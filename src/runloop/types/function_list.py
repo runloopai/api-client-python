@@ -1,0 +1,22 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import List, Optional
+
+from pydantic import Field as FieldInfo
+
+from .._models import BaseModel
+
+__all__ = ["FunctionList", "Function"]
+
+
+class Function(BaseModel):
+    name: Optional[str] = None
+    """Unique name of the function."""
+
+    project_name: Optional[str] = FieldInfo(alias="projectName", default=None)
+    """Unique name of the project."""
+
+
+class FunctionList(BaseModel):
+    functions: Optional[List[Function]] = None
+    """List of functions matching given query."""
