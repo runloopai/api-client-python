@@ -18,5 +18,4 @@ from .code_handle_list_view import CodeHandleListView as CodeHandleListView
 from .code_handle_list_params import CodeHandleListParams as CodeHandleListParams
 from .code_handle_create_params import CodeHandleCreateParams as CodeHandleCreateParams
 from .function_invoke_sync_params import FunctionInvokeSyncParams as FunctionInvokeSyncParams
-from .devbox_execution_detail_view import DevboxExecutionDetailView as DevboxExecutionDetailView
 from .function_invoke_async_params import FunctionInvokeAsyncParams as FunctionInvokeAsyncParams
