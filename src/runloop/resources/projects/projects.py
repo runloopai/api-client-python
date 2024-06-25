@@ -24,7 +24,7 @@ from ..._response import (
 from ..._base_client import (
     make_request_options,
 )
-from ...types.project_list import ProjectList
+from ...types.project_list_view import ProjectListView
 
 __all__ = ["ProjectsResource", "AsyncProjectsResource"]
 
@@ -51,7 +51,7 @@ class ProjectsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ProjectList:
+    ) -> ProjectListView:
         """Get list of all projects for the authenticated user.
 
         This includes all projects
@@ -62,7 +62,7 @@ class ProjectsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ProjectList,
+            cast_to=ProjectListView,
         )
 
 
@@ -88,7 +88,7 @@ class AsyncProjectsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ProjectList:
+    ) -> ProjectListView:
         """Get list of all projects for the authenticated user.
 
         This includes all projects
@@ -99,7 +99,7 @@ class AsyncProjectsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ProjectList,
+            cast_to=ProjectListView,
         )
 
 

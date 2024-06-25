@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from .._models import BaseModel
 
-__all__ = ["FunctionList", "Function"]
+__all__ = ["FunctionListView", "Function"]
 
 
 class Function(BaseModel):
@@ -15,6 +15,6 @@ class Function(BaseModel):
     """Unique name of the project."""
 
 
-class FunctionList(BaseModel):
+class FunctionListView(BaseModel):
     functions: Optional[List[Function]] = None
     """List of functions matching given query."""

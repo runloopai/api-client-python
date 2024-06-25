@@ -4,10 +4,10 @@ from typing import Optional
 
 from .._models import BaseModel
 
-__all__ = ["CodeHandle"]
+__all__ = ["CodeHandleView"]
 
 
-class CodeHandle(BaseModel):
+class CodeHandleView(BaseModel):
     id: Optional[str] = None
     """The id of the CodeHandle."""
 

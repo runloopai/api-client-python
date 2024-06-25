@@ -16,7 +16,7 @@ from ...._response import (
 from ...._base_client import (
     make_request_options,
 )
-from ....types.functions.invocations.invocation_span_list import InvocationSpanList
+from ....types.functions.invocations.invocation_span_list_view import InvocationSpanListView
 
 __all__ = ["SpansResource", "AsyncSpansResource"]
 
@@ -40,7 +40,7 @@ class SpansResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationSpanList:
+    ) -> InvocationSpanListView:
         """Get the span points for the given invocation.
 
         This will return the span points
@@ -62,7 +62,7 @@ class SpansResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InvocationSpanList,
+            cast_to=InvocationSpanListView,
         )
 
 
@@ -85,7 +85,7 @@ class AsyncSpansResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationSpanList:
+    ) -> InvocationSpanListView:
         """Get the span points for the given invocation.
 
         This will return the span points
@@ -107,7 +107,7 @@ class AsyncSpansResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InvocationSpanList,
+            cast_to=InvocationSpanListView,
         )
 
 

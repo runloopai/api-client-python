@@ -2,12 +2,12 @@
 
 from typing import List, Optional
 
-from .devbox import Devbox
 from .._models import BaseModel
+from .devbox_view import DevboxView
 
-__all__ = ["DevboxList"]
+__all__ = ["DevboxListView"]
 
 
-class DevboxList(BaseModel):
-    devboxes: Optional[List[Devbox]] = None
+class DevboxListView(BaseModel):
+    devboxes: Optional[List[DevboxView]] = None
     """List of devboxes matching filter."""

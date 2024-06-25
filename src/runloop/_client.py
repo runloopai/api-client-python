@@ -49,9 +49,7 @@ class Runloop(SyncAPIClient):
     code_handles: resources.CodeHandlesResource
     devboxes: resources.DevboxesResource
     functions: resources.FunctionsResource
-    latches: resources.LatchesResource
     projects: resources.ProjectsResource
-    sessions: resources.SessionsResource
     with_raw_response: RunloopWithRawResponse
     with_streaming_response: RunloopWithStreamedResponse
 
@@ -112,9 +110,7 @@ class Runloop(SyncAPIClient):
         self.code_handles = resources.CodeHandlesResource(self)
         self.devboxes = resources.DevboxesResource(self)
         self.functions = resources.FunctionsResource(self)
-        self.latches = resources.LatchesResource(self)
         self.projects = resources.ProjectsResource(self)
-        self.sessions = resources.SessionsResource(self)
         self.with_raw_response = RunloopWithRawResponse(self)
         self.with_streaming_response = RunloopWithStreamedResponse(self)
 
@@ -227,9 +223,7 @@ class AsyncRunloop(AsyncAPIClient):
     code_handles: resources.AsyncCodeHandlesResource
     devboxes: resources.AsyncDevboxesResource
     functions: resources.AsyncFunctionsResource
-    latches: resources.AsyncLatchesResource
     projects: resources.AsyncProjectsResource
-    sessions: resources.AsyncSessionsResource
     with_raw_response: AsyncRunloopWithRawResponse
     with_streaming_response: AsyncRunloopWithStreamedResponse
 
@@ -290,9 +284,7 @@ class AsyncRunloop(AsyncAPIClient):
         self.code_handles = resources.AsyncCodeHandlesResource(self)
         self.devboxes = resources.AsyncDevboxesResource(self)
         self.functions = resources.AsyncFunctionsResource(self)
-        self.latches = resources.AsyncLatchesResource(self)
         self.projects = resources.AsyncProjectsResource(self)
-        self.sessions = resources.AsyncSessionsResource(self)
         self.with_raw_response = AsyncRunloopWithRawResponse(self)
         self.with_streaming_response = AsyncRunloopWithStreamedResponse(self)
 
@@ -406,9 +398,7 @@ class RunloopWithRawResponse:
         self.code_handles = resources.CodeHandlesResourceWithRawResponse(client.code_handles)
         self.devboxes = resources.DevboxesResourceWithRawResponse(client.devboxes)
         self.functions = resources.FunctionsResourceWithRawResponse(client.functions)
-        self.latches = resources.LatchesResourceWithRawResponse(client.latches)
         self.projects = resources.ProjectsResourceWithRawResponse(client.projects)
-        self.sessions = resources.SessionsResourceWithRawResponse(client.sessions)
 
 
 class AsyncRunloopWithRawResponse:
@@ -416,9 +406,7 @@ class AsyncRunloopWithRawResponse:
         self.code_handles = resources.AsyncCodeHandlesResourceWithRawResponse(client.code_handles)
         self.devboxes = resources.AsyncDevboxesResourceWithRawResponse(client.devboxes)
         self.functions = resources.AsyncFunctionsResourceWithRawResponse(client.functions)
-        self.latches = resources.AsyncLatchesResourceWithRawResponse(client.latches)
         self.projects = resources.AsyncProjectsResourceWithRawResponse(client.projects)
-        self.sessions = resources.AsyncSessionsResourceWithRawResponse(client.sessions)
 
 
 class RunloopWithStreamedResponse:
@@ -426,9 +414,7 @@ class RunloopWithStreamedResponse:
         self.code_handles = resources.CodeHandlesResourceWithStreamingResponse(client.code_handles)
         self.devboxes = resources.DevboxesResourceWithStreamingResponse(client.devboxes)
         self.functions = resources.FunctionsResourceWithStreamingResponse(client.functions)
-        self.latches = resources.LatchesResourceWithStreamingResponse(client.latches)
         self.projects = resources.ProjectsResourceWithStreamingResponse(client.projects)
-        self.sessions = resources.SessionsResourceWithStreamingResponse(client.sessions)
 
 
 class AsyncRunloopWithStreamedResponse:
@@ -436,9 +422,7 @@ class AsyncRunloopWithStreamedResponse:
         self.code_handles = resources.AsyncCodeHandlesResourceWithStreamingResponse(client.code_handles)
         self.devboxes = resources.AsyncDevboxesResourceWithStreamingResponse(client.devboxes)
         self.functions = resources.AsyncFunctionsResourceWithStreamingResponse(client.functions)
-        self.latches = resources.AsyncLatchesResourceWithStreamingResponse(client.latches)
         self.projects = resources.AsyncProjectsResourceWithStreamingResponse(client.projects)
-        self.sessions = resources.AsyncSessionsResourceWithStreamingResponse(client.sessions)
 
 
 Client = Runloop

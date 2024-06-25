@@ -5,7 +5,7 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["FunctionInvocationList", "Invocation"]
+__all__ = ["FunctionInvocationListView", "Invocation"]
 
 
 class Invocation(BaseModel):
@@ -21,6 +21,6 @@ class Invocation(BaseModel):
     status: Optional[Literal["created", "running", "success", "failure", "canceled", "suspended"]] = None
 
 
-class FunctionInvocationList(BaseModel):
+class FunctionInvocationListView(BaseModel):
     invocations: Optional[List[Invocation]] = None
     """List of functions matching given query."""
