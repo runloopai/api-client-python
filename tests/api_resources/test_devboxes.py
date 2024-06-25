@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
-from runloop import Runloop, AsyncRunloop
 from tests.utils import assert_matches_type
-from runloop.types import (
+from runloop_minus_api_minus_client import Runloop, AsyncRunloop
+from runloop_minus_api_minus_client.types import (
     DevboxView,
     DevboxListView,
     DevboxExecutionDetailView,
