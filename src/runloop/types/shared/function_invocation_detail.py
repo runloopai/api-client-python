@@ -3,8 +3,6 @@
 from typing import Optional
 from typing_extensions import Literal
 
-from pydantic import Field as FieldInfo
-
 from ..._models import BaseModel
 
 __all__ = ["FunctionInvocationDetail"]
@@ -16,10 +14,10 @@ class FunctionInvocationDetail(BaseModel):
 
     error: Optional[str] = None
 
-    function_name: Optional[str] = FieldInfo(alias="functionName", default=None)
+    function_name: Optional[str] = None
     """Unique name of the function."""
 
-    project_name: Optional[str] = FieldInfo(alias="projectName", default=None)
+    project_name: Optional[str] = None
     """Unique name of the project associated with function."""
 
     result: Optional[object] = None

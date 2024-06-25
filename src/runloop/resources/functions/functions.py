@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import function_invoke_sync_params, function_invoke_async_params
 from .openapi import (
     OpenAPIResource,
     AsyncOpenAPIResource,
@@ -14,10 +13,6 @@ from .openapi import (
     AsyncOpenAPIResourceWithStreamingResponse,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import (
-    maybe_transform,
-    async_maybe_transform,
-)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -39,7 +34,6 @@ from ..._base_client import (
 )
 from ...types.function_list import FunctionList
 from .invocations.invocations import InvocationsResource, AsyncInvocationsResource
-from ...types.shared.function_invocation_detail import FunctionInvocationDetail
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -80,105 +74,6 @@ class FunctionsResource(SyncAPIResource):
             cast_to=FunctionList,
         )
 
-    def invoke_async(
-        self,
-        function_name: str,
-        *,
-        project_name: str,
-        request: object,
-        runloop_meta: function_invoke_async_params.RunloopMeta | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
-        """Invoke the remote function asynchronously.
-
-        This will return a job id that can be
-        used to query the status of the function invocation.
-
-        Args:
-          request: Json of the request
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not project_name:
-            raise ValueError(f"Expected a non-empty value for `project_name` but received {project_name!r}")
-        if not function_name:
-            raise ValueError(f"Expected a non-empty value for `function_name` but received {function_name!r}")
-        return self._post(
-            f"/v1/functions/{project_name}/{function_name}/invoke_async",
-            body=maybe_transform(
-                {
-                    "request": request,
-                    "runloop_meta": runloop_meta,
-                },
-                function_invoke_async_params.FunctionInvokeAsyncParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FunctionInvocationDetail,
-        )
-
-    def invoke_sync(
-        self,
-        function_name: str,
-        *,
-        project_name: str,
-        request: object,
-        runloop_meta: function_invoke_sync_params.RunloopMeta | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
-        """Invoke the remote function synchronously.
-
-        This will block until the function
-        completes and return the result. If the function call takes too long, the
-        request will timeout.
-
-        Args:
-          request: Json of the request
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not project_name:
-            raise ValueError(f"Expected a non-empty value for `project_name` but received {project_name!r}")
-        if not function_name:
-            raise ValueError(f"Expected a non-empty value for `function_name` but received {function_name!r}")
-        return self._post(
-            f"/v1/functions/{project_name}/{function_name}/invoke_sync",
-            body=maybe_transform(
-                {
-                    "request": request,
-                    "runloop_meta": runloop_meta,
-                },
-                function_invoke_sync_params.FunctionInvokeSyncParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FunctionInvocationDetail,
-        )
-
 
 class AsyncFunctionsResource(AsyncAPIResource):
     @cached_property
@@ -216,105 +111,6 @@ class AsyncFunctionsResource(AsyncAPIResource):
             cast_to=FunctionList,
         )
 
-    async def invoke_async(
-        self,
-        function_name: str,
-        *,
-        project_name: str,
-        request: object,
-        runloop_meta: function_invoke_async_params.RunloopMeta | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
-        """Invoke the remote function asynchronously.
-
-        This will return a job id that can be
-        used to query the status of the function invocation.
-
-        Args:
-          request: Json of the request
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not project_name:
-            raise ValueError(f"Expected a non-empty value for `project_name` but received {project_name!r}")
-        if not function_name:
-            raise ValueError(f"Expected a non-empty value for `function_name` but received {function_name!r}")
-        return await self._post(
-            f"/v1/functions/{project_name}/{function_name}/invoke_async",
-            body=await async_maybe_transform(
-                {
-                    "request": request,
-                    "runloop_meta": runloop_meta,
-                },
-                function_invoke_async_params.FunctionInvokeAsyncParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FunctionInvocationDetail,
-        )
-
-    async def invoke_sync(
-        self,
-        function_name: str,
-        *,
-        project_name: str,
-        request: object,
-        runloop_meta: function_invoke_sync_params.RunloopMeta | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
-        """Invoke the remote function synchronously.
-
-        This will block until the function
-        completes and return the result. If the function call takes too long, the
-        request will timeout.
-
-        Args:
-          request: Json of the request
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not project_name:
-            raise ValueError(f"Expected a non-empty value for `project_name` but received {project_name!r}")
-        if not function_name:
-            raise ValueError(f"Expected a non-empty value for `function_name` but received {function_name!r}")
-        return await self._post(
-            f"/v1/functions/{project_name}/{function_name}/invoke_sync",
-            body=await async_maybe_transform(
-                {
-                    "request": request,
-                    "runloop_meta": runloop_meta,
-                },
-                function_invoke_sync_params.FunctionInvokeSyncParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=FunctionInvocationDetail,
-        )
-
 
 class FunctionsResourceWithRawResponse:
     def __init__(self, functions: FunctionsResource) -> None:
@@ -322,12 +118,6 @@ class FunctionsResourceWithRawResponse:
 
         self.list = to_raw_response_wrapper(
             functions.list,
-        )
-        self.invoke_async = to_raw_response_wrapper(
-            functions.invoke_async,
-        )
-        self.invoke_sync = to_raw_response_wrapper(
-            functions.invoke_sync,
         )
 
     @cached_property
@@ -346,12 +136,6 @@ class AsyncFunctionsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             functions.list,
         )
-        self.invoke_async = async_to_raw_response_wrapper(
-            functions.invoke_async,
-        )
-        self.invoke_sync = async_to_raw_response_wrapper(
-            functions.invoke_sync,
-        )
 
     @cached_property
     def invocations(self) -> AsyncInvocationsResourceWithRawResponse:
@@ -369,12 +153,6 @@ class FunctionsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             functions.list,
         )
-        self.invoke_async = to_streamed_response_wrapper(
-            functions.invoke_async,
-        )
-        self.invoke_sync = to_streamed_response_wrapper(
-            functions.invoke_sync,
-        )
 
     @cached_property
     def invocations(self) -> InvocationsResourceWithStreamingResponse:
@@ -391,12 +169,6 @@ class AsyncFunctionsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             functions.list,
-        )
-        self.invoke_async = async_to_streamed_response_wrapper(
-            functions.invoke_async,
-        )
-        self.invoke_sync = async_to_streamed_response_wrapper(
-            functions.invoke_sync,
         )
 
     @cached_property

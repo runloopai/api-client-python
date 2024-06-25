@@ -55,8 +55,6 @@ from runloop.types import FunctionList
 Methods:
 
 - <code title="get /v1/functions">client.functions.<a href="./src/runloop/resources/functions/functions.py">list</a>() -> <a href="./src/runloop/types/function_list.py">FunctionList</a></code>
-- <code title="post /v1/functions/{projectName}/{functionName}/invoke_async">client.functions.<a href="./src/runloop/resources/functions/functions.py">invoke_async</a>(function_name, \*, project_name, \*\*<a href="src/runloop/types/function_invoke_async_params.py">params</a>) -> <a href="./src/runloop/types/shared/function_invocation_detail.py">FunctionInvocationDetail</a></code>
-- <code title="post /v1/functions/{projectName}/{functionName}/invoke_sync">client.functions.<a href="./src/runloop/resources/functions/functions.py">invoke_sync</a>(function_name, \*, project_name, \*\*<a href="src/runloop/types/function_invoke_sync_params.py">params</a>) -> <a href="./src/runloop/types/shared/function_invocation_detail.py">FunctionInvocationDetail</a></code>
 
 ## Invocations
 
@@ -154,7 +152,3 @@ Types:
 ```python
 from runloop.types.sessions.sessions import SessionKv
 ```
-
-Methods:
-
-- <code title="get /v1/sessions/sessions/{sessionId}/kv">client.sessions.sessions.kv.<a href="./src/runloop/resources/sessions/sessions/kv.py">list</a>(session_id, \*\*<a href="src/runloop/types/sessions/sessions/kv_list_params.py">params</a>) -> <a href="./src/runloop/types/sessions/sessions/session_kv.py">SessionKv</a></code>

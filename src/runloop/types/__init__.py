@@ -14,5 +14,3 @@ from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
 from .latch_fulfill_params import LatchFulfillParams as LatchFulfillParams
 from .code_handle_list_params import CodeHandleListParams as CodeHandleListParams
 from .code_handle_create_params import CodeHandleCreateParams as CodeHandleCreateParams
-from .function_invoke_sync_params import FunctionInvokeSyncParams as FunctionInvokeSyncParams
-from .function_invoke_async_params import FunctionInvokeAsyncParams as FunctionInvokeAsyncParams

@@ -26,6 +26,12 @@ class ProjectActiveDeploy(BaseModel):
     id: Optional[str] = None
     """ID of the deployment."""
 
+    deploy_commit_sha: Optional[str] = None
+    """Associated Commit Sha"""
+
+    deploy_commit_time_ms: Optional[int] = None
+    """Associated Commit Time"""
+
     deploy_end_time_ms: Optional[int] = None
     """Time the Deploy completed (Unix timestamp milliseconds)."""
 
@@ -56,6 +62,12 @@ class ProjectInProgressDeploy(BaseModel):
     id: Optional[str] = None
     """ID of the deployment."""
 
+    deploy_commit_sha: Optional[str] = None
+    """Associated Commit Sha"""
+
+    deploy_commit_time_ms: Optional[int] = None
+    """Associated Commit Time"""
+
     deploy_end_time_ms: Optional[int] = None
     """Time the Deploy completed (Unix timestamp milliseconds)."""
 
@@ -85,6 +97,12 @@ class ProjectRecentDeployment(BaseModel):
 
     id: Optional[str] = None
     """ID of the deployment."""
+
+    deploy_commit_sha: Optional[str] = None
+    """Associated Commit Sha"""
+
+    deploy_commit_time_ms: Optional[int] = None
+    """Associated Commit Time"""
 
     deploy_end_time_ms: Optional[int] = None
     """Time the Deploy completed (Unix timestamp milliseconds)."""

@@ -4,14 +4,6 @@ from __future__ import annotations
 
 import httpx
 
-from .kv import (
-    KvResource,
-    AsyncKvResource,
-    KvResourceWithRawResponse,
-    AsyncKvResourceWithRawResponse,
-    KvResourceWithStreamingResponse,
-    AsyncKvResourceWithStreamingResponse,
-)
 from ...._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -31,10 +23,6 @@ __all__ = ["SessionsResource", "AsyncSessionsResource"]
 
 
 class SessionsResource(SyncAPIResource):
-    @cached_property
-    def kv(self) -> KvResource:
-        return KvResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> SessionsResourceWithRawResponse:
         return SessionsResourceWithRawResponse(self)
@@ -87,10 +75,6 @@ class SessionsResource(SyncAPIResource):
 
 
 class AsyncSessionsResource(AsyncAPIResource):
-    @cached_property
-    def kv(self) -> AsyncKvResource:
-        return AsyncKvResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncSessionsResourceWithRawResponse:
         return AsyncSessionsResourceWithRawResponse(self)
@@ -153,10 +137,6 @@ class SessionsResourceWithRawResponse:
             sessions.list,
         )
 
-    @cached_property
-    def kv(self) -> KvResourceWithRawResponse:
-        return KvResourceWithRawResponse(self._sessions.kv)
-
 
 class AsyncSessionsResourceWithRawResponse:
     def __init__(self, sessions: AsyncSessionsResource) -> None:
@@ -168,10 +148,6 @@ class AsyncSessionsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             sessions.list,
         )
-
-    @cached_property
-    def kv(self) -> AsyncKvResourceWithRawResponse:
-        return AsyncKvResourceWithRawResponse(self._sessions.kv)
 
 
 class SessionsResourceWithStreamingResponse:
@@ -185,10 +161,6 @@ class SessionsResourceWithStreamingResponse:
             sessions.list,
         )
 
-    @cached_property
-    def kv(self) -> KvResourceWithStreamingResponse:
-        return KvResourceWithStreamingResponse(self._sessions.kv)
-
 
 class AsyncSessionsResourceWithStreamingResponse:
     def __init__(self, sessions: AsyncSessionsResource) -> None:
@@ -200,7 +172,3 @@ class AsyncSessionsResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             sessions.list,
         )
-
-    @cached_property
-    def kv(self) -> AsyncKvResourceWithStreamingResponse:
-        return AsyncKvResourceWithStreamingResponse(self._sessions.kv)

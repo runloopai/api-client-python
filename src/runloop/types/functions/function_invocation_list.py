@@ -3,8 +3,6 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
-from pydantic import Field as FieldInfo
-
 from ..._models import BaseModel
 
 __all__ = ["FunctionInvocationList", "Invocation"]
@@ -17,7 +15,7 @@ class Invocation(BaseModel):
     name: Optional[str] = None
     """Name of the invoked function."""
 
-    project_name: Optional[str] = FieldInfo(alias="projectName", default=None)
+    project_name: Optional[str] = None
     """Project name associated with invoked function."""
 
     status: Optional[Literal["created", "running", "success", "failure", "canceled", "suspended"]] = None
