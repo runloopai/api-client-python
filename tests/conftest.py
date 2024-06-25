@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, Iterator, AsyncIterator
 
 import pytest
 
-from runloop import Runloop, AsyncRunloop
+from runloop_minus_api_minus_client import Runloop, AsyncRunloop
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest
 
 pytest.register_assert_rewrite("tests.utils")
 
-logging.getLogger("runloop").setLevel(logging.DEBUG)
+logging.getLogger("runloop_minus_api_minus_client").setLevel(logging.DEBUG)
 
 
 @pytest.fixture(scope="session")

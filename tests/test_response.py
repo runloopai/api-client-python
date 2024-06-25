@@ -6,8 +6,8 @@ import httpx
 import pytest
 import pydantic
 
-from runloop import Runloop, BaseModel, AsyncRunloop
-from runloop._response import (
+from runloop_minus_api_minus_client import Runloop, BaseModel, AsyncRunloop
+from runloop_minus_api_minus_client._response import (
     APIResponse,
     BaseAPIResponse,
     AsyncAPIResponse,
@@ -15,8 +15,8 @@ from runloop._response import (
     AsyncBinaryAPIResponse,
     extract_response_type,
 )
-from runloop._streaming import Stream
-from runloop._base_client import FinalRequestOptions
+from runloop_minus_api_minus_client._streaming import Stream
+from runloop_minus_api_minus_client._base_client import FinalRequestOptions
 
 
 class ConcreteBaseAPIResponse(APIResponse[bytes]):
@@ -40,7 +40,7 @@ def test_extract_response_type_direct_classes() -> None:
 def test_extract_response_type_direct_class_missing_type_arg() -> None:
     with pytest.raises(
         RuntimeError,
-        match="Expected type <class 'runloop._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not",
+        match="Expected type <class 'runloop_minus_api_minus_client._response.AsyncAPIResponse'> to have a type argument at index 0 but it did not",
     ):
         extract_response_type(AsyncAPIResponse)
 
@@ -72,7 +72,7 @@ def test_response_parse_mismatched_basemodel(client: Runloop) -> None:
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from runloop import BaseModel`",
+        match="Pydantic models must subclass our base model type, e.g. `from runloop_minus_api_minus_client import BaseModel`",
     ):
         response.parse(to=PydanticModel)
 
@@ -90,7 +90,7 @@ async def test_async_response_parse_mismatched_basemodel(async_client: AsyncRunl
 
     with pytest.raises(
         TypeError,
-        match="Pydantic models must subclass our base model type, e.g. `from runloop import BaseModel`",
+        match="Pydantic models must subclass our base model type, e.g. `from runloop_minus_api_minus_client import BaseModel`",
     ):
         await response.parse(to=PydanticModel)
 

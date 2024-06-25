@@ -1,5 +1,5 @@
 [project]
-name = "runloop"
+name = "runloop-api-client"
 version = "0.0.1-alpha.0"
 description = "The official Python library for the runloop API"
 dynamic = ["readme"]
@@ -84,7 +84,7 @@ typecheck = { chain = [
   "typecheck:mypy"
 ]}
 "typecheck:pyright" = "pyright"
-"typecheck:verify-types" = "pyright --verifytypes runloop --ignoreexternal"
+"typecheck:verify-types" = "pyright --verifytypes runloop_minus_api_minus_client --ignoreexternal"
 "typecheck:mypy" = "mypy ."
 
 [build-system]
@@ -97,7 +97,7 @@ include = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/runloop"]
+packages = ["src/runloop_minus_api_minus_client"]
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
@@ -187,7 +187,7 @@ length-sort = true
 length-sort-straight = true
 combine-as-imports = true
 extra-standard-library = ["typing_extensions"]
-known-first-party = ["runloop", "tests"]
+known-first-party = ["runloop_minus_api_minus_client", "tests"]
 
 [tool.ruff.per-file-ignores]
 "bin/**.py" = ["T201", "T203"]

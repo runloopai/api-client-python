@@ -61,6 +61,6 @@
   ],
   "release-type": "python",
   "extra-files": [
-    "src/runloop/_version.py"
+    "src/runloop_minus_api_minus_client/_version.py"
   ]
 }
