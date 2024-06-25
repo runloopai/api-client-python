@@ -8,8 +8,8 @@ from typing import Any, TypeVar, Iterator, cast
 from datetime import date, datetime
 from typing_extensions import Literal, get_args, get_origin, assert_type
 
-from runloop._types import NoneType
-from runloop._utils import (
+from runloop_minus_api_minus_client._types import NoneType
+from runloop_minus_api_minus_client._utils import (
     is_dict,
     is_list,
     is_list_type,
@@ -17,8 +17,8 @@ from runloop._utils import (
     extract_type_arg,
     is_annotated_type,
 )
-from runloop._compat import PYDANTIC_V2, field_outer_type, get_model_fields
-from runloop._models import BaseModel
+from runloop_minus_api_minus_client._compat import PYDANTIC_V2, field_outer_type, get_model_fields
+from runloop_minus_api_minus_client._models import BaseModel
 
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 

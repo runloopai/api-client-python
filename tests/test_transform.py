@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from runloop._types import Base64FileInput
-from runloop._utils import (
+from runloop_minus_api_minus_client._types import Base64FileInput
+from runloop_minus_api_minus_client._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from runloop._compat import PYDANTIC_V2
-from runloop._models import BaseModel
+from runloop_minus_api_minus_client._compat import PYDANTIC_V2
+from runloop_minus_api_minus_client._models import BaseModel
 
 _T = TypeVar("_T")
 
