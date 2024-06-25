@@ -22,7 +22,7 @@ Methods:
 Types:
 
 ```python
-from runloop.types import DevboxExecutionDetailView, DevboxListView, DevboxView
+from runloop.types import DevboxListView, DevboxView
 ```
 
 Methods:
@@ -30,7 +30,6 @@ Methods:
 - <code title="post /v1/devboxes">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">create</a>(\*\*<a href="src/runloop/types/devbox_create_params.py">params</a>) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop/types/devbox_list_view.py">DevboxListView</a></code>
-- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">execute_sync</a>(id) -> <a href="./src/runloop/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 
 ## Logs
