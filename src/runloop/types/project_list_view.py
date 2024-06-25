@@ -5,7 +5,7 @@ from typing import List, Optional
 from .._models import BaseModel
 
 __all__ = [
-    "ProjectList",
+    "ProjectListView",
     "Installation",
     "Project",
     "ProjectActiveDeploy",
@@ -142,7 +142,7 @@ class Project(BaseModel):
     """Last deployment attempts (up to 10)"""
 
 
-class ProjectList(BaseModel):
+class ProjectListView(BaseModel):
     installation: Optional[Installation] = None
 
     projects: Optional[List[Project]] = None

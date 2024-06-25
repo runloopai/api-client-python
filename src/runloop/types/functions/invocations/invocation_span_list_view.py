@@ -6,10 +6,10 @@ from pydantic import Field as FieldInfo
 
 from ...._models import BaseModel
 
-__all__ = ["InvocationSpanList"]
+__all__ = ["InvocationSpanListView"]
 
 
-class InvocationSpanList(BaseModel):
+class InvocationSpanListView(BaseModel):
     invocation_id: Optional[str] = FieldInfo(alias="invocationId", default=None)
 
     spans: Optional[object] = None

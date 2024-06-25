@@ -16,7 +16,7 @@ from ..._response import (
 from ..._base_client import (
     make_request_options,
 )
-from ...types.projects.project_logs import ProjectLogs
+from ...types.shared.project_logs_view import ProjectLogsView
 
 __all__ = ["LogsResource", "AsyncLogsResource"]
 
@@ -40,7 +40,7 @@ class LogsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ProjectLogs:
+    ) -> ProjectLogsView:
         """
         Get list of all logs from a project.
 
@@ -60,7 +60,7 @@ class LogsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ProjectLogs,
+            cast_to=ProjectLogsView,
         )
 
 
@@ -83,7 +83,7 @@ class AsyncLogsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ProjectLogs:
+    ) -> ProjectLogsView:
         """
         Get list of all logs from a project.
 
@@ -103,7 +103,7 @@ class AsyncLogsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ProjectLogs,
+            cast_to=ProjectLogsView,
         )
 
 

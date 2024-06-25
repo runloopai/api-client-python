@@ -31,8 +31,9 @@ from ..._response import (
 from ..._base_client import (
     make_request_options,
 )
-from ...types.devbox import Devbox
-from ...types.devbox_list import DevboxList
+from ...types.devbox_view import DevboxView
+from ...types.devbox_list_view import DevboxListView
+from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
@@ -63,7 +64,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Create a Devbox with the specified configuration.
 
         The Devbox will be created in
@@ -104,7 +105,7 @@ class DevboxesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
     def retrieve(
@@ -117,7 +118,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Get a devbox by id.
 
         If the devbox does not exist, a 404 is returned.
@@ -138,7 +139,7 @@ class DevboxesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
     def list(
@@ -151,7 +152,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxList:
+    ) -> DevboxListView:
         """List all devboxes or filter by status.
 
         If no status is provided, all devboxes
@@ -177,7 +178,40 @@ class DevboxesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
             ),
-            cast_to=DevboxList,
+            cast_to=DevboxListView,
+        )
+
+    def execute_sync(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Synchronously execute a command on a devbox
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/execute_sync",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
         )
 
     def shutdown(
@@ -190,7 +224,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Shutdown a running devbox by id.
 
         This will take the devbox out of service.
@@ -211,7 +245,7 @@ class DevboxesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
 
@@ -241,7 +275,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Create a Devbox with the specified configuration.
 
         The Devbox will be created in
@@ -282,7 +316,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
     async def retrieve(
@@ -295,7 +329,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Get a devbox by id.
 
         If the devbox does not exist, a 404 is returned.
@@ -316,7 +350,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
     async def list(
@@ -329,7 +363,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxList:
+    ) -> DevboxListView:
         """List all devboxes or filter by status.
 
         If no status is provided, all devboxes
@@ -355,7 +389,40 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
             ),
-            cast_to=DevboxList,
+            cast_to=DevboxListView,
+        )
+
+    async def execute_sync(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Synchronously execute a command on a devbox
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/execute_sync",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
         )
 
     async def shutdown(
@@ -368,7 +435,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Devbox:
+    ) -> DevboxView:
         """Shutdown a running devbox by id.
 
         This will take the devbox out of service.
@@ -389,7 +456,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Devbox,
+            cast_to=DevboxView,
         )
 
 
@@ -405,6 +472,9 @@ class DevboxesResourceWithRawResponse:
         )
         self.list = to_raw_response_wrapper(
             devboxes.list,
+        )
+        self.execute_sync = to_raw_response_wrapper(
+            devboxes.execute_sync,
         )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
@@ -428,6 +498,9 @@ class AsyncDevboxesResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
         )
+        self.execute_sync = async_to_raw_response_wrapper(
+            devboxes.execute_sync,
+        )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
         )
@@ -450,6 +523,9 @@ class DevboxesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.execute_sync = to_streamed_response_wrapper(
+            devboxes.execute_sync,
+        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
@@ -471,6 +547,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
+        )
+        self.execute_sync = async_to_streamed_response_wrapper(
+            devboxes.execute_sync,
         )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,

@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-from .function_invocation_list import FunctionInvocationList as FunctionInvocationList
+from .function_invocation_list_view import FunctionInvocationListView as FunctionInvocationListView

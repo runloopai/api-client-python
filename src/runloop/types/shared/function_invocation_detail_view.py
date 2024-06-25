@@ -5,10 +5,10 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["FunctionInvocationDetail"]
+__all__ = ["FunctionInvocationDetailView"]
 
 
-class FunctionInvocationDetail(BaseModel):
+class FunctionInvocationDetailView(BaseModel):
     id: Optional[str] = None
     """Unique ID of the invocation."""
 

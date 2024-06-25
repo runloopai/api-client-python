@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-from .invocation_span_list import InvocationSpanList as InvocationSpanList
+from .invocation_span_list_view import InvocationSpanListView as InvocationSpanListView

@@ -1,13 +1,5 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from .openapi import (
-    OpenAPIResource,
-    AsyncOpenAPIResource,
-    OpenAPIResourceWithRawResponse,
-    AsyncOpenAPIResourceWithRawResponse,
-    OpenAPIResourceWithStreamingResponse,
-    AsyncOpenAPIResourceWithStreamingResponse,
-)
 from .functions import (
     FunctionsResource,
     AsyncFunctionsResource,
@@ -32,12 +24,6 @@ __all__ = [
     "AsyncInvocationsResourceWithRawResponse",
     "InvocationsResourceWithStreamingResponse",
     "AsyncInvocationsResourceWithStreamingResponse",
-    "OpenAPIResource",
-    "AsyncOpenAPIResource",
-    "OpenAPIResourceWithRawResponse",
-    "AsyncOpenAPIResourceWithRawResponse",
-    "OpenAPIResourceWithStreamingResponse",
-    "AsyncOpenAPIResourceWithStreamingResponse",
     "FunctionsResource",
     "AsyncFunctionsResource",
     "FunctionsResourceWithRawResponse",

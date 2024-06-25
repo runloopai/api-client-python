@@ -9,7 +9,7 @@ import pytest
 
 from runloop import Runloop, AsyncRunloop
 from tests.utils import assert_matches_type
-from runloop.types.projects import ProjectLogs
+from runloop.types.shared import ProjectLogsView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -22,7 +22,7 @@ class TestLogs:
         log = client.projects.logs.list(
             "string",
         )
-        assert_matches_type(ProjectLogs, log, path=["response"])
+        assert_matches_type(ProjectLogsView, log, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -33,7 +33,7 @@ class TestLogs:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         log = response.parse()
-        assert_matches_type(ProjectLogs, log, path=["response"])
+        assert_matches_type(ProjectLogsView, log, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -44,7 +44,7 @@ class TestLogs:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             log = response.parse()
-            assert_matches_type(ProjectLogs, log, path=["response"])
+            assert_matches_type(ProjectLogsView, log, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -64,7 +64,7 @@ class TestAsyncLogs:
         log = await async_client.projects.logs.list(
             "string",
         )
-        assert_matches_type(ProjectLogs, log, path=["response"])
+        assert_matches_type(ProjectLogsView, log, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -75,7 +75,7 @@ class TestAsyncLogs:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         log = await response.parse()
-        assert_matches_type(ProjectLogs, log, path=["response"])
+        assert_matches_type(ProjectLogsView, log, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -86,7 +86,7 @@ class TestAsyncLogs:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             log = await response.parse()
-            assert_matches_type(ProjectLogs, log, path=["response"])
+            assert_matches_type(ProjectLogsView, log, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

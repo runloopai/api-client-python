@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-from .devbox_logs_list import DevboxLogsList as DevboxLogsList
+from .devbox_logs_list_view import DevboxLogsListView as DevboxLogsListView

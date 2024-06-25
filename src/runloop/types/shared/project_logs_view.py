@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from ..._models import BaseModel
 
-__all__ = ["ProjectLogs", "Log"]
+__all__ = ["ProjectLogsView", "Log"]
 
 
 class Log(BaseModel):
@@ -17,6 +17,6 @@ class Log(BaseModel):
     timestamp: Optional[str] = None
 
 
-class ProjectLogs(BaseModel):
+class ProjectLogsView(BaseModel):
     logs: Optional[List[Log]] = None
     """List of logs for the given project."""

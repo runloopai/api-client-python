@@ -3,11 +3,11 @@
 from typing import List, Optional
 
 from .._models import BaseModel
-from .code_handle import CodeHandle
+from .code_handle_view import CodeHandleView
 
-__all__ = ["CodeHandleList"]
+__all__ = ["CodeHandleListView"]
 
 
-class CodeHandleList(BaseModel):
-    code_handles: Optional[List[CodeHandle]] = None
+class CodeHandleListView(BaseModel):
+    code_handles: Optional[List[CodeHandleView]] = None
     """List of code handles matching given query."""

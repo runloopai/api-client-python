@@ -9,7 +9,7 @@ import pytest
 
 from runloop import Runloop, AsyncRunloop
 from tests.utils import assert_matches_type
-from runloop.types.functions.invocations import InvocationSpanList
+from runloop.types.functions.invocations import InvocationSpanListView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -22,7 +22,7 @@ class TestSpans:
         span = client.functions.invocations.spans.list(
             "string",
         )
-        assert_matches_type(InvocationSpanList, span, path=["response"])
+        assert_matches_type(InvocationSpanListView, span, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -33,7 +33,7 @@ class TestSpans:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         span = response.parse()
-        assert_matches_type(InvocationSpanList, span, path=["response"])
+        assert_matches_type(InvocationSpanListView, span, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -44,7 +44,7 @@ class TestSpans:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             span = response.parse()
-            assert_matches_type(InvocationSpanList, span, path=["response"])
+            assert_matches_type(InvocationSpanListView, span, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -64,7 +64,7 @@ class TestAsyncSpans:
         span = await async_client.functions.invocations.spans.list(
             "string",
         )
-        assert_matches_type(InvocationSpanList, span, path=["response"])
+        assert_matches_type(InvocationSpanListView, span, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -75,7 +75,7 @@ class TestAsyncSpans:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         span = await response.parse()
-        assert_matches_type(InvocationSpanList, span, path=["response"])
+        assert_matches_type(InvocationSpanListView, span, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -86,7 +86,7 @@ class TestAsyncSpans:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             span = await response.parse()
-            assert_matches_type(InvocationSpanList, span, path=["response"])
+            assert_matches_type(InvocationSpanListView, span, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

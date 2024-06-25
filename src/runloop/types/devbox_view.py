@@ -4,10 +4,10 @@ from typing import Optional
 
 from .._models import BaseModel
 
-__all__ = ["Devbox"]
+__all__ = ["DevboxView"]
 
 
-class Devbox(BaseModel):
+class DevboxView(BaseModel):
     id: Optional[str] = None
     """The id of the Devbox."""
 

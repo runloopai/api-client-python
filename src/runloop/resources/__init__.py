@@ -1,13 +1,5 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from .latches import (
-    LatchesResource,
-    AsyncLatchesResource,
-    LatchesResourceWithRawResponse,
-    AsyncLatchesResourceWithRawResponse,
-    LatchesResourceWithStreamingResponse,
-    AsyncLatchesResourceWithStreamingResponse,
-)
 from .devboxes import (
     DevboxesResource,
     AsyncDevboxesResource,
@@ -23,14 +15,6 @@ from .projects import (
     AsyncProjectsResourceWithRawResponse,
     ProjectsResourceWithStreamingResponse,
     AsyncProjectsResourceWithStreamingResponse,
-)
-from .sessions import (
-    SessionsResource,
-    AsyncSessionsResource,
-    SessionsResourceWithRawResponse,
-    AsyncSessionsResourceWithRawResponse,
-    SessionsResourceWithStreamingResponse,
-    AsyncSessionsResourceWithStreamingResponse,
 )
 from .functions import (
     FunctionsResource,
@@ -68,22 +52,10 @@ __all__ = [
     "AsyncFunctionsResourceWithRawResponse",
     "FunctionsResourceWithStreamingResponse",
     "AsyncFunctionsResourceWithStreamingResponse",
-    "LatchesResource",
-    "AsyncLatchesResource",
-    "LatchesResourceWithRawResponse",
-    "AsyncLatchesResourceWithRawResponse",
-    "LatchesResourceWithStreamingResponse",
-    "AsyncLatchesResourceWithStreamingResponse",
     "ProjectsResource",
     "AsyncProjectsResource",
     "ProjectsResourceWithRawResponse",
     "AsyncProjectsResourceWithRawResponse",
     "ProjectsResourceWithStreamingResponse",
     "AsyncProjectsResourceWithStreamingResponse",
-    "SessionsResource",
-    "AsyncSessionsResource",
-    "SessionsResourceWithRawResponse",
-    "AsyncSessionsResourceWithRawResponse",
-    "SessionsResourceWithStreamingResponse",
-    "AsyncSessionsResourceWithStreamingResponse",
 ]

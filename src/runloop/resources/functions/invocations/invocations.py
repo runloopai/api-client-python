@@ -24,8 +24,8 @@ from ...._response import (
 from ...._base_client import (
     make_request_options,
 )
-from ....types.shared.function_invocation_detail import FunctionInvocationDetail
-from ....types.functions.function_invocation_list import FunctionInvocationList
+from ....types.shared.function_invocation_detail_view import FunctionInvocationDetailView
+from ....types.functions.function_invocation_list_view import FunctionInvocationListView
 
 __all__ = ["InvocationsResource", "AsyncInvocationsResource"]
 
@@ -53,7 +53,7 @@ class InvocationsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
+    ) -> FunctionInvocationDetailView:
         """Get the details of a function invocation.
 
         This includes the status, response,
@@ -75,7 +75,7 @@ class InvocationsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetail,
+            cast_to=FunctionInvocationDetailView,
         )
 
     def list(
@@ -87,14 +87,14 @@ class InvocationsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationList:
+    ) -> FunctionInvocationListView:
         """List the functions invocations that are available for invocation."""
         return self._get(
             "/v1/functions/invocations",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationList,
+            cast_to=FunctionInvocationListView,
         )
 
     def kill(
@@ -155,7 +155,7 @@ class AsyncInvocationsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetail:
+    ) -> FunctionInvocationDetailView:
         """Get the details of a function invocation.
 
         This includes the status, response,
@@ -177,7 +177,7 @@ class AsyncInvocationsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetail,
+            cast_to=FunctionInvocationDetailView,
         )
 
     async def list(
@@ -189,14 +189,14 @@ class AsyncInvocationsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationList:
+    ) -> FunctionInvocationListView:
         """List the functions invocations that are available for invocation."""
         return await self._get(
             "/v1/functions/invocations",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationList,
+            cast_to=FunctionInvocationListView,
         )
 
     async def kill(

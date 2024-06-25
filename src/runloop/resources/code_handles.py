@@ -21,8 +21,8 @@ from .._response import (
 from .._base_client import (
     make_request_options,
 )
-from ..types.code_handle import CodeHandle
-from ..types.code_handle_list import CodeHandleList
+from ..types.code_handle_view import CodeHandleView
+from ..types.code_handle_list_view import CodeHandleListView
 
 __all__ = ["CodeHandlesResource", "AsyncCodeHandlesResource"]
 
@@ -49,7 +49,7 @@ class CodeHandlesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CodeHandle:
+    ) -> CodeHandleView:
         """Create a new code handle for a given repository.
 
         This can be referenced in other
@@ -86,7 +86,7 @@ class CodeHandlesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CodeHandle,
+            cast_to=CodeHandleView,
         )
 
     def list(
@@ -100,7 +100,7 @@ class CodeHandlesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CodeHandleList:
+    ) -> CodeHandleListView:
         """
         List the code handles that are available for use.
 
@@ -132,7 +132,7 @@ class CodeHandlesResource(SyncAPIResource):
                     code_handle_list_params.CodeHandleListParams,
                 ),
             ),
-            cast_to=CodeHandleList,
+            cast_to=CodeHandleListView,
         )
 
 
@@ -158,7 +158,7 @@ class AsyncCodeHandlesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CodeHandle:
+    ) -> CodeHandleView:
         """Create a new code handle for a given repository.
 
         This can be referenced in other
@@ -195,7 +195,7 @@ class AsyncCodeHandlesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CodeHandle,
+            cast_to=CodeHandleView,
         )
 
     async def list(
@@ -209,7 +209,7 @@ class AsyncCodeHandlesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CodeHandleList:
+    ) -> CodeHandleListView:
         """
         List the code handles that are available for use.
 
@@ -241,7 +241,7 @@ class AsyncCodeHandlesResource(AsyncAPIResource):
                     code_handle_list_params.CodeHandleListParams,
                 ),
             ),
-            cast_to=CodeHandleList,
+            cast_to=CodeHandleListView,
         )
 
 
