@@ -24,22 +24,8 @@ from .functions import (
     FunctionsResourceWithStreamingResponse,
     AsyncFunctionsResourceWithStreamingResponse,
 )
-from .code_handles import (
-    CodeHandlesResource,
-    AsyncCodeHandlesResource,
-    CodeHandlesResourceWithRawResponse,
-    AsyncCodeHandlesResourceWithRawResponse,
-    CodeHandlesResourceWithStreamingResponse,
-    AsyncCodeHandlesResourceWithStreamingResponse,
-)
 
 __all__ = [
-    "CodeHandlesResource",
-    "AsyncCodeHandlesResource",
-    "CodeHandlesResourceWithRawResponse",
-    "AsyncCodeHandlesResourceWithRawResponse",
-    "CodeHandlesResourceWithStreamingResponse",
-    "AsyncCodeHandlesResourceWithStreamingResponse",
     "DevboxesResource",
     "AsyncDevboxesResource",
     "DevboxesResourceWithRawResponse",

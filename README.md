@@ -35,8 +35,8 @@ client = Runloop(
     bearer_token=os.environ.get("RUNLOOP_BEARER_TOKEN"),
 )
 
-code_handle_view = client.code_handles.create()
-print(code_handle_view.id)
+devbox_view = client.devboxes.create()
+print(devbox_view.id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -60,8 +60,8 @@ client = AsyncRunloop(
 
 
 async def main() -> None:
-    code_handle_view = await client.code_handles.create()
-    print(code_handle_view.id)
+    devbox_view = await client.devboxes.create()
+    print(devbox_view.id)
 
 
 asyncio.run(main())
@@ -94,7 +94,7 @@ from runloop import Runloop
 client = Runloop()
 
 try:
-    client.code_handles.create()
+    client.devboxes.create()
 except runloop.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -137,7 +137,7 @@ client = Runloop(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).code_handles.create()
+client.with_options(max_retries=5).devboxes.create()
 ```
 
 ### Timeouts
@@ -160,7 +160,7 @@ client = Runloop(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).code_handles.create()
+client.with_options(timeout=5.0).devboxes.create()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -199,11 +199,11 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from runloop import Runloop
 
 client = Runloop()
-response = client.code_handles.with_raw_response.create()
+response = client.devboxes.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
-code_handle = response.parse()  # get the object that `code_handles.create()` would have returned
-print(code_handle.id)
+devbox = response.parse()  # get the object that `devboxes.create()` would have returned
+print(devbox.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/stainless-sdks/runloop-python/tree/main/src/runloop/_response.py) object.
@@ -217,7 +217,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.code_handles.with_streaming_response.create() as response:
+with client.devboxes.with_streaming_response.create() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
