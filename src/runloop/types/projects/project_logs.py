@@ -12,6 +12,8 @@ class Log(BaseModel):
 
     message: Optional[str] = None
 
+    source: Optional[str] = None
+
     timestamp: Optional[str] = None
 
 
