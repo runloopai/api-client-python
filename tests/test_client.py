@@ -16,11 +16,16 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from runloop import Runloop, AsyncRunloop, APIResponseValidationError
-from runloop._models import BaseModel, FinalRequestOptions
-from runloop._constants import RAW_RESPONSE_HEADER
-from runloop._exceptions import RunloopError, APIStatusError, APITimeoutError, APIResponseValidationError
-from runloop._base_client import (
+from runloop_minus_api_minus_client import Runloop, AsyncRunloop, APIResponseValidationError
+from runloop_minus_api_minus_client._models import BaseModel, FinalRequestOptions
+from runloop_minus_api_minus_client._constants import RAW_RESPONSE_HEADER
+from runloop_minus_api_minus_client._exceptions import (
+    RunloopError,
+    APIStatusError,
+    APITimeoutError,
+    APIResponseValidationError,
+)
+from runloop_minus_api_minus_client._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
@@ -227,10 +232,10 @@ class TestRunloop:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "runloop/_legacy_response.py",
-                        "runloop/_response.py",
+                        "runloop_minus_api_minus_client/_legacy_response.py",
+                        "runloop_minus_api_minus_client/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "runloop/_compat.py",
+                        "runloop_minus_api_minus_client/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -729,7 +734,7 @@ class TestRunloop:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("runloop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("runloop_minus_api_minus_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -744,7 +749,7 @@ class TestRunloop:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("runloop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("runloop_minus_api_minus_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))
@@ -938,10 +943,10 @@ class TestAsyncRunloop:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "runloop/_legacy_response.py",
-                        "runloop/_response.py",
+                        "runloop_minus_api_minus_client/_legacy_response.py",
+                        "runloop_minus_api_minus_client/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "runloop/_compat.py",
+                        "runloop_minus_api_minus_client/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1444,7 +1449,7 @@ class TestAsyncRunloop:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("runloop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("runloop_minus_api_minus_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -1459,7 +1464,7 @@ class TestAsyncRunloop:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("runloop._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("runloop_minus_api_minus_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))

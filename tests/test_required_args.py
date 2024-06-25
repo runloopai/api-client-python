@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from runloop._utils import required_args
+from runloop_minus_api_minus_client._utils import required_args
 
 
 def test_too_many_positional_params() -> None:
