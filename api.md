@@ -1,28 +1,15 @@
 # Shared Types
 
 ```python
-from runloop.types import EmptyRecord, FunctionInvocationDetailView, ProjectLogsView
+from runloop.types import FunctionInvocationDetailView, ProjectLogsView
 ```
-
-# CodeHandles
-
-Types:
-
-```python
-from runloop.types import CodeHandleListView, CodeHandleView
-```
-
-Methods:
-
-- <code title="post /v1/code_handles">client.code_handles.<a href="./src/runloop/resources/code_handles.py">create</a>(\*\*<a href="src/runloop/types/code_handle_create_params.py">params</a>) -> <a href="./src/runloop/types/code_handle_view.py">CodeHandleView</a></code>
-- <code title="get /v1/code_handles">client.code_handles.<a href="./src/runloop/resources/code_handles.py">list</a>(\*\*<a href="src/runloop/types/code_handle_list_params.py">params</a>) -> <a href="./src/runloop/types/code_handle_list_view.py">CodeHandleListView</a></code>
 
 # Devboxes
 
 Types:
 
 ```python
-from runloop.types import DevboxListView, DevboxView
+from runloop.types import DevboxExecutionDetailView, DevboxListView, DevboxView
 ```
 
 Methods:
@@ -30,6 +17,7 @@ Methods:
 - <code title="post /v1/devboxes">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">create</a>(\*\*<a href="src/runloop/types/devbox_create_params.py">params</a>) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop/types/devbox_list_view.py">DevboxListView</a></code>
+- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">execute_sync</a>(id) -> <a href="./src/runloop/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop/types/devbox_view.py">DevboxView</a></code>
 
 ## Logs
