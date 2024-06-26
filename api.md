@@ -17,7 +17,7 @@ Methods:
 - <code title="post /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create</a>(\*\*<a href="src/runloop_api_client/types/devbox_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_list_view.py">DevboxListView</a></code>
-- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_sync</a>(id) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_sync</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_execute_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 
 ## Logs
@@ -59,14 +59,6 @@ Methods:
 - <code title="get /v1/functions/invocations/{invocationId}">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">retrieve</a>(invocation_id) -> <a href="./src/runloop_api_client/types/shared/function_invocation_detail_view.py">FunctionInvocationDetailView</a></code>
 - <code title="get /v1/functions/invocations">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">list</a>() -> <a href="./src/runloop_api_client/types/functions/function_invocation_list_view.py">FunctionInvocationListView</a></code>
 - <code title="post /v1/functions/invocations/{invocationId}/kill">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">kill</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/kill_operation_response.py">object</a></code>
-
-### Spans
-
-Types:
-
-```python
-from runloop_api_client.types.functions.invocations import InvocationSpanListView
-```
 
 # Projects
 
