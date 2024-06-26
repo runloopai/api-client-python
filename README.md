@@ -1,6 +1,6 @@
 # Runloop Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/runloop-api-client.svg)](https://pypi.org/project/runloop-api-client/)
+[![PyPI version](https://img.shields.io/pypi/v/runloop_api_client.svg)](https://pypi.org/project/runloop_api_client/)
 
 The Runloop Python library provides convenient access to the Runloop REST API from any Python 3.7+
 application. The library includes type definitions for all request params and response fields,
@@ -16,7 +16,7 @@ The REST API documentation can be found [on runloop.ai](https://runloop.ai). The
 
 ```sh
 # install from PyPI
-pip install --pre runloop-api-client
+pip install --pre runloop_api_client
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from runloop_minus_api_minus_client import Runloop
+from runloop_api_client import Runloop
 
 client = Runloop(
     # This is the default and can be omitted
@@ -48,7 +48,7 @@ Simply import `AsyncRunloop` instead of `Runloop` and use `await` with each API 
 ```python
 import os
 import asyncio
-from runloop_minus_api_minus_client import AsyncRunloop
+from runloop_api_client import AsyncRunloop
 
 client = AsyncRunloop(
     # This is the default and can be omitted
@@ -77,27 +77,27 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `runloop_minus_api_minus_client.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `runloop_api_client.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `runloop_minus_api_minus_client.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `runloop_api_client.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `runloop_minus_api_minus_client.APIError`.
+All errors inherit from `runloop_api_client.APIError`.
 
 ```python
-import runloop_minus_api_minus_client
-from runloop_minus_api_minus_client import Runloop
+import runloop_api_client
+from runloop_api_client import Runloop
 
 client = Runloop()
 
 try:
     client.devboxes.create()
-except runloop_minus_api_minus_client.APIConnectionError as e:
+except runloop_api_client.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except runloop_minus_api_minus_client.RateLimitError as e:
+except runloop_api_client.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except runloop_minus_api_minus_client.APIStatusError as e:
+except runloop_api_client.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -125,7 +125,7 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from runloop_minus_api_minus_client import Runloop
+from runloop_api_client import Runloop
 
 # Configure the default for all requests:
 client = Runloop(
@@ -143,7 +143,7 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
-from runloop_minus_api_minus_client import Runloop
+from runloop_api_client import Runloop
 
 # Configure the default for all requests:
 client = Runloop(
@@ -193,7 +193,7 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from runloop_minus_api_minus_client import Runloop
+from runloop_api_client import Runloop
 
 client = Runloop()
 response = client.devboxes.with_raw_response.create()
@@ -203,9 +203,9 @@ devbox = response.parse()  # get the object that `devboxes.create()` would have 
 print(devbox.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_minus_api_minus_client/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_api_client/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_minus_api_minus_client/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_api_client/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -267,7 +267,7 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 - Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality
 
 ```python
-from runloop_minus_api_minus_client import Runloop, DefaultHttpxClient
+from runloop_api_client import Runloop, DefaultHttpxClient
 
 client = Runloop(
     # Or use the `RUNLOOP_BASE_URL` env var

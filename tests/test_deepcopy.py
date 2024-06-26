@@ -1,4 +1,4 @@
-from runloop_minus_api_minus_client._utils import deepcopy_minimal
+from runloop_api_client._utils import deepcopy_minimal
 
 
 def assert_different_identities(obj1: object, obj2: object) -> None:
