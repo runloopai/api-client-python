@@ -68,10 +68,6 @@ Types:
 from runloop_api_client.types.functions.invocations import InvocationSpanListView
 ```
 
-Methods:
-
-- <code title="get /v1/functions/invocations/{invocationId}/spans">client.functions.invocations.spans.<a href="./src/runloop_api_client/resources/functions/invocations/spans.py">list</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/invocations/invocation_span_list_view.py">InvocationSpanListView</a></code>
-
 # Projects
 
 Types:

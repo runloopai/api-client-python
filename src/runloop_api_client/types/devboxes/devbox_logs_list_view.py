@@ -8,6 +8,15 @@ __all__ = ["DevboxLogsListView", "Log"]
 
 
 class Log(BaseModel):
+    cmd: Optional[str] = None
+    """The Command Executed"""
+
+    cmd_id: Optional[str] = None
+    """Identifier of the associated command the log is sourced from."""
+
+    exit_code: Optional[int] = None
+    """The Exit Code of the command"""
+
     level: Optional[str] = None
     """Log line severity level."""
 
