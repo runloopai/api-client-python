@@ -8,8 +8,8 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from runloop_minus_api_minus_client import Runloop, AsyncRunloop
-from runloop_minus_api_minus_client.types import (
+from runloop_api_client import Runloop, AsyncRunloop
+from runloop_api_client.types import (
     DevboxView,
     DevboxListView,
     DevboxExecutionDetailView,

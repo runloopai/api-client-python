@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from runloop_minus_api_minus_client._utils import LazyProxy
+from runloop_api_client._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):
