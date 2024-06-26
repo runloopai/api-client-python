@@ -8,9 +8,9 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from runloop_minus_api_minus_client import Runloop, AsyncRunloop
-from runloop_minus_api_minus_client.types.shared import FunctionInvocationDetailView
-from runloop_minus_api_minus_client.types.functions import FunctionInvocationListView
+from runloop_api_client import Runloop, AsyncRunloop
+from runloop_api_client.types.shared import FunctionInvocationDetailView
+from runloop_api_client.types.functions import FunctionInvocationListView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 

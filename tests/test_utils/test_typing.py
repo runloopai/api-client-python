@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Generic, TypeVar, cast
 
-from runloop_minus_api_minus_client._utils import extract_type_var_from_base
+from runloop_api_client._utils import extract_type_var_from_base
 
 _T = TypeVar("_T")
 _T2 = TypeVar("_T2")

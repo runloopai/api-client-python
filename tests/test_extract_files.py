@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from runloop_minus_api_minus_client._types import FileTypes
-from runloop_minus_api_minus_client._utils import extract_files
+from runloop_api_client._types import FileTypes
+from runloop_api_client._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:
