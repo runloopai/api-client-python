@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from runloop_minus_api_minus_client._utils import PropertyInfo
-from runloop_minus_api_minus_client._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from runloop_minus_api_minus_client._models import BaseModel, construct_type
+from runloop_api_client._utils import PropertyInfo
+from runloop_api_client._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from runloop_api_client._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

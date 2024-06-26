@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from runloop_minus_api_minus_client._qs import Querystring, stringify
+from runloop_api_client._qs import Querystring, stringify
 
 
 def test_empty() -> None:

@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from runloop_minus_api_minus_client import Runloop, AsyncRunloop
-from runloop_minus_api_minus_client._streaming import Stream, AsyncStream, ServerSentEvent
+from runloop_api_client import Runloop, AsyncRunloop
+from runloop_api_client._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio
