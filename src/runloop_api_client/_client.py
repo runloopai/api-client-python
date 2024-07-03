@@ -93,7 +93,7 @@ class Runloop(SyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("RUNLOOP_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.runloop.pro"
+            base_url = f"https://api.runloop.ai"
 
         super().__init__(
             version=__version__,
@@ -265,7 +265,7 @@ class AsyncRunloop(AsyncAPIClient):
         if base_url is None:
             base_url = os.environ.get("RUNLOOP_BASE_URL")
         if base_url is None:
-            base_url = f"https://api.runloop.pro"
+            base_url = f"https://api.runloop.ai"
 
         super().__init__(
             version=__version__,
