@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
+from typing_extensions import Literal
 
 from ..._models import BaseModel
 
@@ -22,6 +23,9 @@ class Log(BaseModel):
 
     message: Optional[str] = None
     """Log line message."""
+
+    source: Optional[Literal["setup_commands", "entrypoint", "exec"]] = None
+    """The source of the log."""
 
     timestamp_ms: Optional[int] = None
     """Time of log (Unix timestamp milliseconds)."""
