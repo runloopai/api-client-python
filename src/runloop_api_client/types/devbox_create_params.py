@@ -22,6 +22,9 @@ class DevboxCreateParams(TypedDict, total=False):
     environment_variables: Dict[str, str]
     """(Optional) Environment variables used to configure your Devbox."""
 
+    name: str
+    """(Optional) A user specified name to give the Devbox."""
+
     setup_commands: List[str]
     """(Optional) List of commands needed to set up your Devbox.
 

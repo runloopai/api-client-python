@@ -32,6 +32,7 @@ class TestDevboxes:
             code_handle="string",
             entrypoint="string",
             environment_variables={"foo": "string"},
+            name="string",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -225,6 +226,7 @@ class TestAsyncDevboxes:
             code_handle="string",
             entrypoint="string",
             environment_variables={"foo": "string"},
+            name="string",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])

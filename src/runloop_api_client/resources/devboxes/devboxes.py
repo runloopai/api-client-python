@@ -57,6 +57,7 @@ class DevboxesResource(SyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -79,6 +80,8 @@ class DevboxesResource(SyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          name: (Optional) A user specified name to give the Devbox.
+
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -98,6 +101,7 @@ class DevboxesResource(SyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "name": name,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -272,6 +276,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -294,6 +299,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          name: (Optional) A user specified name to give the Devbox.
+
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -313,6 +320,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "name": name,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
