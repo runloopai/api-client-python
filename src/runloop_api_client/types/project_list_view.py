@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
 
@@ -48,11 +49,8 @@ class ProjectActiveDeploy(BaseModel):
     failure_message: Optional[str] = None
     """Failure message"""
 
-    status: Optional[str] = None
-    """
-    Status of the deploy (deploy_in_progress | deployed | deploy_failed |
-    not_started).
-    """
+    status: Optional[Literal["scheduled", "skipped", "in_progress", "failed", "deployed"]] = None
+    """Status of the deploy."""
 
 
 class ProjectInProgressDeploy(BaseModel):
@@ -84,11 +82,8 @@ class ProjectInProgressDeploy(BaseModel):
     failure_message: Optional[str] = None
     """Failure message"""
 
-    status: Optional[str] = None
-    """
-    Status of the deploy (deploy_in_progress | deployed | deploy_failed |
-    not_started).
-    """
+    status: Optional[Literal["scheduled", "skipped", "in_progress", "failed", "deployed"]] = None
+    """Status of the deploy."""
 
 
 class ProjectRecentDeployment(BaseModel):
@@ -120,11 +115,8 @@ class ProjectRecentDeployment(BaseModel):
     failure_message: Optional[str] = None
     """Failure message"""
 
-    status: Optional[str] = None
-    """
-    Status of the deploy (deploy_in_progress | deployed | deploy_failed |
-    not_started).
-    """
+    status: Optional[Literal["scheduled", "skipped", "in_progress", "failed", "deployed"]] = None
+    """Status of the deploy."""
 
 
 class Project(BaseModel):

@@ -9,14 +9,22 @@ __all__ = ["FunctionInvocationListView", "Invocation"]
 
 
 class Invocation(BaseModel):
-    id: Optional[str] = None
-    """Unique ID of the invocations."""
+    end_time_ms: int
+    """End time of the invocation."""
 
-    name: Optional[str] = None
-    """Name of the invoked function."""
+    start_time_ms: int
+    """Start time of the invocation."""
+
+    id: Optional[str] = None
+    """Unique ID of the invocation."""
+
+    error: Optional[str] = None
+
+    function_name: Optional[str] = None
+    """Unique name of the function."""
 
     project_name: Optional[str] = None
-    """Project name associated with invoked function."""
+    """Unique name of the project associated with function."""
 
     status: Optional[Literal["created", "running", "success", "failure", "canceled", "suspended"]] = None
 
