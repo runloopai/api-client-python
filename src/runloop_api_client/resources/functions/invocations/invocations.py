@@ -4,14 +4,6 @@ from __future__ import annotations
 
 import httpx
 
-from .spans import (
-    SpansResource,
-    AsyncSpansResource,
-    SpansResourceWithRawResponse,
-    AsyncSpansResourceWithRawResponse,
-    SpansResourceWithStreamingResponse,
-    AsyncSpansResourceWithStreamingResponse,
-)
 from ...._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -31,10 +23,6 @@ __all__ = ["InvocationsResource", "AsyncInvocationsResource"]
 
 
 class InvocationsResource(SyncAPIResource):
-    @cached_property
-    def spans(self) -> SpansResource:
-        return SpansResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> InvocationsResourceWithRawResponse:
         return InvocationsResourceWithRawResponse(self)
@@ -133,10 +121,6 @@ class InvocationsResource(SyncAPIResource):
 
 
 class AsyncInvocationsResource(AsyncAPIResource):
-    @cached_property
-    def spans(self) -> AsyncSpansResource:
-        return AsyncSpansResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncInvocationsResourceWithRawResponse:
         return AsyncInvocationsResourceWithRawResponse(self)
@@ -248,10 +232,6 @@ class InvocationsResourceWithRawResponse:
             invocations.kill,
         )
 
-    @cached_property
-    def spans(self) -> SpansResourceWithRawResponse:
-        return SpansResourceWithRawResponse(self._invocations.spans)
-
 
 class AsyncInvocationsResourceWithRawResponse:
     def __init__(self, invocations: AsyncInvocationsResource) -> None:
@@ -266,10 +246,6 @@ class AsyncInvocationsResourceWithRawResponse:
         self.kill = async_to_raw_response_wrapper(
             invocations.kill,
         )
-
-    @cached_property
-    def spans(self) -> AsyncSpansResourceWithRawResponse:
-        return AsyncSpansResourceWithRawResponse(self._invocations.spans)
 
 
 class InvocationsResourceWithStreamingResponse:
@@ -286,10 +262,6 @@ class InvocationsResourceWithStreamingResponse:
             invocations.kill,
         )
 
-    @cached_property
-    def spans(self) -> SpansResourceWithStreamingResponse:
-        return SpansResourceWithStreamingResponse(self._invocations.spans)
-
 
 class AsyncInvocationsResourceWithStreamingResponse:
     def __init__(self, invocations: AsyncInvocationsResource) -> None:
@@ -304,7 +276,3 @@ class AsyncInvocationsResourceWithStreamingResponse:
         self.kill = async_to_streamed_response_wrapper(
             invocations.kill,
         )
-
-    @cached_property
-    def spans(self) -> AsyncSpansResourceWithStreamingResponse:
-        return AsyncSpansResourceWithStreamingResponse(self._invocations.spans)

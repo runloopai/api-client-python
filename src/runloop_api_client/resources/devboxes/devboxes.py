@@ -14,7 +14,7 @@ from .logs import (
     LogsResourceWithStreamingResponse,
     AsyncLogsResourceWithStreamingResponse,
 )
-from ...types import devbox_list_params, devbox_create_params
+from ...types import devbox_list_params, devbox_create_params, devbox_execute_sync_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
     maybe_transform,
@@ -57,6 +57,7 @@ class DevboxesResource(SyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -79,6 +80,8 @@ class DevboxesResource(SyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          name: (Optional) A user specified name to give the Devbox.
+
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -98,6 +101,7 @@ class DevboxesResource(SyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "name": name,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -185,6 +189,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        command: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -196,6 +201,8 @@ class DevboxesResource(SyncAPIResource):
         Synchronously execute a command on a devbox
 
         Args:
+          command: The command to execute on the Devbox.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -208,6 +215,7 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
+            body=maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -268,6 +276,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -290,6 +299,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          name: (Optional) A user specified name to give the Devbox.
+
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -309,6 +320,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "name": name,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -396,6 +408,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        command: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -407,6 +420,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Synchronously execute a command on a devbox
 
         Args:
+          command: The command to execute on the Devbox.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -419,6 +434,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
+            body=await async_maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

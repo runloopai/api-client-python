@@ -32,6 +32,7 @@ class TestDevboxes:
             code_handle="string",
             entrypoint="string",
             environment_variables={"foo": "string"},
+            name="string",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -134,6 +135,14 @@ class TestDevboxes:
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
+    def test_method_execute_sync_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.execute_sync(
+            "string",
+            command="string",
+        )
+        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
     def test_raw_response_execute_sync(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.execute_sync(
             "string",
@@ -217,6 +226,7 @@ class TestAsyncDevboxes:
             code_handle="string",
             entrypoint="string",
             environment_variables={"foo": "string"},
+            name="string",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -315,6 +325,14 @@ class TestAsyncDevboxes:
     async def test_method_execute_sync(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.execute_sync(
             "string",
+        )
+        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_execute_sync_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.execute_sync(
+            "string",
+            command="string",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
