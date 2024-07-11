@@ -1,7 +1,7 @@
 # Shared Types
 
 ```python
-from runloop_api_client.types import FunctionInvocationDetailView, ProjectLogsView
+from runloop_api_client.types import ProjectLogsView
 ```
 
 # Devboxes
@@ -37,26 +37,34 @@ Methods:
 Types:
 
 ```python
-from runloop_api_client.types import FunctionListView
+from runloop_api_client.types import (
+    FunctionListView,
+    FunctionInvokeAsyncResponse,
+    FunctionInvokeSyncResponse,
+)
 ```
 
 Methods:
 
 - <code title="get /v1/functions">client.functions.<a href="./src/runloop_api_client/resources/functions/functions.py">list</a>() -> <a href="./src/runloop_api_client/types/function_list_view.py">FunctionListView</a></code>
-- <code title="post /v1/functions/{project_name}/{function_name}/invoke_async">client.functions.<a href="./src/runloop_api_client/resources/functions/functions.py">invoke_async</a>(function_name, \*, project_name, \*\*<a href="src/runloop_api_client/types/function_invoke_async_params.py">params</a>) -> <a href="./src/runloop_api_client/types/shared/function_invocation_detail_view.py">FunctionInvocationDetailView</a></code>
-- <code title="post /v1/functions/{project_name}/{function_name}/invoke_sync">client.functions.<a href="./src/runloop_api_client/resources/functions/functions.py">invoke_sync</a>(function_name, \*, project_name, \*\*<a href="src/runloop_api_client/types/function_invoke_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/shared/function_invocation_detail_view.py">FunctionInvocationDetailView</a></code>
+- <code title="post /v1/functions/{project_name}/{function_name}/invoke_async">client.functions.<a href="./src/runloop_api_client/resources/functions/functions.py">invoke_async</a>(function_name, \*, project_name, \*\*<a href="src/runloop_api_client/types/function_invoke_async_params.py">params</a>) -> <a href="./src/runloop_api_client/types/function_invoke_async_response.py">FunctionInvokeAsyncResponse</a></code>
+- <code title="post /v1/functions/{project_name}/{function_name}/invoke_sync">client.functions.<a href="./src/runloop_api_client/resources/functions/functions.py">invoke_sync</a>(function_name, \*, project_name, \*\*<a href="src/runloop_api_client/types/function_invoke_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/function_invoke_sync_response.py">FunctionInvokeSyncResponse</a></code>
 
 ## Invocations
 
 Types:
 
 ```python
-from runloop_api_client.types.functions import FunctionInvocationListView, KillOperationResponse
+from runloop_api_client.types.functions import (
+    FunctionInvocationListView,
+    KillOperationResponse,
+    InvocationRetrieveResponse,
+)
 ```
 
 Methods:
 
-- <code title="get /v1/functions/invocations/{invocationId}">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">retrieve</a>(invocation_id) -> <a href="./src/runloop_api_client/types/shared/function_invocation_detail_view.py">FunctionInvocationDetailView</a></code>
+- <code title="get /v1/functions/invocations/{invocationId}">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">retrieve</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/invocation_retrieve_response.py">InvocationRetrieveResponse</a></code>
 - <code title="get /v1/functions/invocations">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">list</a>() -> <a href="./src/runloop_api_client/types/functions/function_invocation_list_view.py">FunctionInvocationListView</a></code>
 - <code title="post /v1/functions/invocations/{invocationId}/kill">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">kill</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/kill_operation_response.py">object</a></code>
 

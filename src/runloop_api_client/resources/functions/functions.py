@@ -29,7 +29,8 @@ from .invocations import (
 from ..._base_client import make_request_options
 from .invocations.invocations import InvocationsResource, AsyncInvocationsResource
 from ...types.function_list_view import FunctionListView
-from ...types.shared.function_invocation_detail_view import FunctionInvocationDetailView
+from ...types.function_invoke_sync_response import FunctionInvokeSyncResponse
+from ...types.function_invoke_async_response import FunctionInvokeAsyncResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -79,7 +80,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetailView:
+    ) -> FunctionInvokeAsyncResponse:
         """Invoke the remote function asynchronously.
 
         This will return a job id that can be
@@ -112,7 +113,7 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetailView,
+            cast_to=FunctionInvokeAsyncResponse,
         )
 
     def invoke_sync(
@@ -128,7 +129,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetailView:
+    ) -> FunctionInvokeSyncResponse:
         """Invoke the remote function synchronously.
 
         This will block until the function
@@ -162,7 +163,7 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetailView,
+            cast_to=FunctionInvokeSyncResponse,
         )
 
 
@@ -211,7 +212,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetailView:
+    ) -> FunctionInvokeAsyncResponse:
         """Invoke the remote function asynchronously.
 
         This will return a job id that can be
@@ -244,7 +245,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetailView,
+            cast_to=FunctionInvokeAsyncResponse,
         )
 
     async def invoke_sync(
@@ -260,7 +261,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionInvocationDetailView:
+    ) -> FunctionInvokeSyncResponse:
         """Invoke the remote function synchronously.
 
         This will block until the function
@@ -294,7 +295,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionInvocationDetailView,
+            cast_to=FunctionInvokeSyncResponse,
         )
 
 
