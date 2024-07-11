@@ -21,14 +21,14 @@ class TestInvocations:
     @parametrize
     def test_method_retrieve(self, client: Runloop) -> None:
         invocation = client.functions.invocations.retrieve(
-            "string",
+            "invocationId",
         )
         assert_matches_type(FunctionInvocationDetailView, invocation, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Runloop) -> None:
         response = client.functions.invocations.with_raw_response.retrieve(
-            "string",
+            "invocationId",
         )
 
         assert response.is_closed is True
@@ -39,7 +39,7 @@ class TestInvocations:
     @parametrize
     def test_streaming_response_retrieve(self, client: Runloop) -> None:
         with client.functions.invocations.with_streaming_response.retrieve(
-            "string",
+            "invocationId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -84,14 +84,14 @@ class TestInvocations:
     @parametrize
     def test_method_kill(self, client: Runloop) -> None:
         invocation = client.functions.invocations.kill(
-            "string",
+            "invocationId",
         )
         assert_matches_type(object, invocation, path=["response"])
 
     @parametrize
     def test_raw_response_kill(self, client: Runloop) -> None:
         response = client.functions.invocations.with_raw_response.kill(
-            "string",
+            "invocationId",
         )
 
         assert response.is_closed is True
@@ -102,7 +102,7 @@ class TestInvocations:
     @parametrize
     def test_streaming_response_kill(self, client: Runloop) -> None:
         with client.functions.invocations.with_streaming_response.kill(
-            "string",
+            "invocationId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -126,14 +126,14 @@ class TestAsyncInvocations:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncRunloop) -> None:
         invocation = await async_client.functions.invocations.retrieve(
-            "string",
+            "invocationId",
         )
         assert_matches_type(FunctionInvocationDetailView, invocation, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncRunloop) -> None:
         response = await async_client.functions.invocations.with_raw_response.retrieve(
-            "string",
+            "invocationId",
         )
 
         assert response.is_closed is True
@@ -144,7 +144,7 @@ class TestAsyncInvocations:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncRunloop) -> None:
         async with async_client.functions.invocations.with_streaming_response.retrieve(
-            "string",
+            "invocationId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -189,14 +189,14 @@ class TestAsyncInvocations:
     @parametrize
     async def test_method_kill(self, async_client: AsyncRunloop) -> None:
         invocation = await async_client.functions.invocations.kill(
-            "string",
+            "invocationId",
         )
         assert_matches_type(object, invocation, path=["response"])
 
     @parametrize
     async def test_raw_response_kill(self, async_client: AsyncRunloop) -> None:
         response = await async_client.functions.invocations.with_raw_response.kill(
-            "string",
+            "invocationId",
         )
 
         assert response.is_closed is True
@@ -207,7 +207,7 @@ class TestAsyncInvocations:
     @parametrize
     async def test_streaming_response_kill(self, async_client: AsyncRunloop) -> None:
         async with async_client.functions.invocations.with_streaming_response.kill(
-            "string",
+            "invocationId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

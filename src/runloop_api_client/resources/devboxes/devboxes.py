@@ -28,9 +28,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import (
-    make_request_options,
-)
+from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView

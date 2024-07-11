@@ -13,9 +13,7 @@ from ...._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...._base_client import (
-    make_request_options,
-)
+from ...._base_client import make_request_options
 from ....types.shared.function_invocation_detail_view import FunctionInvocationDetailView
 from ....types.functions.function_invocation_list_view import FunctionInvocationListView
 
