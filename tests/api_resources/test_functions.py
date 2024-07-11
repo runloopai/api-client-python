@@ -46,8 +46,8 @@ class TestFunctions:
     @parametrize
     def test_method_invoke_async(self, client: Runloop) -> None:
         function = client.functions.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
@@ -55,18 +55,18 @@ class TestFunctions:
     @parametrize
     def test_method_invoke_async_with_all_params(self, client: Runloop) -> None:
         function = client.functions.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
-            runloop_meta={"session_id": "string"},
+            runloop_meta={"session_id": "session_id"},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
 
     @parametrize
     def test_raw_response_invoke_async(self, client: Runloop) -> None:
         response = client.functions.with_raw_response.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
 
@@ -78,8 +78,8 @@ class TestFunctions:
     @parametrize
     def test_streaming_response_invoke_async(self, client: Runloop) -> None:
         with client.functions.with_streaming_response.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         ) as response:
             assert not response.is_closed
@@ -94,23 +94,23 @@ class TestFunctions:
     def test_path_params_invoke_async(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `project_name` but received ''"):
             client.functions.with_raw_response.invoke_async(
-                "string",
+                function_name="function_name",
                 project_name="",
                 request={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `function_name` but received ''"):
             client.functions.with_raw_response.invoke_async(
-                "",
-                project_name="string",
+                function_name="",
+                project_name="project_name",
                 request={},
             )
 
     @parametrize
     def test_method_invoke_sync(self, client: Runloop) -> None:
         function = client.functions.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
@@ -118,18 +118,18 @@ class TestFunctions:
     @parametrize
     def test_method_invoke_sync_with_all_params(self, client: Runloop) -> None:
         function = client.functions.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
-            runloop_meta={"session_id": "string"},
+            runloop_meta={"session_id": "session_id"},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
 
     @parametrize
     def test_raw_response_invoke_sync(self, client: Runloop) -> None:
         response = client.functions.with_raw_response.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
 
@@ -141,8 +141,8 @@ class TestFunctions:
     @parametrize
     def test_streaming_response_invoke_sync(self, client: Runloop) -> None:
         with client.functions.with_streaming_response.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         ) as response:
             assert not response.is_closed
@@ -157,15 +157,15 @@ class TestFunctions:
     def test_path_params_invoke_sync(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `project_name` but received ''"):
             client.functions.with_raw_response.invoke_sync(
-                "string",
+                function_name="function_name",
                 project_name="",
                 request={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `function_name` but received ''"):
             client.functions.with_raw_response.invoke_sync(
-                "",
-                project_name="string",
+                function_name="",
+                project_name="project_name",
                 request={},
             )
 
@@ -201,8 +201,8 @@ class TestAsyncFunctions:
     @parametrize
     async def test_method_invoke_async(self, async_client: AsyncRunloop) -> None:
         function = await async_client.functions.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
@@ -210,18 +210,18 @@ class TestAsyncFunctions:
     @parametrize
     async def test_method_invoke_async_with_all_params(self, async_client: AsyncRunloop) -> None:
         function = await async_client.functions.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
-            runloop_meta={"session_id": "string"},
+            runloop_meta={"session_id": "session_id"},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
 
     @parametrize
     async def test_raw_response_invoke_async(self, async_client: AsyncRunloop) -> None:
         response = await async_client.functions.with_raw_response.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
 
@@ -233,8 +233,8 @@ class TestAsyncFunctions:
     @parametrize
     async def test_streaming_response_invoke_async(self, async_client: AsyncRunloop) -> None:
         async with async_client.functions.with_streaming_response.invoke_async(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         ) as response:
             assert not response.is_closed
@@ -249,23 +249,23 @@ class TestAsyncFunctions:
     async def test_path_params_invoke_async(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `project_name` but received ''"):
             await async_client.functions.with_raw_response.invoke_async(
-                "string",
+                function_name="function_name",
                 project_name="",
                 request={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `function_name` but received ''"):
             await async_client.functions.with_raw_response.invoke_async(
-                "",
-                project_name="string",
+                function_name="",
+                project_name="project_name",
                 request={},
             )
 
     @parametrize
     async def test_method_invoke_sync(self, async_client: AsyncRunloop) -> None:
         function = await async_client.functions.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
@@ -273,18 +273,18 @@ class TestAsyncFunctions:
     @parametrize
     async def test_method_invoke_sync_with_all_params(self, async_client: AsyncRunloop) -> None:
         function = await async_client.functions.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
-            runloop_meta={"session_id": "string"},
+            runloop_meta={"session_id": "session_id"},
         )
         assert_matches_type(FunctionInvocationDetailView, function, path=["response"])
 
     @parametrize
     async def test_raw_response_invoke_sync(self, async_client: AsyncRunloop) -> None:
         response = await async_client.functions.with_raw_response.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         )
 
@@ -296,8 +296,8 @@ class TestAsyncFunctions:
     @parametrize
     async def test_streaming_response_invoke_sync(self, async_client: AsyncRunloop) -> None:
         async with async_client.functions.with_streaming_response.invoke_sync(
-            "string",
-            project_name="string",
+            function_name="function_name",
+            project_name="project_name",
             request={},
         ) as response:
             assert not response.is_closed
@@ -312,14 +312,14 @@ class TestAsyncFunctions:
     async def test_path_params_invoke_sync(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `project_name` but received ''"):
             await async_client.functions.with_raw_response.invoke_sync(
-                "string",
+                function_name="function_name",
                 project_name="",
                 request={},
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `function_name` but received ''"):
             await async_client.functions.with_raw_response.invoke_sync(
-                "",
-                project_name="string",
+                function_name="",
+                project_name="project_name",
                 request={},
             )

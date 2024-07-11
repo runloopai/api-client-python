@@ -26,9 +26,7 @@ from .invocations import (
     InvocationsResourceWithStreamingResponse,
     AsyncInvocationsResourceWithStreamingResponse,
 )
-from ..._base_client import (
-    make_request_options,
-)
+from ..._base_client import make_request_options
 from .invocations.invocations import InvocationsResource, AsyncInvocationsResource
 from ...types.function_list_view import FunctionListView
 from ...types.shared.function_invocation_detail_view import FunctionInvocationDetailView
