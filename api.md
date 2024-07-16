@@ -65,7 +65,7 @@ from runloop_api_client.types.functions import (
 Methods:
 
 - <code title="get /v1/functions/invocations/{invocationId}">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">retrieve</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/invocation_retrieve_response.py">InvocationRetrieveResponse</a></code>
-- <code title="get /v1/functions/invocations">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">list</a>() -> <a href="./src/runloop_api_client/types/functions/function_invocation_list_view.py">FunctionInvocationListView</a></code>
+- <code title="get /v1/functions/invocations">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">list</a>(\*\*<a href="src/runloop_api_client/types/functions/invocation_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/functions/function_invocation_list_view.py">FunctionInvocationListView</a></code>
 - <code title="post /v1/functions/invocations/{invocationId}/kill">client.functions.invocations.<a href="./src/runloop_api_client/resources/functions/invocations/invocations.py">kill</a>(invocation_id) -> <a href="./src/runloop_api_client/types/functions/kill_operation_response.py">object</a></code>
 
 # Projects
