@@ -103,6 +103,8 @@ class TestDevboxes:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list(
+            limit="limit",
+            starting_after="starting_after",
             status="status",
         )
         assert_matches_type(DevboxListView, devbox, path=["response"])
@@ -297,6 +299,8 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list(
+            limit="limit",
+            starting_after="starting_after",
             status="status",
         )
         assert_matches_type(DevboxListView, devbox, path=["response"])
