@@ -147,6 +147,8 @@ class DevboxesResource(SyncAPIResource):
     def list(
         self,
         *,
+        limit: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -161,6 +163,10 @@ class DevboxesResource(SyncAPIResource):
         are returned.
 
         Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
           status: Filter by status
 
           extra_headers: Send extra headers
@@ -178,7 +184,14 @@ class DevboxesResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                        "status": status,
+                    },
+                    devbox_list_params.DevboxListParams,
+                ),
             ),
             cast_to=DevboxListView,
         )
@@ -366,6 +379,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        limit: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -380,6 +395,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         are returned.
 
         Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
           status: Filter by status
 
           extra_headers: Send extra headers
@@ -397,7 +416,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                        "status": status,
+                    },
+                    devbox_list_params.DevboxListParams,
+                ),
             ),
             cast_to=DevboxListView,
         )
