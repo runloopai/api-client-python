@@ -13,3 +13,5 @@ class DevboxListView(BaseModel):
     """List of devboxes matching filter."""
 
     has_more: Optional[bool] = None
+
+    total_count: Optional[int] = None

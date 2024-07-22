@@ -43,3 +43,5 @@ class FunctionInvocationListView(BaseModel):
 
     invocations: Optional[List[Invocation]] = None
     """List of functions matching given query."""
+
+    total_count: Optional[int] = None
