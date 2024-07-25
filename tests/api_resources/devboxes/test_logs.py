@@ -20,14 +20,14 @@ class TestLogs:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         log = client.devboxes.logs.list(
-            "string",
+            "id",
         )
         assert_matches_type(DevboxLogsListView, log, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
         response = client.devboxes.logs.with_raw_response.list(
-            "string",
+            "id",
         )
 
         assert response.is_closed is True
@@ -38,7 +38,7 @@ class TestLogs:
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
         with client.devboxes.logs.with_streaming_response.list(
-            "string",
+            "id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -62,14 +62,14 @@ class TestAsyncLogs:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         log = await async_client.devboxes.logs.list(
-            "string",
+            "id",
         )
         assert_matches_type(DevboxLogsListView, log, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.logs.with_raw_response.list(
-            "string",
+            "id",
         )
 
         assert response.is_closed is True
@@ -80,7 +80,7 @@ class TestAsyncLogs:
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.logs.with_streaming_response.list(
-            "string",
+            "id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

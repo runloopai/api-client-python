@@ -3,17 +3,14 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from .._models import BaseModel
 
-__all__ = ["FunctionInvocationListView", "Invocation"]
+__all__ = ["FunctionInvokeSyncResponse"]
 
 
-class Invocation(BaseModel):
+class FunctionInvokeSyncResponse(BaseModel):
     id: Optional[str] = None
     """Unique ID of the invocation."""
-
-    end_time_ms: Optional[int] = None
-    """End time of the invocation."""
 
     error: Optional[str] = None
 
@@ -21,7 +18,7 @@ class Invocation(BaseModel):
     """Unique name of the function."""
 
     gh_commit_sha: Optional[str] = None
-    """The Git sha of the project this invocation used."""
+    """The Git sha of the project this invocation used.."""
 
     gh_owner: Optional[str] = None
     """The Github Owner of the Project."""
@@ -32,16 +29,8 @@ class Invocation(BaseModel):
     project_name: Optional[str] = None
     """Unique name of the project associated with function."""
 
-    start_time_ms: Optional[int] = None
-    """Start time of the invocation."""
+    request: Optional[object] = None
+
+    result: Optional[object] = None
 
     status: Optional[Literal["created", "running", "success", "failure", "canceled", "suspended"]] = None
-
-
-class FunctionInvocationListView(BaseModel):
-    has_more: Optional[bool] = None
-
-    invocations: Optional[List[Invocation]] = None
-    """List of functions matching given query."""
-
-    total_count: Optional[int] = None

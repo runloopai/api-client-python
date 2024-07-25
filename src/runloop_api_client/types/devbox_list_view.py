@@ -11,3 +11,7 @@ __all__ = ["DevboxListView"]
 class DevboxListView(BaseModel):
     devboxes: Optional[List[DevboxView]] = None
     """List of devboxes matching filter."""
+
+    has_more: Optional[bool] = None
+
+    total_count: Optional[int] = None

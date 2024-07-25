@@ -28,9 +28,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import (
-    make_request_options,
-)
+from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
@@ -57,6 +55,7 @@ class DevboxesResource(SyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        image_id: str | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -80,6 +79,9 @@ class DevboxesResource(SyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          image_id: (Optional) Image to use as the for the Devbox. If none set, the default Runloop
+              image will be used.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -101,6 +103,7 @@ class DevboxesResource(SyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "image_id": image_id,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -149,6 +152,8 @@ class DevboxesResource(SyncAPIResource):
     def list(
         self,
         *,
+        limit: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -163,6 +168,10 @@ class DevboxesResource(SyncAPIResource):
         are returned.
 
         Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
           status: Filter by status
 
           extra_headers: Send extra headers
@@ -180,7 +189,14 @@ class DevboxesResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                        "status": status,
+                    },
+                    devbox_list_params.DevboxListParams,
+                ),
             ),
             cast_to=DevboxListView,
         )
@@ -276,6 +292,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        image_id: str | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -299,6 +316,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
+          image_id: (Optional) Image to use as the for the Devbox. If none set, the default Runloop
+              image will be used.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -320,6 +340,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
+                    "image_id": image_id,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -368,6 +389,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        limit: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -382,6 +405,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         are returned.
 
         Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
           status: Filter by status
 
           extra_headers: Send extra headers
@@ -399,7 +426,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform({"status": status}, devbox_list_params.DevboxListParams),
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                        "status": status,
+                    },
+                    devbox_list_params.DevboxListParams,
+                ),
             ),
             cast_to=DevboxListView,
         )
