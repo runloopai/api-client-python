@@ -56,6 +56,7 @@ class DevboxesResource(SyncAPIResource):
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         image_id: str | NotGiven = NOT_GIVEN,
+        image_name: str | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -79,8 +80,11 @@ class DevboxesResource(SyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
-          image_id: (Optional) Image to use as the for the Devbox. If none set, the default Runloop
-              image will be used.
+          image_id: (Optional) Image to use for the Devbox. If none set, the default Runloop image
+              will be used.
+
+          image_name: (Optional) Name of image to use for the Devbox. When set, this will load the
+              latest successfully built image with the given name.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -104,6 +108,7 @@ class DevboxesResource(SyncAPIResource):
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "image_id": image_id,
+                    "image_name": image_name,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -293,6 +298,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         image_id: str | NotGiven = NOT_GIVEN,
+        image_name: str | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -316,8 +322,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
-          image_id: (Optional) Image to use as the for the Devbox. If none set, the default Runloop
-              image will be used.
+          image_id: (Optional) Image to use for the Devbox. If none set, the default Runloop image
+              will be used.
+
+          image_name: (Optional) Name of image to use for the Devbox. When set, this will load the
+              latest successfully built image with the given name.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -341,6 +350,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "image_id": image_id,
+                    "image_name": image_name,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
