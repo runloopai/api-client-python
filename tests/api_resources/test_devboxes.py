@@ -33,6 +33,7 @@ class TestDevboxes:
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             image_id="image_id",
+            image_name="image_name",
             name="name",
             setup_commands=["string", "string", "string"],
         )
@@ -230,6 +231,7 @@ class TestAsyncDevboxes:
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             image_id="image_id",
+            image_name="image_name",
             name="name",
             setup_commands=["string", "string", "string"],
         )

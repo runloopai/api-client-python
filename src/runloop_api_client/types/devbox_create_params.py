@@ -23,9 +23,16 @@ class DevboxCreateParams(TypedDict, total=False):
     """(Optional) Environment variables used to configure your Devbox."""
 
     image_id: str
-    """(Optional) Image to use as the for the Devbox.
+    """(Optional) Image to use for the Devbox.
 
     If none set, the default Runloop image will be used.
+    """
+
+    image_name: str
+    """(Optional) Name of image to use for the Devbox.
+
+    When set, this will load the latest successfully built image with the given
+    name.
     """
 
     name: str
