@@ -12,6 +12,9 @@ class InvocationRetrieveResponse(BaseModel):
     id: Optional[str] = None
     """Unique ID of the invocation."""
 
+    end_time_ms: Optional[int] = None
+    """End time of the invocation."""
+
     error: Optional[str] = None
 
     function_name: Optional[str] = None
@@ -32,5 +35,8 @@ class InvocationRetrieveResponse(BaseModel):
     request: Optional[object] = None
 
     result: Optional[object] = None
+
+    start_time_ms: Optional[int] = None
+    """Start time of the invocation."""
 
     status: Optional[Literal["created", "running", "success", "failure", "canceled", "suspended"]] = None
