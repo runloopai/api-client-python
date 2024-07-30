@@ -81,13 +81,13 @@ class Runloop(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous runloop client instance.
 
-        This automatically infers the `bearer_token` argument from the `RUNLOOP_BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `RUNLOOP_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("RUNLOOP_BEARER_TOKEN")
+            bearer_token = os.environ.get("RUNLOOP_API_KEY")
         if bearer_token is None:
             raise RunloopError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the RUNLOOP_BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the RUNLOOP_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
@@ -255,13 +255,13 @@ class AsyncRunloop(AsyncAPIClient):
     ) -> None:
         """Construct a new async runloop client instance.
 
-        This automatically infers the `bearer_token` argument from the `RUNLOOP_BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `RUNLOOP_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("RUNLOOP_BEARER_TOKEN")
+            bearer_token = os.environ.get("RUNLOOP_API_KEY")
         if bearer_token is None:
             raise RunloopError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the RUNLOOP_BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the RUNLOOP_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
