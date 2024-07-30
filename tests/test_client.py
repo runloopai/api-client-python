@@ -732,11 +732,11 @@ class TestRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/blueprints").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             self.client.post(
-                "/v1/devboxes",
+                "/v1/blueprints",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -747,11 +747,11 @@ class TestRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/blueprints").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             self.client.post(
-                "/v1/devboxes",
+                "/v1/blueprints",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -1447,11 +1447,11 @@ class TestAsyncRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/blueprints").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             await self.client.post(
-                "/v1/devboxes",
+                "/v1/blueprints",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -1462,11 +1462,11 @@ class TestAsyncRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/blueprints").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             await self.client.post(
-                "/v1/devboxes",
+                "/v1/blueprints",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},

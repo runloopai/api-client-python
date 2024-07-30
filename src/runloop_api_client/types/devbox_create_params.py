@@ -9,6 +9,19 @@ __all__ = ["DevboxCreateParams"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
+    blueprint_id: str
+    """(Optional) Blueprint to use for the Devbox.
+
+    If none set, the Devbox will be created with the default Runloop Devbox image.
+    """
+
+    blueprint_name: str
+    """(Optional) Name of Blueprint to use for the Devbox.
+
+    When set, this will load the latest successfully built Blueprint with the given
+    name.
+    """
+
     code_handle: str
     """(Optional) Id of a code handle to mount to devbox."""
 
@@ -21,12 +34,6 @@ class DevboxCreateParams(TypedDict, total=False):
 
     environment_variables: Dict[str, str]
     """(Optional) Environment variables used to configure your Devbox."""
-
-    image_id: str
-    """(Optional) Image to use as the for the Devbox.
-
-    If none set, the default Runloop image will be used.
-    """
 
     name: str
     """(Optional) A user specified name to give the Devbox."""

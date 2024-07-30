@@ -2,95 +2,74 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import List, Iterable
 
 import httpx
 
-from .logs import (
-    LogsResource,
-    AsyncLogsResource,
-    LogsResourceWithRawResponse,
-    AsyncLogsResourceWithRawResponse,
-    LogsResourceWithStreamingResponse,
-    AsyncLogsResourceWithStreamingResponse,
-)
-from ...types import devbox_list_params, devbox_create_params, devbox_execute_sync_params
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import (
+from ..types import blueprint_list_params, blueprint_create_params, blueprint_preview_params
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._utils import (
     maybe_transform,
     async_maybe_transform,
 )
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
-from ...types.devbox_view import DevboxView
-from ...types.devbox_list_view import DevboxListView
-from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
+from .._base_client import make_request_options
+from ..types.blueprint_view import BlueprintView
+from ..types.blueprint_list_view import BlueprintListView
+from ..types.blueprint_preview_view import BlueprintPreviewView
+from ..types.code_mount_parameters_param import CodeMountParametersParam
+from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 
-__all__ = ["DevboxesResource", "AsyncDevboxesResource"]
+__all__ = ["BlueprintsResource", "AsyncBlueprintsResource"]
 
 
-class DevboxesResource(SyncAPIResource):
+class BlueprintsResource(SyncAPIResource):
     @cached_property
-    def logs(self) -> LogsResource:
-        return LogsResource(self._client)
-
-    @cached_property
-    def with_raw_response(self) -> DevboxesResourceWithRawResponse:
-        return DevboxesResourceWithRawResponse(self)
+    def with_raw_response(self) -> BlueprintsResourceWithRawResponse:
+        return BlueprintsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> DevboxesResourceWithStreamingResponse:
-        return DevboxesResourceWithStreamingResponse(self)
+    def with_streaming_response(self) -> BlueprintsResourceWithStreamingResponse:
+        return BlueprintsResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        blueprint_id: str | NotGiven = NOT_GIVEN,
-        blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
-        entrypoint: str | NotGiven = NOT_GIVEN,
-        environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        dockerfile: str | NotGiven = NOT_GIVEN,
+        launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
-        setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Create a Devbox with the specified configuration.
+    ) -> BlueprintView:
+        """Build a Blueprint with the specified configuration.
 
-        The Devbox will be created in
-        the 'pending' state and will transition to 'running' once it is ready.
+        The Blueprint will begin
+        building upon create, ' and will transition to 'building_complete' once it is
+        ready.
 
         Args:
-          blueprint_id: (Optional) Blueprint to use for the Devbox. If none set, the Devbox will be
-              created with the default Runloop Devbox image.
+          code_mounts: A list of code mounts to be included in the Blueprint.
 
-          blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
-              latest successfully built Blueprint with the given name.
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
+          launch_parameters: Parameters to configure your Devbox at launch time.
 
-          entrypoint: (Optional) When specified, the Devbox will run this script as its main
-              executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-              the process is complete.
+          name: Name of the Blueprint.
 
-          environment_variables: (Optional) Environment variables used to configure your Devbox.
-
-          name: (Optional) A user specified name to give the Devbox.
-
-          setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
-              fetching a tool or building your dependencies. Runloop will look optimize these
-              steps for you.
+          system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
 
@@ -101,23 +80,21 @@ class DevboxesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/v1/devboxes",
+            "/v1/blueprints",
             body=maybe_transform(
                 {
-                    "blueprint_id": blueprint_id,
-                    "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
-                    "entrypoint": entrypoint,
-                    "environment_variables": environment_variables,
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
+                    "launch_parameters": launch_parameters,
                     "name": name,
-                    "setup_commands": setup_commands,
+                    "system_setup_commands": system_setup_commands,
                 },
-                devbox_create_params.DevboxCreateParams,
+                blueprint_create_params.BlueprintCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintView,
         )
 
     def retrieve(
@@ -130,10 +107,9 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Get a devbox by id.
-
-        If the devbox does not exist, a 404 is returned.
+    ) -> BlueprintView:
+        """
+        Get a previously built Blueprint.
 
         Args:
           extra_headers: Send extra headers
@@ -147,37 +123,37 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/devboxes/{id}",
+            f"/v1/blueprints/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintView,
         )
 
     def list(
         self,
         *,
         limit: str | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
-        status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxListView:
-        """List all devboxes or filter by status.
+    ) -> BlueprintListView:
+        """List all blueprints or filter by name.
 
-        If no status is provided, all devboxes
+        If no status is provided, all blueprints
         are returned.
 
         Args:
           limit: Page Limit
 
-          starting_after: Load the next page starting after the given token.
+          name: Filter by name
 
-          status: Filter by status
+          starting_after: Load the next page starting after the given token.
 
           extra_headers: Send extra headers
 
@@ -188,7 +164,7 @@ class DevboxesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get(
-            "/v1/devboxes",
+            "/v1/blueprints",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -197,53 +173,16 @@ class DevboxesResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
-                        "status": status,
                     },
-                    devbox_list_params.DevboxListParams,
+                    blueprint_list_params.BlueprintListParams,
                 ),
             ),
-            cast_to=DevboxListView,
+            cast_to=BlueprintListView,
         )
 
-    def execute_sync(
-        self,
-        id: str,
-        *,
-        command: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Synchronously execute a command on a devbox
-
-        Args:
-          command: The command to execute on the Devbox.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/execute_sync",
-            body=maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
-    def shutdown(
+    def logs(
         self,
         id: str,
         *,
@@ -253,10 +192,9 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Shutdown a running devbox by id.
-
-        This will take the devbox out of service.
+    ) -> BlueprintBuildLogsListView:
+        """
+        Get Blueprint build logs.
 
         Args:
           extra_headers: Send extra headers
@@ -269,70 +207,112 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/shutdown",
+        return self._get(
+            f"/v1/blueprints/{id}/logs",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintBuildLogsListView,
+        )
+
+    def preview(
+        self,
+        *,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        dockerfile: str | NotGiven = NOT_GIVEN,
+        launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> BlueprintPreviewView:
+        """Preview building a Blueprint with the specified configuration.
+
+        You can take the
+        resulting Dockerfile and test out your build.
+
+        Args:
+          code_mounts: A list of code mounts to be included in the Blueprint.
+
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          name: Name of the Blueprint.
+
+          system_setup_commands: A list of commands to run to set up your system.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/v1/blueprints/preview",
+            body=maybe_transform(
+                {
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
+                    "launch_parameters": launch_parameters,
+                    "name": name,
+                    "system_setup_commands": system_setup_commands,
+                },
+                blueprint_preview_params.BlueprintPreviewParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BlueprintPreviewView,
         )
 
 
-class AsyncDevboxesResource(AsyncAPIResource):
+class AsyncBlueprintsResource(AsyncAPIResource):
     @cached_property
-    def logs(self) -> AsyncLogsResource:
-        return AsyncLogsResource(self._client)
+    def with_raw_response(self) -> AsyncBlueprintsResourceWithRawResponse:
+        return AsyncBlueprintsResourceWithRawResponse(self)
 
     @cached_property
-    def with_raw_response(self) -> AsyncDevboxesResourceWithRawResponse:
-        return AsyncDevboxesResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncDevboxesResourceWithStreamingResponse:
-        return AsyncDevboxesResourceWithStreamingResponse(self)
+    def with_streaming_response(self) -> AsyncBlueprintsResourceWithStreamingResponse:
+        return AsyncBlueprintsResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        blueprint_id: str | NotGiven = NOT_GIVEN,
-        blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
-        entrypoint: str | NotGiven = NOT_GIVEN,
-        environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        dockerfile: str | NotGiven = NOT_GIVEN,
+        launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
-        setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Create a Devbox with the specified configuration.
+    ) -> BlueprintView:
+        """Build a Blueprint with the specified configuration.
 
-        The Devbox will be created in
-        the 'pending' state and will transition to 'running' once it is ready.
+        The Blueprint will begin
+        building upon create, ' and will transition to 'building_complete' once it is
+        ready.
 
         Args:
-          blueprint_id: (Optional) Blueprint to use for the Devbox. If none set, the Devbox will be
-              created with the default Runloop Devbox image.
+          code_mounts: A list of code mounts to be included in the Blueprint.
 
-          blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
-              latest successfully built Blueprint with the given name.
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
+          launch_parameters: Parameters to configure your Devbox at launch time.
 
-          entrypoint: (Optional) When specified, the Devbox will run this script as its main
-              executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-              the process is complete.
+          name: Name of the Blueprint.
 
-          environment_variables: (Optional) Environment variables used to configure your Devbox.
-
-          name: (Optional) A user specified name to give the Devbox.
-
-          setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
-              fetching a tool or building your dependencies. Runloop will look optimize these
-              steps for you.
+          system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
 
@@ -343,23 +323,21 @@ class AsyncDevboxesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/v1/devboxes",
+            "/v1/blueprints",
             body=await async_maybe_transform(
                 {
-                    "blueprint_id": blueprint_id,
-                    "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
-                    "entrypoint": entrypoint,
-                    "environment_variables": environment_variables,
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
+                    "launch_parameters": launch_parameters,
                     "name": name,
-                    "setup_commands": setup_commands,
+                    "system_setup_commands": system_setup_commands,
                 },
-                devbox_create_params.DevboxCreateParams,
+                blueprint_create_params.BlueprintCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintView,
         )
 
     async def retrieve(
@@ -372,10 +350,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Get a devbox by id.
-
-        If the devbox does not exist, a 404 is returned.
+    ) -> BlueprintView:
+        """
+        Get a previously built Blueprint.
 
         Args:
           extra_headers: Send extra headers
@@ -389,37 +366,37 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/devboxes/{id}",
+            f"/v1/blueprints/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintView,
         )
 
     async def list(
         self,
         *,
         limit: str | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
-        status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxListView:
-        """List all devboxes or filter by status.
+    ) -> BlueprintListView:
+        """List all blueprints or filter by name.
 
-        If no status is provided, all devboxes
+        If no status is provided, all blueprints
         are returned.
 
         Args:
           limit: Page Limit
 
-          starting_after: Load the next page starting after the given token.
+          name: Filter by name
 
-          status: Filter by status
+          starting_after: Load the next page starting after the given token.
 
           extra_headers: Send extra headers
 
@@ -430,7 +407,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._get(
-            "/v1/devboxes",
+            "/v1/blueprints",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -439,53 +416,16 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
-                        "status": status,
                     },
-                    devbox_list_params.DevboxListParams,
+                    blueprint_list_params.BlueprintListParams,
                 ),
             ),
-            cast_to=DevboxListView,
+            cast_to=BlueprintListView,
         )
 
-    async def execute_sync(
-        self,
-        id: str,
-        *,
-        command: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Synchronously execute a command on a devbox
-
-        Args:
-          command: The command to execute on the Devbox.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/execute_sync",
-            body=await async_maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
-    async def shutdown(
+    async def logs(
         self,
         id: str,
         *,
@@ -495,10 +435,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxView:
-        """Shutdown a running devbox by id.
-
-        This will take the devbox out of service.
+    ) -> BlueprintBuildLogsListView:
+        """
+        Get Blueprint build logs.
 
         Args:
           extra_headers: Send extra headers
@@ -511,110 +450,151 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/shutdown",
+        return await self._get(
+            f"/v1/blueprints/{id}/logs",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxView,
+            cast_to=BlueprintBuildLogsListView,
+        )
+
+    async def preview(
+        self,
+        *,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        dockerfile: str | NotGiven = NOT_GIVEN,
+        launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> BlueprintPreviewView:
+        """Preview building a Blueprint with the specified configuration.
+
+        You can take the
+        resulting Dockerfile and test out your build.
+
+        Args:
+          code_mounts: A list of code mounts to be included in the Blueprint.
+
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          name: Name of the Blueprint.
+
+          system_setup_commands: A list of commands to run to set up your system.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/v1/blueprints/preview",
+            body=await async_maybe_transform(
+                {
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
+                    "launch_parameters": launch_parameters,
+                    "name": name,
+                    "system_setup_commands": system_setup_commands,
+                },
+                blueprint_preview_params.BlueprintPreviewParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BlueprintPreviewView,
         )
 
 
-class DevboxesResourceWithRawResponse:
-    def __init__(self, devboxes: DevboxesResource) -> None:
-        self._devboxes = devboxes
+class BlueprintsResourceWithRawResponse:
+    def __init__(self, blueprints: BlueprintsResource) -> None:
+        self._blueprints = blueprints
 
         self.create = to_raw_response_wrapper(
-            devboxes.create,
+            blueprints.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            devboxes.retrieve,
+            blueprints.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            devboxes.list,
+            blueprints.list,
         )
-        self.execute_sync = to_raw_response_wrapper(
-            devboxes.execute_sync,
+        self.logs = to_raw_response_wrapper(
+            blueprints.logs,
         )
-        self.shutdown = to_raw_response_wrapper(
-            devboxes.shutdown,
+        self.preview = to_raw_response_wrapper(
+            blueprints.preview,
         )
 
-    @cached_property
-    def logs(self) -> LogsResourceWithRawResponse:
-        return LogsResourceWithRawResponse(self._devboxes.logs)
 
-
-class AsyncDevboxesResourceWithRawResponse:
-    def __init__(self, devboxes: AsyncDevboxesResource) -> None:
-        self._devboxes = devboxes
+class AsyncBlueprintsResourceWithRawResponse:
+    def __init__(self, blueprints: AsyncBlueprintsResource) -> None:
+        self._blueprints = blueprints
 
         self.create = async_to_raw_response_wrapper(
-            devboxes.create,
+            blueprints.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            devboxes.retrieve,
+            blueprints.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            devboxes.list,
+            blueprints.list,
         )
-        self.execute_sync = async_to_raw_response_wrapper(
-            devboxes.execute_sync,
+        self.logs = async_to_raw_response_wrapper(
+            blueprints.logs,
         )
-        self.shutdown = async_to_raw_response_wrapper(
-            devboxes.shutdown,
+        self.preview = async_to_raw_response_wrapper(
+            blueprints.preview,
         )
 
-    @cached_property
-    def logs(self) -> AsyncLogsResourceWithRawResponse:
-        return AsyncLogsResourceWithRawResponse(self._devboxes.logs)
 
-
-class DevboxesResourceWithStreamingResponse:
-    def __init__(self, devboxes: DevboxesResource) -> None:
-        self._devboxes = devboxes
+class BlueprintsResourceWithStreamingResponse:
+    def __init__(self, blueprints: BlueprintsResource) -> None:
+        self._blueprints = blueprints
 
         self.create = to_streamed_response_wrapper(
-            devboxes.create,
+            blueprints.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            devboxes.retrieve,
+            blueprints.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            devboxes.list,
+            blueprints.list,
         )
-        self.execute_sync = to_streamed_response_wrapper(
-            devboxes.execute_sync,
+        self.logs = to_streamed_response_wrapper(
+            blueprints.logs,
         )
-        self.shutdown = to_streamed_response_wrapper(
-            devboxes.shutdown,
+        self.preview = to_streamed_response_wrapper(
+            blueprints.preview,
         )
 
-    @cached_property
-    def logs(self) -> LogsResourceWithStreamingResponse:
-        return LogsResourceWithStreamingResponse(self._devboxes.logs)
 
-
-class AsyncDevboxesResourceWithStreamingResponse:
-    def __init__(self, devboxes: AsyncDevboxesResource) -> None:
-        self._devboxes = devboxes
+class AsyncBlueprintsResourceWithStreamingResponse:
+    def __init__(self, blueprints: AsyncBlueprintsResource) -> None:
+        self._blueprints = blueprints
 
         self.create = async_to_streamed_response_wrapper(
-            devboxes.create,
+            blueprints.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            devboxes.retrieve,
+            blueprints.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            devboxes.list,
+            blueprints.list,
         )
-        self.execute_sync = async_to_streamed_response_wrapper(
-            devboxes.execute_sync,
+        self.logs = async_to_streamed_response_wrapper(
+            blueprints.logs,
         )
-        self.shutdown = async_to_streamed_response_wrapper(
-            devboxes.shutdown,
+        self.preview = async_to_streamed_response_wrapper(
+            blueprints.preview,
         )
-
-    @cached_property
-    def logs(self) -> AsyncLogsResourceWithStreamingResponse:
-        return AsyncLogsResourceWithStreamingResponse(self._devboxes.logs)

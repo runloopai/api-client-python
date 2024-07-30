@@ -29,10 +29,11 @@ class TestDevboxes:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.create(
+            blueprint_id="blueprint_id",
+            blueprint_name="blueprint_name",
             code_handle="code_handle",
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
-            image_id="image_id",
             name="name",
             setup_commands=["string", "string", "string"],
         )
@@ -226,10 +227,11 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.create(
+            blueprint_id="blueprint_id",
+            blueprint_name="blueprint_name",
             code_handle="code_handle",
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
-            image_id="image_id",
             name="name",
             setup_commands=["string", "string", "string"],
         )
