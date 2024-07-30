@@ -12,6 +12,9 @@ class DevboxView(BaseModel):
     id: Optional[str] = None
     """The id of the Devbox."""
 
+    blueprint_id: Optional[str] = None
+    """The Blueprint ID used in creation of the Devbox, if any."""
+
     create_time_ms: Optional[int] = None
     """Creation time of the Devbox (Unix timestamp milliseconds)."""
 
