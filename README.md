@@ -29,16 +29,16 @@ from runloop_api_client import Runloop
 
 client = Runloop(
     # This is the default and can be omitted
-    bearer_token=os.environ.get("RUNLOOP_BEARER_TOKEN"),
+    bearer_token=os.environ.get("RUNLOOP_API_KEY"),
 )
 
-blueprint_preview_view = client.blueprints.create()
-print(blueprint_preview_view.dockerfile)
+blueprint_view = client.blueprints.create()
+print(blueprint_view.id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `RUNLOOP_BEARER_TOKEN="My Bearer Token"` to your `.env` file
+to add `RUNLOOP_API_KEY="My Bearer Token"` to your `.env` file
 so that your Bearer Token is not stored in source control.
 
 ## Async usage
@@ -52,13 +52,13 @@ from runloop_api_client import AsyncRunloop
 
 client = AsyncRunloop(
     # This is the default and can be omitted
-    bearer_token=os.environ.get("RUNLOOP_BEARER_TOKEN"),
+    bearer_token=os.environ.get("RUNLOOP_API_KEY"),
 )
 
 
 async def main() -> None:
-    blueprint_preview_view = await client.blueprints.create()
-    print(blueprint_preview_view.dockerfile)
+    blueprint_view = await client.blueprints.create()
+    print(blueprint_view.id)
 
 
 asyncio.run(main())
@@ -200,7 +200,7 @@ response = client.blueprints.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
 blueprint = response.parse()  # get the object that `blueprints.create()` would have returned
-print(blueprint.dockerfile)
+print(blueprint.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_api_client/_response.py) object.
