@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0-alpha.7 (2024-07-30)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#41](https://github.com/runloopai/api-client-python/issues/41)) ([d4da50f](https://github.com/runloopai/api-client-python/commit/d4da50fc963abf097b5d214df1cc3ee641281ab3))
+* **api:** OpenAPI spec update via Stainless API ([#43](https://github.com/runloopai/api-client-python/issues/43)) ([2eed5ae](https://github.com/runloopai/api-client-python/commit/2eed5aed9091a2040efe730cb63baa8b284f1c4d))
+* **api:** OpenAPI spec update via Stainless API ([#44](https://github.com/runloopai/api-client-python/issues/44)) ([d936662](https://github.com/runloopai/api-client-python/commit/d936662a5aea53a50f8ccf7e7d29c3634a8567d7))
+* **api:** OpenAPI spec update via Stainless API ([#46](https://github.com/runloopai/api-client-python/issues/46)) ([cd62f94](https://github.com/runloopai/api-client-python/commit/cd62f949150028cdd481966722d26f1ea3333cd2))
+* **api:** OpenAPI spec update via Stainless API ([#47](https://github.com/runloopai/api-client-python/issues/47)) ([218b9b0](https://github.com/runloopai/api-client-python/commit/218b9b0a1af247c96d7ca5299cf5c855bc4e3dfd))
+* **api:** OpenAPI spec update via Stainless API ([#48](https://github.com/runloopai/api-client-python/issues/48)) ([b866f26](https://github.com/runloopai/api-client-python/commit/b866f2684b69ba1f5b3ed4f360c8de03aefa63e4))
+* **api:** OpenAPI spec update via Stainless API ([#49](https://github.com/runloopai/api-client-python/issues/49)) ([3a39028](https://github.com/runloopai/api-client-python/commit/3a390287c870129265fc9f2cee6c6042430ea61f))
+* **api:** OpenAPI spec update via Stainless API ([#50](https://github.com/runloopai/api-client-python/issues/50)) ([c6d26f4](https://github.com/runloopai/api-client-python/commit/c6d26f407dffb8b65342476e129e11a2caa481db))
+
+
+### Chores
+
+* **internal:** add type construction helper ([#45](https://github.com/runloopai/api-client-python/issues/45)) ([8b05828](https://github.com/runloopai/api-client-python/commit/8b058280802b5ce7987065d17806632de4a80d32))
+
 ## 0.1.0-alpha.6 (2024-07-25)
 
 Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
