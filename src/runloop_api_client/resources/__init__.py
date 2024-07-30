@@ -24,8 +24,22 @@ from .functions import (
     FunctionsResourceWithStreamingResponse,
     AsyncFunctionsResourceWithStreamingResponse,
 )
+from .blueprints import (
+    BlueprintsResource,
+    AsyncBlueprintsResource,
+    BlueprintsResourceWithRawResponse,
+    AsyncBlueprintsResourceWithRawResponse,
+    BlueprintsResourceWithStreamingResponse,
+    AsyncBlueprintsResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "BlueprintsResource",
+    "AsyncBlueprintsResource",
+    "BlueprintsResourceWithRawResponse",
+    "AsyncBlueprintsResourceWithRawResponse",
+    "BlueprintsResourceWithStreamingResponse",
+    "AsyncBlueprintsResourceWithStreamingResponse",
     "DevboxesResource",
     "AsyncDevboxesResource",
     "DevboxesResourceWithRawResponse",

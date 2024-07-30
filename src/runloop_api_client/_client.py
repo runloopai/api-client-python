@@ -46,6 +46,7 @@ __all__ = [
 
 
 class Runloop(SyncAPIClient):
+    blueprints: resources.BlueprintsResource
     devboxes: resources.DevboxesResource
     functions: resources.FunctionsResource
     projects: resources.ProjectsResource
@@ -106,6 +107,7 @@ class Runloop(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
+        self.blueprints = resources.BlueprintsResource(self)
         self.devboxes = resources.DevboxesResource(self)
         self.functions = resources.FunctionsResource(self)
         self.projects = resources.ProjectsResource(self)
@@ -218,6 +220,7 @@ class Runloop(SyncAPIClient):
 
 
 class AsyncRunloop(AsyncAPIClient):
+    blueprints: resources.AsyncBlueprintsResource
     devboxes: resources.AsyncDevboxesResource
     functions: resources.AsyncFunctionsResource
     projects: resources.AsyncProjectsResource
@@ -278,6 +281,7 @@ class AsyncRunloop(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
+        self.blueprints = resources.AsyncBlueprintsResource(self)
         self.devboxes = resources.AsyncDevboxesResource(self)
         self.functions = resources.AsyncFunctionsResource(self)
         self.projects = resources.AsyncProjectsResource(self)
@@ -391,6 +395,7 @@ class AsyncRunloop(AsyncAPIClient):
 
 class RunloopWithRawResponse:
     def __init__(self, client: Runloop) -> None:
+        self.blueprints = resources.BlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = resources.DevboxesResourceWithRawResponse(client.devboxes)
         self.functions = resources.FunctionsResourceWithRawResponse(client.functions)
         self.projects = resources.ProjectsResourceWithRawResponse(client.projects)
@@ -398,6 +403,7 @@ class RunloopWithRawResponse:
 
 class AsyncRunloopWithRawResponse:
     def __init__(self, client: AsyncRunloop) -> None:
+        self.blueprints = resources.AsyncBlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = resources.AsyncDevboxesResourceWithRawResponse(client.devboxes)
         self.functions = resources.AsyncFunctionsResourceWithRawResponse(client.functions)
         self.projects = resources.AsyncProjectsResourceWithRawResponse(client.projects)
@@ -405,6 +411,7 @@ class AsyncRunloopWithRawResponse:
 
 class RunloopWithStreamedResponse:
     def __init__(self, client: Runloop) -> None:
+        self.blueprints = resources.BlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = resources.DevboxesResourceWithStreamingResponse(client.devboxes)
         self.functions = resources.FunctionsResourceWithStreamingResponse(client.functions)
         self.projects = resources.ProjectsResourceWithStreamingResponse(client.projects)
@@ -412,6 +419,7 @@ class RunloopWithStreamedResponse:
 
 class AsyncRunloopWithStreamedResponse:
     def __init__(self, client: AsyncRunloop) -> None:
+        self.blueprints = resources.AsyncBlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = resources.AsyncDevboxesResourceWithStreamingResponse(client.devboxes)
         self.functions = resources.AsyncFunctionsResourceWithStreamingResponse(client.functions)
         self.projects = resources.AsyncProjectsResourceWithStreamingResponse(client.projects)
