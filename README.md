@@ -32,8 +32,8 @@ client = Runloop(
     bearer_token=os.environ.get("RUNLOOP_API_KEY"),
 )
 
-blueprint_view = client.blueprints.create()
-print(blueprint_view.id)
+blueprint_preview_view = client.blueprints.create()
+print(blueprint_preview_view.dockerfile)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -57,8 +57,8 @@ client = AsyncRunloop(
 
 
 async def main() -> None:
-    blueprint_view = await client.blueprints.create()
-    print(blueprint_view.id)
+    blueprint_preview_view = await client.blueprints.create()
+    print(blueprint_preview_view.dockerfile)
 
 
 asyncio.run(main())
@@ -200,7 +200,7 @@ response = client.blueprints.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
 blueprint = response.parse()  # get the object that `blueprints.create()` would have returned
-print(blueprint.id)
+print(blueprint.dockerfile)
 ```
 
 These methods return an [`APIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_api_client/_response.py) object.
