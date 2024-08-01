@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from .._models import BaseModel
 from .resource_size import ResourceSize
@@ -23,6 +23,9 @@ class BlueprintBuildParameters(BaseModel):
 
     dockerfile: Optional[str] = None
     """Dockerfile contents to be used to build the Blueprint."""
+
+    file_mounts: Optional[Dict[str, str]] = None
+    """(Optional) Map of paths and file contents to write before setup.."""
 
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
