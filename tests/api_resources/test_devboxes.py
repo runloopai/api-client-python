@@ -34,6 +34,7 @@ class TestDevboxes:
             code_handle="code_handle",
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
+            file_mounts={"foo": "string"},
             name="name",
             setup_commands=["string", "string", "string"],
         )
@@ -232,6 +233,7 @@ class TestAsyncDevboxes:
             code_handle="code_handle",
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
+            file_mounts={"foo": "string"},
             name="name",
             setup_commands=["string", "string", "string"],
         )
