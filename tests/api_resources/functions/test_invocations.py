@@ -9,10 +9,8 @@ import pytest
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
-from runloop_api_client.types.functions import (
-    FunctionInvocationListView,
-    InvocationRetrieveResponse,
-)
+from runloop_api_client.types.shared import FunctionInvocationExecutionDetailView
+from runloop_api_client.types.functions import FunctionInvocationListView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -25,7 +23,7 @@ class TestInvocations:
         invocation = client.functions.invocations.retrieve(
             "invocationId",
         )
-        assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+        assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Runloop) -> None:
@@ -36,7 +34,7 @@ class TestInvocations:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         invocation = response.parse()
-        assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+        assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve(self, client: Runloop) -> None:
@@ -47,7 +45,7 @@ class TestInvocations:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             invocation = response.parse()
-            assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+            assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -138,7 +136,7 @@ class TestAsyncInvocations:
         invocation = await async_client.functions.invocations.retrieve(
             "invocationId",
         )
-        assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+        assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -149,7 +147,7 @@ class TestAsyncInvocations:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         invocation = await response.parse()
-        assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+        assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -160,7 +158,7 @@ class TestAsyncInvocations:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             invocation = await response.parse()
-            assert_matches_type(InvocationRetrieveResponse, invocation, path=["response"])
+            assert_matches_type(FunctionInvocationExecutionDetailView, invocation, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
