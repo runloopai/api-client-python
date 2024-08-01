@@ -247,6 +247,39 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    def read_file(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Read file contents from a file on given Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/read_file",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
+        )
+
     def shutdown(
         self,
         id: str,
@@ -279,6 +312,39 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxView,
+        )
+
+    def write_file(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Write contents to a file at path on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/write_file",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
         )
 
 
@@ -493,6 +559,39 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    async def read_file(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Read file contents from a file on given Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/read_file",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
+        )
+
     async def shutdown(
         self,
         id: str,
@@ -527,6 +626,39 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxView,
         )
 
+    async def write_file(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxExecutionDetailView:
+        """
+        Write contents to a file at path on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/write_file",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxExecutionDetailView,
+        )
+
 
 class DevboxesResourceWithRawResponse:
     def __init__(self, devboxes: DevboxesResource) -> None:
@@ -544,8 +676,14 @@ class DevboxesResourceWithRawResponse:
         self.execute_sync = to_raw_response_wrapper(
             devboxes.execute_sync,
         )
+        self.read_file = to_raw_response_wrapper(
+            devboxes.read_file,
+        )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
+        )
+        self.write_file = to_raw_response_wrapper(
+            devboxes.write_file,
         )
 
     @cached_property
@@ -569,8 +707,14 @@ class AsyncDevboxesResourceWithRawResponse:
         self.execute_sync = async_to_raw_response_wrapper(
             devboxes.execute_sync,
         )
+        self.read_file = async_to_raw_response_wrapper(
+            devboxes.read_file,
+        )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
+        )
+        self.write_file = async_to_raw_response_wrapper(
+            devboxes.write_file,
         )
 
     @cached_property
@@ -594,8 +738,14 @@ class DevboxesResourceWithStreamingResponse:
         self.execute_sync = to_streamed_response_wrapper(
             devboxes.execute_sync,
         )
+        self.read_file = to_streamed_response_wrapper(
+            devboxes.read_file,
+        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
+        )
+        self.write_file = to_streamed_response_wrapper(
+            devboxes.write_file,
         )
 
     @cached_property
@@ -619,8 +769,14 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.execute_sync = async_to_streamed_response_wrapper(
             devboxes.execute_sync,
         )
+        self.read_file = async_to_streamed_response_wrapper(
+            devboxes.read_file,
+        )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,
+        )
+        self.write_file = async_to_streamed_response_wrapper(
+            devboxes.write_file,
         )
 
     @cached_property

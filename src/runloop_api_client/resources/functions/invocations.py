@@ -4,23 +4,23 @@ from __future__ import annotations
 
 import httpx
 
-from ...._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ...._utils import (
+from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._utils import (
     maybe_transform,
     async_maybe_transform,
 )
-from ...._compat import cached_property
-from ...._resource import SyncAPIResource, AsyncAPIResource
-from ...._response import (
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...._base_client import make_request_options
-from ....types.functions import invocation_list_params
-from ....types.functions.invocation_retrieve_response import InvocationRetrieveResponse
-from ....types.functions.function_invocation_list_view import FunctionInvocationListView
+from ..._base_client import make_request_options
+from ...types.functions import invocation_list_params
+from ...types.functions.function_invocation_list_view import FunctionInvocationListView
+from ...types.shared.function_invocation_execution_detail_view import FunctionInvocationExecutionDetailView
 
 __all__ = ["InvocationsResource", "AsyncInvocationsResource"]
 
@@ -44,7 +44,7 @@ class InvocationsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationRetrieveResponse:
+    ) -> FunctionInvocationExecutionDetailView:
         """Get the details of a function invocation.
 
         This includes the status, response,
@@ -66,7 +66,7 @@ class InvocationsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InvocationRetrieveResponse,
+            cast_to=FunctionInvocationExecutionDetailView,
         )
 
     def list(
@@ -169,7 +169,7 @@ class AsyncInvocationsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationRetrieveResponse:
+    ) -> FunctionInvocationExecutionDetailView:
         """Get the details of a function invocation.
 
         This includes the status, response,
@@ -191,7 +191,7 @@ class AsyncInvocationsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InvocationRetrieveResponse,
+            cast_to=FunctionInvocationExecutionDetailView,
         )
 
     async def list(

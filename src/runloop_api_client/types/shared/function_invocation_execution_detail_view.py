@@ -3,12 +3,12 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
-from .._models import BaseModel
+from ..._models import BaseModel
 
-__all__ = ["FunctionInvokeAsyncResponse"]
+__all__ = ["FunctionInvocationExecutionDetailView"]
 
 
-class FunctionInvokeAsyncResponse(BaseModel):
+class FunctionInvocationExecutionDetailView(BaseModel):
     id: Optional[str] = None
     """Unique ID of the invocation."""
 
