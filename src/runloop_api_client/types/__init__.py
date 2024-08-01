@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from .shared import ProjectLogsView as ProjectLogsView
+from .shared import (
+    ProjectLogsView as ProjectLogsView,
+    FunctionInvocationExecutionDetailView as FunctionInvocationExecutionDetailView,
+)
 from .devbox_view import DevboxView as DevboxView
 from .resource_size import ResourceSize as ResourceSize
 from .blueprint_view import BlueprintView as BlueprintView
@@ -24,6 +27,4 @@ from .code_mount_parameters_param import CodeMountParametersParam as CodeMountPa
 from .function_invoke_sync_params import FunctionInvokeSyncParams as FunctionInvokeSyncParams
 from .devbox_execution_detail_view import DevboxExecutionDetailView as DevboxExecutionDetailView
 from .function_invoke_async_params import FunctionInvokeAsyncParams as FunctionInvokeAsyncParams
-from .function_invoke_sync_response import FunctionInvokeSyncResponse as FunctionInvokeSyncResponse
 from .blueprint_build_logs_list_view import BlueprintBuildLogsListView as BlueprintBuildLogsListView
-from .function_invoke_async_response import FunctionInvokeAsyncResponse as FunctionInvokeAsyncResponse
