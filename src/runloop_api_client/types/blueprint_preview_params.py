@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable
+from typing import Dict, List, Iterable
 from typing_extensions import TypedDict
 
 from .resource_size import ResourceSize
@@ -17,6 +17,9 @@ class BlueprintPreviewParams(TypedDict, total=False):
 
     dockerfile: str
     """Dockerfile contents to be used to build the Blueprint."""
+
+    file_mounts: Dict[str, str]
+    """(Optional) Map of paths and file contents to write before setup.."""
 
     launch_parameters: LaunchParameters
     """Parameters to configure your Devbox at launch time."""
