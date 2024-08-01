@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.9 (2024-08-01)
+
+Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
+
+### Chores
+
+* update SDK settings ([#60](https://github.com/runloopai/api-client-python/issues/60)) ([0ccfd28](https://github.com/runloopai/api-client-python/commit/0ccfd28645206b0dedc2dac42e17fcaec14c293e))
+
 ## 0.1.0-alpha.8 (2024-08-01)
 
 Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
