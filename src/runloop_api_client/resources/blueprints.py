@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable
+from typing import Dict, List, Iterable
 
 import httpx
 
@@ -44,6 +44,7 @@ class BlueprintsResource(SyncAPIResource):
         *,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
@@ -65,6 +66,8 @@ class BlueprintsResource(SyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
+          file_mounts: (Optional) Map of paths and file contents to write before setup..
+
           launch_parameters: Parameters to configure your Devbox at launch time.
 
           name: Name of the Blueprint.
@@ -85,6 +88,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
+                    "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "name": name,
                     "system_setup_commands": system_setup_commands,
@@ -220,6 +224,7 @@ class BlueprintsResource(SyncAPIResource):
         *,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
@@ -239,6 +244,8 @@ class BlueprintsResource(SyncAPIResource):
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
+
+          file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
@@ -260,6 +267,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
+                    "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "name": name,
                     "system_setup_commands": system_setup_commands,
@@ -287,6 +295,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
@@ -308,6 +317,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
+          file_mounts: (Optional) Map of paths and file contents to write before setup..
+
           launch_parameters: Parameters to configure your Devbox at launch time.
 
           name: Name of the Blueprint.
@@ -328,6 +339,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
+                    "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "name": name,
                     "system_setup_commands": system_setup_commands,
@@ -463,6 +475,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
@@ -482,6 +495,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
+
+          file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
@@ -503,6 +518,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
+                    "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "name": name,
                     "system_setup_commands": system_setup_commands,

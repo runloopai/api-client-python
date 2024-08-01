@@ -51,6 +51,7 @@ class TestBlueprints:
                 },
             ],
             dockerfile="dockerfile",
+            file_mounts={"foo": "string"},
             launch_parameters={
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
@@ -219,6 +220,7 @@ class TestBlueprints:
                 },
             ],
             dockerfile="dockerfile",
+            file_mounts={"foo": "string"},
             launch_parameters={
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
@@ -281,6 +283,7 @@ class TestAsyncBlueprints:
                 },
             ],
             dockerfile="dockerfile",
+            file_mounts={"foo": "string"},
             launch_parameters={
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
@@ -449,6 +452,7 @@ class TestAsyncBlueprints:
                 },
             ],
             dockerfile="dockerfile",
+            file_mounts={"foo": "string"},
             launch_parameters={
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
