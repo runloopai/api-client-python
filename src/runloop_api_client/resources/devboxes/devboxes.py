@@ -14,13 +14,7 @@ from .logs import (
     LogsResourceWithStreamingResponse,
     AsyncLogsResourceWithStreamingResponse,
 )
-from ...types import (
-    devbox_list_params,
-    devbox_create_params,
-    devbox_read_file_params,
-    devbox_write_file_params,
-    devbox_execute_sync_params,
-)
+from ...types import devbox_list_params, devbox_create_params, devbox_execute_sync_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
     maybe_transform,
@@ -257,7 +251,6 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        file_path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -269,8 +262,6 @@ class DevboxesResource(SyncAPIResource):
         Read file contents from a file on given Devbox.
 
         Args:
-          file_path: The path of the file to read.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -283,7 +274,6 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/read_file",
-            body=maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -328,8 +318,6 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        contents: str | NotGiven = NOT_GIVEN,
-        file_path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -341,10 +329,6 @@ class DevboxesResource(SyncAPIResource):
         Write contents to a file at path on the Devbox.
 
         Args:
-          contents: The contents to write to file.
-
-          file_path: The path of the file to read.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -357,13 +341,6 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/write_file",
-            body=maybe_transform(
-                {
-                    "contents": contents,
-                    "file_path": file_path,
-                },
-                devbox_write_file_params.DevboxWriteFileParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -586,7 +563,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        file_path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -598,8 +574,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Read file contents from a file on given Devbox.
 
         Args:
-          file_path: The path of the file to read.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -612,7 +586,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/read_file",
-            body=await async_maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -657,8 +630,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        contents: str | NotGiven = NOT_GIVEN,
-        file_path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -670,10 +641,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Write contents to a file at path on the Devbox.
 
         Args:
-          contents: The contents to write to file.
-
-          file_path: The path of the file to read.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -686,13 +653,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/write_file",
-            body=await async_maybe_transform(
-                {
-                    "contents": contents,
-                    "file_path": file_path,
-                },
-                devbox_write_file_params.DevboxWriteFileParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
