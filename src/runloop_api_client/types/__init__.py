@@ -20,7 +20,9 @@ from .blueprint_list_params import BlueprintListParams as BlueprintListParams
 from .code_mount_parameters import CodeMountParameters as CodeMountParameters
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
+from .devbox_read_file_params import DevboxReadFileParams as DevboxReadFileParams
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
+from .devbox_write_file_params import DevboxWriteFileParams as DevboxWriteFileParams
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
 from .devbox_execute_sync_params import DevboxExecuteSyncParams as DevboxExecuteSyncParams
 from .code_mount_parameters_param import CodeMountParametersParam as CodeMountParametersParam
