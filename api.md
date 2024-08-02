@@ -57,9 +57,9 @@ Methods:
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_list_view.py">DevboxListView</a></code>
 - <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_sync</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_execute_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
-- <code title="post /v1/devboxes/{id}/read_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/read_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file</a>(id) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
-- <code title="post /v1/devboxes/{id}/write_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/write_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file</a>(id) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
 ## Logs
 
