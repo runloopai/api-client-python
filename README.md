@@ -32,8 +32,8 @@ client = Runloop(
     bearer_token=os.environ.get("RUNLOOP_API_KEY"),
 )
 
-blueprint_view = client.blueprints.create()
-print(blueprint_view.id)
+devbox_view = client.devboxes.create()
+print(devbox_view.id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -57,8 +57,8 @@ client = AsyncRunloop(
 
 
 async def main() -> None:
-    blueprint_view = await client.blueprints.create()
-    print(blueprint_view.id)
+    devbox_view = await client.devboxes.create()
+    print(devbox_view.id)
 
 
 asyncio.run(main())
@@ -91,7 +91,7 @@ from runloop_api_client import Runloop
 client = Runloop()
 
 try:
-    client.blueprints.create()
+    client.devboxes.create()
 except runloop_api_client.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -134,7 +134,7 @@ client = Runloop(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).blueprints.create()
+client.with_options(max_retries=5).devboxes.create()
 ```
 
 ### Timeouts
@@ -157,7 +157,7 @@ client = Runloop(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).blueprints.create()
+client.with_options(timeout=5.0).devboxes.create()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -196,11 +196,11 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from runloop_api_client import Runloop
 
 client = Runloop()
-response = client.blueprints.with_raw_response.create()
+response = client.devboxes.with_raw_response.create()
 print(response.headers.get('X-My-Header'))
 
-blueprint = response.parse()  # get the object that `blueprints.create()` would have returned
-print(blueprint.id)
+devbox = response.parse()  # get the object that `devboxes.create()` would have returned
+print(devbox.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/runloopai/api-client-python/tree/main/src/runloop_api_client/_response.py) object.
@@ -214,7 +214,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.blueprints.with_streaming_response.create() as response:
+with client.devboxes.with_streaming_response.create() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
