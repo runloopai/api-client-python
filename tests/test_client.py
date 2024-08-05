@@ -17,6 +17,7 @@ from respx import MockRouter
 from pydantic import ValidationError
 
 from runloop_api_client import Runloop, AsyncRunloop, APIResponseValidationError
+from runloop_api_client._types import Omit
 from runloop_api_client._models import BaseModel, FinalRequestOptions
 from runloop_api_client._constants import RAW_RESPONSE_HEADER
 from runloop_api_client._exceptions import RunloopError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -340,7 +341,8 @@ class TestRunloop:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(RunloopError):
-            client2 = Runloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            with update_env(**{"RUNLOOP_API_KEY": Omit()}):
+                client2 = Runloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
@@ -1072,7 +1074,8 @@ class TestAsyncRunloop:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(RunloopError):
-            client2 = AsyncRunloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            with update_env(**{"RUNLOOP_API_KEY": Omit()}):
+                client2 = AsyncRunloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
