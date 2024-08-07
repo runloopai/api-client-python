@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.0-alpha.11 (2024-08-07)
+
+Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#66](https://github.com/runloopai/api-client-python/issues/66)) ([291eddb](https://github.com/runloopai/api-client-python/commit/291eddbf05d2e12d882f8d53baac9617149a1e34))
+* **api:** OpenAPI spec update via Stainless API ([#68](https://github.com/runloopai/api-client-python/issues/68)) ([91913d6](https://github.com/runloopai/api-client-python/commit/91913d6fc7582204fbfa37bf780ea287c0940e97))
+* **api:** OpenAPI spec update via Stainless API ([#69](https://github.com/runloopai/api-client-python/issues/69)) ([f82c51c](https://github.com/runloopai/api-client-python/commit/f82c51cc8d5a5b8588d0b8e98cae7bcbf06d4f09))
+* **api:** OpenAPI spec update via Stainless API ([#70](https://github.com/runloopai/api-client-python/issues/70)) ([b0ffcf0](https://github.com/runloopai/api-client-python/commit/b0ffcf0031ac84240728907ee722ed3e21de3735))
+* **api:** OpenAPI spec update via Stainless API ([#75](https://github.com/runloopai/api-client-python/issues/75)) ([213734e](https://github.com/runloopai/api-client-python/commit/213734e474bce92394eea0aea69132d95850f3c8))
+* **api:** OpenAPI spec update via Stainless API ([#76](https://github.com/runloopai/api-client-python/issues/76)) ([d6370bc](https://github.com/runloopai/api-client-python/commit/d6370bce09d23275d632e1b265f6207a189fedc7))
+* **api:** OpenAPI spec update via Stainless API ([#79](https://github.com/runloopai/api-client-python/issues/79)) ([23d4705](https://github.com/runloopai/api-client-python/commit/23d470542689d3d227ddff7c11464f6a1849003b))
+* **client:** add `retry_count` to raw response class ([#73](https://github.com/runloopai/api-client-python/issues/73)) ([e17fb03](https://github.com/runloopai/api-client-python/commit/e17fb0352e692b04df6f67d98a67182a13cd95ee))
+
+
+### Chores
+
+* **internal:** bump pyright ([#72](https://github.com/runloopai/api-client-python/issues/72)) ([3fcd1bf](https://github.com/runloopai/api-client-python/commit/3fcd1bf654826a81efea4f3b67fc85a124141d41))
+* **internal:** bump ruff version ([#77](https://github.com/runloopai/api-client-python/issues/77)) ([240971d](https://github.com/runloopai/api-client-python/commit/240971d1eac9b67a3e85369b0617fc9821e048b3))
+* **internal:** test updates ([#74](https://github.com/runloopai/api-client-python/issues/74)) ([cac724a](https://github.com/runloopai/api-client-python/commit/cac724a5db2acdecc40a9775dcde49b9f8f9a277))
+* **internal:** update pydantic compat helper function ([#78](https://github.com/runloopai/api-client-python/issues/78)) ([3befea7](https://github.com/runloopai/api-client-python/commit/3befea7ec40892a6f6455d81eb87d8c4ab8a7629))
+* **internal:** use `TypeAlias` marker for type assignments ([#71](https://github.com/runloopai/api-client-python/issues/71)) ([4de0849](https://github.com/runloopai/api-client-python/commit/4de08497452923cfa328aadfd6626286b3248d17))
+
 ## 0.1.0-alpha.10 (2024-08-02)
 
 Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)

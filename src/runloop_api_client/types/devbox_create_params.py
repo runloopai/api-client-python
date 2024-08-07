@@ -5,7 +5,9 @@ from __future__ import annotations
 from typing import Dict, List
 from typing_extensions import TypedDict
 
-__all__ = ["DevboxCreateParams"]
+from .resource_size import ResourceSize
+
+__all__ = ["DevboxCreateParams", "LaunchParameters"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
@@ -22,9 +24,6 @@ class DevboxCreateParams(TypedDict, total=False):
     name.
     """
 
-    code_handle: str
-    """(Optional) Id of a code handle to mount to devbox."""
-
     entrypoint: str
     """
     (Optional) When specified, the Devbox will run this script as its main
@@ -38,6 +37,9 @@ class DevboxCreateParams(TypedDict, total=False):
     file_mounts: Dict[str, str]
     """(Optional) Map of paths and file contents to write before setup.."""
 
+    launch_parameters: LaunchParameters
+    """Parameters to configure the resources and launch time behavior of the Devbox."""
+
     name: str
     """(Optional) A user specified name to give the Devbox."""
 
@@ -47,3 +49,17 @@ class DevboxCreateParams(TypedDict, total=False):
     Examples might include fetching a tool or building your dependencies. Runloop
     will look optimize these steps for you.
     """
+
+
+class LaunchParameters(TypedDict, total=False):
+    keep_alive_time_seconds: int
+    """Time in seconds after which Devbox will automatically shutdown.
+
+    Default is 1 hour.
+    """
+
+    launch_commands: List[str]
+    """Set of commands to be run at launch time, before the entrypoint process is run."""
+
+    resource_size_request: ResourceSize
+    """Manual resource configuration for Devbox. If not set, defaults will be used."""

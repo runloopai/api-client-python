@@ -30,8 +30,5 @@ class DevboxView(BaseModel):
     name: Optional[str] = None
     """The name of the Devbox."""
 
-    status: Optional[str] = None
-    """
-    The current status of the Devbox (provisioning, initializing, running, failure,
-    shutdown).
-    """
+    status: Optional[Literal["provisioning", "initializing", "running", "failure", "shutdown"]] = None
+    """The current status of the Devbox."""

@@ -20,6 +20,7 @@ from ...types import (
     devbox_read_file_params,
     devbox_write_file_params,
     devbox_execute_sync_params,
+    devbox_read_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
@@ -60,10 +61,10 @@ class DevboxesResource(SyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -85,8 +86,6 @@ class DevboxesResource(SyncAPIResource):
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
-
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
               the process is complete.
@@ -94,6 +93,8 @@ class DevboxesResource(SyncAPIResource):
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup..
+
+          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -115,10 +116,10 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -290,6 +291,46 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    def read_file_contents(
+        self,
+        id: str,
+        *,
+        file_path: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> str:
+        """
+        Read file contents from a file on given Devbox.
+
+        Args:
+          file_path: The path of the file to read.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
+        return self._post(
+            f"/v1/devboxes/{id}/read_file_contents",
+            body=maybe_transform(
+                {"file_path": file_path}, devbox_read_file_contents_params.DevboxReadFileContentsParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=str,
+        )
+
     def shutdown(
         self,
         id: str,
@@ -389,10 +430,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -414,8 +455,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
-
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
               the process is complete.
@@ -423,6 +462,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup..
+
+          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -444,10 +485,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -619,6 +660,46 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    async def read_file_contents(
+        self,
+        id: str,
+        *,
+        file_path: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> str:
+        """
+        Read file contents from a file on given Devbox.
+
+        Args:
+          file_path: The path of the file to read.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
+        return await self._post(
+            f"/v1/devboxes/{id}/read_file_contents",
+            body=await async_maybe_transform(
+                {"file_path": file_path}, devbox_read_file_contents_params.DevboxReadFileContentsParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=str,
+        )
+
     async def shutdown(
         self,
         id: str,
@@ -719,6 +800,9 @@ class DevboxesResourceWithRawResponse:
         self.read_file = to_raw_response_wrapper(
             devboxes.read_file,
         )
+        self.read_file_contents = to_raw_response_wrapper(
+            devboxes.read_file_contents,
+        )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
         )
@@ -749,6 +833,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.read_file = async_to_raw_response_wrapper(
             devboxes.read_file,
+        )
+        self.read_file_contents = async_to_raw_response_wrapper(
+            devboxes.read_file_contents,
         )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
@@ -781,6 +868,9 @@ class DevboxesResourceWithStreamingResponse:
         self.read_file = to_streamed_response_wrapper(
             devboxes.read_file,
         )
+        self.read_file_contents = to_streamed_response_wrapper(
+            devboxes.read_file_contents,
+        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
@@ -811,6 +901,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.read_file = async_to_streamed_response_wrapper(
             devboxes.read_file,
+        )
+        self.read_file_contents = async_to_streamed_response_wrapper(
+            devboxes.read_file_contents,
         )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,

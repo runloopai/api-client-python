@@ -17,6 +17,7 @@ from respx import MockRouter
 from pydantic import ValidationError
 
 from runloop_api_client import Runloop, AsyncRunloop, APIResponseValidationError
+from runloop_api_client._types import Omit
 from runloop_api_client._models import BaseModel, FinalRequestOptions
 from runloop_api_client._constants import RAW_RESPONSE_HEADER
 from runloop_api_client._exceptions import RunloopError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -340,7 +341,8 @@ class TestRunloop:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(RunloopError):
-            client2 = Runloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            with update_env(**{"RUNLOOP_API_KEY": Omit()}):
+                client2 = Runloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
@@ -732,11 +734,11 @@ class TestRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/blueprints").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             self.client.post(
-                "/v1/blueprints",
+                "/v1/devboxes",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -747,17 +749,38 @@ class TestRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/blueprints").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             self.client.post(
-                "/v1/blueprints",
+                "/v1/devboxes",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
 
         assert _get_open_connections(self.client) == 0
+
+    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
+    @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @pytest.mark.respx(base_url=base_url)
+    def test_retries_taken(self, client: Runloop, failures_before_success: int, respx_mock: MockRouter) -> None:
+        client = client.with_options(max_retries=4)
+
+        nb_retries = 0
+
+        def retry_handler(_request: httpx.Request) -> httpx.Response:
+            nonlocal nb_retries
+            if nb_retries < failures_before_success:
+                nb_retries += 1
+                return httpx.Response(500)
+            return httpx.Response(200)
+
+        respx_mock.post("/v1/devboxes").mock(side_effect=retry_handler)
+
+        response = client.devboxes.with_raw_response.create()
+
+        assert response.retries_taken == failures_before_success
 
 
 class TestAsyncRunloop:
@@ -1051,7 +1074,8 @@ class TestAsyncRunloop:
         assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
 
         with pytest.raises(RunloopError):
-            client2 = AsyncRunloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            with update_env(**{"RUNLOOP_API_KEY": Omit()}):
+                client2 = AsyncRunloop(base_url=base_url, bearer_token=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
@@ -1447,11 +1471,11 @@ class TestAsyncRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/blueprints").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/v1/devboxes").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             await self.client.post(
-                "/v1/blueprints",
+                "/v1/devboxes",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
@@ -1462,14 +1486,38 @@ class TestAsyncRunloop:
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/v1/blueprints").mock(return_value=httpx.Response(500))
+        respx_mock.post("/v1/devboxes").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             await self.client.post(
-                "/v1/blueprints",
+                "/v1/devboxes",
                 body=cast(object, dict()),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
 
         assert _get_open_connections(self.client) == 0
+
+    @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
+    @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @pytest.mark.respx(base_url=base_url)
+    @pytest.mark.asyncio
+    async def test_retries_taken(
+        self, async_client: AsyncRunloop, failures_before_success: int, respx_mock: MockRouter
+    ) -> None:
+        client = async_client.with_options(max_retries=4)
+
+        nb_retries = 0
+
+        def retry_handler(_request: httpx.Request) -> httpx.Response:
+            nonlocal nb_retries
+            if nb_retries < failures_before_success:
+                nb_retries += 1
+                return httpx.Response(500)
+            return httpx.Response(200)
+
+        respx_mock.post("/v1/devboxes").mock(side_effect=retry_handler)
+
+        response = await client.devboxes.with_raw_response.create()
+
+        assert response.retries_taken == failures_before_success
