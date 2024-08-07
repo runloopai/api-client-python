@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["ResourceSize"]
 
-ResourceSize: TypeAlias = Literal["MINI", "SMALL", "MEDIUM", "LARGE"]
+ResourceSize: TypeAlias = Literal["MINI", "SMALL", "MEDIUM", "LARGE", "X_LARGE"]

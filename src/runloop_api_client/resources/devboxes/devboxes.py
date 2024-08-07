@@ -61,10 +61,10 @@ class DevboxesResource(SyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -86,8 +86,6 @@ class DevboxesResource(SyncAPIResource):
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
-
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
               the process is complete.
@@ -95,6 +93,8 @@ class DevboxesResource(SyncAPIResource):
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup..
+
+          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -116,10 +116,10 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -430,10 +430,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
-        code_handle: str | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -455,8 +455,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
 
-          code_handle: (Optional) Id of a code handle to mount to devbox.
-
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
               the process is complete.
@@ -464,6 +462,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup..
+
+          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -485,10 +485,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
-                    "code_handle": code_handle,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
