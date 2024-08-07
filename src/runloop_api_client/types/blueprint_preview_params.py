@@ -32,6 +32,12 @@ class BlueprintPreviewParams(TypedDict, total=False):
 
 
 class LaunchParameters(TypedDict, total=False):
+    keep_alive_time_seconds: int
+    """Time in seconds after which Devbox will automatically shutdown.
+
+    Default is 1 hour.
+    """
+
     launch_commands: List[str]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
