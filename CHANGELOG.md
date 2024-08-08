@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.12 (2024-08-08)
+
+Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)
+
+### Chores
+
+* **internal:** remove deprecated ruff config ([#81](https://github.com/runloopai/api-client-python/issues/81)) ([2916f9f](https://github.com/runloopai/api-client-python/commit/2916f9fdc0b19758767e5c93875e14cc3bce4049))
+
 ## 0.1.0-alpha.11 (2024-08-07)
 
 Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
