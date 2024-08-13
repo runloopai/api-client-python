@@ -8,7 +8,7 @@ __all__ = ["InvocationListParams"]
 
 
 class InvocationListParams(TypedDict, total=False):
-    limit: int
+    limit: str
     """Page Limit"""
 
     starting_after: str
