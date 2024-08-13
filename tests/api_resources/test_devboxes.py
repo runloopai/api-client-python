@@ -35,9 +35,9 @@ class TestDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
-                "keep_alive_time_seconds": 0,
             },
             name="name",
             setup_commands=["string", "string", "string"],
@@ -377,9 +377,9 @@ class TestAsyncDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
-                "keep_alive_time_seconds": 0,
             },
             name="name",
             setup_commands=["string", "string", "string"],
