@@ -64,7 +64,7 @@ class TestInvocations:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         invocation = client.functions.invocations.list(
-            limit=0,
+            limit="limit",
             starting_after="starting_after",
         )
         assert_matches_type(FunctionInvocationListView, invocation, path=["response"])
@@ -177,7 +177,7 @@ class TestAsyncInvocations:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         invocation = await async_client.functions.invocations.list(
-            limit=0,
+            limit="limit",
             starting_after="starting_after",
         )
         assert_matches_type(FunctionInvocationListView, invocation, path=["response"])
