@@ -706,20 +706,20 @@ class TestRunloop:
         "remaining_retries,retry_after,timeout",
         [
             [3, "20", 20],
-            [3, "0", 0.5],
-            [3, "-10", 0.5],
+            [3, "0", 1],
+            [3, "-10", 1],
             [3, "60", 60],
-            [3, "61", 0.5],
+            [3, "61", 1],
             [3, "Fri, 29 Sep 2023 16:26:57 GMT", 20],
-            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5],
+            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 1],
+            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 1],
             [3, "Fri, 29 Sep 2023 16:27:37 GMT", 60],
-            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5],
-            [3, "99999999999999999999999999999999999", 0.5],
-            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "", 0.5],
-            [2, "", 0.5 * 2.0],
-            [1, "", 0.5 * 4.0],
+            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 1],
+            [3, "99999999999999999999999999999999999", 1],
+            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 1],
+            [3, "", 1],
+            [2, "", 1 * 2.0],
+            [1, "", 1 * 4.0],
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
@@ -729,7 +729,7 @@ class TestRunloop:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        assert calculated == pytest.approx(timeout, 1 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
@@ -1442,20 +1442,20 @@ class TestAsyncRunloop:
         "remaining_retries,retry_after,timeout",
         [
             [3, "20", 20],
-            [3, "0", 0.5],
-            [3, "-10", 0.5],
+            [3, "0", 1],
+            [3, "-10", 1],
             [3, "60", 60],
-            [3, "61", 0.5],
+            [3, "61", 1],
             [3, "Fri, 29 Sep 2023 16:26:57 GMT", 20],
-            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 0.5],
-            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 0.5],
+            [3, "Fri, 29 Sep 2023 16:26:37 GMT", 1],
+            [3, "Fri, 29 Sep 2023 16:26:27 GMT", 1],
             [3, "Fri, 29 Sep 2023 16:27:37 GMT", 60],
-            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 0.5],
-            [3, "99999999999999999999999999999999999", 0.5],
-            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 0.5],
-            [3, "", 0.5],
-            [2, "", 0.5 * 2.0],
-            [1, "", 0.5 * 4.0],
+            [3, "Fri, 29 Sep 2023 16:27:38 GMT", 1],
+            [3, "99999999999999999999999999999999999", 1],
+            [3, "Zun, 29 Sep 2023 16:26:27 GMT", 1],
+            [3, "", 1],
+            [2, "", 1 * 2.0],
+            [1, "", 1 * 4.0],
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
@@ -1466,7 +1466,7 @@ class TestAsyncRunloop:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        assert calculated == pytest.approx(timeout, 1 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
     @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
