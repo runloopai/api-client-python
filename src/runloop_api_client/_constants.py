@@ -10,5 +10,5 @@ DEFAULT_TIMEOUT = httpx.Timeout(timeout=60.0, connect=5.0)
 DEFAULT_MAX_RETRIES = 0
 DEFAULT_CONNECTION_LIMITS = httpx.Limits(max_connections=100, max_keepalive_connections=20)
 
-INITIAL_RETRY_DELAY = 0.5
-MAX_RETRY_DELAY = 8.0
+INITIAL_RETRY_DELAY = 1.0
+MAX_RETRY_DELAY = 5.0
