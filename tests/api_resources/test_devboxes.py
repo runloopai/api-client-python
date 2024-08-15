@@ -35,9 +35,9 @@ class TestDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
-                "keep_alive_time_seconds": 0,
             },
             name="name",
             setup_commands=["string", "string", "string"],
@@ -313,6 +313,53 @@ class TestDevboxes:
             )
 
     @parametrize
+    def test_method_upload_file(self, client: Runloop) -> None:
+        devbox = client.devboxes.upload_file(
+            id="id",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    def test_method_upload_file_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.upload_file(
+            id="id",
+            file_input_stream=b"raw file contents",
+            path="path",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_upload_file(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.upload_file(
+            id="id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_upload_file(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.upload_file(
+            id="id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(object, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_upload_file(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.upload_file(
+                id="",
+            )
+
+    @parametrize
     def test_method_write_file(self, client: Runloop) -> None:
         devbox = client.devboxes.write_file(
             id="id",
@@ -377,9 +424,9 @@ class TestAsyncDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
-                "keep_alive_time_seconds": 0,
             },
             name="name",
             setup_commands=["string", "string", "string"],
@@ -652,6 +699,53 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.shutdown(
                 "",
+            )
+
+    @parametrize
+    async def test_method_upload_file(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.upload_file(
+            id="id",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_upload_file_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.upload_file(
+            id="id",
+            file_input_stream=b"raw file contents",
+            path="path",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_upload_file(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.upload_file(
+            id="id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_upload_file(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.upload_file(
+            id="id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(object, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_upload_file(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.upload_file(
+                id="",
             )
 
     @parametrize
