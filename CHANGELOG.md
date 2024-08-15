@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.0-alpha.12 (2024-08-15)
+
+Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#83](https://github.com/runloopai/api-client-python/issues/83)) ([df99a13](https://github.com/runloopai/api-client-python/commit/df99a130b3dbbba6b122a65bc9c822b6d589ca26))
+* **api:** OpenAPI spec update via Stainless API ([#88](https://github.com/runloopai/api-client-python/issues/88)) ([a8882d4](https://github.com/runloopai/api-client-python/commit/a8882d440edc71f2922e2fa2dff3d0f0b080eb35))
+* **api:** OpenAPI spec update via Stainless API ([#89](https://github.com/runloopai/api-client-python/issues/89)) ([a8b5d6a](https://github.com/runloopai/api-client-python/commit/a8b5d6a94d38bc593b8ca48014dcba17c783d297))
+* **api:** OpenAPI spec update via Stainless API ([#90](https://github.com/runloopai/api-client-python/issues/90)) ([dc4b13c](https://github.com/runloopai/api-client-python/commit/dc4b13cd4d4fa17f203626e88187f8784ecbac6f))
+* **api:** OpenAPI spec update via Stainless API ([#93](https://github.com/runloopai/api-client-python/issues/93)) ([d6ba90f](https://github.com/runloopai/api-client-python/commit/d6ba90fa6af62f376578aa14a5b50e759fc30898))
+* **api:** update via SDK Studio ([#91](https://github.com/runloopai/api-client-python/issues/91)) ([612ce32](https://github.com/runloopai/api-client-python/commit/612ce3279298c1158ce963471cd6d53b4a822718))
+
+
+### Chores
+
+* **ci:** bump prism mock server version ([#85](https://github.com/runloopai/api-client-python/issues/85)) ([ff2c8dd](https://github.com/runloopai/api-client-python/commit/ff2c8ddeaec8bfaa9ebd71886126f02ede9bb2db))
+* **ci:** minor changes ([#84](https://github.com/runloopai/api-client-python/issues/84)) ([32f527f](https://github.com/runloopai/api-client-python/commit/32f527f1802bfc63c2156ad7eefd7773a007f501))
+* **examples:** minor formatting changes ([#87](https://github.com/runloopai/api-client-python/issues/87)) ([64c9bd5](https://github.com/runloopai/api-client-python/commit/64c9bd5c499d56772028679aa974eac5e78c3b15))
+* **internal:** codegen related update ([#92](https://github.com/runloopai/api-client-python/issues/92)) ([0c34d9a](https://github.com/runloopai/api-client-python/commit/0c34d9a7a296d0e0fd4626b6f9629ff737e61590))
+* **internal:** ensure package is importable in lint cmd ([#86](https://github.com/runloopai/api-client-python/issues/86)) ([ecf2a95](https://github.com/runloopai/api-client-python/commit/ecf2a95f550db94d2d16ea3774bd9c9bea42b3a4))
+* **internal:** remove deprecated ruff config ([#81](https://github.com/runloopai/api-client-python/issues/81)) ([2916f9f](https://github.com/runloopai/api-client-python/commit/2916f9fdc0b19758767e5c93875e14cc3bce4049))
+* **internal:** use different 32bit detection method ([#94](https://github.com/runloopai/api-client-python/issues/94)) ([cf748e3](https://github.com/runloopai/api-client-python/commit/cf748e337f3e1f443be098c1b0e72e3c321815c6))
+
 ## 0.1.0-alpha.11 (2024-08-07)
 
 Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)
