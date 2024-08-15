@@ -323,7 +323,7 @@ class TestDevboxes:
     def test_method_upload_file_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.upload_file(
             id="id",
-            file=b"raw file contents",
+            file_input_stream=b"raw file contents",
             path="path",
         )
         assert_matches_type(object, devbox, path=["response"])
@@ -712,7 +712,7 @@ class TestAsyncDevboxes:
     async def test_method_upload_file_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.upload_file(
             id="id",
-            file=b"raw file contents",
+            file_input_stream=b"raw file contents",
             path="path",
         )
         assert_matches_type(object, devbox, path=["response"])

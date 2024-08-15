@@ -370,7 +370,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        file: FileTypes | NotGiven = NOT_GIVEN,
+        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
         path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -397,7 +397,7 @@ class DevboxesResource(SyncAPIResource):
             f"/v1/devboxes/{id}/upload_file",
             body=maybe_transform(
                 {
-                    "file": file,
+                    "file_input_stream": file_input_stream,
                     "path": path,
                 },
                 devbox_upload_file_params.DevboxUploadFileParams,
@@ -781,7 +781,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        file: FileTypes | NotGiven = NOT_GIVEN,
+        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
         path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -808,7 +808,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             f"/v1/devboxes/{id}/upload_file",
             body=await async_maybe_transform(
                 {
-                    "file": file,
+                    "file_input_stream": file_input_stream,
                     "path": path,
                 },
                 devbox_upload_file_params.DevboxUploadFileParams,
