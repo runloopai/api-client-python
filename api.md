@@ -53,6 +53,7 @@ from runloop_api_client.types import (
     DevboxListView,
     DevboxView,
     DevboxReadFileContentsResponse,
+    DevboxUploadFileResponse,
 )
 ```
 
@@ -65,6 +66,7 @@ Methods:
 - <code title="post /v1/devboxes/{id}/read_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/read_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_contents_params.py">params</a>) -> str</code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
+- <code title="post /v1/devboxes/{id}/upload_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">upload_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_upload_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_upload_file_response.py">object</a></code>
 - <code title="post /v1/devboxes/{id}/write_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
 ## Logs
