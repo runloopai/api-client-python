@@ -19,10 +19,11 @@ from ...types import (
     devbox_create_params,
     devbox_read_file_params,
     devbox_write_file_params,
+    devbox_upload_file_params,
     devbox_execute_sync_params,
     devbox_read_file_contents_params,
 )
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
 from ..._utils import (
     maybe_transform,
     async_maybe_transform,
@@ -363,6 +364,48 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxView,
+        )
+
+    def upload_file(
+        self,
+        id: str,
+        *,
+        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
+        path: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """
+        Upload file contents to a file at path on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/upload_file",
+            body=maybe_transform(
+                {
+                    "file_input_stream": file_input_stream,
+                    "path": path,
+                },
+                devbox_upload_file_params.DevboxUploadFileParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
         )
 
     def write_file(
@@ -734,6 +777,48 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxView,
         )
 
+    async def upload_file(
+        self,
+        id: str,
+        *,
+        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
+        path: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """
+        Upload file contents to a file at path on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/upload_file",
+            body=await async_maybe_transform(
+                {
+                    "file_input_stream": file_input_stream,
+                    "path": path,
+                },
+                devbox_upload_file_params.DevboxUploadFileParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
+
     async def write_file(
         self,
         id: str,
@@ -806,6 +891,9 @@ class DevboxesResourceWithRawResponse:
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
         )
+        self.upload_file = to_raw_response_wrapper(
+            devboxes.upload_file,
+        )
         self.write_file = to_raw_response_wrapper(
             devboxes.write_file,
         )
@@ -839,6 +927,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
+        )
+        self.upload_file = async_to_raw_response_wrapper(
+            devboxes.upload_file,
         )
         self.write_file = async_to_raw_response_wrapper(
             devboxes.write_file,
@@ -874,6 +965,9 @@ class DevboxesResourceWithStreamingResponse:
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
+        self.upload_file = to_streamed_response_wrapper(
+            devboxes.upload_file,
+        )
         self.write_file = to_streamed_response_wrapper(
             devboxes.write_file,
         )
@@ -907,6 +1001,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,
+        )
+        self.upload_file = async_to_streamed_response_wrapper(
+            devboxes.upload_file,
         )
         self.write_file = async_to_streamed_response_wrapper(
             devboxes.write_file,
