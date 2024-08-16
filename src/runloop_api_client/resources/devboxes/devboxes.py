@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Dict, List, Mapping, cast
 
 import httpx
 
@@ -25,7 +25,9 @@ from ...types import (
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
 from ..._utils import (
+    extract_files,
     maybe_transform,
+    deepcopy_minimal,
     async_maybe_transform,
 )
 from ..._compat import cached_property
@@ -370,7 +372,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
+        file: FileTypes | NotGiven = NOT_GIVEN,
         path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -393,15 +395,21 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        body = deepcopy_minimal(
+            {
+                "file": file,
+                "path": path,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
             f"/v1/devboxes/{id}/upload_file",
-            body=maybe_transform(
-                {
-                    "file_input_stream": file_input_stream,
-                    "path": path,
-                },
-                devbox_upload_file_params.DevboxUploadFileParams,
-            ),
+            body=maybe_transform(body, devbox_upload_file_params.DevboxUploadFileParams),
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -781,7 +789,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        file_input_stream: FileTypes | NotGiven = NOT_GIVEN,
+        file: FileTypes | NotGiven = NOT_GIVEN,
         path: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -804,15 +812,21 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        body = deepcopy_minimal(
+            {
+                "file": file,
+                "path": path,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
             f"/v1/devboxes/{id}/upload_file",
-            body=await async_maybe_transform(
-                {
-                    "file_input_stream": file_input_stream,
-                    "path": path,
-                },
-                devbox_upload_file_params.DevboxUploadFileParams,
-            ),
+            body=await async_maybe_transform(body, devbox_upload_file_params.DevboxUploadFileParams),
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
