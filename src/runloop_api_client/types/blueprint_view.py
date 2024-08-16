@@ -16,6 +16,9 @@ class BlueprintView(BaseModel):
     create_time_ms: Optional[int] = None
     """Creation time of the Blueprint (Unix timestamp milliseconds)."""
 
+    failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
+    """The failure reason if the Blueprint build failed, if any."""
+
     name: Optional[str] = None
     """The name of the Blueprint."""
 
