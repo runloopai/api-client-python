@@ -21,8 +21,6 @@ class DevboxView(BaseModel):
     end_time_ms: Optional[int] = None
     """The time the Devbox finished execution (Unix timestamp milliseconds)."""
 
-    initializing_time_ms: Optional[int] = None
-
     initiator_id: Optional[str] = None
     """The initiator ID of the devbox."""
 
@@ -31,8 +29,6 @@ class DevboxView(BaseModel):
 
     name: Optional[str] = None
     """The name of the Devbox."""
-
-    running_time_ms: Optional[int] = None
 
     status: Optional[Literal["provisioning", "initializing", "running", "failure", "shutdown"]] = None
     """The current status of the Devbox."""
