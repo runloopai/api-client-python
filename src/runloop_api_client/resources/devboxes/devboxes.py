@@ -17,7 +17,6 @@ from .logs import (
 from ...types import (
     devbox_list_params,
     devbox_create_params,
-    devbox_read_file_params,
     devbox_write_file_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
@@ -251,43 +250,6 @@ class DevboxesResource(SyncAPIResource):
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
-    def read_file(
-        self,
-        id: str,
-        *,
-        file_path: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Read file contents from a file on given Devbox.
-
-        Args:
-          file_path: The path of the file to read.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/read_file",
-            body=maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -674,43 +636,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
-    async def read_file(
-        self,
-        id: str,
-        *,
-        file_path: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Read file contents from a file on given Devbox.
-
-        Args:
-          file_path: The path of the file to read.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/read_file",
-            body=await async_maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
     async def read_file_contents(
         self,
         id: str,
@@ -896,9 +821,6 @@ class DevboxesResourceWithRawResponse:
         self.execute_sync = to_raw_response_wrapper(
             devboxes.execute_sync,
         )
-        self.read_file = to_raw_response_wrapper(
-            devboxes.read_file,
-        )
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
@@ -932,9 +854,6 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.execute_sync = async_to_raw_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = async_to_raw_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
@@ -970,9 +889,6 @@ class DevboxesResourceWithStreamingResponse:
         self.execute_sync = to_streamed_response_wrapper(
             devboxes.execute_sync,
         )
-        self.read_file = to_streamed_response_wrapper(
-            devboxes.read_file,
-        )
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
@@ -1006,9 +922,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.execute_sync = async_to_streamed_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = async_to_streamed_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
