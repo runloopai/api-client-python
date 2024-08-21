@@ -67,6 +67,7 @@ class DevboxesResource(SyncAPIResource):
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -98,6 +99,8 @@ class DevboxesResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          metadata: User defined metadata to attach to the devbox for organization.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -122,6 +125,7 @@ class DevboxesResource(SyncAPIResource):
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "metadata": metadata,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -447,6 +451,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -478,6 +483,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          metadata: User defined metadata to attach to the devbox for organization.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -502,6 +509,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "metadata": metadata,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
