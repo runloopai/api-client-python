@@ -39,6 +39,7 @@ class TestDevboxes:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
             },
+            metadata={"foo": "string"},
             name="name",
             setup_commands=["string", "string", "string"],
         )
@@ -382,6 +383,7 @@ class TestAsyncDevboxes:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "MINI",
             },
+            metadata={"foo": "string"},
             name="name",
             setup_commands=["string", "string", "string"],
         )
