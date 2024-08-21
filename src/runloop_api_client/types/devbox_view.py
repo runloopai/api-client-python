@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -26,6 +26,9 @@ class DevboxView(BaseModel):
 
     initiator_type: Optional[Literal["unknown", "api", "invocation"]] = None
     """The initiator of the devbox."""
+
+    metadata: Optional[Dict[str, str]] = None
+    """The user defined Devbox metadata."""
 
     name: Optional[str] = None
     """The name of the Devbox."""
