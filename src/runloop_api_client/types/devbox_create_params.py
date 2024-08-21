@@ -40,6 +40,9 @@ class DevboxCreateParams(TypedDict, total=False):
     launch_parameters: LaunchParameters
     """Parameters to configure the resources and launch time behavior of the Devbox."""
 
+    metadata: Dict[str, str]
+    """User defined metadata to attach to the devbox for organization."""
+
     name: str
     """(Optional) A user specified name to give the Devbox."""
 
