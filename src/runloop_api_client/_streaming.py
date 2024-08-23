@@ -55,7 +55,29 @@ class Stream(Generic[_T]):
         iterator = self._iter_events()
 
         for sse in iterator:
-            yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+            if sse.event == "completion":
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+
+            if sse.event == "message_start" or sse.event == "content_block_stop":
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+
+            if sse.event == "ping":
+                continue
+
+            if sse.event == "error":
+                body = sse.data
+
+                try:
+                    body = sse.json()
+                    err_msg = f"{body}"
+                except Exception:
+                    err_msg = sse.data or f"Error code: {response.status_code}"
+
+                raise self._client._make_status_error(
+                    err_msg,
+                    body=body,
+                    response=self.response,
+                )
 
         # Ensure the entire stream is consumed
         for _sse in iterator:
@@ -119,7 +141,29 @@ class AsyncStream(Generic[_T]):
         iterator = self._iter_events()
 
         async for sse in iterator:
-            yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+            if sse.event == "completion":
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+
+            if sse.event == "message_start" or sse.event == "content_block_stop":
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+
+            if sse.event == "ping":
+                continue
+
+            if sse.event == "error":
+                body = sse.data
+
+                try:
+                    body = sse.json()
+                    err_msg = f"{body}"
+                except Exception:
+                    err_msg = sse.data or f"Error code: {response.status_code}"
+
+                raise self._client._make_status_error(
+                    err_msg,
+                    body=body,
+                    response=self.response,
+                )
 
         # Ensure the entire stream is consumed
         async for _sse in iterator:
