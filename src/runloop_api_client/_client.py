@@ -108,6 +108,8 @@ class Runloop(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
+        self._default_stream_cls = Stream
+
         self.blueprints = resources.BlueprintsResource(self)
         self.deployments = resources.DeploymentsResource(self)
         self.devboxes = resources.DevboxesResource(self)
@@ -283,6 +285,8 @@ class AsyncRunloop(AsyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
         )
+
+        self._default_stream_cls = AsyncStream
 
         self.blueprints = resources.AsyncBlueprintsResource(self)
         self.deployments = resources.AsyncDeploymentsResource(self)
