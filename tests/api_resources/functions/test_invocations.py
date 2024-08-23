@@ -10,10 +10,7 @@ import pytest
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types.shared import FunctionInvocationExecutionDetailView
-from runloop_api_client.types.functions import (
-    InvocationLogsResponse,
-    FunctionInvocationListView,
-)
+from runloop_api_client.types.functions import FunctionInvocationListView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -130,44 +127,6 @@ class TestInvocations:
                 "",
             )
 
-    @parametrize
-    def test_method_logs(self, client: Runloop) -> None:
-        invocation = client.functions.invocations.logs(
-            "invocation_id",
-        )
-        assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-    @parametrize
-    def test_raw_response_logs(self, client: Runloop) -> None:
-        response = client.functions.invocations.with_raw_response.logs(
-            "invocation_id",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        invocation = response.parse()
-        assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-    @parametrize
-    def test_streaming_response_logs(self, client: Runloop) -> None:
-        with client.functions.invocations.with_streaming_response.logs(
-            "invocation_id",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            invocation = response.parse()
-            assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_path_params_logs(self, client: Runloop) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `invocation_id` but received ''"):
-            client.functions.invocations.with_raw_response.logs(
-                "",
-            )
-
 
 class TestAsyncInvocations:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -278,43 +237,5 @@ class TestAsyncInvocations:
     async def test_path_params_kill(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `invocation_id` but received ''"):
             await async_client.functions.invocations.with_raw_response.kill(
-                "",
-            )
-
-    @parametrize
-    async def test_method_logs(self, async_client: AsyncRunloop) -> None:
-        invocation = await async_client.functions.invocations.logs(
-            "invocation_id",
-        )
-        assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-    @parametrize
-    async def test_raw_response_logs(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.functions.invocations.with_raw_response.logs(
-            "invocation_id",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        invocation = await response.parse()
-        assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_logs(self, async_client: AsyncRunloop) -> None:
-        async with async_client.functions.invocations.with_streaming_response.logs(
-            "invocation_id",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            invocation = await response.parse()
-            assert_matches_type(InvocationLogsResponse, invocation, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_path_params_logs(self, async_client: AsyncRunloop) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `invocation_id` but received ''"):
-            await async_client.functions.invocations.with_raw_response.logs(
                 "",
             )

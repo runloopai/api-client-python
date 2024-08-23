@@ -19,7 +19,6 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.functions import invocation_list_params
-from ...types.functions.invocation_logs_response import InvocationLogsResponse
 from ...types.functions.function_invocation_list_view import FunctionInvocationListView
 from ...types.shared.function_invocation_execution_detail_view import FunctionInvocationExecutionDetailView
 
@@ -150,39 +149,6 @@ class InvocationsResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def logs(
-        self,
-        invocation_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationLogsResponse:
-        """
-        Get the logs for the given invocation.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not invocation_id:
-            raise ValueError(f"Expected a non-empty value for `invocation_id` but received {invocation_id!r}")
-        return self._get(
-            f"/v1/functions/invocations/{invocation_id}/logs",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=InvocationLogsResponse,
-        )
-
 
 class AsyncInvocationsResource(AsyncAPIResource):
     @cached_property
@@ -308,39 +274,6 @@ class AsyncInvocationsResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def logs(
-        self,
-        invocation_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> InvocationLogsResponse:
-        """
-        Get the logs for the given invocation.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not invocation_id:
-            raise ValueError(f"Expected a non-empty value for `invocation_id` but received {invocation_id!r}")
-        return await self._get(
-            f"/v1/functions/invocations/{invocation_id}/logs",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=InvocationLogsResponse,
-        )
-
 
 class InvocationsResourceWithRawResponse:
     def __init__(self, invocations: InvocationsResource) -> None:
@@ -354,9 +287,6 @@ class InvocationsResourceWithRawResponse:
         )
         self.kill = to_raw_response_wrapper(
             invocations.kill,
-        )
-        self.logs = to_raw_response_wrapper(
-            invocations.logs,
         )
 
 
@@ -373,9 +303,6 @@ class AsyncInvocationsResourceWithRawResponse:
         self.kill = async_to_raw_response_wrapper(
             invocations.kill,
         )
-        self.logs = async_to_raw_response_wrapper(
-            invocations.logs,
-        )
 
 
 class InvocationsResourceWithStreamingResponse:
@@ -391,9 +318,6 @@ class InvocationsResourceWithStreamingResponse:
         self.kill = to_streamed_response_wrapper(
             invocations.kill,
         )
-        self.logs = to_streamed_response_wrapper(
-            invocations.logs,
-        )
 
 
 class AsyncInvocationsResourceWithStreamingResponse:
@@ -408,7 +332,4 @@ class AsyncInvocationsResourceWithStreamingResponse:
         )
         self.kill = async_to_streamed_response_wrapper(
             invocations.kill,
-        )
-        self.logs = async_to_streamed_response_wrapper(
-            invocations.logs,
         )
