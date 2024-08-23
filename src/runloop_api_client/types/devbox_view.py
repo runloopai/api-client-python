@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -21,11 +21,17 @@ class DevboxView(BaseModel):
     end_time_ms: Optional[int] = None
     """The time the Devbox finished execution (Unix timestamp milliseconds)."""
 
+    failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
+    """The failure reason if the Devbox failed, if any."""
+
     initiator_id: Optional[str] = None
     """The initiator ID of the devbox."""
 
     initiator_type: Optional[Literal["unknown", "api", "invocation"]] = None
     """The initiator of the devbox."""
+
+    metadata: Optional[Dict[str, str]] = None
+    """The user defined Devbox metadata."""
 
     name: Optional[str] = None
     """The name of the Devbox."""

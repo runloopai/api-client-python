@@ -17,10 +17,10 @@ from .logs import (
 from ...types import (
     devbox_list_params,
     devbox_create_params,
-    devbox_read_file_params,
     devbox_write_file_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
+    devbox_execute_async_params,
     devbox_read_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
@@ -31,6 +31,14 @@ from ..._utils import (
     async_maybe_transform,
 )
 from ..._compat import cached_property
+from .executions import (
+    ExecutionsResource,
+    AsyncExecutionsResource,
+    ExecutionsResourceWithRawResponse,
+    AsyncExecutionsResourceWithRawResponse,
+    ExecutionsResourceWithStreamingResponse,
+    AsyncExecutionsResourceWithStreamingResponse,
+)
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
     to_raw_response_wrapper,
@@ -41,7 +49,9 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
-from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
+from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
+from ...types.devboxes.devbox_execution_detail_view import DevboxExecutionDetailView
+from ...types.devboxes.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
@@ -50,6 +60,10 @@ class DevboxesResource(SyncAPIResource):
     @cached_property
     def logs(self) -> LogsResource:
         return LogsResource(self._client)
+
+    @cached_property
+    def executions(self) -> ExecutionsResource:
+        return ExecutionsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> DevboxesResourceWithRawResponse:
@@ -68,6 +82,7 @@ class DevboxesResource(SyncAPIResource):
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -99,6 +114,8 @@ class DevboxesResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          metadata: User defined metadata to attach to the devbox for organization.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -123,6 +140,7 @@ class DevboxesResource(SyncAPIResource):
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "metadata": metadata,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -220,6 +238,76 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxListView,
         )
 
+    def create_ssh_key(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxCreateSSHKeyResponse:
+        """
+        Create an SSH key for a devbox by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/create_ssh_key",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxCreateSSHKeyResponse,
+        )
+
+    def execute_async(
+        self,
+        id: str,
+        *,
+        command: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Asynchronously execute a command on a devbox
+
+        Args:
+          command: The command to execute on the Devbox.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/executions/execute_async",
+            body=maybe_transform({"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+        )
+
     def execute_sync(
         self,
         id: str,
@@ -251,43 +339,6 @@ class DevboxesResource(SyncAPIResource):
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
-    def read_file(
-        self,
-        id: str,
-        *,
-        file_path: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Read file contents from a file on given Devbox.
-
-        Args:
-          file_path: The path of the file to read.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/read_file",
-            body=maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -469,6 +520,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return AsyncLogsResource(self._client)
 
     @cached_property
+    def executions(self) -> AsyncExecutionsResource:
+        return AsyncExecutionsResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AsyncDevboxesResourceWithRawResponse:
         return AsyncDevboxesResourceWithRawResponse(self)
 
@@ -485,6 +540,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -516,6 +572,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          metadata: User defined metadata to attach to the devbox for organization.
+
           name: (Optional) A user specified name to give the Devbox.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
@@ -540,6 +598,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "metadata": metadata,
                     "name": name,
                     "setup_commands": setup_commands,
                 },
@@ -637,6 +696,78 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxListView,
         )
 
+    async def create_ssh_key(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxCreateSSHKeyResponse:
+        """
+        Create an SSH key for a devbox by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/create_ssh_key",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxCreateSSHKeyResponse,
+        )
+
+    async def execute_async(
+        self,
+        id: str,
+        *,
+        command: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Asynchronously execute a command on a devbox
+
+        Args:
+          command: The command to execute on the Devbox.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/executions/execute_async",
+            body=await async_maybe_transform(
+                {"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+        )
+
     async def execute_sync(
         self,
         id: str,
@@ -668,43 +799,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=await async_maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxExecutionDetailView,
-        )
-
-    async def read_file(
-        self,
-        id: str,
-        *,
-        file_path: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxExecutionDetailView:
-        """
-        Read file contents from a file on given Devbox.
-
-        Args:
-          file_path: The path of the file to read.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/read_file",
-            body=await async_maybe_transform({"file_path": file_path}, devbox_read_file_params.DevboxReadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -893,11 +987,14 @@ class DevboxesResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             devboxes.list,
         )
+        self.create_ssh_key = to_raw_response_wrapper(
+            devboxes.create_ssh_key,
+        )
+        self.execute_async = to_raw_response_wrapper(
+            devboxes.execute_async,
+        )
         self.execute_sync = to_raw_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = to_raw_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
@@ -916,6 +1013,10 @@ class DevboxesResourceWithRawResponse:
     def logs(self) -> LogsResourceWithRawResponse:
         return LogsResourceWithRawResponse(self._devboxes.logs)
 
+    @cached_property
+    def executions(self) -> ExecutionsResourceWithRawResponse:
+        return ExecutionsResourceWithRawResponse(self._devboxes.executions)
+
 
 class AsyncDevboxesResourceWithRawResponse:
     def __init__(self, devboxes: AsyncDevboxesResource) -> None:
@@ -930,11 +1031,14 @@ class AsyncDevboxesResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
         )
+        self.create_ssh_key = async_to_raw_response_wrapper(
+            devboxes.create_ssh_key,
+        )
+        self.execute_async = async_to_raw_response_wrapper(
+            devboxes.execute_async,
+        )
         self.execute_sync = async_to_raw_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = async_to_raw_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
@@ -953,6 +1057,10 @@ class AsyncDevboxesResourceWithRawResponse:
     def logs(self) -> AsyncLogsResourceWithRawResponse:
         return AsyncLogsResourceWithRawResponse(self._devboxes.logs)
 
+    @cached_property
+    def executions(self) -> AsyncExecutionsResourceWithRawResponse:
+        return AsyncExecutionsResourceWithRawResponse(self._devboxes.executions)
+
 
 class DevboxesResourceWithStreamingResponse:
     def __init__(self, devboxes: DevboxesResource) -> None:
@@ -967,11 +1075,14 @@ class DevboxesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.create_ssh_key = to_streamed_response_wrapper(
+            devboxes.create_ssh_key,
+        )
+        self.execute_async = to_streamed_response_wrapper(
+            devboxes.execute_async,
+        )
         self.execute_sync = to_streamed_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = to_streamed_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
@@ -990,6 +1101,10 @@ class DevboxesResourceWithStreamingResponse:
     def logs(self) -> LogsResourceWithStreamingResponse:
         return LogsResourceWithStreamingResponse(self._devboxes.logs)
 
+    @cached_property
+    def executions(self) -> ExecutionsResourceWithStreamingResponse:
+        return ExecutionsResourceWithStreamingResponse(self._devboxes.executions)
+
 
 class AsyncDevboxesResourceWithStreamingResponse:
     def __init__(self, devboxes: AsyncDevboxesResource) -> None:
@@ -1004,11 +1119,14 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.create_ssh_key = async_to_streamed_response_wrapper(
+            devboxes.create_ssh_key,
+        )
+        self.execute_async = async_to_streamed_response_wrapper(
+            devboxes.execute_async,
+        )
         self.execute_sync = async_to_streamed_response_wrapper(
             devboxes.execute_sync,
-        )
-        self.read_file = async_to_streamed_response_wrapper(
-            devboxes.read_file,
         )
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
@@ -1026,3 +1144,7 @@ class AsyncDevboxesResourceWithStreamingResponse:
     @cached_property
     def logs(self) -> AsyncLogsResourceWithStreamingResponse:
         return AsyncLogsResourceWithStreamingResponse(self._devboxes.logs)
+
+    @cached_property
+    def executions(self) -> AsyncExecutionsResourceWithStreamingResponse:
+        return AsyncExecutionsResourceWithStreamingResponse(self._devboxes.executions)

@@ -49,9 +49,11 @@ Types:
 
 ```python
 from runloop_api_client.types import (
+    DevboxAsyncExecutionDetailView,
     DevboxExecutionDetailView,
     DevboxListView,
     DevboxView,
+    DevboxCreateSSHKeyResponse,
     DevboxReadFileContentsResponse,
     DevboxUploadFileResponse,
 )
@@ -62,12 +64,13 @@ Methods:
 - <code title="post /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create</a>(\*\*<a href="src/runloop_api_client/types/devbox_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_list_view.py">DevboxListView</a></code>
-- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_sync</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_execute_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
-- <code title="post /v1/devboxes/{id}/read_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/create_ssh_key">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_ssh_key</a>(id) -> <a href="./src/runloop_api_client/types/devbox_create_ssh_key_response.py">DevboxCreateSSHKeyResponse</a></code>
+- <code title="post /v1/devboxes/{id}/executions/execute_async">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_async</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_execute_async_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/devbox_async_execution_detail_view.py">DevboxAsyncExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">execute_sync</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_execute_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 - <code title="post /v1/devboxes/{id}/read_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_contents_params.py">params</a>) -> str</code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">shutdown</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="post /v1/devboxes/{id}/upload_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">upload_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_upload_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_upload_file_response.py">object</a></code>
-- <code title="post /v1/devboxes/{id}/write_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/write_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
 ## Logs
 
@@ -80,6 +83,23 @@ from runloop_api_client.types.devboxes import DevboxLogsListView
 Methods:
 
 - <code title="get /v1/devboxes/{id}/logs">client.devboxes.logs.<a href="./src/runloop_api_client/resources/devboxes/logs.py">list</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/devbox_logs_list_view.py">DevboxLogsListView</a></code>
+
+## Executions
+
+Types:
+
+```python
+from runloop_api_client.types.devboxes import (
+    DevboxAsyncExecutionDetailView,
+    DevboxExecutionDetailView,
+    DevboxLogsListView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/devboxes/{id}/executions/execute_async">client.devboxes.executions.<a href="./src/runloop_api_client/resources/devboxes/executions.py">execute_async</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/execution_execute_async_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/devbox_async_execution_detail_view.py">DevboxAsyncExecutionDetailView</a></code>
+- <code title="post /v1/devboxes/{id}/execute_sync">client.devboxes.executions.<a href="./src/runloop_api_client/resources/devboxes/executions.py">execute_sync</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/execution_execute_sync_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
 # Functions
 

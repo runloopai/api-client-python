@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.1.0-alpha.15 (2024-08-23)
+
+Full Changelog: [v0.1.0-alpha.14...v0.1.0-alpha.15](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.14...v0.1.0-alpha.15)
+
+### Features
+
+* **api:** manual updates ([#117](https://github.com/runloopai/api-client-python/issues/117)) ([5222c74](https://github.com/runloopai/api-client-python/commit/5222c7462dae22befa4cbfe000635660c0b72070))
+* **api:** manual updates ([#118](https://github.com/runloopai/api-client-python/issues/118)) ([2801d62](https://github.com/runloopai/api-client-python/commit/2801d62df46e79a9054a4c32453b46436362aa2c))
+* **api:** OpenAPI spec update via Stainless API ([#106](https://github.com/runloopai/api-client-python/issues/106)) ([977e845](https://github.com/runloopai/api-client-python/commit/977e845bb31245f85aa00e1c0bdd091ed81967df))
+* **api:** OpenAPI spec update via Stainless API ([#110](https://github.com/runloopai/api-client-python/issues/110)) ([dc0bc88](https://github.com/runloopai/api-client-python/commit/dc0bc888d147dce2619d0e0f38897bd1df4372e6))
+* **api:** OpenAPI spec update via Stainless API ([#111](https://github.com/runloopai/api-client-python/issues/111)) ([82a1581](https://github.com/runloopai/api-client-python/commit/82a158114880b0d416ae4e9660926151daf1a60f))
+* **api:** OpenAPI spec update via Stainless API ([#112](https://github.com/runloopai/api-client-python/issues/112)) ([cfddae4](https://github.com/runloopai/api-client-python/commit/cfddae44be11039af98c8d6f570990351c552d9d))
+* **api:** OpenAPI spec update via Stainless API ([#113](https://github.com/runloopai/api-client-python/issues/113)) ([23d90e8](https://github.com/runloopai/api-client-python/commit/23d90e8d22775abcaf90e44fa7b9dc112d6d36ad))
+* **api:** OpenAPI spec update via Stainless API ([#114](https://github.com/runloopai/api-client-python/issues/114)) ([f754530](https://github.com/runloopai/api-client-python/commit/f7545300ecc975f555178729c987fa506d8c0dde))
+* **api:** OpenAPI spec update via Stainless API ([#115](https://github.com/runloopai/api-client-python/issues/115)) ([b5200de](https://github.com/runloopai/api-client-python/commit/b5200dedec44c8785daf06cb1acfa3b6909d8361))
+* **api:** OpenAPI spec update via Stainless API ([#120](https://github.com/runloopai/api-client-python/issues/120)) ([e432b64](https://github.com/runloopai/api-client-python/commit/e432b64ee28bf061878cba1bf76285d847cd3ce7))
+
+
+### Chores
+
+* **ci:** also run pydantic v1 tests ([#109](https://github.com/runloopai/api-client-python/issues/109)) ([23009f0](https://github.com/runloopai/api-client-python/commit/23009f032c59a5ab216c7602cabfe63253dd33b5))
+* **client:** fix parsing union responses when non-json is returned ([#108](https://github.com/runloopai/api-client-python/issues/108)) ([9133e9b](https://github.com/runloopai/api-client-python/commit/9133e9b87be8d363742b08f2f829699657982a6e))
+
 ## 0.1.0-alpha.14 (2024-08-16)
 
 Full Changelog: [v0.1.0-alpha.13...v0.1.0-alpha.14](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.13...v0.1.0-alpha.14)
