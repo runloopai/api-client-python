@@ -21,6 +21,9 @@ class DevboxView(BaseModel):
     end_time_ms: Optional[int] = None
     """The time the Devbox finished execution (Unix timestamp milliseconds)."""
 
+    failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
+    """The failure reason if the Devbox failed, if any."""
+
     initiator_id: Optional[str] = None
     """The initiator ID of the devbox."""
 

@@ -169,6 +169,31 @@ class TestFunctions:
                 request={},
             )
 
+    @parametrize
+    def test_method_list_openapi(self, client: Runloop) -> None:
+        function = client.functions.list_openapi()
+        assert_matches_type(object, function, path=["response"])
+
+    @parametrize
+    def test_raw_response_list_openapi(self, client: Runloop) -> None:
+        response = client.functions.with_raw_response.list_openapi()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        function = response.parse()
+        assert_matches_type(object, function, path=["response"])
+
+    @parametrize
+    def test_streaming_response_list_openapi(self, client: Runloop) -> None:
+        with client.functions.with_streaming_response.list_openapi() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            function = response.parse()
+            assert_matches_type(object, function, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncFunctions:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -323,3 +348,28 @@ class TestAsyncFunctions:
                 project_name="project_name",
                 request={},
             )
+
+    @parametrize
+    async def test_method_list_openapi(self, async_client: AsyncRunloop) -> None:
+        function = await async_client.functions.list_openapi()
+        assert_matches_type(object, function, path=["response"])
+
+    @parametrize
+    async def test_raw_response_list_openapi(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.functions.with_raw_response.list_openapi()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        function = await response.parse()
+        assert_matches_type(object, function, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_list_openapi(self, async_client: AsyncRunloop) -> None:
+        async with async_client.functions.with_streaming_response.list_openapi() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            function = await response.parse()
+            assert_matches_type(object, function, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
