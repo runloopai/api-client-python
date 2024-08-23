@@ -48,7 +48,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
-from ...types.devbox_list_response import DevboxListResponse
+from ...types.devbox_list_view import DevboxListView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.devboxes.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devboxes.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -198,7 +198,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxListResponse:
+    ) -> DevboxListView:
         """List all devboxes or filter by status.
 
         If no status is provided, all devboxes
@@ -235,7 +235,7 @@ class DevboxesResource(SyncAPIResource):
                     devbox_list_params.DevboxListParams,
                 ),
             ),
-            cast_to=DevboxListResponse,
+            cast_to=DevboxListView,
         )
 
     def create_ssh_key(
@@ -656,7 +656,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxListResponse:
+    ) -> DevboxListView:
         """List all devboxes or filter by status.
 
         If no status is provided, all devboxes
@@ -693,7 +693,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     devbox_list_params.DevboxListParams,
                 ),
             ),
-            cast_to=DevboxListResponse,
+            cast_to=DevboxListView,
         )
 
     async def create_ssh_key(
