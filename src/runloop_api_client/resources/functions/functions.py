@@ -164,6 +164,25 @@ class FunctionsResource(SyncAPIResource):
             cast_to=FunctionInvocationExecutionDetailView,
         )
 
+    def list_openapi(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """Get the OpenAPI Spec for this project."""
+        return self._get(
+            "/v1/functions/openapi",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
+
 
 class AsyncFunctionsResource(AsyncAPIResource):
     @cached_property
@@ -296,6 +315,25 @@ class AsyncFunctionsResource(AsyncAPIResource):
             cast_to=FunctionInvocationExecutionDetailView,
         )
 
+    async def list_openapi(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """Get the OpenAPI Spec for this project."""
+        return await self._get(
+            "/v1/functions/openapi",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
+
 
 class FunctionsResourceWithRawResponse:
     def __init__(self, functions: FunctionsResource) -> None:
@@ -309,6 +347,9 @@ class FunctionsResourceWithRawResponse:
         )
         self.invoke_sync = to_raw_response_wrapper(
             functions.invoke_sync,
+        )
+        self.list_openapi = to_raw_response_wrapper(
+            functions.list_openapi,
         )
 
     @cached_property
@@ -329,6 +370,9 @@ class AsyncFunctionsResourceWithRawResponse:
         self.invoke_sync = async_to_raw_response_wrapper(
             functions.invoke_sync,
         )
+        self.list_openapi = async_to_raw_response_wrapper(
+            functions.list_openapi,
+        )
 
     @cached_property
     def invocations(self) -> AsyncInvocationsResourceWithRawResponse:
@@ -348,6 +392,9 @@ class FunctionsResourceWithStreamingResponse:
         self.invoke_sync = to_streamed_response_wrapper(
             functions.invoke_sync,
         )
+        self.list_openapi = to_streamed_response_wrapper(
+            functions.list_openapi,
+        )
 
     @cached_property
     def invocations(self) -> InvocationsResourceWithStreamingResponse:
@@ -366,6 +413,9 @@ class AsyncFunctionsResourceWithStreamingResponse:
         )
         self.invoke_sync = async_to_streamed_response_wrapper(
             functions.invoke_sync,
+        )
+        self.list_openapi = async_to_streamed_response_wrapper(
+            functions.list_openapi,
         )
 
     @cached_property

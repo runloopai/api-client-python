@@ -16,6 +16,14 @@ from .devboxes import (
     DevboxesResourceWithStreamingResponse,
     AsyncDevboxesResourceWithStreamingResponse,
 )
+from .executions import (
+    ExecutionsResource,
+    AsyncExecutionsResource,
+    ExecutionsResourceWithRawResponse,
+    AsyncExecutionsResourceWithRawResponse,
+    ExecutionsResourceWithStreamingResponse,
+    AsyncExecutionsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "LogsResource",
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncLogsResourceWithRawResponse",
     "LogsResourceWithStreamingResponse",
     "AsyncLogsResourceWithStreamingResponse",
+    "ExecutionsResource",
+    "AsyncExecutionsResource",
+    "ExecutionsResourceWithRawResponse",
+    "AsyncExecutionsResourceWithRawResponse",
+    "ExecutionsResourceWithStreamingResponse",
+    "AsyncExecutionsResourceWithStreamingResponse",
     "DevboxesResource",
     "AsyncDevboxesResource",
     "DevboxesResourceWithRawResponse",
