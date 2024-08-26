@@ -49,9 +49,9 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
-from ...types.devboxes.devbox_execution_detail_view import DevboxExecutionDetailView
-from ...types.devboxes.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
+from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
