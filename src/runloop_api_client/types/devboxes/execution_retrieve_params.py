@@ -10,5 +10,5 @@ __all__ = ["ExecutionRetrieveParams"]
 class ExecutionRetrieveParams(TypedDict, total=False):
     id: Required[str]
 
-    command: str
-    """The command to execute on the Devbox."""
+    last_n: str
+    """Last n lines of standard error / standard out to return"""

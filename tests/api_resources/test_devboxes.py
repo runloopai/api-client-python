@@ -12,9 +12,10 @@ from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     DevboxView,
     DevboxListView,
+    DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
+    DevboxAsyncExecutionDetailView,
 )
-from runloop_api_client.types.devboxes import DevboxExecutionDetailView, DevboxAsyncExecutionDetailView
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
