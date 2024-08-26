@@ -19,6 +19,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_execute_sync_params, execution_execute_async_params
+from ...types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ...types.devboxes.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devboxes.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -106,6 +107,42 @@ class ExecutionsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxExecutionDetailView,
+        )
+
+    def logs(
+        self,
+        execution_id: str,
+        *,
+        id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxLogsListView:
+        """
+        Get all logs from a Devbox execution by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return self._get(
+            f"/v1/devboxes/{id}/executions/{execution_id}/logs",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxLogsListView,
         )
 
 
@@ -196,6 +233,42 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    async def logs(
+        self,
+        execution_id: str,
+        *,
+        id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxLogsListView:
+        """
+        Get all logs from a Devbox execution by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return await self._get(
+            f"/v1/devboxes/{id}/executions/{execution_id}/logs",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxLogsListView,
+        )
+
 
 class ExecutionsResourceWithRawResponse:
     def __init__(self, executions: ExecutionsResource) -> None:
@@ -206,6 +279,9 @@ class ExecutionsResourceWithRawResponse:
         )
         self.execute_sync = to_raw_response_wrapper(
             executions.execute_sync,
+        )
+        self.logs = to_raw_response_wrapper(
+            executions.logs,
         )
 
 
@@ -219,6 +295,9 @@ class AsyncExecutionsResourceWithRawResponse:
         self.execute_sync = async_to_raw_response_wrapper(
             executions.execute_sync,
         )
+        self.logs = async_to_raw_response_wrapper(
+            executions.logs,
+        )
 
 
 class ExecutionsResourceWithStreamingResponse:
@@ -231,6 +310,9 @@ class ExecutionsResourceWithStreamingResponse:
         self.execute_sync = to_streamed_response_wrapper(
             executions.execute_sync,
         )
+        self.logs = to_streamed_response_wrapper(
+            executions.logs,
+        )
 
 
 class AsyncExecutionsResourceWithStreamingResponse:
@@ -242,4 +324,7 @@ class AsyncExecutionsResourceWithStreamingResponse:
         )
         self.execute_sync = async_to_streamed_response_wrapper(
             executions.execute_sync,
+        )
+        self.logs = async_to_streamed_response_wrapper(
+            executions.logs,
         )
