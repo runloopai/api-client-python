@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from .devbox_logs_list_view import DevboxLogsListView as DevboxLogsListView
-from .devbox_execution_detail_view import DevboxExecutionDetailView as DevboxExecutionDetailView
+from .execution_retrieve_params import ExecutionRetrieveParams as ExecutionRetrieveParams
 from .execution_execute_sync_params import ExecutionExecuteSyncParams as ExecutionExecuteSyncParams
 from .execution_execute_async_params import ExecutionExecuteAsyncParams as ExecutionExecuteAsyncParams
-from .devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView as DevboxAsyncExecutionDetailView
