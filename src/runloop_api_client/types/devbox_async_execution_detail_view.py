@@ -21,7 +21,7 @@ class DevboxAsyncExecutionDetailView(BaseModel):
     This field will remain unset until the execution has completed.
     """
 
-    status: Optional[Literal["running", "success", "failure", "canceled"]] = None
+    status: Optional[Literal["running", "completed", "canceled"]] = None
     """Current status of the execution."""
 
     stderr: Optional[str] = None

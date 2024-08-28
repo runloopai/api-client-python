@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.0-alpha.17 (2024-08-27)
+
+Full Changelog: [v0.1.0-alpha.16...v0.1.0-alpha.17](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.16...v0.1.0-alpha.17)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#130](https://github.com/runloopai/api-client-python/issues/130)) ([fc8ef2f](https://github.com/runloopai/api-client-python/commit/fc8ef2f0b7510d5f368b5d0a12be0fcca1079f14))
+* **api:** OpenAPI spec update via Stainless API ([#132](https://github.com/runloopai/api-client-python/issues/132)) ([29725a4](https://github.com/runloopai/api-client-python/commit/29725a4d63e38ef1f12cd19ead545cbb33a9e338))
+* **api:** OpenAPI spec update via Stainless API ([#133](https://github.com/runloopai/api-client-python/issues/133)) ([9e05c97](https://github.com/runloopai/api-client-python/commit/9e05c97d9bf083d4356b71a141c988422484e6f5))
+* **api:** OpenAPI spec update via Stainless API ([#134](https://github.com/runloopai/api-client-python/issues/134)) ([4c3fd59](https://github.com/runloopai/api-client-python/commit/4c3fd59f4c2e4a0bd87b7539b6cc37979bd4594e))
+
 ## 0.1.0-alpha.16 (2024-08-26)
 
 Full Changelog: [v0.1.0-alpha.15...v0.1.0-alpha.16](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.15...v0.1.0-alpha.16)
