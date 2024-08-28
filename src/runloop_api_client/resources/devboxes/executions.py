@@ -18,7 +18,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
+from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -73,43 +73,6 @@ class ExecutionsResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 query=maybe_transform({"last_n": last_n}, execution_retrieve_params.ExecutionRetrieveParams),
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
-        )
-
-    def execute_async(
-        self,
-        id: str,
-        *,
-        command: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxAsyncExecutionDetailView:
-        """
-        Asynchronously execute a command on a devbox
-
-        Args:
-          command: The command to execute on the Devbox.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/execute_async",
-            body=maybe_transform({"command": command}, execution_execute_async_params.ExecutionExecuteAsyncParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -242,45 +205,6 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
-    async def execute_async(
-        self,
-        id: str,
-        *,
-        command: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxAsyncExecutionDetailView:
-        """
-        Asynchronously execute a command on a devbox
-
-        Args:
-          command: The command to execute on the Devbox.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/execute_async",
-            body=await async_maybe_transform(
-                {"command": command}, execution_execute_async_params.ExecutionExecuteAsyncParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
-        )
-
     async def execute_sync(
         self,
         id: str,
@@ -364,9 +288,6 @@ class ExecutionsResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             executions.retrieve,
         )
-        self.execute_async = to_raw_response_wrapper(
-            executions.execute_async,
-        )
         self.execute_sync = to_raw_response_wrapper(
             executions.execute_sync,
         )
@@ -381,9 +302,6 @@ class AsyncExecutionsResourceWithRawResponse:
 
         self.retrieve = async_to_raw_response_wrapper(
             executions.retrieve,
-        )
-        self.execute_async = async_to_raw_response_wrapper(
-            executions.execute_async,
         )
         self.execute_sync = async_to_raw_response_wrapper(
             executions.execute_sync,
@@ -400,9 +318,6 @@ class ExecutionsResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             executions.retrieve,
         )
-        self.execute_async = to_streamed_response_wrapper(
-            executions.execute_async,
-        )
         self.execute_sync = to_streamed_response_wrapper(
             executions.execute_sync,
         )
@@ -417,9 +332,6 @@ class AsyncExecutionsResourceWithStreamingResponse:
 
         self.retrieve = async_to_streamed_response_wrapper(
             executions.retrieve,
-        )
-        self.execute_async = async_to_streamed_response_wrapper(
-            executions.execute_async,
         )
         self.execute_sync = async_to_streamed_response_wrapper(
             executions.execute_sync,

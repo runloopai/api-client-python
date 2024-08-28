@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing_extensions import TypedDict
 
-__all__ = ["LogListParams"]
+__all__ = ["DevboxExecuteAsyncParams"]
 
 
-class LogListParams(TypedDict, total=False):
-    execution_id: str
-    """Id of execution to filter logs by."""
+class DevboxExecuteAsyncParams(TypedDict, total=False):
+    command: str
+    """The command to execute on the Devbox."""

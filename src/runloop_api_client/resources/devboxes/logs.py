@@ -5,10 +5,6 @@ from __future__ import annotations
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import (
-    maybe_transform,
-    async_maybe_transform,
-)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -18,7 +14,6 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.devboxes import log_list_params
 from ...types.devboxes.devbox_logs_list_view import DevboxLogsListView
 
 __all__ = ["LogsResource", "AsyncLogsResource"]
@@ -37,7 +32,6 @@ class LogsResource(SyncAPIResource):
         self,
         id: str,
         *,
-        execution_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -49,8 +43,6 @@ class LogsResource(SyncAPIResource):
         Get all logs from a Devbox by id.
 
         Args:
-          execution_id: Id of execution to filter logs by.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -64,11 +56,7 @@ class LogsResource(SyncAPIResource):
         return self._get(
             f"/v1/devboxes/{id}/logs",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform({"execution_id": execution_id}, log_list_params.LogListParams),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxLogsListView,
         )
@@ -87,7 +75,6 @@ class AsyncLogsResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        execution_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -99,8 +86,6 @@ class AsyncLogsResource(AsyncAPIResource):
         Get all logs from a Devbox by id.
 
         Args:
-          execution_id: Id of execution to filter logs by.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -114,11 +99,7 @@ class AsyncLogsResource(AsyncAPIResource):
         return await self._get(
             f"/v1/devboxes/{id}/logs",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform({"execution_id": execution_id}, log_list_params.LogListParams),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxLogsListView,
         )
