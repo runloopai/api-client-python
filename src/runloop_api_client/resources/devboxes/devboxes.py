@@ -300,7 +300,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/executions/execute_async",
+            f"/v1/devboxes/{id}/execute_async",
             body=maybe_transform({"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -758,7 +758,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/executions/execute_async",
+            f"/v1/devboxes/{id}/execute_async",
             body=await async_maybe_transform(
                 {"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams
             ),
