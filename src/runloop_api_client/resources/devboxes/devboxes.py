@@ -189,7 +189,7 @@ class DevboxesResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: str | NotGiven = NOT_GIVEN,
+        limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -647,7 +647,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        limit: str | NotGiven = NOT_GIVEN,
+        limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
