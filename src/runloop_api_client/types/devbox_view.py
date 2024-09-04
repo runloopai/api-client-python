@@ -36,5 +36,8 @@ class DevboxView(BaseModel):
     name: Optional[str] = None
     """The name of the Devbox."""
 
+    shutdown_reason: Optional[Literal["api_shutdown", "keep_alive_timeout", "entrypoint_exit"]] = None
+    """The shutdown reason if the Devbox shutdown, if any."""
+
     status: Optional[Literal["provisioning", "initializing", "running", "failure", "shutdown"]] = None
     """The current status of the Devbox."""
