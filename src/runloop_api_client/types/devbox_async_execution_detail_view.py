@@ -21,6 +21,9 @@ class DevboxAsyncExecutionDetailView(BaseModel):
     This field will remain unset until the execution has completed.
     """
 
+    shell_name: Optional[str] = None
+    """Shell name."""
+
     status: Optional[Literal["running", "completed", "canceled"]] = None
     """Current status of the execution."""
 

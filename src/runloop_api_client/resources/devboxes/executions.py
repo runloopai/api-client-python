@@ -82,6 +82,7 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -95,6 +96,8 @@ class ExecutionsResource(SyncAPIResource):
         Args:
           command: The command to execute on the Devbox.
 
+          shell_name: Which named shell to run the command in.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -107,7 +110,13 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/execute_async",
-            body=maybe_transform({"command": command}, execution_execute_async_params.ExecutionExecuteAsyncParams),
+            body=maybe_transform(
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                execution_execute_async_params.ExecutionExecuteAsyncParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -119,6 +128,7 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -132,6 +142,8 @@ class ExecutionsResource(SyncAPIResource):
         Args:
           command: The command to execute on the Devbox.
 
+          shell_name: Which named shell to run the command in.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -144,7 +156,13 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
-            body=maybe_transform({"command": command}, execution_execute_sync_params.ExecutionExecuteSyncParams),
+            body=maybe_transform(
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                execution_execute_sync_params.ExecutionExecuteSyncParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -247,6 +265,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -259,6 +278,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
 
         Args:
           command: The command to execute on the Devbox.
+
+          shell_name: Which named shell to run the command in.
 
           extra_headers: Send extra headers
 
@@ -273,7 +294,11 @@ class AsyncExecutionsResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/execute_async",
             body=await async_maybe_transform(
-                {"command": command}, execution_execute_async_params.ExecutionExecuteAsyncParams
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                execution_execute_async_params.ExecutionExecuteAsyncParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -286,6 +311,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -298,6 +324,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
 
         Args:
           command: The command to execute on the Devbox.
+
+          shell_name: Which named shell to run the command in.
 
           extra_headers: Send extra headers
 
@@ -312,7 +340,11 @@ class AsyncExecutionsResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=await async_maybe_transform(
-                {"command": command}, execution_execute_sync_params.ExecutionExecuteSyncParams
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                execution_execute_sync_params.ExecutionExecuteSyncParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout

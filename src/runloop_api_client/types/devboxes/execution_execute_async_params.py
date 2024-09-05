@@ -10,3 +10,6 @@ __all__ = ["ExecutionExecuteAsyncParams"]
 class ExecutionExecuteAsyncParams(TypedDict, total=False):
     command: str
     """The command to execute on the Devbox."""
+
+    shell_name: str
+    """Which named shell to run the command in."""

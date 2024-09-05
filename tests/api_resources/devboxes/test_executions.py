@@ -86,6 +86,7 @@ class TestExecutions:
         execution = client.devboxes.executions.execute_async(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -132,6 +133,7 @@ class TestExecutions:
         execution = client.devboxes.executions.execute_sync(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])
 
@@ -287,6 +289,7 @@ class TestAsyncExecutions:
         execution = await async_client.devboxes.executions.execute_async(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -333,6 +336,7 @@ class TestAsyncExecutions:
         execution = await async_client.devboxes.executions.execute_sync(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])
 
