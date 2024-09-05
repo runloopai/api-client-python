@@ -24,7 +24,7 @@ class DevboxAsyncExecutionDetailView(BaseModel):
     shell_name: Optional[str] = None
     """Shell name."""
 
-    status: Optional[Literal["running", "completed", "canceled"]] = None
+    status: Optional[Literal["queued", "running", "completed"]] = None
     """Current status of the execution."""
 
     stderr: Optional[str] = None
