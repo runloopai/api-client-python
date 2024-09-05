@@ -29,6 +29,7 @@ class TestLogs:
         log = client.devboxes.logs.list(
             id="id",
             execution_id="execution_id",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxLogsListView, log, path=["response"])
 
@@ -79,6 +80,7 @@ class TestAsyncLogs:
         log = await async_client.devboxes.logs.list(
             id="id",
             execution_id="execution_id",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxLogsListView, log, path=["response"])
 
