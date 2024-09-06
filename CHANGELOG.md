@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.1.0-alpha.20 (2024-09-06)
+
+Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#143](https://github.com/runloopai/api-client-python/issues/143)) ([8cd8b77](https://github.com/runloopai/api-client-python/commit/8cd8b77a11e70d8a9c46d813ffc5d99ba7fc956d))
+* **api:** OpenAPI spec update via Stainless API ([#145](https://github.com/runloopai/api-client-python/issues/145)) ([ce6146e](https://github.com/runloopai/api-client-python/commit/ce6146e94e0e54c2c3eabe091129c172f0bc146e))
+* **api:** OpenAPI spec update via Stainless API ([#146](https://github.com/runloopai/api-client-python/issues/146)) ([21a9a9c](https://github.com/runloopai/api-client-python/commit/21a9a9cc37354f1d4b597e24de694cd9680b95d0))
+* **api:** OpenAPI spec update via Stainless API ([#147](https://github.com/runloopai/api-client-python/issues/147)) ([79994e5](https://github.com/runloopai/api-client-python/commit/79994e52f36038f3d2a38f9cb9639a753ac9d7f4))
+* **api:** OpenAPI spec update via Stainless API ([#148](https://github.com/runloopai/api-client-python/issues/148)) ([e645bda](https://github.com/runloopai/api-client-python/commit/e645bda8f821763db0b184f2ad3e66220b844a55))
+* **api:** OpenAPI spec update via Stainless API ([#150](https://github.com/runloopai/api-client-python/issues/150)) ([0017597](https://github.com/runloopai/api-client-python/commit/00175979cd1f3ccad4b9ded0b27e0fbb15b31fd6))
+* **api:** OpenAPI spec update via Stainless API ([#151](https://github.com/runloopai/api-client-python/issues/151)) ([7b9f2fa](https://github.com/runloopai/api-client-python/commit/7b9f2fad3474a08fc4814574db7715b7c4d69182))
+* **api:** OpenAPI spec update via Stainless API ([#152](https://github.com/runloopai/api-client-python/issues/152)) ([9845185](https://github.com/runloopai/api-client-python/commit/98451858216e7f414e6c81e32e3401bb0eee2f5d))
+* **api:** OpenAPI spec update via Stainless API ([#154](https://github.com/runloopai/api-client-python/issues/154)) ([e6350ec](https://github.com/runloopai/api-client-python/commit/e6350ec396f5f081b8099e3cd760de097f0120f8))
+
+
+### Chores
+
+* pyproject.toml formatting changes ([#149](https://github.com/runloopai/api-client-python/issues/149)) ([9370c54](https://github.com/runloopai/api-client-python/commit/9370c543098a995dfdd10f5b020da92567af814e))
+
 ## 0.1.0-alpha.19 (2024-08-28)
 
 Full Changelog: [v0.1.0-alpha.18...v0.1.0-alpha.19](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.18...v0.1.0-alpha.19)
