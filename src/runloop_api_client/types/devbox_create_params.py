@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Dict, List, Iterable
 from typing_extensions import TypedDict
 
 from .resource_size import ResourceSize
+from .code_mount_parameters_param import CodeMountParametersParam
 
 __all__ = ["DevboxCreateParams", "LaunchParameters"]
 
@@ -23,6 +24,9 @@ class DevboxCreateParams(TypedDict, total=False):
     When set, this will load the latest successfully built Blueprint with the given
     name.
     """
+
+    code_mounts: Iterable[CodeMountParametersParam]
+    """A list of code mounts to be included in the Devbox."""
 
     entrypoint: str
     """
