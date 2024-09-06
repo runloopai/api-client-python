@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Mapping, cast
+from typing import Dict, List, Mapping, Iterable, cast
 
 import httpx
 
@@ -49,6 +49,7 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -78,6 +79,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
@@ -103,6 +105,8 @@ class DevboxesResource(SyncAPIResource):
 
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
+
+          code_mounts: A list of code mounts to be included in the Devbox.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -136,6 +140,7 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
@@ -554,6 +559,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
@@ -579,6 +585,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
+
+          code_mounts: A list of code mounts to be included in the Devbox.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -612,6 +620,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
