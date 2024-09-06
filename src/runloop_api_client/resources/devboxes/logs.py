@@ -38,6 +38,7 @@ class LogsResource(SyncAPIResource):
         id: str,
         *,
         execution_id: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -50,6 +51,8 @@ class LogsResource(SyncAPIResource):
 
         Args:
           execution_id: Id of execution to filter logs by.
+
+          shell_name: Shell Name to filter logs by.
 
           extra_headers: Send extra headers
 
@@ -68,7 +71,13 @@ class LogsResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"execution_id": execution_id}, log_list_params.LogListParams),
+                query=maybe_transform(
+                    {
+                        "execution_id": execution_id,
+                        "shell_name": shell_name,
+                    },
+                    log_list_params.LogListParams,
+                ),
             ),
             cast_to=DevboxLogsListView,
         )
@@ -88,6 +97,7 @@ class AsyncLogsResource(AsyncAPIResource):
         id: str,
         *,
         execution_id: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,6 +110,8 @@ class AsyncLogsResource(AsyncAPIResource):
 
         Args:
           execution_id: Id of execution to filter logs by.
+
+          shell_name: Shell Name to filter logs by.
 
           extra_headers: Send extra headers
 
@@ -118,7 +130,13 @@ class AsyncLogsResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform({"execution_id": execution_id}, log_list_params.LogListParams),
+                query=await async_maybe_transform(
+                    {
+                        "execution_id": execution_id,
+                        "shell_name": shell_name,
+                    },
+                    log_list_params.LogListParams,
+                ),
             ),
             cast_to=DevboxLogsListView,
         )

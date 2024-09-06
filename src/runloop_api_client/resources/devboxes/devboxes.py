@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Mapping, cast
+from typing import Dict, List, Mapping, Iterable, cast
 
 import httpx
 
@@ -49,6 +49,7 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -78,6 +79,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
@@ -103,6 +105,8 @@ class DevboxesResource(SyncAPIResource):
 
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
+
+          code_mounts: A list of code mounts to be included in the Devbox.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -136,6 +140,7 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
@@ -189,7 +194,7 @@ class DevboxesResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: str | NotGiven = NOT_GIVEN,
+        limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -276,6 +281,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -289,6 +295,8 @@ class DevboxesResource(SyncAPIResource):
         Args:
           command: The command to execute on the Devbox.
 
+          shell_name: Which named shell to run the command in.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -301,7 +309,13 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/execute_async",
-            body=maybe_transform({"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams),
+            body=maybe_transform(
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_async_params.DevboxExecuteAsyncParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -313,6 +327,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -326,6 +341,8 @@ class DevboxesResource(SyncAPIResource):
         Args:
           command: The command to execute on the Devbox.
 
+          shell_name: Which named shell to run the command in.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -338,7 +355,13 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
-            body=maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
+            body=maybe_transform(
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_sync_params.DevboxExecuteSyncParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -536,6 +559,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
@@ -561,6 +585,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           blueprint_name: (Optional) Name of Blueprint to use for the Devbox. When set, this will load the
               latest successfully built Blueprint with the given name.
+
+          code_mounts: A list of code mounts to be included in the Devbox.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -594,6 +620,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
@@ -647,7 +674,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        limit: str | NotGiven = NOT_GIVEN,
+        limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         status: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -734,6 +761,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -746,6 +774,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         Args:
           command: The command to execute on the Devbox.
+
+          shell_name: Which named shell to run the command in.
 
           extra_headers: Send extra headers
 
@@ -760,7 +790,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/execute_async",
             body=await async_maybe_transform(
-                {"command": command}, devbox_execute_async_params.DevboxExecuteAsyncParams
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_async_params.DevboxExecuteAsyncParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -773,6 +807,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str | NotGiven = NOT_GIVEN,
+        shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -786,6 +821,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           command: The command to execute on the Devbox.
 
+          shell_name: Which named shell to run the command in.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -798,7 +835,13 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
-            body=await async_maybe_transform({"command": command}, devbox_execute_sync_params.DevboxExecuteSyncParams),
+            body=await async_maybe_transform(
+                {
+                    "command": command,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_sync_params.DevboxExecuteSyncParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

@@ -33,6 +33,26 @@ class TestDevboxes:
         devbox = client.devboxes.create(
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
+            code_mounts=[
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+            ],
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
@@ -113,7 +133,7 @@ class TestDevboxes:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list(
-            limit="limit",
+            limit=0,
             starting_after="starting_after",
             status="status",
         )
@@ -189,6 +209,7 @@ class TestDevboxes:
         devbox = client.devboxes.execute_async(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -235,6 +256,7 @@ class TestDevboxes:
         devbox = client.devboxes.execute_sync(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
@@ -461,6 +483,26 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.create(
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
+            code_mounts=[
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+                {
+                    "token": "token",
+                    "install_command": "install_command",
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                },
+            ],
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
@@ -541,7 +583,7 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list(
-            limit="limit",
+            limit=0,
             starting_after="starting_after",
             status="status",
         )
@@ -617,6 +659,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.execute_async(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -663,6 +706,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.execute_sync(
             id="id",
             command="command",
+            shell_name="shell_name",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 

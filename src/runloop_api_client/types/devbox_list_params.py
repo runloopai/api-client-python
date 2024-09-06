@@ -8,7 +8,7 @@ __all__ = ["DevboxListParams"]
 
 
 class DevboxListParams(TypedDict, total=False):
-    limit: str
+    limit: int
     """Page Limit"""
 
     starting_after: str
