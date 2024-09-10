@@ -28,10 +28,21 @@ __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 class ExecutionsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> ExecutionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
         return ExecutionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> ExecutionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
         return ExecutionsResourceWithStreamingResponse(self)
 
     def retrieve(
@@ -209,10 +220,21 @@ class ExecutionsResource(SyncAPIResource):
 class AsyncExecutionsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncExecutionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncExecutionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncExecutionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
         return AsyncExecutionsResourceWithStreamingResponse(self)
 
     async def retrieve(
