@@ -68,10 +68,21 @@ class DevboxesResource(SyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> DevboxesResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
         return DevboxesResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> DevboxesResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
         return DevboxesResourceWithStreamingResponse(self)
 
     def create(
@@ -548,10 +559,21 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> AsyncDevboxesResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncDevboxesResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncDevboxesResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
         return AsyncDevboxesResourceWithStreamingResponse(self)
 
     async def create(
