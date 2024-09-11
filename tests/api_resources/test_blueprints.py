@@ -55,7 +55,7 @@ class TestBlueprints:
             launch_parameters={
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "MINI",
             },
             name="name",
             system_setup_commands=["string", "string", "string"],
@@ -225,7 +225,7 @@ class TestBlueprints:
             launch_parameters={
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "MINI",
             },
             name="name",
             system_setup_commands=["string", "string", "string"],
@@ -289,7 +289,7 @@ class TestAsyncBlueprints:
             launch_parameters={
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "MINI",
             },
             name="name",
             system_setup_commands=["string", "string", "string"],
@@ -459,7 +459,7 @@ class TestAsyncBlueprints:
             launch_parameters={
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "MINI",
             },
             name="name",
             system_setup_commands=["string", "string", "string"],
