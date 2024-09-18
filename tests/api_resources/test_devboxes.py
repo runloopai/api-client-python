@@ -63,7 +63,6 @@ class TestDevboxes:
             },
             metadata={"foo": "string"},
             name="name",
-            prebuilt_handle="prebuilt_handle",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -514,7 +513,6 @@ class TestAsyncDevboxes:
             },
             metadata={"foo": "string"},
             name="name",
-            prebuilt_handle="prebuilt_handle",
             setup_commands=["string", "string", "string"],
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
