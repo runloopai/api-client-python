@@ -97,7 +97,6 @@ class DevboxesResource(SyncAPIResource):
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
-        prebuilt_handle: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -134,8 +133,6 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt_handle: Handle to prebuilt.
-
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -161,7 +158,6 @@ class DevboxesResource(SyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt_handle": prebuilt_handle,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -592,7 +588,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         launch_parameters: devbox_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
-        prebuilt_handle: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -629,8 +624,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt_handle: Handle to prebuilt.
-
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
@@ -656,7 +649,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt_handle": prebuilt_handle,
                     "setup_commands": setup_commands,
                 },
                 devbox_create_params.DevboxCreateParams,
