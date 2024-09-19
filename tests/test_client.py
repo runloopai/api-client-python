@@ -781,6 +781,7 @@ class TestRunloop:
         response = client.devboxes.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
+        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
 
 class TestAsyncRunloop:
@@ -1521,3 +1522,4 @@ class TestAsyncRunloop:
         response = await client.devboxes.with_raw_response.create()
 
         assert response.retries_taken == failures_before_success
+        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
