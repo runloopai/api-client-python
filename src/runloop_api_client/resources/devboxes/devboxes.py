@@ -134,7 +134,7 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Handle to prebuilt.
+          prebuilt: Reference to prebuilt Blueprint.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
@@ -629,7 +629,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Handle to prebuilt.
+          prebuilt: Reference to prebuilt Blueprint.
 
           setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
               fetching a tool or building your dependencies. Runloop will look optimize these
