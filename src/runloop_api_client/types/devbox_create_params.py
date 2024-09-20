@@ -51,7 +51,7 @@ class DevboxCreateParams(TypedDict, total=False):
     """(Optional) A user specified name to give the Devbox."""
 
     prebuilt: str
-    """Handle to prebuilt."""
+    """Reference to prebuilt Blueprint."""
 
     setup_commands: List[str]
     """(Optional) List of commands needed to set up your Devbox.
