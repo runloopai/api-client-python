@@ -53,11 +53,11 @@ class BlueprintsResource(SyncAPIResource):
     def create(
         self,
         *,
+        name: str,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -73,6 +73,8 @@ class BlueprintsResource(SyncAPIResource):
         ready.
 
         Args:
+          name: Name of the Blueprint.
+
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
@@ -80,8 +82,6 @@ class BlueprintsResource(SyncAPIResource):
           file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
-
-          name: Name of the Blueprint.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -97,11 +97,11 @@ class BlueprintsResource(SyncAPIResource):
             "/v1/blueprints",
             body=maybe_transform(
                 {
+                    "name": name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "name": name,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
@@ -233,11 +233,11 @@ class BlueprintsResource(SyncAPIResource):
     def preview(
         self,
         *,
+        name: str,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -252,6 +252,8 @@ class BlueprintsResource(SyncAPIResource):
         resulting Dockerfile and test out your build.
 
         Args:
+          name: Name of the Blueprint.
+
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
@@ -259,8 +261,6 @@ class BlueprintsResource(SyncAPIResource):
           file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
-
-          name: Name of the Blueprint.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -276,11 +276,11 @@ class BlueprintsResource(SyncAPIResource):
             "/v1/blueprints/preview",
             body=maybe_transform(
                 {
+                    "name": name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "name": name,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_preview_params.BlueprintPreviewParams,
@@ -315,11 +315,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        name: str,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -335,6 +335,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         ready.
 
         Args:
+          name: Name of the Blueprint.
+
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
@@ -342,8 +344,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
           file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
-
-          name: Name of the Blueprint.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -359,11 +359,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             "/v1/blueprints",
             body=await async_maybe_transform(
                 {
+                    "name": name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "name": name,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
@@ -495,11 +495,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     async def preview(
         self,
         *,
+        name: str,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
         launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -514,6 +514,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         resulting Dockerfile and test out your build.
 
         Args:
+          name: Name of the Blueprint.
+
           code_mounts: A list of code mounts to be included in the Blueprint.
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
@@ -521,8 +523,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
           file_mounts: (Optional) Map of paths and file contents to write before setup..
 
           launch_parameters: Parameters to configure your Devbox at launch time.
-
-          name: Name of the Blueprint.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -538,11 +538,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             "/v1/blueprints/preview",
             body=await async_maybe_transform(
                 {
+                    "name": name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "name": name,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_preview_params.BlueprintPreviewParams,

@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+
 
 from .._models import BaseModel
 
@@ -8,11 +8,11 @@ __all__ = ["BlueprintBuildLog"]
 
 
 class BlueprintBuildLog(BaseModel):
-    level: Optional[str] = None
+    level: str
     """Log line severity level."""
 
-    message: Optional[str] = None
+    message: str
     """Log line message."""
 
-    timestamp_ms: Optional[int] = None
+    timestamp_ms: int
     """Time of log (Unix timestamp milliseconds)."""
