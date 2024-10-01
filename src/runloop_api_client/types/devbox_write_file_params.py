@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["DevboxWriteFileParams"]
 
 
 class DevboxWriteFileParams(TypedDict, total=False):
-    contents: str
+    contents: Required[str]
     """The contents to write to file."""
 
-    file_path: str
+    file_path: Required[str]
     """The path of the file to read."""

@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import List
 
 from ..._models import BaseModel
 
@@ -8,15 +8,15 @@ __all__ = ["ProjectLogsView", "Log"]
 
 
 class Log(BaseModel):
-    level: Optional[str] = None
+    level: str
 
-    message: Optional[str] = None
+    message: str
 
-    source: Optional[str] = None
+    source: str
 
-    timestamp: Optional[str] = None
+    timestamp: str
 
 
 class ProjectLogsView(BaseModel):
-    logs: Optional[List[Log]] = None
+    logs: List[Log]
     """List of logs for the given project."""
