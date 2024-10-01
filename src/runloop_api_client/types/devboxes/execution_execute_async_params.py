@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["ExecutionExecuteAsyncParams"]
 
 
 class ExecutionExecuteAsyncParams(TypedDict, total=False):
-    command: str
+    command: Required[str]
     """The command to execute on the Devbox."""
 
     shell_name: str

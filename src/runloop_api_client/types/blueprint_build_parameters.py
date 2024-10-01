@@ -24,6 +24,9 @@ class LaunchParameters(BaseModel):
 
 
 class BlueprintBuildParameters(BaseModel):
+    name: str
+    """Name of the Blueprint."""
+
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""
 
@@ -35,9 +38,6 @@ class BlueprintBuildParameters(BaseModel):
 
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
-
-    name: Optional[str] = None
-    """Name of the Blueprint."""
 
     system_setup_commands: Optional[List[str]] = None
     """A list of commands to run to set up your system."""
