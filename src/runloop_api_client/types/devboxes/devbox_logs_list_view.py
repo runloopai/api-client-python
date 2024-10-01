@@ -9,15 +9,6 @@ __all__ = ["DevboxLogsListView", "Log"]
 
 
 class Log(BaseModel):
-    level: str
-    """Log line severity level."""
-
-    source: Literal["setup_commands", "entrypoint", "exec"]
-    """The source of the log."""
-
-    timestamp_ms: int
-    """Time of log (Unix timestamp milliseconds)."""
-
     cmd: Optional[str] = None
     """The Command Executed"""
 
@@ -27,13 +18,22 @@ class Log(BaseModel):
     exit_code: Optional[int] = None
     """The Exit Code of the command"""
 
+    level: Optional[str] = None
+    """Log line severity level."""
+
     message: Optional[str] = None
     """Log line message."""
 
     shell_name: Optional[str] = None
     """The Shell name the cmd executed in."""
 
+    source: Optional[Literal["setup_commands", "entrypoint", "exec"]] = None
+    """The source of the log."""
+
+    timestamp_ms: Optional[int] = None
+    """Time of log (Unix timestamp milliseconds)."""
+
 
 class DevboxLogsListView(BaseModel):
-    logs: List[Log]
+    logs: Optional[List[Log]] = None
     """List of logs for the given devbox."""

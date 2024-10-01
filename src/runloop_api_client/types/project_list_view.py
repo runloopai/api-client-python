@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 
@@ -8,23 +8,23 @@ __all__ = ["ProjectListView", "Installation", "Project"]
 
 
 class Installation(BaseModel):
-    status: str
+    status: Optional[str] = None
     """Status of the installation (installed | uninstalled | never_installed)."""
 
 
 class Project(BaseModel):
-    id: str
+    id: Optional[str] = None
     """Unique id of Project."""
 
-    gh_owner: str
+    gh_owner: Optional[str] = None
     """Owner of the project in Github"""
 
-    name: str
+    name: Optional[str] = None
     """Project display name."""
 
 
 class ProjectListView(BaseModel):
-    installation: Installation
+    installation: Optional[Installation] = None
 
-    projects: List[Project]
+    projects: Optional[List[Project]] = None
     """List of projects matching given query."""
