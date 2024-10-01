@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.1.0-alpha.21 (2024-10-01)
+
+Full Changelog: [v0.1.0-alpha.20...v0.1.0-alpha.21](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.20...v0.1.0-alpha.21)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#156](https://github.com/runloopai/api-client-python/issues/156)) ([1594f34](https://github.com/runloopai/api-client-python/commit/1594f3430e0ad1f1441fdeaaf374760b9e2edfe6))
+* **api:** OpenAPI spec update via Stainless API ([#160](https://github.com/runloopai/api-client-python/issues/160)) ([ee5dccc](https://github.com/runloopai/api-client-python/commit/ee5dccc7797e5786d627c5df12c9ccdf9bcf46c5))
+* **api:** OpenAPI spec update via Stainless API ([#161](https://github.com/runloopai/api-client-python/issues/161)) ([47f9ac6](https://github.com/runloopai/api-client-python/commit/47f9ac690ce50b93675eab8bfa0d17b9059b8a44))
+* **api:** OpenAPI spec update via Stainless API ([#162](https://github.com/runloopai/api-client-python/issues/162)) ([0ac9009](https://github.com/runloopai/api-client-python/commit/0ac900945faa6d3d273011e1928be6601e8497bb))
+* **api:** OpenAPI spec update via Stainless API ([#163](https://github.com/runloopai/api-client-python/issues/163)) ([c819584](https://github.com/runloopai/api-client-python/commit/c8195846f3185b500783ece288d3252690c75ab9))
+* **api:** OpenAPI spec update via Stainless API ([#167](https://github.com/runloopai/api-client-python/issues/167)) ([3a84eea](https://github.com/runloopai/api-client-python/commit/3a84eea63b488bde4821fe8787aa4c5a3abb98a0))
+* **api:** OpenAPI spec update via Stainless API ([#168](https://github.com/runloopai/api-client-python/issues/168)) ([c9a19cb](https://github.com/runloopai/api-client-python/commit/c9a19cb521ce8168566f01373039d555dde6ff08))
+* **api:** OpenAPI spec update via Stainless API ([#171](https://github.com/runloopai/api-client-python/issues/171)) ([d814a44](https://github.com/runloopai/api-client-python/commit/d814a441646b587ad10d985cc8e38c2e2e5399a4))
+* **client:** send retry count header ([#170](https://github.com/runloopai/api-client-python/issues/170)) ([8390f52](https://github.com/runloopai/api-client-python/commit/8390f52895f48665cf09c3a87e61fef2cc0c3027))
+
+
+### Bug Fixes
+
+* **client:** handle domains with underscores ([#169](https://github.com/runloopai/api-client-python/issues/169)) ([8485f86](https://github.com/runloopai/api-client-python/commit/8485f8692c5bcb94cbc4f4389b6e30117c0231aa))
+
+
+### Chores
+
+* add docstrings to raw response properties ([#158](https://github.com/runloopai/api-client-python/issues/158)) ([762a6b3](https://github.com/runloopai/api-client-python/commit/762a6b3ae34b6b4f3797e56a0464c421d66edeb8))
+* **internal:** bump pyright / mypy version ([#166](https://github.com/runloopai/api-client-python/issues/166)) ([69bc4f3](https://github.com/runloopai/api-client-python/commit/69bc4f338353430426ca64873bff8fff5a40313a))
+* **internal:** bump ruff ([#165](https://github.com/runloopai/api-client-python/issues/165)) ([1085a1c](https://github.com/runloopai/api-client-python/commit/1085a1cbd2f039c971b337827bb87e35d9f9941f))
+* **internal:** codegen related update ([#172](https://github.com/runloopai/api-client-python/issues/172)) ([b2e05d5](https://github.com/runloopai/api-client-python/commit/b2e05d5f307c618a0407a55744c97c9a44721f60))
+
+
+### Documentation
+
+* **readme:** add section on determining installed version ([#159](https://github.com/runloopai/api-client-python/issues/159)) ([9f23958](https://github.com/runloopai/api-client-python/commit/9f239589e7a058b54ef79d25944f43a49621940b))
+* update CONTRIBUTING.md ([#164](https://github.com/runloopai/api-client-python/issues/164)) ([169ef14](https://github.com/runloopai/api-client-python/commit/169ef149c8db980beb50b72823d4b2b87c202846))
+
 ## 0.1.0-alpha.20 (2024-09-06)
 
 Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)
