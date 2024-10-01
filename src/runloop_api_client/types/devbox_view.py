@@ -24,29 +24,14 @@ class LaunchParameters(BaseModel):
 
 
 class DevboxView(BaseModel):
-    id: str
+    id: Optional[str] = None
     """The id of the Devbox."""
-
-    create_time_ms: int
-    """Creation time of the Devbox (Unix timestamp milliseconds)."""
-
-    initiator_id: str
-    """The initiator ID of the devbox."""
-
-    initiator_type: Literal["unknown", "api", "invocation"]
-    """The initiator of the devbox."""
-
-    launch_parameters: LaunchParameters
-    """The launch parameters used to create the Devbox."""
-
-    metadata: Dict[str, str]
-    """The user defined Devbox metadata."""
-
-    status: Literal["provisioning", "initializing", "running", "failure", "shutdown"]
-    """The current status of the Devbox."""
 
     blueprint_id: Optional[str] = None
     """The Blueprint ID used in creation of the Devbox, if any."""
+
+    create_time_ms: Optional[int] = None
+    """Creation time of the Devbox (Unix timestamp milliseconds)."""
 
     end_time_ms: Optional[int] = None
     """The time the Devbox finished execution (Unix timestamp milliseconds)."""
@@ -54,8 +39,23 @@ class DevboxView(BaseModel):
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
     """The failure reason if the Devbox failed, if any."""
 
+    initiator_id: Optional[str] = None
+    """The initiator ID of the devbox."""
+
+    initiator_type: Optional[Literal["unknown", "api", "invocation"]] = None
+    """The initiator of the devbox."""
+
+    launch_parameters: Optional[LaunchParameters] = None
+    """The launch parameters used to create the Devbox."""
+
+    metadata: Optional[Dict[str, str]] = None
+    """The user defined Devbox metadata."""
+
     name: Optional[str] = None
     """The name of the Devbox."""
 
     shutdown_reason: Optional[Literal["api_shutdown", "keep_alive_timeout", "entrypoint_exit"]] = None
     """The shutdown reason if the Devbox shutdown, if any."""
+
+    status: Optional[Literal["provisioning", "initializing", "running", "failure", "shutdown"]] = None
+    """The current status of the Devbox."""

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, List, Iterable
-from typing_extensions import Required, TypedDict
+from typing_extensions import TypedDict
 
 from .resource_size import ResourceSize
 from .code_mount_parameters_param import CodeMountParametersParam
@@ -12,9 +12,6 @@ __all__ = ["BlueprintCreateParams", "LaunchParameters"]
 
 
 class BlueprintCreateParams(TypedDict, total=False):
-    name: Required[str]
-    """Name of the Blueprint."""
-
     code_mounts: Iterable[CodeMountParametersParam]
     """A list of code mounts to be included in the Blueprint."""
 
@@ -26,6 +23,9 @@ class BlueprintCreateParams(TypedDict, total=False):
 
     launch_parameters: LaunchParameters
     """Parameters to configure your Devbox at launch time."""
+
+    name: str
+    """Name of the Blueprint."""
 
     system_setup_commands: List[str]
     """A list of commands to run to set up your system."""
