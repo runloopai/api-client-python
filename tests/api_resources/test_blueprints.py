@@ -24,30 +24,33 @@ class TestBlueprints:
 
     @parametrize
     def test_method_create(self, client: Runloop) -> None:
-        blueprint = client.blueprints.create()
+        blueprint = client.blueprints.create(
+            name="name",
+        )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.create(
+            name="name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             dockerfile="dockerfile",
@@ -57,14 +60,15 @@ class TestBlueprints:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
             },
-            name="name",
             system_setup_commands=["string", "string", "string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
-        response = client.blueprints.with_raw_response.create()
+        response = client.blueprints.with_raw_response.create(
+            name="name",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -73,7 +77,9 @@ class TestBlueprints:
 
     @parametrize
     def test_streaming_response_create(self, client: Runloop) -> None:
-        with client.blueprints.with_streaming_response.create() as response:
+        with client.blueprints.with_streaming_response.create(
+            name="name",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -194,30 +200,33 @@ class TestBlueprints:
 
     @parametrize
     def test_method_preview(self, client: Runloop) -> None:
-        blueprint = client.blueprints.preview()
+        blueprint = client.blueprints.preview(
+            name="name",
+        )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     def test_method_preview_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.preview(
+            name="name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             dockerfile="dockerfile",
@@ -227,14 +236,15 @@ class TestBlueprints:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
             },
-            name="name",
             system_setup_commands=["string", "string", "string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     def test_raw_response_preview(self, client: Runloop) -> None:
-        response = client.blueprints.with_raw_response.preview()
+        response = client.blueprints.with_raw_response.preview(
+            name="name",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -243,7 +253,9 @@ class TestBlueprints:
 
     @parametrize
     def test_streaming_response_preview(self, client: Runloop) -> None:
-        with client.blueprints.with_streaming_response.preview() as response:
+        with client.blueprints.with_streaming_response.preview(
+            name="name",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -258,30 +270,33 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
-        blueprint = await async_client.blueprints.create()
+        blueprint = await async_client.blueprints.create(
+            name="name",
+        )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.create(
+            name="name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             dockerfile="dockerfile",
@@ -291,14 +306,15 @@ class TestAsyncBlueprints:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
             },
-            name="name",
             system_setup_commands=["string", "string", "string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.blueprints.with_raw_response.create()
+        response = await async_client.blueprints.with_raw_response.create(
+            name="name",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -307,7 +323,9 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
-        async with async_client.blueprints.with_streaming_response.create() as response:
+        async with async_client.blueprints.with_streaming_response.create(
+            name="name",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -428,30 +446,33 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_method_preview(self, async_client: AsyncRunloop) -> None:
-        blueprint = await async_client.blueprints.preview()
+        blueprint = await async_client.blueprints.preview(
+            name="name",
+        )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     async def test_method_preview_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.preview(
+            name="name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             dockerfile="dockerfile",
@@ -461,14 +482,15 @@ class TestAsyncBlueprints:
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
             },
-            name="name",
             system_setup_commands=["string", "string", "string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     async def test_raw_response_preview(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.blueprints.with_raw_response.preview()
+        response = await async_client.blueprints.with_raw_response.preview(
+            name="name",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -477,7 +499,9 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_streaming_response_preview(self, async_client: AsyncRunloop) -> None:
-        async with async_client.blueprints.with_streaming_response.preview() as response:
+        async with async_client.blueprints.with_streaming_response.preview(
+            name="name",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

@@ -78,6 +78,7 @@ class TestExecutions:
     def test_method_execute_async(self, client: Runloop) -> None:
         execution = client.devboxes.executions.execute_async(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -94,6 +95,7 @@ class TestExecutions:
     def test_raw_response_execute_async(self, client: Runloop) -> None:
         response = client.devboxes.executions.with_raw_response.execute_async(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -105,6 +107,7 @@ class TestExecutions:
     def test_streaming_response_execute_async(self, client: Runloop) -> None:
         with client.devboxes.executions.with_streaming_response.execute_async(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -119,12 +122,14 @@ class TestExecutions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.executions.with_raw_response.execute_async(
                 id="",
+                command="command",
             )
 
     @parametrize
     def test_method_execute_sync(self, client: Runloop) -> None:
         execution = client.devboxes.executions.execute_sync(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])
 
@@ -141,6 +146,7 @@ class TestExecutions:
     def test_raw_response_execute_sync(self, client: Runloop) -> None:
         response = client.devboxes.executions.with_raw_response.execute_sync(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -152,6 +158,7 @@ class TestExecutions:
     def test_streaming_response_execute_sync(self, client: Runloop) -> None:
         with client.devboxes.executions.with_streaming_response.execute_sync(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -166,6 +173,7 @@ class TestExecutions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.executions.with_raw_response.execute_sync(
                 id="",
+                command="command",
             )
 
     @parametrize
@@ -281,6 +289,7 @@ class TestAsyncExecutions:
     async def test_method_execute_async(self, async_client: AsyncRunloop) -> None:
         execution = await async_client.devboxes.executions.execute_async(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -297,6 +306,7 @@ class TestAsyncExecutions:
     async def test_raw_response_execute_async(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.executions.with_raw_response.execute_async(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -308,6 +318,7 @@ class TestAsyncExecutions:
     async def test_streaming_response_execute_async(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.executions.with_streaming_response.execute_async(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -322,12 +333,14 @@ class TestAsyncExecutions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.executions.with_raw_response.execute_async(
                 id="",
+                command="command",
             )
 
     @parametrize
     async def test_method_execute_sync(self, async_client: AsyncRunloop) -> None:
         execution = await async_client.devboxes.executions.execute_sync(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])
 
@@ -344,6 +357,7 @@ class TestAsyncExecutions:
     async def test_raw_response_execute_sync(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.executions.with_raw_response.execute_sync(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -355,6 +369,7 @@ class TestAsyncExecutions:
     async def test_streaming_response_execute_sync(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.executions.with_streaming_response.execute_sync(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -369,6 +384,7 @@ class TestAsyncExecutions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.executions.with_raw_response.execute_sync(
                 id="",
+                command="command",
             )
 
     @parametrize
