@@ -35,22 +35,22 @@ class TestDevboxes:
             blueprint_name="blueprint_name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             entrypoint="entrypoint",
@@ -202,6 +202,7 @@ class TestDevboxes:
     def test_method_execute_async(self, client: Runloop) -> None:
         devbox = client.devboxes.execute_async(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -218,6 +219,7 @@ class TestDevboxes:
     def test_raw_response_execute_async(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.execute_async(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -229,6 +231,7 @@ class TestDevboxes:
     def test_streaming_response_execute_async(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.execute_async(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -243,12 +246,14 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.execute_async(
                 id="",
+                command="command",
             )
 
     @parametrize
     def test_method_execute_sync(self, client: Runloop) -> None:
         devbox = client.devboxes.execute_sync(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
@@ -265,6 +270,7 @@ class TestDevboxes:
     def test_raw_response_execute_sync(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.execute_sync(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -276,6 +282,7 @@ class TestDevboxes:
     def test_streaming_response_execute_sync(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.execute_sync(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -290,17 +297,11 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.execute_sync(
                 id="",
+                command="command",
             )
 
     @parametrize
     def test_method_read_file_contents(self, client: Runloop) -> None:
-        devbox = client.devboxes.read_file_contents(
-            id="id",
-        )
-        assert_matches_type(str, devbox, path=["response"])
-
-    @parametrize
-    def test_method_read_file_contents_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.read_file_contents(
             id="id",
             file_path="file_path",
@@ -311,6 +312,7 @@ class TestDevboxes:
     def test_raw_response_read_file_contents(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.read_file_contents(
             id="id",
+            file_path="file_path",
         )
 
         assert response.is_closed is True
@@ -322,6 +324,7 @@ class TestDevboxes:
     def test_streaming_response_read_file_contents(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.read_file_contents(
             id="id",
+            file_path="file_path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -336,6 +339,7 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.read_file_contents(
                 id="",
+                file_path="file_path",
             )
 
     @parametrize
@@ -427,13 +431,6 @@ class TestDevboxes:
     def test_method_write_file(self, client: Runloop) -> None:
         devbox = client.devboxes.write_file(
             id="id",
-        )
-        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
-
-    @parametrize
-    def test_method_write_file_with_all_params(self, client: Runloop) -> None:
-        devbox = client.devboxes.write_file(
-            id="id",
             contents="contents",
             file_path="file_path",
         )
@@ -443,6 +440,8 @@ class TestDevboxes:
     def test_raw_response_write_file(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.write_file(
             id="id",
+            contents="contents",
+            file_path="file_path",
         )
 
         assert response.is_closed is True
@@ -454,6 +453,8 @@ class TestDevboxes:
     def test_streaming_response_write_file(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.write_file(
             id="id",
+            contents="contents",
+            file_path="file_path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -468,6 +469,8 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.write_file(
                 id="",
+                contents="contents",
+                file_path="file_path",
             )
 
 
@@ -486,22 +489,22 @@ class TestAsyncDevboxes:
             blueprint_name="blueprint_name",
             code_mounts=[
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
                 {
-                    "token": "token",
-                    "install_command": "install_command",
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
                 },
             ],
             entrypoint="entrypoint",
@@ -653,6 +656,7 @@ class TestAsyncDevboxes:
     async def test_method_execute_async(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.execute_async(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -669,6 +673,7 @@ class TestAsyncDevboxes:
     async def test_raw_response_execute_async(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.execute_async(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -680,6 +685,7 @@ class TestAsyncDevboxes:
     async def test_streaming_response_execute_async(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.execute_async(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -694,12 +700,14 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.execute_async(
                 id="",
+                command="command",
             )
 
     @parametrize
     async def test_method_execute_sync(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.execute_sync(
             id="id",
+            command="command",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
@@ -716,6 +724,7 @@ class TestAsyncDevboxes:
     async def test_raw_response_execute_sync(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.execute_sync(
             id="id",
+            command="command",
         )
 
         assert response.is_closed is True
@@ -727,6 +736,7 @@ class TestAsyncDevboxes:
     async def test_streaming_response_execute_sync(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.execute_sync(
             id="id",
+            command="command",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -741,17 +751,11 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.execute_sync(
                 id="",
+                command="command",
             )
 
     @parametrize
     async def test_method_read_file_contents(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.read_file_contents(
-            id="id",
-        )
-        assert_matches_type(str, devbox, path=["response"])
-
-    @parametrize
-    async def test_method_read_file_contents_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.read_file_contents(
             id="id",
             file_path="file_path",
@@ -762,6 +766,7 @@ class TestAsyncDevboxes:
     async def test_raw_response_read_file_contents(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.read_file_contents(
             id="id",
+            file_path="file_path",
         )
 
         assert response.is_closed is True
@@ -773,6 +778,7 @@ class TestAsyncDevboxes:
     async def test_streaming_response_read_file_contents(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.read_file_contents(
             id="id",
+            file_path="file_path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -787,6 +793,7 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.read_file_contents(
                 id="",
+                file_path="file_path",
             )
 
     @parametrize
@@ -878,13 +885,6 @@ class TestAsyncDevboxes:
     async def test_method_write_file(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.write_file(
             id="id",
-        )
-        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
-
-    @parametrize
-    async def test_method_write_file_with_all_params(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.write_file(
-            id="id",
             contents="contents",
             file_path="file_path",
         )
@@ -894,6 +894,8 @@ class TestAsyncDevboxes:
     async def test_raw_response_write_file(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.write_file(
             id="id",
+            contents="contents",
+            file_path="file_path",
         )
 
         assert response.is_closed is True
@@ -905,6 +907,8 @@ class TestAsyncDevboxes:
     async def test_streaming_response_write_file(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.write_file(
             id="id",
+            contents="contents",
+            file_path="file_path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -919,4 +923,6 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.write_file(
                 id="",
+                contents="contents",
+                file_path="file_path",
             )

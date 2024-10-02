@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import List
 
 from .._models import BaseModel
 from .blueprint_build_log import BlueprintBuildLog
@@ -9,8 +9,8 @@ __all__ = ["BlueprintBuildLogsListView"]
 
 
 class BlueprintBuildLogsListView(BaseModel):
-    blueprint_id: Optional[str] = None
+    blueprint_id: str
     """ID of the Blueprint."""
 
-    logs: Optional[List[BlueprintBuildLog]] = None
+    logs: List[BlueprintBuildLog]
     """List of logs generated during Blueprint build."""
