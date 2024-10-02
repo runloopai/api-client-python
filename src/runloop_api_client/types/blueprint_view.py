@@ -10,20 +10,20 @@ __all__ = ["BlueprintView"]
 
 
 class BlueprintView(BaseModel):
-    id: Optional[str] = None
+    id: str
     """The id of the Blueprint."""
 
-    create_time_ms: Optional[int] = None
+    create_time_ms: int
     """Creation time of the Blueprint (Unix timestamp milliseconds)."""
+
+    name: str
+    """The name of the Blueprint."""
+
+    parameters: BlueprintBuildParameters
+    """The parameters used to create Blueprint."""
+
+    status: Literal["provisioning", "building", "failed", "build_complete"]
+    """The status of the Blueprint build."""
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
     """The failure reason if the Blueprint build failed, if any."""
-
-    name: Optional[str] = None
-    """The name of the Blueprint."""
-
-    parameters: Optional[BlueprintBuildParameters] = None
-    """The parameters used to create Blueprint."""
-
-    status: Optional[Literal["provisioning", "building", "failed", "build_complete"]] = None
-    """The status of the Blueprint build."""

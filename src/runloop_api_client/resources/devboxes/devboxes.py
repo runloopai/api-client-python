@@ -295,7 +295,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        command: str | NotGiven = NOT_GIVEN,
+        command: str,
         shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -341,7 +341,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        command: str | NotGiven = NOT_GIVEN,
+        command: str,
         shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -387,7 +387,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        file_path: str | NotGiven = NOT_GIVEN,
+        file_path: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -509,8 +509,8 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        contents: str | NotGiven = NOT_GIVEN,
-        file_path: str | NotGiven = NOT_GIVEN,
+        contents: str,
+        file_path: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -790,7 +790,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        command: str | NotGiven = NOT_GIVEN,
+        command: str,
         shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -836,7 +836,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        command: str | NotGiven = NOT_GIVEN,
+        command: str,
         shell_name: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -882,7 +882,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        file_path: str | NotGiven = NOT_GIVEN,
+        file_path: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1004,8 +1004,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        contents: str | NotGiven = NOT_GIVEN,
-        file_path: str | NotGiven = NOT_GIVEN,
+        contents: str,
+        file_path: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
