@@ -134,7 +134,7 @@ class TestBlueprints:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.list(
-            limit="limit",
+            limit=0,
             name="name",
             starting_after="starting_after",
         )
@@ -380,7 +380,7 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.list(
-            limit="limit",
+            limit=0,
             name="name",
             starting_after="starting_after",
         )

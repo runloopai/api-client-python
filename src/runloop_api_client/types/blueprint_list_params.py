@@ -8,7 +8,7 @@ __all__ = ["BlueprintListParams"]
 
 
 class BlueprintListParams(TypedDict, total=False):
-    limit: str
+    limit: int
     """Page Limit"""
 
     name: str
