@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.1.0-alpha.23 (2024-10-07)
+
+Full Changelog: [v0.1.0-alpha.22...v0.1.0-alpha.23](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.22...v0.1.0-alpha.23)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#177](https://github.com/runloopai/api-client-python/issues/177)) ([ffb1036](https://github.com/runloopai/api-client-python/commit/ffb1036dbfc4cbd07a13ecdd2b18325604d7674c))
+* **api:** OpenAPI spec update via Stainless API ([#179](https://github.com/runloopai/api-client-python/issues/179)) ([77911b5](https://github.com/runloopai/api-client-python/commit/77911b5618161d23bba170802f102308ba21c13e))
+* **api:** OpenAPI spec update via Stainless API ([#180](https://github.com/runloopai/api-client-python/issues/180)) ([0849ddb](https://github.com/runloopai/api-client-python/commit/0849ddb9062ba0c2e3d2adfb2e2b3f2f72f4c29b))
+* **api:** OpenAPI spec update via Stainless API ([#184](https://github.com/runloopai/api-client-python/issues/184)) ([7022855](https://github.com/runloopai/api-client-python/commit/702285559eac8be1082f7a0b7a8f66d034377286))
+
+
+### Bug Fixes
+
+* **client:** avoid OverflowError with very large retry counts ([#182](https://github.com/runloopai/api-client-python/issues/182)) ([c183989](https://github.com/runloopai/api-client-python/commit/c183989104d3e2e283a082999ca5c6b5e93a463e))
+
+
+### Chores
+
+* add repr to PageInfo class ([#183](https://github.com/runloopai/api-client-python/issues/183)) ([29b7283](https://github.com/runloopai/api-client-python/commit/29b7283228e3fa02621d65b93efff058c4330cba))
+* **internal:** add support for parsing bool response content ([#181](https://github.com/runloopai/api-client-python/issues/181)) ([e2f1795](https://github.com/runloopai/api-client-python/commit/e2f1795c158baaf93118af62d4156629aa2ac816))
+
 ## 0.1.0-alpha.22 (2024-10-01)
 
 Full Changelog: [v0.1.0-alpha.21...v0.1.0-alpha.22](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.21...v0.1.0-alpha.22)
