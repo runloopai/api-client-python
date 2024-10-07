@@ -20,6 +20,7 @@ from ...types import (
     devbox_write_file_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
+    devbox_download_file_params,
     devbox_execute_async_params,
     devbox_read_file_contents_params,
 )
@@ -41,10 +42,18 @@ from .executions import (
 )
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
+    BinaryAPIResponse,
+    AsyncBinaryAPIResponse,
+    StreamedBinaryAPIResponse,
+    AsyncStreamedBinaryAPIResponse,
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
+    to_custom_raw_response_wrapper,
     async_to_streamed_response_wrapper,
+    to_custom_streamed_response_wrapper,
+    async_to_custom_raw_response_wrapper,
+    async_to_custom_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
@@ -289,6 +298,44 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxCreateSSHKeyResponse,
+        )
+
+    def download_file(
+        self,
+        id: str,
+        *,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> BinaryAPIResponse:
+        """
+        Download file contents to a file at path on the Devbox.
+
+        Args:
+          path: The path on the devbox to read the file
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
+        return self._post(
+            f"/v1/devboxes/{id}/download_file",
+            body=maybe_transform({"path": path}, devbox_download_file_params.DevboxDownloadFileParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BinaryAPIResponse,
         )
 
     def execute_async(
@@ -786,6 +833,44 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
+    async def download_file(
+        self,
+        id: str,
+        *,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncBinaryAPIResponse:
+        """
+        Download file contents to a file at path on the Devbox.
+
+        Args:
+          path: The path on the devbox to read the file
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
+        return await self._post(
+            f"/v1/devboxes/{id}/download_file",
+            body=await async_maybe_transform({"path": path}, devbox_download_file_params.DevboxDownloadFileParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AsyncBinaryAPIResponse,
+        )
+
     async def execute_async(
         self,
         id: str,
@@ -1063,6 +1148,10 @@ class DevboxesResourceWithRawResponse:
         self.create_ssh_key = to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.download_file = to_custom_raw_response_wrapper(
+            devboxes.download_file,
+            BinaryAPIResponse,
+        )
         self.execute_async = to_raw_response_wrapper(
             devboxes.execute_async,
         )
@@ -1106,6 +1195,10 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.create_ssh_key = async_to_raw_response_wrapper(
             devboxes.create_ssh_key,
+        )
+        self.download_file = async_to_custom_raw_response_wrapper(
+            devboxes.download_file,
+            AsyncBinaryAPIResponse,
         )
         self.execute_async = async_to_raw_response_wrapper(
             devboxes.execute_async,
@@ -1151,6 +1244,10 @@ class DevboxesResourceWithStreamingResponse:
         self.create_ssh_key = to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.download_file = to_custom_streamed_response_wrapper(
+            devboxes.download_file,
+            StreamedBinaryAPIResponse,
+        )
         self.execute_async = to_streamed_response_wrapper(
             devboxes.execute_async,
         )
@@ -1194,6 +1291,10 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.create_ssh_key = async_to_streamed_response_wrapper(
             devboxes.create_ssh_key,
+        )
+        self.download_file = async_to_custom_streamed_response_wrapper(
+            devboxes.download_file,
+            AsyncStreamedBinaryAPIResponse,
         )
         self.execute_async = async_to_streamed_response_wrapper(
             devboxes.execute_async,

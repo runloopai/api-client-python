@@ -5,7 +5,9 @@ from __future__ import annotations
 import os
 from typing import Any, cast
 
+import httpx
 import pytest
+from respx import MockRouter
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
@@ -15,6 +17,12 @@ from runloop_api_client.types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
     DevboxAsyncExecutionDetailView,
+)
+from runloop_api_client._response import (
+    BinaryAPIResponse,
+    AsyncBinaryAPIResponse,
+    StreamedBinaryAPIResponse,
+    AsyncStreamedBinaryAPIResponse,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -196,6 +204,60 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.create_ssh_key(
                 "",
+            )
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_method_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        devbox = client.devboxes.download_file(
+            id="id",
+            path="path",
+        )
+        assert devbox.is_closed
+        assert devbox.json() == {"foo": "bar"}
+        assert cast(Any, devbox.is_closed) is True
+        assert isinstance(devbox, BinaryAPIResponse)
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_raw_response_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+
+        devbox = client.devboxes.with_raw_response.download_file(
+            id="id",
+            path="path",
+        )
+
+        assert devbox.is_closed is True
+        assert devbox.http_request.headers.get("X-Stainless-Lang") == "python"
+        assert devbox.json() == {"foo": "bar"}
+        assert isinstance(devbox, BinaryAPIResponse)
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_streaming_response_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        with client.devboxes.with_streaming_response.download_file(
+            id="id",
+            path="path",
+        ) as devbox:
+            assert not devbox.is_closed
+            assert devbox.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            assert devbox.json() == {"foo": "bar"}
+            assert cast(Any, devbox.is_closed) is True
+            assert isinstance(devbox, StreamedBinaryAPIResponse)
+
+        assert cast(Any, devbox.is_closed) is True
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_path_params_download_file(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.download_file(
+                id="",
+                path="path",
             )
 
     @parametrize
@@ -650,6 +712,60 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.create_ssh_key(
                 "",
+            )
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_method_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        devbox = await async_client.devboxes.download_file(
+            id="id",
+            path="path",
+        )
+        assert devbox.is_closed
+        assert await devbox.json() == {"foo": "bar"}
+        assert cast(Any, devbox.is_closed) is True
+        assert isinstance(devbox, AsyncBinaryAPIResponse)
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_raw_response_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+
+        devbox = await async_client.devboxes.with_raw_response.download_file(
+            id="id",
+            path="path",
+        )
+
+        assert devbox.is_closed is True
+        assert devbox.http_request.headers.get("X-Stainless-Lang") == "python"
+        assert await devbox.json() == {"foo": "bar"}
+        assert isinstance(devbox, AsyncBinaryAPIResponse)
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_streaming_response_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        respx_mock.post("/v1/devboxes/id/download_file").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        async with async_client.devboxes.with_streaming_response.download_file(
+            id="id",
+            path="path",
+        ) as devbox:
+            assert not devbox.is_closed
+            assert devbox.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            assert await devbox.json() == {"foo": "bar"}
+            assert cast(Any, devbox.is_closed) is True
+            assert isinstance(devbox, AsyncStreamedBinaryAPIResponse)
+
+        assert cast(Any, devbox.is_closed) is True
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_path_params_download_file(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.download_file(
+                id="",
+                path="path",
             )
 
     @parametrize
