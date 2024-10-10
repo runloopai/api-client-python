@@ -108,6 +108,7 @@ class DevboxesResource(SyncAPIResource):
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        snapshot_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -149,6 +150,8 @@ class DevboxesResource(SyncAPIResource):
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
 
+          snapshot_id: Snapshot ID to use for the Devbox.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -172,6 +175,7 @@ class DevboxesResource(SyncAPIResource):
                     "name": name,
                     "prebuilt": prebuilt,
                     "setup_commands": setup_commands,
+                    "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
             ),
@@ -641,6 +645,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
         setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        snapshot_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -682,6 +687,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
               fetching a tool or building your dependencies. Runloop will look optimize these
               steps for you.
 
+          snapshot_id: Snapshot ID to use for the Devbox.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -705,6 +712,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "name": name,
                     "prebuilt": prebuilt,
                     "setup_commands": setup_commands,
+                    "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
             ),
