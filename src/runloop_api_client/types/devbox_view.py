@@ -1,26 +1,12 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
-from .resource_size import ResourceSize
+from .shared.lauch_parameters import LauchParameters
 
-__all__ = ["DevboxView", "LaunchParameters"]
-
-
-class LaunchParameters(BaseModel):
-    keep_alive_time_seconds: Optional[int] = None
-    """Time in seconds after which Devbox will automatically shutdown.
-
-    Default is 1 hour.
-    """
-
-    launch_commands: Optional[List[str]] = None
-    """Set of commands to be run at launch time, before the entrypoint process is run."""
-
-    resource_size_request: Optional[ResourceSize] = None
-    """Manual resource configuration for Devbox. If not set, defaults will be used."""
+__all__ = ["DevboxView"]
 
 
 class DevboxView(BaseModel):
@@ -36,7 +22,7 @@ class DevboxView(BaseModel):
     initiator_type: Literal["unknown", "api", "invocation"]
     """The initiator of the devbox."""
 
-    launch_parameters: LaunchParameters
+    launch_parameters: LauchParameters
     """The launch parameters used to create the Devbox."""
 
     metadata: Dict[str, str]

@@ -1,7 +1,11 @@
 # Shared Types
 
 ```python
-from runloop_api_client.types import FunctionInvocationExecutionDetailView, ProjectLogsView
+from runloop_api_client.types import (
+    FunctionInvocationExecutionDetailView,
+    LauchParameters,
+    ProjectLogsView,
+)
 ```
 
 # Account
