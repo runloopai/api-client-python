@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Dict, List, Iterable
 from typing_extensions import Required, TypedDict
 
-from .resource_size import ResourceSize
 from .code_mount_parameters_param import CodeMountParametersParam
+from .shared_params.lauch_parameters import LauchParameters
 
-__all__ = ["BlueprintPreviewParams", "LaunchParameters"]
+__all__ = ["BlueprintPreviewParams"]
 
 
 class BlueprintPreviewParams(TypedDict, total=False):
@@ -24,22 +24,8 @@ class BlueprintPreviewParams(TypedDict, total=False):
     file_mounts: Dict[str, str]
     """(Optional) Map of paths and file contents to write before setup.."""
 
-    launch_parameters: LaunchParameters
+    launch_parameters: LauchParameters
     """Parameters to configure your Devbox at launch time."""
 
     system_setup_commands: List[str]
     """A list of commands to run to set up your system."""
-
-
-class LaunchParameters(TypedDict, total=False):
-    keep_alive_time_seconds: int
-    """Time in seconds after which Devbox will automatically shutdown.
-
-    Default is 1 hour.
-    """
-
-    launch_commands: List[str]
-    """Set of commands to be run at launch time, before the entrypoint process is run."""
-
-    resource_size_request: ResourceSize
-    """Manual resource configuration for Devbox. If not set, defaults will be used."""
