@@ -59,10 +59,10 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.devbox_snapshot_list_view import DevboxSnapshotListView
 from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
-from ...types.devbox_disk_snapshots_response import DevboxDiskSnapshotsResponse
 from ...types.shared_params.lauch_parameters import LauchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -318,7 +318,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxDiskSnapshotsResponse:
+    ) -> DevboxSnapshotListView:
         """
         List all snapshots of a devbox by id.
 
@@ -350,7 +350,7 @@ class DevboxesResource(SyncAPIResource):
                     devbox_disk_snapshots_params.DevboxDiskSnapshotsParams,
                 ),
             ),
-            cast_to=DevboxDiskSnapshotsResponse,
+            cast_to=DevboxSnapshotListView,
         )
 
     def download_file(
@@ -901,7 +901,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxDiskSnapshotsResponse:
+    ) -> DevboxSnapshotListView:
         """
         List all snapshots of a devbox by id.
 
@@ -933,7 +933,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     devbox_disk_snapshots_params.DevboxDiskSnapshotsParams,
                 ),
             ),
-            cast_to=DevboxDiskSnapshotsResponse,
+            cast_to=DevboxSnapshotListView,
         )
 
     async def download_file(
