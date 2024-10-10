@@ -241,6 +241,7 @@ class TestDevboxes:
 
         assert cast(Any, response.is_closed) is True
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_method_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
@@ -254,6 +255,7 @@ class TestDevboxes:
         assert cast(Any, devbox.is_closed) is True
         assert isinstance(devbox, BinaryAPIResponse)
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
@@ -269,6 +271,7 @@ class TestDevboxes:
         assert devbox.json() == {"foo": "bar"}
         assert isinstance(devbox, BinaryAPIResponse)
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_streaming_response_download_file(self, client: Runloop, respx_mock: MockRouter) -> None:
@@ -286,6 +289,7 @@ class TestDevboxes:
 
         assert cast(Any, devbox.is_closed) is True
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     def test_path_params_download_file(self, client: Runloop) -> None:
@@ -783,6 +787,7 @@ class TestAsyncDevboxes:
 
         assert cast(Any, response.is_closed) is True
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_method_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
@@ -796,6 +801,7 @@ class TestAsyncDevboxes:
         assert cast(Any, devbox.is_closed) is True
         assert isinstance(devbox, AsyncBinaryAPIResponse)
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_raw_response_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
@@ -811,6 +817,7 @@ class TestAsyncDevboxes:
         assert await devbox.json() == {"foo": "bar"}
         assert isinstance(devbox, AsyncBinaryAPIResponse)
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_streaming_response_download_file(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
@@ -828,6 +835,7 @@ class TestAsyncDevboxes:
 
         assert cast(Any, devbox.is_closed) is True
 
+    @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
     @pytest.mark.respx(base_url=base_url)
     async def test_path_params_download_file(self, async_client: AsyncRunloop) -> None:
