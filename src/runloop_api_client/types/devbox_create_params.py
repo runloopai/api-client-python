@@ -60,6 +60,9 @@ class DevboxCreateParams(TypedDict, total=False):
     will look optimize these steps for you.
     """
 
+    snapshot_id: str
+    """Snapshot ID to use for the Devbox."""
+
 
 class LaunchParameters(TypedDict, total=False):
     keep_alive_time_seconds: int
