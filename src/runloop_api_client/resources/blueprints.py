@@ -26,6 +26,7 @@ from ..types.blueprint_list_view import BlueprintListView
 from ..types.blueprint_preview_view import BlueprintPreviewView
 from ..types.code_mount_parameters_param import CodeMountParametersParam
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
+from ..types.shared_params.lauch_parameters import LauchParameters
 
 __all__ = ["BlueprintsResource", "AsyncBlueprintsResource"]
 
@@ -57,7 +58,7 @@ class BlueprintsResource(SyncAPIResource):
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -237,7 +238,7 @@ class BlueprintsResource(SyncAPIResource):
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -319,7 +320,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: blueprint_create_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -499,7 +500,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
         dockerfile: str | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: blueprint_preview_params.LaunchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
         system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
