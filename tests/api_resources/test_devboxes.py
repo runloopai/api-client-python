@@ -16,6 +16,7 @@ from runloop_api_client.types import (
     DevboxListView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
+    DevboxDiskSnapshotsResponse,
     DevboxAsyncExecutionDetailView,
 )
 from runloop_api_client._response import (
@@ -206,6 +207,39 @@ class TestDevboxes:
             client.devboxes.with_raw_response.create_ssh_key(
                 "",
             )
+
+    @parametrize
+    def test_method_disk_snapshots(self, client: Runloop) -> None:
+        devbox = client.devboxes.disk_snapshots()
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    def test_method_disk_snapshots_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.disk_snapshots(
+            limit=0,
+            starting_after="starting_after",
+        )
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_disk_snapshots(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.disk_snapshots()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_disk_snapshots(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.disk_snapshots() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     @pytest.mark.respx(base_url=base_url)
@@ -715,6 +749,39 @@ class TestAsyncDevboxes:
             await async_client.devboxes.with_raw_response.create_ssh_key(
                 "",
             )
+
+    @parametrize
+    async def test_method_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.disk_snapshots()
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_disk_snapshots_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.disk_snapshots(
+            limit=0,
+            starting_after="starting_after",
+        )
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.disk_snapshots()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.disk_snapshots() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxDiskSnapshotsResponse, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     @pytest.mark.respx(base_url=base_url)
