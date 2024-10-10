@@ -22,6 +22,7 @@ from ...types import (
     devbox_execute_sync_params,
     devbox_download_file_params,
     devbox_execute_async_params,
+    devbox_disk_snapshots_params,
     devbox_read_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
@@ -61,6 +62,7 @@ from ...types.devbox_list_view import DevboxListView
 from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
+from ...types.devbox_disk_snapshots_response import DevboxDiskSnapshotsResponse
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
@@ -302,6 +304,52 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxCreateSSHKeyResponse,
+        )
+
+    def disk_snapshots(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxDiskSnapshotsResponse:
+        """
+        List all snapshots of a devbox by id.
+
+        Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get(
+            "/v1/devboxes/disk_snapshots",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    devbox_disk_snapshots_params.DevboxDiskSnapshotsParams,
+                ),
+            ),
+            cast_to=DevboxDiskSnapshotsResponse,
         )
 
     def download_file(
@@ -841,6 +889,52 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
+    async def disk_snapshots(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxDiskSnapshotsResponse:
+        """
+        List all snapshots of a devbox by id.
+
+        Args:
+          limit: Page Limit
+
+          starting_after: Load the next page starting after the given token.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._get(
+            "/v1/devboxes/disk_snapshots",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    devbox_disk_snapshots_params.DevboxDiskSnapshotsParams,
+                ),
+            ),
+            cast_to=DevboxDiskSnapshotsResponse,
+        )
+
     async def download_file(
         self,
         id: str,
@@ -1156,6 +1250,9 @@ class DevboxesResourceWithRawResponse:
         self.create_ssh_key = to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.disk_snapshots = to_raw_response_wrapper(
+            devboxes.disk_snapshots,
+        )
         self.download_file = to_custom_raw_response_wrapper(
             devboxes.download_file,
             BinaryAPIResponse,
@@ -1203,6 +1300,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.create_ssh_key = async_to_raw_response_wrapper(
             devboxes.create_ssh_key,
+        )
+        self.disk_snapshots = async_to_raw_response_wrapper(
+            devboxes.disk_snapshots,
         )
         self.download_file = async_to_custom_raw_response_wrapper(
             devboxes.download_file,
@@ -1252,6 +1352,9 @@ class DevboxesResourceWithStreamingResponse:
         self.create_ssh_key = to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.disk_snapshots = to_streamed_response_wrapper(
+            devboxes.disk_snapshots,
+        )
         self.download_file = to_custom_streamed_response_wrapper(
             devboxes.download_file,
             StreamedBinaryAPIResponse,
@@ -1299,6 +1402,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.create_ssh_key = async_to_streamed_response_wrapper(
             devboxes.create_ssh_key,
+        )
+        self.disk_snapshots = async_to_streamed_response_wrapper(
+            devboxes.disk_snapshots,
         )
         self.download_file = async_to_custom_streamed_response_wrapper(
             devboxes.download_file,
