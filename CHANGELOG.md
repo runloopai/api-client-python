@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.1 (2024-10-11)
+
+Full Changelog: [v0.2.0...v0.2.1](https://github.com/runloopai/api-client-python/compare/v0.2.0...v0.2.1)
+
+### Features
+
+* **api:** api update ([#190](https://github.com/runloopai/api-client-python/issues/190)) ([4b40a20](https://github.com/runloopai/api-client-python/commit/4b40a20d3603f8a0dfdb0ecf8884682193e986d9))
+* **api:** api update ([#192](https://github.com/runloopai/api-client-python/issues/192)) ([51358a5](https://github.com/runloopai/api-client-python/commit/51358a52a59b31729f05c40a6f84af467313f568))
+* **api:** api update ([#193](https://github.com/runloopai/api-client-python/issues/193)) ([d4c04da](https://github.com/runloopai/api-client-python/commit/d4c04da4e1726dd70a638748034e2c86ead63142))
+* **api:** api update ([#194](https://github.com/runloopai/api-client-python/issues/194)) ([31fcc6c](https://github.com/runloopai/api-client-python/commit/31fcc6cc52cc1e7cf782b9fd00d75049f455bb98))
+* **api:** api update ([#195](https://github.com/runloopai/api-client-python/issues/195)) ([4b3112b](https://github.com/runloopai/api-client-python/commit/4b3112bb3e0620fbce4f37bdd4fe06e3bdbaa0d5))
+* **api:** api update ([#196](https://github.com/runloopai/api-client-python/issues/196)) ([f367ac3](https://github.com/runloopai/api-client-python/commit/f367ac3014e94f4be43480fbb8404a8c95b853fe))
+* **api:** api update ([#197](https://github.com/runloopai/api-client-python/issues/197)) ([f5d88d9](https://github.com/runloopai/api-client-python/commit/f5d88d970de6e2820449eedbddc424f387a147ff))
+* **api:** api update ([#198](https://github.com/runloopai/api-client-python/issues/198)) ([6a8c688](https://github.com/runloopai/api-client-python/commit/6a8c688473c715c6bf82a81084a414ea844bac01))
+* **api:** api update ([#199](https://github.com/runloopai/api-client-python/issues/199)) ([e36adf9](https://github.com/runloopai/api-client-python/commit/e36adf900d0c7ee4e25ea1d806c2da2f17cc48eb))
+* **api:** api update ([#200](https://github.com/runloopai/api-client-python/issues/200)) ([2b51e56](https://github.com/runloopai/api-client-python/commit/2b51e5641684c23ddaaf23131b3fe8eba0877925))
+
 ## 0.2.0 (2024-10-10)
 
 Full Changelog: [v0.1.0-alpha.23...v0.2.0](https://github.com/runloopai/api-client-python/compare/v0.1.0-alpha.23...v0.2.0)
