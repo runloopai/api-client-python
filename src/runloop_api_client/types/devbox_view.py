@@ -4,7 +4,7 @@ from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
-from .shared.lauch_parameters import LauchParameters
+from .shared.launch_parameters import LaunchParameters
 
 __all__ = ["DevboxView"]
 
@@ -22,7 +22,7 @@ class DevboxView(BaseModel):
     initiator_type: Literal["unknown", "api", "invocation"]
     """The initiator of the devbox."""
 
-    launch_parameters: LauchParameters
+    launch_parameters: LaunchParameters
     """The launch parameters used to create the Devbox."""
 
     metadata: Dict[str, str]

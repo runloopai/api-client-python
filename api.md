@@ -3,17 +3,9 @@
 ```python
 from runloop_api_client.types import (
     FunctionInvocationExecutionDetailView,
-    LauchParameters,
+    LaunchParameters,
     ProjectLogsView,
 )
-```
-
-# Account
-
-Types:
-
-```python
-from runloop_api_client.types import ResourceSize
 ```
 
 # Blueprints
@@ -107,7 +99,7 @@ Methods:
 Types:
 
 ```python
-from runloop_api_client.types import FunctionListView
+from runloop_api_client.types import FunctionListView, ResourceSize
 ```
 
 Methods:
