@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 
 from .._models import BaseModel
 from .code_mount_parameters import CodeMountParameters
-from .shared.lauch_parameters import LauchParameters
+from .shared.launch_parameters import LaunchParameters
 
 __all__ = ["BlueprintBuildParameters"]
 
@@ -22,7 +22,7 @@ class BlueprintBuildParameters(BaseModel):
     file_mounts: Optional[Dict[str, str]] = None
     """(Optional) Map of paths and file contents to write before setup.."""
 
-    launch_parameters: Optional[LauchParameters] = None
+    launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
 
     system_setup_commands: Optional[List[str]] = None
