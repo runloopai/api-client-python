@@ -5,7 +5,6 @@ from runloop_api_client.types import (
     FunctionInvocationExecutionDetailView,
     LauchParameters,
     ProjectLogsView,
-    ResourceSize,
 )
 ```
 
