@@ -64,7 +64,7 @@ from ...types.devbox_snapshot_list_view import DevboxSnapshotListView
 from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
-from ...types.shared_params.lauch_parameters import LauchParameters
+from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
@@ -107,7 +107,7 @@ class DevboxesResource(SyncAPIResource):
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
@@ -737,7 +737,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         entrypoint: str | NotGiven = NOT_GIVEN,
         environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
         file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LauchParameters | NotGiven = NOT_GIVEN,
+        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
