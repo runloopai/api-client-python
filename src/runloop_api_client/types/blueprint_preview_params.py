@@ -6,7 +6,7 @@ from typing import Dict, List, Iterable
 from typing_extensions import Required, TypedDict
 
 from .code_mount_parameters_param import CodeMountParametersParam
-from .shared_params.lauch_parameters import LauchParameters
+from .shared_params.launch_parameters import LaunchParameters
 
 __all__ = ["BlueprintPreviewParams"]
 
@@ -24,7 +24,7 @@ class BlueprintPreviewParams(TypedDict, total=False):
     file_mounts: Dict[str, str]
     """(Optional) Map of paths and file contents to write before setup.."""
 
-    launch_parameters: LauchParameters
+    launch_parameters: LaunchParameters
     """Parameters to configure your Devbox at launch time."""
 
     system_setup_commands: List[str]
