@@ -3,7 +3,7 @@
 ```python
 from runloop_api_client.types import (
     FunctionInvocationExecutionDetailView,
-    LaunchParameters,
+    LauchParameters,
     ProjectLogsView,
 )
 ```
