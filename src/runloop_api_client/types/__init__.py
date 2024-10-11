@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 from .shared import (
-    ResourceSize as ResourceSize,
     ProjectLogsView as ProjectLogsView,
     LaunchParameters as LaunchParameters,
     FunctionInvocationExecutionDetailView as FunctionInvocationExecutionDetailView,
 )
 from .devbox_view import DevboxView as DevboxView
-from .resource_size import ResourceSize as ResourceSize
 from .blueprint_view import BlueprintView as BlueprintView
 from .devbox_list_view import DevboxListView as DevboxListView
 from .project_list_view import ProjectListView as ProjectListView
