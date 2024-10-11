@@ -5,7 +5,6 @@ from runloop_api_client.types import (
     FunctionInvocationExecutionDetailView,
     LaunchParameters,
     ProjectLogsView,
-    ResourceSize,
 )
 ```
 
@@ -100,7 +99,7 @@ Methods:
 Types:
 
 ```python
-from runloop_api_client.types import FunctionListView, ResourceSize
+from runloop_api_client.types import FunctionListView
 ```
 
 Methods:
