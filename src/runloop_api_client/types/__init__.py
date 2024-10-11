@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .shared import (
+    ResourceSize as ResourceSize,
     ProjectLogsView as ProjectLogsView,
     LaunchParameters as LaunchParameters,
     FunctionInvocationExecutionDetailView as FunctionInvocationExecutionDetailView,
