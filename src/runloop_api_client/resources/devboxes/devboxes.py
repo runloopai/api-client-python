@@ -26,7 +26,7 @@ from ...types import (
     devbox_disk_snapshots_params,
     devbox_read_file_contents_params,
 )
-from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven, FileTypes
+from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
 from ..._utils import (
     extract_files,
     maybe_transform,
@@ -60,6 +60,7 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.devbox_snapshot_list_view import DevboxSnapshotListView
 from ...types.code_mount_parameters_param import CodeMountParametersParam
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
@@ -570,7 +571,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> DevboxSnapshotView:
         """
         Create a filesystem snapshot of a devbox with the specified name and metadata.
 
@@ -589,7 +590,6 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/v1/devboxes/{id}/snapshot_disk",
             body=maybe_transform(
@@ -602,7 +602,7 @@ class DevboxesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=DevboxSnapshotView,
         )
 
     def upload_file(
@@ -1200,7 +1200,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
+    ) -> DevboxSnapshotView:
         """
         Create a filesystem snapshot of a devbox with the specified name and metadata.
 
@@ -1219,7 +1219,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/v1/devboxes/{id}/snapshot_disk",
             body=await async_maybe_transform(
@@ -1232,7 +1231,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=DevboxSnapshotView,
         )
 
     async def upload_file(

@@ -14,6 +14,7 @@ from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     DevboxView,
     DevboxListView,
+    DevboxSnapshotView,
     DevboxSnapshotListView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
@@ -486,7 +487,7 @@ class TestDevboxes:
         devbox = client.devboxes.snapshot_disk(
             id="id",
         )
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     def test_method_snapshot_disk_with_all_params(self, client: Runloop) -> None:
@@ -495,7 +496,7 @@ class TestDevboxes:
             metadata={"foo": "string"},
             name="name",
         )
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_snapshot_disk(self, client: Runloop) -> None:
@@ -506,7 +507,7 @@ class TestDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = response.parse()
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     def test_streaming_response_snapshot_disk(self, client: Runloop) -> None:
@@ -517,7 +518,7 @@ class TestDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = response.parse()
-            assert devbox is None
+            assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -1079,7 +1080,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.snapshot_disk(
             id="id",
         )
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     async def test_method_snapshot_disk_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -1088,7 +1089,7 @@ class TestAsyncDevboxes:
             metadata={"foo": "string"},
             name="name",
         )
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_snapshot_disk(self, async_client: AsyncRunloop) -> None:
@@ -1099,7 +1100,7 @@ class TestAsyncDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = await response.parse()
-        assert devbox is None
+        assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
     @parametrize
     async def test_streaming_response_snapshot_disk(self, async_client: AsyncRunloop) -> None:
@@ -1110,7 +1111,7 @@ class TestAsyncDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = await response.parse()
-            assert devbox is None
+            assert_matches_type(DevboxSnapshotView, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
