@@ -13,9 +13,6 @@ class DevboxSnapshotView(BaseModel):
     id: str
     """The unique identifier of the snapshot."""
 
-    create_time_ms: int
-    """Creation time of the Snapshot (Unix timestamp milliseconds)."""
-
     metadata: Dict[str, str]
     """metadata associated with the snapshot."""
 
