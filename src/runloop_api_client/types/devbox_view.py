@@ -28,7 +28,7 @@ class DevboxView(BaseModel):
     metadata: Dict[str, str]
     """The user defined Devbox metadata."""
 
-    status: Literal["provisioning", "initializing", "running", "suspending", "suspended", "failure", "shutdown"]
+    status: Literal["provisioning", "initializing", "running", "failure", "shutdown"]
     """The current status of the Devbox."""
 
     blueprint_id: Optional[str] = None
