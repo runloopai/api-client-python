@@ -102,6 +102,7 @@ class DevboxesResource(SyncAPIResource):
     def create(
         self,
         *,
+        available_ports: Iterable[int] | NotGiven = NOT_GIVEN,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
@@ -127,6 +128,9 @@ class DevboxesResource(SyncAPIResource):
         the 'pending' state and will transition to 'running' once it is ready.
 
         Args:
+          available_ports: A list of ports to make available on the Devbox. Call createTunnel to open a
+              tunnel to the port.
+
           blueprint_id: (Optional) Blueprint to use for the Devbox. If none set, the Devbox will be
               created with the default Runloop Devbox image.
 
@@ -169,6 +173,7 @@ class DevboxesResource(SyncAPIResource):
             "/v1/devboxes",
             body=maybe_transform(
                 {
+                    "available_ports": available_ports,
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
                     "code_mounts": code_mounts,
@@ -731,6 +736,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        available_ports: Iterable[int] | NotGiven = NOT_GIVEN,
         blueprint_id: str | NotGiven = NOT_GIVEN,
         blueprint_name: str | NotGiven = NOT_GIVEN,
         code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
@@ -756,6 +762,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         the 'pending' state and will transition to 'running' once it is ready.
 
         Args:
+          available_ports: A list of ports to make available on the Devbox. Call createTunnel to open a
+              tunnel to the port.
+
           blueprint_id: (Optional) Blueprint to use for the Devbox. If none set, the Devbox will be
               created with the default Runloop Devbox image.
 
@@ -798,6 +807,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             "/v1/devboxes",
             body=await async_maybe_transform(
                 {
+                    "available_ports": available_ports,
                     "blueprint_id": blueprint_id,
                     "blueprint_name": blueprint_name,
                     "code_mounts": code_mounts,
