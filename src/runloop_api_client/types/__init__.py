@@ -12,6 +12,7 @@ from .blueprint_view import BlueprintView as BlueprintView
 from .devbox_list_view import DevboxListView as DevboxListView
 from .project_list_view import ProjectListView as ProjectListView
 from .devbox_list_params import DevboxListParams as DevboxListParams
+from .devbox_tunnel_view import DevboxTunnelView as DevboxTunnelView
 from .function_list_view import FunctionListView as FunctionListView
 from .blueprint_build_log import BlueprintBuildLog as BlueprintBuildLog
 from .blueprint_list_view import BlueprintListView as BlueprintListView
