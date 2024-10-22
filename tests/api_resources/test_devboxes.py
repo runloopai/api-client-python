@@ -41,6 +41,7 @@ class TestDevboxes:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.create(
+            available_ports=[0, 0, 0],
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
             code_mounts=[
@@ -634,6 +635,7 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.create(
+            available_ports=[0, 0, 0],
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
             code_mounts=[
