@@ -60,6 +60,7 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
+from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.devbox_snapshot_list_view import DevboxSnapshotListView
 from ...types.code_mount_parameters_param import CodeMountParametersParam
@@ -314,6 +315,39 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
+    def create_tunnel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxTunnelView:
+        """
+        Create a tunnel to an available port on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/create_tunnel",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxTunnelView,
+        )
+
     def disk_snapshots(
         self,
         *,
@@ -530,6 +564,39 @@ class DevboxesResource(SyncAPIResource):
             cast_to=str,
         )
 
+    def resume(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """
+        Resume a suspended devbox by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/resume",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxView,
+        )
+
     def shutdown(
         self,
         id: str,
@@ -608,6 +675,40 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxSnapshotView,
+        )
+
+    def suspend(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Suspend a devbox by id.
+
+        This will take the devbox out of service.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/suspend",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxView,
         )
 
     def upload_file(
@@ -948,6 +1049,39 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
+    async def create_tunnel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxTunnelView:
+        """
+        Create a tunnel to an available port on the Devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/create_tunnel",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxTunnelView,
+        )
+
     async def disk_snapshots(
         self,
         *,
@@ -1164,6 +1298,39 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=str,
         )
 
+    async def resume(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """
+        Resume a suspended devbox by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/resume",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxView,
+        )
+
     async def shutdown(
         self,
         id: str,
@@ -1242,6 +1409,40 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxSnapshotView,
+        )
+
+    async def suspend(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Suspend a devbox by id.
+
+        This will take the devbox out of service.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/suspend",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxView,
         )
 
     async def upload_file(
@@ -1355,6 +1556,9 @@ class DevboxesResourceWithRawResponse:
         self.create_ssh_key = to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.create_tunnel = to_raw_response_wrapper(
+            devboxes.create_tunnel,
+        )
         self.disk_snapshots = to_raw_response_wrapper(
             devboxes.disk_snapshots,
         )
@@ -1371,11 +1575,17 @@ class DevboxesResourceWithRawResponse:
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
+        self.resume = to_raw_response_wrapper(
+            devboxes.resume,
+        )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
         )
         self.snapshot_disk = to_raw_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.suspend = to_raw_response_wrapper(
+            devboxes.suspend,
         )
         self.upload_file = to_raw_response_wrapper(
             devboxes.upload_file,
@@ -1409,6 +1619,9 @@ class AsyncDevboxesResourceWithRawResponse:
         self.create_ssh_key = async_to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.create_tunnel = async_to_raw_response_wrapper(
+            devboxes.create_tunnel,
+        )
         self.disk_snapshots = async_to_raw_response_wrapper(
             devboxes.disk_snapshots,
         )
@@ -1425,11 +1638,17 @@ class AsyncDevboxesResourceWithRawResponse:
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
+        self.resume = async_to_raw_response_wrapper(
+            devboxes.resume,
+        )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
         )
         self.snapshot_disk = async_to_raw_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.suspend = async_to_raw_response_wrapper(
+            devboxes.suspend,
         )
         self.upload_file = async_to_raw_response_wrapper(
             devboxes.upload_file,
@@ -1463,6 +1682,9 @@ class DevboxesResourceWithStreamingResponse:
         self.create_ssh_key = to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.create_tunnel = to_streamed_response_wrapper(
+            devboxes.create_tunnel,
+        )
         self.disk_snapshots = to_streamed_response_wrapper(
             devboxes.disk_snapshots,
         )
@@ -1479,11 +1701,17 @@ class DevboxesResourceWithStreamingResponse:
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
+        self.resume = to_streamed_response_wrapper(
+            devboxes.resume,
+        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
         self.snapshot_disk = to_streamed_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.suspend = to_streamed_response_wrapper(
+            devboxes.suspend,
         )
         self.upload_file = to_streamed_response_wrapper(
             devboxes.upload_file,
@@ -1517,6 +1745,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.create_ssh_key = async_to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
+        self.create_tunnel = async_to_streamed_response_wrapper(
+            devboxes.create_tunnel,
+        )
         self.disk_snapshots = async_to_streamed_response_wrapper(
             devboxes.disk_snapshots,
         )
@@ -1533,11 +1764,17 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
+        self.resume = async_to_streamed_response_wrapper(
+            devboxes.resume,
+        )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,
         )
         self.snapshot_disk = async_to_streamed_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.suspend = async_to_streamed_response_wrapper(
+            devboxes.suspend,
         )
         self.upload_file = async_to_streamed_response_wrapper(
             devboxes.upload_file,
