@@ -42,7 +42,6 @@ class TestDevboxes:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.create(
-            available_ports=[0, 0, 0],
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
             code_mounts=[
@@ -69,6 +68,7 @@ class TestDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
@@ -750,7 +750,6 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.create(
-            available_ports=[0, 0, 0],
             blueprint_id="blueprint_id",
             blueprint_name="blueprint_name",
             code_mounts=[
@@ -777,6 +776,7 @@ class TestAsyncDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
+                "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
                 "resource_size_request": "SMALL",
