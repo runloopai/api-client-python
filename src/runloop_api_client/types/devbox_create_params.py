@@ -12,12 +12,6 @@ __all__ = ["DevboxCreateParams"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
-    available_ports: Iterable[int]
-    """A list of ports to make available on the Devbox.
-
-    Call createTunnel to open a tunnel to the port.
-    """
-
     blueprint_id: str
     """(Optional) Blueprint to use for the Devbox.
 
