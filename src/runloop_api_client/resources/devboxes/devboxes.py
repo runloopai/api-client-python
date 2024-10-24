@@ -20,6 +20,7 @@ from ...types import (
     devbox_write_file_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
+    devbox_create_tunnel_params,
     devbox_download_file_params,
     devbox_execute_async_params,
     devbox_snapshot_disk_params,
@@ -314,6 +315,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        port: int,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -325,6 +327,8 @@ class DevboxesResource(SyncAPIResource):
         Create a tunnel to an available port on the Devbox.
 
         Args:
+          port: Devbox port that tunnel will expose.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -337,6 +341,7 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/create_tunnel",
+            body=maybe_transform({"port": port}, devbox_create_tunnel_params.DevboxCreateTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -1043,6 +1048,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        port: int,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1054,6 +1060,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Create a tunnel to an available port on the Devbox.
 
         Args:
+          port: Devbox port that tunnel will expose.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1066,6 +1074,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/create_tunnel",
+            body=await async_maybe_transform({"port": port}, devbox_create_tunnel_params.DevboxCreateTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
