@@ -214,14 +214,16 @@ class TestDevboxes:
     @parametrize
     def test_method_create_tunnel(self, client: Runloop) -> None:
         devbox = client.devboxes.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         )
         assert_matches_type(DevboxTunnelView, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_create_tunnel(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         )
 
         assert response.is_closed is True
@@ -232,7 +234,8 @@ class TestDevboxes:
     @parametrize
     def test_streaming_response_create_tunnel(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -246,7 +249,8 @@ class TestDevboxes:
     def test_path_params_create_tunnel(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.create_tunnel(
-                "",
+                id="",
+                port=0,
             )
 
     @parametrize
@@ -922,14 +926,16 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_create_tunnel(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         )
         assert_matches_type(DevboxTunnelView, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_create_tunnel(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         )
 
         assert response.is_closed is True
@@ -940,7 +946,8 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_streaming_response_create_tunnel(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.create_tunnel(
-            "id",
+            id="id",
+            port=0,
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -954,7 +961,8 @@ class TestAsyncDevboxes:
     async def test_path_params_create_tunnel(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.create_tunnel(
-                "",
+                id="",
+                port=0,
             )
 
     @parametrize
