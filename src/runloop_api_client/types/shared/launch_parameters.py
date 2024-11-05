@@ -5,10 +5,24 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["LaunchParameters"]
+__all__ = ["LaunchParameters", "AfterIdle"]
+
+
+class AfterIdle(BaseModel):
+    idle_time_seconds: int
+    """After idle_time_seconds, on_idle action will be taken."""
+
+    on_idle: Literal["unknown", "shutdown", "suspend"]
+    """Action to take after Devbox becomes idle."""
 
 
 class LaunchParameters(BaseModel):
+    after_idle: Optional[AfterIdle] = None
+    """Configure Devbox lifecycle based on idle activity.
+
+    If after_idle is set, Devbox will ignore keep_alive_time_seconds.
+    """
+
     available_ports: Optional[List[int]] = None
     """A list of ports to make available on the Devbox.
 
