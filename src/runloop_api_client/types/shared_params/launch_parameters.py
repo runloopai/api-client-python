@@ -3,26 +3,12 @@
 from __future__ import annotations
 
 from typing import List, Iterable
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Literal, TypedDict
 
-__all__ = ["LaunchParameters", "AfterIdle"]
-
-
-class AfterIdle(TypedDict, total=False):
-    idle_time_seconds: Required[int]
-    """After idle_time_seconds, on_idle action will be taken."""
-
-    on_idle: Required[Literal["unknown", "shutdown", "suspend"]]
-    """Action to take after Devbox becomes idle."""
+__all__ = ["LaunchParameters"]
 
 
 class LaunchParameters(TypedDict, total=False):
-    after_idle: AfterIdle
-    """Configure Devbox lifecycle based on idle activity.
-
-    If after_idle is set, Devbox will ignore keep_alive_time_seconds.
-    """
-
     available_ports: Iterable[int]
     """A list of ports to make available on the Devbox.
 

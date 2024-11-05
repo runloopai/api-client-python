@@ -68,10 +68,6 @@ class TestDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
-                "after_idle": {
-                    "idle_time_seconds": 0,
-                    "on_idle": "unknown",
-                },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
@@ -784,10 +780,6 @@ class TestAsyncDevboxes:
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
             launch_parameters={
-                "after_idle": {
-                    "idle_time_seconds": 0,
-                    "on_idle": "unknown",
-                },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string", "string", "string"],
