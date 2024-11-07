@@ -38,5 +38,5 @@ class LaunchParameters(TypedDict, total=False):
     launch_commands: List[str]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
-    resource_size_request: Literal["SMALL", "MEDIUM", "LARGE", "X_LARGE", "CUSTOM_SIZE"]
+    resource_size_request: Literal["SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
     """Manual resource configuration for Devbox. If not set, defaults will be used."""
