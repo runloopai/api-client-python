@@ -4,16 +4,9 @@ from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._models import BaseModel
+from .after_idle import AfterIdle
 
-__all__ = ["LaunchParameters", "AfterIdle"]
-
-
-class AfterIdle(BaseModel):
-    idle_time_seconds: int
-    """After idle_time_seconds, on_idle action will be taken."""
-
-    on_idle: Literal["unknown", "shutdown", "suspend"]
-    """Action to take after Devbox becomes idle."""
+__all__ = ["LaunchParameters"]
 
 
 class LaunchParameters(BaseModel):

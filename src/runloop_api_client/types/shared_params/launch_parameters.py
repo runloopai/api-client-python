@@ -3,17 +3,11 @@
 from __future__ import annotations
 
 from typing import List, Iterable
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Literal, TypedDict
 
-__all__ = ["LaunchParameters", "AfterIdle"]
+from .after_idle import AfterIdle
 
-
-class AfterIdle(TypedDict, total=False):
-    idle_time_seconds: Required[int]
-    """After idle_time_seconds, on_idle action will be taken."""
-
-    on_idle: Required[Literal["unknown", "shutdown", "suspend"]]
-    """Action to take after Devbox becomes idle."""
+__all__ = ["LaunchParameters"]
 
 
 class LaunchParameters(TypedDict, total=False):

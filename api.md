@@ -2,6 +2,7 @@
 
 ```python
 from runloop_api_client.types import (
+    AfterIdle,
     FunctionInvocationExecutionDetailView,
     LaunchParameters,
     ProjectLogsView,
