@@ -11,5 +11,5 @@ class AfterIdle(TypedDict, total=False):
     idle_time_seconds: Required[int]
     """After idle_time_seconds, on_idle action will be taken."""
 
-    on_idle: Required[Literal["shutdown", "suspend"]]
+    on_idle: Required[Literal["unknown", "shutdown", "suspend"]]
     """Action to take after Devbox becomes idle."""
