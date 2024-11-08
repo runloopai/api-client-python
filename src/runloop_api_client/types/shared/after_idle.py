@@ -11,5 +11,5 @@ class AfterIdle(BaseModel):
     idle_time_seconds: int
     """After idle_time_seconds, on_idle action will be taken."""
 
-    on_idle: Literal["unknown", "shutdown", "suspend"]
+    on_idle: Literal["shutdown", "suspend"]
     """Action to take after Devbox becomes idle."""
