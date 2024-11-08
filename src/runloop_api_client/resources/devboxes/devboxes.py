@@ -524,6 +524,39 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    def keep_alive(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """
+        Keep alive a running devbox that is configured to shutdown on idle.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/keep_alive",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
+
     def read_file_contents(
         self,
         id: str,
@@ -1257,6 +1290,39 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
+    async def keep_alive(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> object:
+        """
+        Keep alive a running devbox that is configured to shutdown on idle.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/keep_alive",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
+
     async def read_file_contents(
         self,
         id: str,
@@ -1571,6 +1637,9 @@ class DevboxesResourceWithRawResponse:
         self.execute_sync = to_raw_response_wrapper(
             devboxes.execute_sync,
         )
+        self.keep_alive = to_raw_response_wrapper(
+            devboxes.keep_alive,
+        )
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
@@ -1633,6 +1702,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.execute_sync = async_to_raw_response_wrapper(
             devboxes.execute_sync,
+        )
+        self.keep_alive = async_to_raw_response_wrapper(
+            devboxes.keep_alive,
         )
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
@@ -1697,6 +1769,9 @@ class DevboxesResourceWithStreamingResponse:
         self.execute_sync = to_streamed_response_wrapper(
             devboxes.execute_sync,
         )
+        self.keep_alive = to_streamed_response_wrapper(
+            devboxes.keep_alive,
+        )
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
@@ -1759,6 +1834,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.execute_sync = async_to_streamed_response_wrapper(
             devboxes.execute_sync,
+        )
+        self.keep_alive = async_to_streamed_response_wrapper(
+            devboxes.keep_alive,
         )
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
