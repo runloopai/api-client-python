@@ -58,7 +58,7 @@ class TestBlueprints:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "unknown",
+                    "on_idle": "shutdown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
@@ -239,7 +239,7 @@ class TestBlueprints:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "unknown",
+                    "on_idle": "shutdown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
@@ -314,7 +314,7 @@ class TestAsyncBlueprints:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "unknown",
+                    "on_idle": "shutdown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
@@ -495,7 +495,7 @@ class TestAsyncBlueprints:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "unknown",
+                    "on_idle": "shutdown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
