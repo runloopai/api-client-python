@@ -70,7 +70,7 @@ class TestDevboxes:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "shutdown",
+                    "on_idle": "unknown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
@@ -786,7 +786,7 @@ class TestAsyncDevboxes:
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
-                    "on_idle": "shutdown",
+                    "on_idle": "unknown",
                 },
                 "available_ports": [0, 0, 0],
                 "keep_alive_time_seconds": 0,
