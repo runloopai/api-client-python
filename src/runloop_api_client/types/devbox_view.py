@@ -45,5 +45,7 @@ class DevboxView(BaseModel):
     name: Optional[str] = None
     """The name of the Devbox."""
 
-    shutdown_reason: Optional[Literal["api_shutdown", "keep_alive_timeout", "entrypoint_exit"]] = None
+    shutdown_reason: Optional[
+        Literal["api_shutdown", "keep_alive_timeout", "entrypoint_exit", "idle", "lambda_lifecycle"]
+    ] = None
     """The shutdown reason if the Devbox shutdown, if any."""
