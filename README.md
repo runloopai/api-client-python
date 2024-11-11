@@ -28,8 +28,7 @@ import os
 from runloop_api_client import Runloop
 
 client = Runloop(
-    # This is the default and can be omitted
-    bearer_token=os.environ.get("RUNLOOP_API_KEY"),
+    bearer_token=os.environ.get("RUNLOOP_API_KEY"),  # This is the default and can be omitted
 )
 
 devbox_view = client.devboxes.create()
@@ -51,8 +50,7 @@ import asyncio
 from runloop_api_client import AsyncRunloop
 
 client = AsyncRunloop(
-    # This is the default and can be omitted
-    bearer_token=os.environ.get("RUNLOOP_API_KEY"),
+    bearer_token=os.environ.get("RUNLOOP_API_KEY"),  # This is the default and can be omitted
 )
 
 
