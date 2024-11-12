@@ -12,4 +12,4 @@ class DevboxWriteFileParams(TypedDict, total=False):
     """The contents to write to file."""
 
     file_path: Required[str]
-    """The path of the file to read."""
+    """The path of the file to write."""

@@ -811,7 +811,7 @@ class DevboxesResource(SyncAPIResource):
         Args:
           contents: The contents to write to file.
 
-          file_path: The path of the file to read.
+          file_path: The path of the file to write.
 
           extra_headers: Send extra headers
 
@@ -1577,7 +1577,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           contents: The contents to write to file.
 
-          file_path: The path of the file to read.
+          file_path: The path of the file to write.
 
           extra_headers: Send extra headers
 
