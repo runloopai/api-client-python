@@ -39,19 +39,7 @@ class TestBlueprints:
                     "repo_owner": "repo_owner",
                     "token": "token",
                     "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
+                }
             ],
             dockerfile="dockerfile",
             file_mounts={"foo": "string"},
@@ -60,12 +48,12 @@ class TestBlueprints:
                     "idle_time_seconds": 0,
                     "on_idle": "shutdown",
                 },
-                "available_ports": [0, 0, 0],
+                "available_ports": [0],
                 "keep_alive_time_seconds": 0,
-                "launch_commands": ["string", "string", "string"],
+                "launch_commands": ["string"],
                 "resource_size_request": "SMALL",
             },
-            system_setup_commands=["string", "string", "string"],
+            system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
@@ -220,19 +208,7 @@ class TestBlueprints:
                     "repo_owner": "repo_owner",
                     "token": "token",
                     "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
+                }
             ],
             dockerfile="dockerfile",
             file_mounts={"foo": "string"},
@@ -241,12 +217,12 @@ class TestBlueprints:
                     "idle_time_seconds": 0,
                     "on_idle": "shutdown",
                 },
-                "available_ports": [0, 0, 0],
+                "available_ports": [0],
                 "keep_alive_time_seconds": 0,
-                "launch_commands": ["string", "string", "string"],
+                "launch_commands": ["string"],
                 "resource_size_request": "SMALL",
             },
-            system_setup_commands=["string", "string", "string"],
+            system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
@@ -295,19 +271,7 @@ class TestAsyncBlueprints:
                     "repo_owner": "repo_owner",
                     "token": "token",
                     "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
+                }
             ],
             dockerfile="dockerfile",
             file_mounts={"foo": "string"},
@@ -316,12 +280,12 @@ class TestAsyncBlueprints:
                     "idle_time_seconds": 0,
                     "on_idle": "shutdown",
                 },
-                "available_ports": [0, 0, 0],
+                "available_ports": [0],
                 "keep_alive_time_seconds": 0,
-                "launch_commands": ["string", "string", "string"],
+                "launch_commands": ["string"],
                 "resource_size_request": "SMALL",
             },
-            system_setup_commands=["string", "string", "string"],
+            system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
 
@@ -476,19 +440,7 @@ class TestAsyncBlueprints:
                     "repo_owner": "repo_owner",
                     "token": "token",
                     "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                },
+                }
             ],
             dockerfile="dockerfile",
             file_mounts={"foo": "string"},
@@ -497,12 +449,12 @@ class TestAsyncBlueprints:
                     "idle_time_seconds": 0,
                     "on_idle": "shutdown",
                 },
-                "available_ports": [0, 0, 0],
+                "available_ports": [0],
                 "keep_alive_time_seconds": 0,
-                "launch_commands": ["string", "string", "string"],
+                "launch_commands": ["string"],
                 "resource_size_request": "SMALL",
             },
-            system_setup_commands=["string", "string", "string"],
+            system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
