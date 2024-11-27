@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Mapping, Iterable, cast
+from typing import Dict, Mapping, Iterable, cast
 
 import httpx
 
@@ -126,7 +126,6 @@ class DevboxesResource(SyncAPIResource):
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
-        setup_commands: List[str] | NotGiven = NOT_GIVEN,
         snapshot_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -165,10 +164,6 @@ class DevboxesResource(SyncAPIResource):
 
           prebuilt: Reference to prebuilt Blueprint.
 
-          setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
-              fetching a tool or building your dependencies. Runloop will look optimize these
-              steps for you.
-
           snapshot_id: Snapshot ID to use for the Devbox.
 
           extra_headers: Send extra headers
@@ -193,7 +188,6 @@ class DevboxesResource(SyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "prebuilt": prebuilt,
-                    "setup_commands": setup_commands,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -896,7 +890,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         prebuilt: str | NotGiven = NOT_GIVEN,
-        setup_commands: List[str] | NotGiven = NOT_GIVEN,
         snapshot_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -935,10 +928,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           prebuilt: Reference to prebuilt Blueprint.
 
-          setup_commands: (Optional) List of commands needed to set up your Devbox. Examples might include
-              fetching a tool or building your dependencies. Runloop will look optimize these
-              steps for you.
-
           snapshot_id: Snapshot ID to use for the Devbox.
 
           extra_headers: Send extra headers
@@ -963,7 +952,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "prebuilt": prebuilt,
-                    "setup_commands": setup_commands,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
