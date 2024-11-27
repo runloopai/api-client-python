@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable
+from typing import Dict, Iterable
 from typing_extensions import TypedDict
 
 from .code_mount_parameters_param import CodeMountParametersParam
@@ -52,13 +52,6 @@ class DevboxCreateParams(TypedDict, total=False):
 
     prebuilt: str
     """Reference to prebuilt Blueprint."""
-
-    setup_commands: List[str]
-    """(Optional) List of commands needed to set up your Devbox.
-
-    Examples might include fetching a tool or building your dependencies. Runloop
-    will look optimize these steps for you.
-    """
 
     snapshot_id: str
     """Snapshot ID to use for the Devbox."""
