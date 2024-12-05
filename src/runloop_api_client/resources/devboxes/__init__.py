@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .lsp import (
+    LspResource,
+    AsyncLspResource,
+    LspResourceWithRawResponse,
+    AsyncLspResourceWithRawResponse,
+    LspResourceWithStreamingResponse,
+    AsyncLspResourceWithStreamingResponse,
+)
 from .logs import (
     LogsResource,
     AsyncLogsResource,
@@ -26,6 +34,12 @@ from .executions import (
 )
 
 __all__ = [
+    "LspResource",
+    "AsyncLspResource",
+    "LspResourceWithRawResponse",
+    "AsyncLspResourceWithRawResponse",
+    "LspResourceWithStreamingResponse",
+    "AsyncLspResourceWithStreamingResponse",
     "LogsResource",
     "AsyncLogsResource",
     "LogsResourceWithRawResponse",
