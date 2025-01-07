@@ -24,7 +24,7 @@ from ._utils import (
     get_async_library,
 )
 from ._version import __version__
-from .resources import blueprints
+from .resources import blueprints, repositories
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import RunloopError, APIStatusError
 from ._base_client import (
@@ -42,6 +42,7 @@ __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Runloop", 
 class Runloop(SyncAPIClient):
     blueprints: blueprints.BlueprintsResource
     devboxes: devboxes.DevboxesResource
+    repositories: repositories.RepositoriesResource
     functions: functions.FunctionsResource
     projects: projects.ProjectsResource
     with_raw_response: RunloopWithRawResponse
@@ -103,6 +104,7 @@ class Runloop(SyncAPIClient):
 
         self.blueprints = blueprints.BlueprintsResource(self)
         self.devboxes = devboxes.DevboxesResource(self)
+        self.repositories = repositories.RepositoriesResource(self)
         self.functions = functions.FunctionsResource(self)
         self.projects = projects.ProjectsResource(self)
         self.with_raw_response = RunloopWithRawResponse(self)
@@ -216,6 +218,7 @@ class Runloop(SyncAPIClient):
 class AsyncRunloop(AsyncAPIClient):
     blueprints: blueprints.AsyncBlueprintsResource
     devboxes: devboxes.AsyncDevboxesResource
+    repositories: repositories.AsyncRepositoriesResource
     functions: functions.AsyncFunctionsResource
     projects: projects.AsyncProjectsResource
     with_raw_response: AsyncRunloopWithRawResponse
@@ -277,6 +280,7 @@ class AsyncRunloop(AsyncAPIClient):
 
         self.blueprints = blueprints.AsyncBlueprintsResource(self)
         self.devboxes = devboxes.AsyncDevboxesResource(self)
+        self.repositories = repositories.AsyncRepositoriesResource(self)
         self.functions = functions.AsyncFunctionsResource(self)
         self.projects = projects.AsyncProjectsResource(self)
         self.with_raw_response = AsyncRunloopWithRawResponse(self)
@@ -391,6 +395,7 @@ class RunloopWithRawResponse:
     def __init__(self, client: Runloop) -> None:
         self.blueprints = blueprints.BlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithRawResponse(client.devboxes)
+        self.repositories = repositories.RepositoriesResourceWithRawResponse(client.repositories)
         self.functions = functions.FunctionsResourceWithRawResponse(client.functions)
         self.projects = projects.ProjectsResourceWithRawResponse(client.projects)
 
@@ -399,6 +404,7 @@ class AsyncRunloopWithRawResponse:
     def __init__(self, client: AsyncRunloop) -> None:
         self.blueprints = blueprints.AsyncBlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithRawResponse(client.devboxes)
+        self.repositories = repositories.AsyncRepositoriesResourceWithRawResponse(client.repositories)
         self.functions = functions.AsyncFunctionsResourceWithRawResponse(client.functions)
         self.projects = projects.AsyncProjectsResourceWithRawResponse(client.projects)
 
@@ -407,6 +413,7 @@ class RunloopWithStreamedResponse:
     def __init__(self, client: Runloop) -> None:
         self.blueprints = blueprints.BlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithStreamingResponse(client.devboxes)
+        self.repositories = repositories.RepositoriesResourceWithStreamingResponse(client.repositories)
         self.functions = functions.FunctionsResourceWithStreamingResponse(client.functions)
         self.projects = projects.ProjectsResourceWithStreamingResponse(client.projects)
 
@@ -415,6 +422,7 @@ class AsyncRunloopWithStreamedResponse:
     def __init__(self, client: AsyncRunloop) -> None:
         self.blueprints = blueprints.AsyncBlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithStreamingResponse(client.devboxes)
+        self.repositories = repositories.AsyncRepositoriesResourceWithStreamingResponse(client.repositories)
         self.functions = functions.AsyncFunctionsResourceWithStreamingResponse(client.functions)
         self.projects = projects.AsyncProjectsResourceWithStreamingResponse(client.projects)
 
