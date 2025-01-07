@@ -32,6 +32,14 @@ from .blueprints import (
     BlueprintsResourceWithStreamingResponse,
     AsyncBlueprintsResourceWithStreamingResponse,
 )
+from .repositories import (
+    RepositoriesResource,
+    AsyncRepositoriesResource,
+    RepositoriesResourceWithRawResponse,
+    AsyncRepositoriesResourceWithRawResponse,
+    RepositoriesResourceWithStreamingResponse,
+    AsyncRepositoriesResourceWithStreamingResponse,
+)
 
 __all__ = [
     "BlueprintsResource",
@@ -46,6 +54,12 @@ __all__ = [
     "AsyncDevboxesResourceWithRawResponse",
     "DevboxesResourceWithStreamingResponse",
     "AsyncDevboxesResourceWithStreamingResponse",
+    "RepositoriesResource",
+    "AsyncRepositoriesResource",
+    "RepositoriesResourceWithRawResponse",
+    "AsyncRepositoriesResourceWithRawResponse",
+    "RepositoriesResourceWithStreamingResponse",
+    "AsyncRepositoriesResourceWithStreamingResponse",
     "FunctionsResource",
     "AsyncFunctionsResource",
     "FunctionsResourceWithRawResponse",
