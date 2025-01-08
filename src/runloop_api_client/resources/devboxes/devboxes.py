@@ -22,9 +22,6 @@ from .logs import (
     LogsResourceWithStreamingResponse,
     AsyncLogsResourceWithStreamingResponse,
 )
-from ...lib.polling import PollingConfig, poll_until
-from ...lib.polling_async import async_poll_until
-from ..._exceptions import RunloopError
 from ...types import (
     devbox_list_params,
     devbox_create_params,
@@ -69,7 +66,10 @@ from ..._response import (
     async_to_custom_raw_response_wrapper,
     async_to_custom_streamed_response_wrapper,
 )
+from ..._exceptions import RunloopError
+from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
+from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
 from ...types.devbox_tunnel_view import DevboxTunnelView

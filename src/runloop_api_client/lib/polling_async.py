@@ -1,8 +1,9 @@
-from typing import TypeVar, Callable, Optional, Union, Awaitable
-import asyncio
 import time
+import asyncio
+from typing import Union, TypeVar, Callable, Optional, Awaitable
 
 from .polling import PollingConfig, PollingTimeout
+
 T = TypeVar('T')
 
 async def async_poll_until(
