@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.13.0 (2025-01-08)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/runloopai/api-client-python/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **api:** api update ([#481](https://github.com/runloopai/api-client-python/issues/481)) ([3d8c1d6](https://github.com/runloopai/api-client-python/commit/3d8c1d6a8d2fc6c84ed3722048f8b86ce7f1730a))
+
+
+### Bug Fixes
+
+* **client:** only call .close() when needed ([#484](https://github.com/runloopai/api-client-python/issues/484)) ([6df7217](https://github.com/runloopai/api-client-python/commit/6df7217d27efbce514cfc1c2e3ad2ea21f3f9529))
+
+
+### Chores
+
+* **internal:** bump httpx dependency ([#483](https://github.com/runloopai/api-client-python/issues/483)) ([0829c07](https://github.com/runloopai/api-client-python/commit/0829c07ec17302e07bb61a9aca9e0840be06b878))
+
 ## 0.12.0 (2025-01-07)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/runloopai/api-client-python/compare/v0.11.0...v0.12.0)
