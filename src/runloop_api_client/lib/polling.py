@@ -8,7 +8,7 @@ T = TypeVar('T')
 class PollingConfig:
     """Configuration for polling behavior"""
     interval_seconds: float = 1.0
-    max_attempts: int = 60
+    max_attempts: int = 120
     timeout_seconds: Optional[float] = None
 
 class PollingTimeout(Exception):
