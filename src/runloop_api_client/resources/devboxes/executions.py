@@ -120,7 +120,7 @@ class ExecutionsResource(SyncAPIResource):
         Raises:
             PollingTimeout: If polling times out before execution completes
         """
-        def retrieve_execution():
+        def retrieve_execution() -> DevboxAsyncExecutionDetailView:
             return self.retrieve(
                 execution_id,
                 id=id,
@@ -359,7 +359,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Raises:
             PollingTimeout: If polling times out before execution completes
         """
-        async def retrieve_execution():
+        async def retrieve_execution() -> DevboxAsyncExecutionDetailView:
             return await self.retrieve(
                 execution_id,
                 id=id,

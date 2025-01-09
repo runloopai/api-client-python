@@ -265,7 +265,7 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        def retrieve_devbox():
+        def retrieve_devbox() -> DevboxView:
             return self.retrieve(
                 id,
                 extra_headers=extra_headers,
@@ -1228,7 +1228,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        async def retrieve_devbox():
+        async def retrieve_devbox() -> DevboxView:
             return await self.retrieve(
                 id,
                 extra_headers=extra_headers,
