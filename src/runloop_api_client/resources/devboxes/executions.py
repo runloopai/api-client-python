@@ -17,8 +17,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
+from ...lib.polling_async import async_poll_until
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -87,6 +89,51 @@ class ExecutionsResource(SyncAPIResource):
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
+
+    def await_completed(
+        self,
+        execution_id: str,
+        id: str,
+        *,
+        config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxAsyncExecutionDetailView:
+        """Wait for an execution to complete.
+        
+        Args:
+            execution_id: The ID of the execution to wait for
+            id: The ID of the devbox
+            config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The completed execution
+
+        Raises:
+            PollingTimeout: If polling times out before execution completes
+        """
+        def retrieve_execution() -> DevboxAsyncExecutionDetailView:
+            return self.retrieve(
+                execution_id,
+                id=id,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout
+            )
+
+        def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
+            return execution.status == 'completed'
+
+        return poll_until(retrieve_execution, is_done, config)    
 
     def execute_async(
         self,
@@ -281,6 +328,51 @@ class AsyncExecutionsResource(AsyncAPIResource):
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
+
+    async def await_completed(
+        self,
+        execution_id: str,        
+        *,
+        id: str,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxAsyncExecutionDetailView:
+        """Wait for an execution to complete.
+        
+        Args:
+            execution_id: The ID of the execution to wait for
+            id: The ID of the devbox
+            polling_config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The completed execution
+
+        Raises:
+            PollingTimeout: If polling times out before execution completes
+        """
+        async def retrieve_execution() -> DevboxAsyncExecutionDetailView:
+            return await self.retrieve(
+                execution_id,
+                id=id,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout
+            )
+
+        def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
+            return execution.status == 'completed'
+
+        return await async_poll_until(retrieve_execution, is_done, polling_config)
 
     async def execute_async(
         self,
