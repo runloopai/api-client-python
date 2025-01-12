@@ -2,17 +2,19 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
 
 __all__ = ["DevboxListParams"]
 
 
 class DevboxListParams(TypedDict, total=False):
     limit: int
-    """Page Limit"""
+    """The limit of items to return. Default is 20."""
 
     starting_after: str
-    """Load the next page starting after the given token."""
+    """Load the next page of data starting after the item with the given ID."""
 
-    status: str
+    status: Literal[
+        "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+    ]
     """Filter by status"""

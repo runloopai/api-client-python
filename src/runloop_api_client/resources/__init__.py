@@ -8,22 +8,6 @@ from .devboxes import (
     DevboxesResourceWithStreamingResponse,
     AsyncDevboxesResourceWithStreamingResponse,
 )
-from .projects import (
-    ProjectsResource,
-    AsyncProjectsResource,
-    ProjectsResourceWithRawResponse,
-    AsyncProjectsResourceWithRawResponse,
-    ProjectsResourceWithStreamingResponse,
-    AsyncProjectsResourceWithStreamingResponse,
-)
-from .functions import (
-    FunctionsResource,
-    AsyncFunctionsResource,
-    FunctionsResourceWithRawResponse,
-    AsyncFunctionsResourceWithRawResponse,
-    FunctionsResourceWithStreamingResponse,
-    AsyncFunctionsResourceWithStreamingResponse,
-)
 from .blueprints import (
     BlueprintsResource,
     AsyncBlueprintsResource,
@@ -31,6 +15,14 @@ from .blueprints import (
     AsyncBlueprintsResourceWithRawResponse,
     BlueprintsResourceWithStreamingResponse,
     AsyncBlueprintsResourceWithStreamingResponse,
+)
+from .repositories import (
+    RepositoriesResource,
+    AsyncRepositoriesResource,
+    RepositoriesResourceWithRawResponse,
+    AsyncRepositoriesResourceWithRawResponse,
+    RepositoriesResourceWithStreamingResponse,
+    AsyncRepositoriesResourceWithStreamingResponse,
 )
 
 __all__ = [
@@ -46,16 +38,10 @@ __all__ = [
     "AsyncDevboxesResourceWithRawResponse",
     "DevboxesResourceWithStreamingResponse",
     "AsyncDevboxesResourceWithStreamingResponse",
-    "FunctionsResource",
-    "AsyncFunctionsResource",
-    "FunctionsResourceWithRawResponse",
-    "AsyncFunctionsResourceWithRawResponse",
-    "FunctionsResourceWithStreamingResponse",
-    "AsyncFunctionsResourceWithStreamingResponse",
-    "ProjectsResource",
-    "AsyncProjectsResource",
-    "ProjectsResourceWithRawResponse",
-    "AsyncProjectsResourceWithRawResponse",
-    "ProjectsResourceWithStreamingResponse",
-    "AsyncProjectsResourceWithStreamingResponse",
+    "RepositoriesResource",
+    "AsyncRepositoriesResource",
+    "RepositoriesResourceWithRawResponse",
+    "AsyncRepositoriesResourceWithRawResponse",
+    "RepositoriesResourceWithStreamingResponse",
+    "AsyncRepositoriesResourceWithStreamingResponse",
 ]

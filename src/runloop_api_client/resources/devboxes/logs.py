@@ -58,10 +58,10 @@ class LogsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxLogsListView:
         """
-        Get all logs from a Devbox by id.
+        Get all logs from a running or completed Devbox.
 
         Args:
-          execution_id: Id of execution to filter logs by.
+          execution_id: ID of execution to filter logs by.
 
           shell_name: Shell Name to filter logs by.
 
@@ -128,10 +128,10 @@ class AsyncLogsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxLogsListView:
         """
-        Get all logs from a Devbox by id.
+        Get all logs from a running or completed Devbox.
 
         Args:
-          execution_id: Id of execution to filter logs by.
+          execution_id: ID of execution to filter logs by.
 
           shell_name: Shell Name to filter logs by.
 

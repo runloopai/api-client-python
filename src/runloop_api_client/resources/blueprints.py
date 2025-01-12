@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable
+from typing import Dict, List, Iterable, Optional
 
 import httpx
 
@@ -20,13 +20,13 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.blueprint_view import BlueprintView
-from ..types.blueprint_list_view import BlueprintListView
 from ..types.blueprint_preview_view import BlueprintPreviewView
-from ..types.code_mount_parameters_param import CodeMountParametersParam
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
 __all__ = ["BlueprintsResource", "AsyncBlueprintsResource"]
 
@@ -55,23 +55,25 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
-        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
-        dockerfile: str | NotGiven = NOT_GIVEN,
-        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
-        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> BlueprintView:
-        """Build a Blueprint with the specified configuration.
+        """Starts build of custom defined container Blueprint.
 
-        The Blueprint will begin
-        building upon create, ' and will transition to 'building_complete' once it is
-        ready.
+        The Blueprint will begin in
+        the 'provisioning' step and transition to the 'building' step once it is
+        selected off the build queue., Upon build complete it will transition to
+        'building_complete' if the build is successful.
 
         Args:
           name: Name of the Blueprint.
@@ -93,6 +95,8 @@ class BlueprintsResource(SyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
             "/v1/blueprints",
@@ -108,7 +112,11 @@ class BlueprintsResource(SyncAPIResource):
                 blueprint_create_params.BlueprintCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=BlueprintView,
         )
@@ -125,7 +133,7 @@ class BlueprintsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> BlueprintView:
         """
-        Get a previously built Blueprint.
+        Get the details of a previously created Blueprint including the build status.
 
         Args:
           extra_headers: Send extra headers
@@ -158,18 +166,16 @@ class BlueprintsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BlueprintListView:
-        """List all blueprints or filter by name.
-
-        If no status is provided, all blueprints
-        are returned.
+    ) -> SyncBlueprintsCursorIDPage[BlueprintView]:
+        """
+        List all Blueprints or filter by name.
 
         Args:
-          limit: Page Limit
+          limit: The limit of items to return. Default is 20.
 
           name: Filter by name
 
-          starting_after: Load the next page starting after the given token.
+          starting_after: Load the next page of data starting after the item with the given ID.
 
           extra_headers: Send extra headers
 
@@ -179,8 +185,9 @@ class BlueprintsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/v1/blueprints",
+            page=SyncBlueprintsCursorIDPage[BlueprintView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -195,7 +202,7 @@ class BlueprintsResource(SyncAPIResource):
                     blueprint_list_params.BlueprintListParams,
                 ),
             ),
-            cast_to=BlueprintListView,
+            model=BlueprintView,
         )
 
     def logs(
@@ -210,7 +217,7 @@ class BlueprintsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> BlueprintBuildLogsListView:
         """
-        Get Blueprint build logs.
+        Get all logs from the building of a Blueprint.
 
         Args:
           extra_headers: Send extra headers
@@ -235,22 +242,23 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
-        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
-        dockerfile: str | NotGiven = NOT_GIVEN,
-        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
-        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> BlueprintPreviewView:
         """Preview building a Blueprint with the specified configuration.
 
         You can take the
-        resulting Dockerfile and test out your build.
+        resulting Dockerfile and test out your build using any local docker tooling.
 
         Args:
           name: Name of the Blueprint.
@@ -272,6 +280,8 @@ class BlueprintsResource(SyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
             "/v1/blueprints/preview",
@@ -287,7 +297,11 @@ class BlueprintsResource(SyncAPIResource):
                 blueprint_preview_params.BlueprintPreviewParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=BlueprintPreviewView,
         )
@@ -317,23 +331,25 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
-        dockerfile: str | NotGiven = NOT_GIVEN,
-        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
-        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> BlueprintView:
-        """Build a Blueprint with the specified configuration.
+        """Starts build of custom defined container Blueprint.
 
-        The Blueprint will begin
-        building upon create, ' and will transition to 'building_complete' once it is
-        ready.
+        The Blueprint will begin in
+        the 'provisioning' step and transition to the 'building' step once it is
+        selected off the build queue., Upon build complete it will transition to
+        'building_complete' if the build is successful.
 
         Args:
           name: Name of the Blueprint.
@@ -355,6 +371,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return await self._post(
             "/v1/blueprints",
@@ -370,7 +388,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 blueprint_create_params.BlueprintCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=BlueprintView,
         )
@@ -387,7 +409,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> BlueprintView:
         """
-        Get a previously built Blueprint.
+        Get the details of a previously created Blueprint including the build status.
 
         Args:
           extra_headers: Send extra headers
@@ -408,7 +430,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             cast_to=BlueprintView,
         )
 
-    async def list(
+    def list(
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
@@ -420,18 +442,16 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BlueprintListView:
-        """List all blueprints or filter by name.
-
-        If no status is provided, all blueprints
-        are returned.
+    ) -> AsyncPaginator[BlueprintView, AsyncBlueprintsCursorIDPage[BlueprintView]]:
+        """
+        List all Blueprints or filter by name.
 
         Args:
-          limit: Page Limit
+          limit: The limit of items to return. Default is 20.
 
           name: Filter by name
 
-          starting_after: Load the next page starting after the given token.
+          starting_after: Load the next page of data starting after the item with the given ID.
 
           extra_headers: Send extra headers
 
@@ -441,14 +461,15 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/v1/blueprints",
+            page=AsyncBlueprintsCursorIDPage[BlueprintView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "limit": limit,
                         "name": name,
@@ -457,7 +478,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     blueprint_list_params.BlueprintListParams,
                 ),
             ),
-            cast_to=BlueprintListView,
+            model=BlueprintView,
         )
 
     async def logs(
@@ -472,7 +493,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> BlueprintBuildLogsListView:
         """
-        Get Blueprint build logs.
+        Get all logs from the building of a Blueprint.
 
         Args:
           extra_headers: Send extra headers
@@ -497,22 +518,23 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
-        dockerfile: str | NotGiven = NOT_GIVEN,
-        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
-        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
-        system_setup_commands: List[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> BlueprintPreviewView:
         """Preview building a Blueprint with the specified configuration.
 
         You can take the
-        resulting Dockerfile and test out your build.
+        resulting Dockerfile and test out your build using any local docker tooling.
 
         Args:
           name: Name of the Blueprint.
@@ -534,6 +556,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return await self._post(
             "/v1/blueprints/preview",
@@ -549,7 +573,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 blueprint_preview_params.BlueprintPreviewParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=BlueprintPreviewView,
         )

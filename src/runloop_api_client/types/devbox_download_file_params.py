@@ -9,4 +9,7 @@ __all__ = ["DevboxDownloadFileParams"]
 
 class DevboxDownloadFileParams(TypedDict, total=False):
     path: Required[str]
-    """The path on the devbox to read the file"""
+    """The path on the Devbox filesystem to read the file from.
+
+    Path is relative to user home directory.
+    """
