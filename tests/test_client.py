@@ -553,6 +553,33 @@ class TestRunloop:
         assert isinstance(response, Model)
         assert response.foo == 2
 
+    @pytest.mark.respx(base_url=base_url)
+    def test_idempotency_header_options(self, respx_mock: MockRouter) -> None:
+        respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={}))
+
+        response = self.client.post("/foo", cast_to=httpx.Response)
+
+        header = response.request.headers.get("x-request-id")
+        assert header is not None
+        assert header.startswith("stainless-python-retry")
+
+        # explicit header
+        response = self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(extra_headers={"x-request-id": "custom-key"})
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
+
+        response = self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(extra_headers={"x-request-id": "custom-key"})
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
+
+        # custom argument
+        response = self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(idempotency_key="custom-key")
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
+
     def test_base_url_setter(self) -> None:
         client = Runloop(
             base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
@@ -1342,6 +1369,33 @@ class TestAsyncRunloop:
         response = await self.client.get("/foo", cast_to=Model)
         assert isinstance(response, Model)
         assert response.foo == 2
+
+    @pytest.mark.respx(base_url=base_url)
+    async def test_idempotency_header_options(self, respx_mock: MockRouter) -> None:
+        respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={}))
+
+        response = await self.client.post("/foo", cast_to=httpx.Response)
+
+        header = response.request.headers.get("x-request-id")
+        assert header is not None
+        assert header.startswith("stainless-python-retry")
+
+        # explicit header
+        response = await self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(extra_headers={"x-request-id": "custom-key"})
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
+
+        response = await self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(extra_headers={"x-request-id": "custom-key"})
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
+
+        # custom argument
+        response = await self.client.post(
+            "/foo", cast_to=httpx.Response, options=make_request_options(idempotency_key="custom-key")
+        )
+        assert response.request.headers.get("x-request-id") == "custom-key"
 
     def test_base_url_setter(self) -> None:
         client = AsyncRunloop(

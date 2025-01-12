@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Dict
+from typing import Dict, Optional
 from typing_extensions import TypedDict
 
 __all__ = ["DevboxSnapshotDiskParams"]
 
 
 class DevboxSnapshotDiskParams(TypedDict, total=False):
-    metadata: Dict[str, str]
+    metadata: Optional[Dict[str, str]]
     """(Optional) Metadata used to describe the snapshot"""
 
-    name: str
+    name: Optional[str]
     """(Optional) A user specified name to give the snapshot"""

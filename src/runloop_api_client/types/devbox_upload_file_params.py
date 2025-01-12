@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 from .._types import FileTypes
 
@@ -10,6 +10,10 @@ __all__ = ["DevboxUploadFileParams"]
 
 
 class DevboxUploadFileParams(TypedDict, total=False):
-    file: FileTypes
+    path: Required[str]
+    """The path to write the file to on the Devbox.
 
-    path: str
+    Path is relative to user home directory.
+    """
+
+    file: FileTypes

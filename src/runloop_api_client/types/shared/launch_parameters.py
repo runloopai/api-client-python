@@ -19,7 +19,8 @@ class LaunchParameters(BaseModel):
     available_ports: Optional[List[int]] = None
     """A list of ports to make available on the Devbox.
 
-    Call createTunnel to open a tunnel to the port.
+    Only ports made available will be surfaced to create tunnels via the
+    'createTunnel' API.
     """
 
     keep_alive_time_seconds: Optional[int] = None
