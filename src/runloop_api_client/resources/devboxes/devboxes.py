@@ -58,7 +58,10 @@ from ..._response import (
     async_to_custom_raw_response_wrapper,
     async_to_custom_streamed_response_wrapper,
 )
+from ..._exceptions import RunloopError
+from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
+from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.devbox_list_view import DevboxListView
 from ...types.devbox_tunnel_view import DevboxTunnelView
@@ -72,6 +75,7 @@ from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDeta
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
+DEVBOX_BOOTING_STATES = frozenset(('provisioning', 'initializing'))
 
 class DevboxesResource(SyncAPIResource):
     @cached_property
@@ -218,6 +222,132 @@ class DevboxesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=DevboxView,
+        )
+
+    def await_running(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Wait for a devbox to be in running state.
+        
+        Args:
+            id: The ID of the devbox to wait for
+            config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The devbox in running state
+
+        Raises:
+            PollingTimeout: If polling times out before devbox is running
+            RunloopError: If devbox enters a non-running terminal state
+        """
+        def retrieve_devbox() -> DevboxView:
+            return self.retrieve(
+                id,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout
+            )
+
+        def is_done_booting(devbox: DevboxView) -> bool:
+            return devbox.status not in DEVBOX_BOOTING_STATES
+
+        devbox = poll_until(retrieve_devbox, is_done_booting, polling_config)
+
+        if devbox.status != "running":
+            raise RunloopError(
+                f"Devbox entered non-running terminal state: {devbox.status}"
+            )
+
+        return devbox
+
+    def create_and_await_running(
+        self,
+        *,
+        blueprint_id: str | NotGiven = NOT_GIVEN,
+        blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        entrypoint: str | NotGiven = NOT_GIVEN,
+        environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        prebuilt: str | NotGiven = NOT_GIVEN,
+        snapshot_id: str | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Create a new devbox and wait for it to be in running state.
+        
+        Args:
+            blueprint_id: The ID of the blueprint to use
+            blueprint_name: The name of the blueprint to use
+            code_mounts: Code mount parameters
+            entrypoint: The entrypoint command
+            environment_variables: Environment variables
+            file_mounts: File mount parameters
+            launch_parameters: Launch parameters
+            metadata: Metadata key-value pairs
+            name: The name of the devbox
+            prebuilt: The prebuilt image to use
+            snapshot_id: The ID of the snapshot to restore from
+            polling_config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The devbox in running state
+
+        Raises:
+            PollingTimeout: If polling times out before devbox is running
+            RunloopError: If devbox enters a non-running terminal state
+        """
+        devbox = self.create(
+            blueprint_id=blueprint_id,
+            blueprint_name=blueprint_name,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            prebuilt=prebuilt,
+            snapshot_id=snapshot_id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
+
+        return self.await_running(
+            devbox.id,
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
         )
 
     def list(
@@ -979,6 +1109,129 @@ class AsyncDevboxesResource(AsyncAPIResource):
             ),
             cast_to=DevboxView,
         )
+
+    async def create_and_await_running(
+        self,
+        *,
+        blueprint_id: str | NotGiven = NOT_GIVEN,
+        blueprint_name: str | NotGiven = NOT_GIVEN,
+        code_mounts: Iterable[CodeMountParametersParam] | NotGiven = NOT_GIVEN,
+        entrypoint: str | NotGiven = NOT_GIVEN,
+        environment_variables: Dict[str, str] | NotGiven = NOT_GIVEN,
+        file_mounts: Dict[str, str] | NotGiven = NOT_GIVEN,
+        launch_parameters: LaunchParameters | NotGiven = NOT_GIVEN,
+        metadata: Dict[str, str] | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        prebuilt: str | NotGiven = NOT_GIVEN,
+        snapshot_id: str | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Create a devbox and wait for it to be in running state.
+
+        Args:
+            code_mount_parameters: Parameters for mounting code into the devbox
+            environment_variables: Environment variables to set in the devbox
+            file_mounts: Files to mount into the devbox
+            launch_parameters: Parameters for launching the devbox
+            metadata: Metadata to attach to the devbox
+            name: Name of the devbox
+            prebuilt: Whether to use a prebuilt image
+            snapshot_id: ID of snapshot to create devbox from
+            polling_config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The devbox in running state
+
+        Raises:
+            PollingTimeout: If polling times out before devbox is running
+            RunloopError: If devbox enters a non-running terminal state
+        """
+        devbox = await self.create(
+            blueprint_id=blueprint_id,
+            blueprint_name=blueprint_name,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            prebuilt=prebuilt,
+            snapshot_id=snapshot_id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
+
+        return await self.await_running(
+            devbox.id,
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
+
+    async def await_running(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxView:
+        """Wait for a devbox to be in running state.
+        
+        Args:
+            id: The ID of the devbox to wait for
+            config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The devbox in running state
+
+        Raises:
+            PollingTimeout: If polling times out before devbox is running
+            RunloopError: If devbox enters a non-running terminal state
+        """
+        async def retrieve_devbox() -> DevboxView:
+            return await self.retrieve(
+                id,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout
+            )
+        
+        def is_done_booting(devbox: DevboxView) -> bool:
+            return devbox.status not in DEVBOX_BOOTING_STATES
+
+        devbox = await async_poll_until(retrieve_devbox, is_done_booting, polling_config)
+
+        if devbox.status != "running":
+            raise RunloopError(
+                f"Devbox entered non-running terminal state: {devbox.status}"
+            )        
+
+        return devbox
 
     async def list(
         self,
