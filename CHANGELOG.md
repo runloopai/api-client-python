@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.13.0 (2025-01-13)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/runloopai/api-client-python/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* add helpers for common polling operations ([97891c7](https://github.com/runloopai/api-client-python/commit/97891c7cf8be7b9192c5dbcfc35fc93cb3490d04))
+* **api:** api update ([#481](https://github.com/runloopai/api-client-python/issues/481)) ([7a8d8a8](https://github.com/runloopai/api-client-python/commit/7a8d8a8ba1119fd43ee4d40127fc486f0c626cb8))
+
+
+### Bug Fixes
+
+* **client:** only call .close() when needed ([#484](https://github.com/runloopai/api-client-python/issues/484)) ([55bf004](https://github.com/runloopai/api-client-python/commit/55bf004101e86ebdb01db4b9ad8661d619a777bb))
+* correctly handle deserialising `cls` fields ([#489](https://github.com/runloopai/api-client-python/issues/489)) ([2b2a573](https://github.com/runloopai/api-client-python/commit/2b2a5736c16a985e4b8e33313b4dcde8fc10dbca))
+
+
+### Chores
+
+* **internal:** bump httpx dependency ([#483](https://github.com/runloopai/api-client-python/issues/483)) ([dcd5be5](https://github.com/runloopai/api-client-python/commit/dcd5be5065ed52f1172d2fa813d6a5ff64767de6))
+* **internal:** codegen related update ([#488](https://github.com/runloopai/api-client-python/issues/488)) ([af72728](https://github.com/runloopai/api-client-python/commit/af727286ef5018e27be7d564078d1c0305f7d9e1))
+
+
+### Documentation
+
+* fix typos ([#487](https://github.com/runloopai/api-client-python/issues/487)) ([440e80b](https://github.com/runloopai/api-client-python/commit/440e80b9e28a64edec079bf72d27c3b188997574))
+
 ## 0.12.0 (2025-01-07)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/runloopai/api-client-python/compare/v0.11.0...v0.12.0)

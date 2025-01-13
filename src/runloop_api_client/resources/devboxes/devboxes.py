@@ -6,14 +6,6 @@ from typing import Dict, Mapping, Iterable, cast
 
 import httpx
 
-from .lsp import (
-    LspResource,
-    AsyncLspResource,
-    LspResourceWithRawResponse,
-    AsyncLspResourceWithRawResponse,
-    LspResourceWithStreamingResponse,
-    AsyncLspResourceWithStreamingResponse,
-)
 from .logs import (
     LogsResource,
     AsyncLogsResource,
@@ -86,10 +78,6 @@ __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 DEVBOX_BOOTING_STATES = frozenset(('provisioning', 'initializing'))
 
 class DevboxesResource(SyncAPIResource):
-    @cached_property
-    def lsp(self) -> LspResource:
-        return LspResource(self._client)
-
     @cached_property
     def logs(self) -> LogsResource:
         return LogsResource(self._client)
@@ -976,10 +964,6 @@ class DevboxesResource(SyncAPIResource):
 
 
 class AsyncDevboxesResource(AsyncAPIResource):
-    @cached_property
-    def lsp(self) -> AsyncLspResource:
-        return AsyncLspResource(self._client)
-
     @cached_property
     def logs(self) -> AsyncLogsResource:
         return AsyncLogsResource(self._client)
@@ -1920,10 +1904,6 @@ class DevboxesResourceWithRawResponse:
         )
 
     @cached_property
-    def lsp(self) -> LspResourceWithRawResponse:
-        return LspResourceWithRawResponse(self._devboxes.lsp)
-
-    @cached_property
     def logs(self) -> LogsResourceWithRawResponse:
         return LogsResourceWithRawResponse(self._devboxes.logs)
 
@@ -1988,10 +1968,6 @@ class AsyncDevboxesResourceWithRawResponse:
         self.write_file = async_to_raw_response_wrapper(
             devboxes.write_file,
         )
-
-    @cached_property
-    def lsp(self) -> AsyncLspResourceWithRawResponse:
-        return AsyncLspResourceWithRawResponse(self._devboxes.lsp)
 
     @cached_property
     def logs(self) -> AsyncLogsResourceWithRawResponse:
@@ -2060,10 +2036,6 @@ class DevboxesResourceWithStreamingResponse:
         )
 
     @cached_property
-    def lsp(self) -> LspResourceWithStreamingResponse:
-        return LspResourceWithStreamingResponse(self._devboxes.lsp)
-
-    @cached_property
     def logs(self) -> LogsResourceWithStreamingResponse:
         return LogsResourceWithStreamingResponse(self._devboxes.logs)
 
@@ -2128,10 +2100,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.write_file = async_to_streamed_response_wrapper(
             devboxes.write_file,
         )
-
-    @cached_property
-    def lsp(self) -> AsyncLspResourceWithStreamingResponse:
-        return AsyncLspResourceWithStreamingResponse(self._devboxes.lsp)
 
     @cached_property
     def logs(self) -> AsyncLogsResourceWithStreamingResponse:
