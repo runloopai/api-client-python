@@ -2,8 +2,6 @@
 
 from typing import Dict, Optional
 
-from pydantic import Field as FieldInfo
-
 from .._models import BaseModel
 
 __all__ = ["DevboxSnapshotView"]
@@ -17,10 +15,10 @@ class DevboxSnapshotView(BaseModel):
     """Creation time of the Snapshot (Unix timestamp milliseconds)."""
 
     metadata: Dict[str, str]
-    """metadata associated with the snapshot."""
+    """User defined metadata associated with the snapshot."""
 
-    source_devbox_id: str = FieldInfo(alias="sourceDevboxId")
-    """The source devbox identifier."""
+    source_devbox_id: str
+    """The source Devbox ID this snapshot was created from."""
 
     name: Optional[str] = None
     """(Optional) The custom name of the snapshot."""

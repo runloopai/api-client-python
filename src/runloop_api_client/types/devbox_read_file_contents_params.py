@@ -9,4 +9,7 @@ __all__ = ["DevboxReadFileContentsParams"]
 
 class DevboxReadFileContentsParams(TypedDict, total=False):
     file_path: Required[str]
-    """The path of the file to read."""
+    """The path on the Devbox filesystem to read the file from.
+
+    Path is relative to user home directory.
+    """
