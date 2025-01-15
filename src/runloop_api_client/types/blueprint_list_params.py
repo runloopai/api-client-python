@@ -9,10 +9,10 @@ __all__ = ["BlueprintListParams"]
 
 class BlueprintListParams(TypedDict, total=False):
     limit: int
-    """Page Limit"""
+    """The limit of items to return. Default is 20."""
 
     name: str
     """Filter by name"""
 
     starting_after: str
-    """Load the next page starting after the given token."""
+    """Load the next page of data starting after the item with the given ID."""

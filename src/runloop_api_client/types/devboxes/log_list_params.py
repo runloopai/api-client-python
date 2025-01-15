@@ -9,7 +9,7 @@ __all__ = ["LogListParams"]
 
 class LogListParams(TypedDict, total=False):
     execution_id: str
-    """Id of execution to filter logs by."""
+    """ID of execution to filter logs by."""
 
     shell_name: str
     """Shell Name to filter logs by."""

@@ -8,10 +8,10 @@ __all__ = ["DevboxCreateSSHKeyResponse"]
 
 class DevboxCreateSSHKeyResponse(BaseModel):
     id: str
-    """The id of the Devbox."""
+    """The ID of the Devbox."""
 
     ssh_private_key: str
     """The ssh private key, in PEM format."""
 
     url: str
-    """The url of the Devbox."""
+    """The host url of the Devbox that can be used for SSH."""
