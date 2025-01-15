@@ -258,13 +258,7 @@ class DevboxesResource(SyncAPIResource):
     def await_running(
         self,
         id: str,
-        *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        status: Literal[
-            "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
-        ]
-        | NotGiven = NOT_GIVEN,
+        *,        
         polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
