@@ -13,10 +13,8 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     DevboxView,
-    DevboxListView,
     DevboxTunnelView,
     DevboxSnapshotView,
-    DevboxSnapshotListView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
     DevboxAsyncExecutionDetailView,
@@ -26,6 +24,12 @@ from runloop_api_client._response import (
     AsyncBinaryAPIResponse,
     StreamedBinaryAPIResponse,
     AsyncStreamedBinaryAPIResponse,
+)
+from runloop_api_client.pagination import (
+    SyncDevboxesCursorIDPage,
+    AsyncDevboxesCursorIDPage,
+    SyncDiskSnapshotsCursorIDPage,
+    AsyncDiskSnapshotsCursorIDPage,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -133,16 +137,16 @@ class TestDevboxes:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         devbox = client.devboxes.list()
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(SyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list(
             limit=0,
             starting_after="starting_after",
-            status="status",
+            status="provisioning",
         )
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(SyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -151,7 +155,7 @@ class TestDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = response.parse()
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(SyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -160,7 +164,7 @@ class TestDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = response.parse()
-            assert_matches_type(DevboxListView, devbox, path=["response"])
+            assert_matches_type(SyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -245,37 +249,42 @@ class TestDevboxes:
             )
 
     @parametrize
-    def test_method_disk_snapshots(self, client: Runloop) -> None:
-        devbox = client.devboxes.disk_snapshots()
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
-
-    @parametrize
-    def test_method_disk_snapshots_with_all_params(self, client: Runloop) -> None:
-        devbox = client.devboxes.disk_snapshots(
-            limit=0,
-            starting_after="starting_after",
+    def test_method_delete_disk_snapshot(self, client: Runloop) -> None:
+        devbox = client.devboxes.delete_disk_snapshot(
+            "id",
         )
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
-    def test_raw_response_disk_snapshots(self, client: Runloop) -> None:
-        response = client.devboxes.with_raw_response.disk_snapshots()
+    def test_raw_response_delete_disk_snapshot(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.delete_disk_snapshot(
+            "id",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = response.parse()
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
-    def test_streaming_response_disk_snapshots(self, client: Runloop) -> None:
-        with client.devboxes.with_streaming_response.disk_snapshots() as response:
+    def test_streaming_response_delete_disk_snapshot(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.delete_disk_snapshot(
+            "id",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = response.parse()
-            assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_delete_disk_snapshot(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.delete_disk_snapshot(
+                "",
+            )
 
     @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
@@ -476,6 +485,40 @@ class TestDevboxes:
             )
 
     @parametrize
+    def test_method_list_disk_snapshots(self, client: Runloop) -> None:
+        devbox = client.devboxes.list_disk_snapshots()
+        assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    def test_method_list_disk_snapshots_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.list_disk_snapshots(
+            devbox_id="devbox_id",
+            limit=0,
+            starting_after="starting_after",
+        )
+        assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_list_disk_snapshots(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.list_disk_snapshots()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_list_disk_snapshots(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.list_disk_snapshots() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
     def test_method_read_file_contents(self, client: Runloop) -> None:
         devbox = client.devboxes.read_file_contents(
             id="id",
@@ -515,6 +558,48 @@ class TestDevboxes:
             client.devboxes.with_raw_response.read_file_contents(
                 id="",
                 file_path="file_path",
+            )
+
+    @parametrize
+    def test_method_remove_tunnel(self, client: Runloop) -> None:
+        devbox = client.devboxes.remove_tunnel(
+            id="id",
+            port=0,
+        )
+        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_remove_tunnel(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.remove_tunnel(
+            id="id",
+            port=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_remove_tunnel(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.remove_tunnel(
+            id="id",
+            port=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_remove_tunnel(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.remove_tunnel(
+                id="",
+                port=0,
             )
 
     @parametrize
@@ -682,6 +767,7 @@ class TestDevboxes:
     def test_method_upload_file(self, client: Runloop) -> None:
         devbox = client.devboxes.upload_file(
             id="id",
+            path="path",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -689,8 +775,8 @@ class TestDevboxes:
     def test_method_upload_file_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.upload_file(
             id="id",
-            file=b"raw file contents",
             path="path",
+            file=b"raw file contents",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -698,6 +784,7 @@ class TestDevboxes:
     def test_raw_response_upload_file(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.upload_file(
             id="id",
+            path="path",
         )
 
         assert response.is_closed is True
@@ -709,6 +796,7 @@ class TestDevboxes:
     def test_streaming_response_upload_file(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.upload_file(
             id="id",
+            path="path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -723,11 +811,12 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.upload_file(
                 id="",
+                path="path",
             )
 
     @parametrize
-    def test_method_write_file(self, client: Runloop) -> None:
-        devbox = client.devboxes.write_file(
+    def test_method_write_file_contents(self, client: Runloop) -> None:
+        devbox = client.devboxes.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -735,8 +824,8 @@ class TestDevboxes:
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
-    def test_raw_response_write_file(self, client: Runloop) -> None:
-        response = client.devboxes.with_raw_response.write_file(
+    def test_raw_response_write_file_contents(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -748,8 +837,8 @@ class TestDevboxes:
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
-    def test_streaming_response_write_file(self, client: Runloop) -> None:
-        with client.devboxes.with_streaming_response.write_file(
+    def test_streaming_response_write_file_contents(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -763,9 +852,9 @@ class TestDevboxes:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_path_params_write_file(self, client: Runloop) -> None:
+    def test_path_params_write_file_contents(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            client.devboxes.with_raw_response.write_file(
+            client.devboxes.with_raw_response.write_file_contents(
                 id="",
                 contents="contents",
                 file_path="file_path",
@@ -874,16 +963,16 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list()
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(AsyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list(
             limit=0,
             starting_after="starting_after",
-            status="status",
+            status="provisioning",
         )
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(AsyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -892,7 +981,7 @@ class TestAsyncDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = await response.parse()
-        assert_matches_type(DevboxListView, devbox, path=["response"])
+        assert_matches_type(AsyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -901,7 +990,7 @@ class TestAsyncDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = await response.parse()
-            assert_matches_type(DevboxListView, devbox, path=["response"])
+            assert_matches_type(AsyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -986,37 +1075,42 @@ class TestAsyncDevboxes:
             )
 
     @parametrize
-    async def test_method_disk_snapshots(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.disk_snapshots()
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
-
-    @parametrize
-    async def test_method_disk_snapshots_with_all_params(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.disk_snapshots(
-            limit=0,
-            starting_after="starting_after",
+    async def test_method_delete_disk_snapshot(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.delete_disk_snapshot(
+            "id",
         )
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
-    async def test_raw_response_disk_snapshots(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.devboxes.with_raw_response.disk_snapshots()
+    async def test_raw_response_delete_disk_snapshot(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.delete_disk_snapshot(
+            "id",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = await response.parse()
-        assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
-    async def test_streaming_response_disk_snapshots(self, async_client: AsyncRunloop) -> None:
-        async with async_client.devboxes.with_streaming_response.disk_snapshots() as response:
+    async def test_streaming_response_delete_disk_snapshot(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.delete_disk_snapshot(
+            "id",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = await response.parse()
-            assert_matches_type(DevboxSnapshotListView, devbox, path=["response"])
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_delete_disk_snapshot(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.delete_disk_snapshot(
+                "",
+            )
 
     @pytest.mark.skip(reason="prism can't support octet")
     @parametrize
@@ -1217,6 +1311,40 @@ class TestAsyncDevboxes:
             )
 
     @parametrize
+    async def test_method_list_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.list_disk_snapshots()
+        assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    async def test_method_list_disk_snapshots_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.list_disk_snapshots(
+            devbox_id="devbox_id",
+            limit=0,
+            starting_after="starting_after",
+        )
+        assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_list_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.list_disk_snapshots()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_list_disk_snapshots(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.list_disk_snapshots() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
     async def test_method_read_file_contents(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.read_file_contents(
             id="id",
@@ -1256,6 +1384,48 @@ class TestAsyncDevboxes:
             await async_client.devboxes.with_raw_response.read_file_contents(
                 id="",
                 file_path="file_path",
+            )
+
+    @parametrize
+    async def test_method_remove_tunnel(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.remove_tunnel(
+            id="id",
+            port=0,
+        )
+        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.remove_tunnel(
+            id="id",
+            port=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.remove_tunnel(
+            id="id",
+            port=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_remove_tunnel(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.remove_tunnel(
+                id="",
+                port=0,
             )
 
     @parametrize
@@ -1423,6 +1593,7 @@ class TestAsyncDevboxes:
     async def test_method_upload_file(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.upload_file(
             id="id",
+            path="path",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -1430,8 +1601,8 @@ class TestAsyncDevboxes:
     async def test_method_upload_file_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.upload_file(
             id="id",
-            file=b"raw file contents",
             path="path",
+            file=b"raw file contents",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -1439,6 +1610,7 @@ class TestAsyncDevboxes:
     async def test_raw_response_upload_file(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.upload_file(
             id="id",
+            path="path",
         )
 
         assert response.is_closed is True
@@ -1450,6 +1622,7 @@ class TestAsyncDevboxes:
     async def test_streaming_response_upload_file(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.upload_file(
             id="id",
+            path="path",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1464,11 +1637,12 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.upload_file(
                 id="",
+                path="path",
             )
 
     @parametrize
-    async def test_method_write_file(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.write_file(
+    async def test_method_write_file_contents(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -1476,8 +1650,8 @@ class TestAsyncDevboxes:
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
-    async def test_raw_response_write_file(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.devboxes.with_raw_response.write_file(
+    async def test_raw_response_write_file_contents(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -1489,8 +1663,8 @@ class TestAsyncDevboxes:
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
-    async def test_streaming_response_write_file(self, async_client: AsyncRunloop) -> None:
-        async with async_client.devboxes.with_streaming_response.write_file(
+    async def test_streaming_response_write_file_contents(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.write_file_contents(
             id="id",
             contents="contents",
             file_path="file_path",
@@ -1504,9 +1678,9 @@ class TestAsyncDevboxes:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_path_params_write_file(self, async_client: AsyncRunloop) -> None:
+    async def test_path_params_write_file_contents(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            await async_client.devboxes.with_raw_response.write_file(
+            await async_client.devboxes.with_raw_response.write_file_contents(
                 id="",
                 contents="contents",
                 file_path="file_path",

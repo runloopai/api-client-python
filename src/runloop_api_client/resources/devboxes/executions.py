@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
@@ -102,6 +104,7 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
         
@@ -140,21 +143,28 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str,
-        shell_name: str | NotGiven = NOT_GIVEN,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """
-        Asynchronously execute a command on a devbox
+        Execute the given command in the Devbox shell asynchronously and returns the
+        execution that can be used to track the command's progress.
 
         Args:
-          command: The command to execute on the Devbox.
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
 
-          shell_name: Which named shell to run the command in.
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -163,6 +173,8 @@ class ExecutionsResource(SyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -176,7 +188,11 @@ class ExecutionsResource(SyncAPIResource):
                 execution_execute_async_params.ExecutionExecuteAsyncParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -186,21 +202,28 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str,
-        shell_name: str | NotGiven = NOT_GIVEN,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxExecutionDetailView:
         """
-        Synchronously execute a command on a devbox
+        Execute a bash command in the Devbox shell, await the command completion and
+        return the output.
 
         Args:
-          command: The command to execute on the Devbox.
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
 
-          shell_name: Which named shell to run the command in.
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -209,6 +232,8 @@ class ExecutionsResource(SyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -222,45 +247,13 @@ class ExecutionsResource(SyncAPIResource):
                 execution_execute_sync_params.ExecutionExecuteSyncParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=DevboxExecutionDetailView,
-        )
-
-    def kill(
-        self,
-        execution_id: str,
-        *,
-        id: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxAsyncExecutionDetailView:
-        """
-        Kill an asynchronous execution currently running on a devbox
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        if not execution_id:
-            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/executions/{execution_id}/kill",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
         )
 
 
@@ -341,6 +334,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
         
@@ -379,21 +373,28 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
-        shell_name: str | NotGiven = NOT_GIVEN,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """
-        Asynchronously execute a command on a devbox
+        Execute the given command in the Devbox shell asynchronously and returns the
+        execution that can be used to track the command's progress.
 
         Args:
-          command: The command to execute on the Devbox.
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
 
-          shell_name: Which named shell to run the command in.
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -402,6 +403,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -415,7 +418,11 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 execution_execute_async_params.ExecutionExecuteAsyncParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -425,21 +432,28 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
-        shell_name: str | NotGiven = NOT_GIVEN,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxExecutionDetailView:
         """
-        Synchronously execute a command on a devbox
+        Execute a bash command in the Devbox shell, await the command completion and
+        return the output.
 
         Args:
-          command: The command to execute on the Devbox.
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
 
-          shell_name: Which named shell to run the command in.
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -448,6 +462,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
           extra_body: Add additional JSON properties to the request
 
           timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -461,45 +477,13 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 execution_execute_sync_params.ExecutionExecuteSyncParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=DevboxExecutionDetailView,
-        )
-
-    async def kill(
-        self,
-        execution_id: str,
-        *,
-        id: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DevboxAsyncExecutionDetailView:
-        """
-        Kill an asynchronous execution currently running on a devbox
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        if not execution_id:
-            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/executions/{execution_id}/kill",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
         )
 
 
@@ -507,17 +491,11 @@ class ExecutionsResourceWithRawResponse:
     def __init__(self, executions: ExecutionsResource) -> None:
         self._executions = executions
 
-        self.retrieve = to_raw_response_wrapper(
-            executions.retrieve,
-        )
         self.execute_async = to_raw_response_wrapper(
             executions.execute_async,
         )
         self.execute_sync = to_raw_response_wrapper(
             executions.execute_sync,
-        )
-        self.kill = to_raw_response_wrapper(
-            executions.kill,
         )
 
 
@@ -525,17 +503,11 @@ class AsyncExecutionsResourceWithRawResponse:
     def __init__(self, executions: AsyncExecutionsResource) -> None:
         self._executions = executions
 
-        self.retrieve = async_to_raw_response_wrapper(
-            executions.retrieve,
-        )
         self.execute_async = async_to_raw_response_wrapper(
             executions.execute_async,
         )
         self.execute_sync = async_to_raw_response_wrapper(
             executions.execute_sync,
-        )
-        self.kill = async_to_raw_response_wrapper(
-            executions.kill,
         )
 
 
@@ -543,17 +515,11 @@ class ExecutionsResourceWithStreamingResponse:
     def __init__(self, executions: ExecutionsResource) -> None:
         self._executions = executions
 
-        self.retrieve = to_streamed_response_wrapper(
-            executions.retrieve,
-        )
         self.execute_async = to_streamed_response_wrapper(
             executions.execute_async,
         )
         self.execute_sync = to_streamed_response_wrapper(
             executions.execute_sync,
-        )
-        self.kill = to_streamed_response_wrapper(
-            executions.kill,
         )
 
 
@@ -561,15 +527,9 @@ class AsyncExecutionsResourceWithStreamingResponse:
     def __init__(self, executions: AsyncExecutionsResource) -> None:
         self._executions = executions
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            executions.retrieve,
-        )
         self.execute_async = async_to_streamed_response_wrapper(
             executions.execute_async,
         )
         self.execute_sync = async_to_streamed_response_wrapper(
             executions.execute_sync,
-        )
-        self.kill = async_to_streamed_response_wrapper(
-            executions.kill,
         )
