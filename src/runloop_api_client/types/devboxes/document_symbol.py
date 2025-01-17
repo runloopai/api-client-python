@@ -39,7 +39,7 @@ class DocumentSymbol(BaseModel):
     e.g the name of a function. Must be contained by the `range`.
     """
 
-    children: Optional[List[DocumentSymbol]] = None
+    children: Optional[List["DocumentSymbol"]] = None
     """Children of this symbol, e.g. properties of a class."""
 
     deprecated: Optional[bool] = None
