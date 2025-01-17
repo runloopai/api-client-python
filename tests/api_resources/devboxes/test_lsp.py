@@ -129,7 +129,7 @@ class TestLsp:
                             },
                         },
                         "code": 0,
-                        "code_description": {"href": "href"},
+                        "code_description": {"href": "string"},
                         "data": {},
                         "related_information": [
                             {
@@ -144,7 +144,7 @@ class TestLsp:
                                             "line": 0,
                                         },
                                     },
-                                    "uri": "uri",
+                                    "uri": "string",
                                 },
                                 "message": "message",
                             }
@@ -208,7 +208,7 @@ class TestLsp:
     def test_method_diagnostics(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(DiagnosticsResponse, lsp, path=["response"])
 
@@ -216,7 +216,7 @@ class TestLsp:
     def test_raw_response_diagnostics(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -228,7 +228,7 @@ class TestLsp:
     def test_streaming_response_diagnostics(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -243,14 +243,14 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.diagnostics(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
     def test_method_document_symbols(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(object, lsp, path=["response"])
 
@@ -258,7 +258,7 @@ class TestLsp:
     def test_raw_response_document_symbols(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -270,7 +270,7 @@ class TestLsp:
     def test_streaming_response_document_symbols(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -285,14 +285,14 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.document_symbols(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
     def test_method_file(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.file(
             id="id",
-            path="path",
+            path="string",
         )
         assert_matches_type(FileContentsResponse, lsp, path=["response"])
 
@@ -300,7 +300,7 @@ class TestLsp:
     def test_raw_response_file(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.file(
             id="id",
-            path="path",
+            path="string",
         )
 
         assert response.is_closed is True
@@ -312,7 +312,7 @@ class TestLsp:
     def test_streaming_response_file(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.file(
             id="id",
-            path="path",
+            path="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -327,7 +327,7 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.file(
                 id="",
-                path="path",
+                path="string",
             )
 
     @parametrize
@@ -422,7 +422,7 @@ class TestLsp:
     def test_method_formatting(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(object, lsp, path=["response"])
 
@@ -430,7 +430,7 @@ class TestLsp:
     def test_raw_response_formatting(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -442,7 +442,7 @@ class TestLsp:
     def test_streaming_response_formatting(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -457,7 +457,7 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.formatting(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
@@ -583,7 +583,7 @@ class TestLsp:
         lsp = client.devboxes.lsp.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
@@ -592,7 +592,7 @@ class TestLsp:
         lsp = client.devboxes.lsp.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
             symbol_type="function",
         )
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
@@ -602,7 +602,7 @@ class TestLsp:
         response = client.devboxes.lsp.with_raw_response.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -615,7 +615,7 @@ class TestLsp:
         with client.devboxes.lsp.with_streaming_response.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -631,7 +631,7 @@ class TestLsp:
             client.devboxes.lsp.with_raw_response.get_code_segment_info(
                 id="",
                 symbol_name="symbolName",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
@@ -776,7 +776,7 @@ class TestLsp:
     def test_method_set_watch_directory(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         )
         assert_matches_type(str, lsp, path=["response"])
 
@@ -784,7 +784,7 @@ class TestLsp:
     def test_raw_response_set_watch_directory(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         )
 
         assert response.is_closed is True
@@ -796,7 +796,7 @@ class TestLsp:
     def test_streaming_response_set_watch_directory(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -811,7 +811,7 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.set_watch_directory(
                 id="",
-                path="path",
+                path="string",
             )
 
 
@@ -921,7 +921,7 @@ class TestAsyncLsp:
                             },
                         },
                         "code": 0,
-                        "code_description": {"href": "href"},
+                        "code_description": {"href": "string"},
                         "data": {},
                         "related_information": [
                             {
@@ -936,7 +936,7 @@ class TestAsyncLsp:
                                             "line": 0,
                                         },
                                     },
-                                    "uri": "uri",
+                                    "uri": "string",
                                 },
                                 "message": "message",
                             }
@@ -1000,7 +1000,7 @@ class TestAsyncLsp:
     async def test_method_diagnostics(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(DiagnosticsResponse, lsp, path=["response"])
 
@@ -1008,7 +1008,7 @@ class TestAsyncLsp:
     async def test_raw_response_diagnostics(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -1020,7 +1020,7 @@ class TestAsyncLsp:
     async def test_streaming_response_diagnostics(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.diagnostics(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1035,14 +1035,14 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.diagnostics(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
     async def test_method_document_symbols(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(object, lsp, path=["response"])
 
@@ -1050,7 +1050,7 @@ class TestAsyncLsp:
     async def test_raw_response_document_symbols(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -1062,7 +1062,7 @@ class TestAsyncLsp:
     async def test_streaming_response_document_symbols(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.document_symbols(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1077,14 +1077,14 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.document_symbols(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
     async def test_method_file(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.file(
             id="id",
-            path="path",
+            path="string",
         )
         assert_matches_type(FileContentsResponse, lsp, path=["response"])
 
@@ -1092,7 +1092,7 @@ class TestAsyncLsp:
     async def test_raw_response_file(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.file(
             id="id",
-            path="path",
+            path="string",
         )
 
         assert response.is_closed is True
@@ -1104,7 +1104,7 @@ class TestAsyncLsp:
     async def test_streaming_response_file(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.file(
             id="id",
-            path="path",
+            path="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1119,7 +1119,7 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.file(
                 id="",
-                path="path",
+                path="string",
             )
 
     @parametrize
@@ -1214,7 +1214,7 @@ class TestAsyncLsp:
     async def test_method_formatting(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(object, lsp, path=["response"])
 
@@ -1222,7 +1222,7 @@ class TestAsyncLsp:
     async def test_raw_response_formatting(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -1234,7 +1234,7 @@ class TestAsyncLsp:
     async def test_streaming_response_formatting(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.formatting(
             id="id",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1249,7 +1249,7 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.formatting(
                 id="",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
@@ -1375,7 +1375,7 @@ class TestAsyncLsp:
         lsp = await async_client.devboxes.lsp.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         )
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
@@ -1384,7 +1384,7 @@ class TestAsyncLsp:
         lsp = await async_client.devboxes.lsp.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
             symbol_type="function",
         )
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
@@ -1394,7 +1394,7 @@ class TestAsyncLsp:
         response = await async_client.devboxes.lsp.with_raw_response.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         )
 
         assert response.is_closed is True
@@ -1407,7 +1407,7 @@ class TestAsyncLsp:
         async with async_client.devboxes.lsp.with_streaming_response.get_code_segment_info(
             id="id",
             symbol_name="symbolName",
-            uri="uri",
+            uri="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1423,7 +1423,7 @@ class TestAsyncLsp:
             await async_client.devboxes.lsp.with_raw_response.get_code_segment_info(
                 id="",
                 symbol_name="symbolName",
-                uri="uri",
+                uri="string",
             )
 
     @parametrize
@@ -1568,7 +1568,7 @@ class TestAsyncLsp:
     async def test_method_set_watch_directory(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         )
         assert_matches_type(str, lsp, path=["response"])
 
@@ -1576,7 +1576,7 @@ class TestAsyncLsp:
     async def test_raw_response_set_watch_directory(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         )
 
         assert response.is_closed is True
@@ -1588,7 +1588,7 @@ class TestAsyncLsp:
     async def test_streaming_response_set_watch_directory(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.set_watch_directory(
             id="id",
-            path="path",
+            path="string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1603,5 +1603,5 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.set_watch_directory(
                 id="",
-                path="path",
+                path="string",
             )
