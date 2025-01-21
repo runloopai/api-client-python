@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.13.1 (2025-01-21)
+
+Full Changelog: [v0.13.0...v0.13.1](https://github.com/runloopai/api-client-python/compare/v0.13.0...v0.13.1)
+
+### Bug Fixes
+
+* **tests:** make test_get_platform less flaky ([#500](https://github.com/runloopai/api-client-python/issues/500)) ([394d017](https://github.com/runloopai/api-client-python/commit/394d0172530ea1284173d3fd04a3a8a1f1dd78f9))
+
+
+### Chores
+
+* **internal:** codegen related update ([#497](https://github.com/runloopai/api-client-python/issues/497)) ([207a88e](https://github.com/runloopai/api-client-python/commit/207a88ed4bed2b87e10d15c49002661f1cf84f1c))
+
+
+### Documentation
+
+* **raw responses:** fix duplicate `the` ([#499](https://github.com/runloopai/api-client-python/issues/499)) ([80e393c](https://github.com/runloopai/api-client-python/commit/80e393c1c87319b6886cef1c2806c2ce8e467a54))
+
 ## 0.13.0 (2025-01-15)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/runloopai/api-client-python/compare/v0.12.0...v0.13.0)
