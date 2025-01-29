@@ -12,6 +12,7 @@ Types:
 from runloop_api_client.types import (
     BenchmarkCreateParameters,
     BenchmarkListView,
+    BenchmarkRunListView,
     BenchmarkRunView,
     BenchmarkView,
     StartBenchmarkRunParameters,
@@ -27,16 +28,10 @@ Methods:
 
 ## Runs
 
-Types:
-
-```python
-from runloop_api_client.types.benchmarks import RunListResponse
-```
-
 Methods:
 
 - <code title="get /v1/benchmarks/runs/{id}">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
-- <code title="get /v1/benchmarks/runs">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmarks/run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmarks/run_list_response.py">RunListResponse</a></code>
+- <code title="get /v1/benchmarks/runs">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmarks/run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_list_view.py">BenchmarkRunListView</a></code>
 - <code title="post /v1/benchmarks/runs/{id}/complete">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 
 # Blueprints
@@ -215,7 +210,6 @@ Types:
 ```python
 from runloop_api_client.types import (
     InputContextParameters,
-    RepositoryConnectionListView,
     ScenarioCreateParameters,
     ScenarioEnvironmentParameters,
     ScenarioListView,
