@@ -8,6 +8,22 @@ from .devboxes import (
     DevboxesResourceWithStreamingResponse,
     AsyncDevboxesResourceWithStreamingResponse,
 )
+from .scenarios import (
+    ScenariosResource,
+    AsyncScenariosResource,
+    ScenariosResourceWithRawResponse,
+    AsyncScenariosResourceWithRawResponse,
+    ScenariosResourceWithStreamingResponse,
+    AsyncScenariosResourceWithStreamingResponse,
+)
+from .benchmarks import (
+    BenchmarksResource,
+    AsyncBenchmarksResource,
+    BenchmarksResourceWithRawResponse,
+    AsyncBenchmarksResourceWithRawResponse,
+    BenchmarksResourceWithStreamingResponse,
+    AsyncBenchmarksResourceWithStreamingResponse,
+)
 from .blueprints import (
     BlueprintsResource,
     AsyncBlueprintsResource,
@@ -26,6 +42,12 @@ from .repositories import (
 )
 
 __all__ = [
+    "BenchmarksResource",
+    "AsyncBenchmarksResource",
+    "BenchmarksResourceWithRawResponse",
+    "AsyncBenchmarksResourceWithRawResponse",
+    "BenchmarksResourceWithStreamingResponse",
+    "AsyncBenchmarksResourceWithStreamingResponse",
     "BlueprintsResource",
     "AsyncBlueprintsResource",
     "BlueprintsResourceWithRawResponse",
@@ -38,6 +60,12 @@ __all__ = [
     "AsyncDevboxesResourceWithRawResponse",
     "DevboxesResourceWithStreamingResponse",
     "AsyncDevboxesResourceWithStreamingResponse",
+    "ScenariosResource",
+    "AsyncScenariosResource",
+    "ScenariosResourceWithRawResponse",
+    "AsyncScenariosResourceWithRawResponse",
+    "ScenariosResourceWithStreamingResponse",
+    "AsyncScenariosResourceWithStreamingResponse",
     "RepositoriesResource",
     "AsyncRepositoriesResource",
     "RepositoriesResourceWithRawResponse",
