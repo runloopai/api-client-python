@@ -1,13 +1,45 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 
 from .._models import BaseModel
 from .input_context_parameters import InputContextParameters
-from .scoring_contract_parameters import ScoringContractParameters
-from .scenario_environment_parameters import ScenarioEnvironmentParameters
 
-__all__ = ["ScenarioView"]
+__all__ = ["ScenarioView", "ScoringContract", "ScoringContractScoringFunctionParameter", "Environment"]
+
+
+class ScoringContractScoringFunctionParameter(BaseModel):
+    name: str
+    """Name of scoring function."""
+
+    weight: float
+    """Wight to apply to scoring function score.
+
+    Weights of all scoring functions should sum to 1.0.
+    """
+
+    bash_script: Optional[str] = None
+    """
+    A single bash script that sets up the environment, scores, and prints the final
+    score to standard out. Score should be an integer between 0 and 100, and look
+    like "score=[0..100].
+    """
+
+
+class ScoringContract(BaseModel):
+    scoring_function_parameters: List[ScoringContractScoringFunctionParameter]
+    """A list of scoring functions used to evaluate the Scenario."""
+
+
+class Environment(BaseModel):
+    blueprint_id: Optional[str] = None
+    """Use the blueprint with matching ID."""
+
+    prebuilt_id: Optional[str] = None
+    """Use the prebuilt with matching ID."""
+
+    snapshot_id: Optional[str] = None
+    """Use the snapshot with matching ID."""
 
 
 class ScenarioView(BaseModel):
@@ -20,8 +52,8 @@ class ScenarioView(BaseModel):
     name: str
     """The name of the Scenario."""
 
-    scoring_contract: ScoringContractParameters
+    scoring_contract: ScoringContract
     """The scoring contract for the Scenario."""
 
-    environment: Optional[ScenarioEnvironmentParameters] = None
+    environment: Optional[Environment] = None
     """The Environment in which the Scenario is run."""
