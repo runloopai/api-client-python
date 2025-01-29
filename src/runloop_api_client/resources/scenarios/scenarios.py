@@ -37,8 +37,6 @@ from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.scenario_list_view import ScenarioListView
 from ...types.input_context_parameters_param import InputContextParametersParam
-from ...types.scoring_contract_parameters_param import ScoringContractParametersParam
-from ...types.scenario_environment_parameters_param import ScenarioEnvironmentParametersParam
 
 __all__ = ["ScenariosResource", "AsyncScenariosResource"]
 
@@ -72,8 +70,8 @@ class ScenariosResource(SyncAPIResource):
         *,
         input_context: InputContextParametersParam,
         name: str,
-        scoring_contract: ScoringContractParametersParam,
-        environment_parameters: Optional[ScenarioEnvironmentParametersParam] | NotGiven = NOT_GIVEN,
+        scoring_contract: scenario_create_params.ScoringContract,
+        environment_parameters: Optional[scenario_create_params.EnvironmentParameters] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -290,8 +288,8 @@ class AsyncScenariosResource(AsyncAPIResource):
         *,
         input_context: InputContextParametersParam,
         name: str,
-        scoring_contract: ScoringContractParametersParam,
-        environment_parameters: Optional[ScenarioEnvironmentParametersParam] | NotGiven = NOT_GIVEN,
+        scoring_contract: scenario_create_params.ScoringContract,
+        environment_parameters: Optional[scenario_create_params.EnvironmentParameters] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

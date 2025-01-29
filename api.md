@@ -211,14 +211,11 @@ Types:
 from runloop_api_client.types import (
     InputContextParameters,
     ScenarioCreateParameters,
-    ScenarioEnvironmentParameters,
     ScenarioListView,
     ScenarioRunListView,
     ScenarioRunView,
     ScenarioView,
-    ScoringContractParameters,
     ScoringContractResultView,
-    ScoringFunctionParameters,
     ScoringFunctionResultView,
     StartScenarioRunParameters,
 )
