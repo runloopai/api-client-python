@@ -33,13 +33,17 @@ from ._base_client import (
     AsyncAPIClient,
 )
 from .resources.devboxes import devboxes
+from .resources.scenarios import scenarios
+from .resources.benchmarks import benchmarks
 
 __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Runloop", "AsyncRunloop", "Client", "AsyncClient"]
 
 
 class Runloop(SyncAPIClient):
+    benchmarks: benchmarks.BenchmarksResource
     blueprints: blueprints.BlueprintsResource
     devboxes: devboxes.DevboxesResource
+    scenarios: scenarios.ScenariosResource
     repositories: repositories.RepositoriesResource
     with_raw_response: RunloopWithRawResponse
     with_streaming_response: RunloopWithStreamedResponse
@@ -100,8 +104,10 @@ class Runloop(SyncAPIClient):
 
         self._idempotency_header = "x-request-id"
 
+        self.benchmarks = benchmarks.BenchmarksResource(self)
         self.blueprints = blueprints.BlueprintsResource(self)
         self.devboxes = devboxes.DevboxesResource(self)
+        self.scenarios = scenarios.ScenariosResource(self)
         self.repositories = repositories.RepositoriesResource(self)
         self.with_raw_response = RunloopWithRawResponse(self)
         self.with_streaming_response = RunloopWithStreamedResponse(self)
@@ -212,8 +218,10 @@ class Runloop(SyncAPIClient):
 
 
 class AsyncRunloop(AsyncAPIClient):
+    benchmarks: benchmarks.AsyncBenchmarksResource
     blueprints: blueprints.AsyncBlueprintsResource
     devboxes: devboxes.AsyncDevboxesResource
+    scenarios: scenarios.AsyncScenariosResource
     repositories: repositories.AsyncRepositoriesResource
     with_raw_response: AsyncRunloopWithRawResponse
     with_streaming_response: AsyncRunloopWithStreamedResponse
@@ -274,8 +282,10 @@ class AsyncRunloop(AsyncAPIClient):
 
         self._idempotency_header = "x-request-id"
 
+        self.benchmarks = benchmarks.AsyncBenchmarksResource(self)
         self.blueprints = blueprints.AsyncBlueprintsResource(self)
         self.devboxes = devboxes.AsyncDevboxesResource(self)
+        self.scenarios = scenarios.AsyncScenariosResource(self)
         self.repositories = repositories.AsyncRepositoriesResource(self)
         self.with_raw_response = AsyncRunloopWithRawResponse(self)
         self.with_streaming_response = AsyncRunloopWithStreamedResponse(self)
@@ -387,29 +397,37 @@ class AsyncRunloop(AsyncAPIClient):
 
 class RunloopWithRawResponse:
     def __init__(self, client: Runloop) -> None:
+        self.benchmarks = benchmarks.BenchmarksResourceWithRawResponse(client.benchmarks)
         self.blueprints = blueprints.BlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithRawResponse(client.devboxes)
+        self.scenarios = scenarios.ScenariosResourceWithRawResponse(client.scenarios)
         self.repositories = repositories.RepositoriesResourceWithRawResponse(client.repositories)
 
 
 class AsyncRunloopWithRawResponse:
     def __init__(self, client: AsyncRunloop) -> None:
+        self.benchmarks = benchmarks.AsyncBenchmarksResourceWithRawResponse(client.benchmarks)
         self.blueprints = blueprints.AsyncBlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithRawResponse(client.devboxes)
+        self.scenarios = scenarios.AsyncScenariosResourceWithRawResponse(client.scenarios)
         self.repositories = repositories.AsyncRepositoriesResourceWithRawResponse(client.repositories)
 
 
 class RunloopWithStreamedResponse:
     def __init__(self, client: Runloop) -> None:
+        self.benchmarks = benchmarks.BenchmarksResourceWithStreamingResponse(client.benchmarks)
         self.blueprints = blueprints.BlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithStreamingResponse(client.devboxes)
+        self.scenarios = scenarios.ScenariosResourceWithStreamingResponse(client.scenarios)
         self.repositories = repositories.RepositoriesResourceWithStreamingResponse(client.repositories)
 
 
 class AsyncRunloopWithStreamedResponse:
     def __init__(self, client: AsyncRunloop) -> None:
+        self.benchmarks = benchmarks.AsyncBenchmarksResourceWithStreamingResponse(client.benchmarks)
         self.blueprints = blueprints.AsyncBlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithStreamingResponse(client.devboxes)
+        self.scenarios = scenarios.AsyncScenariosResourceWithStreamingResponse(client.scenarios)
         self.repositories = repositories.AsyncRepositoriesResourceWithStreamingResponse(client.repositories)
 
 
