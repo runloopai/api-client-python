@@ -20,7 +20,7 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.benchmarks import run_list_params
 from ...types.benchmark_run_view import BenchmarkRunView
-from ...types.benchmarks.run_list_response import RunListResponse
+from ...types.benchmark_run_list_view import BenchmarkRunListView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
 
@@ -89,7 +89,7 @@ class RunsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RunListResponse:
+    ) -> BenchmarkRunListView:
         """
         List all BenchmarkRuns matching filter.
 
@@ -121,7 +121,7 @@ class RunsResource(SyncAPIResource):
                     run_list_params.RunListParams,
                 ),
             ),
-            cast_to=RunListResponse,
+            cast_to=BenchmarkRunListView,
         )
 
     def complete(
@@ -229,7 +229,7 @@ class AsyncRunsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RunListResponse:
+    ) -> BenchmarkRunListView:
         """
         List all BenchmarkRuns matching filter.
 
@@ -261,7 +261,7 @@ class AsyncRunsResource(AsyncAPIResource):
                     run_list_params.RunListParams,
                 ),
             ),
-            cast_to=RunListResponse,
+            cast_to=BenchmarkRunListView,
         )
 
     async def complete(
