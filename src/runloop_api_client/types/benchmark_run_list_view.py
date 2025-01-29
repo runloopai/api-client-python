@@ -2,13 +2,13 @@
 
 from typing import List
 
-from ..._models import BaseModel
-from ..benchmark_run_view import BenchmarkRunView
+from .._models import BaseModel
+from .benchmark_run_view import BenchmarkRunView
 
-__all__ = ["RunListResponse"]
+__all__ = ["BenchmarkRunListView"]
 
 
-class RunListResponse(BaseModel):
+class BenchmarkRunListView(BaseModel):
     has_more: bool
 
     runs: List[BenchmarkRunView]
