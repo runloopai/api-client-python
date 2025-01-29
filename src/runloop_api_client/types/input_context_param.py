@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-__all__ = ["InputContextParametersParam"]
+__all__ = ["InputContextParam"]
 
 
-class InputContextParametersParam(TypedDict, total=False):
+class InputContextParam(TypedDict, total=False):
     problem_statement: Required[str]
     """The problem statement for the Scenario."""
