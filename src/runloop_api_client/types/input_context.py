@@ -3,9 +3,9 @@
 
 from .._models import BaseModel
 
-__all__ = ["InputContextParameters"]
+__all__ = ["InputContext"]
 
 
-class InputContextParameters(BaseModel):
+class InputContext(BaseModel):
     problem_statement: str
     """The problem statement for the Scenario."""
