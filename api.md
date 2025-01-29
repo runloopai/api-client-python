@@ -209,13 +209,16 @@ Types:
 
 ```python
 from runloop_api_client.types import (
-    InputContextParameters,
+    InputContext,
     ScenarioCreateParameters,
+    ScenarioEnvironment,
     ScenarioListView,
     ScenarioRunListView,
     ScenarioRunView,
     ScenarioView,
+    ScoringContract,
     ScoringContractResultView,
+    ScoringFunction,
     ScoringFunctionResultView,
     StartScenarioRunParameters,
 )

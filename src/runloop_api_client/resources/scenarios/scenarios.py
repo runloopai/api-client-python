@@ -36,7 +36,9 @@ from ..._base_client import make_request_options
 from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.scenario_list_view import ScenarioListView
-from ...types.input_context_parameters_param import InputContextParametersParam
+from ...types.input_context_param import InputContextParam
+from ...types.scoring_contract_param import ScoringContractParam
+from ...types.scenario_environment_param import ScenarioEnvironmentParam
 
 __all__ = ["ScenariosResource", "AsyncScenariosResource"]
 
@@ -68,10 +70,10 @@ class ScenariosResource(SyncAPIResource):
     def create(
         self,
         *,
-        input_context: InputContextParametersParam,
+        input_context: InputContextParam,
         name: str,
-        scoring_contract: scenario_create_params.ScoringContract,
-        environment_parameters: Optional[scenario_create_params.EnvironmentParameters] | NotGiven = NOT_GIVEN,
+        scoring_contract: ScoringContractParam,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -286,10 +288,10 @@ class AsyncScenariosResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        input_context: InputContextParametersParam,
+        input_context: InputContextParam,
         name: str,
-        scoring_contract: scenario_create_params.ScoringContract,
-        environment_parameters: Optional[scenario_create_params.EnvironmentParameters] | NotGiven = NOT_GIVEN,
+        scoring_contract: ScoringContractParam,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
