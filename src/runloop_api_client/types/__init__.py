@@ -30,6 +30,7 @@ from .repository_list_params import RepositoryListParams as RepositoryListParams
 from .scenario_create_params import ScenarioCreateParams as ScenarioCreateParams
 from .scenario_run_list_view import ScenarioRunListView as ScenarioRunListView
 from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreateParams
+from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListView
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
 from .input_context_parameters import InputContextParameters as InputContextParameters
