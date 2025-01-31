@@ -15,8 +15,14 @@ class BenchmarkRunView(BaseModel):
     benchmark_id: str
     """The ID of the Benchmark."""
 
+    start_time_ms: int
+    """The time the benchmark run execution started (Unix timestamp milliseconds)."""
+
     state: Literal["running", "completed"]
     """The state of the BenchmarkRun."""
+
+    duration_ms: Optional[int] = None
+    """The duration for the BenchmarkRun to complete."""
 
     name: Optional[str] = None
     """The name of the BenchmarkRun."""

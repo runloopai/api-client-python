@@ -30,6 +30,15 @@ class TestRepositories:
         assert_matches_type(RepositoryConnectionView, repository, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Runloop) -> None:
+        repository = client.repositories.create(
+            name="name",
+            owner="owner",
+            blueprint_id="blueprint_id",
+        )
+        assert_matches_type(RepositoryConnectionView, repository, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.repositories.with_raw_response.create(
             name="name",
@@ -102,6 +111,8 @@ class TestRepositories:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         repository = client.repositories.list(
             limit=0,
+            name="name",
+            owner="owner",
             starting_after="starting_after",
         )
         assert_matches_type(SyncRepositoriesCursorIDPage[RepositoryConnectionView], repository, path=["response"])
@@ -215,6 +226,15 @@ class TestAsyncRepositories:
         assert_matches_type(RepositoryConnectionView, repository, path=["response"])
 
     @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
+        repository = await async_client.repositories.create(
+            name="name",
+            owner="owner",
+            blueprint_id="blueprint_id",
+        )
+        assert_matches_type(RepositoryConnectionView, repository, path=["response"])
+
+    @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.repositories.with_raw_response.create(
             name="name",
@@ -287,6 +307,8 @@ class TestAsyncRepositories:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         repository = await async_client.repositories.list(
             limit=0,
+            name="name",
+            owner="owner",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncRepositoriesCursorIDPage[RepositoryConnectionView], repository, path=["response"])

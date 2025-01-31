@@ -11,5 +11,11 @@ class RepositoryListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20."""
 
+    name: str
+    """Filter by repository name"""
+
+    owner: str
+    """Filter by repository owner"""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
