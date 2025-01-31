@@ -11,7 +11,7 @@ class RunListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20."""
 
-    scenario_id: bool
+    scenario_id: str
     """Filter runs associated to Scenario given ID"""
 
     starting_after: str
