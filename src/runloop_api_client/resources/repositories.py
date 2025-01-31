@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
 from ..types import repository_list_params, repository_create_params
@@ -51,6 +53,7 @@ class RepositoriesResource(SyncAPIResource):
         *,
         name: str,
         owner: str,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -68,6 +71,8 @@ class RepositoriesResource(SyncAPIResource):
 
           owner: Account owner of the repository.
 
+          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -84,6 +89,7 @@ class RepositoriesResource(SyncAPIResource):
                 {
                     "name": name,
                     "owner": owner,
+                    "blueprint_id": blueprint_id,
                 },
                 repository_create_params.RepositoryCreateParams,
             ),
@@ -110,7 +116,7 @@ class RepositoriesResource(SyncAPIResource):
     ) -> RepositoryConnectionView:
         """
         Get Repository Connection details including latest inspection status and
-        generated respository insights.
+        generated repository insights.
 
         Args:
           extra_headers: Send extra headers
@@ -135,6 +141,8 @@ class RepositoriesResource(SyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        owner: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -148,6 +156,10 @@ class RepositoriesResource(SyncAPIResource):
 
         Args:
           limit: The limit of items to return. Default is 20.
+
+          name: Filter by repository name
+
+          owner: Filter by repository owner
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -170,6 +182,8 @@ class RepositoriesResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
+                        "owner": owner,
                         "starting_after": starting_after,
                     },
                     repository_list_params.RepositoryListParams,
@@ -279,6 +293,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         *,
         name: str,
         owner: str,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -296,6 +311,8 @@ class AsyncRepositoriesResource(AsyncAPIResource):
 
           owner: Account owner of the repository.
 
+          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -312,6 +329,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
                 {
                     "name": name,
                     "owner": owner,
+                    "blueprint_id": blueprint_id,
                 },
                 repository_create_params.RepositoryCreateParams,
             ),
@@ -338,7 +356,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
     ) -> RepositoryConnectionView:
         """
         Get Repository Connection details including latest inspection status and
-        generated respository insights.
+        generated repository insights.
 
         Args:
           extra_headers: Send extra headers
@@ -363,6 +381,8 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        owner: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -376,6 +396,10 @@ class AsyncRepositoriesResource(AsyncAPIResource):
 
         Args:
           limit: The limit of items to return. Default is 20.
+
+          name: Filter by repository name
+
+          owner: Filter by repository owner
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -398,6 +422,8 @@ class AsyncRepositoriesResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
+                        "owner": owner,
                         "starting_after": starting_after,
                     },
                     repository_list_params.RepositoryListParams,

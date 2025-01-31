@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Required, TypedDict
 
 __all__ = ["RepositoryCreateParams"]
@@ -13,3 +14,6 @@ class RepositoryCreateParams(TypedDict, total=False):
 
     owner: Required[str]
     """Account owner of the repository."""
+
+    blueprint_id: Optional[str]
+    """ID of blueprint to use as base for resulting RepositoryVersion blueprint."""
