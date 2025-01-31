@@ -81,6 +81,7 @@ class RunsResource(SyncAPIResource):
     def list(
         self,
         *,
+        benchmark_id: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -94,6 +95,8 @@ class RunsResource(SyncAPIResource):
         List all BenchmarkRuns matching filter.
 
         Args:
+          benchmark_id: The Benchmark ID to filter by.
+
           limit: The limit of items to return. Default is 20.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -115,6 +118,7 @@ class RunsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "benchmark_id": benchmark_id,
                         "limit": limit,
                         "starting_after": starting_after,
                     },
@@ -221,6 +225,7 @@ class AsyncRunsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        benchmark_id: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -234,6 +239,8 @@ class AsyncRunsResource(AsyncAPIResource):
         List all BenchmarkRuns matching filter.
 
         Args:
+          benchmark_id: The Benchmark ID to filter by.
+
           limit: The limit of items to return. Default is 20.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -255,6 +262,7 @@ class AsyncRunsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "benchmark_id": benchmark_id,
                         "limit": limit,
                         "starting_after": starting_after,
                     },

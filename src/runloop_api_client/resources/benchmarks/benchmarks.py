@@ -147,6 +147,7 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        public: bool | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -160,6 +161,9 @@ class BenchmarksResource(SyncAPIResource):
 
         Args:
           limit: The limit of items to return. Default is 20.
+
+          public: List public benchmarks, e.g. SWE-bench. Defaults to false, i.e. only
+              user-defined benchmarks are listed.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -181,6 +185,7 @@ class BenchmarksResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "public": public,
                         "starting_after": starting_after,
                     },
                     benchmark_list_params.BenchmarkListParams,
@@ -351,6 +356,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        public: bool | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -364,6 +370,9 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
         Args:
           limit: The limit of items to return. Default is 20.
+
+          public: List public benchmarks, e.g. SWE-bench. Defaults to false, i.e. only
+              user-defined benchmarks are listed.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -385,6 +394,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "limit": limit,
+                        "public": public,
                         "starting_after": starting_after,
                     },
                     benchmark_list_params.BenchmarkListParams,
