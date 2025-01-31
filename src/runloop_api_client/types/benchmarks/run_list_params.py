@@ -8,6 +8,9 @@ __all__ = ["RunListParams"]
 
 
 class RunListParams(TypedDict, total=False):
+    benchmark_id: str
+    """The Benchmark ID to filter by."""
+
     limit: int
     """The limit of items to return. Default is 20."""
 

@@ -63,6 +63,7 @@ class TestRuns:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         run = client.benchmarks.runs.list(
+            benchmark_id="benchmark_id",
             limit=0,
             starting_after="starting_after",
         )
@@ -176,6 +177,7 @@ class TestAsyncRuns:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         run = await async_client.benchmarks.runs.list(
+            benchmark_id="benchmark_id",
             limit=0,
             starting_after="starting_after",
         )

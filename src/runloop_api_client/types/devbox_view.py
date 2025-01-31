@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -12,6 +12,13 @@ __all__ = ["DevboxView"]
 class DevboxView(BaseModel):
     id: str
     """The ID of the Devbox."""
+
+    capabilities: List[Literal["unknown", "computer_usage", "browser_usage"]]
+    """A list of capability groups this devbox has access to.
+
+    This allows devboxes to be compatible with certain tools sets like computer
+    usage APIs.
+    """
 
     create_time_ms: int
     """Creation time of the Devbox (Unix timestamp milliseconds)."""

@@ -64,6 +64,7 @@ class TestRuns:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         run = client.scenarios.runs.list(
             limit=0,
+            scenario_id=True,
             starting_after="starting_after",
         )
         assert_matches_type(ScenarioRunListView, run, path=["response"])
@@ -215,6 +216,7 @@ class TestAsyncRuns:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         run = await async_client.scenarios.runs.list(
             limit=0,
+            scenario_id=True,
             starting_after="starting_after",
         )
         assert_matches_type(ScenarioRunListView, run, path=["response"])

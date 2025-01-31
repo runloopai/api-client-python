@@ -20,3 +20,9 @@ class BenchmarkRunView(BaseModel):
 
     name: Optional[str] = None
     """The name of the BenchmarkRun."""
+
+    score: Optional[float] = None
+    """The final score across the BenchmarkRun, present once completed.
+
+    Calculated as sum of scenario scores / number of scenario runs.
+    """
