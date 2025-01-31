@@ -33,3 +33,6 @@ class ScenarioRunView(BaseModel):
 
     scoring_contract_result: Optional[ScoringContractResultView] = None
     """The input context for the Scenario."""
+
+    start_time_ms: Optional[int] = None
+    """The time that the scenario started"""
