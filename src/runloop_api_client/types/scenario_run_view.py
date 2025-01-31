@@ -19,7 +19,7 @@ class ScenarioRunView(BaseModel):
     scenario_id: str
     """ID of the Scenario that has been run."""
 
-    state: Literal["running", "scoring", "completed", "canceled", "timeout", "failed"]
+    state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
     """The state of the ScenarioRun."""
 
     benchmark_run_id: Optional[str] = None
@@ -27,6 +27,9 @@ class ScenarioRunView(BaseModel):
 
     duration_ms: Optional[int] = None
     """Duration scenario took to run."""
+
+    name: Optional[str] = None
+    """Optional name of ScenarioRun."""
 
     scoring_contract_result: Optional[ScoringContractResultView] = None
     """The input context for the Scenario."""
