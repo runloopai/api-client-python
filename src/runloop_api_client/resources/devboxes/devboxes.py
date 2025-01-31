@@ -44,7 +44,23 @@ from ..._utils import (
     deepcopy_minimal,
     async_maybe_transform,
 )
+from .browsers import (
+    BrowsersResource,
+    AsyncBrowsersResource,
+    BrowsersResourceWithRawResponse,
+    AsyncBrowsersResourceWithRawResponse,
+    BrowsersResourceWithStreamingResponse,
+    AsyncBrowsersResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
+from .computers import (
+    ComputersResource,
+    AsyncComputersResource,
+    ComputersResourceWithRawResponse,
+    AsyncComputersResourceWithRawResponse,
+    ComputersResourceWithStreamingResponse,
+    AsyncComputersResourceWithStreamingResponse,
+)
 from .executions import (
     ExecutionsResource,
     AsyncExecutionsResource,
@@ -88,6 +104,14 @@ __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
 
 class DevboxesResource(SyncAPIResource):
+    @cached_property
+    def browsers(self) -> BrowsersResource:
+        return BrowsersResource(self._client)
+
+    @cached_property
+    def computers(self) -> ComputersResource:
+        return ComputersResource(self._client)
+
     @cached_property
     def lsp(self) -> LspResource:
         return LspResource(self._client)
@@ -1085,6 +1109,14 @@ class DevboxesResource(SyncAPIResource):
 
 
 class AsyncDevboxesResource(AsyncAPIResource):
+    @cached_property
+    def browsers(self) -> AsyncBrowsersResource:
+        return AsyncBrowsersResource(self._client)
+
+    @cached_property
+    def computers(self) -> AsyncComputersResource:
+        return AsyncComputersResource(self._client)
+
     @cached_property
     def lsp(self) -> AsyncLspResource:
         return AsyncLspResource(self._client)
@@ -2145,6 +2177,14 @@ class DevboxesResourceWithRawResponse:
         )
 
     @cached_property
+    def browsers(self) -> BrowsersResourceWithRawResponse:
+        return BrowsersResourceWithRawResponse(self._devboxes.browsers)
+
+    @cached_property
+    def computers(self) -> ComputersResourceWithRawResponse:
+        return ComputersResourceWithRawResponse(self._devboxes.computers)
+
+    @cached_property
     def lsp(self) -> LspResourceWithRawResponse:
         return LspResourceWithRawResponse(self._devboxes.lsp)
 
@@ -2219,6 +2259,14 @@ class AsyncDevboxesResourceWithRawResponse:
         self.write_file_contents = async_to_raw_response_wrapper(
             devboxes.write_file_contents,
         )
+
+    @cached_property
+    def browsers(self) -> AsyncBrowsersResourceWithRawResponse:
+        return AsyncBrowsersResourceWithRawResponse(self._devboxes.browsers)
+
+    @cached_property
+    def computers(self) -> AsyncComputersResourceWithRawResponse:
+        return AsyncComputersResourceWithRawResponse(self._devboxes.computers)
 
     @cached_property
     def lsp(self) -> AsyncLspResourceWithRawResponse:
@@ -2297,6 +2345,14 @@ class DevboxesResourceWithStreamingResponse:
         )
 
     @cached_property
+    def browsers(self) -> BrowsersResourceWithStreamingResponse:
+        return BrowsersResourceWithStreamingResponse(self._devboxes.browsers)
+
+    @cached_property
+    def computers(self) -> ComputersResourceWithStreamingResponse:
+        return ComputersResourceWithStreamingResponse(self._devboxes.computers)
+
+    @cached_property
     def lsp(self) -> LspResourceWithStreamingResponse:
         return LspResourceWithStreamingResponse(self._devboxes.lsp)
 
@@ -2371,6 +2427,14 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.write_file_contents = async_to_streamed_response_wrapper(
             devboxes.write_file_contents,
         )
+
+    @cached_property
+    def browsers(self) -> AsyncBrowsersResourceWithStreamingResponse:
+        return AsyncBrowsersResourceWithStreamingResponse(self._devboxes.browsers)
+
+    @cached_property
+    def computers(self) -> AsyncComputersResourceWithStreamingResponse:
+        return AsyncComputersResourceWithStreamingResponse(self._devboxes.computers)
 
     @cached_property
     def lsp(self) -> AsyncLspResourceWithStreamingResponse:

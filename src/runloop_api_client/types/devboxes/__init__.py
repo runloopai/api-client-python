@@ -16,8 +16,10 @@ from .range_param import RangeParam as RangeParam
 from .symbol_kind import SymbolKind as SymbolKind
 from .symbol_type import SymbolType as SymbolType
 from .base_command import BaseCommand as BaseCommand
+from .browser_view import BrowserView as BrowserView
 from .document_uri import DocumentUri as DocumentUri
 from .base_location import BaseLocation as BaseLocation
+from .computer_view import ComputerView as ComputerView
 from .base_signature import BaseSignature as BaseSignature
 from .diagnostic_tag import DiagnosticTag as DiagnosticTag
 from .l_sp_any_param import LSpAnyParam as LSpAnyParam
@@ -44,6 +46,7 @@ from .lsp_formatting_params import LspFormattingParams as LspFormattingParams
 from .lsp_references_params import LspReferencesParams as LspReferencesParams
 from .watched_file_response import WatchedFileResponse as WatchedFileResponse
 from .code_description_param import CodeDescriptionParam as CodeDescriptionParam
+from .computer_create_params import ComputerCreateParams as ComputerCreateParams
 from .file_contents_response import FileContentsResponse as FileContentsResponse
 from .health_status_response import HealthStatusResponse as HealthStatusResponse
 from .lsp_diagnostics_params import LspDiagnosticsParams as LspDiagnosticsParams
@@ -66,8 +69,16 @@ from .execution_execute_async_params import ExecutionExecuteAsyncParams as Execu
 from .lsp_set_watch_directory_params import LspSetWatchDirectoryParams as LspSetWatchDirectoryParams
 from .lsp_get_code_segment_info_params import LspGetCodeSegmentInfoParams as LspGetCodeSegmentInfoParams
 from .lsp_set_watch_directory_response import LspSetWatchDirectoryResponse as LspSetWatchDirectoryResponse
+from .computer_mouse_interaction_params import ComputerMouseInteractionParams as ComputerMouseInteractionParams
+from .computer_screen_interaction_params import ComputerScreenInteractionParams as ComputerScreenInteractionParams
+from .computer_mouse_interaction_response import ComputerMouseInteractionResponse as ComputerMouseInteractionResponse
 from .record_string_text_edit_array_param import RecordStringTextEditArrayParam as RecordStringTextEditArrayParam
+from .computer_keyboard_interaction_params import ComputerKeyboardInteractionParams as ComputerKeyboardInteractionParams
+from .computer_screen_interaction_response import ComputerScreenInteractionResponse as ComputerScreenInteractionResponse
 from .diagnostic_related_information_param import DiagnosticRelatedInformationParam as DiagnosticRelatedInformationParam
+from .computer_keyboard_interaction_response import (
+    ComputerKeyboardInteractionResponse as ComputerKeyboardInteractionResponse,
+)
 from .lsp_get_code_actions_for_diagnostic_params import (
     LspGetCodeActionsForDiagnosticParams as LspGetCodeActionsForDiagnosticParams,
 )
