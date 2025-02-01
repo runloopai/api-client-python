@@ -11,5 +11,8 @@ class ScenarioListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20."""
 
+    name: int
+    """Query for Scenarios with a given name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

@@ -5,10 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import (
-    maybe_transform,
-    async_maybe_transform,
-)
+from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -17,10 +14,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.benchmarks import run_list_params
 from ...types.benchmark_run_view import BenchmarkRunView
-from ...types.benchmark_run_list_view import BenchmarkRunListView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
 
@@ -90,7 +87,7 @@ class RunsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkRunListView:
+    ) -> SyncBenchmarkRunsCursorIDPage[BenchmarkRunView]:
         """
         List all BenchmarkRuns matching filter.
 
@@ -109,8 +106,9 @@ class RunsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/v1/benchmarks/runs",
+            page=SyncBenchmarkRunsCursorIDPage[BenchmarkRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -125,7 +123,7 @@ class RunsResource(SyncAPIResource):
                     run_list_params.RunListParams,
                 ),
             ),
-            cast_to=BenchmarkRunListView,
+            model=BenchmarkRunView,
         )
 
     def complete(
@@ -222,7 +220,7 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
-    async def list(
+    def list(
         self,
         *,
         benchmark_id: str | NotGiven = NOT_GIVEN,
@@ -234,7 +232,7 @@ class AsyncRunsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkRunListView:
+    ) -> AsyncPaginator[BenchmarkRunView, AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView]]:
         """
         List all BenchmarkRuns matching filter.
 
@@ -253,14 +251,15 @@ class AsyncRunsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/v1/benchmarks/runs",
+            page=AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
                         "limit": limit,
@@ -269,7 +268,7 @@ class AsyncRunsResource(AsyncAPIResource):
                     run_list_params.RunListParams,
                 ),
             ),
-            cast_to=BenchmarkRunListView,
+            model=BenchmarkRunView,
         )
 
     async def complete(
