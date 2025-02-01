@@ -32,10 +32,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
-from ...types.scenario_list_view import ScenarioListView
 from ...types.input_context_param import InputContextParam
 from ...types.scoring_contract_param import ScoringContractParam
 from ...types.scenario_environment_param import ScenarioEnvironmentParam
@@ -163,6 +163,7 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        name: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -170,13 +171,15 @@ class ScenariosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioListView:
+    ) -> SyncScenariosCursorIDPage[ScenarioView]:
         """List all Scenarios matching filter.
 
         Args:
           limit: The limit of items to return.
 
         Default is 20.
+
+          name: Query for Scenarios with a given name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -188,8 +191,9 @@ class ScenariosResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/v1/scenarios",
+            page=SyncScenariosCursorIDPage[ScenarioView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -198,12 +202,13 @@ class ScenariosResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     scenario_list_params.ScenarioListParams,
                 ),
             ),
-            cast_to=ScenarioListView,
+            model=ScenarioView,
         )
 
     def start_run(
@@ -377,10 +382,11 @@ class AsyncScenariosResource(AsyncAPIResource):
             cast_to=ScenarioView,
         )
 
-    async def list(
+    def list(
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
+        name: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -388,13 +394,15 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioListView:
+    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
         """List all Scenarios matching filter.
 
         Args:
           limit: The limit of items to return.
 
         Default is 20.
+
+          name: Query for Scenarios with a given name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -406,22 +414,24 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/v1/scenarios",
+            page=AsyncScenariosCursorIDPage[ScenarioView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     scenario_list_params.ScenarioListParams,
                 ),
             ),
-            cast_to=ScenarioListView,
+            model=ScenarioView,
         )
 
     async def start_run(
