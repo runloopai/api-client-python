@@ -28,10 +28,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.benchmark_view import BenchmarkView
 from ...types.benchmark_run_view import BenchmarkRunView
-from ...types.benchmark_list_view import BenchmarkListView
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
 
@@ -155,7 +155,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkListView:
+    ) -> SyncBenchmarksCursorIDPage[BenchmarkView]:
         """
         List all Benchmarks matching filter.
 
@@ -175,8 +175,9 @@ class BenchmarksResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
+        return self._get_api_list(
             "/v1/benchmarks",
+            page=SyncBenchmarksCursorIDPage[BenchmarkView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -191,7 +192,7 @@ class BenchmarksResource(SyncAPIResource):
                     benchmark_list_params.BenchmarkListParams,
                 ),
             ),
-            cast_to=BenchmarkListView,
+            model=BenchmarkView,
         )
 
     def start_run(
@@ -352,7 +353,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             cast_to=BenchmarkView,
         )
 
-    async def list(
+    def list(
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
@@ -364,7 +365,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkListView:
+    ) -> AsyncPaginator[BenchmarkView, AsyncBenchmarksCursorIDPage[BenchmarkView]]:
         """
         List all Benchmarks matching filter.
 
@@ -384,14 +385,15 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
+        return self._get_api_list(
             "/v1/benchmarks",
+            page=AsyncBenchmarksCursorIDPage[BenchmarkView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "limit": limit,
                         "public": public,
@@ -400,7 +402,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                     benchmark_list_params.BenchmarkListParams,
                 ),
             ),
-            cast_to=BenchmarkListView,
+            model=BenchmarkView,
         )
 
     async def start_run(

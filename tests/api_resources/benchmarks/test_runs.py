@@ -9,7 +9,8 @@ import pytest
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
-from runloop_api_client.types import BenchmarkRunView, BenchmarkRunListView
+from runloop_api_client.types import BenchmarkRunView
+from runloop_api_client.pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -58,7 +59,7 @@ class TestRuns:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         run = client.benchmarks.runs.list()
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
@@ -67,7 +68,7 @@ class TestRuns:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -76,7 +77,7 @@ class TestRuns:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         run = response.parse()
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -85,7 +86,7 @@ class TestRuns:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             run = response.parse()
-            assert_matches_type(BenchmarkRunListView, run, path=["response"])
+            assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -172,7 +173,7 @@ class TestAsyncRuns:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         run = await async_client.benchmarks.runs.list()
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -181,7 +182,7 @@ class TestAsyncRuns:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -190,7 +191,7 @@ class TestAsyncRuns:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         run = await response.parse()
-        assert_matches_type(BenchmarkRunListView, run, path=["response"])
+        assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -199,7 +200,7 @@ class TestAsyncRuns:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             run = await response.parse()
-            assert_matches_type(BenchmarkRunListView, run, path=["response"])
+            assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

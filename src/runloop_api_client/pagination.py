@@ -14,6 +14,14 @@ __all__ = [
     "AsyncRepositoriesCursorIDPage",
     "SyncDiskSnapshotsCursorIDPage",
     "AsyncDiskSnapshotsCursorIDPage",
+    "SyncBenchmarksCursorIDPage",
+    "AsyncBenchmarksCursorIDPage",
+    "SyncBenchmarkRunsCursorIDPage",
+    "AsyncBenchmarkRunsCursorIDPage",
+    "SyncScenariosCursorIDPage",
+    "AsyncScenariosCursorIDPage",
+    "SyncScenarioRunsCursorIDPage",
+    "AsyncScenarioRunsCursorIDPage",
 ]
 
 _T = TypeVar("_T")
@@ -36,6 +44,26 @@ class RepositoriesCursorIDPageItem(Protocol):
 
 @runtime_checkable
 class DiskSnapshotsCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class BenchmarksCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class BenchmarkRunsCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class ScenariosCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class ScenarioRunsCursorIDPageItem(Protocol):
     id: str
 
 
@@ -241,6 +269,214 @@ class AsyncDiskSnapshotsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T
 
         item = cast(Any, snapshots[-1])
         if not isinstance(item, DiskSnapshotsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncBenchmarksCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    benchmarks: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        benchmarks = self.benchmarks
+        if not benchmarks:
+            return []
+        return benchmarks
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        benchmarks = self.benchmarks
+        if not benchmarks:
+            return None
+
+        item = cast(Any, benchmarks[-1])
+        if not isinstance(item, BenchmarksCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncBenchmarksCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    benchmarks: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        benchmarks = self.benchmarks
+        if not benchmarks:
+            return []
+        return benchmarks
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        benchmarks = self.benchmarks
+        if not benchmarks:
+            return None
+
+        item = cast(Any, benchmarks[-1])
+        if not isinstance(item, BenchmarksCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncBenchmarkRunsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    runs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        runs = self.runs
+        if not runs:
+            return []
+        return runs
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        runs = self.runs
+        if not runs:
+            return None
+
+        item = cast(Any, runs[-1])
+        if not isinstance(item, BenchmarkRunsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncBenchmarkRunsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    runs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        runs = self.runs
+        if not runs:
+            return []
+        return runs
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        runs = self.runs
+        if not runs:
+            return None
+
+        item = cast(Any, runs[-1])
+        if not isinstance(item, BenchmarkRunsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncScenariosCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    scenarios: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        scenarios = self.scenarios
+        if not scenarios:
+            return []
+        return scenarios
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        scenarios = self.scenarios
+        if not scenarios:
+            return None
+
+        item = cast(Any, scenarios[-1])
+        if not isinstance(item, ScenariosCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncScenariosCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    scenarios: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        scenarios = self.scenarios
+        if not scenarios:
+            return []
+        return scenarios
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        scenarios = self.scenarios
+        if not scenarios:
+            return None
+
+        item = cast(Any, scenarios[-1])
+        if not isinstance(item, ScenariosCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncScenarioRunsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    runs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        runs = self.runs
+        if not runs:
+            return []
+        return runs
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        runs = self.runs
+        if not runs:
+            return None
+
+        item = cast(Any, runs[-1])
+        if not isinstance(item, ScenarioRunsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncScenarioRunsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    runs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        runs = self.runs
+        if not runs:
+            return []
+        return runs
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        runs = self.runs
+        if not runs:
+            return None
+
+        item = cast(Any, runs[-1])
+        if not isinstance(item, ScenarioRunsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
             # TODO emit warning log
             return None
 
