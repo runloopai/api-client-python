@@ -4,15 +4,12 @@ from __future__ import annotations
 
 from typing_extensions import TypedDict
 
-__all__ = ["ScenarioListParams"]
+__all__ = ["BenchmarkListPublicParams"]
 
 
-class ScenarioListParams(TypedDict, total=False):
+class BenchmarkListPublicParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20."""
-
-    name: str
-    """Query for Scenarios with a given name."""
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

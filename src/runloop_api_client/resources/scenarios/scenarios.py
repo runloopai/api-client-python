@@ -18,6 +18,7 @@ from ...types import (
     scenario_list_params,
     scenario_create_params,
     scenario_start_run_params,
+    scenario_list_public_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
@@ -163,7 +164,7 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
-        name: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -206,6 +207,57 @@ class ScenariosResource(SyncAPIResource):
                         "starting_after": starting_after,
                     },
                     scenario_list_params.ScenarioListParams,
+                ),
+            ),
+            model=ScenarioView,
+        )
+
+    def list_public(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SyncScenariosCursorIDPage[ScenarioView]:
+        """
+        List all public scenarios matching filter.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          name: Query for Scenarios with a given name.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/scenarios/list_public",
+            page=SyncScenariosCursorIDPage[ScenarioView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    scenario_list_public_params.ScenarioListPublicParams,
                 ),
             ),
             model=ScenarioView,
@@ -386,7 +438,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
-        name: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -429,6 +481,57 @@ class AsyncScenariosResource(AsyncAPIResource):
                         "starting_after": starting_after,
                     },
                     scenario_list_params.ScenarioListParams,
+                ),
+            ),
+            model=ScenarioView,
+        )
+
+    def list_public(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
+        """
+        List all public scenarios matching filter.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          name: Query for Scenarios with a given name.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/scenarios/list_public",
+            page=AsyncScenariosCursorIDPage[ScenarioView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    scenario_list_public_params.ScenarioListPublicParams,
                 ),
             ),
             model=ScenarioView,
@@ -502,6 +605,9 @@ class ScenariosResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             scenarios.list,
         )
+        self.list_public = to_raw_response_wrapper(
+            scenarios.list_public,
+        )
         self.start_run = to_raw_response_wrapper(
             scenarios.start_run,
         )
@@ -523,6 +629,9 @@ class AsyncScenariosResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             scenarios.list,
+        )
+        self.list_public = async_to_raw_response_wrapper(
+            scenarios.list_public,
         )
         self.start_run = async_to_raw_response_wrapper(
             scenarios.start_run,
@@ -546,6 +655,9 @@ class ScenariosResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             scenarios.list,
         )
+        self.list_public = to_streamed_response_wrapper(
+            scenarios.list_public,
+        )
         self.start_run = to_streamed_response_wrapper(
             scenarios.start_run,
         )
@@ -567,6 +679,9 @@ class AsyncScenariosResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             scenarios.list,
+        )
+        self.list_public = async_to_streamed_response_wrapper(
+            scenarios.list_public,
         )
         self.start_run = async_to_streamed_response_wrapper(
             scenarios.start_run,
