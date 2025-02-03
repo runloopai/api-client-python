@@ -24,6 +24,7 @@ Methods:
 - <code title="post /v1/benchmarks">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">create</a>(\*\*<a href="src/runloop_api_client/types/benchmark_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
 - <code title="get /v1/benchmarks/{id}">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
 - <code title="get /v1/benchmarks">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
+- <code title="get /v1/benchmarks/list_public">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
 - <code title="post /v1/benchmarks/start_run">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/benchmark_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 
 ## Runs
@@ -261,6 +262,7 @@ Methods:
 - <code title="post /v1/scenarios">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">create</a>(\*\*<a href="src/runloop_api_client/types/scenario_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
 - <code title="get /v1/scenarios/{id}">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
 - <code title="get /v1/scenarios">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenario_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">SyncScenariosCursorIDPage[ScenarioView]</a></code>
+- <code title="get /v1/scenarios/list_public">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/scenario_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">SyncScenariosCursorIDPage[ScenarioView]</a></code>
 - <code title="post /v1/scenarios/start_run">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/scenario_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
 
 ## Runs

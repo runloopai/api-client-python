@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -26,6 +26,9 @@ class BenchmarkRunView(BaseModel):
 
     name: Optional[str] = None
     """The name of the BenchmarkRun."""
+
+    pending_scenarios: Optional[List[str]] = None
+    """List of Scenarios that need to be completed before benchmark can be completed."""
 
     score: Optional[float] = None
     """The final score across the BenchmarkRun, present once completed.
