@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.19.0 (2025-02-03)
+
+Full Changelog: [v0.18.0...v0.19.0](https://github.com/runloopai/api-client-python/compare/v0.18.0...v0.19.0)
+
+### Features
+
+* add helper methods for scenarios ([551fcfc](https://github.com/runloopai/api-client-python/commit/551fcfc1dc5b8b67c0c6179d49c3eef2c0a38676))
+* **api:** api update ([#520](https://github.com/runloopai/api-client-python/issues/520)) ([750b4ba](https://github.com/runloopai/api-client-python/commit/750b4ba51cc0c848258113af8bf882ceb679bf9e))
+
 ## 0.18.0 (2025-02-01)
 
 Full Changelog: [v0.17.0...v0.18.0](https://github.com/runloopai/api-client-python/compare/v0.17.0...v0.18.0)
