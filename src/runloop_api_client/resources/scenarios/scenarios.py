@@ -20,6 +20,14 @@ from ...types import (
     scenario_start_run_params,
     scenario_list_public_params,
 )
+from .scorers import (
+    ScorersResource,
+    AsyncScorersResource,
+    ScorersResourceWithRawResponse,
+    AsyncScorersResourceWithRawResponse,
+    ScorersResourceWithStreamingResponse,
+    AsyncScorersResourceWithStreamingResponse,
+)
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
     maybe_transform,
@@ -49,6 +57,10 @@ class ScenariosResource(SyncAPIResource):
     @cached_property
     def runs(self) -> RunsResource:
         return RunsResource(self._client)
+
+    @cached_property
+    def scorers(self) -> ScorersResource:
+        return ScorersResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> ScenariosResourceWithRawResponse:
@@ -382,6 +394,10 @@ class AsyncScenariosResource(AsyncAPIResource):
         return AsyncRunsResource(self._client)
 
     @cached_property
+    def scorers(self) -> AsyncScorersResource:
+        return AsyncScorersResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AsyncScenariosResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -708,6 +724,10 @@ class ScenariosResourceWithRawResponse:
     def runs(self) -> RunsResourceWithRawResponse:
         return RunsResourceWithRawResponse(self._scenarios.runs)
 
+    @cached_property
+    def scorers(self) -> ScorersResourceWithRawResponse:
+        return ScorersResourceWithRawResponse(self._scenarios.scorers)
+
 
 class AsyncScenariosResourceWithRawResponse:
     def __init__(self, scenarios: AsyncScenariosResource) -> None:
@@ -732,6 +752,10 @@ class AsyncScenariosResourceWithRawResponse:
     @cached_property
     def runs(self) -> AsyncRunsResourceWithRawResponse:
         return AsyncRunsResourceWithRawResponse(self._scenarios.runs)
+
+    @cached_property
+    def scorers(self) -> AsyncScorersResourceWithRawResponse:
+        return AsyncScorersResourceWithRawResponse(self._scenarios.scorers)
 
 
 class ScenariosResourceWithStreamingResponse:
@@ -758,6 +782,10 @@ class ScenariosResourceWithStreamingResponse:
     def runs(self) -> RunsResourceWithStreamingResponse:
         return RunsResourceWithStreamingResponse(self._scenarios.runs)
 
+    @cached_property
+    def scorers(self) -> ScorersResourceWithStreamingResponse:
+        return ScorersResourceWithStreamingResponse(self._scenarios.scorers)
+
 
 class AsyncScenariosResourceWithStreamingResponse:
     def __init__(self, scenarios: AsyncScenariosResource) -> None:
@@ -782,3 +810,7 @@ class AsyncScenariosResourceWithStreamingResponse:
     @cached_property
     def runs(self) -> AsyncRunsResourceWithStreamingResponse:
         return AsyncRunsResourceWithStreamingResponse(self._scenarios.runs)
+
+    @cached_property
+    def scorers(self) -> AsyncScorersResourceWithStreamingResponse:
+        return AsyncScorersResourceWithStreamingResponse(self._scenarios.scorers)

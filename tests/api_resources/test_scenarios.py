@@ -40,7 +40,10 @@ class TestScenarios:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.create(
-            input_context={"problem_statement": "problem_statement"},
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -270,7 +273,10 @@ class TestAsyncScenarios:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.create(
-            input_context={"problem_statement": "problem_statement"},
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
