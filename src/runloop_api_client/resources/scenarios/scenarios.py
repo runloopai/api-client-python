@@ -25,6 +25,7 @@ from ..._utils import (
     maybe_transform,
     async_maybe_transform,
 )
+from ...lib.polling import PollingConfig
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -317,6 +318,63 @@ class ScenariosResource(SyncAPIResource):
             cast_to=ScenarioRunView,
         )
 
+    def start_run_and_await_env_ready(
+        self,
+        *,
+        scenario_id: str,
+        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
+        run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScenarioRunView:
+        """Start a new ScenarioRun and wait for its environment to be ready.
+
+        Args:
+            scenario_id: ID of the Scenario to run
+            benchmark_run_id: Benchmark to associate the run
+            run_name: Display name of the run
+            polling_config: Optional polling configuration
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+            idempotency_key: Specify a custom idempotency key for this request
+
+        Returns:
+            The scenario run in running state
+
+        Raises:
+            PollingTimeout: If polling times out before environment is ready
+            RunloopError: If environment enters a non-running terminal state
+        """
+        run = self.start_run(
+            scenario_id=scenario_id,
+            benchmark_run_id=benchmark_run_id,
+            run_name=run_name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+
+        self._client.devboxes.await_running(
+            run.devbox_id,
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
+
+        return run
+
 
 class AsyncScenariosResource(AsyncAPIResource):
     @cached_property
@@ -591,6 +649,40 @@ class AsyncScenariosResource(AsyncAPIResource):
             cast_to=ScenarioRunView,
         )
 
+    async def start_run_and_await_env_ready(
+        self,
+        scenario_id: str,
+        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
+        run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+    ) -> ScenarioRunView:
+        """Start a new ScenarioRun and wait for its environment to be ready.
+
+        Args:
+            scenario_id: ID of the Scenario to run
+            benchmark_run_id: Benchmark to associate the run
+            run_name: Display name of the run
+            polling_config: Optional polling configuration
+
+        Returns:
+            The scenario run in running state
+
+        Raises:
+            PollingTimeout: If polling times out before environment is ready
+            RunloopError: If environment enters a non-running terminal state
+        """
+        run = await self.start_run(
+            scenario_id=scenario_id,
+            benchmark_run_id=benchmark_run_id,
+            run_name=run_name,
+        )
+
+        await self._client.devboxes.await_running(
+            run.devbox_id,
+            polling_config=polling_config,
+        )
+
+        return run
 
 class ScenariosResourceWithRawResponse:
     def __init__(self, scenarios: ScenariosResource) -> None:
