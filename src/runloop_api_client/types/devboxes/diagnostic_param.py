@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Union, Iterable
-from typing_extensions import Required, Annotated, TypedDict
+from typing import Dict, Union, Iterable
+from typing_extensions import Required, Annotated, TypeAlias, TypedDict
 
 from .integer import Integer
 from ..._utils import PropertyInfo
@@ -17,7 +17,7 @@ from .diagnostic_related_information_param import DiagnosticRelatedInformationPa
 __all__ = ["DiagnosticParam"]
 
 
-class DiagnosticParam(TypedDict, total=False):
+class DiagnosticParamTyped(TypedDict, total=False):
     message: Required[str]
     """The diagnostic's message. It usually appears in the user interface"""
 
@@ -63,3 +63,6 @@ class DiagnosticParam(TypedDict, total=False):
 
     tags: Iterable[DiagnosticTag]
     """Additional metadata about the diagnostic."""
+
+
+DiagnosticParam: TypeAlias = Union[DiagnosticParamTyped, Dict[str, object]]

@@ -41,11 +41,16 @@ from ...types.devboxes.range_param import RangeParam
 from ...types.devboxes.symbol_type import SymbolType
 from ...types.devboxes.base_command_param import BaseCommandParam
 from ...types.devboxes.lsp_files_response import LspFilesResponse
+from ...types.devboxes.formatting_response import FormattingResponse
+from ...types.devboxes.references_response import ReferencesResponse
 from ...types.devboxes.diagnostics_response import DiagnosticsResponse
 from ...types.devboxes.base_diagnostic_param import BaseDiagnosticParam
+from ...types.devboxes.code_actions_response import CodeActionsResponse
 from ...types.devboxes.file_contents_response import FileContentsResponse
 from ...types.devboxes.health_status_response import HealthStatusResponse
 from ...types.devboxes.signature_help_response import SignatureHelpResponse
+from ...types.devboxes.document_symbol_response import DocumentSymbolResponse
+from ...types.devboxes.file_definition_response import FileDefinitionResponse
 from ...types.devboxes.base_workspace_edit_param import BaseWorkspaceEditParam
 from ...types.devboxes.code_action_context_param import CodeActionContextParam
 from ...types.devboxes.code_segment_info_response import CodeSegmentInfoResponse
@@ -83,6 +88,7 @@ class LspResource(SyncAPIResource):
         command: BaseCommandParam | NotGiven = NOT_GIVEN,
         edit: BaseWorkspaceEditParam | NotGiven = NOT_GIVEN,
         is_preferred: bool | NotGiven = NOT_GIVEN,
+        kind: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -116,6 +122,7 @@ class LspResource(SyncAPIResource):
                     "command": command,
                     "edit": edit,
                     "is_preferred": is_preferred,
+                    "kind": kind,
                 },
                 lsp_apply_code_action_params.LspApplyCodeActionParams,
             ),
@@ -143,7 +150,7 @@ class LspResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> CodeActionsResponse:
         """Get code actions for a part of a document.
 
         This method calls the
@@ -203,7 +210,7 @@ class LspResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=CodeActionsResponse,
         )
 
     def diagnostics(
@@ -260,7 +267,7 @@ class LspResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> DocumentSymbolResponse:
         """
         Get document symbols for a given document.
 
@@ -287,7 +294,7 @@ class LspResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=DocumentSymbolResponse,
         )
 
     def file(
@@ -346,7 +353,7 @@ class LspResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> FileDefinitionResponse:
         """
         Get the definition of a symbol at a given position in a file
         https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_definition
@@ -381,7 +388,7 @@ class LspResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=FileDefinitionResponse,
         )
 
     def files(
@@ -429,7 +436,7 @@ class LspResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> FormattingResponse:
         """
         Get formatting changes for a given document.
         https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_formatting
@@ -457,7 +464,7 @@ class LspResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=FormattingResponse,
         )
 
     def get_code_actions_for_diagnostic(
@@ -661,7 +668,7 @@ class LspResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> ReferencesResponse:
         """Get references for a given symbol.
 
         This method calls the `getReferences` method
@@ -699,7 +706,7 @@ class LspResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=ReferencesResponse,
         )
 
     def set_watch_directory(
@@ -774,6 +781,7 @@ class AsyncLspResource(AsyncAPIResource):
         command: BaseCommandParam | NotGiven = NOT_GIVEN,
         edit: BaseWorkspaceEditParam | NotGiven = NOT_GIVEN,
         is_preferred: bool | NotGiven = NOT_GIVEN,
+        kind: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -807,6 +815,7 @@ class AsyncLspResource(AsyncAPIResource):
                     "command": command,
                     "edit": edit,
                     "is_preferred": is_preferred,
+                    "kind": kind,
                 },
                 lsp_apply_code_action_params.LspApplyCodeActionParams,
             ),
@@ -834,7 +843,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> CodeActionsResponse:
         """Get code actions for a part of a document.
 
         This method calls the
@@ -894,7 +903,7 @@ class AsyncLspResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=CodeActionsResponse,
         )
 
     async def diagnostics(
@@ -951,7 +960,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> DocumentSymbolResponse:
         """
         Get document symbols for a given document.
 
@@ -978,7 +987,7 @@ class AsyncLspResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=DocumentSymbolResponse,
         )
 
     async def file(
@@ -1037,7 +1046,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> FileDefinitionResponse:
         """
         Get the definition of a symbol at a given position in a file
         https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_definition
@@ -1072,7 +1081,7 @@ class AsyncLspResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=FileDefinitionResponse,
         )
 
     async def files(
@@ -1120,7 +1129,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> FormattingResponse:
         """
         Get formatting changes for a given document.
         https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_formatting
@@ -1148,7 +1157,7 @@ class AsyncLspResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=FormattingResponse,
         )
 
     async def get_code_actions_for_diagnostic(
@@ -1352,7 +1361,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> object:
+    ) -> ReferencesResponse:
         """Get references for a given symbol.
 
         This method calls the `getReferences` method
@@ -1390,7 +1399,7 @@ class AsyncLspResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=object,
+            cast_to=ReferencesResponse,
         )
 
     async def set_watch_directory(
