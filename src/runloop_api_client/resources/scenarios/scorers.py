@@ -2,32 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import httpx
 
-from .runs import (
-    RunsResource,
-    AsyncRunsResource,
-    RunsResourceWithRawResponse,
-    AsyncRunsResourceWithRawResponse,
-    RunsResourceWithStreamingResponse,
-    AsyncRunsResourceWithStreamingResponse,
-)
-from ...types import (
-    scenario_list_params,
-    scenario_create_params,
-    scenario_start_run_params,
-    scenario_list_public_params,
-)
-from .scorers import (
-    ScorersResource,
-    AsyncScorersResource,
-    ScorersResourceWithRawResponse,
-    AsyncScorersResourceWithRawResponse,
-    ScorersResourceWithStreamingResponse,
-    AsyncScorersResourceWithStreamingResponse,
-)
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from ..._utils import (
     maybe_transform,
@@ -41,52 +17,44 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
+from ...pagination import SyncScenarioScorersCursorIDPage, AsyncScenarioScorersCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenario_view import ScenarioView
-from ...types.scenario_run_view import ScenarioRunView
-from ...types.input_context_param import InputContextParam
-from ...types.scoring_contract_param import ScoringContractParam
+from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params, scorer_validate_params
 from ...types.scenario_environment_param import ScenarioEnvironmentParam
+from ...types.scenarios.scorer_list_response import ScorerListResponse
+from ...types.scenarios.scorer_create_response import ScorerCreateResponse
+from ...types.scenarios.scorer_update_response import ScorerUpdateResponse
+from ...types.scenarios.scorer_retrieve_response import ScorerRetrieveResponse
+from ...types.scenarios.scorer_validate_response import ScorerValidateResponse
 
-__all__ = ["ScenariosResource", "AsyncScenariosResource"]
+__all__ = ["ScorersResource", "AsyncScorersResource"]
 
 
-class ScenariosResource(SyncAPIResource):
+class ScorersResource(SyncAPIResource):
     @cached_property
-    def runs(self) -> RunsResource:
-        return RunsResource(self._client)
-
-    @cached_property
-    def scorers(self) -> ScorersResource:
-        return ScorersResource(self._client)
-
-    @cached_property
-    def with_raw_response(self) -> ScenariosResourceWithRawResponse:
+    def with_raw_response(self) -> ScorersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return ScenariosResourceWithRawResponse(self)
+        return ScorersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> ScenariosResourceWithStreamingResponse:
+    def with_streaming_response(self) -> ScorersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return ScenariosResourceWithStreamingResponse(self)
+        return ScorersResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        input_context: InputContextParam,
+        bash_script: str,
         name: str,
-        scoring_contract: ScoringContractParam,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -94,19 +62,15 @@ class ScenariosResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScorerCreateResponse:
         """
-        Create a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria.
+        Create a custom scenario scorer.
 
         Args:
-          input_context: The input context for the Scenario.
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_TEST_CONTEXT.
 
-          name: Name of the scenario.
-
-          scoring_contract: The scoring contract for the Scenario.
-
-          environment_parameters: The Environment in which the Scenario will run.
+          name: Name of the custom scorer.
 
           extra_headers: Send extra headers
 
@@ -119,15 +83,13 @@ class ScenariosResource(SyncAPIResource):
           idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
-            "/v1/scenarios",
+            "/v1/scenarios/scorers",
             body=maybe_transform(
                 {
-                    "input_context": input_context,
+                    "bash_script": bash_script,
                     "name": name,
-                    "scoring_contract": scoring_contract,
-                    "environment_parameters": environment_parameters,
                 },
-                scenario_create_params.ScenarioCreateParams,
+                scorer_create_params.ScorerCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -136,7 +98,7 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScorerCreateResponse,
         )
 
     def retrieve(
@@ -149,9 +111,9 @@ class ScenariosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioView:
+    ) -> ScorerRetrieveResponse:
         """
-        Get a previously created scenario.
+        Retrieve Scenario Scorer.
 
         Args:
           extra_headers: Send extra headers
@@ -165,122 +127,19 @@ class ScenariosResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/scenarios/{id}",
+            f"/v1/scenarios/scorers/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScenarioView,
+            cast_to=ScorerRetrieveResponse,
         )
 
-    def list(
+    def update(
         self,
+        id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncScenariosCursorIDPage[ScenarioView]:
-        """List all Scenarios matching filter.
-
-        Args:
-          limit: The limit of items to return.
-
-        Default is 20.
-
-          name: Query for Scenarios with a given name.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get_api_list(
-            "/v1/scenarios",
-            page=SyncScenariosCursorIDPage[ScenarioView],
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "name": name,
-                        "starting_after": starting_after,
-                    },
-                    scenario_list_params.ScenarioListParams,
-                ),
-            ),
-            model=ScenarioView,
-        )
-
-    def list_public(
-        self,
-        *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncScenariosCursorIDPage[ScenarioView]:
-        """
-        List all public scenarios matching filter.
-
-        Args:
-          limit: The limit of items to return. Default is 20.
-
-          name: Query for Scenarios with a given name.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get_api_list(
-            "/v1/scenarios/list_public",
-            page=SyncScenariosCursorIDPage[ScenarioView],
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "name": name,
-                        "starting_after": starting_after,
-                    },
-                    scenario_list_public_params.ScenarioListPublicParams,
-                ),
-            ),
-            model=ScenarioView,
-        )
-
-    def start_run(
-        self,
-        *,
-        scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        bash_script: str,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -288,16 +147,15 @@ class ScenariosResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioRunView:
+    ) -> ScorerUpdateResponse:
         """
-        Start a new ScenarioRun based on the provided Scenario.
+        Update a scenario scorer.
 
         Args:
-          scenario_id: ID of the Scenario to run.
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_TEST_CONTEXT.
 
-          benchmark_run_id: Benchmark to associate the run.
-
-          run_name: Display name of the run.
+          name: Name of the custom scorer.
 
           extra_headers: Send extra headers
 
@@ -309,15 +167,16 @@ class ScenariosResource(SyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            "/v1/scenarios/start_run",
+            f"/v1/scenarios/scorers/{id}",
             body=maybe_transform(
                 {
-                    "scenario_id": scenario_id,
-                    "benchmark_run_id": benchmark_run_id,
-                    "run_name": run_name,
+                    "bash_script": bash_script,
+                    "name": name,
                 },
-                scenario_start_run_params.ScenarioStartRunParams,
+                scorer_update_params.ScorerUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -326,45 +185,62 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioRunView,
+            cast_to=ScorerUpdateResponse,
         )
 
-
-class AsyncScenariosResource(AsyncAPIResource):
-    @cached_property
-    def runs(self) -> AsyncRunsResource:
-        return AsyncRunsResource(self._client)
-
-    @cached_property
-    def scorers(self) -> AsyncScorersResource:
-        return AsyncScorersResource(self._client)
-
-    @cached_property
-    def with_raw_response(self) -> AsyncScenariosResourceWithRawResponse:
-        """
-        This property can be used as a prefix for any HTTP method call to return
-        the raw response object instead of the parsed content.
-
-        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
-        """
-        return AsyncScenariosResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncScenariosResourceWithStreamingResponse:
-        """
-        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
-
-        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
-        """
-        return AsyncScenariosResourceWithStreamingResponse(self)
-
-    async def create(
+    def list(
         self,
         *,
-        input_context: InputContextParam,
-        name: str,
-        scoring_contract: ScoringContractParam,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SyncScenarioScorersCursorIDPage[ScorerListResponse]:
+        """
+        List all Scenario Scorers matching filter.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/scenarios/scorers",
+            page=SyncScenarioScorersCursorIDPage[ScorerListResponse],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    scorer_list_params.ScorerListParams,
+                ),
+            ),
+            model=ScorerListResponse,
+        )
+
+    def validate(
+        self,
+        id: str,
+        *,
+        scoring_context: object,
+        environment_parameters: ScenarioEnvironmentParam | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -372,17 +248,12 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScorerValidateResponse:
         """
-        Create a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria.
+        Validate a scenario scorer.
 
         Args:
-          input_context: The input context for the Scenario.
-
-          name: Name of the scenario.
-
-          scoring_contract: The scoring contract for the Scenario.
+          scoring_context: Json context that gets passed to the custom scorer
 
           environment_parameters: The Environment in which the Scenario will run.
 
@@ -396,16 +267,16 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
-        return await self._post(
-            "/v1/scenarios",
-            body=await async_maybe_transform(
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/scenarios/scorers/{id}/validate",
+            body=maybe_transform(
                 {
-                    "input_context": input_context,
-                    "name": name,
-                    "scoring_contract": scoring_contract,
+                    "scoring_context": scoring_context,
                     "environment_parameters": environment_parameters,
                 },
-                scenario_create_params.ScenarioCreateParams,
+                scorer_validate_params.ScorerValidateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -414,7 +285,79 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScorerValidateResponse,
+        )
+
+
+class AsyncScorersResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncScorersResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
+        return AsyncScorersResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncScorersResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
+        return AsyncScorersResourceWithStreamingResponse(self)
+
+    async def create(
+        self,
+        *,
+        bash_script: str,
+        name: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScorerCreateResponse:
+        """
+        Create a custom scenario scorer.
+
+        Args:
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_TEST_CONTEXT.
+
+          name: Name of the custom scorer.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return await self._post(
+            "/v1/scenarios/scorers",
+            body=await async_maybe_transform(
+                {
+                    "bash_script": bash_script,
+                    "name": name,
+                },
+                scorer_create_params.ScorerCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScorerCreateResponse,
         )
 
     async def retrieve(
@@ -427,9 +370,9 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioView:
+    ) -> ScorerRetrieveResponse:
         """
-        Get a previously created scenario.
+        Retrieve Scenario Scorer.
 
         Args:
           extra_headers: Send extra headers
@@ -443,122 +386,19 @@ class AsyncScenariosResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/scenarios/{id}",
+            f"/v1/scenarios/scorers/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScenarioView,
+            cast_to=ScorerRetrieveResponse,
         )
 
-    def list(
+    async def update(
         self,
+        id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
-        """List all Scenarios matching filter.
-
-        Args:
-          limit: The limit of items to return.
-
-        Default is 20.
-
-          name: Query for Scenarios with a given name.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get_api_list(
-            "/v1/scenarios",
-            page=AsyncScenariosCursorIDPage[ScenarioView],
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "name": name,
-                        "starting_after": starting_after,
-                    },
-                    scenario_list_params.ScenarioListParams,
-                ),
-            ),
-            model=ScenarioView,
-        )
-
-    def list_public(
-        self,
-        *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
-        """
-        List all public scenarios matching filter.
-
-        Args:
-          limit: The limit of items to return. Default is 20.
-
-          name: Query for Scenarios with a given name.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get_api_list(
-            "/v1/scenarios/list_public",
-            page=AsyncScenariosCursorIDPage[ScenarioView],
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "name": name,
-                        "starting_after": starting_after,
-                    },
-                    scenario_list_public_params.ScenarioListPublicParams,
-                ),
-            ),
-            model=ScenarioView,
-        )
-
-    async def start_run(
-        self,
-        *,
-        scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        bash_script: str,
+        name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -566,16 +406,15 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioRunView:
+    ) -> ScorerUpdateResponse:
         """
-        Start a new ScenarioRun based on the provided Scenario.
+        Update a scenario scorer.
 
         Args:
-          scenario_id: ID of the Scenario to run.
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_TEST_CONTEXT.
 
-          benchmark_run_id: Benchmark to associate the run.
-
-          run_name: Display name of the run.
+          name: Name of the custom scorer.
 
           extra_headers: Send extra headers
 
@@ -587,15 +426,16 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            "/v1/scenarios/start_run",
+            f"/v1/scenarios/scorers/{id}",
             body=await async_maybe_transform(
                 {
-                    "scenario_id": scenario_id,
-                    "benchmark_run_id": benchmark_run_id,
-                    "run_name": run_name,
+                    "bash_script": bash_script,
+                    "name": name,
                 },
-                scenario_start_run_params.ScenarioStartRunParams,
+                scorer_update_params.ScorerUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -604,121 +444,189 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioRunView,
+            cast_to=ScorerUpdateResponse,
+        )
+
+    def list(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncPaginator[ScorerListResponse, AsyncScenarioScorersCursorIDPage[ScorerListResponse]]:
+        """
+        List all Scenario Scorers matching filter.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/scenarios/scorers",
+            page=AsyncScenarioScorersCursorIDPage[ScorerListResponse],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    scorer_list_params.ScorerListParams,
+                ),
+            ),
+            model=ScorerListResponse,
+        )
+
+    async def validate(
+        self,
+        id: str,
+        *,
+        scoring_context: object,
+        environment_parameters: ScenarioEnvironmentParam | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScorerValidateResponse:
+        """
+        Validate a scenario scorer.
+
+        Args:
+          scoring_context: Json context that gets passed to the custom scorer
+
+          environment_parameters: The Environment in which the Scenario will run.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/scenarios/scorers/{id}/validate",
+            body=await async_maybe_transform(
+                {
+                    "scoring_context": scoring_context,
+                    "environment_parameters": environment_parameters,
+                },
+                scorer_validate_params.ScorerValidateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScorerValidateResponse,
         )
 
 
-class ScenariosResourceWithRawResponse:
-    def __init__(self, scenarios: ScenariosResource) -> None:
-        self._scenarios = scenarios
+class ScorersResourceWithRawResponse:
+    def __init__(self, scorers: ScorersResource) -> None:
+        self._scorers = scorers
 
         self.create = to_raw_response_wrapper(
-            scenarios.create,
+            scorers.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            scenarios.retrieve,
+            scorers.retrieve,
+        )
+        self.update = to_raw_response_wrapper(
+            scorers.update,
         )
         self.list = to_raw_response_wrapper(
-            scenarios.list,
+            scorers.list,
         )
-        self.list_public = to_raw_response_wrapper(
-            scenarios.list_public,
-        )
-        self.start_run = to_raw_response_wrapper(
-            scenarios.start_run,
+        self.validate = to_raw_response_wrapper(
+            scorers.validate,
         )
 
-    @cached_property
-    def runs(self) -> RunsResourceWithRawResponse:
-        return RunsResourceWithRawResponse(self._scenarios.runs)
 
-    @cached_property
-    def scorers(self) -> ScorersResourceWithRawResponse:
-        return ScorersResourceWithRawResponse(self._scenarios.scorers)
-
-
-class AsyncScenariosResourceWithRawResponse:
-    def __init__(self, scenarios: AsyncScenariosResource) -> None:
-        self._scenarios = scenarios
+class AsyncScorersResourceWithRawResponse:
+    def __init__(self, scorers: AsyncScorersResource) -> None:
+        self._scorers = scorers
 
         self.create = async_to_raw_response_wrapper(
-            scenarios.create,
+            scorers.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            scenarios.retrieve,
+            scorers.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            scorers.update,
         )
         self.list = async_to_raw_response_wrapper(
-            scenarios.list,
+            scorers.list,
         )
-        self.list_public = async_to_raw_response_wrapper(
-            scenarios.list_public,
-        )
-        self.start_run = async_to_raw_response_wrapper(
-            scenarios.start_run,
+        self.validate = async_to_raw_response_wrapper(
+            scorers.validate,
         )
 
-    @cached_property
-    def runs(self) -> AsyncRunsResourceWithRawResponse:
-        return AsyncRunsResourceWithRawResponse(self._scenarios.runs)
 
-    @cached_property
-    def scorers(self) -> AsyncScorersResourceWithRawResponse:
-        return AsyncScorersResourceWithRawResponse(self._scenarios.scorers)
-
-
-class ScenariosResourceWithStreamingResponse:
-    def __init__(self, scenarios: ScenariosResource) -> None:
-        self._scenarios = scenarios
+class ScorersResourceWithStreamingResponse:
+    def __init__(self, scorers: ScorersResource) -> None:
+        self._scorers = scorers
 
         self.create = to_streamed_response_wrapper(
-            scenarios.create,
+            scorers.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            scenarios.retrieve,
+            scorers.retrieve,
+        )
+        self.update = to_streamed_response_wrapper(
+            scorers.update,
         )
         self.list = to_streamed_response_wrapper(
-            scenarios.list,
+            scorers.list,
         )
-        self.list_public = to_streamed_response_wrapper(
-            scenarios.list_public,
-        )
-        self.start_run = to_streamed_response_wrapper(
-            scenarios.start_run,
+        self.validate = to_streamed_response_wrapper(
+            scorers.validate,
         )
 
-    @cached_property
-    def runs(self) -> RunsResourceWithStreamingResponse:
-        return RunsResourceWithStreamingResponse(self._scenarios.runs)
 
-    @cached_property
-    def scorers(self) -> ScorersResourceWithStreamingResponse:
-        return ScorersResourceWithStreamingResponse(self._scenarios.scorers)
-
-
-class AsyncScenariosResourceWithStreamingResponse:
-    def __init__(self, scenarios: AsyncScenariosResource) -> None:
-        self._scenarios = scenarios
+class AsyncScorersResourceWithStreamingResponse:
+    def __init__(self, scorers: AsyncScorersResource) -> None:
+        self._scorers = scorers
 
         self.create = async_to_streamed_response_wrapper(
-            scenarios.create,
+            scorers.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            scenarios.retrieve,
+            scorers.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            scorers.update,
         )
         self.list = async_to_streamed_response_wrapper(
-            scenarios.list,
+            scorers.list,
         )
-        self.list_public = async_to_streamed_response_wrapper(
-            scenarios.list_public,
+        self.validate = async_to_streamed_response_wrapper(
+            scorers.validate,
         )
-        self.start_run = async_to_streamed_response_wrapper(
-            scenarios.start_run,
-        )
-
-    @cached_property
-    def runs(self) -> AsyncRunsResourceWithStreamingResponse:
-        return AsyncRunsResourceWithStreamingResponse(self._scenarios.runs)
-
-    @cached_property
-    def scorers(self) -> AsyncScorersResourceWithStreamingResponse:
-        return AsyncScorersResourceWithStreamingResponse(self._scenarios.scorers)

@@ -8,6 +8,14 @@ from .runs import (
     RunsResourceWithStreamingResponse,
     AsyncRunsResourceWithStreamingResponse,
 )
+from .scorers import (
+    ScorersResource,
+    AsyncScorersResource,
+    ScorersResourceWithRawResponse,
+    AsyncScorersResourceWithRawResponse,
+    ScorersResourceWithStreamingResponse,
+    AsyncScorersResourceWithStreamingResponse,
+)
 from .scenarios import (
     ScenariosResource,
     AsyncScenariosResource,
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncRunsResourceWithRawResponse",
     "RunsResourceWithStreamingResponse",
     "AsyncRunsResourceWithStreamingResponse",
+    "ScorersResource",
+    "AsyncScorersResource",
+    "ScorersResourceWithRawResponse",
+    "AsyncScorersResourceWithRawResponse",
+    "ScorersResourceWithStreamingResponse",
+    "AsyncScorersResourceWithStreamingResponse",
     "ScenariosResource",
     "AsyncScenariosResource",
     "ScenariosResourceWithRawResponse",
