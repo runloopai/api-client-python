@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing import Dict, Union
+from typing_extensions import Required, TypeAlias, TypedDict
 
 from .uinteger import Uinteger
 
 __all__ = ["PositionParam"]
 
 
-class PositionParam(TypedDict, total=False):
+class PositionParamTyped(TypedDict, total=False):
     character: Required[Uinteger]
     """Character offset on a line in a document (zero-based).
 
@@ -27,3 +28,6 @@ class PositionParam(TypedDict, total=False):
     back to the number of lines in the document. If a line number is negative, it
     defaults to 0.
     """
+
+
+PositionParam: TypeAlias = Union[PositionParamTyped, Dict[str, object]]

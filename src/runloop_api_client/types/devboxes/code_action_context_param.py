@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable
-from typing_extensions import Required, Annotated, TypedDict
+from typing import Dict, List, Union, Iterable
+from typing_extensions import Required, Annotated, TypeAlias, TypedDict
 
 from ..._utils import PropertyInfo
 from .code_action_kind import CodeActionKind
@@ -13,7 +13,7 @@ from .code_action_trigger_kind import CodeActionTriggerKind
 __all__ = ["CodeActionContextParam"]
 
 
-class CodeActionContextParam(TypedDict, total=False):
+class CodeActionContextParamTyped(TypedDict, total=False):
     diagnostics: Required[Iterable[DiagnosticParam]]
     """
     An array of diagnostics known on the client side overlapping the range provided
@@ -32,3 +32,6 @@ class CodeActionContextParam(TypedDict, total=False):
 
     trigger_kind: Annotated[CodeActionTriggerKind, PropertyInfo(alias="triggerKind")]
     """The reason why code actions were requested."""
+
+
+CodeActionContextParam: TypeAlias = Union[CodeActionContextParamTyped, Dict[str, object]]

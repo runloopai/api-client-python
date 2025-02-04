@@ -19,3 +19,5 @@ class BaseCodeAction(BaseModel):
     edit: Optional[BaseWorkspaceEdit] = None
 
     is_preferred: Optional[bool] = FieldInfo(alias="isPreferred", default=None)
+
+    kind: Optional[str] = None

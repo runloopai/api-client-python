@@ -39,8 +39,11 @@ from .lsp_files_response import LspFilesResponse as LspFilesResponse
 from .base_markup_content import BaseMarkupContent as BaseMarkupContent
 from .base_workspace_edit import BaseWorkspaceEdit as BaseWorkspaceEdit
 from .diagnostic_severity import DiagnosticSeverity as DiagnosticSeverity
+from .formatting_response import FormattingResponse as FormattingResponse
+from .references_response import ReferencesResponse as ReferencesResponse
 from .diagnostics_response import DiagnosticsResponse as DiagnosticsResponse
 from .base_diagnostic_param import BaseDiagnosticParam as BaseDiagnosticParam
+from .code_actions_response import CodeActionsResponse as CodeActionsResponse
 from .devbox_logs_list_view import DevboxLogsListView as DevboxLogsListView
 from .lsp_formatting_params import LspFormattingParams as LspFormattingParams
 from .lsp_references_params import LspReferencesParams as LspReferencesParams
@@ -53,6 +56,8 @@ from .lsp_diagnostics_params import LspDiagnosticsParams as LspDiagnosticsParams
 from .lsp_code_actions_params import LspCodeActionsParams as LspCodeActionsParams
 from .signature_help_response import SignatureHelpResponse as SignatureHelpResponse
 from .code_action_trigger_kind import CodeActionTriggerKind as CodeActionTriggerKind
+from .document_symbol_response import DocumentSymbolResponse as DocumentSymbolResponse
+from .file_definition_response import FileDefinitionResponse as FileDefinitionResponse
 from .base_workspace_edit_param import BaseWorkspaceEditParam as BaseWorkspaceEditParam
 from .code_action_context_param import CodeActionContextParam as CodeActionContextParam
 from .execution_retrieve_params import ExecutionRetrieveParams as ExecutionRetrieveParams
