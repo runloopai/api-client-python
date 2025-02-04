@@ -22,6 +22,8 @@ __all__ = [
     "AsyncScenariosCursorIDPage",
     "SyncScenarioRunsCursorIDPage",
     "AsyncScenarioRunsCursorIDPage",
+    "SyncScenarioScorersCursorIDPage",
+    "AsyncScenarioScorersCursorIDPage",
 ]
 
 _T = TypeVar("_T")
@@ -64,6 +66,11 @@ class ScenariosCursorIDPageItem(Protocol):
 
 @runtime_checkable
 class ScenarioRunsCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class ScenarioScorersCursorIDPageItem(Protocol):
     id: str
 
 
@@ -477,6 +484,58 @@ class AsyncScenarioRunsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]
 
         item = cast(Any, runs[-1])
         if not isinstance(item, ScenarioRunsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncScenarioScorersCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    scorers: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        scorers = self.scorers
+        if not scorers:
+            return []
+        return scorers
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        scorers = self.scorers
+        if not scorers:
+            return None
+
+        item = cast(Any, scorers[-1])
+        if not isinstance(item, ScenarioScorersCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncScenarioScorersCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    scorers: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        scorers = self.scorers
+        if not scorers:
+            return []
+        return scorers
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        scorers = self.scorers
+        if not scorers:
+            return None
+
+        item = cast(Any, scorers[-1])
+        if not isinstance(item, ScenarioScorersCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
             # TODO emit warning log
             return None
 
