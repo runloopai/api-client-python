@@ -19,3 +19,5 @@ class LspApplyCodeActionParams(TypedDict, total=False):
     edit: BaseWorkspaceEditParam
 
     is_preferred: Annotated[bool, PropertyInfo(alias="isPreferred")]
+
+    kind: str

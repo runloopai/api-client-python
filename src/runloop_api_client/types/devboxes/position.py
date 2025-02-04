@@ -1,5 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import TYPE_CHECKING
 
 from .uinteger import Uinteger
 from ..._models import BaseModel
@@ -25,3 +26,9 @@ class Position(BaseModel):
     back to the number of lines in the document. If a line number is negative, it
     defaults to 0.
     """
+
+    if TYPE_CHECKING:
+        # Stub to indicate that arbitrary properties are accepted.
+        # To access properties that are not valid identifiers you can use `getattr`, e.g.
+        # `getattr(obj, '$type')`
+        def __getattr__(self, attr: str) -> object: ...

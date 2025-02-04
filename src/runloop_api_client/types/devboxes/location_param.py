@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing import Dict, Union
+from typing_extensions import Required, TypeAlias, TypedDict
 
 from .range_param import RangeParam
 from .document_uri import DocumentUri
@@ -10,7 +11,7 @@ from .document_uri import DocumentUri
 __all__ = ["LocationParam"]
 
 
-class LocationParam(TypedDict, total=False):
+class LocationParamTyped(TypedDict, total=False):
     range: Required[RangeParam]
     """A range in a text document expressed as (zero-based) start and end positions.
 
@@ -31,3 +32,6 @@ class LocationParam(TypedDict, total=False):
 
     uri: Required[DocumentUri]
     """A tagging type for string properties that are actually document URIs."""
+
+
+LocationParam: TypeAlias = Union[LocationParamTyped, Dict[str, object]]
