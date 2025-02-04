@@ -59,6 +59,7 @@ class ComputersResource(SyncAPIResource):
         self,
         *,
         display_dimensions: Optional[computer_create_params.DisplayDimensions] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -78,6 +79,8 @@ class ComputersResource(SyncAPIResource):
         Args:
           display_dimensions: Customize the dimensions of the computer display.
 
+          name: The name to use for the created computer.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -91,7 +94,11 @@ class ComputersResource(SyncAPIResource):
         return self._post(
             "/v1/devboxes/computers",
             body=maybe_transform(
-                {"display_dimensions": display_dimensions}, computer_create_params.ComputerCreateParams
+                {
+                    "display_dimensions": display_dimensions,
+                    "name": name,
+                },
+                computer_create_params.ComputerCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -285,6 +292,7 @@ class AsyncComputersResource(AsyncAPIResource):
         self,
         *,
         display_dimensions: Optional[computer_create_params.DisplayDimensions] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -304,6 +312,8 @@ class AsyncComputersResource(AsyncAPIResource):
         Args:
           display_dimensions: Customize the dimensions of the computer display.
 
+          name: The name to use for the created computer.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -317,7 +327,11 @@ class AsyncComputersResource(AsyncAPIResource):
         return await self._post(
             "/v1/devboxes/computers",
             body=await async_maybe_transform(
-                {"display_dimensions": display_dimensions}, computer_create_params.ComputerCreateParams
+                {
+                    "display_dimensions": display_dimensions,
+                    "name": name,
+                },
+                computer_create_params.ComputerCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
