@@ -13,7 +13,7 @@ class DevboxView(BaseModel):
     id: str
     """The ID of the Devbox."""
 
-    capabilities: List[Literal["unknown", "computer_usage", "browser_usage"]]
+    capabilities: List[Literal["unknown", "computer_usage", "browser_usage", "language_server"]]
     """A list of capability groups this devbox has access to.
 
     This allows devboxes to be compatible with certain tools sets like computer
