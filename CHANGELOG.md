@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.20.0 (2025-02-04)
+
+Full Changelog: [v0.19.0...v0.20.0](https://github.com/runloopai/api-client-python/compare/v0.19.0...v0.20.0)
+
+### Features
+
+* add helpers for blueprint and scenario run creation ([b00a7c1](https://github.com/runloopai/api-client-python/commit/b00a7c1b935db7c919d79ed10c135bf5ed2a9b4f))
+* **api:** api update ([#526](https://github.com/runloopai/api-client-python/issues/526)) ([be26ed7](https://github.com/runloopai/api-client-python/commit/be26ed7c82017d9bff67c9920c078808f8a675e3))
+
+
+### Chores
+
+* **internal:** bummp ruff dependency ([#525](https://github.com/runloopai/api-client-python/issues/525)) ([84051db](https://github.com/runloopai/api-client-python/commit/84051db83a6347f28ee4891be52f5eee7fa9d02a))
+* **internal:** change default timeout to an int ([#524](https://github.com/runloopai/api-client-python/issues/524)) ([a15ccaa](https://github.com/runloopai/api-client-python/commit/a15ccaa45f69331d57be0144a16ba3b1df387245))
+
 ## 0.19.0 (2025-02-03)
 
 Full Changelog: [v0.18.0...v0.19.0](https://github.com/runloopai/api-client-python/compare/v0.18.0...v0.19.0)
