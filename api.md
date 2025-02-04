@@ -111,7 +111,7 @@ from runloop_api_client.types.devboxes import BrowserView
 
 Methods:
 
-- <code title="post /v1/devboxes/browsers">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">create</a>() -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
+- <code title="post /v1/devboxes/browsers">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">create</a>(\*\*<a href="src/runloop_api_client/types/devboxes/browser_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
 
 ## Computers
 

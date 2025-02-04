@@ -12,6 +12,9 @@ class ComputerCreateParams(TypedDict, total=False):
     display_dimensions: Optional[DisplayDimensions]
     """Customize the dimensions of the computer display."""
 
+    name: Optional[str]
+    """The name to use for the created computer."""
+
 
 class DisplayDimensions(TypedDict, total=False):
     display_height_px: Required[int]
