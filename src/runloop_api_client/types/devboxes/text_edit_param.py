@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
+from typing import Dict, Union
+from typing_extensions import Required, Annotated, TypeAlias, TypedDict
 
 from ..._utils import PropertyInfo
 from .range_param import RangeParam
@@ -10,7 +11,7 @@ from .range_param import RangeParam
 __all__ = ["TextEditParam"]
 
 
-class TextEditParam(TypedDict, total=False):
+class TextEditParamTyped(TypedDict, total=False):
     new_text: Required[Annotated[str, PropertyInfo(alias="newText")]]
     """The string to be inserted. For delete operations use an empty string."""
 
@@ -19,3 +20,6 @@ class TextEditParam(TypedDict, total=False):
 
     To insert text into a document create a range where start === end.
     """
+
+
+TextEditParam: TypeAlias = Union[TextEditParamTyped, Dict[str, object]]

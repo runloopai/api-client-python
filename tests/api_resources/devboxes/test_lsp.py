@@ -11,10 +11,15 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types.devboxes import (
     LspFilesResponse,
+    FormattingResponse,
+    ReferencesResponse,
+    CodeActionsResponse,
     DiagnosticsResponse,
     FileContentsResponse,
     HealthStatusResponse,
     SignatureHelpResponse,
+    DocumentSymbolResponse,
+    FileDefinitionResponse,
     CodeSegmentInfoResponse,
     CodeActionApplicationResult,
     LspGetCodeActionsForDiagnosticResponse,
@@ -64,6 +69,7 @@ class TestLsp:
                 }
             },
             is_preferred=True,
+            kind="kind",
         )
         assert_matches_type(CodeActionApplicationResult, lsp, path=["response"])
 
@@ -107,7 +113,7 @@ class TestLsp:
             id="id",
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     def test_method_code_actions_with_all_params(self, client: Runloop) -> None:
@@ -168,7 +174,7 @@ class TestLsp:
                 },
             },
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     def test_raw_response_code_actions(self, client: Runloop) -> None:
@@ -180,7 +186,7 @@ class TestLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     def test_streaming_response_code_actions(self, client: Runloop) -> None:
@@ -192,7 +198,7 @@ class TestLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -252,7 +258,7 @@ class TestLsp:
             id="id",
             uri="string",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
     @parametrize
     def test_raw_response_document_symbols(self, client: Runloop) -> None:
@@ -264,7 +270,7 @@ class TestLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
     @parametrize
     def test_streaming_response_document_symbols(self, client: Runloop) -> None:
@@ -276,7 +282,7 @@ class TestLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -338,7 +344,7 @@ class TestLsp:
             line=0,
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
     @parametrize
     def test_raw_response_file_definition(self, client: Runloop) -> None:
@@ -352,7 +358,7 @@ class TestLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
     @parametrize
     def test_streaming_response_file_definition(self, client: Runloop) -> None:
@@ -366,7 +372,7 @@ class TestLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -424,7 +430,7 @@ class TestLsp:
             id="id",
             uri="string",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FormattingResponse, lsp, path=["response"])
 
     @parametrize
     def test_raw_response_formatting(self, client: Runloop) -> None:
@@ -436,7 +442,7 @@ class TestLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FormattingResponse, lsp, path=["response"])
 
     @parametrize
     def test_streaming_response_formatting(self, client: Runloop) -> None:
@@ -448,7 +454,7 @@ class TestLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(FormattingResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -730,7 +736,7 @@ class TestLsp:
             line=0,
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
     @parametrize
     def test_raw_response_references(self, client: Runloop) -> None:
@@ -744,7 +750,7 @@ class TestLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
     @parametrize
     def test_streaming_response_references(self, client: Runloop) -> None:
@@ -758,7 +764,7 @@ class TestLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -856,6 +862,7 @@ class TestAsyncLsp:
                 }
             },
             is_preferred=True,
+            kind="kind",
         )
         assert_matches_type(CodeActionApplicationResult, lsp, path=["response"])
 
@@ -899,7 +906,7 @@ class TestAsyncLsp:
             id="id",
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     async def test_method_code_actions_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -960,7 +967,7 @@ class TestAsyncLsp:
                 },
             },
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     async def test_raw_response_code_actions(self, async_client: AsyncRunloop) -> None:
@@ -972,7 +979,7 @@ class TestAsyncLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = await response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
     @parametrize
     async def test_streaming_response_code_actions(self, async_client: AsyncRunloop) -> None:
@@ -984,7 +991,7 @@ class TestAsyncLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = await response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(CodeActionsResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -1044,7 +1051,7 @@ class TestAsyncLsp:
             id="id",
             uri="string",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
     @parametrize
     async def test_raw_response_document_symbols(self, async_client: AsyncRunloop) -> None:
@@ -1056,7 +1063,7 @@ class TestAsyncLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = await response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
     @parametrize
     async def test_streaming_response_document_symbols(self, async_client: AsyncRunloop) -> None:
@@ -1068,7 +1075,7 @@ class TestAsyncLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = await response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(DocumentSymbolResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -1130,7 +1137,7 @@ class TestAsyncLsp:
             line=0,
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
     @parametrize
     async def test_raw_response_file_definition(self, async_client: AsyncRunloop) -> None:
@@ -1144,7 +1151,7 @@ class TestAsyncLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = await response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
     @parametrize
     async def test_streaming_response_file_definition(self, async_client: AsyncRunloop) -> None:
@@ -1158,7 +1165,7 @@ class TestAsyncLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = await response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -1216,7 +1223,7 @@ class TestAsyncLsp:
             id="id",
             uri="string",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FormattingResponse, lsp, path=["response"])
 
     @parametrize
     async def test_raw_response_formatting(self, async_client: AsyncRunloop) -> None:
@@ -1228,7 +1235,7 @@ class TestAsyncLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = await response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(FormattingResponse, lsp, path=["response"])
 
     @parametrize
     async def test_streaming_response_formatting(self, async_client: AsyncRunloop) -> None:
@@ -1240,7 +1247,7 @@ class TestAsyncLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = await response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(FormattingResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -1522,7 +1529,7 @@ class TestAsyncLsp:
             line=0,
             uri="uri",
         )
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
     @parametrize
     async def test_raw_response_references(self, async_client: AsyncRunloop) -> None:
@@ -1536,7 +1543,7 @@ class TestAsyncLsp:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         lsp = await response.parse()
-        assert_matches_type(object, lsp, path=["response"])
+        assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
     @parametrize
     async def test_streaming_response_references(self, async_client: AsyncRunloop) -> None:
@@ -1550,7 +1557,7 @@ class TestAsyncLsp:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             lsp = await response.parse()
-            assert_matches_type(object, lsp, path=["response"])
+            assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
