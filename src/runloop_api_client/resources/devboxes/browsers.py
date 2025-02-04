@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._utils import (
+    maybe_transform,
+    async_maybe_transform,
+)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -14,6 +20,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.devboxes import browser_create_params
 from ...types.devboxes.browser_view import BrowserView
 
 __all__ = ["BrowsersResource", "AsyncBrowsersResource"]
@@ -42,6 +49,7 @@ class BrowsersResource(SyncAPIResource):
     def create(
         self,
         *,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -55,9 +63,23 @@ class BrowsersResource(SyncAPIResource):
         As part
         of booting the Devbox, the browser will automatically be started with connection
         utilities activated.
+
+        Args:
+          name: The name to use for the created Devbox with a Browser.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
             "/v1/devboxes/browsers",
+            body=maybe_transform({"name": name}, browser_create_params.BrowserCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -92,6 +114,7 @@ class AsyncBrowsersResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -105,9 +128,23 @@ class AsyncBrowsersResource(AsyncAPIResource):
         As part
         of booting the Devbox, the browser will automatically be started with connection
         utilities activated.
+
+        Args:
+          name: The name to use for the created Devbox with a Browser.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
         """
         return await self._post(
             "/v1/devboxes/browsers",
+            body=await async_maybe_transform({"name": name}, browser_create_params.BrowserCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

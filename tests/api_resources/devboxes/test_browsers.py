@@ -23,6 +23,13 @@ class TestBrowsers:
         assert_matches_type(BrowserView, browser, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Runloop) -> None:
+        browser = client.devboxes.browsers.create(
+            name="name",
+        )
+        assert_matches_type(BrowserView, browser, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.devboxes.browsers.with_raw_response.create()
 
@@ -49,6 +56,13 @@ class TestAsyncBrowsers:
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         browser = await async_client.devboxes.browsers.create()
+        assert_matches_type(BrowserView, browser, path=["response"])
+
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
+        browser = await async_client.devboxes.browsers.create(
+            name="name",
+        )
         assert_matches_type(BrowserView, browser, path=["response"])
 
     @parametrize

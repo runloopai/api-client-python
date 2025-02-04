@@ -43,6 +43,7 @@ from .formatting_response import FormattingResponse as FormattingResponse
 from .references_response import ReferencesResponse as ReferencesResponse
 from .diagnostics_response import DiagnosticsResponse as DiagnosticsResponse
 from .base_diagnostic_param import BaseDiagnosticParam as BaseDiagnosticParam
+from .browser_create_params import BrowserCreateParams as BrowserCreateParams
 from .code_actions_response import CodeActionsResponse as CodeActionsResponse
 from .devbox_logs_list_view import DevboxLogsListView as DevboxLogsListView
 from .lsp_formatting_params import LspFormattingParams as LspFormattingParams

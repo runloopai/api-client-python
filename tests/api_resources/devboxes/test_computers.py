@@ -34,6 +34,7 @@ class TestComputers:
                 "display_height_px": 0,
                 "display_width_px": 0,
             },
+            name="name",
         )
         assert_matches_type(ComputerView, computer, path=["response"])
 
@@ -220,6 +221,7 @@ class TestAsyncComputers:
                 "display_height_px": 0,
                 "display_width_px": 0,
             },
+            name="name",
         )
         assert_matches_type(ComputerView, computer, path=["response"])
 
