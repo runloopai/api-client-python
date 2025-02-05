@@ -26,7 +26,6 @@ from .l_sp_any_param import LSpAnyParam as LSpAnyParam
 from .location_param import LocationParam as LocationParam
 from .position_param import PositionParam as PositionParam
 from .base_diagnostic import BaseDiagnostic as BaseDiagnostic
-from .document_symbol import DocumentSymbol as DocumentSymbol
 from .log_list_params import LogListParams as LogListParams
 from .lsp_file_params import LspFileParams as LspFileParams
 from .text_edit_param import TextEditParam as TextEditParam
