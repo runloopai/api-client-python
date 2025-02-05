@@ -163,7 +163,6 @@ from runloop_api_client.types.devboxes import (
     DiagnosticSeverity,
     DiagnosticsResponse,
     DiagnosticTag,
-    DocumentSymbol,
     DocumentSymbolResponse,
     DocumentUri,
     FileContentsResponse,
