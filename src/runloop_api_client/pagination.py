@@ -87,6 +87,14 @@ class SyncBlueprintsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return blueprints
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         blueprints = self.blueprints
         if not blueprints:
@@ -111,6 +119,14 @@ class AsyncBlueprintsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
         if not blueprints:
             return []
         return blueprints
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -139,6 +155,14 @@ class SyncDevboxesCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return devboxes
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         devboxes = self.devboxes
         if not devboxes:
@@ -163,6 +187,14 @@ class AsyncDevboxesCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
         if not devboxes:
             return []
         return devboxes
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -191,6 +223,14 @@ class SyncRepositoriesCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return repositories
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         repositories = self.repositories
         if not repositories:
@@ -215,6 +255,14 @@ class AsyncRepositoriesCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]
         if not repositories:
             return []
         return repositories
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -243,6 +291,14 @@ class SyncDiskSnapshotsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T])
         return snapshots
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         snapshots = self.snapshots
         if not snapshots:
@@ -267,6 +323,14 @@ class AsyncDiskSnapshotsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T
         if not snapshots:
             return []
         return snapshots
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -295,6 +359,14 @@ class SyncBenchmarksCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return benchmarks
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         benchmarks = self.benchmarks
         if not benchmarks:
@@ -319,6 +391,14 @@ class AsyncBenchmarksCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
         if not benchmarks:
             return []
         return benchmarks
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -347,6 +427,14 @@ class SyncBenchmarkRunsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T])
         return runs
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         runs = self.runs
         if not runs:
@@ -371,6 +459,14 @@ class AsyncBenchmarkRunsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T
         if not runs:
             return []
         return runs
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -399,6 +495,14 @@ class SyncScenariosCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return scenarios
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         scenarios = self.scenarios
         if not scenarios:
@@ -423,6 +527,14 @@ class AsyncScenariosCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
         if not scenarios:
             return []
         return scenarios
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -451,6 +563,14 @@ class SyncScenarioRunsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
         return runs
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         runs = self.runs
         if not runs:
@@ -475,6 +595,14 @@ class AsyncScenarioRunsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]
         if not runs:
             return []
         return runs
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
@@ -503,6 +631,14 @@ class SyncScenarioScorersCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T
         return scorers
 
     @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
     def next_page_info(self) -> Optional[PageInfo]:
         scorers = self.scorers
         if not scorers:
@@ -527,6 +663,14 @@ class AsyncScenarioScorersCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[
         if not scorers:
             return []
         return scorers
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
 
     @override
     def next_page_info(self) -> Optional[PageInfo]:
