@@ -20,5 +20,7 @@ class BrowserView(BaseModel):
     live_view_url: str
     """
     The url to view the browser window and enable user interactions via their own
-    browser.
+    browser. You can control the interactivity of the browser by adding or removing
+    'view_only' query parameter. view_only=1 will allow interaction and view_only=0
+    will disable interaction.
     """

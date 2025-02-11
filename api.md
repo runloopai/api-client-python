@@ -83,6 +83,7 @@ Methods:
 
 - <code title="post /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create</a>(\*\*<a href="src/runloop_api_client/types/devbox_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
+- <code title="post /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">SyncDevboxesCursorIDPage[DevboxView]</a></code>
 - <code title="post /v1/devboxes/{id}/create_ssh_key">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_ssh_key</a>(id) -> <a href="./src/runloop_api_client/types/devbox_create_ssh_key_response.py">DevboxCreateSSHKeyResponse</a></code>
 - <code title="post /v1/devboxes/{id}/create_tunnel">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_tunnel</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_create_tunnel_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_tunnel_view.py">DevboxTunnelView</a></code>
@@ -101,6 +102,20 @@ Methods:
 - <code title="post /v1/devboxes/{id}/upload_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">upload_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_upload_file_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_upload_file_response.py">object</a></code>
 - <code title="post /v1/devboxes/{id}/write_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_contents_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
+## DiskSnapshots
+
+Types:
+
+```python
+from runloop_api_client.types.devboxes import DiskSnapshotDeleteResponse
+```
+
+Methods:
+
+- <code title="post /v1/devboxes/disk_snapshots/{id}">client.devboxes.disk_snapshots.<a href="./src/runloop_api_client/resources/devboxes/disk_snapshots.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/disk_snapshot_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_snapshot_view.py">DevboxSnapshotView</a></code>
+- <code title="get /v1/devboxes/disk_snapshots">client.devboxes.disk_snapshots.<a href="./src/runloop_api_client/resources/devboxes/disk_snapshots.py">list</a>(\*\*<a href="src/runloop_api_client/types/devboxes/disk_snapshot_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_snapshot_view.py">SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]</a></code>
+- <code title="post /v1/devboxes/disk_snapshots/{id}/delete">client.devboxes.disk_snapshots.<a href="./src/runloop_api_client/resources/devboxes/disk_snapshots.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/disk_snapshot_delete_response.py">object</a></code>
+
 ## Browsers
 
 Types:
@@ -112,6 +127,7 @@ from runloop_api_client.types.devboxes import BrowserView
 Methods:
 
 - <code title="post /v1/devboxes/browsers">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">create</a>(\*\*<a href="src/runloop_api_client/types/devboxes/browser_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
+- <code title="get /v1/devboxes/browsers/{id}">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
 
 ## Computers
 
@@ -129,6 +145,7 @@ from runloop_api_client.types.devboxes import (
 Methods:
 
 - <code title="post /v1/devboxes/computers">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">create</a>(\*\*<a href="src/runloop_api_client/types/devboxes/computer_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_view.py">ComputerView</a></code>
+- <code title="get /v1/devboxes/computers/{id}">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/computer_view.py">ComputerView</a></code>
 - <code title="post /v1/devboxes/computers/{id}/keyboard_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">keyboard_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_keyboard_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_keyboard_interaction_response.py">ComputerKeyboardInteractionResponse</a></code>
 - <code title="post /v1/devboxes/computers/{id}/mouse_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">mouse_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_mouse_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_mouse_interaction_response.py">ComputerMouseInteractionResponse</a></code>
 - <code title="post /v1/devboxes/computers/{id}/screen_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">screen_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_screen_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_screen_interaction_response.py">ComputerScreenInteractionResponse</a></code>
@@ -163,6 +180,7 @@ from runloop_api_client.types.devboxes import (
     DiagnosticSeverity,
     DiagnosticsResponse,
     DiagnosticTag,
+    DocumentSymbol,
     DocumentSymbolResponse,
     DocumentUri,
     FileContentsResponse,
