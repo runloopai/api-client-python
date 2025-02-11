@@ -26,6 +26,7 @@ from .logs import (
 from ...types import (
     devbox_list_params,
     devbox_create_params,
+    devbox_update_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
     devbox_create_tunnel_params,
@@ -92,8 +93,16 @@ from ...pagination import (
 )
 from ..._exceptions import RunloopError
 from ...lib.polling import PollingConfig, poll_until
-from ..._base_client import AsyncPaginator, make_request_options
 from ...lib.polling_async import async_poll_until
+from ..._base_client import AsyncPaginator, make_request_options
+from .disk_snapshots import (
+    DiskSnapshotsResource,
+    AsyncDiskSnapshotsResource,
+    DiskSnapshotsResourceWithRawResponse,
+    AsyncDiskSnapshotsResourceWithRawResponse,
+    DiskSnapshotsResourceWithStreamingResponse,
+    AsyncDiskSnapshotsResourceWithStreamingResponse,
+)
 from ...types.devbox_view import DevboxView
 from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.devbox_snapshot_view import DevboxSnapshotView
@@ -108,6 +117,10 @@ __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 DEVBOX_BOOTING_STATES = frozenset(('provisioning', 'initializing'))
 
 class DevboxesResource(SyncAPIResource):
+    @cached_property
+    def disk_snapshots(self) -> DiskSnapshotsResource:
+        return DiskSnapshotsResource(self._client)
+
     @cached_property
     def browsers(self) -> BrowsersResource:
         return BrowsersResource(self._client)
@@ -275,6 +288,60 @@ class DevboxesResource(SyncAPIResource):
             f"/v1/devboxes/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxView,
+        )
+
+    def update(
+        self,
+        id: str,
+        *,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxView:
+        """
+        Updates a devbox by doing a complete update the existing name,metadata fields.
+        It does not patch partial values.
+
+        Args:
+          metadata: User defined metadata to attach to the devbox for organization.
+
+          name: (Optional) A user specified name to give the Devbox.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}",
+            body=maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                devbox_update_params.DevboxUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=DevboxView,
         )
@@ -1240,6 +1307,10 @@ class DevboxesResource(SyncAPIResource):
 
 class AsyncDevboxesResource(AsyncAPIResource):
     @cached_property
+    def disk_snapshots(self) -> AsyncDiskSnapshotsResource:
+        return AsyncDiskSnapshotsResource(self._client)
+
+    @cached_property
     def browsers(self) -> AsyncBrowsersResource:
         return AsyncBrowsersResource(self._client)
 
@@ -1532,8 +1603,62 @@ class AsyncDevboxesResource(AsyncAPIResource):
             )        
 
         return devbox
+    
+    async def update(
+        self,
+        id: str,
+        *,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxView:
+        """
+        Updates a devbox by doing a complete update the existing name,metadata fields.
+        It does not patch partial values.
 
-    async def list(
+        Args:
+          metadata: User defined metadata to attach to the devbox for organization.
+
+          name: (Optional) A user specified name to give the Devbox.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}",
+            body=await async_maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                devbox_update_params.DevboxUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxView,
+        )
+
+    def list(
         self,
         *,
         limit: int | NotGiven = NOT_GIVEN,
@@ -2376,6 +2501,9 @@ class DevboxesResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             devboxes.retrieve,
         )
+        self.update = to_raw_response_wrapper(
+            devboxes.update,
+        )
         self.list = to_raw_response_wrapper(
             devboxes.list,
         )
@@ -2430,6 +2558,10 @@ class DevboxesResourceWithRawResponse:
         )
 
     @cached_property
+    def disk_snapshots(self) -> DiskSnapshotsResourceWithRawResponse:
+        return DiskSnapshotsResourceWithRawResponse(self._devboxes.disk_snapshots)
+
+    @cached_property
     def browsers(self) -> BrowsersResourceWithRawResponse:
         return BrowsersResourceWithRawResponse(self._devboxes.browsers)
 
@@ -2459,6 +2591,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.retrieve = async_to_raw_response_wrapper(
             devboxes.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            devboxes.update,
         )
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
@@ -2514,6 +2649,10 @@ class AsyncDevboxesResourceWithRawResponse:
         )
 
     @cached_property
+    def disk_snapshots(self) -> AsyncDiskSnapshotsResourceWithRawResponse:
+        return AsyncDiskSnapshotsResourceWithRawResponse(self._devboxes.disk_snapshots)
+
+    @cached_property
     def browsers(self) -> AsyncBrowsersResourceWithRawResponse:
         return AsyncBrowsersResourceWithRawResponse(self._devboxes.browsers)
 
@@ -2543,6 +2682,9 @@ class DevboxesResourceWithStreamingResponse:
         )
         self.retrieve = to_streamed_response_wrapper(
             devboxes.retrieve,
+        )
+        self.update = to_streamed_response_wrapper(
+            devboxes.update,
         )
         self.list = to_streamed_response_wrapper(
             devboxes.list,
@@ -2598,6 +2740,10 @@ class DevboxesResourceWithStreamingResponse:
         )
 
     @cached_property
+    def disk_snapshots(self) -> DiskSnapshotsResourceWithStreamingResponse:
+        return DiskSnapshotsResourceWithStreamingResponse(self._devboxes.disk_snapshots)
+
+    @cached_property
     def browsers(self) -> BrowsersResourceWithStreamingResponse:
         return BrowsersResourceWithStreamingResponse(self._devboxes.browsers)
 
@@ -2627,6 +2773,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             devboxes.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            devboxes.update,
         )
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
@@ -2680,6 +2829,10 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.write_file_contents = async_to_streamed_response_wrapper(
             devboxes.write_file_contents,
         )
+
+    @cached_property
+    def disk_snapshots(self) -> AsyncDiskSnapshotsResourceWithStreamingResponse:
+        return AsyncDiskSnapshotsResourceWithStreamingResponse(self._devboxes.disk_snapshots)
 
     @cached_property
     def browsers(self) -> AsyncBrowsersResourceWithStreamingResponse:

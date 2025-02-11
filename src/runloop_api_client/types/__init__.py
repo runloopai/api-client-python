@@ -26,6 +26,7 @@ from .blueprint_list_view import BlueprintListView as BlueprintListView
 from .input_context_param import InputContextParam as InputContextParam
 from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
 from .devbox_snapshot_view import DevboxSnapshotView as DevboxSnapshotView
+from .devbox_update_params import DevboxUpdateParams as DevboxUpdateParams
 from .scenario_environment import ScenarioEnvironment as ScenarioEnvironment
 from .scenario_list_params import ScenarioListParams as ScenarioListParams
 from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams

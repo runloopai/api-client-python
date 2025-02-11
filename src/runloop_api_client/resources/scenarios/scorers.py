@@ -54,7 +54,7 @@ class ScorersResource(SyncAPIResource):
         self,
         *,
         bash_script: str,
-        name: str,
+        type: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -70,7 +70,7 @@ class ScorersResource(SyncAPIResource):
           bash_script: Bash script for the custom scorer taking context as a json object
               $RL_TEST_CONTEXT.
 
-          name: Name of the custom scorer.
+          type: Name of the type of custom scorer.
 
           extra_headers: Send extra headers
 
@@ -87,7 +87,7 @@ class ScorersResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "bash_script": bash_script,
-                    "name": name,
+                    "type": type,
                 },
                 scorer_create_params.ScorerCreateParams,
             ),
@@ -139,7 +139,7 @@ class ScorersResource(SyncAPIResource):
         id: str,
         *,
         bash_script: str,
-        name: str,
+        type: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -155,7 +155,7 @@ class ScorersResource(SyncAPIResource):
           bash_script: Bash script for the custom scorer taking context as a json object
               $RL_TEST_CONTEXT.
 
-          name: Name of the custom scorer.
+          type: Name of the type of custom scorer.
 
           extra_headers: Send extra headers
 
@@ -174,7 +174,7 @@ class ScorersResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "bash_script": bash_script,
-                    "name": name,
+                    "type": type,
                 },
                 scorer_update_params.ScorerUpdateParams,
             ),
@@ -313,7 +313,7 @@ class AsyncScorersResource(AsyncAPIResource):
         self,
         *,
         bash_script: str,
-        name: str,
+        type: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -329,7 +329,7 @@ class AsyncScorersResource(AsyncAPIResource):
           bash_script: Bash script for the custom scorer taking context as a json object
               $RL_TEST_CONTEXT.
 
-          name: Name of the custom scorer.
+          type: Name of the type of custom scorer.
 
           extra_headers: Send extra headers
 
@@ -346,7 +346,7 @@ class AsyncScorersResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "bash_script": bash_script,
-                    "name": name,
+                    "type": type,
                 },
                 scorer_create_params.ScorerCreateParams,
             ),
@@ -398,7 +398,7 @@ class AsyncScorersResource(AsyncAPIResource):
         id: str,
         *,
         bash_script: str,
-        name: str,
+        type: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -414,7 +414,7 @@ class AsyncScorersResource(AsyncAPIResource):
           bash_script: Bash script for the custom scorer taking context as a json object
               $RL_TEST_CONTEXT.
 
-          name: Name of the custom scorer.
+          type: Name of the type of custom scorer.
 
           extra_headers: Send extra headers
 
@@ -433,7 +433,7 @@ class AsyncScorersResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "bash_script": bash_script,
-                    "name": name,
+                    "type": type,
                 },
                 scorer_update_params.ScorerUpdateParams,
             ),
