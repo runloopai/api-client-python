@@ -28,7 +28,7 @@ class TestScorers:
     def test_method_create(self, client: Runloop) -> None:
         scorer = client.scenarios.scorers.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
         assert_matches_type(ScorerCreateResponse, scorer, path=["response"])
 
@@ -36,7 +36,7 @@ class TestScorers:
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.scenarios.scorers.with_raw_response.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
 
         assert response.is_closed is True
@@ -48,7 +48,7 @@ class TestScorers:
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.scenarios.scorers.with_streaming_response.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -101,7 +101,7 @@ class TestScorers:
         scorer = client.scenarios.scorers.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
         assert_matches_type(ScorerUpdateResponse, scorer, path=["response"])
 
@@ -110,7 +110,7 @@ class TestScorers:
         response = client.scenarios.scorers.with_raw_response.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
 
         assert response.is_closed is True
@@ -123,7 +123,7 @@ class TestScorers:
         with client.scenarios.scorers.with_streaming_response.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -139,7 +139,7 @@ class TestScorers:
             client.scenarios.scorers.with_raw_response.update(
                 id="",
                 bash_script="bash_script",
-                name="name",
+                type="type",
             )
 
     @parametrize
@@ -238,7 +238,7 @@ class TestAsyncScorers:
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         scorer = await async_client.scenarios.scorers.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
         assert_matches_type(ScorerCreateResponse, scorer, path=["response"])
 
@@ -246,7 +246,7 @@ class TestAsyncScorers:
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.scenarios.scorers.with_raw_response.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
 
         assert response.is_closed is True
@@ -258,7 +258,7 @@ class TestAsyncScorers:
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.scenarios.scorers.with_streaming_response.create(
             bash_script="bash_script",
-            name="name",
+            type="type",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -311,7 +311,7 @@ class TestAsyncScorers:
         scorer = await async_client.scenarios.scorers.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
         assert_matches_type(ScorerUpdateResponse, scorer, path=["response"])
 
@@ -320,7 +320,7 @@ class TestAsyncScorers:
         response = await async_client.scenarios.scorers.with_raw_response.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         )
 
         assert response.is_closed is True
@@ -333,7 +333,7 @@ class TestAsyncScorers:
         async with async_client.scenarios.scorers.with_streaming_response.update(
             id="id",
             bash_script="bash_script",
-            name="name",
+            type="type",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -349,7 +349,7 @@ class TestAsyncScorers:
             await async_client.scenarios.scorers.with_raw_response.update(
                 id="",
                 bash_script="bash_script",
-                name="name",
+                type="type",
             )
 
     @parametrize
