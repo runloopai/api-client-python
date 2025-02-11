@@ -13,5 +13,5 @@ class ScorerCreateResponse(BaseModel):
     bash_script: str
     """Bash script that takes in $RL_TEST_CONTEXT as env variable and runs scoring."""
 
-    name: str
-    """Name of the scenario scorer."""
+    type: str
+    """Name of the type of scenario scorer."""

@@ -14,5 +14,5 @@ class ScorerUpdateParams(TypedDict, total=False):
     $RL_TEST_CONTEXT.
     """
 
-    name: Required[str]
-    """Name of the custom scorer."""
+    type: Required[str]
+    """Name of the type of custom scorer."""

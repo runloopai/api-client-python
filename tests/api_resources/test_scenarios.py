@@ -30,6 +30,7 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]
@@ -49,8 +50,10 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                         "bash_script": "bash_script",
+                        "scorer_params": {},
                     }
                 ]
             },
@@ -71,6 +74,7 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]
@@ -91,6 +95,7 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]
@@ -263,6 +268,7 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]
@@ -282,8 +288,10 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                         "bash_script": "bash_script",
+                        "scorer_params": {},
                     }
                 ]
             },
@@ -304,6 +312,7 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]
@@ -324,6 +333,7 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
+                        "type": "type",
                         "weight": 0,
                     }
                 ]

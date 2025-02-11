@@ -110,6 +110,39 @@ class ComputersResource(SyncAPIResource):
             cast_to=ComputerView,
         )
 
+    def retrieve(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ComputerView:
+        """
+        Get Computer Details.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/devboxes/computers/{id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ComputerView,
+        )
+
     def keyboard_interaction(
         self,
         id: str,
@@ -343,6 +376,39 @@ class AsyncComputersResource(AsyncAPIResource):
             cast_to=ComputerView,
         )
 
+    async def retrieve(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ComputerView:
+        """
+        Get Computer Details.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/devboxes/computers/{id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ComputerView,
+        )
+
     async def keyboard_interaction(
         self,
         id: str,
@@ -508,6 +574,9 @@ class ComputersResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             computers.create,
         )
+        self.retrieve = to_raw_response_wrapper(
+            computers.retrieve,
+        )
         self.keyboard_interaction = to_raw_response_wrapper(
             computers.keyboard_interaction,
         )
@@ -525,6 +594,9 @@ class AsyncComputersResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             computers.create,
+        )
+        self.retrieve = async_to_raw_response_wrapper(
+            computers.retrieve,
         )
         self.keyboard_interaction = async_to_raw_response_wrapper(
             computers.keyboard_interaction,
@@ -544,6 +616,9 @@ class ComputersResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             computers.create,
         )
+        self.retrieve = to_streamed_response_wrapper(
+            computers.retrieve,
+        )
         self.keyboard_interaction = to_streamed_response_wrapper(
             computers.keyboard_interaction,
         )
@@ -561,6 +636,9 @@ class AsyncComputersResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             computers.create,
+        )
+        self.retrieve = async_to_streamed_response_wrapper(
+            computers.retrieve,
         )
         self.keyboard_interaction = async_to_streamed_response_wrapper(
             computers.keyboard_interaction,

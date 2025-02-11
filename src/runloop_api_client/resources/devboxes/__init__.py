@@ -48,8 +48,22 @@ from .executions import (
     ExecutionsResourceWithStreamingResponse,
     AsyncExecutionsResourceWithStreamingResponse,
 )
+from .disk_snapshots import (
+    DiskSnapshotsResource,
+    AsyncDiskSnapshotsResource,
+    DiskSnapshotsResourceWithRawResponse,
+    AsyncDiskSnapshotsResourceWithRawResponse,
+    DiskSnapshotsResourceWithStreamingResponse,
+    AsyncDiskSnapshotsResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "DiskSnapshotsResource",
+    "AsyncDiskSnapshotsResource",
+    "DiskSnapshotsResourceWithRawResponse",
+    "AsyncDiskSnapshotsResourceWithRawResponse",
+    "DiskSnapshotsResourceWithStreamingResponse",
+    "AsyncDiskSnapshotsResourceWithStreamingResponse",
     "BrowsersResource",
     "AsyncBrowsersResource",
     "BrowsersResourceWithRawResponse",

@@ -26,6 +26,7 @@ from .l_sp_any_param import LSpAnyParam as LSpAnyParam
 from .location_param import LocationParam as LocationParam
 from .position_param import PositionParam as PositionParam
 from .base_diagnostic import BaseDiagnostic as BaseDiagnostic
+from .document_symbol import DocumentSymbol as DocumentSymbol
 from .log_list_params import LogListParams as LogListParams
 from .lsp_file_params import LspFileParams as LspFileParams
 from .text_edit_param import TextEditParam as TextEditParam
@@ -60,10 +61,12 @@ from .document_symbol_response import DocumentSymbolResponse as DocumentSymbolRe
 from .file_definition_response import FileDefinitionResponse as FileDefinitionResponse
 from .base_workspace_edit_param import BaseWorkspaceEditParam as BaseWorkspaceEditParam
 from .code_action_context_param import CodeActionContextParam as CodeActionContextParam
+from .disk_snapshot_list_params import DiskSnapshotListParams as DiskSnapshotListParams
 from .execution_retrieve_params import ExecutionRetrieveParams as ExecutionRetrieveParams
 from .base_parameter_information import BaseParameterInformation as BaseParameterInformation
 from .code_segment_info_response import CodeSegmentInfoResponse as CodeSegmentInfoResponse
 from .lsp_file_definition_params import LspFileDefinitionParams as LspFileDefinitionParams
+from .disk_snapshot_update_params import DiskSnapshotUpdateParams as DiskSnapshotUpdateParams
 from .lsp_document_symbols_params import LspDocumentSymbolsParams as LspDocumentSymbolsParams
 from .lsp_apply_code_action_params import LspApplyCodeActionParams as LspApplyCodeActionParams
 from .execution_execute_sync_params import ExecutionExecuteSyncParams as ExecutionExecuteSyncParams
