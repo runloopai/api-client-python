@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.23.0 (2025-02-11)
+
+Full Changelog: [v0.22.0...v0.23.0](https://github.com/runloopai/api-client-python/compare/v0.22.0...v0.23.0)
+
+### Features
+
+* **api:** api update ([#540](https://github.com/runloopai/api-client-python/issues/540)) ([0f1ce28](https://github.com/runloopai/api-client-python/commit/0f1ce28e9137b52265666131ee0c7561e92cefd9))
+* **client:** send `X-Stainless-Read-Timeout` header ([#536](https://github.com/runloopai/api-client-python/issues/536)) ([996da95](https://github.com/runloopai/api-client-python/commit/996da9596984be3962a3f1f81753c0617676988b))
+
+
+### Bug Fixes
+
+* **api:** remove recursive model for now ([#534](https://github.com/runloopai/api-client-python/issues/534)) ([748bd3d](https://github.com/runloopai/api-client-python/commit/748bd3d1c63587094c0c7ead108d670740052a0b))
+
+
+### Chores
+
+* **internal:** codegen related update ([#538](https://github.com/runloopai/api-client-python/issues/538)) ([b538d7c](https://github.com/runloopai/api-client-python/commit/b538d7c842fa8f2ebf5bcb61b9184d9171283c36))
+* **internal:** fix type traversing dictionary params ([#537](https://github.com/runloopai/api-client-python/issues/537)) ([d6afc80](https://github.com/runloopai/api-client-python/commit/d6afc8051e30d19b2f011f3bcad85676d96c4a48))
+* **internal:** minor type handling changes ([#539](https://github.com/runloopai/api-client-python/issues/539)) ([ecd4acd](https://github.com/runloopai/api-client-python/commit/ecd4acd4ac7e950ad5757a4f6adc08971135f7d3))
+
 ## 0.22.0 (2025-02-04)
 
 Full Changelog: [v0.21.0...v0.22.0](https://github.com/runloopai/api-client-python/compare/v0.21.0...v0.22.0)
