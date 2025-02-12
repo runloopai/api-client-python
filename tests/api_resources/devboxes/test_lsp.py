@@ -340,9 +340,11 @@ class TestLsp:
     def test_method_file_definition(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
@@ -350,9 +352,11 @@ class TestLsp:
     def test_raw_response_file_definition(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -364,9 +368,11 @@ class TestLsp:
     def test_streaming_response_file_definition(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -381,9 +387,11 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.file_definition(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                file_definition_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
@@ -644,9 +652,11 @@ class TestLsp:
     def test_method_get_signature_help(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(SignatureHelpResponse, lsp, path=["response"])
 
@@ -654,9 +664,11 @@ class TestLsp:
     def test_raw_response_get_signature_help(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -668,9 +680,11 @@ class TestLsp:
     def test_streaming_response_get_signature_help(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -685,9 +699,11 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.get_signature_help(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                signature_help_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
@@ -732,9 +748,11 @@ class TestLsp:
     def test_method_references(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
@@ -742,9 +760,11 @@ class TestLsp:
     def test_raw_response_references(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -756,9 +776,11 @@ class TestLsp:
     def test_streaming_response_references(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -773,9 +795,11 @@ class TestLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.lsp.with_raw_response.references(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                references_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
@@ -1133,9 +1157,11 @@ class TestAsyncLsp:
     async def test_method_file_definition(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(FileDefinitionResponse, lsp, path=["response"])
 
@@ -1143,9 +1169,11 @@ class TestAsyncLsp:
     async def test_raw_response_file_definition(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -1157,9 +1185,11 @@ class TestAsyncLsp:
     async def test_streaming_response_file_definition(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.file_definition(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            file_definition_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1174,9 +1204,11 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.file_definition(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                file_definition_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
@@ -1437,9 +1469,11 @@ class TestAsyncLsp:
     async def test_method_get_signature_help(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(SignatureHelpResponse, lsp, path=["response"])
 
@@ -1447,9 +1481,11 @@ class TestAsyncLsp:
     async def test_raw_response_get_signature_help(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -1461,9 +1497,11 @@ class TestAsyncLsp:
     async def test_streaming_response_get_signature_help(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.get_signature_help(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            signature_help_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1478,9 +1516,11 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.get_signature_help(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                signature_help_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
@@ -1525,9 +1565,11 @@ class TestAsyncLsp:
     async def test_method_references(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
         assert_matches_type(ReferencesResponse, lsp, path=["response"])
 
@@ -1535,9 +1577,11 @@ class TestAsyncLsp:
     async def test_raw_response_references(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         )
 
         assert response.is_closed is True
@@ -1549,9 +1593,11 @@ class TestAsyncLsp:
     async def test_streaming_response_references(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.references(
             id="id",
-            character=0,
-            line=0,
-            uri="uri",
+            references_request_body={
+                "character": 0,
+                "line": 0,
+                "uri": "uri",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1566,9 +1612,11 @@ class TestAsyncLsp:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.lsp.with_raw_response.references(
                 id="",
-                character=0,
-                line=0,
-                uri="uri",
+                references_request_body={
+                    "character": 0,
+                    "line": 0,
+                    "uri": "uri",
+                },
             )
 
     @parametrize
