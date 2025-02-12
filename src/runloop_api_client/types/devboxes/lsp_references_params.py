@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from ..._utils import PropertyInfo
+from .references_request_body_param import ReferencesRequestBodyParam
 
 __all__ = ["LspReferencesParams"]
 
 
 class LspReferencesParams(TypedDict, total=False):
-    character: Required[float]
-
-    line: Required[float]
-
-    uri: Required[str]
+    references_request_body: Required[
+        Annotated[ReferencesRequestBodyParam, PropertyInfo(alias="referencesRequestBody")]
+    ]
