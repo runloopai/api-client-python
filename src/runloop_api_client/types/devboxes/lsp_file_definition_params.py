@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
-
-from ..._utils import PropertyInfo
-from .file_definition_request_body_param import FileDefinitionRequestBodyParam
+from typing_extensions import Required, TypedDict
 
 __all__ = ["LspFileDefinitionParams"]
 
 
 class LspFileDefinitionParams(TypedDict, total=False):
-    file_definition_request_body: Required[
-        Annotated[FileDefinitionRequestBodyParam, PropertyInfo(alias="fileDefinitionRequestBody")]
-    ]
+    character: Required[float]
+
+    line: Required[float]
+
+    uri: Required[str]
