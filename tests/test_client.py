@@ -23,6 +23,7 @@ from pydantic import ValidationError
 
 from runloop_api_client import Runloop, AsyncRunloop, APIResponseValidationError
 from runloop_api_client._types import Omit
+from runloop_api_client._utils import maybe_transform
 from runloop_api_client._models import BaseModel, FinalRequestOptions
 from runloop_api_client._constants import RAW_RESPONSE_HEADER
 from runloop_api_client._exceptions import RunloopError, APIStatusError, APITimeoutError, APIResponseValidationError
@@ -32,6 +33,7 @@ from runloop_api_client._base_client import (
     BaseClient,
     make_request_options,
 )
+from runloop_api_client.types.devbox_create_params import DevboxCreateParams
 
 from .utils import update_env
 
@@ -772,7 +774,7 @@ class TestRunloop:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/v1/devboxes",
-                body=cast(object, dict()),
+                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -787,7 +789,7 @@ class TestRunloop:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/v1/devboxes",
-                body=cast(object, dict()),
+                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1593,7 +1595,7 @@ class TestAsyncRunloop:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/v1/devboxes",
-                body=cast(object, dict()),
+                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1608,7 +1610,7 @@ class TestAsyncRunloop:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/v1/devboxes",
-                body=cast(object, dict()),
+                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
