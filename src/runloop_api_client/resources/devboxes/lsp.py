@@ -54,10 +54,7 @@ from ...types.devboxes.file_definition_response import FileDefinitionResponse
 from ...types.devboxes.base_workspace_edit_param import BaseWorkspaceEditParam
 from ...types.devboxes.code_action_context_param import CodeActionContextParam
 from ...types.devboxes.code_segment_info_response import CodeSegmentInfoResponse
-from ...types.devboxes.references_request_body_param import ReferencesRequestBodyParam
 from ...types.devboxes.code_action_application_result import CodeActionApplicationResult
-from ...types.devboxes.signature_help_request_body_param import SignatureHelpRequestBodyParam
-from ...types.devboxes.file_definition_request_body_param import FileDefinitionRequestBodyParam
 from ...types.devboxes.lsp_get_code_actions_for_diagnostic_response import LspGetCodeActionsForDiagnosticResponse
 
 __all__ = ["LspResource", "AsyncLspResource"]
@@ -346,7 +343,9 @@ class LspResource(SyncAPIResource):
         self,
         id: str,
         *,
-        file_definition_request_body: FileDefinitionRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -374,7 +373,14 @@ class LspResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/lsp/file-definition",
-            body=maybe_transform(file_definition_request_body, lsp_file_definition_params.LspFileDefinitionParams),
+            body=maybe_transform(
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_file_definition_params.LspFileDefinitionParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -566,7 +572,9 @@ class LspResource(SyncAPIResource):
         self,
         id: str,
         *,
-        signature_help_request_body: SignatureHelpRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -594,7 +602,14 @@ class LspResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/lsp/get-signature-help",
-            body=maybe_transform(signature_help_request_body, lsp_get_signature_help_params.LspGetSignatureHelpParams),
+            body=maybe_transform(
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_get_signature_help_params.LspGetSignatureHelpParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -643,7 +658,9 @@ class LspResource(SyncAPIResource):
         self,
         id: str,
         *,
-        references_request_body: ReferencesRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -674,7 +691,14 @@ class LspResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/lsp/references",
-            body=maybe_transform(references_request_body, lsp_references_params.LspReferencesParams),
+            body=maybe_transform(
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_references_params.LspReferencesParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1012,7 +1036,9 @@ class AsyncLspResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        file_definition_request_body: FileDefinitionRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1041,7 +1067,12 @@ class AsyncLspResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/lsp/file-definition",
             body=await async_maybe_transform(
-                file_definition_request_body, lsp_file_definition_params.LspFileDefinitionParams
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_file_definition_params.LspFileDefinitionParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -1234,7 +1265,9 @@ class AsyncLspResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        signature_help_request_body: SignatureHelpRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1263,7 +1296,12 @@ class AsyncLspResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/lsp/get-signature-help",
             body=await async_maybe_transform(
-                signature_help_request_body, lsp_get_signature_help_params.LspGetSignatureHelpParams
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_get_signature_help_params.LspGetSignatureHelpParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -1313,7 +1351,9 @@ class AsyncLspResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        references_request_body: ReferencesRequestBodyParam,
+        character: float,
+        line: float,
+        uri: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1344,7 +1384,14 @@ class AsyncLspResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/devboxes/{id}/lsp/references",
-            body=await async_maybe_transform(references_request_body, lsp_references_params.LspReferencesParams),
+            body=await async_maybe_transform(
+                {
+                    "character": character,
+                    "line": line,
+                    "uri": uri,
+                },
+                lsp_references_params.LspReferencesParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

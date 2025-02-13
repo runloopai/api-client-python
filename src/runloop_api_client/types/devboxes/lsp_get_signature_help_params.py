@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
-
-from ..._utils import PropertyInfo
-from .signature_help_request_body_param import SignatureHelpRequestBodyParam
+from typing_extensions import Required, TypedDict
 
 __all__ = ["LspGetSignatureHelpParams"]
 
 
 class LspGetSignatureHelpParams(TypedDict, total=False):
-    signature_help_request_body: Required[
-        Annotated[SignatureHelpRequestBodyParam, PropertyInfo(alias="signatureHelpRequestBody")]
-    ]
+    character: Required[float]
+
+    line: Required[float]
+
+    uri: Required[str]
