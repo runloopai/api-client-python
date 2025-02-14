@@ -774,7 +774,7 @@ class TestRunloop:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/v1/devboxes",
-                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
+                body=cast(object, maybe_transform({}, DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -789,7 +789,7 @@ class TestRunloop:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/v1/devboxes",
-                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
+                body=cast(object, maybe_transform({}, DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1595,7 +1595,7 @@ class TestAsyncRunloop:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/v1/devboxes",
-                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
+                body=cast(object, maybe_transform({}, DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1610,7 +1610,7 @@ class TestAsyncRunloop:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/v1/devboxes",
-                body=cast(object, maybe_transform(dict(), DevboxCreateParams)),
+                body=cast(object, maybe_transform({}, DevboxCreateParams)),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
