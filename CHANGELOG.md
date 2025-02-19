@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.24.0 (2025-02-19)
+
+Full Changelog: [v0.23.0...v0.24.0](https://github.com/runloopai/api-client-python/compare/v0.23.0...v0.24.0)
+
+### Features
+
+* **api:** api update ([#549](https://github.com/runloopai/api-client-python/issues/549)) ([3e19f41](https://github.com/runloopai/api-client-python/commit/3e19f41cf8e2b9cd225439d9df90f80b34d89660))
+
+
+### Bug Fixes
+
+* asyncify on non-asyncio runtimes ([#547](https://github.com/runloopai/api-client-python/issues/547)) ([8ce7003](https://github.com/runloopai/api-client-python/commit/8ce700397fc5d6755f0a95b637efad74d6dc3fe4))
+
+
+### Chores
+
+* **internal:** codegen related update ([#543](https://github.com/runloopai/api-client-python/issues/543)) ([5c44e84](https://github.com/runloopai/api-client-python/commit/5c44e84a8a029b22461df339c280885dc972fa96))
+* **internal:** codegen related update ([#546](https://github.com/runloopai/api-client-python/issues/546)) ([d8b620d](https://github.com/runloopai/api-client-python/commit/d8b620d93c687d37a843262d5ac60fd4a9b815e8))
+* **internal:** update client tests ([#545](https://github.com/runloopai/api-client-python/issues/545)) ([30307f4](https://github.com/runloopai/api-client-python/commit/30307f4b78ba76240793b851dd735a0beb835b75))
+* **internal:** update client tests ([#548](https://github.com/runloopai/api-client-python/issues/548)) ([4e782f1](https://github.com/runloopai/api-client-python/commit/4e782f19bfa7e08ae318eca6f00fb4d5ffe5c9af))
+
 ## 0.23.0 (2025-02-11)
 
 Full Changelog: [v0.22.0...v0.23.0](https://github.com/runloopai/api-client-python/compare/v0.22.0...v0.23.0)
