@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 from typing_extensions import Required, TypedDict
 
 __all__ = ["BenchmarkCreateParams"]
@@ -11,6 +11,9 @@ __all__ = ["BenchmarkCreateParams"]
 class BenchmarkCreateParams(TypedDict, total=False):
     name: Required[str]
     """The name of the Benchmark."""
+
+    metadata: Optional[Dict[str, str]]
+    """User defined metadata to attach to the benchmark for organization."""
 
     scenario_ids: Optional[List[str]]
     """The Scenario IDs that make up the Benchmark."""

@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -15,6 +15,12 @@ class BenchmarkRunView(BaseModel):
     benchmark_id: str
     """The ID of the Benchmark."""
 
+    metadata: Dict[str, str]
+    """User defined metadata to attach to the benchmark run for organization."""
+
+    pending_scenarios: List[str]
+    """List of Scenarios that need to be completed before benchmark can be completed."""
+
     start_time_ms: int
     """The time the benchmark run execution started (Unix timestamp milliseconds)."""
 
@@ -26,9 +32,6 @@ class BenchmarkRunView(BaseModel):
 
     name: Optional[str] = None
     """The name of the BenchmarkRun."""
-
-    pending_scenarios: Optional[List[str]] = None
-    """List of Scenarios that need to be completed before benchmark can be completed."""
 
     score: Optional[float] = None
     """The final score across the BenchmarkRun, present once completed.
