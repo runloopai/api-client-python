@@ -32,6 +32,7 @@ class TestBenchmarks:
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.create(
             name="name",
+            metadata={"foo": "string"},
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -175,6 +176,7 @@ class TestBenchmarks:
     def test_method_start_run_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.start_run(
             benchmark_id="benchmark_id",
+            metadata={"foo": "string"},
             run_name="run_name",
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])
@@ -218,6 +220,7 @@ class TestAsyncBenchmarks:
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.create(
             name="name",
+            metadata={"foo": "string"},
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -361,6 +364,7 @@ class TestAsyncBenchmarks:
     async def test_method_start_run_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.start_run(
             benchmark_id="benchmark_id",
+            metadata={"foo": "string"},
             run_name="run_name",
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])

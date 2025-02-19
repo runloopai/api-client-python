@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -15,6 +15,9 @@ class ScenarioRunView(BaseModel):
 
     devbox_id: str
     """ID of the Devbox on which the Scenario is running."""
+
+    metadata: Dict[str, str]
+    """User defined metadata to attach to the scenario run for organization."""
 
     scenario_id: str
     """ID of the Scenario that has been run."""

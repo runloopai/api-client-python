@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Required, TypedDict
 
 from .input_context_param import InputContextParam
@@ -24,3 +24,13 @@ class ScenarioCreateParams(TypedDict, total=False):
 
     environment_parameters: Optional[ScenarioEnvironmentParam]
     """The Environment in which the Scenario will run."""
+
+    metadata: Optional[Dict[str, str]]
+    """User defined metadata to attach to the scenario for organization."""
+
+    reference_output: Optional[str]
+    """A string representation of the reference output to solve the scenario.
+
+    Commonly can be the result of a git diff or a sequence of command actions to
+    apply to the environment.
+    """
