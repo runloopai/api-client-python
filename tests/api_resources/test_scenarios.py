@@ -59,9 +59,22 @@ class TestScenarios:
             },
             environment_parameters={
                 "blueprint_id": "blueprint_id",
+                "launch_parameters": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "available_ports": [0],
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "resource_size_request": "SMALL",
+                },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
+                "working_directory": "working_directory",
             },
+            metadata={"foo": "string"},
+            reference_output="reference_output",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -227,6 +240,7 @@ class TestScenarios:
         scenario = client.scenarios.start_run(
             scenario_id="scenario_id",
             benchmark_run_id="benchmark_run_id",
+            metadata={"foo": "string"},
             run_name="run_name",
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])
@@ -297,9 +311,22 @@ class TestAsyncScenarios:
             },
             environment_parameters={
                 "blueprint_id": "blueprint_id",
+                "launch_parameters": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "available_ports": [0],
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "resource_size_request": "SMALL",
+                },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
+                "working_directory": "working_directory",
             },
+            metadata={"foo": "string"},
+            reference_output="reference_output",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -465,6 +492,7 @@ class TestAsyncScenarios:
         scenario = await async_client.scenarios.start_run(
             scenario_id="scenario_id",
             benchmark_run_id="benchmark_run_id",
+            metadata={"foo": "string"},
             run_name="run_name",
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])

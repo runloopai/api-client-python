@@ -10,10 +10,15 @@ __all__ = ["ScoringFunctionParam"]
 
 class ScoringFunctionParam(TypedDict, total=False):
     name: Required[str]
-    """Name of scoring function."""
+    """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 
     type: Required[str]
-    """Type of the scoring function. Defaults to bash script."""
+    """Type of the scoring function.
+
+    Use 'bash' as type and fill out 'bash_script' field for scoring via custom bash
+    scripts. Otherwise use a type corresponding to a custom scorer function or a
+    public Runloop scorer type.
+    """
 
     weight: Required[float]
     """Wight to apply to scoring function score.
@@ -24,8 +29,8 @@ class ScoringFunctionParam(TypedDict, total=False):
     bash_script: Optional[str]
     """
     A single bash script that sets up the environment, scores, and prints the final
-    score to standard out. Score should be an integer between 0 and 100, and look
-    like "score=[0..100].
+    score to standard out. Score should be a float between 0.0 and 1.0, and look
+    like "score=[0.0..1.0].
     """
 
     scorer_params: Optional[object]

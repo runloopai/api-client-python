@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import httpx
 
@@ -69,6 +69,7 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         name: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -83,6 +84,8 @@ class BenchmarksResource(SyncAPIResource):
 
         Args:
           name: The name of the Benchmark.
+
+          metadata: User defined metadata to attach to the benchmark for organization.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -101,6 +104,7 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "metadata": metadata,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -246,6 +250,7 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         benchmark_id: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -260,6 +265,8 @@ class BenchmarksResource(SyncAPIResource):
 
         Args:
           benchmark_id: ID of the Benchmark to run.
+
+          metadata: User defined metadata to attach to the benchmark run for organization.
 
           run_name: Display name of the run.
 
@@ -278,6 +285,7 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "benchmark_id": benchmark_id,
+                    "metadata": metadata,
                     "run_name": run_name,
                 },
                 benchmark_start_run_params.BenchmarkStartRunParams,
@@ -321,6 +329,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -335,6 +344,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
         Args:
           name: The name of the Benchmark.
+
+          metadata: User defined metadata to attach to the benchmark for organization.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -353,6 +364,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "metadata": metadata,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -498,6 +510,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         benchmark_id: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -512,6 +525,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
         Args:
           benchmark_id: ID of the Benchmark to run.
+
+          metadata: User defined metadata to attach to the benchmark run for organization.
 
           run_name: Display name of the run.
 
@@ -530,6 +545,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "benchmark_id": benchmark_id,
+                    "metadata": metadata,
                     "run_name": run_name,
                 },
                 benchmark_start_run_params.BenchmarkStartRunParams,

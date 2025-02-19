@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import Dict, List
 
 from pydantic import Field as FieldInfo
 
@@ -12,6 +12,9 @@ __all__ = ["BenchmarkView"]
 class BenchmarkView(BaseModel):
     id: str
     """The ID of the Benchmark."""
+
+    metadata: Dict[str, str]
+    """User defined metadata to attach to the benchmark for organization."""
 
     name: str
     """The name of the Benchmark."""
