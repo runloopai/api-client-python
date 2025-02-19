@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
 
 from .._models import BaseModel
 from .input_context import InputContext
@@ -17,6 +17,9 @@ class ScenarioView(BaseModel):
     input_context: InputContext
     """The input context for the Scenario."""
 
+    metadata: Dict[str, str]
+    """User defined metadata to attach to the scenario for organization."""
+
     name: str
     """The name of the Scenario."""
 
@@ -25,3 +28,10 @@ class ScenarioView(BaseModel):
 
     environment: Optional[ScenarioEnvironment] = None
     """The Environment in which the Scenario is run."""
+
+    reference_output: Optional[str] = None
+    """A string representation of the reference output to solve the scenario.
+
+    Commonly can be the result of a git diff or a sequence of command actions to
+    apply to the environment.
+    """
