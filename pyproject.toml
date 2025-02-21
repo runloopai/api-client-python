@@ -1,6 +1,6 @@
 [project]
 name = "runloop_api_client"
-version = "0.24.0"
+version = "0.25.0"
 description = "The official Python library for the runloop API"
 dynamic = ["readme"]
 license = "MIT"
