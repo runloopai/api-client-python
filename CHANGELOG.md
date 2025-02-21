@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.25.0 (2025-02-21)
+
+Full Changelog: [v0.24.0...v0.25.0](https://github.com/runloopai/api-client-python/compare/v0.24.0...v0.25.0)
+
+### Features
+
+* **client:** allow passing `NotGiven` for body ([#553](https://github.com/runloopai/api-client-python/issues/553)) ([dc21cae](https://github.com/runloopai/api-client-python/commit/dc21caec97e15ccde2c396c6a2f0fce0f2bad313))
+
+
+### Bug Fixes
+
+* **client:** mark some request bodies as optional ([dc21cae](https://github.com/runloopai/api-client-python/commit/dc21caec97e15ccde2c396c6a2f0fce0f2bad313))
+
+
+### Chores
+
+* **internal:** codegen related update ([#551](https://github.com/runloopai/api-client-python/issues/551)) ([8dd01a1](https://github.com/runloopai/api-client-python/commit/8dd01a1e69d82ccbc4f05b72bd980d16cb93e5e5))
+
 ## 0.24.0 (2025-02-19)
 
 Full Changelog: [v0.23.0...v0.24.0](https://github.com/runloopai/api-client-python/compare/v0.23.0...v0.24.0)
