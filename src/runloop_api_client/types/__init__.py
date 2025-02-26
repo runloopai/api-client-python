@@ -35,6 +35,7 @@ from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
 from .repository_list_params import RepositoryListParams as RepositoryListParams
 from .scenario_create_params import ScenarioCreateParams as ScenarioCreateParams
 from .scenario_run_list_view import ScenarioRunListView as ScenarioRunListView
+from .scenario_update_params import ScenarioUpdateParams as ScenarioUpdateParams
 from .scoring_contract_param import ScoringContractParam as ScoringContractParam
 from .scoring_function_param import ScoringFunctionParam as ScoringFunctionParam
 from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreateParams
