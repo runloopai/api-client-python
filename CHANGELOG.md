@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.25.0 (2025-02-26)
+
+Full Changelog: [v0.24.0...v0.25.0](https://github.com/runloopai/api-client-python/compare/v0.24.0...v0.25.0)
+
+### Features
+
+* **api:** api update ([#555](https://github.com/runloopai/api-client-python/issues/555)) ([7c1d55d](https://github.com/runloopai/api-client-python/commit/7c1d55de7fe3f157a30080ddc7e7f0ea5053304a))
+* **client:** allow passing `NotGiven` for body ([#553](https://github.com/runloopai/api-client-python/issues/553)) ([dc21cae](https://github.com/runloopai/api-client-python/commit/dc21caec97e15ccde2c396c6a2f0fce0f2bad313))
+
+
+### Bug Fixes
+
+* **client:** mark some request bodies as optional ([dc21cae](https://github.com/runloopai/api-client-python/commit/dc21caec97e15ccde2c396c6a2f0fce0f2bad313))
+
+
+### Chores
+
+* **internal:** codegen related update ([#551](https://github.com/runloopai/api-client-python/issues/551)) ([8dd01a1](https://github.com/runloopai/api-client-python/commit/8dd01a1e69d82ccbc4f05b72bd980d16cb93e5e5))
+* **internal:** fix devcontainers setup ([#554](https://github.com/runloopai/api-client-python/issues/554)) ([9260eb4](https://github.com/runloopai/api-client-python/commit/9260eb4443fc50ecb07e99af2307896e32027158))
+* **internal:** properly set __pydantic_private__ ([#556](https://github.com/runloopai/api-client-python/issues/556)) ([4496830](https://github.com/runloopai/api-client-python/commit/449683002d1fb31b01c4d167973058684b7ee654))
+
 ## 0.24.0 (2025-02-19)
 
 Full Changelog: [v0.23.0...v0.24.0](https://github.com/runloopai/api-client-python/compare/v0.23.0...v0.24.0)
