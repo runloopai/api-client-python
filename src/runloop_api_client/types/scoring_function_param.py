@@ -21,7 +21,7 @@ class ScoringFunctionParam(TypedDict, total=False):
     """
 
     weight: Required[float]
-    """Wight to apply to scoring function score.
+    """Weight to apply to scoring function score.
 
     Weights of all scoring functions should sum to 1.0.
     """
