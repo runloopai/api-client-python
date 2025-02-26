@@ -161,6 +161,129 @@ class TestScenarios:
             )
 
     @parametrize
+    def test_method_update(self, client: Runloop) -> None:
+        scenario = client.scenarios.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    def test_method_update_with_all_params(self, client: Runloop) -> None:
+        scenario = client.scenarios.update(
+            id="id",
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                        "bash_script": "bash_script",
+                        "scorer_params": {},
+                    }
+                ]
+            },
+            environment_parameters={
+                "blueprint_id": "blueprint_id",
+                "launch_parameters": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "available_ports": [0],
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "resource_size_request": "SMALL",
+                },
+                "prebuilt_id": "prebuilt_id",
+                "snapshot_id": "snapshot_id",
+                "working_directory": "working_directory",
+            },
+            metadata={"foo": "string"},
+            reference_output="reference_output",
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    def test_raw_response_update(self, client: Runloop) -> None:
+        response = client.scenarios.with_raw_response.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        scenario = response.parse()
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    def test_streaming_response_update(self, client: Runloop) -> None:
+        with client.scenarios.with_streaming_response.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            scenario = response.parse()
+            assert_matches_type(ScenarioView, scenario, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_update(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.scenarios.with_raw_response.update(
+                id="",
+                input_context={"problem_statement": "problem_statement"},
+                name="name",
+                scoring_contract={
+                    "scoring_function_parameters": [
+                        {
+                            "name": "name",
+                            "type": "type",
+                            "weight": 0,
+                        }
+                    ]
+                },
+            )
+
+    @parametrize
     def test_method_list(self, client: Runloop) -> None:
         scenario = client.scenarios.list()
         assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
@@ -410,6 +533,129 @@ class TestAsyncScenarios:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.scenarios.with_raw_response.retrieve(
                 "",
+            )
+
+    @parametrize
+    async def test_method_update(self, async_client: AsyncRunloop) -> None:
+        scenario = await async_client.scenarios.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
+        scenario = await async_client.scenarios.update(
+            id="id",
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                        "bash_script": "bash_script",
+                        "scorer_params": {},
+                    }
+                ]
+            },
+            environment_parameters={
+                "blueprint_id": "blueprint_id",
+                "launch_parameters": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "available_ports": [0],
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "resource_size_request": "SMALL",
+                },
+                "prebuilt_id": "prebuilt_id",
+                "snapshot_id": "snapshot_id",
+                "working_directory": "working_directory",
+            },
+            metadata={"foo": "string"},
+            reference_output="reference_output",
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.scenarios.with_raw_response.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        scenario = await response.parse()
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_update(self, async_client: AsyncRunloop) -> None:
+        async with async_client.scenarios.with_streaming_response.update(
+            id="id",
+            input_context={"problem_statement": "problem_statement"},
+            name="name",
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "name",
+                        "type": "type",
+                        "weight": 0,
+                    }
+                ]
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            scenario = await response.parse()
+            assert_matches_type(ScenarioView, scenario, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_update(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.scenarios.with_raw_response.update(
+                id="",
+                input_context={"problem_statement": "problem_statement"},
+                name="name",
+                scoring_contract={
+                    "scoring_function_parameters": [
+                        {
+                            "name": "name",
+                            "type": "type",
+                            "weight": 0,
+                        }
+                    ]
+                },
             )
 
     @parametrize

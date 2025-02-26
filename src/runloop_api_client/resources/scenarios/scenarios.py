@@ -17,6 +17,7 @@ from .runs import (
 from ...types import (
     scenario_list_params,
     scenario_create_params,
+    scenario_update_params,
     scenario_start_run_params,
     scenario_list_public_params,
 )
@@ -179,6 +180,78 @@ class ScenariosResource(SyncAPIResource):
             f"/v1/scenarios/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ScenarioView,
+        )
+
+    def update(
+        self,
+        id: str,
+        *,
+        input_context: InputContextParam,
+        name: str,
+        scoring_contract: ScoringContractParam,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScenarioView:
+        """
+        Update a Scenario, a repeatable AI coding evaluation test that defines the
+        starting environment as well as evaluation success criteria.
+
+        Args:
+          input_context: The input context for the Scenario.
+
+          name: Name of the scenario.
+
+          scoring_contract: The scoring contract for the Scenario.
+
+          environment_parameters: The Environment in which the Scenario will run.
+
+          metadata: User defined metadata to attach to the scenario for organization.
+
+          reference_output: A string representation of the reference output to solve the scenario. Commonly
+              can be the result of a git diff or a sequence of command actions to apply to the
+              environment.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/scenarios/{id}",
+            body=maybe_transform(
+                {
+                    "input_context": input_context,
+                    "name": name,
+                    "scoring_contract": scoring_contract,
+                    "environment_parameters": environment_parameters,
+                    "metadata": metadata,
+                    "reference_output": reference_output,
+                },
+                scenario_update_params.ScenarioUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=ScenarioView,
         )
@@ -532,6 +605,78 @@ class AsyncScenariosResource(AsyncAPIResource):
             cast_to=ScenarioView,
         )
 
+    async def update(
+        self,
+        id: str,
+        *,
+        input_context: InputContextParam,
+        name: str,
+        scoring_contract: ScoringContractParam,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScenarioView:
+        """
+        Update a Scenario, a repeatable AI coding evaluation test that defines the
+        starting environment as well as evaluation success criteria.
+
+        Args:
+          input_context: The input context for the Scenario.
+
+          name: Name of the scenario.
+
+          scoring_contract: The scoring contract for the Scenario.
+
+          environment_parameters: The Environment in which the Scenario will run.
+
+          metadata: User defined metadata to attach to the scenario for organization.
+
+          reference_output: A string representation of the reference output to solve the scenario. Commonly
+              can be the result of a git diff or a sequence of command actions to apply to the
+              environment.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/scenarios/{id}",
+            body=await async_maybe_transform(
+                {
+                    "input_context": input_context,
+                    "name": name,
+                    "scoring_contract": scoring_contract,
+                    "environment_parameters": environment_parameters,
+                    "metadata": metadata,
+                    "reference_output": reference_output,
+                },
+                scenario_update_params.ScenarioUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScenarioView,
+        )
+
     def list(
         self,
         *,
@@ -738,6 +883,9 @@ class ScenariosResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             scenarios.retrieve,
         )
+        self.update = to_raw_response_wrapper(
+            scenarios.update,
+        )
         self.list = to_raw_response_wrapper(
             scenarios.list,
         )
@@ -766,6 +914,9 @@ class AsyncScenariosResourceWithRawResponse:
         )
         self.retrieve = async_to_raw_response_wrapper(
             scenarios.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            scenarios.update,
         )
         self.list = async_to_raw_response_wrapper(
             scenarios.list,
@@ -796,6 +947,9 @@ class ScenariosResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             scenarios.retrieve,
         )
+        self.update = to_streamed_response_wrapper(
+            scenarios.update,
+        )
         self.list = to_streamed_response_wrapper(
             scenarios.list,
         )
@@ -824,6 +978,9 @@ class AsyncScenariosResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             scenarios.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            scenarios.update,
         )
         self.list = async_to_streamed_response_wrapper(
             scenarios.list,

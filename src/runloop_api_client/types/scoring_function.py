@@ -20,7 +20,7 @@ class ScoringFunction(BaseModel):
     """
 
     weight: float
-    """Wight to apply to scoring function score.
+    """Weight to apply to scoring function score.
 
     Weights of all scoring functions should sum to 1.0.
     """
