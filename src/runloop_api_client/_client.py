@@ -74,7 +74,7 @@ class Runloop(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous runloop client instance.
+        """Construct a new synchronous Runloop client instance.
 
         This automatically infers the `bearer_token` argument from the `RUNLOOP_API_KEY` environment variable if it is not provided.
         """
@@ -252,7 +252,7 @@ class AsyncRunloop(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async runloop client instance.
+        """Construct a new async AsyncRunloop client instance.
 
         This automatically infers the `bearer_token` argument from the `RUNLOOP_API_KEY` environment variable if it is not provided.
         """
