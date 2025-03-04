@@ -93,7 +93,6 @@ from ...pagination import (
 )
 from ..._exceptions import RunloopError
 from ...lib.polling import PollingConfig, poll_until
-from ...lib.polling_async import async_poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
     DiskSnapshotsResource,
@@ -103,6 +102,7 @@ from .disk_snapshots import (
     DiskSnapshotsResourceWithStreamingResponse,
     AsyncDiskSnapshotsResourceWithStreamingResponse,
 )
+from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.devbox_snapshot_view import DevboxSnapshotView
