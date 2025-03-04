@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.26.0 (2025-03-04)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/runloopai/api-client-python/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* cp ([4675ff3](https://github.com/runloopai/api-client-python/commit/4675ff37c7bfbce34db1a2b1a2b95bfc90407c57))
+* cp ([a0e7c26](https://github.com/runloopai/api-client-python/commit/a0e7c26d92b1f846e8e27ad80b4bcc3eec9a6b4c))
+* cp ([2ed5f7a](https://github.com/runloopai/api-client-python/commit/2ed5f7a944582d29a5284ddc7ff455832dede033))
+
+
+### Chores
+
+* **docs:** update client docstring ([#559](https://github.com/runloopai/api-client-python/issues/559)) ([aae64ef](https://github.com/runloopai/api-client-python/commit/aae64ef8fa7a03db23695b7dae48dba6d7b1d1e3))
+* **internal:** remove unused http client options forwarding ([#561](https://github.com/runloopai/api-client-python/issues/561)) ([39fcd59](https://github.com/runloopai/api-client-python/commit/39fcd59664517ad7a088a087011cb38f1d9a58ae))
+
+
+### Documentation
+
+* update URLs from stainlessapi.com to stainless.com ([#558](https://github.com/runloopai/api-client-python/issues/558)) ([cc0b37d](https://github.com/runloopai/api-client-python/commit/cc0b37d74d46c7796ae72a8d496ee733e50b70c0))
+
 ## 0.25.0 (2025-02-26)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/runloopai/api-client-python/compare/v0.24.0...v0.25.0)
