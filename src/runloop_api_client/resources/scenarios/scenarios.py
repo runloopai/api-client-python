@@ -422,6 +422,7 @@ class ScenariosResource(SyncAPIResource):
         *,
         scenario_id: str,
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
         polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -455,6 +456,7 @@ class ScenariosResource(SyncAPIResource):
         run = self.start_run(
             scenario_id=scenario_id,
             benchmark_run_id=benchmark_run_id,
+            metadata=metadata,
             run_name=run_name,
             extra_headers=extra_headers,
             extra_query=extra_query,
@@ -842,6 +844,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         scenario_id: str,
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
         polling_config: PollingConfig | None = None,
     ) -> ScenarioRunView:
@@ -863,6 +866,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         run = await self.start_run(
             scenario_id=scenario_id,
             benchmark_run_id=benchmark_run_id,
+            metadata=metadata,
             run_name=run_name,
         )
 
