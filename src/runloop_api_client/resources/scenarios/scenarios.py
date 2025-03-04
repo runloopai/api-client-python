@@ -34,7 +34,6 @@ from ..._utils import (
     maybe_transform,
     async_maybe_transform,
 )
-from ...lib.polling import PollingConfig
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -44,6 +43,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ...pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
+from ...lib.polling import PollingConfig
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
