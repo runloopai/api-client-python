@@ -136,6 +136,31 @@ for devbox in first_page.devboxes:
 # Remove `await` for non-async usage.
 ```
 
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from runloop_api_client import Runloop
+
+client = Runloop()
+
+blueprint_view = client.blueprints.create(
+    name="name",
+    launch_parameters={
+        "after_idle": {
+            "idle_time_seconds": 0,
+            "on_idle": "shutdown",
+        },
+        "available_ports": [0],
+        "keep_alive_time_seconds": 0,
+        "launch_commands": ["string"],
+        "resource_size_request": "SMALL",
+    },
+)
+print(blueprint_view.launch_parameters)
+```
+
 ## File uploads
 
 Request parameters that correspond to file uploads can be passed as `bytes`, a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
