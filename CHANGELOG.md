@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.27.0 (2025-03-21)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/runloopai/api-client-python/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* **api:** api update ([#573](https://github.com/runloopai/api-client-python/issues/573)) ([091f833](https://github.com/runloopai/api-client-python/commit/091f833d80096bb0470d505c0a0145648e52819b))
+
+
+### Bug Fixes
+
+* **ci:** ensure pip is always available ([#571](https://github.com/runloopai/api-client-python/issues/571)) ([ddb9362](https://github.com/runloopai/api-client-python/commit/ddb93629704f116cafb2123dc8b302ddff883bb8))
+* **ci:** remove publishing patch ([#572](https://github.com/runloopai/api-client-python/issues/572)) ([c71815a](https://github.com/runloopai/api-client-python/commit/c71815aaaf47e404e1bf3d44c6b26b5ed0b05054))
+* **types:** handle more discriminated union shapes ([#570](https://github.com/runloopai/api-client-python/issues/570)) ([297cfbe](https://github.com/runloopai/api-client-python/commit/297cfbe93bfdcbbafd44a4501d5a81a7fb1651bd))
+
+
+### Chores
+
+* **internal:** bump rye to 0.44.0 ([#569](https://github.com/runloopai/api-client-python/issues/569)) ([dd5b79a](https://github.com/runloopai/api-client-python/commit/dd5b79a221fff5b38fdbd655d78254fe7140fd73))
+* **internal:** remove extra empty newlines ([#567](https://github.com/runloopai/api-client-python/issues/567)) ([49f34bd](https://github.com/runloopai/api-client-python/commit/49f34bd0b733f2a10592fff098d379501df3ac86))
+
+
+### Documentation
+
+* revise readme docs about nested params ([#564](https://github.com/runloopai/api-client-python/issues/564)) ([a2df5d3](https://github.com/runloopai/api-client-python/commit/a2df5d3c9b32ab941ee83d3f5cac8b874b7bbe28))
+
 ## 0.26.0 (2025-03-04)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/runloopai/api-client-python/compare/v0.25.0...v0.26.0)
