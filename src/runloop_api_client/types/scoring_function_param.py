@@ -7,18 +7,18 @@ from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 __all__ = [
     "ScoringFunctionParam",
-    "ScoringFunction",
-    "ScoringFunctionAstGrepScoringFunction",
-    "ScoringFunctionBashScriptScoringFunction",
-    "ScoringFunctionCommandScoringFunction",
-    "ScoringFunctionCustomScoringFunction",
-    "ScoringFunctionPythonScriptScoringFunction",
-    "ScoringFunctionTestBasedScoringFunction",
-    "ScoringFunctionTestBasedScoringFunctionTestFile",
+    "Scorer",
+    "ScorerAstGrepScoringFunction",
+    "ScorerBashScriptScoringFunction",
+    "ScorerCommandScoringFunction",
+    "ScorerCustomScoringFunction",
+    "ScorerPythonScriptScoringFunction",
+    "ScorerTestBasedScoringFunction",
+    "ScorerTestBasedScoringFunctionTestFile",
 ]
 
 
-class ScoringFunctionAstGrepScoringFunction(TypedDict, total=False):
+class ScorerAstGrepScoringFunction(TypedDict, total=False):
     pattern: Required[str]
     """AST pattern to match."""
 
@@ -31,7 +31,7 @@ class ScoringFunctionAstGrepScoringFunction(TypedDict, total=False):
     """The language of the pattern."""
 
 
-class ScoringFunctionBashScriptScoringFunction(TypedDict, total=False):
+class ScorerBashScriptScoringFunction(TypedDict, total=False):
     type: Required[Literal["bash_script_scorer"]]
 
     bash_script: str
@@ -42,21 +42,21 @@ class ScoringFunctionBashScriptScoringFunction(TypedDict, total=False):
     """
 
 
-class ScoringFunctionCommandScoringFunction(TypedDict, total=False):
+class ScorerCommandScoringFunction(TypedDict, total=False):
     type: Required[Literal["command_scorer"]]
 
     command: str
     """The command to execute."""
 
 
-class ScoringFunctionCustomScoringFunction(TypedDict, total=False):
+class ScorerCustomScoringFunction(TypedDict, total=False):
     type: Required[Literal["custom_scorer"]]
 
     scorer_params: Optional[object]
     """Additional JSON structured context to pass to the scoring function."""
 
 
-class ScoringFunctionPythonScriptScoringFunction(TypedDict, total=False):
+class ScorerPythonScriptScoringFunction(TypedDict, total=False):
     python_script: Required[str]
     """Python script to be run.
 
@@ -73,7 +73,7 @@ class ScoringFunctionPythonScriptScoringFunction(TypedDict, total=False):
     """
 
 
-class ScoringFunctionTestBasedScoringFunctionTestFile(TypedDict, total=False):
+class ScorerTestBasedScoringFunctionTestFile(TypedDict, total=False):
     file_contents: str
     """Content of the test file"""
 
@@ -84,23 +84,23 @@ class ScoringFunctionTestBasedScoringFunctionTestFile(TypedDict, total=False):
     """
 
 
-class ScoringFunctionTestBasedScoringFunction(TypedDict, total=False):
+class ScorerTestBasedScoringFunction(TypedDict, total=False):
     type: Required[Literal["test_based_scorer"]]
 
     test_command: str
     """The command to execute for running the tests"""
 
-    test_files: Iterable[ScoringFunctionTestBasedScoringFunctionTestFile]
+    test_files: Iterable[ScorerTestBasedScoringFunctionTestFile]
     """List of test files to create"""
 
 
-ScoringFunction: TypeAlias = Union[
-    ScoringFunctionAstGrepScoringFunction,
-    ScoringFunctionBashScriptScoringFunction,
-    ScoringFunctionCommandScoringFunction,
-    ScoringFunctionCustomScoringFunction,
-    ScoringFunctionPythonScriptScoringFunction,
-    ScoringFunctionTestBasedScoringFunction,
+Scorer: TypeAlias = Union[
+    ScorerAstGrepScoringFunction,
+    ScorerBashScriptScoringFunction,
+    ScorerCommandScoringFunction,
+    ScorerCustomScoringFunction,
+    ScorerPythonScriptScoringFunction,
+    ScorerTestBasedScoringFunction,
 ]
 
 
@@ -108,7 +108,7 @@ class ScoringFunctionParam(TypedDict, total=False):
     name: Required[str]
     """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 
-    scoring_function: Required[ScoringFunction]
+    scorer: Required[Scorer]
     """The scoring function to use for evaluating this scenario.
 
     The type field determines which built-in function to use.
