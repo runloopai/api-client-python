@@ -11,6 +11,8 @@ __all__ = ["BenchmarkRunListView"]
 class BenchmarkRunListView(BaseModel):
     has_more: bool
 
+    remaining_count: int
+
     runs: List[BenchmarkRunView]
     """List of BenchmarkRuns matching filter."""
 
