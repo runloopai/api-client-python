@@ -138,8 +138,10 @@ class RunsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> ScenarioRunView:
-        """
-        Complete a currently running ScenarioRun.
+        """Complete a currently running ScenarioRun.
+
+        Calling complete will shutdown
+        underlying Devbox resource.
 
         Args:
           extra_headers: Send extra headers
@@ -323,8 +325,10 @@ class AsyncRunsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> ScenarioRunView:
-        """
-        Complete a currently running ScenarioRun.
+        """Complete a currently running ScenarioRun.
+
+        Calling complete will shutdown
+        underlying Devbox resource.
 
         Args:
           extra_headers: Send extra headers

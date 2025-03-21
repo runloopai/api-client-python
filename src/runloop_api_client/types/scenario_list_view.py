@@ -11,6 +11,8 @@ __all__ = ["ScenarioListView"]
 class ScenarioListView(BaseModel):
     has_more: bool
 
+    remaining_count: int
+
     scenarios: List[ScenarioView]
     """List of Scenarios matching filter."""
 
