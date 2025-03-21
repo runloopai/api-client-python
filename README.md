@@ -153,6 +153,8 @@ blueprint_view = client.blueprints.create(
             "on_idle": "shutdown",
         },
         "available_ports": [0],
+        "custom_cpu_cores": 0,
+        "custom_gb_memory": 0,
         "keep_alive_time_seconds": 0,
         "launch_commands": ["string"],
         "resource_size_request": "SMALL",

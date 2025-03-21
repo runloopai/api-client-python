@@ -23,6 +23,12 @@ class LaunchParameters(BaseModel):
     'createTunnel' API.
     """
 
+    custom_cpu_cores: Optional[int] = None
+    """custom resource size, number of cpu cores, must be multiple of 2."""
+
+    custom_gb_memory: Optional[int] = None
+    """custom memory size, number in Gi, must be a multiple of 2."""
+
     keep_alive_time_seconds: Optional[int] = None
     """Time in seconds after which Devbox will automatically shutdown.
 

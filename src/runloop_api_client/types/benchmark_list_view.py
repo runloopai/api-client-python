@@ -14,4 +14,6 @@ class BenchmarkListView(BaseModel):
 
     has_more: bool
 
+    remaining_count: int
+
     total_count: int

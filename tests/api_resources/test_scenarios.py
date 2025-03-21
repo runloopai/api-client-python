@@ -30,7 +30,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -50,10 +54,13 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                            "lang": "lang",
+                        },
                         "weight": 0,
-                        "bash_script": "bash_script",
-                        "scorer_params": {},
                     }
                 ]
             },
@@ -65,6 +72,8 @@ class TestScenarios:
                         "on_idle": "shutdown",
                     },
                     "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
                     "resource_size_request": "SMALL",
@@ -87,7 +96,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -108,7 +121,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -170,7 +187,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -191,10 +212,13 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                            "lang": "lang",
+                        },
                         "weight": 0,
-                        "bash_script": "bash_script",
-                        "scorer_params": {},
                     }
                 ]
             },
@@ -206,6 +230,8 @@ class TestScenarios:
                         "on_idle": "shutdown",
                     },
                     "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
                     "resource_size_request": "SMALL",
@@ -229,7 +255,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -251,7 +281,11 @@ class TestScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -276,7 +310,11 @@ class TestScenarios:
                     "scoring_function_parameters": [
                         {
                             "name": "name",
-                            "type": "type",
+                            "scoring_function": {
+                                "pattern": "pattern",
+                                "search_directory": "search_directory",
+                                "type": "ast_grep_scorer",
+                            },
                             "weight": 0,
                         }
                     ]
@@ -405,7 +443,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -425,10 +467,13 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                            "lang": "lang",
+                        },
                         "weight": 0,
-                        "bash_script": "bash_script",
-                        "scorer_params": {},
                     }
                 ]
             },
@@ -440,6 +485,8 @@ class TestAsyncScenarios:
                         "on_idle": "shutdown",
                     },
                     "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
                     "resource_size_request": "SMALL",
@@ -462,7 +509,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -483,7 +534,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -545,7 +600,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -566,10 +625,13 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                            "lang": "lang",
+                        },
                         "weight": 0,
-                        "bash_script": "bash_script",
-                        "scorer_params": {},
                     }
                 ]
             },
@@ -581,6 +643,8 @@ class TestAsyncScenarios:
                         "on_idle": "shutdown",
                     },
                     "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
                     "resource_size_request": "SMALL",
@@ -604,7 +668,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -626,7 +694,11 @@ class TestAsyncScenarios:
                 "scoring_function_parameters": [
                     {
                         "name": "name",
-                        "type": "type",
+                        "scoring_function": {
+                            "pattern": "pattern",
+                            "search_directory": "search_directory",
+                            "type": "ast_grep_scorer",
+                        },
                         "weight": 0,
                     }
                 ]
@@ -651,7 +723,11 @@ class TestAsyncScenarios:
                     "scoring_function_parameters": [
                         {
                             "name": "name",
-                            "type": "type",
+                            "scoring_function": {
+                                "pattern": "pattern",
+                                "search_directory": "search_directory",
+                                "type": "ast_grep_scorer",
+                            },
                             "weight": 0,
                         }
                     ]

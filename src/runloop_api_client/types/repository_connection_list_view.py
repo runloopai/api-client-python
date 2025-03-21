@@ -11,6 +11,8 @@ __all__ = ["RepositoryConnectionListView"]
 class RepositoryConnectionListView(BaseModel):
     has_more: bool
 
+    remaining_count: int
+
     repositories: List[RepositoryConnectionView]
     """List of repositories matching filter."""
 

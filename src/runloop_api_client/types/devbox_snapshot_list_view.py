@@ -11,6 +11,8 @@ __all__ = ["DevboxSnapshotListView"]
 class DevboxSnapshotListView(BaseModel):
     has_more: bool
 
+    remaining_count: int
+
     snapshots: List[DevboxSnapshotView]
     """List of snapshots matching filter."""
 
