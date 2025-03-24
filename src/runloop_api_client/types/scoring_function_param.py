@@ -20,7 +20,11 @@ __all__ = [
 
 class ScorerAstGrepScoringFunction(TypedDict, total=False):
     pattern: Required[str]
-    """AST pattern to match."""
+    """AST pattern to match.
+
+    Pattern will be passed to ast-grep using the commandline surround by double
+    quotes ("), so make sure to use proper escaping (for example, \\$$\\$$\\$$).
+    """
 
     search_directory: Required[str]
     """The path to search."""
