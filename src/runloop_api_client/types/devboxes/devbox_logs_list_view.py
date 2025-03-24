@@ -12,7 +12,7 @@ class Log(BaseModel):
     level: str
     """Log line severity level."""
 
-    source: Literal["setup_commands", "entrypoint", "exec", "files"]
+    source: Literal["setup_commands", "entrypoint", "exec", "files", "stats"]
     """The source of the log."""
 
     timestamp_ms: int
