@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.29.0 (2025-03-25)
+
+Full Changelog: [v0.28.0...v0.29.0](https://github.com/runloopai/api-client-python/compare/v0.28.0...v0.29.0)
+
+### Features
+
+* **api:** api update ([#578](https://github.com/runloopai/api-client-python/issues/578)) ([73a814f](https://github.com/runloopai/api-client-python/commit/73a814fa135eb768ca5d6f7e73c9720d32c5be93))
+* **api:** api update ([#580](https://github.com/runloopai/api-client-python/issues/580)) ([c8389b1](https://github.com/runloopai/api-client-python/commit/c8389b1d1c521226ccca8665c79c1b1a5349e457))
+
 ## 0.28.0 (2025-03-21)
 
 Full Changelog: [v0.27.0...v0.28.0](https://github.com/runloopai/api-client-python/compare/v0.27.0...v0.28.0)
