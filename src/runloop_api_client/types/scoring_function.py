@@ -55,6 +55,9 @@ class ScorerCommandScoringFunction(BaseModel):
 
 
 class ScorerCustomScoringFunction(BaseModel):
+    custom_scorer_type: str
+    """Type of the scoring function, previously registered with Runloop."""
+
     type: Literal["custom_scorer"]
 
     scorer_params: Optional[object] = None
