@@ -54,6 +54,9 @@ class ScorerCommandScoringFunction(TypedDict, total=False):
 
 
 class ScorerCustomScoringFunction(TypedDict, total=False):
+    custom_scorer_type: Required[str]
+    """Type of the scoring function, previously registered with Runloop."""
+
     type: Required[Literal["custom_scorer"]]
 
     scorer_params: Optional[object]
