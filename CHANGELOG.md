@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.29.1 (2025-03-27)
+
+Full Changelog: [v0.29.0...v0.29.1](https://github.com/runloopai/api-client-python/compare/v0.29.0...v0.29.1)
+
+### Chores
+
+* fix typos ([#582](https://github.com/runloopai/api-client-python/issues/582)) ([66d248c](https://github.com/runloopai/api-client-python/commit/66d248cf691f776d04df6aeb3273734bbf914a3b))
+
 ## 0.29.0 (2025-03-25)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/runloopai/api-client-python/compare/v0.28.0...v0.29.0)
