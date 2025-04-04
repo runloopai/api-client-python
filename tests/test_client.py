@@ -1709,7 +1709,7 @@ class TestAsyncRunloop:
         import threading
 
         from runloop_api_client._utils import asyncify
-        from runloop_api_client._base_client import get_platform 
+        from runloop_api_client._base_client import get_platform
 
         async def test_main() -> None:
             result = await asyncify(get_platform)()
