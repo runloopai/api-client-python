@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.29.1 (2025-04-05)
+
+Full Changelog: [v0.29.0...v0.29.1](https://github.com/runloopai/api-client-python/compare/v0.29.0...v0.29.1)
+
+### Chores
+
+* fix typos ([#582](https://github.com/runloopai/api-client-python/issues/582)) ([66d248c](https://github.com/runloopai/api-client-python/commit/66d248cf691f776d04df6aeb3273734bbf914a3b))
+* **internal:** remove trailing character ([#584](https://github.com/runloopai/api-client-python/issues/584)) ([65bacb7](https://github.com/runloopai/api-client-python/commit/65bacb71b584b8b1a3f998efb2d28102ffa98d74))
+
+
+### Documentation
+
+* swap examples used in readme ([#585](https://github.com/runloopai/api-client-python/issues/585)) ([adf9a26](https://github.com/runloopai/api-client-python/commit/adf9a26a3890b7bd5899d191927ed97a9402c864))
+
 ## 0.29.0 (2025-03-25)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/runloopai/api-client-python/compare/v0.28.0...v0.29.0)
