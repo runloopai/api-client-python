@@ -145,8 +145,7 @@ from runloop_api_client import Runloop
 
 client = Runloop()
 
-blueprint_view = client.blueprints.create(
-    name="name",
+devbox_view = client.devboxes.create(
     launch_parameters={
         "after_idle": {
             "idle_time_seconds": 0,
@@ -160,7 +159,7 @@ blueprint_view = client.blueprints.create(
         "resource_size_request": "SMALL",
     },
 )
-print(blueprint_view.launch_parameters)
+print(devbox_view.launch_parameters)
 ```
 
 ## File uploads
