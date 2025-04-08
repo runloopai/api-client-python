@@ -35,8 +35,11 @@ from ..._response import (
 )
 from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.benchmark_view import BenchmarkView
 from ...types.benchmark_run_view import BenchmarkRunView
+from ...types.benchmark_list_response import BenchmarkListResponse
+from ...types.benchmark_create_response import BenchmarkCreateResponse
+from ...types.benchmark_retrieve_response import BenchmarkRetrieveResponse
+from ...types.benchmark_list_public_response import BenchmarkListPublicResponse
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
 
@@ -78,7 +81,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> BenchmarkView:
+    ) -> BenchmarkCreateResponse:
         """
         Create a Benchmark with a set of Scenarios.
 
@@ -116,7 +119,7 @@ class BenchmarksResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=BenchmarkView,
+            cast_to=BenchmarkCreateResponse,
         )
 
     def retrieve(
@@ -129,7 +132,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkView:
+    ) -> BenchmarkRetrieveResponse:
         """
         Get a previously created Benchmark.
 
@@ -149,7 +152,7 @@ class BenchmarksResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BenchmarkView,
+            cast_to=BenchmarkRetrieveResponse,
         )
 
     def list(
@@ -163,7 +166,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncBenchmarksCursorIDPage[BenchmarkView]:
+    ) -> SyncBenchmarksCursorIDPage[BenchmarkListResponse]:
         """
         List all Benchmarks matching filter.
 
@@ -182,7 +185,7 @@ class BenchmarksResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/v1/benchmarks",
-            page=SyncBenchmarksCursorIDPage[BenchmarkView],
+            page=SyncBenchmarksCursorIDPage[BenchmarkListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -196,7 +199,7 @@ class BenchmarksResource(SyncAPIResource):
                     benchmark_list_params.BenchmarkListParams,
                 ),
             ),
-            model=BenchmarkView,
+            model=BenchmarkListResponse,
         )
 
     def list_public(
@@ -210,7 +213,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncBenchmarksCursorIDPage[BenchmarkView]:
+    ) -> SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse]:
         """
         List all public benchmarks matching filter.
 
@@ -229,7 +232,7 @@ class BenchmarksResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/v1/benchmarks/list_public",
-            page=SyncBenchmarksCursorIDPage[BenchmarkView],
+            page=SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -243,7 +246,7 @@ class BenchmarksResource(SyncAPIResource):
                     benchmark_list_public_params.BenchmarkListPublicParams,
                 ),
             ),
-            model=BenchmarkView,
+            model=BenchmarkListPublicResponse,
         )
 
     def start_run(
@@ -338,7 +341,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> BenchmarkView:
+    ) -> BenchmarkCreateResponse:
         """
         Create a Benchmark with a set of Scenarios.
 
@@ -376,7 +379,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=BenchmarkView,
+            cast_to=BenchmarkCreateResponse,
         )
 
     async def retrieve(
@@ -389,7 +392,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> BenchmarkView:
+    ) -> BenchmarkRetrieveResponse:
         """
         Get a previously created Benchmark.
 
@@ -409,7 +412,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BenchmarkView,
+            cast_to=BenchmarkRetrieveResponse,
         )
 
     def list(
@@ -423,7 +426,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[BenchmarkView, AsyncBenchmarksCursorIDPage[BenchmarkView]]:
+    ) -> AsyncPaginator[BenchmarkListResponse, AsyncBenchmarksCursorIDPage[BenchmarkListResponse]]:
         """
         List all Benchmarks matching filter.
 
@@ -442,7 +445,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/v1/benchmarks",
-            page=AsyncBenchmarksCursorIDPage[BenchmarkView],
+            page=AsyncBenchmarksCursorIDPage[BenchmarkListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -456,7 +459,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                     benchmark_list_params.BenchmarkListParams,
                 ),
             ),
-            model=BenchmarkView,
+            model=BenchmarkListResponse,
         )
 
     def list_public(
@@ -470,7 +473,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[BenchmarkView, AsyncBenchmarksCursorIDPage[BenchmarkView]]:
+    ) -> AsyncPaginator[BenchmarkListPublicResponse, AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse]]:
         """
         List all public benchmarks matching filter.
 
@@ -489,7 +492,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/v1/benchmarks/list_public",
-            page=AsyncBenchmarksCursorIDPage[BenchmarkView],
+            page=AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -503,7 +506,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                     benchmark_list_public_params.BenchmarkListPublicParams,
                 ),
             ),
-            model=BenchmarkView,
+            model=BenchmarkListPublicResponse,
         )
 
     async def start_run(

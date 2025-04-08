@@ -35,7 +35,7 @@ class ScenarioRunView(BaseModel):
     """Optional name of ScenarioRun."""
 
     scoring_contract_result: Optional[ScoringContractResultView] = None
-    """The input context for the Scenario."""
+    """The scoring result of the ScenarioRun."""
 
     start_time_ms: Optional[int] = None
     """The time that the scenario started"""

@@ -11,7 +11,7 @@ class ScorerCreateParams(TypedDict, total=False):
     bash_script: Required[str]
     """
     Bash script for the custom scorer taking context as a json object
-    $RL_TEST_CONTEXT.
+    $RL_SCORER_CONTEXT.
     """
 
     type: Required[str]

@@ -69,7 +69,7 @@ class TestDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             metadata={"foo": "string"},
             name="name",
@@ -615,7 +615,7 @@ class TestDevboxes:
             id="id",
             port=0,
         )
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_remove_tunnel(self, client: Runloop) -> None:
@@ -627,7 +627,7 @@ class TestDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = response.parse()
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     def test_streaming_response_remove_tunnel(self, client: Runloop) -> None:
@@ -639,7 +639,7 @@ class TestDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = response.parse()
-            assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -944,7 +944,7 @@ class TestAsyncDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             metadata={"foo": "string"},
             name="name",
@@ -1490,7 +1490,7 @@ class TestAsyncDevboxes:
             id="id",
             port=0,
         )
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
@@ -1502,7 +1502,7 @@ class TestAsyncDevboxes:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         devbox = await response.parse()
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+        assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     async def test_streaming_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
@@ -1514,7 +1514,7 @@ class TestAsyncDevboxes:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             devbox = await response.parse()
-            assert_matches_type(DevboxTunnelView, devbox, path=["response"])
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
