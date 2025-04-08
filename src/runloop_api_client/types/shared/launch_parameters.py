@@ -38,5 +38,7 @@ class LaunchParameters(BaseModel):
     launch_commands: Optional[List[str]] = None
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
-    resource_size_request: Optional[Literal["SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]] = None
+    resource_size_request: Optional[
+        Literal["X_SMALL", "SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
+    ] = None
     """Manual resource configuration for Devbox. If not set, defaults will be used."""

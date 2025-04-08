@@ -156,7 +156,7 @@ devbox_view = client.devboxes.create(
         "custom_gb_memory": 0,
         "keep_alive_time_seconds": 0,
         "launch_commands": ["string"],
-        "resource_size_request": "SMALL",
+        "resource_size_request": "X_SMALL",
     },
 )
 print(devbox_view.launch_parameters)

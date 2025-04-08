@@ -6,10 +6,10 @@ from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["BenchmarkView"]
+__all__ = ["BenchmarkListResponse"]
 
 
-class BenchmarkView(BaseModel):
+class BenchmarkListResponse(BaseModel):
     id: str
     """The ID of the Benchmark."""
 

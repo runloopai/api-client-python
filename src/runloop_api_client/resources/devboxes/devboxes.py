@@ -973,7 +973,7 @@ class DevboxesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> DevboxTunnelView:
+    ) -> object:
         """
         Remove a previously opened tunnel on the Devbox.
 
@@ -1002,7 +1002,7 @@ class DevboxesResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxTunnelView,
+            cast_to=object,
         )
 
     def resume(
@@ -2159,7 +2159,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> DevboxTunnelView:
+    ) -> object:
         """
         Remove a previously opened tunnel on the Devbox.
 
@@ -2188,7 +2188,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxTunnelView,
+            cast_to=object,
         )
 
     async def resume(

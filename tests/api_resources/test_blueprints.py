@@ -53,7 +53,7 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             system_setup_commands=["string"],
         )
@@ -224,7 +224,7 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             system_setup_commands=["string"],
         )
@@ -289,7 +289,7 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             system_setup_commands=["string"],
         )
@@ -460,7 +460,7 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
-                "resource_size_request": "SMALL",
+                "resource_size_request": "X_SMALL",
             },
             system_setup_commands=["string"],
         )
