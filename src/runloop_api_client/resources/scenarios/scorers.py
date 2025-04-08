@@ -68,7 +68,7 @@ class ScorersResource(SyncAPIResource):
 
         Args:
           bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_TEST_CONTEXT.
+              $RL_SCORER_CONTEXT.
 
           type: Name of the type of custom scorer.
 
@@ -153,7 +153,7 @@ class ScorersResource(SyncAPIResource):
 
         Args:
           bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_TEST_CONTEXT.
+              $RL_SCORER_CONTEXT.
 
           type: Name of the type of custom scorer.
 
@@ -327,7 +327,7 @@ class AsyncScorersResource(AsyncAPIResource):
 
         Args:
           bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_TEST_CONTEXT.
+              $RL_SCORER_CONTEXT.
 
           type: Name of the type of custom scorer.
 
@@ -412,7 +412,7 @@ class AsyncScorersResource(AsyncAPIResource):
 
         Args:
           bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_TEST_CONTEXT.
+              $RL_SCORER_CONTEXT.
 
           type: Name of the type of custom scorer.
 

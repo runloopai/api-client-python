@@ -22,6 +22,9 @@ class BlueprintView(BaseModel):
     parameters: BlueprintBuildParameters
     """The parameters used to create Blueprint."""
 
+    state: Literal["created", "deleted"]
+    """The state of the Blueprint."""
+
     status: Literal["provisioning", "building", "failed", "build_complete"]
     """The status of the Blueprint build."""
 
