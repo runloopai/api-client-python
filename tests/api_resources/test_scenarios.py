@@ -29,6 +29,7 @@ class TestScenarios:
     def test_method_create(self, client: Runloop) -> None:
         scenario = client.scenarios.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -53,6 +54,7 @@ class TestScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -95,6 +97,7 @@ class TestScenarios:
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.scenarios.with_raw_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -120,6 +123,7 @@ class TestScenarios:
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.scenarios.with_streaming_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -186,6 +190,7 @@ class TestScenarios:
         scenario = client.scenarios.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -211,6 +216,7 @@ class TestScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -254,6 +260,7 @@ class TestScenarios:
         response = client.scenarios.with_raw_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -280,6 +287,7 @@ class TestScenarios:
         with client.scenarios.with_streaming_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -309,6 +317,7 @@ class TestScenarios:
             client.scenarios.with_raw_response.update(
                 id="",
                 input_context={"problem_statement": "problem_statement"},
+                is_public=True,
                 name="name",
                 scoring_contract={
                     "scoring_function_parameters": [
@@ -442,6 +451,7 @@ class TestAsyncScenarios:
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -466,6 +476,7 @@ class TestAsyncScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -508,6 +519,7 @@ class TestAsyncScenarios:
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.scenarios.with_raw_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -533,6 +545,7 @@ class TestAsyncScenarios:
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.scenarios.with_streaming_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -599,6 +612,7 @@ class TestAsyncScenarios:
         scenario = await async_client.scenarios.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -624,6 +638,7 @@ class TestAsyncScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -667,6 +682,7 @@ class TestAsyncScenarios:
         response = await async_client.scenarios.with_raw_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -693,6 +709,7 @@ class TestAsyncScenarios:
         async with async_client.scenarios.with_streaming_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -722,6 +739,7 @@ class TestAsyncScenarios:
             await async_client.scenarios.with_raw_response.update(
                 id="",
                 input_context={"problem_statement": "problem_statement"},
+                is_public=True,
                 name="name",
                 scoring_contract={
                     "scoring_function_parameters": [

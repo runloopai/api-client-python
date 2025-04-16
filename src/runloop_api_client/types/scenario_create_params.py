@@ -16,6 +16,9 @@ class ScenarioCreateParams(TypedDict, total=False):
     input_context: Required[InputContextParam]
     """The input context for the Scenario."""
 
+    is_public: Required[bool]
+    """Whether this scenario is public."""
+
     name: Required[str]
     """Name of the scenario."""
 

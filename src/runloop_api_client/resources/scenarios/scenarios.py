@@ -90,6 +90,7 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -109,6 +110,8 @@ class ScenariosResource(SyncAPIResource):
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -137,6 +140,7 @@ class ScenariosResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -193,6 +197,7 @@ class ScenariosResource(SyncAPIResource):
         id: str,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -212,6 +217,8 @@ class ScenariosResource(SyncAPIResource):
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -242,6 +249,7 @@ class ScenariosResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -513,6 +521,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -532,6 +541,8 @@ class AsyncScenariosResource(AsyncAPIResource):
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -560,6 +571,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -616,6 +628,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         id: str,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -635,6 +648,8 @@ class AsyncScenariosResource(AsyncAPIResource):
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -665,6 +680,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
