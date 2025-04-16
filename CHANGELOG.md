@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.30.0 (2025-04-16)
+
+Full Changelog: [v0.29.0...v0.30.0](https://github.com/runloopai/api-client-python/compare/v0.29.0...v0.30.0)
+
+### Features
+
+* **api:** api update ([380287d](https://github.com/runloopai/api-client-python/commit/380287d31238c9cc1cf99a3c394f03141be6174d))
+* **api:** api update ([e9857e8](https://github.com/runloopai/api-client-python/commit/e9857e86999295ef3a8507f69c61ea6ee2861908))
+* **api:** api update ([#586](https://github.com/runloopai/api-client-python/issues/586)) ([eb6d1ba](https://github.com/runloopai/api-client-python/commit/eb6d1ba0b6420f256c8b40dbae75f8a51854d32d))
+
+
+### Bug Fixes
+
+* **client:** correctly reuse idempotency key ([a6ba920](https://github.com/runloopai/api-client-python/commit/a6ba9201bf5012822ba97fdfdc48e96668a2d22e))
+* **perf:** optimize some hot paths ([edf120c](https://github.com/runloopai/api-client-python/commit/edf120c4cfc3d0104c3735c6882787a039b21bce))
+* **perf:** skip traversing types for NotGiven values ([bcb8823](https://github.com/runloopai/api-client-python/commit/bcb8823c114d7171745010f41442932657fc0b76))
+
+
+### Chores
+
+* fix typos ([#582](https://github.com/runloopai/api-client-python/issues/582)) ([66d248c](https://github.com/runloopai/api-client-python/commit/66d248cf691f776d04df6aeb3273734bbf914a3b))
+* **internal:** expand CI branch coverage ([0b68591](https://github.com/runloopai/api-client-python/commit/0b68591b8977c6863d75a464045a958809cca096))
+* **internal:** reduce CI branch coverage ([58821a3](https://github.com/runloopai/api-client-python/commit/58821a3fc73f47ed0601a8fdbeaad79778765719))
+* **internal:** remove trailing character ([#584](https://github.com/runloopai/api-client-python/issues/584)) ([65bacb7](https://github.com/runloopai/api-client-python/commit/65bacb71b584b8b1a3f998efb2d28102ffa98d74))
+* **internal:** slight transform perf improvement ([#587](https://github.com/runloopai/api-client-python/issues/587)) ([ec630c4](https://github.com/runloopai/api-client-python/commit/ec630c44eefc52b89ce69277c9040fc93dd9241f))
+* **internal:** update pyright settings ([487213d](https://github.com/runloopai/api-client-python/commit/487213dcc570b7d538fbff04b0a942cdbc6e97c6))
+* slight wording improvement in README ([#588](https://github.com/runloopai/api-client-python/issues/588)) ([2eb6437](https://github.com/runloopai/api-client-python/commit/2eb643793ea4ce03000b5b4eae6f39843a74543b))
+
+
+### Documentation
+
+* swap examples used in readme ([#585](https://github.com/runloopai/api-client-python/issues/585)) ([adf9a26](https://github.com/runloopai/api-client-python/commit/adf9a26a3890b7bd5899d191927ed97a9402c864))
+
 ## 0.29.0 (2025-03-25)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/runloopai/api-client-python/compare/v0.28.0...v0.29.0)
