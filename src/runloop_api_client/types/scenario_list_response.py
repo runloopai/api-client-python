@@ -7,10 +7,10 @@ from .input_context import InputContext
 from .scoring_contract import ScoringContract
 from .scenario_environment import ScenarioEnvironment
 
-__all__ = ["ScenarioView"]
+__all__ = ["ScenarioListResponse"]
 
 
-class ScenarioView(BaseModel):
+class ScenarioListResponse(BaseModel):
     id: str
     """The ID of the Scenario."""
 
@@ -28,6 +28,9 @@ class ScenarioView(BaseModel):
 
     environment: Optional[ScenarioEnvironment] = None
     """The Environment in which the Scenario is run."""
+
+    is_public: Optional[bool] = None
+    """Whether this scenario is public."""
 
     reference_output: Optional[str] = None
     """A string representation of the reference output to solve the scenario.

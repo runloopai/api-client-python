@@ -145,8 +145,7 @@ from runloop_api_client import Runloop
 
 client = Runloop()
 
-blueprint_view = client.blueprints.create(
-    name="name",
+devbox_view = client.devboxes.create(
     launch_parameters={
         "after_idle": {
             "idle_time_seconds": 0,
@@ -157,15 +156,15 @@ blueprint_view = client.blueprints.create(
         "custom_gb_memory": 0,
         "keep_alive_time_seconds": 0,
         "launch_commands": ["string"],
-        "resource_size_request": "SMALL",
+        "resource_size_request": "X_SMALL",
     },
 )
-print(blueprint_view.launch_parameters)
+print(devbox_view.launch_parameters)
 ```
 
 ## File uploads
 
-Request parameters that correspond to file uploads can be passed as `bytes`, a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
 
 ```python
 from pathlib import Path

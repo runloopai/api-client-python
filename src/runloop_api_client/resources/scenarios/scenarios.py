@@ -45,11 +45,15 @@ from ..._response import (
 from ...pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
 from ...lib.polling import PollingConfig
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.input_context_param import InputContextParam
+from ...types.scenario_list_response import ScenarioListResponse
 from ...types.scoring_contract_param import ScoringContractParam
+from ...types.scenario_create_response import ScenarioCreateResponse
+from ...types.scenario_update_response import ScenarioUpdateResponse
 from ...types.scenario_environment_param import ScenarioEnvironmentParam
+from ...types.scenario_retrieve_response import ScenarioRetrieveResponse
+from ...types.scenario_list_public_response import ScenarioListPublicResponse
 
 __all__ = ["ScenariosResource", "AsyncScenariosResource"]
 
@@ -86,6 +90,7 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -98,13 +103,15 @@ class ScenariosResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScenarioCreateResponse:
         """
         Create a Scenario, a repeatable AI coding evaluation test that defines the
         starting environment as well as evaluation success criteria.
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -133,6 +140,7 @@ class ScenariosResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -148,7 +156,7 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioCreateResponse,
         )
 
     def retrieve(
@@ -161,7 +169,7 @@ class ScenariosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioView:
+    ) -> ScenarioRetrieveResponse:
         """
         Get a previously created scenario.
 
@@ -181,7 +189,7 @@ class ScenariosResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioRetrieveResponse,
         )
 
     def update(
@@ -189,6 +197,7 @@ class ScenariosResource(SyncAPIResource):
         id: str,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -201,13 +210,15 @@ class ScenariosResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScenarioUpdateResponse:
         """
         Update a Scenario, a repeatable AI coding evaluation test that defines the
         starting environment as well as evaluation success criteria.
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -238,6 +249,7 @@ class ScenariosResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -253,7 +265,7 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioUpdateResponse,
         )
 
     def list(
@@ -268,7 +280,7 @@ class ScenariosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncScenariosCursorIDPage[ScenarioView]:
+    ) -> SyncScenariosCursorIDPage[ScenarioListResponse]:
         """List all Scenarios matching filter.
 
         Args:
@@ -290,7 +302,7 @@ class ScenariosResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/v1/scenarios",
-            page=SyncScenariosCursorIDPage[ScenarioView],
+            page=SyncScenariosCursorIDPage[ScenarioListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -305,7 +317,7 @@ class ScenariosResource(SyncAPIResource):
                     scenario_list_params.ScenarioListParams,
                 ),
             ),
-            model=ScenarioView,
+            model=ScenarioListResponse,
         )
 
     def list_public(
@@ -320,7 +332,7 @@ class ScenariosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncScenariosCursorIDPage[ScenarioView]:
+    ) -> SyncScenariosCursorIDPage[ScenarioListPublicResponse]:
         """
         List all public scenarios matching filter.
 
@@ -341,7 +353,7 @@ class ScenariosResource(SyncAPIResource):
         """
         return self._get_api_list(
             "/v1/scenarios/list_public",
-            page=SyncScenariosCursorIDPage[ScenarioView],
+            page=SyncScenariosCursorIDPage[ScenarioListPublicResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -356,7 +368,7 @@ class ScenariosResource(SyncAPIResource):
                     scenario_list_public_params.ScenarioListPublicParams,
                 ),
             ),
-            model=ScenarioView,
+            model=ScenarioListPublicResponse,
         )
 
     def start_run(
@@ -509,6 +521,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -521,13 +534,15 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScenarioCreateResponse:
         """
         Create a Scenario, a repeatable AI coding evaluation test that defines the
         starting environment as well as evaluation success criteria.
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -556,6 +571,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -571,7 +587,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioCreateResponse,
         )
 
     async def retrieve(
@@ -584,7 +600,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioView:
+    ) -> ScenarioRetrieveResponse:
         """
         Get a previously created scenario.
 
@@ -604,7 +620,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioRetrieveResponse,
         )
 
     async def update(
@@ -612,6 +628,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         id: str,
         *,
         input_context: InputContextParam,
+        is_public: bool,
         name: str,
         scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
@@ -624,13 +641,15 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> ScenarioView:
+    ) -> ScenarioUpdateResponse:
         """
         Update a Scenario, a repeatable AI coding evaluation test that defines the
         starting environment as well as evaluation success criteria.
 
         Args:
           input_context: The input context for the Scenario.
+
+          is_public: Whether this scenario is public.
 
           name: Name of the scenario.
 
@@ -661,6 +680,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "input_context": input_context,
+                    "is_public": is_public,
                     "name": name,
                     "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
@@ -676,7 +696,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScenarioView,
+            cast_to=ScenarioUpdateResponse,
         )
 
     def list(
@@ -691,7 +711,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
+    ) -> AsyncPaginator[ScenarioListResponse, AsyncScenariosCursorIDPage[ScenarioListResponse]]:
         """List all Scenarios matching filter.
 
         Args:
@@ -713,7 +733,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/v1/scenarios",
-            page=AsyncScenariosCursorIDPage[ScenarioView],
+            page=AsyncScenariosCursorIDPage[ScenarioListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -728,7 +748,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     scenario_list_params.ScenarioListParams,
                 ),
             ),
-            model=ScenarioView,
+            model=ScenarioListResponse,
         )
 
     def list_public(
@@ -743,7 +763,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
+    ) -> AsyncPaginator[ScenarioListPublicResponse, AsyncScenariosCursorIDPage[ScenarioListPublicResponse]]:
         """
         List all public scenarios matching filter.
 
@@ -764,7 +784,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         """
         return self._get_api_list(
             "/v1/scenarios/list_public",
-            page=AsyncScenariosCursorIDPage[ScenarioView],
+            page=AsyncScenariosCursorIDPage[ScenarioListPublicResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -779,7 +799,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     scenario_list_public_params.ScenarioListPublicParams,
                 ),
             ),
-            model=ScenarioView,
+            model=ScenarioListPublicResponse,
         )
 
     async def start_run(

@@ -10,8 +10,12 @@ import pytest
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
-    ScenarioView,
     ScenarioRunView,
+    ScenarioListResponse,
+    ScenarioCreateResponse,
+    ScenarioUpdateResponse,
+    ScenarioRetrieveResponse,
+    ScenarioListPublicResponse,
 )
 from runloop_api_client.pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
 
@@ -25,6 +29,7 @@ class TestScenarios:
     def test_method_create(self, client: Runloop) -> None:
         scenario = client.scenarios.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -40,7 +45,7 @@ class TestScenarios:
                 ]
             },
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
@@ -49,6 +54,7 @@ class TestScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -76,7 +82,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
-                    "resource_size_request": "SMALL",
+                    "resource_size_request": "X_SMALL",
                 },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
@@ -85,12 +91,13 @@ class TestScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.scenarios.with_raw_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -110,12 +117,13 @@ class TestScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.scenarios.with_streaming_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -135,7 +143,7 @@ class TestScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -144,7 +152,7 @@ class TestScenarios:
         scenario = client.scenarios.retrieve(
             "id",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Runloop) -> None:
@@ -155,7 +163,7 @@ class TestScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve(self, client: Runloop) -> None:
@@ -166,7 +174,7 @@ class TestScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -182,6 +190,7 @@ class TestScenarios:
         scenario = client.scenarios.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -197,7 +206,7 @@ class TestScenarios:
                 ]
             },
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     def test_method_update_with_all_params(self, client: Runloop) -> None:
@@ -207,6 +216,7 @@ class TestScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -234,7 +244,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
-                    "resource_size_request": "SMALL",
+                    "resource_size_request": "X_SMALL",
                 },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
@@ -243,13 +253,14 @@ class TestScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     def test_raw_response_update(self, client: Runloop) -> None:
         response = client.scenarios.with_raw_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -269,13 +280,14 @@ class TestScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     def test_streaming_response_update(self, client: Runloop) -> None:
         with client.scenarios.with_streaming_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -295,7 +307,7 @@ class TestScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -305,6 +317,7 @@ class TestScenarios:
             client.scenarios.with_raw_response.update(
                 id="",
                 input_context={"problem_statement": "problem_statement"},
+                is_public=True,
                 name="name",
                 scoring_contract={
                     "scoring_function_parameters": [
@@ -324,7 +337,7 @@ class TestScenarios:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         scenario = client.scenarios.list()
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
@@ -333,7 +346,7 @@ class TestScenarios:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -342,7 +355,7 @@ class TestScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = response.parse()
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -351,14 +364,14 @@ class TestScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = response.parse()
-            assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+            assert_matches_type(SyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_list_public(self, client: Runloop) -> None:
         scenario = client.scenarios.list_public()
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
@@ -367,7 +380,7 @@ class TestScenarios:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     def test_raw_response_list_public(self, client: Runloop) -> None:
@@ -376,7 +389,7 @@ class TestScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = response.parse()
-        assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(SyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     def test_streaming_response_list_public(self, client: Runloop) -> None:
@@ -385,7 +398,7 @@ class TestScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = response.parse()
-            assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+            assert_matches_type(SyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -438,6 +451,7 @@ class TestAsyncScenarios:
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -453,7 +467,7 @@ class TestAsyncScenarios:
                 ]
             },
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -462,6 +476,7 @@ class TestAsyncScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -489,7 +504,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
-                    "resource_size_request": "SMALL",
+                    "resource_size_request": "X_SMALL",
                 },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
@@ -498,12 +513,13 @@ class TestAsyncScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.scenarios.with_raw_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -523,12 +539,13 @@ class TestAsyncScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = await response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.scenarios.with_streaming_response.create(
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -548,7 +565,7 @@ class TestAsyncScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = await response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioCreateResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -557,7 +574,7 @@ class TestAsyncScenarios:
         scenario = await async_client.scenarios.retrieve(
             "id",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -568,7 +585,7 @@ class TestAsyncScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = await response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -579,7 +596,7 @@ class TestAsyncScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = await response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioRetrieveResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -595,6 +612,7 @@ class TestAsyncScenarios:
         scenario = await async_client.scenarios.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -610,7 +628,7 @@ class TestAsyncScenarios:
                 ]
             },
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -620,6 +638,7 @@ class TestAsyncScenarios:
                 "problem_statement": "problem_statement",
                 "additional_context": {},
             },
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -647,7 +666,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
-                    "resource_size_request": "SMALL",
+                    "resource_size_request": "X_SMALL",
                 },
                 "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
@@ -656,13 +675,14 @@ class TestAsyncScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
         )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncRunloop) -> None:
         response = await async_client.scenarios.with_raw_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -682,13 +702,14 @@ class TestAsyncScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = await response.parse()
-        assert_matches_type(ScenarioView, scenario, path=["response"])
+        assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncRunloop) -> None:
         async with async_client.scenarios.with_streaming_response.update(
             id="id",
             input_context={"problem_statement": "problem_statement"},
+            is_public=True,
             name="name",
             scoring_contract={
                 "scoring_function_parameters": [
@@ -708,7 +729,7 @@ class TestAsyncScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = await response.parse()
-            assert_matches_type(ScenarioView, scenario, path=["response"])
+            assert_matches_type(ScenarioUpdateResponse, scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -718,6 +739,7 @@ class TestAsyncScenarios:
             await async_client.scenarios.with_raw_response.update(
                 id="",
                 input_context={"problem_statement": "problem_statement"},
+                is_public=True,
                 name="name",
                 scoring_contract={
                     "scoring_function_parameters": [
@@ -737,7 +759,7 @@ class TestAsyncScenarios:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list()
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -746,7 +768,7 @@ class TestAsyncScenarios:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -755,7 +777,7 @@ class TestAsyncScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = await response.parse()
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -764,14 +786,14 @@ class TestAsyncScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = await response.parse()
-            assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+            assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListResponse], scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_list_public(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list_public()
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -780,7 +802,7 @@ class TestAsyncScenarios:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     async def test_raw_response_list_public(self, async_client: AsyncRunloop) -> None:
@@ -789,7 +811,7 @@ class TestAsyncScenarios:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         scenario = await response.parse()
-        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+        assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
     @parametrize
     async def test_streaming_response_list_public(self, async_client: AsyncRunloop) -> None:
@@ -798,7 +820,7 @@ class TestAsyncScenarios:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             scenario = await response.parse()
-            assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
+            assert_matches_type(AsyncScenariosCursorIDPage[ScenarioListPublicResponse], scenario, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

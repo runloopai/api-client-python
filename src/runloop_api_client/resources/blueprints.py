@@ -321,6 +321,46 @@ class BlueprintsResource(SyncAPIResource):
             model=BlueprintView,
         )
 
+    def delete(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """
+        Delete a previously created Blueprint.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/blueprints/{id}/delete",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
+        )
+
     def logs(
         self,
         id: str,
@@ -710,6 +750,46 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             model=BlueprintView,
         )
 
+    async def delete(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """
+        Delete a previously created Blueprint.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/blueprints/{id}/delete",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
+        )
+
     async def logs(
         self,
         id: str,
@@ -825,6 +905,9 @@ class BlueprintsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             blueprints.list,
         )
+        self.delete = to_raw_response_wrapper(
+            blueprints.delete,
+        )
         self.logs = to_raw_response_wrapper(
             blueprints.logs,
         )
@@ -845,6 +928,9 @@ class AsyncBlueprintsResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             blueprints.list,
+        )
+        self.delete = async_to_raw_response_wrapper(
+            blueprints.delete,
         )
         self.logs = async_to_raw_response_wrapper(
             blueprints.logs,
@@ -867,6 +953,9 @@ class BlueprintsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             blueprints.list,
         )
+        self.delete = to_streamed_response_wrapper(
+            blueprints.delete,
+        )
         self.logs = to_streamed_response_wrapper(
             blueprints.logs,
         )
@@ -887,6 +976,9 @@ class AsyncBlueprintsResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             blueprints.list,
+        )
+        self.delete = async_to_streamed_response_wrapper(
+            blueprints.delete,
         )
         self.logs = async_to_streamed_response_wrapper(
             blueprints.logs,
