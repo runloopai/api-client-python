@@ -29,6 +29,9 @@ class ScenarioListPublicResponse(BaseModel):
     environment: Optional[ScenarioEnvironment] = None
     """The Environment in which the Scenario is run."""
 
+    is_public: Optional[bool] = None
+    """Whether this scenario is public."""
+
     reference_output: Optional[str] = None
     """A string representation of the reference output to solve the scenario.
 
