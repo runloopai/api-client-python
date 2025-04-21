@@ -16,6 +16,9 @@ class LaunchParameters(BaseModel):
     If after_idle is set, Devbox will ignore keep_alive_time_seconds.
     """
 
+    architecture: Optional[Literal["x86_64", "arm64"]] = None
+    """The target architecture for the Devbox. If unset, defaults to arm64."""
+
     available_ports: Optional[List[int]] = None
     """A list of ports to make available on the Devbox.
 
