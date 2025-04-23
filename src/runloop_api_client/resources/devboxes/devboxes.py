@@ -39,12 +39,7 @@ from ...types import (
     devbox_write_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
-from ..._utils import (
-    extract_files,
-    maybe_transform,
-    deepcopy_minimal,
-    async_maybe_transform,
-)
+from ..._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .browsers import (
     BrowsersResource,
     AsyncBrowsersResource,
