@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.32.0 (2025-04-25)
+
+Full Changelog: [v0.31.0...v0.32.0](https://github.com/runloopai/api-client-python/compare/v0.31.0...v0.32.0)
+
+### Features
+
+* **api:** api update ([cf2ad50](https://github.com/runloopai/api-client-python/commit/cf2ad505284d70de40503c417b3a1183294b7174))
+
+
+### Bug Fixes
+
+* **pydantic v1:** more robust ModelField.annotation check ([6ac21f3](https://github.com/runloopai/api-client-python/commit/6ac21f3a0ceb614011e1359b7c8d68c85a47b840))
+
+
+### Chores
+
+* broadly detect json family of content-type headers ([0a09a72](https://github.com/runloopai/api-client-python/commit/0a09a72c20fdf74d044bf074a68629da159d16b7))
+* **ci:** add timeout thresholds for CI jobs ([a10bca8](https://github.com/runloopai/api-client-python/commit/a10bca8067d5fdbd5095a7bdc81ff744e5bc1314))
+* **ci:** only use depot for staging repos ([84dd6ba](https://github.com/runloopai/api-client-python/commit/84dd6ba5bd4279e8dacad56c04b4aebb20023463))
+* **internal:** codegen related update ([fdaff81](https://github.com/runloopai/api-client-python/commit/fdaff81cc4ef7a4ee0455c07a7655868705599c0))
+* **internal:** fix list file params ([d74de2f](https://github.com/runloopai/api-client-python/commit/d74de2fab676075f4e46972dbba8f413b1e1160e))
+* **internal:** import reformatting ([97a122c](https://github.com/runloopai/api-client-python/commit/97a122c50265888b92b41d6f078209c054a1fb79))
+* **internal:** minor formatting changes ([6557c6c](https://github.com/runloopai/api-client-python/commit/6557c6ccf7bb6f6e93b6e29c3c8bbe49ef57d44d))
+* **internal:** refactor retries to not use recursion ([88cd023](https://github.com/runloopai/api-client-python/commit/88cd02300c4e5eb6bb763341a71aca3eccbeebae))
+
 ## 0.31.0 (2025-04-21)
 
 Full Changelog: [v0.30.0...v0.31.0](https://github.com/runloopai/api-client-python/compare/v0.30.0...v0.31.0)
