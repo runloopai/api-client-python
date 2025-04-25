@@ -158,6 +158,10 @@ devbox_view = client.devboxes.create(
         "keep_alive_time_seconds": 0,
         "launch_commands": ["string"],
         "resource_size_request": "X_SMALL",
+        "user_parameters": {
+            "uid": 0,
+            "username": "username",
+        },
     },
 )
 print(devbox_view.launch_parameters)
