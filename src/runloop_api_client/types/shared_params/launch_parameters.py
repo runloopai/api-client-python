@@ -3,11 +3,19 @@
 from __future__ import annotations
 
 from typing import List, Iterable, Optional
-from typing_extensions import Literal, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .after_idle import AfterIdle
 
-__all__ = ["LaunchParameters"]
+__all__ = ["LaunchParameters", "UserParameters"]
+
+
+class UserParameters(TypedDict, total=False):
+    uid: Required[int]
+    """User ID (UID) for the Linux user. Must be a positive integer."""
+
+    username: Required[str]
+    """Username for the Linux user."""
 
 
 class LaunchParameters(TypedDict, total=False):
@@ -46,3 +54,9 @@ class LaunchParameters(TypedDict, total=False):
         Literal["X_SMALL", "SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
     ]
     """Manual resource configuration for Devbox. If not set, defaults will be used."""
+
+    user_parameters: Optional[UserParameters]
+    """Specify the user for execution on Devbox.
+
+    If not set, default `user` will be used.
+    """

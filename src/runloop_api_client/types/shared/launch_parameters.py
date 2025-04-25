@@ -6,7 +6,15 @@ from typing_extensions import Literal
 from ..._models import BaseModel
 from .after_idle import AfterIdle
 
-__all__ = ["LaunchParameters"]
+__all__ = ["LaunchParameters", "UserParameters"]
+
+
+class UserParameters(BaseModel):
+    uid: int
+    """User ID (UID) for the Linux user. Must be a positive integer."""
+
+    username: str
+    """Username for the Linux user."""
 
 
 class LaunchParameters(BaseModel):
@@ -45,3 +53,9 @@ class LaunchParameters(BaseModel):
         Literal["X_SMALL", "SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
     ] = None
     """Manual resource configuration for Devbox. If not set, defaults will be used."""
+
+    user_parameters: Optional[UserParameters] = None
+    """Specify the user for execution on Devbox.
+
+    If not set, default `user` will be used.
+    """
