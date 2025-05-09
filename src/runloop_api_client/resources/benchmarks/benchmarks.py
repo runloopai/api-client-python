@@ -83,7 +83,7 @@ class BenchmarksResource(SyncAPIResource):
         Args:
           is_public: Whether this benchmark is public.
 
-          name: The name of the Benchmark.
+          name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
@@ -347,7 +347,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Args:
           is_public: Whether this benchmark is public.
 
-          name: The name of the Benchmark.
+          name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
