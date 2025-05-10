@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.33.0 (2025-05-10)
+
+Full Changelog: [v0.32.0...v0.33.0](https://github.com/runloopai/api-client-python/compare/v0.32.0...v0.33.0)
+
+### Features
+
+* **api:** api update ([a08fe0e](https://github.com/runloopai/api-client-python/commit/a08fe0e64744f7edb832574c8ed66ecb181cdeba))
+* **api:** api update ([597df88](https://github.com/runloopai/api-client-python/commit/597df884cf33c10fadb2148393bef626aaf23c53))
+
+
+### Bug Fixes
+
+* **package:** support direct resource imports ([44f30d6](https://github.com/runloopai/api-client-python/commit/44f30d62901a439f835e7ea9367d2691de8844a8))
+
+
+### Chores
+
+* **internal:** avoid errors for isinstance checks on proxies ([e825829](https://github.com/runloopai/api-client-python/commit/e825829b51d90c2d2b18b0f6d0864ee8fc1b0419))
+
 ## 0.32.0 (2025-04-25)
 
 Full Changelog: [v0.31.0...v0.32.0](https://github.com/runloopai/api-client-python/compare/v0.31.0...v0.32.0)
