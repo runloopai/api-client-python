@@ -7,10 +7,10 @@ from .input_context import InputContext
 from .scoring_contract import ScoringContract
 from .scenario_environment import ScenarioEnvironment
 
-__all__ = ["ScenarioListResponse"]
+__all__ = ["ScenarioView"]
 
 
-class ScenarioListResponse(BaseModel):
+class ScenarioView(BaseModel):
     id: str
     """The ID of the Scenario."""
 

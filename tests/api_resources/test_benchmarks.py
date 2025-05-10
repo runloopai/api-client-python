@@ -10,11 +10,8 @@ import pytest
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
+    BenchmarkView,
     BenchmarkRunView,
-    BenchmarkListResponse,
-    BenchmarkCreateResponse,
-    BenchmarkRetrieveResponse,
-    BenchmarkListPublicResponse,
 )
 from runloop_api_client.pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPage
 
@@ -30,7 +27,7 @@ class TestBenchmarks:
             is_public=True,
             name="name",
         )
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
@@ -40,7 +37,7 @@ class TestBenchmarks:
             metadata={"foo": "string"},
             scenario_ids=["string"],
         )
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
@@ -52,7 +49,7 @@ class TestBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = response.parse()
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: Runloop) -> None:
@@ -64,7 +61,7 @@ class TestBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = response.parse()
-            assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -73,7 +70,7 @@ class TestBenchmarks:
         benchmark = client.benchmarks.retrieve(
             "id",
         )
-        assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Runloop) -> None:
@@ -84,7 +81,7 @@ class TestBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = response.parse()
-        assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve(self, client: Runloop) -> None:
@@ -95,7 +92,7 @@ class TestBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = response.parse()
-            assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -109,7 +106,7 @@ class TestBenchmarks:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list()
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
@@ -117,7 +114,7 @@ class TestBenchmarks:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -126,7 +123,7 @@ class TestBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = response.parse()
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -135,14 +132,14 @@ class TestBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = response.parse()
-            assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+            assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_list_public(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list_public()
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
@@ -150,7 +147,7 @@ class TestBenchmarks:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_raw_response_list_public(self, client: Runloop) -> None:
@@ -159,7 +156,7 @@ class TestBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = response.parse()
-        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     def test_streaming_response_list_public(self, client: Runloop) -> None:
@@ -168,7 +165,7 @@ class TestBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = response.parse()
-            assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+            assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -222,7 +219,7 @@ class TestAsyncBenchmarks:
             is_public=True,
             name="name",
         )
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -232,7 +229,7 @@ class TestAsyncBenchmarks:
             metadata={"foo": "string"},
             scenario_ids=["string"],
         )
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
@@ -244,7 +241,7 @@ class TestAsyncBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = await response.parse()
-        assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
@@ -256,7 +253,7 @@ class TestAsyncBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = await response.parse()
-            assert_matches_type(BenchmarkCreateResponse, benchmark, path=["response"])
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -265,7 +262,7 @@ class TestAsyncBenchmarks:
         benchmark = await async_client.benchmarks.retrieve(
             "id",
         )
-        assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -276,7 +273,7 @@ class TestAsyncBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = await response.parse()
-        assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -287,7 +284,7 @@ class TestAsyncBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = await response.parse()
-            assert_matches_type(BenchmarkRetrieveResponse, benchmark, path=["response"])
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -301,7 +298,7 @@ class TestAsyncBenchmarks:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list()
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -309,7 +306,7 @@ class TestAsyncBenchmarks:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -318,7 +315,7 @@ class TestAsyncBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = await response.parse()
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -327,14 +324,14 @@ class TestAsyncBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = await response.parse()
-            assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListResponse], benchmark, path=["response"])
+            assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_list_public(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list_public()
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -342,7 +339,7 @@ class TestAsyncBenchmarks:
             limit=0,
             starting_after="starting_after",
         )
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_raw_response_list_public(self, async_client: AsyncRunloop) -> None:
@@ -351,7 +348,7 @@ class TestAsyncBenchmarks:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         benchmark = await response.parse()
-        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+        assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
     @parametrize
     async def test_streaming_response_list_public(self, async_client: AsyncRunloop) -> None:
@@ -360,7 +357,7 @@ class TestAsyncBenchmarks:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             benchmark = await response.parse()
-            assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkListPublicResponse], benchmark, path=["response"])
+            assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
