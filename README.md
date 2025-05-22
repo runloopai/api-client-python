@@ -250,7 +250,7 @@ client.with_options(max_retries=5).devboxes.create()
 
 ### Timeouts
 
-By default requests time out after 10 minutes. You can configure this with a `timeout` option,
+By default requests time out after 1 minute. You can configure this with a `timeout` option,
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
@@ -258,7 +258,7 @@ from runloop_api_client import Runloop
 
 # Configure the default for all requests:
 client = Runloop(
-    # 20 seconds (default is 10 minutes)
+    # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
