@@ -39,7 +39,7 @@ from ...types import (
     devbox_write_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
-from ..._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .browsers import (
     BrowsersResource,
     AsyncBrowsersResource,
@@ -80,6 +80,7 @@ from ..._response import (
     async_to_custom_raw_response_wrapper,
     async_to_custom_streamed_response_wrapper,
 )
+from ..._constants import DEFAULT_TIMEOUT
 from ...pagination import (
     SyncDevboxesCursorIDPage,
     AsyncDevboxesCursorIDPage,
@@ -661,6 +662,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=maybe_transform(
@@ -998,6 +1001,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return self._post(
             f"/v1/devboxes/{id}/snapshot_disk",
             body=maybe_transform(
@@ -1731,6 +1736,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=await async_maybe_transform(
@@ -2068,6 +2075,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return await self._post(
             f"/v1/devboxes/{id}/snapshot_disk",
             body=await async_maybe_transform(
