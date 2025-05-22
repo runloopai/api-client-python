@@ -548,6 +548,8 @@ class TestDevboxes:
         devbox = client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
             limit=0,
+            metadata_key="metadata[key]",
+            metadata_key_in="metadata[key][in]",
             starting_after="starting_after",
         )
         assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
@@ -1428,6 +1430,8 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
             limit=0,
+            metadata_key="metadata[key]",
+            metadata_key_in="metadata[key][in]",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
