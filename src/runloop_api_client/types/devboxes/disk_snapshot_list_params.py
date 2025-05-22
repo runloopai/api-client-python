@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Annotated, TypedDict
+
+from ..._utils import PropertyInfo
 
 __all__ = ["DiskSnapshotListParams"]
 
@@ -13,6 +15,15 @@ class DiskSnapshotListParams(TypedDict, total=False):
 
     limit: int
     """The limit of items to return. Default is 20."""
+
+    metadata_key: Annotated[str, PropertyInfo(alias="metadata[key]")]
+    """Filter snapshots by metadata key-value pair.
+
+    Can be used multiple times for different keys.
+    """
+
+    metadata_key_in: Annotated[str, PropertyInfo(alias="metadata[key][in]")]
+    """Filter snapshots by metadata key with multiple possible values (OR condition)."""
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
