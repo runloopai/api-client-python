@@ -20,6 +20,7 @@ from ...pagination import SyncDiskSnapshotsCursorIDPage, AsyncDiskSnapshotsCurso
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.devboxes import disk_snapshot_list_params, disk_snapshot_update_params
 from ...types.devbox_snapshot_view import DevboxSnapshotView
+from ...types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 __all__ = ["DiskSnapshotsResource", "AsyncDiskSnapshotsResource"]
 
@@ -200,6 +201,40 @@ class DiskSnapshotsResource(SyncAPIResource):
             cast_to=object,
         )
 
+    def query_status(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxSnapshotAsyncStatusView:
+        """
+        Get the current status of an asynchronous disk snapshot operation, including
+        whether it is still in progress and any error messages if it failed.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/devboxes/disk_snapshots/{id}/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxSnapshotAsyncStatusView,
+        )
+
 
 class AsyncDiskSnapshotsResource(AsyncAPIResource):
     @cached_property
@@ -377,6 +412,40 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    async def query_status(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> DevboxSnapshotAsyncStatusView:
+        """
+        Get the current status of an asynchronous disk snapshot operation, including
+        whether it is still in progress and any error messages if it failed.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/devboxes/disk_snapshots/{id}/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxSnapshotAsyncStatusView,
+        )
+
 
 class DiskSnapshotsResourceWithRawResponse:
     def __init__(self, disk_snapshots: DiskSnapshotsResource) -> None:
@@ -390,6 +459,9 @@ class DiskSnapshotsResourceWithRawResponse:
         )
         self.delete = to_raw_response_wrapper(
             disk_snapshots.delete,
+        )
+        self.query_status = to_raw_response_wrapper(
+            disk_snapshots.query_status,
         )
 
 
@@ -406,6 +478,9 @@ class AsyncDiskSnapshotsResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             disk_snapshots.delete,
         )
+        self.query_status = async_to_raw_response_wrapper(
+            disk_snapshots.query_status,
+        )
 
 
 class DiskSnapshotsResourceWithStreamingResponse:
@@ -421,6 +496,9 @@ class DiskSnapshotsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             disk_snapshots.delete,
         )
+        self.query_status = to_streamed_response_wrapper(
+            disk_snapshots.query_status,
+        )
 
 
 class AsyncDiskSnapshotsResourceWithStreamingResponse:
@@ -435,4 +513,7 @@ class AsyncDiskSnapshotsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             disk_snapshots.delete,
+        )
+        self.query_status = async_to_streamed_response_wrapper(
+            disk_snapshots.query_status,
         )

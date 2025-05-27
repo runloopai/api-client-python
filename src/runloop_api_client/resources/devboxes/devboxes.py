@@ -36,6 +36,7 @@ from ...types import (
     devbox_snapshot_disk_params,
     devbox_read_file_contents_params,
     devbox_list_disk_snapshots_params,
+    devbox_snapshot_disk_async_params,
     devbox_write_file_contents_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, FileTypes
@@ -1011,6 +1012,61 @@ class DevboxesResource(SyncAPIResource):
                     "name": name,
                 },
                 devbox_snapshot_disk_params.DevboxSnapshotDiskParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxSnapshotView,
+        )
+
+    def snapshot_disk_async(
+        self,
+        id: str,
+        *,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxSnapshotView:
+        """
+        Start an asynchronous disk snapshot of a devbox with the specified name and
+        metadata. The snapshot operation will continue in the background and can be
+        monitored using the query endpoint.
+
+        Args:
+          metadata: (Optional) Metadata used to describe the snapshot
+
+          name: (Optional) A user specified name to give the snapshot
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/snapshot_disk_async",
+            body=maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                devbox_snapshot_disk_async_params.DevboxSnapshotDiskAsyncParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -2096,6 +2152,61 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxSnapshotView,
         )
 
+    async def snapshot_disk_async(
+        self,
+        id: str,
+        *,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxSnapshotView:
+        """
+        Start an asynchronous disk snapshot of a devbox with the specified name and
+        metadata. The snapshot operation will continue in the background and can be
+        monitored using the query endpoint.
+
+        Args:
+          metadata: (Optional) Metadata used to describe the snapshot
+
+          name: (Optional) A user specified name to give the snapshot
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/snapshot_disk_async",
+            body=await async_maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                devbox_snapshot_disk_async_params.DevboxSnapshotDiskAsyncParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxSnapshotView,
+        )
+
     async def suspend(
         self,
         id: str,
@@ -2312,6 +2423,9 @@ class DevboxesResourceWithRawResponse:
         self.snapshot_disk = to_raw_response_wrapper(
             devboxes.snapshot_disk,
         )
+        self.snapshot_disk_async = to_raw_response_wrapper(
+            devboxes.snapshot_disk_async,
+        )
         self.suspend = to_raw_response_wrapper(
             devboxes.suspend,
         )
@@ -2402,6 +2516,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.snapshot_disk = async_to_raw_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.snapshot_disk_async = async_to_raw_response_wrapper(
+            devboxes.snapshot_disk_async,
         )
         self.suspend = async_to_raw_response_wrapper(
             devboxes.suspend,
@@ -2494,6 +2611,9 @@ class DevboxesResourceWithStreamingResponse:
         self.snapshot_disk = to_streamed_response_wrapper(
             devboxes.snapshot_disk,
         )
+        self.snapshot_disk_async = to_streamed_response_wrapper(
+            devboxes.snapshot_disk_async,
+        )
         self.suspend = to_streamed_response_wrapper(
             devboxes.suspend,
         )
@@ -2584,6 +2704,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.snapshot_disk = async_to_streamed_response_wrapper(
             devboxes.snapshot_disk,
+        )
+        self.snapshot_disk_async = async_to_streamed_response_wrapper(
+            devboxes.snapshot_disk_async,
         )
         self.suspend = async_to_streamed_response_wrapper(
             devboxes.suspend,
