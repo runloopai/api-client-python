@@ -11,6 +11,9 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import DevboxSnapshotView
 from runloop_api_client.pagination import SyncDiskSnapshotsCursorIDPage, AsyncDiskSnapshotsCursorIDPage
+from runloop_api_client.types.devboxes import (
+    DevboxSnapshotAsyncStatusView,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -139,6 +142,44 @@ class TestDiskSnapshots:
                 "",
             )
 
+    @parametrize
+    def test_method_query_status(self, client: Runloop) -> None:
+        disk_snapshot = client.devboxes.disk_snapshots.query_status(
+            "id",
+        )
+        assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+    @parametrize
+    def test_raw_response_query_status(self, client: Runloop) -> None:
+        response = client.devboxes.disk_snapshots.with_raw_response.query_status(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        disk_snapshot = response.parse()
+        assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+    @parametrize
+    def test_streaming_response_query_status(self, client: Runloop) -> None:
+        with client.devboxes.disk_snapshots.with_streaming_response.query_status(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            disk_snapshot = response.parse()
+            assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_query_status(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.disk_snapshots.with_raw_response.query_status(
+                "",
+            )
+
 
 class TestAsyncDiskSnapshots:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
@@ -261,5 +302,43 @@ class TestAsyncDiskSnapshots:
     async def test_path_params_delete(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.disk_snapshots.with_raw_response.delete(
+                "",
+            )
+
+    @parametrize
+    async def test_method_query_status(self, async_client: AsyncRunloop) -> None:
+        disk_snapshot = await async_client.devboxes.disk_snapshots.query_status(
+            "id",
+        )
+        assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+    @parametrize
+    async def test_raw_response_query_status(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.disk_snapshots.with_raw_response.query_status(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        disk_snapshot = await response.parse()
+        assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_query_status(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.disk_snapshots.with_streaming_response.query_status(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            disk_snapshot = await response.parse()
+            assert_matches_type(DevboxSnapshotAsyncStatusView, disk_snapshot, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_query_status(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.disk_snapshots.with_raw_response.query_status(
                 "",
             )
