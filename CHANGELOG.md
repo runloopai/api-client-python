@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.34.1 (2025-05-28)
+
+Full Changelog: [v0.34.0...v0.34.1](https://github.com/runloopai/api-client-python/compare/v0.34.0...v0.34.1)
+
+### Bug Fixes
+
+* **docs/api:** remove references to nonexistent types ([2462ba5](https://github.com/runloopai/api-client-python/commit/2462ba56d0f0735cf9995eebd18818ea94b3fb10))
+
 ## 0.34.0 (2025-05-27)
 
 Full Changelog: [v0.33.0...v0.34.0](https://github.com/runloopai/api-client-python/compare/v0.33.0...v0.34.0)
