@@ -38,6 +38,7 @@ from .scoring_contract_param import ScoringContractParam as ScoringContractParam
 from .scoring_function_param import ScoringFunctionParam as ScoringFunctionParam
 from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreateParams
 from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListView
+from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams

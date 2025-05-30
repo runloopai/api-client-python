@@ -17,6 +17,7 @@ from .runs import (
 from ...types import (
     benchmark_list_params,
     benchmark_create_params,
+    benchmark_update_params,
     benchmark_start_run_params,
     benchmark_list_public_params,
 )
@@ -149,6 +150,67 @@ class BenchmarksResource(SyncAPIResource):
             f"/v1/benchmarks/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BenchmarkView,
+        )
+
+    def update(
+        self,
+        id: str,
+        *,
+        is_public: bool,
+        name: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> BenchmarkView:
+        """
+        Update a Benchmark with a set of Scenarios.
+
+        Args:
+          is_public: Whether this benchmark is public.
+
+          name: The name of the Benchmark. This must be unique.
+
+          metadata: User defined metadata to attach to the benchmark for organization.
+
+          scenario_ids: The Scenario IDs that make up the Benchmark.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/benchmarks/{id}",
+            body=maybe_transform(
+                {
+                    "is_public": is_public,
+                    "name": name,
+                    "metadata": metadata,
+                    "scenario_ids": scenario_ids,
+                },
+                benchmark_update_params.BenchmarkUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             ),
             cast_to=BenchmarkView,
         )
@@ -417,6 +479,67 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             cast_to=BenchmarkView,
         )
 
+    async def update(
+        self,
+        id: str,
+        *,
+        is_public: bool,
+        name: str,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> BenchmarkView:
+        """
+        Update a Benchmark with a set of Scenarios.
+
+        Args:
+          is_public: Whether this benchmark is public.
+
+          name: The name of the Benchmark. This must be unique.
+
+          metadata: User defined metadata to attach to the benchmark for organization.
+
+          scenario_ids: The Scenario IDs that make up the Benchmark.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/benchmarks/{id}",
+            body=await async_maybe_transform(
+                {
+                    "is_public": is_public,
+                    "name": name,
+                    "metadata": metadata,
+                    "scenario_ids": scenario_ids,
+                },
+                benchmark_update_params.BenchmarkUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BenchmarkView,
+        )
+
     def list(
         self,
         *,
@@ -576,6 +699,9 @@ class BenchmarksResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             benchmarks.retrieve,
         )
+        self.update = to_raw_response_wrapper(
+            benchmarks.update,
+        )
         self.list = to_raw_response_wrapper(
             benchmarks.list,
         )
@@ -600,6 +726,9 @@ class AsyncBenchmarksResourceWithRawResponse:
         )
         self.retrieve = async_to_raw_response_wrapper(
             benchmarks.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            benchmarks.update,
         )
         self.list = async_to_raw_response_wrapper(
             benchmarks.list,
@@ -626,6 +755,9 @@ class BenchmarksResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             benchmarks.retrieve,
         )
+        self.update = to_streamed_response_wrapper(
+            benchmarks.update,
+        )
         self.list = to_streamed_response_wrapper(
             benchmarks.list,
         )
@@ -650,6 +782,9 @@ class AsyncBenchmarksResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             benchmarks.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            benchmarks.update,
         )
         self.list = async_to_streamed_response_wrapper(
             benchmarks.list,
