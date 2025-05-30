@@ -91,6 +91,44 @@ class TestRuns:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
+    def test_method_cancel(self, client: Runloop) -> None:
+        run = client.scenarios.runs.cancel(
+            "id",
+        )
+        assert_matches_type(ScenarioRunView, run, path=["response"])
+
+    @parametrize
+    def test_raw_response_cancel(self, client: Runloop) -> None:
+        response = client.scenarios.runs.with_raw_response.cancel(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        run = response.parse()
+        assert_matches_type(ScenarioRunView, run, path=["response"])
+
+    @parametrize
+    def test_streaming_response_cancel(self, client: Runloop) -> None:
+        with client.scenarios.runs.with_streaming_response.cancel(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            run = response.parse()
+            assert_matches_type(ScenarioRunView, run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_cancel(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.scenarios.runs.with_raw_response.cancel(
+                "",
+            )
+
+    @parametrize
     def test_method_complete(self, client: Runloop) -> None:
         run = client.scenarios.runs.complete(
             "id",
@@ -241,6 +279,44 @@ class TestAsyncRuns:
             assert_matches_type(AsyncBenchmarkRunsCursorIDPage[ScenarioRunView], run, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_cancel(self, async_client: AsyncRunloop) -> None:
+        run = await async_client.scenarios.runs.cancel(
+            "id",
+        )
+        assert_matches_type(ScenarioRunView, run, path=["response"])
+
+    @parametrize
+    async def test_raw_response_cancel(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.scenarios.runs.with_raw_response.cancel(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        run = await response.parse()
+        assert_matches_type(ScenarioRunView, run, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_cancel(self, async_client: AsyncRunloop) -> None:
+        async with async_client.scenarios.runs.with_streaming_response.cancel(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            run = await response.parse()
+            assert_matches_type(ScenarioRunView, run, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_cancel(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.scenarios.runs.with_raw_response.cancel(
+                "",
+            )
 
     @parametrize
     async def test_method_complete(self, async_client: AsyncRunloop) -> None:

@@ -129,6 +129,48 @@ class RunsResource(SyncAPIResource):
             model=ScenarioRunView,
         )
 
+    def cancel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScenarioRunView:
+        """Cancel a currently running Scenario run.
+
+        This will shutdown the underlying
+        Devbox resource.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/scenarios/runs/{id}/cancel",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScenarioRunView,
+        )
+
     def complete(
         self,
         id: str,
@@ -457,6 +499,48 @@ class AsyncRunsResource(AsyncAPIResource):
             model=ScenarioRunView,
         )
 
+    async def cancel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> ScenarioRunView:
+        """Cancel a currently running Scenario run.
+
+        This will shutdown the underlying
+        Devbox resource.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/scenarios/runs/{id}/cancel",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScenarioRunView,
+        )
+
     async def complete(
         self,
         id: str,
@@ -692,6 +776,9 @@ class RunsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             runs.list,
         )
+        self.cancel = to_raw_response_wrapper(
+            runs.cancel,
+        )
         self.complete = to_raw_response_wrapper(
             runs.complete,
         )
@@ -709,6 +796,9 @@ class AsyncRunsResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             runs.list,
+        )
+        self.cancel = async_to_raw_response_wrapper(
+            runs.cancel,
         )
         self.complete = async_to_raw_response_wrapper(
             runs.complete,
@@ -728,6 +818,9 @@ class RunsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             runs.list,
         )
+        self.cancel = to_streamed_response_wrapper(
+            runs.cancel,
+        )
         self.complete = to_streamed_response_wrapper(
             runs.complete,
         )
@@ -745,6 +838,9 @@ class AsyncRunsResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             runs.list,
+        )
+        self.cancel = async_to_streamed_response_wrapper(
+            runs.cancel,
         )
         self.complete = async_to_streamed_response_wrapper(
             runs.complete,

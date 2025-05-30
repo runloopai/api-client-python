@@ -33,7 +33,7 @@ class BenchmarkRunView(BaseModel):
     """User defined metadata to attach to the benchmark run for organization."""
 
     pending_scenarios: List[str]
-    """List of Scenarios that need to be completed before benchmark can be completed."""
+    """List of Scenarios that have yet to be scored."""
 
     scenario_runs: List[ScenarioRun]
     """List of Scenarios have been completed."""
@@ -41,7 +41,7 @@ class BenchmarkRunView(BaseModel):
     start_time_ms: int
     """The time the benchmark run execution started (Unix timestamp milliseconds)."""
 
-    state: Literal["running", "completed"]
+    state: Literal["running", "canceled", "completed"]
     """The state of the BenchmarkRun."""
 
     duration_ms: Optional[int] = None
