@@ -11,7 +11,7 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     RepositoryConnectionView,
-    RepositoryVersionListView,
+    RepositoryInspectionListView,
 )
 from runloop_api_client.pagination import SyncRepositoriesCursorIDPage, AsyncRepositoriesCursorIDPage
 
@@ -35,6 +35,7 @@ class TestRepositories:
             name="name",
             owner="owner",
             blueprint_id="blueprint_id",
+            github_auth_token="github_auth_token",
         )
         assert_matches_type(RepositoryConnectionView, repository, path=["response"])
 
@@ -176,40 +177,78 @@ class TestRepositories:
             )
 
     @parametrize
-    def test_method_versions(self, client: Runloop) -> None:
-        repository = client.repositories.versions(
+    def test_method_list_inspections(self, client: Runloop) -> None:
+        repository = client.repositories.list_inspections(
             "id",
         )
-        assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+        assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
     @parametrize
-    def test_raw_response_versions(self, client: Runloop) -> None:
-        response = client.repositories.with_raw_response.versions(
+    def test_raw_response_list_inspections(self, client: Runloop) -> None:
+        response = client.repositories.with_raw_response.list_inspections(
             "id",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         repository = response.parse()
-        assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+        assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
     @parametrize
-    def test_streaming_response_versions(self, client: Runloop) -> None:
-        with client.repositories.with_streaming_response.versions(
+    def test_streaming_response_list_inspections(self, client: Runloop) -> None:
+        with client.repositories.with_streaming_response.list_inspections(
             "id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             repository = response.parse()
-            assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+            assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_path_params_versions(self, client: Runloop) -> None:
+    def test_path_params_list_inspections(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            client.repositories.with_raw_response.versions(
+            client.repositories.with_raw_response.list_inspections(
+                "",
+            )
+
+    @parametrize
+    def test_method_refresh(self, client: Runloop) -> None:
+        repository = client.repositories.refresh(
+            "id",
+        )
+        assert_matches_type(object, repository, path=["response"])
+
+    @parametrize
+    def test_raw_response_refresh(self, client: Runloop) -> None:
+        response = client.repositories.with_raw_response.refresh(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        repository = response.parse()
+        assert_matches_type(object, repository, path=["response"])
+
+    @parametrize
+    def test_streaming_response_refresh(self, client: Runloop) -> None:
+        with client.repositories.with_streaming_response.refresh(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            repository = response.parse()
+            assert_matches_type(object, repository, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_refresh(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.repositories.with_raw_response.refresh(
                 "",
             )
 
@@ -231,6 +270,7 @@ class TestAsyncRepositories:
             name="name",
             owner="owner",
             blueprint_id="blueprint_id",
+            github_auth_token="github_auth_token",
         )
         assert_matches_type(RepositoryConnectionView, repository, path=["response"])
 
@@ -372,39 +412,77 @@ class TestAsyncRepositories:
             )
 
     @parametrize
-    async def test_method_versions(self, async_client: AsyncRunloop) -> None:
-        repository = await async_client.repositories.versions(
+    async def test_method_list_inspections(self, async_client: AsyncRunloop) -> None:
+        repository = await async_client.repositories.list_inspections(
             "id",
         )
-        assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+        assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
     @parametrize
-    async def test_raw_response_versions(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.repositories.with_raw_response.versions(
+    async def test_raw_response_list_inspections(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.repositories.with_raw_response.list_inspections(
             "id",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         repository = await response.parse()
-        assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+        assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
     @parametrize
-    async def test_streaming_response_versions(self, async_client: AsyncRunloop) -> None:
-        async with async_client.repositories.with_streaming_response.versions(
+    async def test_streaming_response_list_inspections(self, async_client: AsyncRunloop) -> None:
+        async with async_client.repositories.with_streaming_response.list_inspections(
             "id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             repository = await response.parse()
-            assert_matches_type(RepositoryVersionListView, repository, path=["response"])
+            assert_matches_type(RepositoryInspectionListView, repository, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_path_params_versions(self, async_client: AsyncRunloop) -> None:
+    async def test_path_params_list_inspections(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            await async_client.repositories.with_raw_response.versions(
+            await async_client.repositories.with_raw_response.list_inspections(
+                "",
+            )
+
+    @parametrize
+    async def test_method_refresh(self, async_client: AsyncRunloop) -> None:
+        repository = await async_client.repositories.refresh(
+            "id",
+        )
+        assert_matches_type(object, repository, path=["response"])
+
+    @parametrize
+    async def test_raw_response_refresh(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.repositories.with_raw_response.refresh(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        repository = await response.parse()
+        assert_matches_type(object, repository, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_refresh(self, async_client: AsyncRunloop) -> None:
+        async with async_client.repositories.with_streaming_response.refresh(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            repository = await response.parse()
+            assert_matches_type(object, repository, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_refresh(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.repositories.with_raw_response.refresh(
                 "",
             )
