@@ -79,6 +79,10 @@ class TestDevboxes:
             metadata={"foo": "string"},
             name="name",
             prebuilt="prebuilt",
+            repository_connection={
+                "github_auth_token": "github_auth_token",
+                "repository_connection_id": "repository_connection_id",
+            },
             snapshot_id="snapshot_id",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -1008,6 +1012,10 @@ class TestAsyncDevboxes:
             metadata={"foo": "string"},
             name="name",
             prebuilt="prebuilt",
+            repository_connection={
+                "github_auth_token": "github_auth_token",
+                "repository_connection_id": "repository_connection_id",
+            },
             snapshot_id="snapshot_id",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])

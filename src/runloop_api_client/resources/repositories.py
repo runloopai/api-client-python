@@ -20,7 +20,7 @@ from .._response import (
 from ..pagination import SyncRepositoriesCursorIDPage, AsyncRepositoriesCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.repository_connection_view import RepositoryConnectionView
-from ..types.repository_version_list_view import RepositoryVersionListView
+from ..types.repository_inspection_list_view import RepositoryInspectionListView
 
 __all__ = ["RepositoriesResource", "AsyncRepositoriesResource"]
 
@@ -51,6 +51,7 @@ class RepositoriesResource(SyncAPIResource):
         name: str,
         owner: str,
         blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -70,6 +71,8 @@ class RepositoriesResource(SyncAPIResource):
 
           blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
 
+          github_auth_token: GitHub authentication token for accessing private repositories.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -87,6 +90,7 @@ class RepositoriesResource(SyncAPIResource):
                     "name": name,
                     "owner": owner,
                     "blueprint_id": blueprint_id,
+                    "github_auth_token": github_auth_token,
                 },
                 repository_create_params.RepositoryCreateParams,
             ),
@@ -230,7 +234,7 @@ class RepositoriesResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def versions(
+    def list_inspections(
         self,
         id: str,
         *,
@@ -240,10 +244,10 @@ class RepositoriesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RepositoryVersionListView:
+    ) -> RepositoryInspectionListView:
         """
-        List all analyzed versions of a repository connection including automatically
-        generated insights for each version.
+        List all inspections of a repository connection including automatically
+        generated insights for each inspection.
 
         Args:
           extra_headers: Send extra headers
@@ -257,11 +261,52 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/{id}/versions",
+            f"/v1/repositories/{id}/inspections",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=RepositoryVersionListView,
+            cast_to=RepositoryInspectionListView,
+        )
+
+    def refresh(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """
+        Refresh a repository connection by inspecting the latest version including
+        repo's technical stack and developer environment requirements.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/repositories/{id}/refresh",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
         )
 
 
@@ -291,6 +336,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         name: str,
         owner: str,
         blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -310,6 +356,8 @@ class AsyncRepositoriesResource(AsyncAPIResource):
 
           blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
 
+          github_auth_token: GitHub authentication token for accessing private repositories.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -327,6 +375,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
                     "name": name,
                     "owner": owner,
                     "blueprint_id": blueprint_id,
+                    "github_auth_token": github_auth_token,
                 },
                 repository_create_params.RepositoryCreateParams,
             ),
@@ -470,7 +519,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def versions(
+    async def list_inspections(
         self,
         id: str,
         *,
@@ -480,10 +529,10 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> RepositoryVersionListView:
+    ) -> RepositoryInspectionListView:
         """
-        List all analyzed versions of a repository connection including automatically
-        generated insights for each version.
+        List all inspections of a repository connection including automatically
+        generated insights for each inspection.
 
         Args:
           extra_headers: Send extra headers
@@ -497,11 +546,52 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/{id}/versions",
+            f"/v1/repositories/{id}/inspections",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=RepositoryVersionListView,
+            cast_to=RepositoryInspectionListView,
+        )
+
+    async def refresh(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """
+        Refresh a repository connection by inspecting the latest version including
+        repo's technical stack and developer environment requirements.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/repositories/{id}/refresh",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
         )
 
 
@@ -521,8 +611,11 @@ class RepositoriesResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             repositories.delete,
         )
-        self.versions = to_raw_response_wrapper(
-            repositories.versions,
+        self.list_inspections = to_raw_response_wrapper(
+            repositories.list_inspections,
+        )
+        self.refresh = to_raw_response_wrapper(
+            repositories.refresh,
         )
 
 
@@ -542,8 +635,11 @@ class AsyncRepositoriesResourceWithRawResponse:
         self.delete = async_to_raw_response_wrapper(
             repositories.delete,
         )
-        self.versions = async_to_raw_response_wrapper(
-            repositories.versions,
+        self.list_inspections = async_to_raw_response_wrapper(
+            repositories.list_inspections,
+        )
+        self.refresh = async_to_raw_response_wrapper(
+            repositories.refresh,
         )
 
 
@@ -563,8 +659,11 @@ class RepositoriesResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             repositories.delete,
         )
-        self.versions = to_streamed_response_wrapper(
-            repositories.versions,
+        self.list_inspections = to_streamed_response_wrapper(
+            repositories.list_inspections,
+        )
+        self.refresh = to_streamed_response_wrapper(
+            repositories.refresh,
         )
 
 
@@ -584,6 +683,9 @@ class AsyncRepositoriesResourceWithStreamingResponse:
         self.delete = async_to_streamed_response_wrapper(
             repositories.delete,
         )
-        self.versions = async_to_streamed_response_wrapper(
-            repositories.versions,
+        self.list_inspections = async_to_streamed_response_wrapper(
+            repositories.list_inspections,
+        )
+        self.refresh = async_to_streamed_response_wrapper(
+            repositories.refresh,
         )
