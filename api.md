@@ -323,8 +323,9 @@ Types:
 from runloop_api_client.types import (
     RepositoryConnectionListView,
     RepositoryConnectionView,
-    RepositoryVersionDetails,
-    RepositoryVersionListView,
+    RepositoryInspectionDetails,
+    RepositoryInspectionListView,
+    RepositoryManifestView,
 )
 ```
 
@@ -334,4 +335,5 @@ Methods:
 - <code title="get /v1/repositories/{id}">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">RepositoryConnectionView</a></code>
 - <code title="get /v1/repositories">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list</a>(\*\*<a href="src/runloop_api_client/types/repository_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">SyncRepositoriesCursorIDPage[RepositoryConnectionView]</a></code>
 - <code title="post /v1/repositories/{id}/delete">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">delete</a>(id) -> object</code>
-- <code title="get /v1/repositories/{id}/versions">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">versions</a>(id) -> <a href="./src/runloop_api_client/types/repository_version_list_view.py">RepositoryVersionListView</a></code>
+- <code title="get /v1/repositories/{id}/inspections">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list_inspections</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_list_view.py">RepositoryInspectionListView</a></code>
+- <code title="post /v1/repositories/{id}/refresh">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">refresh</a>(id) -> object</code>
