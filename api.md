@@ -14,6 +14,7 @@ from runloop_api_client.types import (
     BenchmarkRunListView,
     BenchmarkRunView,
     BenchmarkView,
+    ScenarioDefinitionListView,
     StartBenchmarkRunParameters,
 )
 ```
