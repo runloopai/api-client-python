@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.37.0 (2025-06-04)
+
+Full Changelog: [v0.36.0...v0.37.0](https://github.com/runloopai/api-client-python/compare/v0.36.0...v0.37.0)
+
+### Features
+
+* **api:** api update ([a167d0b](https://github.com/runloopai/api-client-python/commit/a167d0b2dbab59cb4ffbb029ea6dae22d0d7c2f4))
+* **client:** add follow_redirects request option ([c29d24c](https://github.com/runloopai/api-client-python/commit/c29d24c5483ee2ca7e4d53dfdf8d40278f04f1fe))
+
+
+### Chores
+
+* **docs:** remove reference to rye shell ([af51a95](https://github.com/runloopai/api-client-python/commit/af51a958afb08cc728959b154c52d0ca31f4206c))
+* **docs:** remove unnecessary param examples ([a29553d](https://github.com/runloopai/api-client-python/commit/a29553d048fa85207e28e5b3dbc4ad9ea326ad86))
+
 ## 0.36.0 (2025-06-02)
 
 Full Changelog: [v0.35.0...v0.36.0](https://github.com/runloopai/api-client-python/compare/v0.35.0...v0.36.0)
