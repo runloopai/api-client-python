@@ -16,7 +16,8 @@ from ..._response import (
 )
 from ...pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.benchmarks import run_list_params
+from ...types.benchmarks import run_list_params, run_list_scenario_runs_params
+from ...types.scenario_run_view import ScenarioRunView
 from ...types.benchmark_run_view import BenchmarkRunView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
@@ -206,6 +207,56 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    def list_scenario_runs(
+        self,
+        id: str,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SyncBenchmarkRunsCursorIDPage[ScenarioRunView]:
+        """
+        List started scenario runs for a benchmark run.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get_api_list(
+            f"/v1/benchmarks/runs/{id}/scenario_runs",
+            page=SyncBenchmarkRunsCursorIDPage[ScenarioRunView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    run_list_scenario_runs_params.RunListScenarioRunsParams,
+                ),
+            ),
+            model=ScenarioRunView,
+        )
+
 
 class AsyncRunsResource(AsyncAPIResource):
     @cached_property
@@ -391,6 +442,56 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    def list_scenario_runs(
+        self,
+        id: str,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncPaginator[ScenarioRunView, AsyncBenchmarkRunsCursorIDPage[ScenarioRunView]]:
+        """
+        List started scenario runs for a benchmark run.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get_api_list(
+            f"/v1/benchmarks/runs/{id}/scenario_runs",
+            page=AsyncBenchmarkRunsCursorIDPage[ScenarioRunView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    run_list_scenario_runs_params.RunListScenarioRunsParams,
+                ),
+            ),
+            model=ScenarioRunView,
+        )
+
 
 class RunsResourceWithRawResponse:
     def __init__(self, runs: RunsResource) -> None:
@@ -407,6 +508,9 @@ class RunsResourceWithRawResponse:
         )
         self.complete = to_raw_response_wrapper(
             runs.complete,
+        )
+        self.list_scenario_runs = to_raw_response_wrapper(
+            runs.list_scenario_runs,
         )
 
 
@@ -426,6 +530,9 @@ class AsyncRunsResourceWithRawResponse:
         self.complete = async_to_raw_response_wrapper(
             runs.complete,
         )
+        self.list_scenario_runs = async_to_raw_response_wrapper(
+            runs.list_scenario_runs,
+        )
 
 
 class RunsResourceWithStreamingResponse:
@@ -444,6 +551,9 @@ class RunsResourceWithStreamingResponse:
         self.complete = to_streamed_response_wrapper(
             runs.complete,
         )
+        self.list_scenario_runs = to_streamed_response_wrapper(
+            runs.list_scenario_runs,
+        )
 
 
 class AsyncRunsResourceWithStreamingResponse:
@@ -461,4 +571,7 @@ class AsyncRunsResourceWithStreamingResponse:
         )
         self.complete = async_to_streamed_response_wrapper(
             runs.complete,
+        )
+        self.list_scenario_runs = async_to_streamed_response_wrapper(
+            runs.list_scenario_runs,
         )
