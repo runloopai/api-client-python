@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing_extensions import Literal
+
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
@@ -213,6 +215,8 @@ class RunsResource(SyncAPIResource):
         *,
         limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
+        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
+        | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -227,6 +231,8 @@ class RunsResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by Scenario Run state
 
           extra_headers: Send extra headers
 
@@ -250,6 +256,7 @@ class RunsResource(SyncAPIResource):
                     {
                         "limit": limit,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     run_list_scenario_runs_params.RunListScenarioRunsParams,
                 ),
@@ -448,6 +455,8 @@ class AsyncRunsResource(AsyncAPIResource):
         *,
         limit: int | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
+        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
+        | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -462,6 +471,8 @@ class AsyncRunsResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by Scenario Run state
 
           extra_headers: Send extra headers
 
@@ -485,6 +496,7 @@ class AsyncRunsResource(AsyncAPIResource):
                     {
                         "limit": limit,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     run_list_scenario_runs_params.RunListScenarioRunsParams,
                 ),
