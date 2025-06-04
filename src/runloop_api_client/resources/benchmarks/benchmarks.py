@@ -19,6 +19,7 @@ from ...types import (
     benchmark_create_params,
     benchmark_update_params,
     benchmark_start_run_params,
+    benchmark_definitions_params,
     benchmark_list_public_params,
 )
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
@@ -35,6 +36,7 @@ from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPag
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.benchmark_view import BenchmarkView
 from ...types.benchmark_run_view import BenchmarkRunView
+from ...types.scenario_definition_list_view import ScenarioDefinitionListView
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
 
@@ -260,6 +262,55 @@ class BenchmarksResource(SyncAPIResource):
                 ),
             ),
             model=BenchmarkView,
+        )
+
+    def definitions(
+        self,
+        id: str,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ScenarioDefinitionListView:
+        """
+        Get scenario definitions for a previously created Benchmark.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/benchmarks/{id}/definitions",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    benchmark_definitions_params.BenchmarkDefinitionsParams,
+                ),
+            ),
+            cast_to=ScenarioDefinitionListView,
         )
 
     def list_public(
@@ -587,6 +638,55 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             model=BenchmarkView,
         )
 
+    async def definitions(
+        self,
+        id: str,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ScenarioDefinitionListView:
+        """
+        Get scenario definitions for a previously created Benchmark.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/benchmarks/{id}/definitions",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    benchmark_definitions_params.BenchmarkDefinitionsParams,
+                ),
+            ),
+            cast_to=ScenarioDefinitionListView,
+        )
+
     def list_public(
         self,
         *,
@@ -705,6 +805,9 @@ class BenchmarksResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             benchmarks.list,
         )
+        self.definitions = to_raw_response_wrapper(
+            benchmarks.definitions,
+        )
         self.list_public = to_raw_response_wrapper(
             benchmarks.list_public,
         )
@@ -732,6 +835,9 @@ class AsyncBenchmarksResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             benchmarks.list,
+        )
+        self.definitions = async_to_raw_response_wrapper(
+            benchmarks.definitions,
         )
         self.list_public = async_to_raw_response_wrapper(
             benchmarks.list_public,
@@ -761,6 +867,9 @@ class BenchmarksResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             benchmarks.list,
         )
+        self.definitions = to_streamed_response_wrapper(
+            benchmarks.definitions,
+        )
         self.list_public = to_streamed_response_wrapper(
             benchmarks.list_public,
         )
@@ -788,6 +897,9 @@ class AsyncBenchmarksResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             benchmarks.list,
+        )
+        self.definitions = async_to_streamed_response_wrapper(
+            benchmarks.definitions,
         )
         self.list_public = async_to_streamed_response_wrapper(
             benchmarks.list_public,
