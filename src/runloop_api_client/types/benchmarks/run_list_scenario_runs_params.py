@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
 
 __all__ = ["RunListScenarioRunsParams"]
 
@@ -13,3 +13,6 @@ class RunListScenarioRunsParams(TypedDict, total=False):
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
+
+    state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
+    """Filter by Scenario Run state"""
