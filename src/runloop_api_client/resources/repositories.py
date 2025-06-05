@@ -6,7 +6,7 @@ from typing import Optional
 
 import httpx
 
-from ..types import repository_list_params, repository_create_params
+from ..types import repository_list_params, repository_create_params, repository_refresh_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -272,6 +272,8 @@ class RepositoriesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -285,6 +287,10 @@ class RepositoriesResource(SyncAPIResource):
         repo's technical stack and developer environment requirements.
 
         Args:
+          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
+
+          github_auth_token: GitHub authentication token for accessing private repositories.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -299,6 +305,13 @@ class RepositoriesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/repositories/{id}/refresh",
+            body=maybe_transform(
+                {
+                    "blueprint_id": blueprint_id,
+                    "github_auth_token": github_auth_token,
+                },
+                repository_refresh_params.RepositoryRefreshParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -557,6 +570,8 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -570,6 +585,10 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         repo's technical stack and developer environment requirements.
 
         Args:
+          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
+
+          github_auth_token: GitHub authentication token for accessing private repositories.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -584,6 +603,13 @@ class AsyncRepositoriesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             f"/v1/repositories/{id}/refresh",
+            body=await async_maybe_transform(
+                {
+                    "blueprint_id": blueprint_id,
+                    "github_auth_token": github_auth_token,
+                },
+                repository_refresh_params.RepositoryRefreshParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
