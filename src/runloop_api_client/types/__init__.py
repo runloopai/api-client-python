@@ -45,6 +45,7 @@ from .repository_create_params import RepositoryCreateParams as RepositoryCreate
 from .repository_manifest_view import RepositoryManifestView as RepositoryManifestView
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
 from .devbox_upload_file_params import DevboxUploadFileParams as DevboxUploadFileParams
+from .repository_refresh_params import RepositoryRefreshParams as RepositoryRefreshParams
 from .scenario_start_run_params import ScenarioStartRunParams as ScenarioStartRunParams
 from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStartRunParams
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
