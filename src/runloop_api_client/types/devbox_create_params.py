@@ -8,7 +8,7 @@ from typing_extensions import TypedDict
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxCreateParams", "RepositoryConnection"]
+__all__ = ["DevboxCreateParams"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
@@ -58,26 +58,11 @@ class DevboxCreateParams(TypedDict, total=False):
     Should not be used together with (Snapshot ID, Blueprint ID, or Blueprint name).
     """
 
-    repository_connection: Optional[RepositoryConnection]
-    """Repository connection parameters for configuring repository integration."""
+    repo_connection_id: Optional[str]
+    """Repository connection id the devbox should source its base image from."""
 
     snapshot_id: Optional[str]
     """Snapshot ID to use for the Devbox.
 
     Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
-    """
-
-
-class RepositoryConnection(TypedDict, total=False):
-    github_auth_token: Optional[str]
-    """
-    GitHub authentication token for accessing private repositories when using
-    repository_connection_id.
-    """
-
-    repository_connection_id: Optional[str]
-    """Repository connection ID to use for the Devbox.
-
-    When specified, the latest inspection blueprint will be used and workspace
-    maintenance commands will be run during boot.
     """

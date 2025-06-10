@@ -9,9 +9,6 @@ __all__ = ["BenchmarkCreateParams"]
 
 
 class BenchmarkCreateParams(TypedDict, total=False):
-    is_public: Required[bool]
-    """Whether this benchmark is public."""
-
     name: Required[str]
     """The name of the Benchmark. This must be unique."""
 
