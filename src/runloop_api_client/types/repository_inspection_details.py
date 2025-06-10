@@ -10,6 +10,9 @@ __all__ = ["RepositoryInspectionDetails"]
 
 
 class RepositoryInspectionDetails(BaseModel):
+    id: str
+    """The ID of the inspection."""
+
     commit_sha: str
     """The sha of the inspected version of the Repository."""
 
@@ -29,6 +32,7 @@ class RepositoryInspectionDetails(BaseModel):
         "inspection_success",
         "image_build_success",
         "image_build_failure",
+        "inspection_user_manifest_added",
     ]
     """The status of the repository inspection."""
 
@@ -37,3 +41,9 @@ class RepositoryInspectionDetails(BaseModel):
 
     blueprint_name: Optional[str] = None
     """The blueprint name associated with this inspection if successful."""
+
+    user_manifest: Optional[RepositoryManifestView] = None
+    """
+    User uploaded repository manifest containing container config and workspace
+    details.
+    """

@@ -68,7 +68,6 @@ class BenchmarksResource(SyncAPIResource):
     def create(
         self,
         *,
-        is_public: bool,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
@@ -84,8 +83,6 @@ class BenchmarksResource(SyncAPIResource):
         Create a Benchmark with a set of Scenarios.
 
         Args:
-          is_public: Whether this benchmark is public.
-
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
@@ -106,7 +103,6 @@ class BenchmarksResource(SyncAPIResource):
             "/v1/benchmarks",
             body=maybe_transform(
                 {
-                    "is_public": is_public,
                     "name": name,
                     "metadata": metadata,
                     "scenario_ids": scenario_ids,
@@ -160,7 +156,6 @@ class BenchmarksResource(SyncAPIResource):
         self,
         id: str,
         *,
-        is_public: bool,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
@@ -176,8 +171,6 @@ class BenchmarksResource(SyncAPIResource):
         Update a Benchmark with a set of Scenarios.
 
         Args:
-          is_public: Whether this benchmark is public.
-
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
@@ -200,7 +193,6 @@ class BenchmarksResource(SyncAPIResource):
             f"/v1/benchmarks/{id}",
             body=maybe_transform(
                 {
-                    "is_public": is_public,
                     "name": name,
                     "metadata": metadata,
                     "scenario_ids": scenario_ids,
@@ -442,7 +434,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        is_public: bool,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
@@ -458,8 +449,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Create a Benchmark with a set of Scenarios.
 
         Args:
-          is_public: Whether this benchmark is public.
-
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
@@ -480,7 +469,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             "/v1/benchmarks",
             body=await async_maybe_transform(
                 {
-                    "is_public": is_public,
                     "name": name,
                     "metadata": metadata,
                     "scenario_ids": scenario_ids,
@@ -534,7 +522,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        is_public: bool,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
@@ -550,8 +537,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Update a Benchmark with a set of Scenarios.
 
         Args:
-          is_public: Whether this benchmark is public.
-
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
@@ -574,7 +559,6 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             f"/v1/benchmarks/{id}",
             body=await async_maybe_transform(
                 {
-                    "is_public": is_public,
                     "name": name,
                     "metadata": metadata,
                     "scenario_ids": scenario_ids,

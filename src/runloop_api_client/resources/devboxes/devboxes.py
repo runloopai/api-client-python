@@ -166,7 +166,7 @@ class DevboxesResource(SyncAPIResource):
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
-        repository_connection: Optional[devbox_create_params.RepositoryConnection] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -212,7 +212,7 @@ class DevboxesResource(SyncAPIResource):
           prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
               together with (Snapshot ID, Blueprint ID, or Blueprint name).
 
-          repository_connection: Repository connection parameters for configuring repository integration.
+          repo_connection_id: Repository connection id the devbox should source its base image from.
 
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
@@ -241,7 +241,7 @@ class DevboxesResource(SyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "prebuilt": prebuilt,
-                    "repository_connection": repository_connection,
+                    "repo_connection_id": repo_connection_id,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -1299,7 +1299,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
-        repository_connection: Optional[devbox_create_params.RepositoryConnection] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1345,7 +1345,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
           prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
               together with (Snapshot ID, Blueprint ID, or Blueprint name).
 
-          repository_connection: Repository connection parameters for configuring repository integration.
+          repo_connection_id: Repository connection id the devbox should source its base image from.
 
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
@@ -1374,7 +1374,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "prebuilt": prebuilt,
-                    "repository_connection": repository_connection,
+                    "repo_connection_id": repo_connection_id,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
