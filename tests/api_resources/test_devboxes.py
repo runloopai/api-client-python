@@ -80,6 +80,7 @@ class TestDevboxes:
             name="name",
             prebuilt="prebuilt",
             repo_connection_id="repo_connection_id",
+            secrets={"foo": "string"},
             snapshot_id="snapshot_id",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -1010,6 +1011,7 @@ class TestAsyncDevboxes:
             name="name",
             prebuilt="prebuilt",
             repo_connection_id="repo_connection_id",
+            secrets={"foo": "string"},
             snapshot_id="snapshot_id",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])

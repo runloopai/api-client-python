@@ -167,6 +167,7 @@ class DevboxesResource(SyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -214,6 +215,11 @@ class DevboxesResource(SyncAPIResource):
 
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
+          secrets: (Optional) Map of environment variable names to secret names. The secret values
+              will be securely injected as environment variables in the Devbox. Example:
+              {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
+              value of secret 'DATABASE_PASSWORD'.
+
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
 
@@ -242,6 +248,7 @@ class DevboxesResource(SyncAPIResource):
                     "name": name,
                     "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
+                    "secrets": secrets,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
@@ -1300,6 +1307,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1347,6 +1355,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
+          secrets: (Optional) Map of environment variable names to secret names. The secret values
+              will be securely injected as environment variables in the Devbox. Example:
+              {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
+              value of secret 'DATABASE_PASSWORD'.
+
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
 
@@ -1375,6 +1388,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "name": name,
                     "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
+                    "secrets": secrets,
                     "snapshot_id": snapshot_id,
                 },
                 devbox_create_params.DevboxCreateParams,
