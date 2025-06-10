@@ -61,6 +61,14 @@ class DevboxCreateParams(TypedDict, total=False):
     repo_connection_id: Optional[str]
     """Repository connection id the devbox should source its base image from."""
 
+    secrets: Optional[Dict[str, str]]
+    """(Optional) Map of environment variable names to secret names.
+
+    The secret values will be securely injected as environment variables in the
+    Devbox. Example: {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable
+    'DB_PASS' to the value of secret 'DATABASE_PASSWORD'.
+    """
+
     snapshot_id: Optional[str]
     """Snapshot ID to use for the Devbox.
 
