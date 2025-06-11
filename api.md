@@ -340,3 +340,23 @@ Methods:
 - <code title="post /v1/repositories/{id}/delete">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">delete</a>(id) -> object</code>
 - <code title="get /v1/repositories/{id}/inspections">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list_inspections</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_list_view.py">RepositoryInspectionListView</a></code>
 - <code title="post /v1/repositories/{id}/refresh">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">refresh</a>(id, \*\*<a href="src/runloop_api_client/types/repository_refresh_params.py">params</a>) -> object</code>
+
+# Secrets
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    SecretCreateParameters,
+    SecretListView,
+    SecretUpdateParameters,
+    SecretView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/secrets">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">create</a>(\*\*<a href="src/runloop_api_client/types/secret_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
+- <code title="post /v1/secrets/{name}">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">update</a>(name, \*\*<a href="src/runloop_api_client/types/secret_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
+- <code title="get /v1/secrets">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">list</a>() -> <a href="./src/runloop_api_client/types/secret_list_view.py">SecretListView</a></code>
+- <code title="post /v1/secrets/{name}/delete">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">delete</a>(name) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
