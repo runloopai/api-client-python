@@ -8,6 +8,7 @@ from .shared import (
     CodeMountParameters as CodeMountParameters,
 )
 from .devbox_view import DevboxView as DevboxView
+from .secret_view import SecretView as SecretView
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .benchmark_view import BenchmarkView as BenchmarkView
@@ -15,6 +16,7 @@ from .blueprint_view import BlueprintView as BlueprintView
 from .devbox_list_view import DevboxListView as DevboxListView
 from .scoring_contract import ScoringContract as ScoringContract
 from .scoring_function import ScoringFunction as ScoringFunction
+from .secret_list_view import SecretListView as SecretListView
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
@@ -27,6 +29,8 @@ from .devbox_snapshot_view import DevboxSnapshotView as DevboxSnapshotView
 from .devbox_update_params import DevboxUpdateParams as DevboxUpdateParams
 from .scenario_environment import ScenarioEnvironment as ScenarioEnvironment
 from .scenario_list_params import ScenarioListParams as ScenarioListParams
+from .secret_create_params import SecretCreateParams as SecretCreateParams
+from .secret_update_params import SecretUpdateParams as SecretUpdateParams
 from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
