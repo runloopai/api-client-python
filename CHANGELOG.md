@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.43.0 (2025-06-14)
+
+Full Changelog: [v0.42.0...v0.43.0](https://github.com/runloopai/api-client-python/compare/v0.42.0...v0.43.0)
+
+### Features
+
+* **api:** api update ([695b29a](https://github.com/runloopai/api-client-python/commit/695b29a97bd2dcad3f90ee377ed0475a84ed1a2b))
+
+
+### Bug Fixes
+
+* **client:** correctly parse binary response | stream ([1d815d4](https://github.com/runloopai/api-client-python/commit/1d815d468db24142174fe536c05dcd3ec49ee03f))
+
+
+### Chores
+
+* **tests:** run tests in parallel ([fdeee42](https://github.com/runloopai/api-client-python/commit/fdeee42440c5df55af77cbad2423c7faab473dcd))
+
 ## 0.42.0 (2025-06-11)
 
 Full Changelog: [v0.41.0...v0.42.0](https://github.com/runloopai/api-client-python/compare/v0.41.0...v0.42.0)

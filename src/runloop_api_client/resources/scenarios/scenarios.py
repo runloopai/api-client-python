@@ -256,6 +256,7 @@ class ScenariosResource(SyncAPIResource):
     def list(
         self,
         *,
+        benchmark_id: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
@@ -266,12 +267,13 @@ class ScenariosResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> SyncScenariosCursorIDPage[ScenarioView]:
-        """List all Scenarios matching filter.
+        """
+        List all Scenarios matching filter.
 
         Args:
-          limit: The limit of items to return.
+          benchmark_id: Filter scenarios by benchmark ID.
 
-        Default is 20.
+          limit: The limit of items to return. Default is 20.
 
           name: Query for Scenarios with a given name.
 
@@ -295,6 +297,7 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "benchmark_id": benchmark_id,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -679,6 +682,7 @@ class AsyncScenariosResource(AsyncAPIResource):
     def list(
         self,
         *,
+        benchmark_id: str | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
         name: str | NotGiven = NOT_GIVEN,
         starting_after: str | NotGiven = NOT_GIVEN,
@@ -689,12 +693,13 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
-        """List all Scenarios matching filter.
+        """
+        List all Scenarios matching filter.
 
         Args:
-          limit: The limit of items to return.
+          benchmark_id: Filter scenarios by benchmark ID.
 
-        Default is 20.
+          limit: The limit of items to return. Default is 20.
 
           name: Query for Scenarios with a given name.
 
@@ -718,6 +723,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "benchmark_id": benchmark_id,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
