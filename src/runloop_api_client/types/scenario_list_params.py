@@ -8,6 +8,9 @@ __all__ = ["ScenarioListParams"]
 
 
 class ScenarioListParams(TypedDict, total=False):
+    benchmark_id: str
+    """Filter scenarios by benchmark ID."""
+
     limit: int
     """The limit of items to return. Default is 20."""
 
