@@ -186,21 +186,6 @@ class TestScenarios:
     def test_method_update(self, client: Runloop) -> None:
         scenario = client.scenarios.update(
             id="id",
-            input_context={"problem_statement": "problem_statement"},
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -208,25 +193,6 @@ class TestScenarios:
     def test_method_update_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.update(
             id="id",
-            input_context={
-                "problem_statement": "problem_statement",
-                "additional_context": {},
-            },
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                            "lang": "lang",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
             environment_parameters={
                 "blueprint_id": "blueprint_id",
                 "launch_parameters": {
@@ -250,17 +216,13 @@ class TestScenarios:
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
             metadata={"foo": "string"},
-            reference_output="reference_output",
-        )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
-
-    @parametrize
-    def test_raw_response_update(self, client: Runloop) -> None:
-        response = client.scenarios.with_raw_response.update(
-            id="id",
-            input_context={"problem_statement": "problem_statement"},
             name="name",
+            reference_output="reference_output",
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -269,11 +231,19 @@ class TestScenarios:
                             "pattern": "pattern",
                             "search_directory": "search_directory",
                             "type": "ast_grep_scorer",
+                            "lang": "lang",
                         },
                         "weight": 0,
                     }
                 ]
             },
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    def test_raw_response_update(self, client: Runloop) -> None:
+        response = client.scenarios.with_raw_response.update(
+            id="id",
         )
 
         assert response.is_closed is True
@@ -285,21 +255,6 @@ class TestScenarios:
     def test_streaming_response_update(self, client: Runloop) -> None:
         with client.scenarios.with_streaming_response.update(
             id="id",
-            input_context={"problem_statement": "problem_statement"},
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -314,21 +269,6 @@ class TestScenarios:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.scenarios.with_raw_response.update(
                 id="",
-                input_context={"problem_statement": "problem_statement"},
-                name="name",
-                scoring_contract={
-                    "scoring_function_parameters": [
-                        {
-                            "name": "name",
-                            "scorer": {
-                                "pattern": "pattern",
-                                "search_directory": "search_directory",
-                                "type": "ast_grep_scorer",
-                            },
-                            "weight": 0,
-                        }
-                    ]
-                },
             )
 
     @parametrize
@@ -610,21 +550,6 @@ class TestAsyncScenarios:
     async def test_method_update(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.update(
             id="id",
-            input_context={"problem_statement": "problem_statement"},
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -632,25 +557,6 @@ class TestAsyncScenarios:
     async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.update(
             id="id",
-            input_context={
-                "problem_statement": "problem_statement",
-                "additional_context": {},
-            },
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                            "lang": "lang",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
             environment_parameters={
                 "blueprint_id": "blueprint_id",
                 "launch_parameters": {
@@ -674,17 +580,13 @@ class TestAsyncScenarios:
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
+            input_context={
+                "problem_statement": "problem_statement",
+                "additional_context": {},
+            },
             metadata={"foo": "string"},
-            reference_output="reference_output",
-        )
-        assert_matches_type(ScenarioView, scenario, path=["response"])
-
-    @parametrize
-    async def test_raw_response_update(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.scenarios.with_raw_response.update(
-            id="id",
-            input_context={"problem_statement": "problem_statement"},
             name="name",
+            reference_output="reference_output",
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -693,11 +595,19 @@ class TestAsyncScenarios:
                             "pattern": "pattern",
                             "search_directory": "search_directory",
                             "type": "ast_grep_scorer",
+                            "lang": "lang",
                         },
                         "weight": 0,
                     }
                 ]
             },
+        )
+        assert_matches_type(ScenarioView, scenario, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.scenarios.with_raw_response.update(
+            id="id",
         )
 
         assert response.is_closed is True
@@ -709,21 +619,6 @@ class TestAsyncScenarios:
     async def test_streaming_response_update(self, async_client: AsyncRunloop) -> None:
         async with async_client.scenarios.with_streaming_response.update(
             id="id",
-            input_context={"problem_statement": "problem_statement"},
-            name="name",
-            scoring_contract={
-                "scoring_function_parameters": [
-                    {
-                        "name": "name",
-                        "scorer": {
-                            "pattern": "pattern",
-                            "search_directory": "search_directory",
-                            "type": "ast_grep_scorer",
-                        },
-                        "weight": 0,
-                    }
-                ]
-            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -738,21 +633,6 @@ class TestAsyncScenarios:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.scenarios.with_raw_response.update(
                 id="",
-                input_context={"problem_statement": "problem_statement"},
-                name="name",
-                scoring_contract={
-                    "scoring_function_parameters": [
-                        {
-                            "name": "name",
-                            "scorer": {
-                                "pattern": "pattern",
-                                "search_directory": "search_directory",
-                                "type": "ast_grep_scorer",
-                            },
-                            "weight": 0,
-                        }
-                    ]
-                },
             )
 
     @parametrize
