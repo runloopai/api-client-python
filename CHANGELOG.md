@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.44.0 (2025-06-21)
+
+Full Changelog: [v0.43.0...v0.44.0](https://github.com/runloopai/api-client-python/compare/v0.43.0...v0.44.0)
+
+### Features
+
+* **api:** api update ([8bd0a39](https://github.com/runloopai/api-client-python/commit/8bd0a3937ff3d5b3e03a34ab2fc291377bbc4203))
+* **api:** api update ([8ebd055](https://github.com/runloopai/api-client-python/commit/8ebd055bb3760c7a01193df890ca7e56d7ff9c01))
+* **client:** add support for aiohttp ([4237321](https://github.com/runloopai/api-client-python/commit/4237321688934fcc89a17588800ce33fb47d9633))
+
+
+### Bug Fixes
+
+* **tests:** fix: tests which call HTTP endpoints directly with the example parameters ([038fe71](https://github.com/runloopai/api-client-python/commit/038fe71f5d0bee93bdcad12af69a8f5b09b6664f))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([f64b8a2](https://github.com/runloopai/api-client-python/commit/f64b8a2a52a28a86f25d8b8ad1998e9ce4dda542))
+* **internal:** update conftest.py ([d840c86](https://github.com/runloopai/api-client-python/commit/d840c863eb3b080202874080e44b8ab0baa379c4))
+* **readme:** update badges ([4b5af3f](https://github.com/runloopai/api-client-python/commit/4b5af3faf2f3cfbcee8474b864335eb0a4c0a78b))
+* **tests:** add tests for httpx client instantiation & proxies ([938b9aa](https://github.com/runloopai/api-client-python/commit/938b9aa33ef7ae52809ca6e9111fc3265d70263d))
+
+
+### Documentation
+
+* **client:** fix httpx.Timeout documentation reference ([b8df915](https://github.com/runloopai/api-client-python/commit/b8df91557df34f77ce5a6f85769305628d9f2a1d))
+
 ## 0.43.0 (2025-06-14)
 
 Full Changelog: [v0.42.0...v0.43.0](https://github.com/runloopai/api-client-python/compare/v0.42.0...v0.43.0)
