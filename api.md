@@ -268,6 +268,7 @@ from runloop_api_client.types import (
     ScenarioEnvironment,
     ScenarioRunListView,
     ScenarioRunView,
+    ScenarioUpdateParameters,
     ScenarioView,
     ScoringContract,
     ScoringContractResultView,
