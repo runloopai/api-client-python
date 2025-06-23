@@ -1,6 +1,6 @@
 # Runloop Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/runloop_api_client.svg)](https://pypi.org/project/runloop_api_client/)
+[![PyPI version](<https://img.shields.io/pypi/v/runloop_api_client.svg?label=pypi%20(stable)>)](https://pypi.org/project/runloop_api_client/)
 
 The Runloop Python library provides convenient access to the Runloop REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -63,6 +63,38 @@ asyncio.run(main())
 ```
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
+
+### With aiohttp
+
+By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
+
+You can enable this by installing `aiohttp`:
+
+```sh
+# install from PyPI
+pip install runloop_api_client[aiohttp]
+```
+
+Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
+
+```python
+import os
+import asyncio
+from runloop_api_client import DefaultAioHttpClient
+from runloop_api_client import AsyncRunloop
+
+
+async def main() -> None:
+    async with AsyncRunloop(
+        bearer_token=os.environ.get("RUNLOOP_API_KEY"),  # This is the default and can be omitted
+        http_client=DefaultAioHttpClient(),
+    ) as client:
+        devbox_view = await client.devboxes.create()
+        print(devbox_view.id)
+
+
+asyncio.run(main())
+```
 
 ## Using types
 
@@ -235,7 +267,7 @@ client.with_options(max_retries=5).devboxes.create()
 ### Timeouts
 
 By default requests time out after 1 minute. You can configure this with a `timeout` option,
-which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
+which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
 from runloop_api_client import Runloop

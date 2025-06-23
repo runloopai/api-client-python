@@ -185,12 +185,12 @@ class ScenariosResource(SyncAPIResource):
         self,
         id: str,
         *,
-        input_context: InputContextParam,
-        name: str,
-        scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
+        input_context: Optional[InputContextParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        scoring_contract: Optional[ScoringContractParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -201,22 +201,23 @@ class ScenariosResource(SyncAPIResource):
     ) -> ScenarioView:
         """
         Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria.
+        starting environment as well as evaluation success criteria. Only provided
+        fields will be updated.
 
         Args:
-          input_context: The input context for the Scenario.
-
-          name: Name of the scenario.
-
-          scoring_contract: The scoring contract for the Scenario.
-
           environment_parameters: The Environment in which the Scenario will run.
 
+          input_context: The input context for the Scenario.
+
           metadata: User defined metadata to attach to the scenario for organization.
+
+          name: Name of the scenario.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
+
+          scoring_contract: The scoring contract for the Scenario.
 
           extra_headers: Send extra headers
 
@@ -234,12 +235,12 @@ class ScenariosResource(SyncAPIResource):
             f"/v1/scenarios/{id}",
             body=maybe_transform(
                 {
-                    "input_context": input_context,
-                    "name": name,
-                    "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
+                    "input_context": input_context,
                     "metadata": metadata,
+                    "name": name,
                     "reference_output": reference_output,
+                    "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,
             ),
@@ -611,12 +612,12 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        input_context: InputContextParam,
-        name: str,
-        scoring_contract: ScoringContractParam,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
+        input_context: Optional[InputContextParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        scoring_contract: Optional[ScoringContractParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -627,22 +628,23 @@ class AsyncScenariosResource(AsyncAPIResource):
     ) -> ScenarioView:
         """
         Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria.
+        starting environment as well as evaluation success criteria. Only provided
+        fields will be updated.
 
         Args:
-          input_context: The input context for the Scenario.
-
-          name: Name of the scenario.
-
-          scoring_contract: The scoring contract for the Scenario.
-
           environment_parameters: The Environment in which the Scenario will run.
 
+          input_context: The input context for the Scenario.
+
           metadata: User defined metadata to attach to the scenario for organization.
+
+          name: Name of the scenario.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
+
+          scoring_contract: The scoring contract for the Scenario.
 
           extra_headers: Send extra headers
 
@@ -660,12 +662,12 @@ class AsyncScenariosResource(AsyncAPIResource):
             f"/v1/scenarios/{id}",
             body=await async_maybe_transform(
                 {
-                    "input_context": input_context,
-                    "name": name,
-                    "scoring_contract": scoring_contract,
                     "environment_parameters": environment_parameters,
+                    "input_context": input_context,
                     "metadata": metadata,
+                    "name": name,
                     "reference_output": reference_output,
+                    "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,
             ),
