@@ -45,7 +45,9 @@ from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.input_context_param import InputContextParam
 from ...types.scoring_contract_param import ScoringContractParam
+from ...types.input_context_update_param import InputContextUpdateParam
 from ...types.scenario_environment_param import ScenarioEnvironmentParam
+from ...types.scoring_contract_update_param import ScoringContractUpdateParam
 
 __all__ = ["ScenariosResource", "AsyncScenariosResource"]
 
@@ -185,11 +187,11 @@ class ScenariosResource(SyncAPIResource):
         id: str,
         *,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        input_context: Optional[InputContextParam] | NotGiven = NOT_GIVEN,
+        input_context: Optional[InputContextUpdateParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        scoring_contract: Optional[ScoringContractParam] | NotGiven = NOT_GIVEN,
+        scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -553,11 +555,11 @@ class AsyncScenariosResource(AsyncAPIResource):
         id: str,
         *,
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        input_context: Optional[InputContextParam] | NotGiven = NOT_GIVEN,
+        input_context: Optional[InputContextUpdateParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        scoring_contract: Optional[ScoringContractParam] | NotGiven = NOT_GIVEN,
+        scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

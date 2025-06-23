@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import Dict, Optional
 from typing_extensions import TypedDict
 
-from .input_context_param import InputContextParam
-from .scoring_contract_param import ScoringContractParam
+from .input_context_update_param import InputContextUpdateParam
 from .scenario_environment_param import ScenarioEnvironmentParam
+from .scoring_contract_update_param import ScoringContractUpdateParam
 
 __all__ = ["ScenarioUpdateParams"]
 
@@ -16,7 +16,7 @@ class ScenarioUpdateParams(TypedDict, total=False):
     environment_parameters: Optional[ScenarioEnvironmentParam]
     """The Environment in which the Scenario will run."""
 
-    input_context: Optional[InputContextParam]
+    input_context: Optional[InputContextUpdateParam]
     """The input context for the Scenario."""
 
     metadata: Optional[Dict[str, str]]
@@ -32,5 +32,5 @@ class ScenarioUpdateParams(TypedDict, total=False):
     apply to the environment.
     """
 
-    scoring_contract: Optional[ScoringContractParam]
+    scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""

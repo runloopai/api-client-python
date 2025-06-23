@@ -264,6 +264,7 @@ Types:
 ```python
 from runloop_api_client.types import (
     InputContext,
+    InputContextUpdate,
     ScenarioCreateParameters,
     ScenarioEnvironment,
     ScenarioRunListView,
@@ -272,6 +273,7 @@ from runloop_api_client.types import (
     ScenarioView,
     ScoringContract,
     ScoringContractResultView,
+    ScoringContractUpdate,
     ScoringFunction,
     ScoringFunctionResultView,
     StartScenarioRunParameters,
