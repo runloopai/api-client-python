@@ -9,10 +9,18 @@ from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
+    BinaryAPIResponse,
+    AsyncBinaryAPIResponse,
+    StreamedBinaryAPIResponse,
+    AsyncStreamedBinaryAPIResponse,
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
+    to_custom_raw_response_wrapper,
     async_to_streamed_response_wrapper,
+    to_custom_streamed_response_wrapper,
+    async_to_custom_raw_response_wrapper,
+    async_to_custom_streamed_response_wrapper,
 )
 from ...pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
@@ -208,6 +216,48 @@ class RunsResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=ScenarioRunView,
+        )
+
+    def download_logs(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> BinaryAPIResponse:
+        """
+        Download a zip file containing all logs for a Scenario run from the associated
+        devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "application/zip", **(extra_headers or {})}
+        return self._post(
+            f"/v1/scenarios/runs/{id}/download_logs",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BinaryAPIResponse,
         )
 
     def score(
@@ -439,6 +489,48 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=ScenarioRunView,
         )
 
+    async def download_logs(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> AsyncBinaryAPIResponse:
+        """
+        Download a zip file containing all logs for a Scenario run from the associated
+        devbox.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {"Accept": "application/zip", **(extra_headers or {})}
+        return await self._post(
+            f"/v1/scenarios/runs/{id}/download_logs",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=AsyncBinaryAPIResponse,
+        )
+
     async def score(
         self,
         id: str,
@@ -496,6 +588,10 @@ class RunsResourceWithRawResponse:
         self.complete = to_raw_response_wrapper(
             runs.complete,
         )
+        self.download_logs = to_custom_raw_response_wrapper(
+            runs.download_logs,
+            BinaryAPIResponse,
+        )
         self.score = to_raw_response_wrapper(
             runs.score,
         )
@@ -516,6 +612,10 @@ class AsyncRunsResourceWithRawResponse:
         )
         self.complete = async_to_raw_response_wrapper(
             runs.complete,
+        )
+        self.download_logs = async_to_custom_raw_response_wrapper(
+            runs.download_logs,
+            AsyncBinaryAPIResponse,
         )
         self.score = async_to_raw_response_wrapper(
             runs.score,
@@ -538,6 +638,10 @@ class RunsResourceWithStreamingResponse:
         self.complete = to_streamed_response_wrapper(
             runs.complete,
         )
+        self.download_logs = to_custom_streamed_response_wrapper(
+            runs.download_logs,
+            StreamedBinaryAPIResponse,
+        )
         self.score = to_streamed_response_wrapper(
             runs.score,
         )
@@ -558,6 +662,10 @@ class AsyncRunsResourceWithStreamingResponse:
         )
         self.complete = async_to_streamed_response_wrapper(
             runs.complete,
+        )
+        self.download_logs = async_to_custom_streamed_response_wrapper(
+            runs.download_logs,
+            AsyncStreamedBinaryAPIResponse,
         )
         self.score = async_to_streamed_response_wrapper(
             runs.score,
