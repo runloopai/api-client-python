@@ -217,8 +217,8 @@ class TestScenarios:
                 "working_directory": "working_directory",
             },
             input_context={
-                "problem_statement": "problem_statement",
                 "additional_context": {},
+                "problem_statement": "problem_statement",
             },
             metadata={"foo": "string"},
             name="name",
@@ -583,8 +583,8 @@ class TestAsyncScenarios:
                 "working_directory": "working_directory",
             },
             input_context={
-                "problem_statement": "problem_statement",
                 "additional_context": {},
+                "problem_statement": "problem_statement",
             },
             metadata={"foo": "string"},
             name="name",

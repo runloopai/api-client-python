@@ -264,6 +264,7 @@ Types:
 ```python
 from runloop_api_client.types import (
     InputContext,
+    InputContextUpdate,
     ScenarioCreateParameters,
     ScenarioEnvironment,
     ScenarioRunListView,
@@ -272,6 +273,7 @@ from runloop_api_client.types import (
     ScenarioView,
     ScoringContract,
     ScoringContractResultView,
+    ScoringContractUpdate,
     ScoringFunction,
     ScoringFunctionResultView,
     StartScenarioRunParameters,
@@ -295,6 +297,7 @@ Methods:
 - <code title="get /v1/scenarios/runs">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
 - <code title="post /v1/scenarios/runs/{id}/cancel">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
 - <code title="post /v1/scenarios/runs/{id}/complete">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
+- <code title="post /v1/scenarios/runs/{id}/download_logs">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">download_logs</a>(id) -> BinaryAPIResponse</code>
 - <code title="post /v1/scenarios/runs/{id}/score">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">score</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
 
 ## Scorers
