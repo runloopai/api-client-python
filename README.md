@@ -245,7 +245,7 @@ Error codes are as follows:
 
 ### Retries
 
-Certain errors are automatically retried 3 times by default, with a short exponential backoff.
+Certain errors are automatically retried 5 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors are all retried by default.
 
