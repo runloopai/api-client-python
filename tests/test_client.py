@@ -93,7 +93,7 @@ class TestRunloop:
         # options that have a default are overridden correctly
         copied = self.client.copy(max_retries=7)
         assert copied.max_retries == 7
-        assert self.client.max_retries == 0
+        assert self.client.max_retries == 3
 
         copied2 = copied.copy(max_retries=6)
         assert copied2.max_retries == 6
@@ -754,7 +754,7 @@ class TestRunloop:
             [3, "", 1],
             [2, "", 1 * 2.0],
             [1, "", 1 * 4.0],
-            [-1100, "", 10],  # test large number potentially overflowing
+            [-1100, "", 15],  # test large number potentially overflowing
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
@@ -949,7 +949,7 @@ class TestAsyncRunloop:
         # options that have a default are overridden correctly
         copied = self.client.copy(max_retries=7)
         assert copied.max_retries == 7
-        assert self.client.max_retries == 0
+        assert self.client.max_retries == 3
 
         copied2 = copied.copy(max_retries=6)
         assert copied2.max_retries == 6
@@ -1613,7 +1613,7 @@ class TestAsyncRunloop:
             [3, "", 1],
             [2, "", 1 * 2.0],
             [1, "", 1 * 4.0],
-            [-1100, "", 10],  # test large number potentially overflowing
+            [-1100, "", 15],  # test large number potentially overflowing
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
