@@ -7,7 +7,7 @@ from typing import Optional
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import is_given, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -17,6 +17,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ...lib.polling import PollingConfig, poll_until
+from ..._constants import DEFAULT_TIMEOUT
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
 from ...lib.polling_async import async_poll_until
@@ -235,6 +236,8 @@ class ExecutionsResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=maybe_transform(
@@ -510,6 +513,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return await self._post(
             f"/v1/devboxes/{id}/execute_sync",
             body=await async_maybe_transform(

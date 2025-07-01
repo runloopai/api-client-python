@@ -245,7 +245,7 @@ Error codes are as follows:
 
 ### Retries
 
-Certain errors are automatically retried 0 times by default, with a short exponential backoff.
+Certain errors are automatically retried 3 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors are all retried by default.
 
@@ -266,7 +266,7 @@ client.with_options(max_retries=5).devboxes.create()
 
 ### Timeouts
 
-By default requests time out after 1 minute. You can configure this with a `timeout` option,
+By default requests time out after 30 seconds. You can configure this with a `timeout` option,
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
@@ -274,7 +274,7 @@ from runloop_api_client import Runloop
 
 # Configure the default for all requests:
 client = Runloop(
-    # 20 seconds (default is 1 minute)
+    # 20 seconds (default is 30 seconds)
     timeout=20.0,
 )
 

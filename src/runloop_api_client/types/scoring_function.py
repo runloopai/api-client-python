@@ -74,6 +74,9 @@ class ScorerPythonScriptScoringFunction(BaseModel):
 
     type: Literal["python_script_scorer"]
 
+    python_version_constraint: Optional[str] = None
+    """Python version to run scoring. Default is "==3.12.10" """
+
     requirements_contents: Optional[str] = None
     """Package dependencies to be installed.
 
