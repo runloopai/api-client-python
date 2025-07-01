@@ -73,6 +73,9 @@ class ScorerPythonScriptScoringFunction(TypedDict, total=False):
 
     type: Required[Literal["python_script_scorer"]]
 
+    python_version_constraint: Optional[str]
+    """Python version to run scoring. Default is "==3.12.10" """
+
     requirements_contents: str
     """Package dependencies to be installed.
 

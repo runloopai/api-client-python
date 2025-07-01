@@ -561,6 +561,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return self._post(
             f"/v1/devboxes/{id}/download_file",
@@ -832,6 +834,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._post(
             f"/v1/devboxes/{id}/read_file_contents",
@@ -1167,6 +1171,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         body = deepcopy_minimal(
             {
                 "path": path,
@@ -1229,6 +1235,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return self._post(
             f"/v1/devboxes/{id}/write_file_contents",
             body=maybe_transform(
@@ -1701,6 +1709,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return await self._post(
             f"/v1/devboxes/{id}/download_file",
@@ -1972,6 +1982,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._post(
             f"/v1/devboxes/{id}/read_file_contents",
@@ -2307,6 +2319,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         body = deepcopy_minimal(
             {
                 "path": path,
@@ -2369,6 +2383,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
         return await self._post(
             f"/v1/devboxes/{id}/write_file_contents",
             body=await async_maybe_transform(
