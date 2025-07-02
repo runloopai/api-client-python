@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.47.1 (2025-07-02)
+
+Full Changelog: [v0.47.0...v0.47.1](https://github.com/runloopai/api-client-python/compare/v0.47.0...v0.47.1)
+
+### Chores
+
+* **ci:** change upload type ([00667f4](https://github.com/runloopai/api-client-python/commit/00667f4d85d07db079704d2b8f682d48e09fa7fc))
+
 ## 0.47.0 (2025-07-01)
 
 Full Changelog: [v0.46.0...v0.47.0](https://github.com/runloopai/api-client-python/compare/v0.46.0...v0.47.0)
