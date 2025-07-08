@@ -10,6 +10,7 @@ async def async_poll_until(
     retriever: Callable[[], Awaitable[T]],
     is_terminal: Callable[[T], bool],
     config: Optional[PollingConfig] = None,
+    on_error: Optional[Callable[[Exception], T]] = None,
 ) -> T:
     """
     Poll until a condition is met or timeout/max attempts are reached.
@@ -18,6 +19,8 @@ async def async_poll_until(
         retriever: Async or sync callable that returns the object to check
         is_terminal: Callable that returns True when polling should stop
         config: Optional polling configuration
+        on_error: Optional error handler that can return a value to continue polling
+                 or re-raise the exception to stop polling
         
     Returns:
         The final state of the polled object
@@ -33,7 +36,13 @@ async def async_poll_until(
     last_result: Union[T, None] = None
     
     while True:
-        last_result = await retriever()
+        try:
+            last_result = await retriever()
+        except Exception as e:
+            if on_error is not None:
+                last_result = on_error(e)
+            else:
+                raise
         
         if is_terminal(last_result):
             return last_result

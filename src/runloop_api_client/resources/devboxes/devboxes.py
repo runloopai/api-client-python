@@ -108,10 +108,12 @@ from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
+from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
-DEVBOX_BOOTING_STATES = frozenset(('provisioning', 'initializing'))
+DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+
 
 class DevboxesResource(SyncAPIResource):
     @cached_property
@@ -357,7 +359,7 @@ class DevboxesResource(SyncAPIResource):
     def await_running(
         self,
         id: str,
-        *,        
+        *,
         polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -367,7 +369,7 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
-        
+
         Args:
             id: The ID of the devbox to wait for
             config: Optional polling configuration
@@ -383,24 +385,43 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        def retrieve_devbox() -> DevboxView:
-            return self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+
+        def wait_for_devbox_status() -> DevboxView:
+            # This wait_for_status endpoint polls the devbox status for 10 seconds until it reaches either running or failure.
+            # If it's neither, it will throw an error.
+            return self._post(
+                f"/v1/devboxes/{id}/wait_for_status",
+                body={"statuses": ["running", "failure"]},
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=DevboxView,
             )
+
+        def handle_timeout_error(error: Exception) -> DevboxView:
+            # Handle 408 timeout errors by returning current devbox state to continue polling
+            if isinstance(error, httpx.HTTPStatusError) and error.response.status_code == 408:
+                # Return a placeholder result to continue polling
+                return DevboxView(
+                    id=id,
+                    status="provisioning",
+                    capabilities=[],
+                    create_time_ms=0,
+                    launch_parameters=SharedLaunchParameters(),
+                    metadata={},
+                    state_transitions=[],
+                )
+            else:
+                # Re-raise other errors to stop polling
+                raise error
 
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = poll_until(retrieve_devbox, is_done_booting, polling_config)
+        devbox = poll_until(wait_for_devbox_status, is_done_booting, polling_config, handle_timeout_error)
 
         if devbox.status != "running":
-            raise RunloopError(
-                f"Devbox entered non-running terminal state: {devbox.status}"
-            )
+            raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
 
         return devbox
 
@@ -427,7 +448,7 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
-        
+
         Args:
             blueprint_id: The ID of the blueprint to use
             blueprint_name: The name of the blueprint to use
@@ -1660,7 +1681,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
-        
+
         Args:
             id: The ID of the devbox to wait for
             config: Optional polling configuration
@@ -1676,27 +1697,45 @@ class AsyncDevboxesResource(AsyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        async def retrieve_devbox() -> DevboxView:
-            return await self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
-            )
-        
+
+        async def wait_for_devbox_status() -> DevboxView:
+            # This wait_for_status endpoint polls the devbox status for 10 seconds until it reaches either running or failure.
+            # If it's neither, it will throw an error.
+            try:
+                return await self._post(
+                    f"/v1/devboxes/{id}/wait_for_status",
+                    body={"statuses": ["running", "failure"]},
+                    options=make_request_options(
+                        extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                    ),
+                    cast_to=DevboxView,
+                )
+            except httpx.HTTPStatusError as error:
+                if error.response.status_code == 408:
+                    # Handle 408 timeout errors by returning a placeholder result to continue polling
+                    return DevboxView(
+                        id=id,
+                        status="provisioning",
+                        capabilities=[],
+                        create_time_ms=0,
+                        launch_parameters=SharedLaunchParameters(),
+                        metadata={},
+                        state_transitions=[],
+                    )
+                else:
+                    # Re-raise other errors to stop polling
+                    raise
+
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = await async_poll_until(retrieve_devbox, is_done_booting, polling_config)
+        devbox = await async_poll_until(wait_for_devbox_status, is_done_booting, polling_config)
 
         if devbox.status != "running":
-            raise RunloopError(
-                f"Devbox entered non-running terminal state: {devbox.status}"
-            )        
+            raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
 
         return devbox
-    
+
     async def update(
         self,
         id: str,
