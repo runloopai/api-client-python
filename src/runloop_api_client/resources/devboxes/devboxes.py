@@ -103,12 +103,12 @@ from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.devbox_snapshot_view import DevboxSnapshotView
+from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
-from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
 
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 

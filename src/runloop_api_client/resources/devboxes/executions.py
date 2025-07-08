@@ -16,8 +16,8 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...lib.polling import PollingConfig, poll_until
 from ..._constants import DEFAULT_TIMEOUT
+from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
 from ...lib.polling_async import async_poll_until
@@ -103,7 +103,6 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
         
@@ -380,7 +379,6 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
         
@@ -406,7 +404,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
-                timeout=timeout
+                timeout=timeout,
             )
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
