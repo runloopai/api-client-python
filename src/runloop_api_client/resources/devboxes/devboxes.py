@@ -88,7 +88,7 @@ from ...pagination import (
     SyncDiskSnapshotsCursorIDPage,
     AsyncDiskSnapshotsCursorIDPage,
 )
-from ..._exceptions import RunloopError
+from ..._exceptions import RunloopError, APIStatusError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
@@ -400,7 +400,7 @@ class DevboxesResource(SyncAPIResource):
 
         def handle_timeout_error(error: Exception) -> DevboxView:
             # Handle 408 timeout errors by returning current devbox state to continue polling
-            if isinstance(error, httpx.HTTPStatusError) and error.response.status_code == 408:
+            if isinstance(error, APIStatusError) and error.response.status_code == 408:
                 # Return a placeholder result to continue polling
                 return DevboxView(
                     id=id,
@@ -1710,7 +1710,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     ),
                     cast_to=DevboxView,
                 )
-            except httpx.HTTPStatusError as error:
+            except APIStatusError as error:
                 if error.response.status_code == 408:
                     # Handle 408 timeout errors by returning a placeholder result to continue polling
                     return DevboxView(
