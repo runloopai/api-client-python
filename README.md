@@ -247,7 +247,8 @@ Error codes are as follows:
 
 Certain errors are automatically retried 5 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors are all retried by default.
+429 Rate Limit, and >=500 Internal errors are all retried by default for GET requests. For POST requests, only 
+429 errors will be retried.
 
 You can use the `max_retries` option to configure or disable retry settings:
 
@@ -256,12 +257,12 @@ from runloop_api_client import Runloop
 
 # Configure the default for all requests:
 client = Runloop(
-    # default is 2
+    # default is 5
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).devboxes.create()
+client.with_options(max_retries=10).devboxes.create()
 ```
 
 ### Timeouts
