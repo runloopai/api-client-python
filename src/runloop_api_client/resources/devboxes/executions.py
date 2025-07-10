@@ -17,13 +17,13 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._constants import DEFAULT_TIMEOUT
+from ..._exceptions import APIStatusError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
-from ..._exceptions import APIStatusError
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 
@@ -106,7 +106,7 @@ class ExecutionsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
-        
+
         Args:
             execution_id: The ID of the execution to wait for
             id: The ID of the devbox
@@ -133,7 +133,7 @@ class ExecutionsResource(SyncAPIResource):
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
             )
-        
+
         def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
             # Handle 408 timeout errors by returning current execution state to continue polling
             if isinstance(error, APIStatusError) and error.response.status_code == 408:
@@ -150,9 +150,9 @@ class ExecutionsResource(SyncAPIResource):
                 raise error
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
-            return execution.status == 'completed'
+            return execution.status == "completed"
 
-        return poll_until(wait_for_execution_status, is_done, config, handle_timeout_error)    
+        return poll_until(wait_for_execution_status, is_done, config, handle_timeout_error)
 
     def execute_async(
         self,
@@ -387,7 +387,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
 
     async def await_completed(
         self,
-        execution_id: str,        
+        execution_id: str,
         *,
         devbox_id: str,
         polling_config: PollingConfig | None = None,
@@ -399,7 +399,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
-        
+
         Args:
             execution_id: The ID of the execution to wait for
             id: The ID of the devbox
@@ -415,6 +415,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Raises:
             PollingTimeout: If polling times out before execution completes
         """
+
         async def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
             try:
                 return await self._post(
@@ -440,8 +441,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     raise
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
-            return execution.status == 'completed'
-        
+            return execution.status == "completed"
+
         return await async_poll_until(wait_for_execution_status, is_done, polling_config)
 
     async def execute_async(
