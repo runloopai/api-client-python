@@ -231,7 +231,7 @@ class TestExecutions:
     @parametrize
     def test_method_await_completed_success(self, client: Runloop) -> None:
         """Test await_completed with successful polling to completed state"""
-        
+
         # Mock the wait_for_status calls - first returns running, then completed
         mock_execution_running = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
@@ -240,28 +240,28 @@ class TestExecutions:
             stdout="Starting...",
             stderr="",
         )
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
-            execution_id="execution_id", 
+            execution_id="execution_id",
             status="completed",
             stdout="Starting...\nFinished!",
             stderr="",
         )
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = [mock_execution_running, mock_execution_completed]
-            
+
             result = client.devboxes.executions.await_completed("execution_id", "devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
-            
+
     @parametrize
     def test_method_await_completed_immediate_success(self, client: Runloop) -> None:
         """Test await_completed when execution is already completed"""
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -269,25 +269,25 @@ class TestExecutions:
             stdout="Already finished!",
             stderr="",
         )
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
-            
+
             result = client.devboxes.executions.await_completed("execution_id", "devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 1
-            
+
     @parametrize
     def test_method_await_completed_timeout_handling(self, client: Runloop) -> None:
         """Test await_completed handles 408 timeouts correctly"""
-        
+
         # Create a mock 408 response
         mock_response = Mock()
         mock_response.status_code = 408
         mock_408_error = APIStatusError("Request timeout", response=mock_response, body=None)
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -295,36 +295,36 @@ class TestExecutions:
             stdout="Finished after timeout!",
             stderr="",
         )
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             # First call raises 408, second call succeeds
             mock_post.side_effect = [mock_408_error, mock_execution_completed]
-            
+
             result = client.devboxes.executions.await_completed("execution_id", "devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
-            
+
     @parametrize
     def test_method_await_completed_other_error(self, client: Runloop) -> None:
         """Test await_completed re-raises non-408 errors"""
-        
+
         # Create a mock 500 response
         mock_response = Mock()
         mock_response.status_code = 500
         mock_500_error = APIStatusError("Internal server error", response=mock_response, body=None)
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = mock_500_error
-            
+
             with pytest.raises(APIStatusError, match="Internal server error"):
                 client.devboxes.executions.await_completed("execution_id", "devbox_id")
-                
+
     @parametrize
     def test_method_await_completed_with_config(self, client: Runloop) -> None:
         """Test await_completed with custom polling configuration"""
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -332,21 +332,21 @@ class TestExecutions:
             stdout="Finished with config!",
             stderr="",
         )
-        
+
         config = PollingConfig(interval_seconds=0.1, max_attempts=10)
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
-            
+
             result = client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
-            
+
     @parametrize
     def test_method_await_completed_polling_timeout(self, client: Runloop) -> None:
         """Test await_completed raises PollingTimeout when max attempts exceeded"""
-        
+
         mock_execution_running = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -354,19 +354,19 @@ class TestExecutions:
             stdout="Still running...",
             stderr="",
         )
-        
+
         config = PollingConfig(interval_seconds=0.01, max_attempts=2)
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_running
-            
+
             with pytest.raises(PollingTimeout):
                 client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
-                
+
     @parametrize
     def test_method_await_completed_various_statuses(self, client: Runloop) -> None:
         """Test await_completed correctly handles different execution statuses"""
-        
+
         # Test with queued status first
         mock_execution_queued = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
@@ -375,7 +375,7 @@ class TestExecutions:
             stdout="",
             stderr="",
         )
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -383,12 +383,12 @@ class TestExecutions:
             stdout="Done!",
             stderr="",
         )
-        
-        with patch.object(client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = [mock_execution_queued, mock_execution_completed]
-            
+
             result = client.devboxes.executions.await_completed("execution_id", "devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
@@ -610,7 +610,7 @@ class TestAsyncExecutions:
     @parametrize
     async def test_method_await_completed_success(self, async_client: AsyncRunloop) -> None:
         """Test await_completed with successful polling to completed state"""
-        
+
         # Mock the wait_for_status calls - first returns running, then completed
         mock_execution_running = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
@@ -619,28 +619,28 @@ class TestAsyncExecutions:
             stdout="Starting...",
             stderr="",
         )
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
-            execution_id="execution_id", 
+            execution_id="execution_id",
             status="completed",
             stdout="Starting...\nFinished!",
             stderr="",
         )
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = [mock_execution_running, mock_execution_completed]
-            
+
             result = await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
-            
+
     @parametrize
     async def test_method_await_completed_immediate_success(self, async_client: AsyncRunloop) -> None:
         """Test await_completed when execution is already completed"""
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -648,25 +648,25 @@ class TestAsyncExecutions:
             stdout="Already finished!",
             stderr="",
         )
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
-            
+
             result = await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 1
-            
+
     @parametrize
     async def test_method_await_completed_timeout_handling(self, async_client: AsyncRunloop) -> None:
         """Test await_completed handles 408 timeouts correctly"""
-        
+
         # Create a mock 408 response
         mock_response = Mock()
         mock_response.status_code = 408
         mock_408_error = APIStatusError("Request timeout", response=mock_response, body=None)
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -674,36 +674,36 @@ class TestAsyncExecutions:
             stdout="Finished after timeout!",
             stderr="",
         )
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             # First call raises 408, second call succeeds
             mock_post.side_effect = [mock_408_error, mock_execution_completed]
-            
+
             result = await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
-            
+
     @parametrize
     async def test_method_await_completed_other_error(self, async_client: AsyncRunloop) -> None:
         """Test await_completed re-raises non-408 errors"""
-        
+
         # Create a mock 500 response
         mock_response = Mock()
         mock_response.status_code = 500
         mock_500_error = APIStatusError("Internal server error", response=mock_response, body=None)
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = mock_500_error
-            
+
             with pytest.raises(APIStatusError, match="Internal server error"):
                 await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id")
-                
+
     @parametrize
     async def test_method_await_completed_with_config(self, async_client: AsyncRunloop) -> None:
         """Test await_completed with custom polling configuration"""
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -711,21 +711,23 @@ class TestAsyncExecutions:
             stdout="Finished with config!",
             stderr="",
         )
-        
+
         config = PollingConfig(interval_seconds=0.1, max_attempts=10)
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
-            
-            result = await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id", polling_config=config)
-            
+
+            result = await async_client.devboxes.executions.await_completed(
+                "execution_id", devbox_id="devbox_id", polling_config=config
+            )
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
-            
+
     @parametrize
     async def test_method_await_completed_polling_timeout(self, async_client: AsyncRunloop) -> None:
         """Test await_completed raises PollingTimeout when max attempts exceeded"""
-        
+
         mock_execution_running = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -733,19 +735,21 @@ class TestAsyncExecutions:
             stdout="Still running...",
             stderr="",
         )
-        
+
         config = PollingConfig(interval_seconds=0.01, max_attempts=2)
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_running
-            
+
             with pytest.raises(PollingTimeout):
-                await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id", polling_config=config)
-                
+                await async_client.devboxes.executions.await_completed(
+                    "execution_id", devbox_id="devbox_id", polling_config=config
+                )
+
     @parametrize
     async def test_method_await_completed_various_statuses(self, async_client: AsyncRunloop) -> None:
         """Test await_completed correctly handles different execution statuses"""
-        
+
         # Test with queued status first
         mock_execution_queued = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
@@ -754,7 +758,7 @@ class TestAsyncExecutions:
             stdout="",
             stderr="",
         )
-        
+
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",
             execution_id="execution_id",
@@ -762,12 +766,12 @@ class TestAsyncExecutions:
             stdout="Done!",
             stderr="",
         )
-        
-        with patch.object(async_client.devboxes.executions, '_post') as mock_post:
+
+        with patch.object(async_client.devboxes.executions, "_post") as mock_post:
             mock_post.side_effect = [mock_execution_queued, mock_execution_completed]
-            
+
             result = await async_client.devboxes.executions.await_completed("execution_id", devbox_id="devbox_id")
-            
+
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
