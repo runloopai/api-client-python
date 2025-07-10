@@ -42,6 +42,31 @@ def pytest_collection_modifyitems(items: list[pytest.Function]) -> None:
         if is_dict(async_client_param) and async_client_param.get("http_client") == "aiohttp":
             item.add_marker(pytest.mark.skip(reason="aiohttp client is not compatible with respx_mock"))
 
+    # Handle skip_if_strict marker
+    for item in items:
+        skip_marker = item.get_closest_marker("skip_if_strict")
+        if not skip_marker:
+            continue
+
+        if not hasattr(item, "callspec"):
+            continue
+
+        # Check if this is a strict validation test (True parameter)
+        client_param = item.callspec.params.get("client", None)
+        async_client_param = item.callspec.params.get("async_client", None)
+        
+        is_strict = False
+        if client_param is True:
+            is_strict = True
+        elif is_dict(async_client_param) and async_client_param.get("strict", True):
+            is_strict = True
+        elif async_client_param is True:
+            is_strict = True
+
+        if is_strict:
+            reason = skip_marker.kwargs.get("reason", "Skip strict validation test") if skip_marker.kwargs else "Skip strict validation test"
+            item.add_marker(pytest.mark.skip(reason=reason))
+
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
