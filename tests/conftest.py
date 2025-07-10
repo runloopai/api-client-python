@@ -54,7 +54,7 @@ def pytest_collection_modifyitems(items: list[pytest.Function]) -> None:
         # Check if this is a strict validation test (True parameter)
         client_param = item.callspec.params.get("client", None)
         async_client_param = item.callspec.params.get("async_client", None)
-        
+
         is_strict = False
         if client_param is True:
             is_strict = True
@@ -64,7 +64,11 @@ def pytest_collection_modifyitems(items: list[pytest.Function]) -> None:
             is_strict = True
 
         if is_strict:
-            reason = skip_marker.kwargs.get("reason", "Skip strict validation test") if skip_marker.kwargs else "Skip strict validation test"
+            reason = (
+                skip_marker.kwargs.get("reason", "Skip strict validation test")
+                if skip_marker.kwargs
+                else "Skip strict validation test"
+            )
             item.add_marker(pytest.mark.skip(reason=reason))
 
 
