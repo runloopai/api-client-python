@@ -135,6 +135,9 @@ asyncio_default_fixture_loop_scope = "session"
 filterwarnings = [
   "error"
 ]
+markers = [
+  "skip_if_strict: skip test if using strict validation (for prism mock server issues)"
+]
 
 [tool.pyright]
 # this enables practically every flag given by pyright.

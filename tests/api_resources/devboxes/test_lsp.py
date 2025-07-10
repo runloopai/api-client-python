@@ -585,6 +585,7 @@ class TestLsp:
             )
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     def test_method_get_code_segment_info(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.get_code_segment_info(
             id="id",
@@ -594,6 +595,7 @@ class TestLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     def test_method_get_code_segment_info_with_all_params(self, client: Runloop) -> None:
         lsp = client.devboxes.lsp.get_code_segment_info(
             id="id",
@@ -604,6 +606,7 @@ class TestLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     def test_raw_response_get_code_segment_info(self, client: Runloop) -> None:
         response = client.devboxes.lsp.with_raw_response.get_code_segment_info(
             id="id",
@@ -617,6 +620,7 @@ class TestLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     def test_streaming_response_get_code_segment_info(self, client: Runloop) -> None:
         with client.devboxes.lsp.with_streaming_response.get_code_segment_info(
             id="id",
@@ -1380,6 +1384,7 @@ class TestAsyncLsp:
             )
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     async def test_method_get_code_segment_info(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.get_code_segment_info(
             id="id",
@@ -1389,6 +1394,7 @@ class TestAsyncLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     async def test_method_get_code_segment_info_with_all_params(self, async_client: AsyncRunloop) -> None:
         lsp = await async_client.devboxes.lsp.get_code_segment_info(
             id="id",
@@ -1399,6 +1405,7 @@ class TestAsyncLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     async def test_raw_response_get_code_segment_info(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.lsp.with_raw_response.get_code_segment_info(
             id="id",
@@ -1412,6 +1419,7 @@ class TestAsyncLsp:
         assert_matches_type(CodeSegmentInfoResponse, lsp, path=["response"])
 
     @parametrize
+    @pytest.mark.skip_if_strict(reason="prism mock server generates invalid nested DocumentSymbol structures")
     async def test_streaming_response_get_code_segment_info(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.lsp.with_streaming_response.get_code_segment_info(
             id="id",
