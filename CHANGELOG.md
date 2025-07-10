@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.48.1 (2025-07-10)
+
+Full Changelog: [v0.48.0...v0.48.1](https://github.com/runloopai/api-client-python/compare/v0.48.0...v0.48.1)
+
+### Bug Fixes
+
+* **parsing:** correctly handle nested discriminated unions ([3312be9](https://github.com/runloopai/api-client-python/commit/3312be9e751dd58396884644be4ceabbaba11014))
+
+
+### Chores
+
+* **internal:** bump pinned h11 dep ([80ff87c](https://github.com/runloopai/api-client-python/commit/80ff87cde91eedd2169bd3b3e563545291928cbd))
+* **package:** mark python 3.13 as supported ([7043864](https://github.com/runloopai/api-client-python/commit/70438649e40206746ea1543fc6c29b3c9fb47bd3))
+
 ## 0.48.0 (2025-07-09)
 
 Full Changelog: [v0.47.1...v0.48.0](https://github.com/runloopai/api-client-python/compare/v0.47.1...v0.48.0)
