@@ -23,6 +23,7 @@ from ...types.devboxes import execution_retrieve_params, execution_execute_sync_
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
+from ..._exceptions import APIStatusError
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 
@@ -121,20 +122,37 @@ class ExecutionsResource(SyncAPIResource):
         Raises:
             PollingTimeout: If polling times out before execution completes
         """
-        def retrieve_execution() -> DevboxAsyncExecutionDetailView:
-            return self.retrieve(
-                execution_id,
-                devbox_id=devbox_id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+
+        def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
+            # This wait_for_status endpoint polls the execution status for 60 seconds until it reaches either completed.
+            return self._post(
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+                body={"statuses": ["completed"]},
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=DevboxAsyncExecutionDetailView,
             )
+        
+        def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
+            # Handle 408 timeout errors by returning current execution state to continue polling
+            if isinstance(error, APIStatusError) and error.response.status_code == 408:
+                # Return a placeholder result to continue polling
+                return DevboxAsyncExecutionDetailView(
+                    devbox_id=devbox_id,
+                    execution_id=execution_id,
+                    status="queued",
+                    stdout="",
+                    stderr="",
+                )
+            else:
+                # Re-raise other errors to stop polling
+                raise error
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == 'completed'
 
-        return poll_until(retrieve_execution, is_done, config)    
+        return poll_until(wait_for_execution_status, is_done, config, handle_timeout_error)    
 
     def execute_async(
         self,
@@ -397,20 +415,34 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Raises:
             PollingTimeout: If polling times out before execution completes
         """
-        async def retrieve_execution() -> DevboxAsyncExecutionDetailView:
-            return await self.retrieve(
-                execution_id,
-                devbox_id=devbox_id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-            )
+        async def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
+            try:
+                return await self._post(
+                    f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+                    body={"statuses": ["completed"]},
+                    options=make_request_options(
+                        extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                    ),
+                    cast_to=DevboxAsyncExecutionDetailView,
+                )
+            except APIStatusError as error:
+                if error.response.status_code == 408:
+                    # Handle 408 timeout errors by returning current execution state to continue polling
+                    return DevboxAsyncExecutionDetailView(
+                        devbox_id=devbox_id,
+                        execution_id=execution_id,
+                        status="queued",
+                        stdout="",
+                        stderr="",
+                    )
+                else:
+                    # Re-raise other errors to stop polling
+                    raise
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == 'completed'
-
-        return await async_poll_until(retrieve_execution, is_done, polling_config)
+        
+        return await async_poll_until(wait_for_execution_status, is_done, polling_config)
 
     async def execute_async(
         self,
