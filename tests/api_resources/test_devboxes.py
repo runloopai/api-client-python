@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import Any, cast
-from unittest.mock import ANY, Mock, patch
+from unittest.mock import Mock, patch
 
 import httpx
 import pytest
@@ -1171,9 +1171,7 @@ class TestDevboxes:
                 assert result.id == "test_id"
                 assert result.status == "running"
                 mock_create.assert_called_once()
-                mock_await.assert_called_once_with(
-                    "test_id", polling_config=None, extra_headers=None, extra_query=None, extra_body=None, timeout=ANY
-                )
+                mock_await.assert_called_once_with("test_id", polling_config=None)
 
     @parametrize
     def test_method_create_and_await_running_with_config(self, client: Runloop) -> None:
@@ -1210,9 +1208,7 @@ class TestDevboxes:
 
                 assert result.id == "test_id"
                 assert result.status == "running"
-                mock_await.assert_called_once_with(
-                    "test_id", polling_config=config, extra_headers=None, extra_query=None, extra_body=None, timeout=ANY
-                )
+                mock_await.assert_called_once_with("test_id", polling_config=config)
 
     @parametrize
     def test_method_create_and_await_running_create_failure(self, client: Runloop) -> None:
