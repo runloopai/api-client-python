@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.2 (2025-07-11)
+
+Full Changelog: [v0.48.1...v0.48.2](https://github.com/runloopai/api-client-python/compare/v0.48.1...v0.48.2)
+
+### Chores
+
+* **readme:** fix version rendering on pypi ([73af53e](https://github.com/runloopai/api-client-python/commit/73af53e19889262ac445fc0789999873c411c35a))
+
 ## 0.48.1 (2025-07-10)
 
 Full Changelog: [v0.48.0...v0.48.1](https://github.com/runloopai/api-client-python/compare/v0.48.0...v0.48.1)
