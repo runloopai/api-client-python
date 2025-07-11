@@ -338,7 +338,7 @@ class TestExecutions:
         with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
 
-            result = client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
+            result = client.devboxes.executions.await_completed("execution_id", "devbox_id", polling_config=config)
 
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
@@ -361,7 +361,7 @@ class TestExecutions:
             mock_post.return_value = mock_execution_running
 
             with pytest.raises(PollingTimeout):
-                client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
+                client.devboxes.executions.await_completed("execution_id", "devbox_id", polling_config=config)
 
     @parametrize
     def test_method_await_completed_various_statuses(self, client: Runloop) -> None:

@@ -97,13 +97,8 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         devbox_id: str,
         *,
-        config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        # Use polling_config to configure the "long" polling behavior.
+        polling_config: PollingConfig | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -128,9 +123,6 @@ class ExecutionsResource(SyncAPIResource):
             return self._post(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
                 body={"statuses": ["completed"]},
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
                 cast_to=DevboxAsyncExecutionDetailView,
             )
 
@@ -152,7 +144,7 @@ class ExecutionsResource(SyncAPIResource):
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return poll_until(wait_for_execution_status, is_done, config, handle_timeout_error)
+        return poll_until(wait_for_execution_status, is_done, polling_config, handle_timeout_error)
 
     def execute_async(
         self,
@@ -390,13 +382,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
+        # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -421,9 +408,6 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 return await self._post(
                     f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
                     body={"statuses": ["completed"]},
-                    options=make_request_options(
-                        extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                    ),
                     cast_to=DevboxAsyncExecutionDetailView,
                 )
             except APIStatusError as error:
