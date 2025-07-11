@@ -471,10 +471,6 @@ class ScenariosResource(SyncAPIResource):
         self._client.devboxes.await_running(
             run.devbox_id,
             polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
         )
 
         return run

@@ -17,7 +17,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._constants import DEFAULT_TIMEOUT
-from ..._exceptions import APIStatusError
+from ..._exceptions import APIStatusError, APITimeoutError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import make_request_options
 from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
@@ -26,6 +26,16 @@ from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
+
+
+def placeholder_execution_detail_view(devbox_id: str, execution_id: str) -> DevboxAsyncExecutionDetailView:
+    return DevboxAsyncExecutionDetailView(
+        devbox_id=devbox_id,
+        execution_id=execution_id,
+        status="queued",
+        stdout="",
+        stderr="",
+    )
 
 
 class ExecutionsResource(SyncAPIResource):
@@ -97,13 +107,8 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         devbox_id: str,
         *,
-        config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        # Use polling_config to configure the "long" polling behavior.
+        polling_config: PollingConfig | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -128,23 +133,16 @@ class ExecutionsResource(SyncAPIResource):
             return self._post(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
                 body={"statuses": ["completed"]},
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
                 cast_to=DevboxAsyncExecutionDetailView,
             )
 
         def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
-            # Handle 408 timeout errors by returning current execution state to continue polling
-            if isinstance(error, APIStatusError) and error.response.status_code == 408:
+            # Handle timeout errors by returning current execution state to continue polling
+            if isinstance(error, APITimeoutError) or (
+                isinstance(error, APIStatusError) and error.response.status_code == 408
+            ):
                 # Return a placeholder result to continue polling
-                return DevboxAsyncExecutionDetailView(
-                    devbox_id=devbox_id,
-                    execution_id=execution_id,
-                    status="queued",
-                    stdout="",
-                    stderr="",
-                )
+                return placeholder_execution_detail_view(devbox_id, execution_id)
             else:
                 # Re-raise other errors to stop polling
                 raise error
@@ -152,7 +150,7 @@ class ExecutionsResource(SyncAPIResource):
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return poll_until(wait_for_execution_status, is_done, config, handle_timeout_error)
+        return poll_until(wait_for_execution_status, is_done, polling_config, handle_timeout_error)
 
     def execute_async(
         self,
@@ -390,13 +388,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
+        # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -421,24 +414,15 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 return await self._post(
                     f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
                     body={"statuses": ["completed"]},
-                    options=make_request_options(
-                        extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                    ),
                     cast_to=DevboxAsyncExecutionDetailView,
                 )
-            except APIStatusError as error:
-                if error.response.status_code == 408:
-                    # Handle 408 timeout errors by returning current execution state to continue polling
-                    return DevboxAsyncExecutionDetailView(
-                        devbox_id=devbox_id,
-                        execution_id=execution_id,
-                        status="queued",
-                        stdout="",
-                        stderr="",
-                    )
-                else:
-                    # Re-raise other errors to stop polling
-                    raise
+            except (APITimeoutError, APIStatusError) as error:
+                # Handle timeout errors by returning placeholder to continue polling
+                if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+                    return placeholder_execution_detail_view(devbox_id, execution_id)
+
+                # Re-raise other errors to stop polling
+                raise
 
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"

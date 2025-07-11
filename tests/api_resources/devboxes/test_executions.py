@@ -11,7 +11,7 @@ import pytest
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import DevboxExecutionDetailView, DevboxAsyncExecutionDetailView
-from runloop_api_client._exceptions import APIStatusError
+from runloop_api_client._exceptions import APIStatusError, APITimeoutError
 from runloop_api_client.lib.polling import PollingConfig, PollingTimeout
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -338,7 +338,7 @@ class TestExecutions:
         with patch.object(client.devboxes.executions, "_post") as mock_post:
             mock_post.return_value = mock_execution_completed
 
-            result = client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
+            result = client.devboxes.executions.await_completed("execution_id", "devbox_id", polling_config=config)
 
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
@@ -361,7 +361,7 @@ class TestExecutions:
             mock_post.return_value = mock_execution_running
 
             with pytest.raises(PollingTimeout):
-                client.devboxes.executions.await_completed("execution_id", "devbox_id", config=config)
+                client.devboxes.executions.await_completed("execution_id", "devbox_id", polling_config=config)
 
     @parametrize
     def test_method_await_completed_various_statuses(self, client: Runloop) -> None:
@@ -665,7 +665,7 @@ class TestAsyncExecutions:
         # Create a mock 408 response
         mock_response = Mock()
         mock_response.status_code = 408
-        mock_408_error = APIStatusError("Request timeout", response=mock_response, body=None)
+        mock_408_error = APITimeoutError(request=mock_response.request)
 
         mock_execution_completed = DevboxAsyncExecutionDetailView(
             devbox_id="devbox_id",

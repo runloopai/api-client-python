@@ -88,7 +88,7 @@ from ...pagination import (
     SyncDiskSnapshotsCursorIDPage,
     AsyncDiskSnapshotsCursorIDPage,
 )
-from ..._exceptions import RunloopError, APIStatusError
+from ..._exceptions import RunloopError, APIStatusError, APITimeoutError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
@@ -113,6 +113,18 @@ from ...types.shared_params.code_mount_parameters import CodeMountParameters
 __all__ = ["DevboxesResource", "AsyncDevboxesResource"]
 
 DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+
+
+def placeholder_devbox_view(id: str) -> DevboxView:
+    return DevboxView(
+        id=id,
+        status="provisioning",
+        capabilities=[],
+        create_time_ms=0,
+        launch_parameters=SharedLaunchParameters(),
+        metadata={},
+        state_transitions=[],
+    )
 
 
 class DevboxesResource(SyncAPIResource):
@@ -360,13 +372,8 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 
@@ -392,28 +399,19 @@ class DevboxesResource(SyncAPIResource):
             return self._post(
                 f"/v1/devboxes/{id}/wait_for_status",
                 body={"statuses": ["running", "failure"]},
-                options=make_request_options(
-                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                ),
                 cast_to=DevboxView,
             )
 
         def handle_timeout_error(error: Exception) -> DevboxView:
-            # Handle 408 timeout errors by returning current devbox state to continue polling
-            if isinstance(error, APIStatusError) and error.response.status_code == 408:
+            # Handle timeout errors by returning current devbox state to continue polling
+            if isinstance(error, APITimeoutError) or (
+                isinstance(error, APIStatusError) and error.response.status_code == 408
+            ):
                 # Return a placeholder result to continue polling
-                return DevboxView(
-                    id=id,
-                    status="provisioning",
-                    capabilities=[],
-                    create_time_ms=0,
-                    launch_parameters=SharedLaunchParameters(),
-                    metadata={},
-                    state_transitions=[],
-                )
-            else:
-                # Re-raise other errors to stop polling
-                raise error
+                return placeholder_devbox_view(id)
+
+            # Re-raise other errors to stop polling
+            raise error
 
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
@@ -495,10 +493,6 @@ class DevboxesResource(SyncAPIResource):
         return self.await_running(
             devbox.id,
             polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
         )
 
     def list(
@@ -1662,23 +1656,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self.await_running(
             devbox.id,
             polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
         )
 
     async def await_running(
         self,
         id: str,
         *,
+        # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 
@@ -1705,26 +1690,16 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 return await self._post(
                     f"/v1/devboxes/{id}/wait_for_status",
                     body={"statuses": ["running", "failure"]},
-                    options=make_request_options(
-                        extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-                    ),
                     cast_to=DevboxView,
                 )
-            except APIStatusError as error:
-                if error.response.status_code == 408:
-                    # Handle 408 timeout errors by returning a placeholder result to continue polling
-                    return DevboxView(
-                        id=id,
-                        status="provisioning",
-                        capabilities=[],
-                        create_time_ms=0,
-                        launch_parameters=SharedLaunchParameters(),
-                        metadata={},
-                        state_transitions=[],
-                    )
-                else:
-                    # Re-raise other errors to stop polling
-                    raise
+            except (APITimeoutError, APIStatusError) as error:
+                # Handle timeout errors by returning current devbox state to continue polling
+                if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+                    # Return a placeholder result to continue polling
+                    return placeholder_devbox_view(id)
+
+                # Re-raise other errors to stop polling
+                raise
 
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
