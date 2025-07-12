@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.3 (2025-07-12)
+
+Full Changelog: [v0.48.2...v0.48.3](https://github.com/runloopai/api-client-python/compare/v0.48.2...v0.48.3)
+
+### Bug Fixes
+
+* **client:** don't send Content-Type header on GET requests ([5d9b833](https://github.com/runloopai/api-client-python/commit/5d9b8330d37d53bb5c1e8393c5d9798323a0a2ca))
+
 ## 0.48.2 (2025-07-11)
 
 Full Changelog: [v0.48.1...v0.48.2](https://github.com/runloopai/api-client-python/compare/v0.48.1...v0.48.2)
