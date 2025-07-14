@@ -38,6 +38,9 @@ class LaunchParameters(TypedDict, total=False):
     custom_cpu_cores: Optional[int]
     """custom resource size, number of cpu cores, must be multiple of 2."""
 
+    custom_disk_size: Optional[int]
+    """custom disk size, number in Gi, must be a multiple of 2."""
+
     custom_gb_memory: Optional[int]
     """custom memory size, number in Gi, must be a multiple of 2."""
 

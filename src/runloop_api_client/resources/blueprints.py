@@ -79,7 +79,7 @@ class BlueprintsResource(SyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
@@ -304,7 +304,7 @@ class BlueprintsResource(SyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
@@ -395,7 +395,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
@@ -620,7 +620,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           dockerfile: Dockerfile contents to be used to build the Blueprint.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 

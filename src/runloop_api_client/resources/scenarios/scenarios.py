@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import httpx
 
@@ -89,6 +89,7 @@ class ScenariosResource(SyncAPIResource):
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -116,6 +117,9 @@ class ScenariosResource(SyncAPIResource):
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
 
+          required_environment_variables: Environment variables required to run the scenario. If these variables are not
+              provided, the scenario will fail to start.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -136,6 +140,7 @@ class ScenariosResource(SyncAPIResource):
                     "environment_parameters": environment_parameters,
                     "metadata": metadata,
                     "reference_output": reference_output,
+                    "required_environment_variables": required_environment_variables,
                 },
                 scenario_create_params.ScenarioCreateParams,
             ),
@@ -191,6 +196,7 @@ class ScenariosResource(SyncAPIResource):
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        required_env_vars: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -218,6 +224,8 @@ class ScenariosResource(SyncAPIResource):
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
 
+          required_env_vars: Environment variables required to run the benchmark.
+
           scoring_contract: The scoring contract for the Scenario.
 
           extra_headers: Send extra headers
@@ -241,6 +249,7 @@ class ScenariosResource(SyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "reference_output": reference_output,
+                    "required_env_vars": required_env_vars,
                     "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,
@@ -368,6 +377,7 @@ class ScenariosResource(SyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -388,6 +398,8 @@ class ScenariosResource(SyncAPIResource):
 
           run_name: Display name of the run.
 
+          run_profile: Runtime configuration to use for this benchmark run
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -406,6 +418,7 @@ class ScenariosResource(SyncAPIResource):
                     "benchmark_run_id": benchmark_run_id,
                     "metadata": metadata,
                     "run_name": run_name,
+                    "run_profile": run_profile,
                 },
                 scenario_start_run_params.ScenarioStartRunParams,
             ),
@@ -457,6 +470,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -484,6 +498,9 @@ class AsyncScenariosResource(AsyncAPIResource):
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
 
+          required_environment_variables: Environment variables required to run the scenario. If these variables are not
+              provided, the scenario will fail to start.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -504,6 +521,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "environment_parameters": environment_parameters,
                     "metadata": metadata,
                     "reference_output": reference_output,
+                    "required_environment_variables": required_environment_variables,
                 },
                 scenario_create_params.ScenarioCreateParams,
             ),
@@ -559,6 +577,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
+        required_env_vars: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -586,6 +605,8 @@ class AsyncScenariosResource(AsyncAPIResource):
               can be the result of a git diff or a sequence of command actions to apply to the
               environment.
 
+          required_env_vars: Environment variables required to run the benchmark.
+
           scoring_contract: The scoring contract for the Scenario.
 
           extra_headers: Send extra headers
@@ -609,6 +630,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "metadata": metadata,
                     "name": name,
                     "reference_output": reference_output,
+                    "required_env_vars": required_env_vars,
                     "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,
@@ -736,6 +758,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -756,6 +779,8 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           run_name: Display name of the run.
 
+          run_profile: Runtime configuration to use for this benchmark run
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -774,6 +799,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "benchmark_run_id": benchmark_run_id,
                     "metadata": metadata,
                     "run_name": run_name,
+                    "run_profile": run_profile,
                 },
                 scenario_start_run_params.ScenarioStartRunParams,
             ),

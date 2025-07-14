@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
-from typing_extensions import TypedDict
+from typing import Dict, List, Optional
+from typing_extensions import Annotated, TypedDict
 
+from .._utils import PropertyInfo
 from .input_context_update_param import InputContextUpdateParam
 from .scenario_environment_param import ScenarioEnvironmentParam
 from .scoring_contract_update_param import ScoringContractUpdateParam
@@ -31,6 +32,9 @@ class ScenarioUpdateParams(TypedDict, total=False):
     Commonly can be the result of a git diff or a sequence of command actions to
     apply to the environment.
     """
+
+    required_env_vars: Annotated[Optional[List[str]], PropertyInfo(alias="requiredEnvVars")]
+    """Environment variables required to run the benchmark."""
 
     scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""

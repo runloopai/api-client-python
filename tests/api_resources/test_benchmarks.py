@@ -34,6 +34,7 @@ class TestBenchmarks:
         benchmark = client.benchmarks.create(
             name="name",
             metadata={"foo": "string"},
+            required_environment_variables=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -114,6 +115,7 @@ class TestBenchmarks:
             id="id",
             name="name",
             metadata={"foo": "string"},
+            required_environment_variables=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -278,6 +280,10 @@ class TestBenchmarks:
             benchmark_id="benchmark_id",
             metadata={"foo": "string"},
             run_name="run_name",
+            run_profile={
+                "env_vars": {"foo": "string"},
+                "purpose": "purpose",
+            },
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])
 
@@ -323,6 +329,7 @@ class TestAsyncBenchmarks:
         benchmark = await async_client.benchmarks.create(
             name="name",
             metadata={"foo": "string"},
+            required_environment_variables=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -403,6 +410,7 @@ class TestAsyncBenchmarks:
             id="id",
             name="name",
             metadata={"foo": "string"},
+            required_environment_variables=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -567,6 +575,10 @@ class TestAsyncBenchmarks:
             benchmark_id="benchmark_id",
             metadata={"foo": "string"},
             run_name="run_name",
+            run_profile={
+                "env_vars": {"foo": "string"},
+                "purpose": "purpose",
+            },
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])
 

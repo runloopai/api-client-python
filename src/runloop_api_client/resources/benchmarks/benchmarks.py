@@ -70,6 +70,7 @@ class BenchmarksResource(SyncAPIResource):
         *,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -86,6 +87,9 @@ class BenchmarksResource(SyncAPIResource):
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
+
+          required_environment_variables: Environment variables required to run the benchmark. If these variables are not
+              supplied, the benchmark will fail to start
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -105,6 +109,7 @@ class BenchmarksResource(SyncAPIResource):
                 {
                     "name": name,
                     "metadata": metadata,
+                    "required_environment_variables": required_environment_variables,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -158,6 +163,7 @@ class BenchmarksResource(SyncAPIResource):
         *,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -174,6 +180,9 @@ class BenchmarksResource(SyncAPIResource):
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
+
+          required_environment_variables: Environment variables required to run the benchmark. If these variables are not
+              supplied, the benchmark will fail to start
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -195,6 +204,7 @@ class BenchmarksResource(SyncAPIResource):
                 {
                     "name": name,
                     "metadata": metadata,
+                    "required_environment_variables": required_environment_variables,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_update_params.BenchmarkUpdateParams,
@@ -358,6 +368,7 @@ class BenchmarksResource(SyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -376,6 +387,8 @@ class BenchmarksResource(SyncAPIResource):
 
           run_name: Display name of the run.
 
+          run_profile: Runtime configuration to use for this benchmark run
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -393,6 +406,7 @@ class BenchmarksResource(SyncAPIResource):
                     "benchmark_id": benchmark_id,
                     "metadata": metadata,
                     "run_name": run_name,
+                    "run_profile": run_profile,
                 },
                 benchmark_start_run_params.BenchmarkStartRunParams,
             ),
@@ -436,6 +450,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         *,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -452,6 +467,9 @@ class AsyncBenchmarksResource(AsyncAPIResource):
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
+
+          required_environment_variables: Environment variables required to run the benchmark. If these variables are not
+              supplied, the benchmark will fail to start
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -471,6 +489,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                 {
                     "name": name,
                     "metadata": metadata,
+                    "required_environment_variables": required_environment_variables,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -524,6 +543,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         *,
         name: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -540,6 +560,9 @@ class AsyncBenchmarksResource(AsyncAPIResource):
           name: The name of the Benchmark. This must be unique.
 
           metadata: User defined metadata to attach to the benchmark for organization.
+
+          required_environment_variables: Environment variables required to run the benchmark. If these variables are not
+              supplied, the benchmark will fail to start
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -561,6 +584,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                 {
                     "name": name,
                     "metadata": metadata,
+                    "required_environment_variables": required_environment_variables,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_update_params.BenchmarkUpdateParams,
@@ -724,6 +748,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -742,6 +767,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
           run_name: Display name of the run.
 
+          run_profile: Runtime configuration to use for this benchmark run
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -759,6 +786,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                     "benchmark_id": benchmark_id,
                     "metadata": metadata,
                     "run_name": run_name,
+                    "run_profile": run_profile,
                 },
                 benchmark_start_run_params.BenchmarkStartRunParams,
             ),

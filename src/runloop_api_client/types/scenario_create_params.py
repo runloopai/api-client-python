@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from typing_extensions import Required, TypedDict
 
 from .input_context_param import InputContextParam
@@ -33,4 +33,10 @@ class ScenarioCreateParams(TypedDict, total=False):
 
     Commonly can be the result of a git diff or a sequence of command actions to
     apply to the environment.
+    """
+
+    required_environment_variables: Optional[List[str]]
+    """Environment variables required to run the scenario.
+
+    If these variables are not provided, the scenario will fail to start.
     """

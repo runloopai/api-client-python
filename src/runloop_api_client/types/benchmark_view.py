@@ -24,3 +24,9 @@ class BenchmarkView(BaseModel):
 
     is_public: Optional[bool] = None
     """Whether this benchmark is public."""
+
+    required_environment_variables: Optional[List[str]] = None
+    """Required environment variables used to run the benchmark.
+
+    If any required environment are missing, the benchmark will fail to start.
+    """
