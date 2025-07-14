@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import Dict, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
 
-__all__ = ["BenchmarkStartRunParams"]
+from .._utils import PropertyInfo
+
+__all__ = ["BenchmarkStartRunParams", "RunProfile"]
 
 
 class BenchmarkStartRunParams(TypedDict, total=False):
@@ -17,3 +19,14 @@ class BenchmarkStartRunParams(TypedDict, total=False):
 
     run_name: Optional[str]
     """Display name of the run."""
+
+    run_profile: Annotated[Optional[RunProfile], PropertyInfo(alias="runProfile")]
+    """Runtime configuration to use for this benchmark run"""
+
+
+class RunProfile(TypedDict, total=False):
+    env_vars: Annotated[Optional[Dict[str, str]], PropertyInfo(alias="envVars")]
+    """Environment variables."""
+
+    purpose: Optional[str]
+    """Purpose of the run."""

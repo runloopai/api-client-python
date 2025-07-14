@@ -20,7 +20,7 @@ class BlueprintBuildParameters(BaseModel):
     """Dockerfile contents to be used to build the Blueprint."""
 
     file_mounts: Optional[Dict[str, str]] = None
-    """(Optional) Map of paths and file contents to write before setup.."""
+    """(Optional) Map of paths and file contents to write before setup."""
 
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""

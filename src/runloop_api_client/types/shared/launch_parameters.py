@@ -37,6 +37,9 @@ class LaunchParameters(BaseModel):
     custom_cpu_cores: Optional[int] = None
     """custom resource size, number of cpu cores, must be multiple of 2."""
 
+    custom_disk_size: Optional[int] = None
+    """custom disk size, number in Gi, must be a multiple of 2."""
+
     custom_gb_memory: Optional[int] = None
     """custom memory size, number in Gi, must be a multiple of 2."""
 
