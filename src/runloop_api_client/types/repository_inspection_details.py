@@ -30,8 +30,6 @@ class RepositoryInspectionDetails(BaseModel):
         "inspection_pending",
         "inspection_failed",
         "inspection_success",
-        "image_build_success",
-        "image_build_failure",
         "inspection_user_manifest_added",
     ]
     """The status of the repository inspection."""
@@ -41,6 +39,9 @@ class RepositoryInspectionDetails(BaseModel):
 
     blueprint_name: Optional[str] = None
     """The blueprint name associated with this inspection if successful."""
+
+    build_status: Optional[Literal["image_building", "image_build_success", "image_build_failure"]] = None
+    """The status of the linked Blueprint build."""
 
     user_manifest: Optional[RepositoryManifestView] = None
     """

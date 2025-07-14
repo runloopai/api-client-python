@@ -15,5 +15,11 @@ class BenchmarkCreateParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the benchmark for organization."""
 
+    required_environment_variables: Optional[List[str]]
+    """Environment variables required to run the benchmark.
+
+    If these variables are not supplied, the benchmark will fail to start
+    """
+
     scenario_ids: Optional[List[str]]
     """The Scenario IDs that make up the Benchmark."""

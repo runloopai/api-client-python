@@ -27,8 +27,14 @@ class BenchmarkRunView(BaseModel):
     duration_ms: Optional[int] = None
     """The duration for the BenchmarkRun to complete."""
 
+    environment_variables: Optional[Dict[str, str]] = None
+    """Environment variables used to run the benchmark."""
+
     name: Optional[str] = None
     """The name of the BenchmarkRun."""
+
+    purpose: Optional[str] = None
+    """Purpose of the run."""
 
     score: Optional[float] = None
     """The final score across the BenchmarkRun, present once completed.

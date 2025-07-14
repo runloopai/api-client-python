@@ -74,6 +74,7 @@ class TestScenarios:
                     "architecture": "x86_64",
                     "available_ports": [0],
                     "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
@@ -89,6 +90,7 @@ class TestScenarios:
             },
             metadata={"foo": "string"},
             reference_output="reference_output",
+            required_environment_variables=["string"],
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -203,6 +205,7 @@ class TestScenarios:
                     "architecture": "x86_64",
                     "available_ports": [0],
                     "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
@@ -223,6 +226,7 @@ class TestScenarios:
             metadata={"foo": "string"},
             name="name",
             reference_output="reference_output",
+            required_env_vars=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -354,6 +358,10 @@ class TestScenarios:
             benchmark_run_id="benchmark_run_id",
             metadata={"foo": "string"},
             run_name="run_name",
+            run_profile={
+                "env_vars": {"foo": "string"},
+                "purpose": "purpose",
+            },
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])
 
@@ -440,6 +448,7 @@ class TestAsyncScenarios:
                     "architecture": "x86_64",
                     "available_ports": [0],
                     "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
@@ -455,6 +464,7 @@ class TestAsyncScenarios:
             },
             metadata={"foo": "string"},
             reference_output="reference_output",
+            required_environment_variables=["string"],
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -569,6 +579,7 @@ class TestAsyncScenarios:
                     "architecture": "x86_64",
                     "available_ports": [0],
                     "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
@@ -589,6 +600,7 @@ class TestAsyncScenarios:
             metadata={"foo": "string"},
             name="name",
             reference_output="reference_output",
+            required_env_vars=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -720,6 +732,10 @@ class TestAsyncScenarios:
             benchmark_run_id="benchmark_run_id",
             metadata={"foo": "string"},
             run_name="run_name",
+            run_profile={
+                "env_vars": {"foo": "string"},
+                "purpose": "purpose",
+            },
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])
 

@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from .._models import BaseModel
 from .input_context import InputContext
@@ -37,4 +37,11 @@ class ScenarioView(BaseModel):
 
     Commonly can be the result of a git diff or a sequence of command actions to
     apply to the environment.
+    """
+
+    required_environment_variables: Optional[List[str]] = None
+    """Environment variables required to run the scenario.
+
+    If any required environment variables are missing, the scenario will fail to
+    start.
     """
