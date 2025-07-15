@@ -52,6 +52,7 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
+        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -74,6 +75,9 @@ class BlueprintsResource(SyncAPIResource):
 
         Args:
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -100,6 +104,7 @@ class BlueprintsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -279,6 +284,7 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
+        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -299,6 +305,9 @@ class BlueprintsResource(SyncAPIResource):
 
         Args:
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -325,6 +334,7 @@ class BlueprintsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -368,6 +378,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -390,6 +401,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
         Args:
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -416,6 +430,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -595,6 +610,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -615,6 +631,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
         Args:
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -641,6 +660,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,

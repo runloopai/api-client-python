@@ -13,6 +13,12 @@ class BlueprintBuildParameters(BaseModel):
     name: str
     """Name of the Blueprint."""
 
+    base_blueprint_id: Optional[str] = None
+    """
+    (Optional) ID of previously built blueprint to use as a base blueprint for this
+    build.
+    """
+
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""
 
