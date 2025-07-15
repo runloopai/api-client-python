@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.49.0 (2025-07-15)
+
+Full Changelog: [v0.48.2...v0.49.0](https://github.com/runloopai/api-client-python/compare/v0.48.2...v0.49.0)
+
+### Features
+
+* **api:** api update ([6022768](https://github.com/runloopai/api-client-python/commit/60227681f91e9eabc2b8da030fc6ef61834ce761))
+* **api:** api update ([27c4579](https://github.com/runloopai/api-client-python/commit/27c4579ac003a2e211c5b421a1cc4714f86c6e57))
+* clean up environment call outs ([e3a125d](https://github.com/runloopai/api-client-python/commit/e3a125d0bde927ff142d1817ce4c40489a3217c0))
+
+
+### Bug Fixes
+
+* **client:** don't send Content-Type header on GET requests ([5d9b833](https://github.com/runloopai/api-client-python/commit/5d9b8330d37d53bb5c1e8393c5d9798323a0a2ca))
+
 ## 0.48.2 (2025-07-11)
 
 Full Changelog: [v0.48.1...v0.48.2](https://github.com/runloopai/api-client-python/compare/v0.48.1...v0.48.2)
