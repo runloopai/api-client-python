@@ -36,13 +36,22 @@ class LaunchParameters(TypedDict, total=False):
     """
 
     custom_cpu_cores: Optional[int]
-    """custom resource size, number of cpu cores, must be multiple of 2."""
+    """custom resource size, number of cpu cores, must be multiple of 2.
+
+    Min is 1, max is 16.
+    """
 
     custom_disk_size: Optional[int]
-    """custom disk size, number in Gi, must be a multiple of 2."""
+    """custom disk size, number in GiB, must be a multiple of 2.
+
+    Min is 2GiB, max is 64GiB.
+    """
 
     custom_gb_memory: Optional[int]
-    """custom memory size, number in Gi, must be a multiple of 2."""
+    """custom memory size, number in GiB, must be a multiple of 2.
+
+    Min is 2GiB, max is 64GiB.
+    """
 
     keep_alive_time_seconds: Optional[int]
     """Time in seconds after which Devbox will automatically shutdown.
