@@ -79,7 +79,6 @@ pip install runloop_api_client[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from runloop_api_client import DefaultAioHttpClient
 from runloop_api_client import AsyncRunloop
@@ -87,7 +86,7 @@ from runloop_api_client import AsyncRunloop
 
 async def main() -> None:
     async with AsyncRunloop(
-        bearer_token=os.environ.get("RUNLOOP_API_KEY"),  # This is the default and can be omitted
+        bearer_token="My Bearer Token",
         http_client=DefaultAioHttpClient(),
     ) as client:
         devbox_view = await client.devboxes.create()
