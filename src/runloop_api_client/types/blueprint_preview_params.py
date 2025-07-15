@@ -15,6 +15,12 @@ class BlueprintPreviewParams(TypedDict, total=False):
     name: Required[str]
     """Name of the Blueprint."""
 
+    base_blueprint_id: Optional[str]
+    """
+    (Optional) ID of previously built blueprint to use as a base blueprint for this
+    build.
+    """
+
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Blueprint."""
 

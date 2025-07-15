@@ -33,6 +33,7 @@ class TestBlueprints:
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.create(
             name="name",
+            base_blueprint_id="base_blueprint_id",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -248,6 +249,7 @@ class TestBlueprints:
     def test_method_preview_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.preview(
             name="name",
+            base_blueprint_id="base_blueprint_id",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -321,6 +323,7 @@ class TestAsyncBlueprints:
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.create(
             name="name",
+            base_blueprint_id="base_blueprint_id",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -536,6 +539,7 @@ class TestAsyncBlueprints:
     async def test_method_preview_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.preview(
             name="name",
+            base_blueprint_id="base_blueprint_id",
             code_mounts=[
                 {
                     "repo_name": "repo_name",

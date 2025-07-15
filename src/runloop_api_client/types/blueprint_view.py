@@ -28,5 +28,8 @@ class BlueprintView(BaseModel):
     status: Literal["provisioning", "building", "failed", "build_complete"]
     """The status of the Blueprint build."""
 
+    base_blueprint_id: Optional[str] = None
+    """The ID of the base Blueprint."""
+
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
     """The failure reason if the Blueprint build failed, if any."""
