@@ -164,9 +164,8 @@ line-length = 120
 output-format = "grouped"
 target-version = "py37"
 
-# Ruff formatting is disabled - only linting is enabled
-# [tool.ruff.format]
-# docstring-code-format = true
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.lint]
 select = [
