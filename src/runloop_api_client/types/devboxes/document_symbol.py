@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, List, Optional
 from pydantic import Field as FieldInfo
 
 from .range import Range
-from ..._compat import PYDANTIC_V2
 from ..._models import BaseModel
 from .symbol_tag import SymbolTag
 from .symbol_kind import SymbolKind
@@ -56,9 +55,3 @@ class DocumentSymbol(BaseModel):
         # To access properties that are not valid identifiers you can use `getattr`, e.g.
         # `getattr(obj, '$type')`
         def __getattr__(self, attr: str) -> object: ...
-
-
-if PYDANTIC_V2:
-    DocumentSymbol.model_rebuild()
-else:
-    DocumentSymbol.update_forward_refs()  # type: ignore
