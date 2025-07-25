@@ -1,6 +1,8 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
+
+from pydantic import Field as FieldInfo
 
 from .position import Position
 from ..._models import BaseModel
@@ -15,6 +17,7 @@ class Range(BaseModel):
     start: Position
     """The range's start position."""
 
+    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
     if TYPE_CHECKING:
         # Stub to indicate that arbitrary properties are accepted.
         # To access properties that are not valid identifiers you can use `getattr`, e.g.

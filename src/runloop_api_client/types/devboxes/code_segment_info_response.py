@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import List, Optional
 
 from .file_uri import FileUri
-from ..._compat import PYDANTIC_V2
 from ..._models import BaseModel
 from .base_range import BaseRange
 from .base_location import BaseLocation
@@ -45,10 +44,3 @@ class CodeSegmentInfoResponse(BaseModel):
 
 
 from .document_symbol import DocumentSymbol
-
-if PYDANTIC_V2:
-    CodeSegmentInfoResponse.model_rebuild()
-    Hover.model_rebuild()
-else:
-    CodeSegmentInfoResponse.update_forward_refs()  # type: ignore
-    Hover.update_forward_refs()  # type: ignore
