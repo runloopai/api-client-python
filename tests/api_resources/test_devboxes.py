@@ -886,7 +886,9 @@ class TestDevboxes:
         devbox = client.devboxes.upload_file(
             id="id",
             path="path",
+            chmod="chmod",
             file=b"raw file contents",
+            owner="owner",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -930,6 +932,17 @@ class TestDevboxes:
             id="id",
             contents="contents",
             file_path="file_path",
+        )
+        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    def test_method_write_file_contents_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.write_file_contents(
+            id="id",
+            contents="contents",
+            file_path="file_path",
+            chmod="chmod",
+            owner="owner",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
@@ -2097,7 +2110,9 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.upload_file(
             id="id",
             path="path",
+            chmod="chmod",
             file=b"raw file contents",
+            owner="owner",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -2141,6 +2156,17 @@ class TestAsyncDevboxes:
             id="id",
             contents="contents",
             file_path="file_path",
+        )
+        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_write_file_contents_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.write_file_contents(
+            id="id",
+            contents="contents",
+            file_path="file_path",
+            chmod="chmod",
+            owner="owner",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
