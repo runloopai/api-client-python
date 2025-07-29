@@ -1,10 +1,17 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from .._models import BaseModel
 
-__all__ = ["RepositoryManifestView", "ContainerConfig", "Workspace", "WorkspaceDevCommands"]
+__all__ = [
+    "RepositoryManifestView",
+    "ContainerConfig",
+    "Workspace",
+    "WorkspaceDevCommands",
+    "ContainerizedService",
+    "ContainerizedServiceCredentials",
+]
 
 
 class ContainerConfig(BaseModel):
@@ -23,21 +30,21 @@ class ContainerConfig(BaseModel):
 
 
 class WorkspaceDevCommands(BaseModel):
-    build: Optional[str] = None
+    build: Optional[List[str]] = None
     """Build command (e.g. npm run build)."""
 
-    install: Optional[str] = None
+    install: Optional[List[str]] = None
     """Installation command (e.g. pip install -r requirements.txt)."""
 
-    lint: Optional[str] = None
+    lint: Optional[List[str]] = None
     """Lint command (e.g. flake8)."""
 
-    test: Optional[str] = None
+    test: Optional[List[str]] = None
     """Test command (e.g. pytest)."""
 
 
 class Workspace(BaseModel):
-    package_manager: str
+    package_manager: List[str]
     """Name of the package manager used (e.g. pip, npm)."""
 
     dev_commands: Optional[WorkspaceDevCommands] = None
@@ -80,6 +87,37 @@ class Workspace(BaseModel):
     """
 
 
+class ContainerizedServiceCredentials(BaseModel):
+    password: str
+    """The password of the container service."""
+
+    username: str
+    """The username of the container service."""
+
+
+class ContainerizedService(BaseModel):
+    image: str
+    """The image of the container service."""
+
+    name: str
+    """The name of the container service."""
+
+    credentials: Optional[ContainerizedServiceCredentials] = None
+    """The credentials of the container service."""
+
+    env: Optional[Dict[str, str]] = None
+    """The environment variables of the container service."""
+
+    options: Optional[str] = None
+    """Additional Docker container create options."""
+
+    port_mappings: Optional[List[str]] = None
+    """The port mappings of the container service.
+
+    Port mappings are in the format of <host_port>:<container_port>.
+    """
+
+
 class RepositoryManifestView(BaseModel):
     container_config: ContainerConfig
     """Container configuration specifying the base image and setup commands."""
@@ -88,4 +126,10 @@ class RepositoryManifestView(BaseModel):
     """List of workspaces within the repository.
 
     Each workspace represents a buildable unit of code.
+    """
+
+    containerized_services: Optional[List[ContainerizedService]] = None
+    """List of discovered ContainerizedServices.
+
+    Services can be explicitly started when creating a Devbox.
     """
