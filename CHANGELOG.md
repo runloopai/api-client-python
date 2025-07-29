@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.51.0 (2025-07-29)
+
+Full Changelog: [v0.50.0...v0.51.0](https://github.com/runloopai/api-client-python/compare/v0.50.0...v0.51.0)
+
+### Features
+
+* **api:** api update ([5d42629](https://github.com/runloopai/api-client-python/commit/5d426295ac258ede767c131a209b1deab4d746a6))
+
+
+### Bug Fixes
+
+* **parsing:** ignore empty metadata ([10c81bd](https://github.com/runloopai/api-client-python/commit/10c81bd7e10ee82e1414aede07c6889630322f6b))
+* **parsing:** parse extra field types ([9d2a5f0](https://github.com/runloopai/api-client-python/commit/9d2a5f01e3646d127dec75dca085c2168c35f48a))
+
+
+### Chores
+
+* **project:** add settings file for vscode ([7a11210](https://github.com/runloopai/api-client-python/commit/7a1121066a7eeb7ca3acb9185834154556d52894))
+* **types:** rebuild Pydantic models after all types are defined ([b1839c6](https://github.com/runloopai/api-client-python/commit/b1839c61f42496896ed58b90a983771902f2c26e))
+
 ## 0.50.0 (2025-07-15)
 
 Full Changelog: [v0.49.0...v0.50.0](https://github.com/runloopai/api-client-python/compare/v0.49.0...v0.50.0)
