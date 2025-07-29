@@ -1305,7 +1305,9 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         path: str,
+        chmod: Optional[str] | NotGiven = NOT_GIVEN,
         file: FileTypes | NotGiven = NOT_GIVEN,
+        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1324,6 +1326,12 @@ class DevboxesResource(SyncAPIResource):
           path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
 
+          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
+              specified, default system permissions will be used.
+
+          owner: File owner username. Optional. If not specified, the file will be owned by the
+              current user.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1341,7 +1349,9 @@ class DevboxesResource(SyncAPIResource):
         body = deepcopy_minimal(
             {
                 "path": path,
+                "chmod": chmod,
                 "file": file,
+                "owner": owner,
             }
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
@@ -1369,6 +1379,8 @@ class DevboxesResource(SyncAPIResource):
         *,
         contents: str,
         file_path: str,
+        chmod: Optional[str] | NotGiven = NOT_GIVEN,
+        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1387,6 +1399,12 @@ class DevboxesResource(SyncAPIResource):
 
           file_path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
+
+          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
+              specified, default system permissions will be used.
+
+          owner: File owner username. Optional. If not specified, the file will be owned by the
+              current user.
 
           extra_headers: Send extra headers
 
@@ -1408,6 +1426,8 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "contents": contents,
                     "file_path": file_path,
+                    "chmod": chmod,
+                    "owner": owner,
                 },
                 devbox_write_file_contents_params.DevboxWriteFileContentsParams,
             ),
@@ -2598,7 +2618,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         path: str,
+        chmod: Optional[str] | NotGiven = NOT_GIVEN,
         file: FileTypes | NotGiven = NOT_GIVEN,
+        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2617,6 +2639,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
           path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
 
+          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
+              specified, default system permissions will be used.
+
+          owner: File owner username. Optional. If not specified, the file will be owned by the
+              current user.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2634,7 +2662,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         body = deepcopy_minimal(
             {
                 "path": path,
+                "chmod": chmod,
                 "file": file,
+                "owner": owner,
             }
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
@@ -2662,6 +2692,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         contents: str,
         file_path: str,
+        chmod: Optional[str] | NotGiven = NOT_GIVEN,
+        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2680,6 +2712,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           file_path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
+
+          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
+              specified, default system permissions will be used.
+
+          owner: File owner username. Optional. If not specified, the file will be owned by the
+              current user.
 
           extra_headers: Send extra headers
 
@@ -2701,6 +2739,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "contents": contents,
                     "file_path": file_path,
+                    "chmod": chmod,
+                    "owner": owner,
                 },
                 devbox_write_file_contents_params.DevboxWriteFileContentsParams,
             ),
