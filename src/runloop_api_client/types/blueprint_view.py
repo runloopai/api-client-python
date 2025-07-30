@@ -3,8 +3,6 @@
 from typing import Dict, List, Optional
 from typing_extensions import Literal
 
-from pydantic import Field as FieldInfo
-
 from .._models import BaseModel
 from .blueprint_build_parameters import BlueprintBuildParameters
 
@@ -64,9 +62,7 @@ class BlueprintView(BaseModel):
     base_blueprint_id: Optional[str] = None
     """The ID of the base Blueprint."""
 
-    containerized_services: Optional[List[ContainerizedService]] = FieldInfo(
-        alias="containerizedServices", default=None
-    )
+    containerized_services: Optional[List[ContainerizedService]] = None
     """List of ContainerizedServices available in the Blueprint.
 
     Services can be explicitly started when creating a Devbox.
