@@ -29,7 +29,10 @@ class ScenarioStartRunParams(TypedDict, total=False):
 
 class RunProfile(TypedDict, total=False):
     env_vars: Annotated[Optional[Dict[str, str]], PropertyInfo(alias="envVars")]
-    """Environment variables."""
+    """Environment Variables: Environment Variable to Value."""
 
     purpose: Optional[str]
     """Purpose of the run."""
+
+    secrets: Optional[Dict[str, str]]
+    """Secrets: Environment Variable to User Secret Name."""

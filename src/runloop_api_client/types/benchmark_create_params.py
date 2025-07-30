@@ -18,7 +18,14 @@ class BenchmarkCreateParams(TypedDict, total=False):
     required_environment_variables: Optional[List[str]]
     """Environment variables required to run the benchmark.
 
-    If these variables are not supplied, the benchmark will fail to start
+    If any required variables are not supplied, the benchmark will fail to start
+    """
+
+    required_secrets: List[str]
+    """
+    Secrets required to run the benchmark with (user secret name will be mapped to
+    benchmark required secret name). If any of these secrets are not provided or the
+    mapping is incorrect, the benchmark will fail to start.
     """
 
     scenario_ids: Optional[List[str]]

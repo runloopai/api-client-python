@@ -71,6 +71,7 @@ class TestDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
                     "uid": 0,
@@ -1018,6 +1019,7 @@ class TestAsyncDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
                     "uid": 0,
