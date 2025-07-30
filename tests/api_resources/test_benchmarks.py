@@ -35,6 +35,7 @@ class TestBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
+            required_secrets=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -116,6 +117,7 @@ class TestBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
+            required_secrets=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -283,6 +285,7 @@ class TestBenchmarks:
             run_profile={
                 "env_vars": {"foo": "string"},
                 "purpose": "purpose",
+                "secrets": {"foo": "string"},
             },
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])
@@ -330,6 +333,7 @@ class TestAsyncBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
+            required_secrets=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -411,6 +415,7 @@ class TestAsyncBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
+            required_secrets=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -578,6 +583,7 @@ class TestAsyncBenchmarks:
             run_profile={
                 "env_vars": {"foo": "string"},
                 "purpose": "purpose",
+                "secrets": {"foo": "string"},
             },
         )
         assert_matches_type(BenchmarkRunView, benchmark, path=["response"])

@@ -28,5 +28,12 @@ class BenchmarkView(BaseModel):
     required_environment_variables: Optional[List[str]] = None
     """Required environment variables used to run the benchmark.
 
-    If any required environment are missing, the benchmark will fail to start.
+    If any required environment variables are missing, the benchmark will fail to
+    start.
+    """
+
+    required_secret_names: Optional[List[str]] = None
+    """Required secrets used to run the benchmark.
+
+    If any required secrets are missing, the benchmark will fail to start.
     """

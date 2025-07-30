@@ -62,6 +62,12 @@ class LaunchParameters(TypedDict, total=False):
     launch_commands: Optional[List[str]]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
+    required_services: Optional[List[str]]
+    """A list of ContainerizedService names to be started when a Devbox is created.
+
+    A valid ContainerizedService must be specified in Blueprint to be started.
+    """
+
     resource_size_request: Optional[
         Literal["X_SMALL", "SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
     ]

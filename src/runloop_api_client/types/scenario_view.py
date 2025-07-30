@@ -45,3 +45,9 @@ class ScenarioView(BaseModel):
     If any required environment variables are missing, the scenario will fail to
     start.
     """
+
+    required_secret_names: Optional[List[str]] = None
+    """Environment variables required to run the scenario.
+
+    If any required secrets are missing, the scenario will fail to start.
+    """

@@ -78,6 +78,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
                         "uid": 0,
@@ -91,6 +92,7 @@ class TestScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
             required_environment_variables=["string"],
+            required_secret_names=["string"],
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -209,6 +211,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
                         "uid": 0,
@@ -226,7 +229,8 @@ class TestScenarios:
             metadata={"foo": "string"},
             name="name",
             reference_output="reference_output",
-            required_env_vars=["string"],
+            required_environment_variables=["string"],
+            required_secrets=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -361,6 +365,7 @@ class TestScenarios:
             run_profile={
                 "env_vars": {"foo": "string"},
                 "purpose": "purpose",
+                "secrets": {"foo": "string"},
             },
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])
@@ -452,6 +457,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
                         "uid": 0,
@@ -465,6 +471,7 @@ class TestAsyncScenarios:
             metadata={"foo": "string"},
             reference_output="reference_output",
             required_environment_variables=["string"],
+            required_secret_names=["string"],
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -583,6 +590,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
                         "uid": 0,
@@ -600,7 +608,8 @@ class TestAsyncScenarios:
             metadata={"foo": "string"},
             name="name",
             reference_output="reference_output",
-            required_env_vars=["string"],
+            required_environment_variables=["string"],
+            required_secrets=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -735,6 +744,7 @@ class TestAsyncScenarios:
             run_profile={
                 "env_vars": {"foo": "string"},
                 "purpose": "purpose",
+                "secrets": {"foo": "string"},
             },
         )
         assert_matches_type(ScenarioRunView, scenario, path=["response"])

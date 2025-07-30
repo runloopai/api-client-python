@@ -41,3 +41,6 @@ class BenchmarkRunView(BaseModel):
 
     Calculated as sum of scenario scores / number of scenario runs.
     """
+
+    secrets_provided: Optional[Dict[str, str]] = None
+    """User secrets used to run the benchmark."""

@@ -32,7 +32,7 @@ class ScenarioRunView(BaseModel):
     """Duration scenario took to run."""
 
     environment_variables: Optional[Dict[str, str]] = None
-    """Environment variables used to run the Scenario."""
+    """Environment variables used to run the scenario."""
 
     name: Optional[str] = None
     """Optional name of ScenarioRun."""
@@ -42,6 +42,9 @@ class ScenarioRunView(BaseModel):
 
     scoring_contract_result: Optional[ScoringContractResultView] = None
     """The scoring result of the ScenarioRun."""
+
+    secrets_provided: Optional[Dict[str, str]] = None
+    """User secrets used to run the scenario."""
 
     start_time_ms: Optional[int] = None
     """The time that the scenario started"""
