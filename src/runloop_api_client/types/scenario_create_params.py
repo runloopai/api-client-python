@@ -40,3 +40,10 @@ class ScenarioCreateParams(TypedDict, total=False):
 
     If these variables are not provided, the scenario will fail to start.
     """
+
+    required_secret_names: Optional[List[str]]
+    """
+    Secrets required to run the scenario (user secret name to scenario required
+    secret name). If these secrets are not provided or the mapping is incorrect, the
+    scenario will fail to start.
+    """
