@@ -398,7 +398,7 @@ class DevboxesResource(SyncAPIResource):
             # If it's neither, it will throw an error.
             return self._post(
                 f"/v1/devboxes/{id}/wait_for_status",
-                body={"statuses": ["running", "failure"]},
+                body={"statuses": ["running", "failure", "shutdown"]},
                 cast_to=DevboxView,
             )
 
@@ -1752,7 +1752,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             try:
                 return await self._post(
                     f"/v1/devboxes/{id}/wait_for_status",
-                    body={"statuses": ["running", "failure"]},
+                    body={"statuses": ["running", "failure", "shutdown"]},
                     cast_to=DevboxView,
                 )
             except (APITimeoutError, APIStatusError) as error:
