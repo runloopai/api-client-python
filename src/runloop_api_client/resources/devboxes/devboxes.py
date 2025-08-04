@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional, cast
+from typing import Dict, Mapping, Iterable, Optional, cast, TypedDict
 from typing_extensions import Literal
 
 import httpx
@@ -110,9 +110,18 @@ from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxesResource", "AsyncDevboxesResource"]
+__all__ = ["DevboxesResource", "AsyncDevboxesResource", "DevboxRequestArgs"]
 
 DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+
+
+# Type for request arguments that combine polling config with additional request options
+class DevboxRequestArgs(TypedDict, total=False):
+    polling_config: PollingConfig | None
+    extra_headers: Headers | None
+    extra_query: Query | None
+    extra_body: Body | None
+    timeout: float | httpx.Timeout | None | NotGiven
 
 
 def placeholder_devbox_view(id: str) -> DevboxView:
@@ -374,6 +383,10 @@ class DevboxesResource(SyncAPIResource):
         *,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 
@@ -427,15 +440,15 @@ class DevboxesResource(SyncAPIResource):
         self,
         *,
         create_args: devbox_create_params.DevboxCreateParams,
-        polling_config: PollingConfig | None = None,
+        request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
 
         This is a wrapper around the `create` method that waits for the devbox to reach running state.
-        
+
         Args:
             create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
-            polling_config: Optional polling configuration
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The devbox in running state
@@ -444,12 +457,22 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
+
         # Pass all create_args to the underlying create method
-        devbox = self.create(**create_args)
+        devbox = self.create(
+            **create_args,
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
+        )
 
         return self.await_running(
             devbox.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
         )
 
     def list(
@@ -1570,15 +1593,15 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         *,
         create_args: devbox_create_params.DevboxCreateParams,
-        polling_config: PollingConfig | None = None,
+        request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a devbox and wait for it to be in running state.
 
         This is a wrapper around the `create` method that waits for the devbox to reach running state.
-        
+
         Args:
             create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
-            polling_config: Optional polling configuration
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The devbox in running state
@@ -1590,9 +1613,13 @@ class AsyncDevboxesResource(AsyncAPIResource):
         # Pass all create_args to the underlying create method
         devbox = await self.create(**create_args)
 
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
+
         return await self.await_running(
             devbox.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
         )
 
     async def await_running(

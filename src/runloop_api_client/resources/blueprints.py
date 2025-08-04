@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional, TypedDict
 
 import httpx
 
@@ -28,7 +28,19 @@ from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintsResource", "AsyncBlueprintsResource"]
+
+# Type for request arguments that combine polling config with additional request options
+class BlueprintRequestArgs(TypedDict, total=False):
+    polling_config: PollingConfig | None
+    # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+    # The extra values given here take precedence over values defined on the client or passed to this method.
+    extra_headers: Headers | None
+    extra_query: Query | None
+    extra_body: Body | None
+    timeout: float | httpx.Timeout | None | NotGiven
+
+
+__all__ = ["BlueprintsResource", "AsyncBlueprintsResource", "BlueprintRequestArgs"]
 
 
 class BlueprintsResource(SyncAPIResource):
@@ -188,13 +200,10 @@ class BlueprintsResource(SyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+
         def retrieve_blueprint() -> BlueprintView:
             return self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
@@ -203,9 +212,7 @@ class BlueprintsResource(SyncAPIResource):
         blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
 
         if blueprint.status != "build_complete":
-            raise RunloopError(
-                f"Blueprint entered non-built terminal state: {blueprint.status}"
-            )
+            raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
 
         return blueprint
 
@@ -213,7 +220,7 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         create_args: blueprint_create_params.BlueprintCreateParams,
-        polling_config: PollingConfig | None = None,
+        request_args: BlueprintRequestArgs | None = None,
     ) -> BlueprintView:
         """Create a new Blueprint and wait for it to finish building.
 
@@ -221,7 +228,7 @@ class BlueprintsResource(SyncAPIResource):
 
         Args:
             create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
-            polling_config: Optional polling configuration
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The built blueprint
@@ -233,9 +240,16 @@ class BlueprintsResource(SyncAPIResource):
         # Pass all create_args to the underlying create method
         blueprint = self.create(**create_args)
 
+        if request_args is None:
+            request_args = {}
+
         return self.await_build_complete(
             blueprint.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
         )
 
     def list(
@@ -563,7 +577,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             ),
             cast_to=BlueprintView,
         )
-    
+
     async def await_build_complete(
         self,
         id: str,
@@ -593,13 +607,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+
         async def retrieve_blueprint() -> BlueprintView:
             return await self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
@@ -608,9 +619,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
 
         if blueprint.status != "build_complete":
-            raise RunloopError(
-                f"Blueprint entered non-built terminal state: {blueprint.status}"
-            )
+            raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
 
         return blueprint
 
@@ -618,7 +627,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         create_args: blueprint_create_params.BlueprintCreateParams,
-        polling_config: PollingConfig | None = None,
+        request_args: BlueprintRequestArgs | None = None,
     ) -> BlueprintView:
         """Create a new Blueprint and wait for it to finish building.
 
@@ -626,7 +635,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
         Args:
             create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
-            polling_config: Optional polling configuration
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The built blueprint
@@ -638,9 +647,17 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         # Pass all create_args to the underlying create method
         blueprint = await self.create(**create_args)
 
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
+
         return await self.await_build_complete(
             blueprint.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
         )
 
     def list(
