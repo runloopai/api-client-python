@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional, cast, TypedDict
+from typing import Dict, Mapping, Iterable, Optional, TypedDict, cast
 from typing_extensions import Literal
 
 import httpx
