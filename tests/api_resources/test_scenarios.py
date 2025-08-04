@@ -230,7 +230,7 @@ class TestScenarios:
             name="name",
             reference_output="reference_output",
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -609,7 +609,7 @@ class TestAsyncScenarios:
             name="name",
             reference_output="reference_output",
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {

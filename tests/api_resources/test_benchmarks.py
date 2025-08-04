@@ -35,7 +35,7 @@ class TestBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -117,7 +117,7 @@ class TestBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -333,7 +333,7 @@ class TestAsyncBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
@@ -415,7 +415,7 @@ class TestAsyncBenchmarks:
             name="name",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scenario_ids=["string"],
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
