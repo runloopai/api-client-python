@@ -1262,7 +1262,7 @@ aiohttp = [
 ]
 
 [package.dev-dependencies]
-lint = [
+dev = [
     { name = "ruff" },
 ]
 
@@ -1280,7 +1280,7 @@ requires-dist = [
 provides-extras = ["aiohttp"]
 
 [package.metadata.requires-dev]
-lint = [{ name = "ruff", specifier = ">=0.12.7" }]
+dev = [{ name = "ruff", specifier = ">=0.12.7" }]
 
 [[package]]
 name = "sniffio"

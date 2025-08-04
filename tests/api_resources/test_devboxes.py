@@ -1229,7 +1229,7 @@ class TestDevboxes:
                     },
                     request_args={
                         "polling_config": config,
-                    }
+                    },
                 )
 
                 assert result.id == "test_id"

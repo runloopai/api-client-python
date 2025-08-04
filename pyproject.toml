@@ -95,7 +95,7 @@ requires = ["hatchling==1.26.3", "hatch-fancy-pypi-readme"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-lint = [
+dev = [
     "ruff>=0.12.7",
 ]
 
