@@ -383,10 +383,6 @@ class DevboxesResource(SyncAPIResource):
         *,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 

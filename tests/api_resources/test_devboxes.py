@@ -1227,7 +1227,9 @@ class TestDevboxes:
                     create_args={
                         "name": "test",
                     },
-                    polling_config=config,
+                    request_args={
+                        "polling_config": config,
+                    }
                 )
 
                 assert result.id == "test_id"
