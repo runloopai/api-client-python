@@ -445,7 +445,6 @@ class DevboxesResource(SyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
         # Pass all create_args to the underlying create method
-        _ = create_args  # Suppress unused parameter warning
         devbox = self.create(**create_args)
 
         return self.await_running(
@@ -1589,7 +1588,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
         # Pass all create_args to the underlying create method
-        _ = create_args  # Suppress unused parameter warning
         devbox = await self.create(**create_args)
 
         return await self.await_running(
