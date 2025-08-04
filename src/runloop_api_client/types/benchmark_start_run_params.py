@@ -26,10 +26,19 @@ class BenchmarkStartRunParams(TypedDict, total=False):
 
 class RunProfile(TypedDict, total=False):
     env_vars: Annotated[Optional[Dict[str, str]], PropertyInfo(alias="envVars")]
-    """Environment Variables: Environment Variable to Value."""
+    """Mapping of Environment Variable to Value.
+
+    May be shown in devbox logging. Example: {"DB_PASS": "DATABASE_PASSWORD"} would
+    set the environment variable 'DB_PASS' to the value 'DATABASE_PASSWORD_VALUE'.
+    """
 
     purpose: Optional[str]
     """Purpose of the run."""
 
     secrets: Optional[Dict[str, str]]
-    """Secrets: Environment Variable to User Secret Name."""
+    """Mapping of Environment Variable to User Secret Name.
+
+    Never shown in devbox logging. Example: {"DB_PASS": "DATABASE_PASSWORD"} would
+    set the environment variable 'DB_PASS' to the value of the secret
+    'DATABASE_PASSWORD'.
+    """
