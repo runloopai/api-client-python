@@ -1181,7 +1181,11 @@ class TestDevboxes:
                 mock_create.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
-                result = client.devboxes.create_and_await_running(name="test")
+                result = client.devboxes.create_and_await_running(
+                    create_args={
+                        "name": "test",
+                    }
+                )
 
                 assert result.id == "test_id"
                 assert result.status == "running"
@@ -1219,7 +1223,12 @@ class TestDevboxes:
                 mock_create.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
-                result = client.devboxes.create_and_await_running(name="test", polling_config=config)
+                result = client.devboxes.create_and_await_running(
+                    create_args={
+                        "name": "test",
+                    },
+                    polling_config=config,
+                )
 
                 assert result.id == "test_id"
                 assert result.status == "running"
@@ -1237,7 +1246,11 @@ class TestDevboxes:
             mock_create.side_effect = mock_error
 
             with pytest.raises(APIStatusError, match="Bad request"):
-                client.devboxes.create_and_await_running(name="test")
+                client.devboxes.create_and_await_running(
+                    create_args={
+                        "name": "test",
+                    }
+                )
 
     @parametrize
     def test_method_create_and_await_running_await_failure(self, client: Runloop) -> None:
@@ -1259,7 +1272,11 @@ class TestDevboxes:
                 mock_await.side_effect = RunloopError("Devbox entered non-running terminal state: failed")
 
                 with pytest.raises(RunloopError, match="Devbox entered non-running terminal state: failed"):
-                    client.devboxes.create_and_await_running(name="test")
+                    client.devboxes.create_and_await_running(
+                        create_args={
+                            "name": "test",
+                        }
+                    )
 
 
 class TestAsyncDevboxes:
