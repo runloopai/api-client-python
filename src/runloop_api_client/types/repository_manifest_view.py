@@ -7,6 +7,7 @@ from .._models import BaseModel
 __all__ = [
     "RepositoryManifestView",
     "ContainerConfig",
+    "Language",
     "Workspace",
     "WorkspaceDevCommands",
     "ContainerizedService",
@@ -27,6 +28,12 @@ class ContainerConfig(BaseModel):
     Commands to run to setup the base container such as installing necessary
     toolchains (e.g. apt install).
     """
+
+
+class Language(BaseModel):
+    language: Optional[str] = None
+
+    version: Optional[str] = None
 
 
 class WorkspaceDevCommands(BaseModel):
@@ -121,6 +128,12 @@ class ContainerizedService(BaseModel):
 class RepositoryManifestView(BaseModel):
     container_config: ContainerConfig
     """Container configuration specifying the base image and setup commands."""
+
+    languages: List[Language]
+    """List of required languages found in Repository."""
+
+    workflows: List[str]
+    """The workflow(s) that were selected to build the manifest for this repo."""
 
     workspaces: List[Workspace]
     """List of workspaces within the repository.

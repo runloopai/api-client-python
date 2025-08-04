@@ -76,7 +76,7 @@ class ScorerPythonScriptScoringFunction(TypedDict, total=False):
     python_version_constraint: Optional[str]
     """Python version to run scoring. Default is "==3.12.10" """
 
-    requirements_contents: str
+    requirements_contents: Optional[str]
     """Package dependencies to be installed.
 
     The requirements should be a valid requirements.txt file.

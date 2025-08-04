@@ -203,7 +203,7 @@ class ScenariosResource(SyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -233,7 +233,7 @@ class ScenariosResource(SyncAPIResource):
 
           required_environment_variables: Environment variables required to run the scenario.
 
-          required_secrets: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario.
 
           scoring_contract: The scoring contract for the Scenario.
 
@@ -259,7 +259,7 @@ class ScenariosResource(SyncAPIResource):
                     "name": name,
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,
@@ -594,7 +594,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -624,7 +624,7 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           required_environment_variables: Environment variables required to run the scenario.
 
-          required_secrets: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario.
 
           scoring_contract: The scoring contract for the Scenario.
 
@@ -650,7 +650,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "name": name,
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scoring_contract": scoring_contract,
                 },
                 scenario_update_params.ScenarioUpdateParams,

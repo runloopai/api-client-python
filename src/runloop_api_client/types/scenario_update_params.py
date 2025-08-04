@@ -35,7 +35,7 @@ class ScenarioUpdateParams(TypedDict, total=False):
     required_environment_variables: Optional[List[str]]
     """Environment variables required to run the scenario."""
 
-    required_secrets: Optional[List[str]]
+    required_secret_names: Optional[List[str]]
     """Secrets required to run the scenario."""
 
     scoring_contract: Optional[ScoringContractUpdateParam]
