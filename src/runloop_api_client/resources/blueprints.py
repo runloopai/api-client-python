@@ -230,6 +230,8 @@ class BlueprintsResource(SyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+        # Pass all create_args to the underlying create method
+        _ = create_args  # Suppress unused parameter warning
         blueprint = self.create(**create_args)
 
         return self.await_build_complete(
@@ -634,6 +636,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+        # Pass all create_args to the underlying create method
+        _ = create_args  # Suppress unused parameter warning
         blueprint = await self.create(**create_args)
 
         return await self.await_build_complete(
