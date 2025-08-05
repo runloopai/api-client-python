@@ -15,6 +15,7 @@ dependencies = [
     "distro>=1.7.0, <2",
     "sniffio",
 ]
+
 requires-python = ">= 3.8"
 classifiers = [
   "Typing :: Typed",
@@ -92,6 +93,11 @@ typecheck = { chain = [
 [build-system]
 requires = ["hatchling==1.26.3", "hatch-fancy-pypi-readme"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.7",
+]
 
 [tool.hatch.build]
 include = [

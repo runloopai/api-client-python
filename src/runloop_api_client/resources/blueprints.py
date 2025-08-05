@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional, TypedDict
 
 import httpx
 
@@ -28,7 +28,19 @@ from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintsResource", "AsyncBlueprintsResource"]
+
+# Type for request arguments that combine polling config with additional request options
+class BlueprintRequestArgs(TypedDict, total=False):
+    polling_config: PollingConfig | None
+    # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+    # The extra values given here take precedence over values defined on the client or passed to this method.
+    extra_headers: Headers | None
+    extra_query: Query | None
+    extra_body: Body | None
+    timeout: float | httpx.Timeout | None | NotGiven
+
+
+__all__ = ["BlueprintsResource", "AsyncBlueprintsResource", "BlueprintRequestArgs"]
 
 
 class BlueprintsResource(SyncAPIResource):
@@ -188,13 +200,10 @@ class BlueprintsResource(SyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+
         def retrieve_blueprint() -> BlueprintView:
             return self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
@@ -203,44 +212,23 @@ class BlueprintsResource(SyncAPIResource):
         blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
 
         if blueprint.status != "build_complete":
-            raise RunloopError(
-                f"Blueprint entered non-built terminal state: {blueprint.status}"
-            )
+            raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
 
         return blueprint
 
     def create_and_await_build_complete(
         self,
         *,
-        name: str,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
+        create_args: blueprint_create_params.BlueprintCreateParams,
+        request_args: BlueprintRequestArgs | None = None,
     ) -> BlueprintView:
         """Create a new Blueprint and wait for it to finish building.
 
+        This is a wrapper around the `create` method that waits for the blueprint to finish building.
+
         Args:
-            dockerfile: The Dockerfile contents to use for building the Blueprint
-            file_mounts: Files to mount into the Blueprint
-            launch_parameters: Launch parameters for Devboxes created from this Blueprint
-            name: Name for the Blueprint
-            system_setup_commands: Commands to run during Blueprint build
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
+            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The built blueprint
@@ -249,27 +237,19 @@ class BlueprintsResource(SyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
-        blueprint = self.create(
-            name=name,
-            dockerfile=dockerfile,
-            code_mounts=code_mounts,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            system_setup_commands=system_setup_commands,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
-        )
+        # Pass all create_args to the underlying create method
+        blueprint = self.create(**create_args)
+
+        if request_args is None:
+            request_args = {}
 
         return self.await_build_complete(
             blueprint.id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            polling_config=request_args.get("polling_config", None),
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
         )
 
     def list(
@@ -597,7 +577,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             ),
             cast_to=BlueprintView,
         )
-    
+
     async def await_build_complete(
         self,
         id: str,
@@ -627,13 +607,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
+
         async def retrieve_blueprint() -> BlueprintView:
             return await self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
@@ -642,44 +619,23 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
 
         if blueprint.status != "build_complete":
-            raise RunloopError(
-                f"Blueprint entered non-built terminal state: {blueprint.status}"
-            )
+            raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
 
         return blueprint
 
     async def create_and_await_build_complete(
         self,
         *,
-        name: str,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
+        create_args: blueprint_create_params.BlueprintCreateParams,
+        request_args: BlueprintRequestArgs | None = None,
     ) -> BlueprintView:
         """Create a new Blueprint and wait for it to finish building.
 
+        This is a wrapper around the `create` method that waits for the blueprint to finish building.
+
         Args:
-            dockerfile: The Dockerfile contents to use for building the Blueprint
-            file_mounts: Files to mount into the Blueprint
-            launch_parameters: Launch parameters for Devboxes created from this Blueprint
-            name: Name for the Blueprint
-            system_setup_commands: Commands to run during Blueprint build
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
+            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The built blueprint
@@ -688,27 +644,20 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before blueprint is built
             RunloopError: If blueprint enters a non-built terminal state
         """
-        blueprint = await self.create(
-            name=name,
-            dockerfile=dockerfile,
-            code_mounts=code_mounts,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            system_setup_commands=system_setup_commands,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
-        )
+        # Pass all create_args to the underlying create method
+        blueprint = await self.create(**create_args)
+
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
 
         return await self.await_build_complete(
             blueprint.id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            polling_config=request_args.get("polling_config", None),
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
         )
 
     def list(

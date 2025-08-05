@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional, cast
+from typing import Dict, Mapping, Iterable, Optional, TypedDict, cast
 from typing_extensions import Literal
 
 import httpx
@@ -110,9 +110,18 @@ from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxesResource", "AsyncDevboxesResource"]
+__all__ = ["DevboxesResource", "AsyncDevboxesResource", "DevboxRequestArgs"]
 
 DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+
+
+# Type for request arguments that combine polling config with additional request options
+class DevboxRequestArgs(TypedDict, total=False):
+    polling_config: PollingConfig | None
+    extra_headers: Headers | None
+    extra_query: Query | None
+    extra_body: Body | None
+    timeout: float | httpx.Timeout | None | NotGiven
 
 
 def placeholder_devbox_view(id: str) -> DevboxView:
@@ -426,61 +435,16 @@ class DevboxesResource(SyncAPIResource):
     def create_and_await_running(
         self,
         *,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
-        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
-        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
+        create_args: devbox_create_params.DevboxCreateParams,
+        request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
 
+        This is a wrapper around the `create` method that waits for the devbox to reach running state.
+
         Args:
-            blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
-                the default Runloop Devbox image. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            blueprint_name: Name of Blueprint to use for the Devbox. When set, this will load the latest
-                successfully built Blueprint with the given name. Only one of (Snapshot ID,
-                Blueprint ID, Blueprint name) should be specified.
-            code_mounts: A list of code mounts to be included in the Devbox.
-            entrypoint: (Optional) When specified, the Devbox will run this script as its main
-                executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-                the process is complete.
-            environment_variables: (Optional) Environment variables used to configure your Devbox.
-            file_mounts: (Optional) Map of paths and file contents to write before setup.
-            launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
-            metadata: User defined metadata to attach to the devbox for organization.
-            name: (Optional) A user specified name to give the Devbox.
-            prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-                together with (Snapshot ID, Blueprint ID, or Blueprint name).
-            repo_connection_id: Repository connection id the devbox should source its base image from.
-            secrets: (Optional) Map of environment variable names to secret names. The secret values
-                will be securely injected as environment variables in the Devbox. Example:
-                {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
-                value of secret 'DATABASE_PASSWORD'.
-            snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
+            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The devbox in running state
@@ -489,30 +453,22 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
+
+        # Pass all create_args to the underlying create method
         devbox = self.create(
-            blueprint_id=blueprint_id,
-            blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            name=name,
-            prebuilt=prebuilt,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            snapshot_id=snapshot_id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **create_args,
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
         )
 
         return self.await_running(
             devbox.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
         )
 
     def list(
@@ -1632,61 +1588,16 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def create_and_await_running(
         self,
         *,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
-        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
-        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-        idempotency_key: str | None = None,
+        create_args: devbox_create_params.DevboxCreateParams,
+        request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a devbox and wait for it to be in running state.
 
+        This is a wrapper around the `create` method that waits for the devbox to reach running state.
+
         Args:
-            blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
-                the default Runloop Devbox image. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            blueprint_name: Name of Blueprint to use for the Devbox. When set, this will load the latest
-                successfully built Blueprint with the given name. Only one of (Snapshot ID,
-                Blueprint ID, Blueprint name) should be specified.
-            code_mounts: A list of code mounts to be included in the Devbox.
-            entrypoint: (Optional) When specified, the Devbox will run this script as its main
-                executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-                the process is complete.
-            environment_variables: (Optional) Environment variables used to configure your Devbox.
-            file_mounts: (Optional) Map of paths and file contents to write before setup.
-            launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
-            metadata: User defined metadata to attach to the devbox for organization.
-            name: (Optional) A user specified name to give the Devbox.
-            prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-                together with (Snapshot ID, Blueprint ID, or Blueprint name).
-            repo_connection_id: Repository connection id the devbox should source its base image from.
-            secrets: (Optional) Map of environment variable names to secret names. The secret values
-                will be securely injected as environment variables in the Devbox. Example:
-                {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
-                value of secret 'DATABASE_PASSWORD'.
-            snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
+            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The devbox in running state
@@ -1695,30 +1606,16 @@ class AsyncDevboxesResource(AsyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        devbox = await self.create(
-            blueprint_id=blueprint_id,
-            blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            name=name,
-            prebuilt=prebuilt,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            snapshot_id=snapshot_id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
-        )
+        # Pass all create_args to the underlying create method
+        devbox = await self.create(**create_args)
+
+        # Extract polling config and other request args
+        if request_args is None:
+            request_args = {}
 
         return await self.await_running(
             devbox.id,
-            polling_config=polling_config,
+            polling_config=request_args.get("polling_config", None),
         )
 
     async def await_running(

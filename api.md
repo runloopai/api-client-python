@@ -62,6 +62,7 @@ Methods:
 - <code title="post /v1/blueprints/{id}/delete">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">delete</a>(id) -> object</code>
 - <code title="get /v1/blueprints/{id}/logs">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">logs</a>(id) -> <a href="./src/runloop_api_client/types/blueprint_build_logs_list_view.py">BlueprintBuildLogsListView</a></code>
 - <code title="post /v1/blueprints/preview">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">preview</a>(\*\*<a href="src/runloop_api_client/types/blueprint_preview_params.py">params</a>) -> <a href="./src/runloop_api_client/types/blueprint_preview_view.py">BlueprintPreviewView</a></code>
+- <code title="create_and_await_build_complete">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">create_and_await_build_complete</a>(<a href="src/runloop_api_client/types/blueprint_create_params.py">create_args</a>, <a href="src/runloop_api_client/resources/blueprints.py">request_args</a>=None) -> <a href="./src/runloop_api_client/types/blueprint_view.py">BlueprintView</a></code>
 
 # Devboxes
 
@@ -104,6 +105,7 @@ Methods:
 - <code title="post /v1/devboxes/{id}/suspend">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">suspend</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="post /v1/devboxes/{id}/upload_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">upload_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_upload_file_params.py">params</a>) -> object</code>
 - <code title="post /v1/devboxes/{id}/write_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_contents_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
+- <code title="create_and_await_running">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_and_await_running</a>(<a href="src/runloop_api_client/types/devbox_create_params.py">create_args</a>, <a href="src/runloop_api_client/resources/devboxes/devboxes.py">request_args</a>=None) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 
 ## DiskSnapshots
 
