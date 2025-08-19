@@ -63,6 +63,19 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -280,6 +293,19 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
@@ -355,6 +381,19 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -572,6 +611,19 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])

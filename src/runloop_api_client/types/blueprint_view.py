@@ -70,3 +70,9 @@ class BlueprintView(BaseModel):
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
     """The failure reason if the Blueprint build failed, if any."""
+
+    is_public: Optional[bool] = None
+    """Whether this Blueprint is publicly accessible to all users."""
+
+    metadata: Optional[Dict[str, str]] = None
+    """User defined metadata associated with the blueprint."""

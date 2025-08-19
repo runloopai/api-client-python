@@ -165,7 +165,6 @@ class DevboxesResource(SyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -210,9 +209,6 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-              together with (Snapshot ID, Blueprint ID, or Blueprint name).
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -246,7 +242,6 @@ class DevboxesResource(SyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -1313,7 +1308,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -1358,9 +1352,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-              together with (Snapshot ID, Blueprint ID, or Blueprint name).
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -1394,7 +1385,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
