@@ -316,7 +316,7 @@ class RunsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Wait for a scenario run to be scored.
-        
+
         Args:
             id: The ID of the scenario run to wait for
             polling_config: Optional polling configuration
@@ -332,13 +332,10 @@ class RunsResource(SyncAPIResource):
             PollingTimeout: If polling times out before scenario run is scored
             RunloopError: If scenario run enters a non-scored terminal state
         """
+
         def retrieve_run() -> ScenarioRunView:
             return self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_scoring(run: ScenarioRunView) -> bool:
@@ -347,9 +344,7 @@ class RunsResource(SyncAPIResource):
         run = poll_until(retrieve_run, is_done_scoring, polling_config)
 
         if run.state != "scored":
-            raise RunloopError(
-                f"Scenario run entered non-scored state unexpectedly: {run.state}"
-            )
+            raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
 
         return run
 
@@ -366,7 +361,7 @@ class RunsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Score a scenario run and wait for it to be scored.
-        
+
         Args:
             id: The ID of the scenario run to score and wait for
             polling_config: Optional polling configuration
@@ -412,7 +407,7 @@ class RunsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Score a scenario run, wait for it to be scored, then complete it.
-        
+
         Args:
             id: The ID of the scenario run to score, wait for, and complete
             polling_config: Optional polling configuration
@@ -444,6 +439,7 @@ class RunsResource(SyncAPIResource):
             extra_body=extra_body,
             timeout=timeout,
         )
+
 
 class AsyncRunsResource(AsyncAPIResource):
     @cached_property
@@ -728,7 +724,7 @@ class AsyncRunsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Wait for a scenario run to be scored.
-        
+
         Args:
             id: The ID of the scenario run to wait for
             polling_config: Optional polling configuration
@@ -744,13 +740,10 @@ class AsyncRunsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before scenario run is scored
             RunloopError: If scenario run enters a non-scored terminal state
         """
+
         async def retrieve_run() -> ScenarioRunView:
             return await self.retrieve(
-                id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             )
 
         def is_done_scoring(run: ScenarioRunView) -> bool:
@@ -759,9 +752,7 @@ class AsyncRunsResource(AsyncAPIResource):
         run = await async_poll_until(retrieve_run, is_done_scoring, polling_config)
 
         if run.state != "scored":
-            raise RunloopError(
-                f"Scenario run entered non-scored state unexpectedly: {run.state}"
-            )
+            raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
 
         return run
 
@@ -778,7 +769,7 @@ class AsyncRunsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Score a scenario run and wait for it to be scored.
-        
+
         Args:
             id: The ID of the scenario run to score and wait for
             polling_config: Optional polling configuration
@@ -824,7 +815,7 @@ class AsyncRunsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScenarioRunView:
         """Score a scenario run, wait for it to be scored, then complete it.
-        
+
         Args:
             id: The ID of the scenario run to score, wait for, and complete
             polling_config: Optional polling configuration

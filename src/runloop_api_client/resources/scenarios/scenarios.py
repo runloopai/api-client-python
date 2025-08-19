@@ -926,6 +926,7 @@ class AsyncScenariosResource(AsyncAPIResource):
 
         return run
 
+
 class ScenariosResourceWithRawResponse:
     def __init__(self, scenarios: ScenariosResource) -> None:
         self._scenarios = scenarios

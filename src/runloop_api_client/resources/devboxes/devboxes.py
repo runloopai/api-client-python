@@ -1576,12 +1576,19 @@ class AsyncDevboxesResource(AsyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        # Pass all create_args to the underlying create method
-        devbox = await self.create(**(create_args or {}))
 
         # Extract polling config and other request args
         if request_args is None:
             request_args = {}
+
+        # Pass all create_args, relevant request args to the underlying create method
+        devbox = await self.create(
+            **(create_args or {}),
+            extra_headers=request_args.get("extra_headers", None),
+            extra_query=request_args.get("extra_query", None),
+            extra_body=request_args.get("extra_body", None),
+            timeout=request_args.get("timeout", None),
+        )
 
         return await self.await_running(
             devbox.id,
