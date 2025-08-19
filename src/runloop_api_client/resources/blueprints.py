@@ -282,6 +282,10 @@ class BlueprintsResource(SyncAPIResource):
         return self.await_build_complete(
             blueprint.id,
             polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
         )
 
     def list(
