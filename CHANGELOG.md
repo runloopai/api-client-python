@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.55.0 (2025-08-19)
+
+Full Changelog: [v0.54.0...v0.55.0](https://github.com/runloopai/api-client-python/compare/v0.54.0...v0.55.0)
+
+### Features
+
+* **api:** api update ([b861c73](https://github.com/runloopai/api-client-python/commit/b861c73595eb0d0744a7a3d81bb46cc2cc397486))
+* **api:** api update ([06ec7b9](https://github.com/runloopai/api-client-python/commit/06ec7b9b9b47b96c1876427f74a063640a4f6fb7))
+
+
+### Chores
+
+* **internal:** fix ruff target version ([91fb064](https://github.com/runloopai/api-client-python/commit/91fb0649d64f4982c292330ade9f61b26ff4841c))
+* **internal:** update comment in script ([4b8d5ba](https://github.com/runloopai/api-client-python/commit/4b8d5ba0dd2553ca32f56876bd6a20ec04991778))
+* update @stainless-api/prism-cli to v5.15.0 ([3119d91](https://github.com/runloopai/api-client-python/commit/3119d91af94985c86961db8b137753f70ef13748))
+
 ## 0.54.0 (2025-08-05)
 
 Full Changelog: [v0.53.0...v0.54.0](https://github.com/runloopai/api-client-python/compare/v0.53.0...v0.54.0)
