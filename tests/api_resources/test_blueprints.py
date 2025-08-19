@@ -215,6 +215,40 @@ class TestBlueprints:
             )
 
     @parametrize
+    def test_method_list_public(self, client: Runloop) -> None:
+        blueprint = client.blueprints.list_public()
+        assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    def test_method_list_public_with_all_params(self, client: Runloop) -> None:
+        blueprint = client.blueprints.list_public(
+            limit=0,
+            name="name",
+            starting_after="starting_after",
+        )
+        assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    def test_raw_response_list_public(self, client: Runloop) -> None:
+        response = client.blueprints.with_raw_response.list_public()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        blueprint = response.parse()
+        assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    def test_streaming_response_list_public(self, client: Runloop) -> None:
+        with client.blueprints.with_streaming_response.list_public() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            blueprint = response.parse()
+            assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
     def test_method_logs(self, client: Runloop) -> None:
         blueprint = client.blueprints.logs(
             "id",
@@ -531,6 +565,40 @@ class TestAsyncBlueprints:
             await async_client.blueprints.with_raw_response.delete(
                 "",
             )
+
+    @parametrize
+    async def test_method_list_public(self, async_client: AsyncRunloop) -> None:
+        blueprint = await async_client.blueprints.list_public()
+        assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
+        blueprint = await async_client.blueprints.list_public(
+            limit=0,
+            name="name",
+            starting_after="starting_after",
+        )
+        assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    async def test_raw_response_list_public(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.blueprints.with_raw_response.list_public()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        blueprint = await response.parse()
+        assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_list_public(self, async_client: AsyncRunloop) -> None:
+        async with async_client.blueprints.with_streaming_response.list_public() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            blueprint = await response.parse()
+            assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_logs(self, async_client: AsyncRunloop) -> None:

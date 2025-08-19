@@ -6,7 +6,12 @@ from typing import Dict, List, Iterable, Optional
 
 import httpx
 
-from ..types import blueprint_list_params, blueprint_create_params, blueprint_preview_params
+from ..types import (
+    blueprint_list_params,
+    blueprint_create_params,
+    blueprint_preview_params,
+    blueprint_list_public_params,
+)
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -251,6 +256,57 @@ class BlueprintsResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=object,
+        )
+
+    def list_public(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> SyncBlueprintsCursorIDPage[BlueprintView]:
+        """
+        List all public Blueprints that are available to all users.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          name: Filter by name
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/blueprints/list_public",
+            page=SyncBlueprintsCursorIDPage[BlueprintView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    blueprint_list_public_params.BlueprintListPublicParams,
+                ),
+            ),
+            model=BlueprintView,
         )
 
     def logs(
@@ -591,6 +647,57 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    def list_public(
+        self,
+        *,
+        limit: int | NotGiven = NOT_GIVEN,
+        name: str | NotGiven = NOT_GIVEN,
+        starting_after: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncPaginator[BlueprintView, AsyncBlueprintsCursorIDPage[BlueprintView]]:
+        """
+        List all public Blueprints that are available to all users.
+
+        Args:
+          limit: The limit of items to return. Default is 20.
+
+          name: Filter by name
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/blueprints/list_public",
+            page=AsyncBlueprintsCursorIDPage[BlueprintView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    blueprint_list_public_params.BlueprintListPublicParams,
+                ),
+            ),
+            model=BlueprintView,
+        )
+
     async def logs(
         self,
         id: str,
@@ -720,6 +827,9 @@ class BlueprintsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             blueprints.delete,
         )
+        self.list_public = to_raw_response_wrapper(
+            blueprints.list_public,
+        )
         self.logs = to_raw_response_wrapper(
             blueprints.logs,
         )
@@ -743,6 +853,9 @@ class AsyncBlueprintsResourceWithRawResponse:
         )
         self.delete = async_to_raw_response_wrapper(
             blueprints.delete,
+        )
+        self.list_public = async_to_raw_response_wrapper(
+            blueprints.list_public,
         )
         self.logs = async_to_raw_response_wrapper(
             blueprints.logs,
@@ -768,6 +881,9 @@ class BlueprintsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             blueprints.delete,
         )
+        self.list_public = to_streamed_response_wrapper(
+            blueprints.list_public,
+        )
         self.logs = to_streamed_response_wrapper(
             blueprints.logs,
         )
@@ -791,6 +907,9 @@ class AsyncBlueprintsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             blueprints.delete,
+        )
+        self.list_public = async_to_streamed_response_wrapper(
+            blueprints.list_public,
         )
         self.logs = async_to_streamed_response_wrapper(
             blueprints.logs,
