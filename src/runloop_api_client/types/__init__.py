@@ -23,6 +23,7 @@ from .scenario_run_view import ScenarioRunView as ScenarioRunView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
 from .devbox_tunnel_view import DevboxTunnelView as DevboxTunnelView
+from .secret_list_params import SecretListParams as SecretListParams
 from .blueprint_build_log import BlueprintBuildLog as BlueprintBuildLog
 from .blueprint_list_view import BlueprintListView as BlueprintListView
 from .input_context_param import InputContextParam as InputContextParam

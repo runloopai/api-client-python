@@ -72,6 +72,7 @@ class BlueprintsResource(SyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -102,6 +103,10 @@ class BlueprintsResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -124,6 +129,7 @@ class BlueprintsResource(SyncAPIResource):
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
@@ -385,6 +391,7 @@ class BlueprintsResource(SyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -413,6 +420,10 @@ class BlueprintsResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -435,6 +446,7 @@ class BlueprintsResource(SyncAPIResource):
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_preview_params.BlueprintPreviewParams,
@@ -479,6 +491,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -509,6 +522,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -531,6 +548,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
@@ -793,6 +811,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -821,6 +840,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -843,6 +866,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_preview_params.BlueprintPreviewParams,
