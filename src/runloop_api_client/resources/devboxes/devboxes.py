@@ -430,8 +430,26 @@ class DevboxesResource(SyncAPIResource):
     def create_and_await_running(
         self,
         *,
-        create_args: devbox_create_params.DevboxCreateParams | None = None,
-        request_args: DevboxRequestArgs | None = None,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
+        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        polling_config: PollingConfig | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
 
@@ -448,22 +466,30 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        # Extract polling config and other request args
-        if request_args is None:
-            request_args = {}
-
         # Pass all create_args to the underlying create method
         devbox = self.create(
-            **(create_args or {}),
-            extra_headers=request_args.get("extra_headers", None),
-            extra_query=request_args.get("extra_query", None),
-            extra_body=request_args.get("extra_body", None),
-            timeout=request_args.get("timeout", None),
+            blueprint_id=blueprint_id,
+            blueprint_name=blueprint_name,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            repo_connection_id=repo_connection_id,
+            secrets=secrets,
+            snapshot_id=snapshot_id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
         return self.await_running(
             devbox.id,
-            polling_config=request_args.get("polling_config", None),
+            polling_config=polling_config,
         )
 
     def list(
@@ -1558,16 +1584,34 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def create_and_await_running(
         self,
         *,
-        create_args: devbox_create_params.DevboxCreateParams | None = None,
-        request_args: DevboxRequestArgs | None = None,
+        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
+        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        polling_config: PollingConfig | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
     ) -> DevboxView:
         """Create a devbox and wait for it to be in running state.
 
         This is a wrapper around the `create` method that waits for the devbox to reach running state.
 
         Args:
-            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
-            request_args: Optional request arguments including polling configuration and additional request options
+            See the `create` method for detailed documentation.
+            polling_config: Optional polling configuration
 
         Returns:
             The devbox in running state
@@ -1577,22 +1621,30 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
 
-        # Extract polling config and other request args
-        if request_args is None:
-            request_args = {}
-
         # Pass all create_args, relevant request args to the underlying create method
         devbox = await self.create(
-            **(create_args or {}),
-            extra_headers=request_args.get("extra_headers", None),
-            extra_query=request_args.get("extra_query", None),
-            extra_body=request_args.get("extra_body", None),
-            timeout=request_args.get("timeout", None),
+            blueprint_id=blueprint_id,
+            blueprint_name=blueprint_name,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            repo_connection_id=repo_connection_id,
+            secrets=secrets,
+            snapshot_id=snapshot_id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
         return await self.await_running(
             devbox.id,
-            polling_config=request_args.get("polling_config", None),
+            polling_config=polling_config,
         )
 
     async def await_running(
