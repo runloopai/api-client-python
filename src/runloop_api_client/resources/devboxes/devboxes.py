@@ -430,7 +430,7 @@ class DevboxesResource(SyncAPIResource):
     def create_and_await_running(
         self,
         *,
-        create_args: devbox_create_params.DevboxCreateParams = {},
+        create_args: devbox_create_params.DevboxCreateParams | None = None,
         request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
@@ -454,7 +454,7 @@ class DevboxesResource(SyncAPIResource):
 
         # Pass all create_args to the underlying create method
         devbox = self.create(
-            **create_args,
+            **(create_args or {}),
             extra_headers=request_args.get("extra_headers", None),
             extra_query=request_args.get("extra_query", None),
             extra_body=request_args.get("extra_body", None),
@@ -1558,7 +1558,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     async def create_and_await_running(
         self,
         *,
-        create_args: devbox_create_params.DevboxCreateParams = {},
+        create_args: devbox_create_params.DevboxCreateParams | None = None,
         request_args: DevboxRequestArgs | None = None,
     ) -> DevboxView:
         """Create a devbox and wait for it to be in running state.
@@ -1577,7 +1577,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
         # Pass all create_args to the underlying create method
-        devbox = await self.create(**create_args)
+        devbox = await self.create(**(create_args or {}))
 
         # Extract polling config and other request args
         if request_args is None:
