@@ -1168,7 +1168,7 @@ class TestDevboxes:
                 mock_await.return_value = mock_devbox_running
 
                 result = client.devboxes.create_and_await_running(
-                    name="test",     
+                    name="test",
                 )
 
                 assert result.id == "test_id"

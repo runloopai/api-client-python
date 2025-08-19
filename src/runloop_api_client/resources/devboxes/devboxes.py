@@ -439,6 +439,7 @@ class DevboxesResource(SyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -447,7 +448,6 @@ class DevboxesResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        polling_config: PollingConfig | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> DevboxView:
@@ -1593,6 +1593,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -1601,7 +1602,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        polling_config: PollingConfig | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> DevboxView:

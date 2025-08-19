@@ -236,6 +236,7 @@ class BlueprintsResource(SyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -243,7 +244,6 @@ class BlueprintsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        polling_config: PollingConfig | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
@@ -727,6 +727,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
         system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -734,7 +735,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        polling_config: PollingConfig | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
