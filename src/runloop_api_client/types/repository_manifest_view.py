@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
 
@@ -22,6 +23,9 @@ class ContainerConfig(BaseModel):
     Should be one of the GitHub public images like ubuntu-latest, ubuntu-24.04,
     ubuntu-22.04, windows-latest, windows-2022, macos-latest etc.
     """
+
+    architecture: Optional[Literal["x86_64", "arm64"]] = None
+    """The target architecture for the Repository Container."""
 
     setup_commands: Optional[List[str]] = None
     """
@@ -46,13 +50,16 @@ class WorkspaceDevCommands(BaseModel):
     lint: Optional[List[str]] = None
     """Lint command (e.g. flake8)."""
 
+    scripts: Optional[List[str]] = None
+    """Script commands."""
+
     test: Optional[List[str]] = None
     """Test command (e.g. pytest)."""
 
 
 class Workspace(BaseModel):
-    package_manager: List[str]
-    """Name of the package manager used (e.g. pip, npm)."""
+    build_tool: List[str]
+    """Name of the build tool used (e.g. pip, npm)."""
 
     dev_commands: Optional[WorkspaceDevCommands] = None
     """
@@ -72,12 +79,6 @@ class Workspace(BaseModel):
 
     Can be empty if the workspace is the root of the repository. Only necessary for
     monorepo style repositories.
-    """
-
-    required_env_vars: Optional[List[str]] = None
-    """
-    Environment variables that are required to be set for this workspace to run
-    correctly.
     """
 
     workspace_refresh_commands: Optional[List[str]] = None
@@ -132,9 +133,6 @@ class RepositoryManifestView(BaseModel):
     languages: List[Language]
     """List of required languages found in Repository."""
 
-    workflows: List[str]
-    """The workflow(s) that were selected to build the manifest for this repo."""
-
     workspaces: List[Workspace]
     """List of workspaces within the repository.
 
@@ -145,4 +143,16 @@ class RepositoryManifestView(BaseModel):
     """List of discovered ContainerizedServices.
 
     Services can be explicitly started when creating a Devbox.
+    """
+
+    env_vars: Optional[Dict[str, str]] = None
+    """
+    Qualified environment variables and values that should be set for this
+    repository to run correctly.
+    """
+
+    required_env_vars: Optional[List[str]] = None
+    """
+    Missing environment variables that (may) be required for this repository to run
+    correctly.
     """
