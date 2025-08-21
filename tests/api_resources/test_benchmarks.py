@@ -33,6 +33,8 @@ class TestBenchmarks:
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.create(
             name="name",
+            attribution="attribution",
+            description="description",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
             required_secret_names=["string"],
@@ -115,6 +117,8 @@ class TestBenchmarks:
         benchmark = client.benchmarks.update(
             id="id",
             name="name",
+            attribution="attribution",
+            description="description",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
             required_secret_names=["string"],
@@ -331,6 +335,8 @@ class TestAsyncBenchmarks:
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.create(
             name="name",
+            attribution="attribution",
+            description="description",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
             required_secret_names=["string"],
@@ -413,6 +419,8 @@ class TestAsyncBenchmarks:
         benchmark = await async_client.benchmarks.update(
             id="id",
             name="name",
+            attribution="attribution",
+            description="description",
             metadata={"foo": "string"},
             required_environment_variables=["string"],
             required_secret_names=["string"],

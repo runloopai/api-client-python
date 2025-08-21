@@ -21,7 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import secrets, blueprints, repositories
+from .resources import objects, secrets, blueprints, repositories
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import RunloopError, APIStatusError
 from ._base_client import (
@@ -41,6 +41,7 @@ class Runloop(SyncAPIClient):
     blueprints: blueprints.BlueprintsResource
     devboxes: devboxes.DevboxesResource
     scenarios: scenarios.ScenariosResource
+    objects: objects.ObjectsResource
     repositories: repositories.RepositoriesResource
     secrets: secrets.SecretsResource
     with_raw_response: RunloopWithRawResponse
@@ -106,6 +107,7 @@ class Runloop(SyncAPIClient):
         self.blueprints = blueprints.BlueprintsResource(self)
         self.devboxes = devboxes.DevboxesResource(self)
         self.scenarios = scenarios.ScenariosResource(self)
+        self.objects = objects.ObjectsResource(self)
         self.repositories = repositories.RepositoriesResource(self)
         self.secrets = secrets.SecretsResource(self)
         self.with_raw_response = RunloopWithRawResponse(self)
@@ -221,6 +223,7 @@ class AsyncRunloop(AsyncAPIClient):
     blueprints: blueprints.AsyncBlueprintsResource
     devboxes: devboxes.AsyncDevboxesResource
     scenarios: scenarios.AsyncScenariosResource
+    objects: objects.AsyncObjectsResource
     repositories: repositories.AsyncRepositoriesResource
     secrets: secrets.AsyncSecretsResource
     with_raw_response: AsyncRunloopWithRawResponse
@@ -286,6 +289,7 @@ class AsyncRunloop(AsyncAPIClient):
         self.blueprints = blueprints.AsyncBlueprintsResource(self)
         self.devboxes = devboxes.AsyncDevboxesResource(self)
         self.scenarios = scenarios.AsyncScenariosResource(self)
+        self.objects = objects.AsyncObjectsResource(self)
         self.repositories = repositories.AsyncRepositoriesResource(self)
         self.secrets = secrets.AsyncSecretsResource(self)
         self.with_raw_response = AsyncRunloopWithRawResponse(self)
@@ -402,6 +406,7 @@ class RunloopWithRawResponse:
         self.blueprints = blueprints.BlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithRawResponse(client.devboxes)
         self.scenarios = scenarios.ScenariosResourceWithRawResponse(client.scenarios)
+        self.objects = objects.ObjectsResourceWithRawResponse(client.objects)
         self.repositories = repositories.RepositoriesResourceWithRawResponse(client.repositories)
         self.secrets = secrets.SecretsResourceWithRawResponse(client.secrets)
 
@@ -412,6 +417,7 @@ class AsyncRunloopWithRawResponse:
         self.blueprints = blueprints.AsyncBlueprintsResourceWithRawResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithRawResponse(client.devboxes)
         self.scenarios = scenarios.AsyncScenariosResourceWithRawResponse(client.scenarios)
+        self.objects = objects.AsyncObjectsResourceWithRawResponse(client.objects)
         self.repositories = repositories.AsyncRepositoriesResourceWithRawResponse(client.repositories)
         self.secrets = secrets.AsyncSecretsResourceWithRawResponse(client.secrets)
 
@@ -422,6 +428,7 @@ class RunloopWithStreamedResponse:
         self.blueprints = blueprints.BlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.DevboxesResourceWithStreamingResponse(client.devboxes)
         self.scenarios = scenarios.ScenariosResourceWithStreamingResponse(client.scenarios)
+        self.objects = objects.ObjectsResourceWithStreamingResponse(client.objects)
         self.repositories = repositories.RepositoriesResourceWithStreamingResponse(client.repositories)
         self.secrets = secrets.SecretsResourceWithStreamingResponse(client.secrets)
 
@@ -432,6 +439,7 @@ class AsyncRunloopWithStreamedResponse:
         self.blueprints = blueprints.AsyncBlueprintsResourceWithStreamingResponse(client.blueprints)
         self.devboxes = devboxes.AsyncDevboxesResourceWithStreamingResponse(client.devboxes)
         self.scenarios = scenarios.AsyncScenariosResourceWithStreamingResponse(client.scenarios)
+        self.objects = objects.AsyncObjectsResourceWithStreamingResponse(client.objects)
         self.repositories = repositories.AsyncRepositoriesResourceWithStreamingResponse(client.repositories)
         self.secrets = secrets.AsyncSecretsResourceWithStreamingResponse(client.secrets)
 

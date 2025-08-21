@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .objects import (
+    ObjectsResource,
+    AsyncObjectsResource,
+    ObjectsResourceWithRawResponse,
+    AsyncObjectsResourceWithRawResponse,
+    ObjectsResourceWithStreamingResponse,
+    AsyncObjectsResourceWithStreamingResponse,
+)
 from .secrets import (
     SecretsResource,
     AsyncSecretsResource,
@@ -74,6 +82,12 @@ __all__ = [
     "AsyncScenariosResourceWithRawResponse",
     "ScenariosResourceWithStreamingResponse",
     "AsyncScenariosResourceWithStreamingResponse",
+    "ObjectsResource",
+    "AsyncObjectsResource",
+    "ObjectsResourceWithRawResponse",
+    "AsyncObjectsResourceWithRawResponse",
+    "ObjectsResourceWithStreamingResponse",
+    "AsyncObjectsResourceWithStreamingResponse",
     "RepositoriesResource",
     "AsyncRepositoriesResource",
     "RepositoriesResourceWithRawResponse",
