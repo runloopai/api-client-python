@@ -1,7 +1,7 @@
 # Shared Types
 
 ```python
-from runloop_api_client.types import AfterIdle, CodeMountParameters, LaunchParameters
+from runloop_api_client.types import AfterIdle, CodeMountParameters, LaunchParameters, RunProfile
 ```
 
 # Benchmarks
@@ -322,6 +322,29 @@ Methods:
 - <code title="post /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_update_response.py">ScorerUpdateResponse</a></code>
 - <code title="get /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_list_response.py">SyncScenarioScorersCursorIDPage[ScorerListResponse]</a></code>
 - <code title="post /v1/scenarios/scorers/{id}/validate">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">validate</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_validate_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_validate_response.py">ScorerValidateResponse</a></code>
+
+# Objects
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    ObjectCreateParameters,
+    ObjectDownloadURLView,
+    ObjectListView,
+    ObjectView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/objects">client.objects.<a href="./src/runloop_api_client/resources/objects.py">create</a>(\*\*<a href="src/runloop_api_client/types/object_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_view.py">ObjectView</a></code>
+- <code title="get /v1/objects/{id}">client.objects.<a href="./src/runloop_api_client/resources/objects.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/object_view.py">ObjectView</a></code>
+- <code title="get /v1/objects">client.objects.<a href="./src/runloop_api_client/resources/objects.py">list</a>(\*\*<a href="src/runloop_api_client/types/object_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_view.py">SyncObjectsCursorIDPage[ObjectView]</a></code>
+- <code title="post /v1/objects/{id}/delete">client.objects.<a href="./src/runloop_api_client/resources/objects.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/object_view.py">ObjectView</a></code>
+- <code title="post /v1/objects/{id}/complete">client.objects.<a href="./src/runloop_api_client/resources/objects.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/object_view.py">ObjectView</a></code>
+- <code title="get /v1/objects/{id}/download">client.objects.<a href="./src/runloop_api_client/resources/objects.py">download</a>(id, \*\*<a href="src/runloop_api_client/types/object_download_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_download_url_view.py">ObjectDownloadURLView</a></code>
+- <code title="get /v1/objects/list_public">client.objects.<a href="./src/runloop_api_client/resources/objects.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/object_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_view.py">SyncObjectsCursorIDPage[ObjectView]</a></code>
 
 # Repositories
 
