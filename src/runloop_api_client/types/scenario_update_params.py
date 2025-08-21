@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, List, Optional
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
 
 from .input_context_update_param import InputContextUpdateParam
 from .scenario_environment_param import ScenarioEnvironmentParam
@@ -40,3 +40,6 @@ class ScenarioUpdateParams(TypedDict, total=False):
 
     scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""
+
+    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]]
+    """Validation strategy."""

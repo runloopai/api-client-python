@@ -12,6 +12,12 @@ class BenchmarkCreateParams(TypedDict, total=False):
     name: Required[str]
     """The name of the Benchmark. This must be unique."""
 
+    attribution: Optional[str]
+    """Attribution information for the benchmark."""
+
+    description: Optional[str]
+    """Detailed description of the benchmark."""
+
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the benchmark for organization."""
 

@@ -36,6 +36,7 @@ from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPag
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.benchmark_view import BenchmarkView
 from ...types.benchmark_run_view import BenchmarkRunView
+from ...types.shared_params.run_profile import RunProfile
 from ...types.scenario_definition_list_view import ScenarioDefinitionListView
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
@@ -69,6 +70,8 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: List[str] | NotGiven = NOT_GIVEN,
@@ -86,6 +89,10 @@ class BenchmarksResource(SyncAPIResource):
 
         Args:
           name: The name of the Benchmark. This must be unique.
+
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
@@ -113,6 +120,8 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
@@ -168,6 +177,8 @@ class BenchmarksResource(SyncAPIResource):
         id: str,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: List[str] | NotGiven = NOT_GIVEN,
@@ -185,6 +196,10 @@ class BenchmarksResource(SyncAPIResource):
 
         Args:
           name: The name of the Benchmark. This must be unique.
+
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
@@ -214,6 +229,8 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
@@ -380,7 +397,7 @@ class BenchmarksResource(SyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -461,6 +478,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: List[str] | NotGiven = NOT_GIVEN,
@@ -478,6 +497,10 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
         Args:
           name: The name of the Benchmark. This must be unique.
+
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
@@ -505,6 +528,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
@@ -560,6 +585,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         id: str,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: List[str] | NotGiven = NOT_GIVEN,
@@ -577,6 +604,10 @@ class AsyncBenchmarksResource(AsyncAPIResource):
 
         Args:
           name: The name of the Benchmark. This must be unique.
+
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
 
           metadata: User defined metadata to attach to the benchmark for organization.
 
@@ -606,6 +637,8 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
@@ -772,7 +805,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

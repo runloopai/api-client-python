@@ -6,8 +6,9 @@ from typing import Dict, Optional
 from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
+from .shared_params.run_profile import RunProfile
 
-__all__ = ["BenchmarkStartRunParams", "RunProfile"]
+__all__ = ["BenchmarkStartRunParams"]
 
 
 class BenchmarkStartRunParams(TypedDict, total=False):
@@ -22,23 +23,3 @@ class BenchmarkStartRunParams(TypedDict, total=False):
 
     run_profile: Annotated[Optional[RunProfile], PropertyInfo(alias="runProfile")]
     """Runtime configuration to use for this benchmark run"""
-
-
-class RunProfile(TypedDict, total=False):
-    env_vars: Annotated[Optional[Dict[str, str]], PropertyInfo(alias="envVars")]
-    """Mapping of Environment Variable to Value.
-
-    May be shown in devbox logging. Example: {"DB_PASS": "DATABASE_PASSWORD"} would
-    set the environment variable 'DB_PASS' to the value 'DATABASE_PASSWORD_VALUE'.
-    """
-
-    purpose: Optional[str]
-    """Purpose of the run."""
-
-    secrets: Optional[Dict[str, str]]
-    """Mapping of Environment Variable to User Secret Name.
-
-    Never shown in devbox logging. Example: {"DB_PASS": "DATABASE_PASSWORD"} would
-    set the environment variable 'DB_PASS' to the value of the secret
-    'DATABASE_PASSWORD'.
-    """

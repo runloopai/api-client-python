@@ -15,9 +15,6 @@ class ScenarioEnvironment(BaseModel):
     launch_parameters: Optional[LaunchParameters] = None
     """Optional launch parameters to apply to the devbox environment at launch."""
 
-    prebuilt_id: Optional[str] = None
-    """Use the prebuilt with matching ID."""
-
     snapshot_id: Optional[str] = None
     """Use the snapshot with matching ID."""
 
