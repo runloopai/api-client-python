@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.56.2 (2025-08-25)
+
+Full Changelog: [v0.56.1-beta...v0.56.2](https://github.com/runloopai/api-client-python/compare/v0.56.1-beta...v0.56.2)
+
+### Chores
+
+* update github action ([d0a51b8](https://github.com/runloopai/api-client-python/commit/d0a51b81c7cda9e63bc4c6a314effbdfadacd7b2))
+
 ## 0.56.1-beta (2025-08-21)
 
 Full Changelog: [v0.55.2...v0.56.1-beta](https://github.com/runloopai/api-client-python/compare/v0.55.2...v0.56.1-beta)

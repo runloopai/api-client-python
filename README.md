@@ -17,7 +17,7 @@ The REST API documentation can be found on [runloop.ai](https://runloop.ai). The
 
 ```sh
 # install from PyPI
-pip install --pre runloop_api_client
+pip install runloop_api_client
 ```
 
 ## Usage
@@ -73,7 +73,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install --pre runloop_api_client[aiohttp]
+pip install runloop_api_client[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
