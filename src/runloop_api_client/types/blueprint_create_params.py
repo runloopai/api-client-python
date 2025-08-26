@@ -33,6 +33,9 @@ class BlueprintCreateParams(TypedDict, total=False):
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure your Devbox at launch time."""
 
+    metadata: Optional[Dict[str, str]]
+    """(Optional) User defined metadata for the Blueprint."""
+
     services: Optional[Iterable[Service]]
     """(Optional) List of containerized services to include in the Blueprint.
 

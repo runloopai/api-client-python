@@ -6,6 +6,7 @@ from typing import Dict, Optional
 from typing_extensions import Annotated, TypedDict
 
 from ..._utils import PropertyInfo
+from .launch_parameters import LaunchParameters
 
 __all__ = ["RunProfile"]
 
@@ -17,6 +18,9 @@ class RunProfile(TypedDict, total=False):
     May be shown in devbox logging. Example: {"DB_PASS": "DATABASE_PASSWORD"} would
     set the environment variable 'DB_PASS' to the value 'DATABASE_PASSWORD_VALUE'.
     """
+
+    launch_parameters: Annotated[Optional[LaunchParameters], PropertyInfo(alias="launchParameters")]
+    """Additional runtime LaunchParameters to apply after the devbox starts."""
 
     purpose: Optional[str]
     """Purpose of the run."""
