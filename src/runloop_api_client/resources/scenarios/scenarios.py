@@ -450,6 +450,7 @@ class ScenariosResource(SyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -465,6 +466,7 @@ class ScenariosResource(SyncAPIResource):
             scenario_id: ID of the Scenario to run
             benchmark_run_id: Benchmark to associate the run
             run_name: Display name of the run
+            run_profile: Runtime configuration to use for this benchmark run
             polling_config: Optional polling configuration
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
@@ -484,6 +486,7 @@ class ScenariosResource(SyncAPIResource):
             benchmark_run_id=benchmark_run_id,
             metadata=metadata,
             run_name=run_name,
+            run_profile=run_profile,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -895,6 +898,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
         polling_config: PollingConfig | None = None,
     ) -> ScenarioRunView:
         """Start a new ScenarioRun and wait for its environment to be ready.
@@ -903,6 +907,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             scenario_id: ID of the Scenario to run
             benchmark_run_id: Benchmark to associate the run
             run_name: Display name of the run
+            run_profile: Runtime configuration to use for this benchmark run
             polling_config: Optional polling configuration
 
         Returns:
@@ -917,6 +922,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             benchmark_run_id=benchmark_run_id,
             metadata=metadata,
             run_name=run_name,
+            run_profile=run_profile,
         )
 
         await self._client.devboxes.await_running(
@@ -925,6 +931,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         )
 
         return run
+
 
 class ScenariosResourceWithRawResponse:
     def __init__(self, scenarios: ScenariosResource) -> None:
