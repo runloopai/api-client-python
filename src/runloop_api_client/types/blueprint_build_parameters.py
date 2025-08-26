@@ -62,6 +62,9 @@ class BlueprintBuildParameters(BaseModel):
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
 
+    metadata: Optional[Dict[str, str]] = None
+    """(Optional) User defined metadata for the Blueprint."""
+
     services: Optional[List[Service]] = None
     """(Optional) List of containerized services to include in the Blueprint.
 
