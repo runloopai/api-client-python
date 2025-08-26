@@ -63,6 +63,7 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
+            metadata={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -327,6 +328,7 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
+            metadata={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -415,6 +417,7 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
+            metadata={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -679,6 +682,7 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
+            metadata={"foo": "string"},
             services=[
                 {
                     "image": "image",
