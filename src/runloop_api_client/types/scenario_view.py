@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
 from .input_context import InputContext
@@ -51,3 +52,6 @@ class ScenarioView(BaseModel):
 
     If any required secrets are missing, the scenario will fail to start.
     """
+
+    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] = None
+    """Validation strategy."""

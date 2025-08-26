@@ -1,12 +1,36 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, List, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
 from .repository_manifest_view import RepositoryManifestView
 
-__all__ = ["RepositoryInspectionDetails"]
+__all__ = ["RepositoryInspectionDetails", "WorkflowContexts", "WorkflowContextsActionsContext"]
+
+
+class WorkflowContextsActionsContext(BaseModel):
+    actions_skipped_unnecessary: List[str]
+    """
+    Actions that were skipped because they were unnecessary (e.g., upload
+    artifacts).
+    """
+
+    actions_taken: List[str]
+    """Actions that were translated into commands and executed."""
+
+    actions_unknown: List[str]
+    """
+    Actions that were not understood and skipped because we did not know what to do.
+    """
+
+
+class WorkflowContexts(BaseModel):
+    actions_context: WorkflowContextsActionsContext
+    """Details about actions processing for this workflow."""
+
+    file_name: str
+    """The file name of the workflow."""
 
 
 class RepositoryInspectionDetails(BaseModel):
@@ -48,3 +72,6 @@ class RepositoryInspectionDetails(BaseModel):
     User uploaded repository manifest containing container config and workspace
     details.
     """
+
+    workflow_contexts: Optional[Dict[str, WorkflowContexts]] = None
+    """Workflow contexts mapping workflow names to their processing details."""

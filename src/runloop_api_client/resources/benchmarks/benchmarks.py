@@ -36,6 +36,7 @@ from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPag
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.benchmark_view import BenchmarkView
 from ...types.benchmark_run_view import BenchmarkRunView
+from ...types.shared_params.run_profile import RunProfile
 from ...types.scenario_definition_list_view import ScenarioDefinitionListView
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
@@ -69,9 +70,11 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: List[str] | NotGiven = NOT_GIVEN,
+        required_secret_names: List[str] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -87,14 +90,18 @@ class BenchmarksResource(SyncAPIResource):
         Args:
           name: The name of the Benchmark. This must be unique.
 
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
+
           metadata: User defined metadata to attach to the benchmark for organization.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
               are not supplied, the benchmark will fail to start
 
-          required_secrets: Secrets required to run the benchmark with (user secret name will be mapped to
-              benchmark required secret name). If any of these secrets are not provided or the
-              mapping is incorrect, the benchmark will fail to start.
+          required_secret_names: Secrets required to run the benchmark with (environment variable name will be
+              mapped to the your user secret by name). If any of these secrets are not
+              provided or the mapping is incorrect, the benchmark will fail to start.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -113,9 +120,11 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -168,9 +177,11 @@ class BenchmarksResource(SyncAPIResource):
         id: str,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: List[str] | NotGiven = NOT_GIVEN,
+        required_secret_names: List[str] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -186,14 +197,18 @@ class BenchmarksResource(SyncAPIResource):
         Args:
           name: The name of the Benchmark. This must be unique.
 
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
+
           metadata: User defined metadata to attach to the benchmark for organization.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
               are not supplied, the benchmark will fail to start
 
-          required_secrets: Secrets required to run the benchmark with (user secret name will be mapped to
-              benchmark required secret name). If any of these secrets are not provided or the
-              mapping is incorrect, the benchmark will fail to start.
+          required_secret_names: Secrets required to run the benchmark with (environment variable name will be
+              mapped to the your user secret by name). If any of these secrets are not
+              provided or the mapping is incorrect, the benchmark will fail to start.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -214,9 +229,11 @@ class BenchmarksResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_update_params.BenchmarkUpdateParams,
@@ -380,7 +397,7 @@ class BenchmarksResource(SyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -461,9 +478,11 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: List[str] | NotGiven = NOT_GIVEN,
+        required_secret_names: List[str] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -479,14 +498,18 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Args:
           name: The name of the Benchmark. This must be unique.
 
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
+
           metadata: User defined metadata to attach to the benchmark for organization.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
               are not supplied, the benchmark will fail to start
 
-          required_secrets: Secrets required to run the benchmark with (user secret name will be mapped to
-              benchmark required secret name). If any of these secrets are not provided or the
-              mapping is incorrect, the benchmark will fail to start.
+          required_secret_names: Secrets required to run the benchmark with (environment variable name will be
+              mapped to the your user secret by name). If any of these secrets are not
+              provided or the mapping is incorrect, the benchmark will fail to start.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -505,9 +528,11 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_create_params.BenchmarkCreateParams,
@@ -560,9 +585,11 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         id: str,
         *,
         name: str,
+        attribution: Optional[str] | NotGiven = NOT_GIVEN,
+        description: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: List[str] | NotGiven = NOT_GIVEN,
+        required_secret_names: List[str] | NotGiven = NOT_GIVEN,
         scenario_ids: Optional[List[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -578,14 +605,18 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Args:
           name: The name of the Benchmark. This must be unique.
 
+          attribution: Attribution information for the benchmark.
+
+          description: Detailed description of the benchmark.
+
           metadata: User defined metadata to attach to the benchmark for organization.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
               are not supplied, the benchmark will fail to start
 
-          required_secrets: Secrets required to run the benchmark with (user secret name will be mapped to
-              benchmark required secret name). If any of these secrets are not provided or the
-              mapping is incorrect, the benchmark will fail to start.
+          required_secret_names: Secrets required to run the benchmark with (environment variable name will be
+              mapped to the your user secret by name). If any of these secrets are not
+              provided or the mapping is incorrect, the benchmark will fail to start.
 
           scenario_ids: The Scenario IDs that make up the Benchmark.
 
@@ -606,9 +637,11 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "attribution": attribution,
+                    "description": description,
                     "metadata": metadata,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,
                 },
                 benchmark_update_params.BenchmarkUpdateParams,
@@ -772,7 +805,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         benchmark_id: str,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[benchmark_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

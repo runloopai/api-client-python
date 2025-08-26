@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional, cast
+from typing import Dict, Mapping, Iterable, Optional, TypedDict, cast
 from typing_extensions import Literal
 
 import httpx
@@ -110,9 +110,18 @@ from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxesResource", "AsyncDevboxesResource"]
+__all__ = ["DevboxesResource", "AsyncDevboxesResource", "DevboxRequestArgs"]
 
 DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+
+
+# Type for request arguments that combine polling config with additional request options
+class DevboxRequestArgs(TypedDict, total=False):
+    polling_config: PollingConfig | None
+    extra_headers: Headers | None
+    extra_query: Query | None
+    extra_body: Body | None
+    timeout: float | httpx.Timeout | None | NotGiven
 
 
 def placeholder_devbox_view(id: str) -> DevboxView:
@@ -183,7 +192,6 @@ class DevboxesResource(SyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -228,9 +236,6 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-              together with (Snapshot ID, Blueprint ID, or Blueprint name).
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -264,7 +269,6 @@ class DevboxesResource(SyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -435,11 +439,10 @@ class DevboxesResource(SyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -450,37 +453,11 @@ class DevboxesResource(SyncAPIResource):
     ) -> DevboxView:
         """Create a new devbox and wait for it to be in running state.
 
+        This is a wrapper around the `create` method that waits for the devbox to reach running state.
+
         Args:
-            blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
-                the default Runloop Devbox image. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            blueprint_name: Name of Blueprint to use for the Devbox. When set, this will load the latest
-                successfully built Blueprint with the given name. Only one of (Snapshot ID,
-                Blueprint ID, Blueprint name) should be specified.
-            code_mounts: A list of code mounts to be included in the Devbox.
-            entrypoint: (Optional) When specified, the Devbox will run this script as its main
-                executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-                the process is complete.
-            environment_variables: (Optional) Environment variables used to configure your Devbox.
-            file_mounts: (Optional) Map of paths and file contents to write before setup.
-            launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
-            metadata: User defined metadata to attach to the devbox for organization.
-            name: (Optional) A user specified name to give the Devbox.
-            prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-                together with (Snapshot ID, Blueprint ID, or Blueprint name).
-            repo_connection_id: Repository connection id the devbox should source its base image from.
-            secrets: (Optional) Map of environment variable names to secret names. The secret values
-                will be securely injected as environment variables in the Devbox. Example:
-                {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
-                value of secret 'DATABASE_PASSWORD'.
-            snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
+            create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
+            request_args: Optional request arguments including polling configuration and additional request options
 
         Returns:
             The devbox in running state
@@ -489,6 +466,7 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
+        # Pass all create_args to the underlying create method
         devbox = self.create(
             blueprint_id=blueprint_id,
             blueprint_name=blueprint_name,
@@ -499,7 +477,6 @@ class DevboxesResource(SyncAPIResource):
             launch_parameters=launch_parameters,
             metadata=metadata,
             name=name,
-            prebuilt=prebuilt,
             repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
@@ -1305,9 +1282,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         path: str,
-        chmod: Optional[str] | NotGiven = NOT_GIVEN,
         file: FileTypes | NotGiven = NOT_GIVEN,
-        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1326,12 +1301,6 @@ class DevboxesResource(SyncAPIResource):
           path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
 
-          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
-              specified, default system permissions will be used.
-
-          owner: File owner username. Optional. If not specified, the file will be owned by the
-              current user.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1349,9 +1318,7 @@ class DevboxesResource(SyncAPIResource):
         body = deepcopy_minimal(
             {
                 "path": path,
-                "chmod": chmod,
                 "file": file,
-                "owner": owner,
             }
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
@@ -1379,8 +1346,6 @@ class DevboxesResource(SyncAPIResource):
         *,
         contents: str,
         file_path: str,
-        chmod: Optional[str] | NotGiven = NOT_GIVEN,
-        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1399,12 +1364,6 @@ class DevboxesResource(SyncAPIResource):
 
           file_path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
-
-          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
-              specified, default system permissions will be used.
-
-          owner: File owner username. Optional. If not specified, the file will be owned by the
-              current user.
 
           extra_headers: Send extra headers
 
@@ -1426,8 +1385,6 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "contents": contents,
                     "file_path": file_path,
-                    "chmod": chmod,
-                    "owner": owner,
                 },
                 devbox_write_file_contents_params.DevboxWriteFileContentsParams,
             ),
@@ -1498,7 +1455,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
@@ -1543,9 +1499,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-              together with (Snapshot ID, Blueprint ID, or Blueprint name).
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -1579,7 +1532,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "name": name,
-                    "prebuilt": prebuilt,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -1641,11 +1593,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         name: Optional[str] | NotGiven = NOT_GIVEN,
-        prebuilt: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
         repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
         secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         snapshot_id: Optional[str] | NotGiven = NOT_GIVEN,
-        polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1656,37 +1607,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
     ) -> DevboxView:
         """Create a devbox and wait for it to be in running state.
 
+        This is a wrapper around the `create` method that waits for the devbox to reach running state.
+
         Args:
-            blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
-                the default Runloop Devbox image. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
-            blueprint_name: Name of Blueprint to use for the Devbox. When set, this will load the latest
-                successfully built Blueprint with the given name. Only one of (Snapshot ID,
-                Blueprint ID, Blueprint name) should be specified.
-            code_mounts: A list of code mounts to be included in the Devbox.
-            entrypoint: (Optional) When specified, the Devbox will run this script as its main
-                executable. The devbox lifecycle will be bound to entrypoint, shutting down when
-                the process is complete.
-            environment_variables: (Optional) Environment variables used to configure your Devbox.
-            file_mounts: (Optional) Map of paths and file contents to write before setup.
-            launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
-            metadata: User defined metadata to attach to the devbox for organization.
-            name: (Optional) A user specified name to give the Devbox.
-            prebuilt: Reference to prebuilt Blueprint to create the Devbox from. Should not be used
-                together with (Snapshot ID, Blueprint ID, or Blueprint name).
-            repo_connection_id: Repository connection id the devbox should source its base image from.
-            secrets: (Optional) Map of environment variable names to secret names. The secret values
-                will be securely injected as environment variables in the Devbox. Example:
-                {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
-                value of secret 'DATABASE_PASSWORD'.
-            snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
-                Blueprint name) should be specified.
+            See the `create` method for detailed documentation.
             polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-            idempotency_key: Specify a custom idempotency key for this request
 
         Returns:
             The devbox in running state
@@ -1695,6 +1620,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
+
+        # Pass all create_args, relevant request args to the underlying create method
         devbox = await self.create(
             blueprint_id=blueprint_id,
             blueprint_name=blueprint_name,
@@ -1705,7 +1632,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             launch_parameters=launch_parameters,
             metadata=metadata,
             name=name,
-            prebuilt=prebuilt,
             repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
@@ -2618,9 +2544,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         path: str,
-        chmod: Optional[str] | NotGiven = NOT_GIVEN,
         file: FileTypes | NotGiven = NOT_GIVEN,
-        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2639,12 +2563,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
           path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
 
-          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
-              specified, default system permissions will be used.
-
-          owner: File owner username. Optional. If not specified, the file will be owned by the
-              current user.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2662,9 +2580,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         body = deepcopy_minimal(
             {
                 "path": path,
-                "chmod": chmod,
                 "file": file,
-                "owner": owner,
             }
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
@@ -2692,8 +2608,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         contents: str,
         file_path: str,
-        chmod: Optional[str] | NotGiven = NOT_GIVEN,
-        owner: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2712,12 +2626,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           file_path: The path to write the file to on the Devbox. Path is relative to user home
               directory.
-
-          chmod: File permissions in octal format (e.g., "644", "1755"). Optional. If not
-              specified, default system permissions will be used.
-
-          owner: File owner username. Optional. If not specified, the file will be owned by the
-              current user.
 
           extra_headers: Send extra headers
 
@@ -2739,8 +2647,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "contents": contents,
                     "file_path": file_path,
-                    "chmod": chmod,
-                    "owner": owner,
                 },
                 devbox_write_file_contents_params.DevboxWriteFileContentsParams,
             ),

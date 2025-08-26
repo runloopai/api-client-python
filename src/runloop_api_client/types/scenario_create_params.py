@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, List, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .input_context_param import InputContextParam
 from .scoring_contract_param import ScoringContractParam
@@ -47,3 +47,6 @@ class ScenarioCreateParams(TypedDict, total=False):
     secret name). If these secrets are not provided or the mapping is incorrect, the
     scenario will fail to start.
     """
+
+    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]]
+    """Validation strategy."""

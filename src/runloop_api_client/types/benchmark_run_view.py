@@ -43,4 +43,9 @@ class BenchmarkRunView(BaseModel):
     """
 
     secrets_provided: Optional[Dict[str, str]] = None
-    """User secrets used to run the benchmark."""
+    """User secrets used to run the benchmark.
+
+    Example: {"DB_PASS": "DATABASE_PASSWORD"} would set the environment variable
+    'DB_PASS' on all scenario devboxes to the value of the secret
+    'DATABASE_PASSWORD'.
+    """

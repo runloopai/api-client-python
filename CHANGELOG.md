@@ -1,5 +1,54 @@
 # Changelog
 
+## 0.56.2 (2025-08-25)
+
+Full Changelog: [v0.56.1-beta...v0.56.2](https://github.com/runloopai/api-client-python/compare/v0.56.1-beta...v0.56.2)
+
+### Chores
+
+* update github action ([d0a51b8](https://github.com/runloopai/api-client-python/commit/d0a51b81c7cda9e63bc4c6a314effbdfadacd7b2))
+
+## 0.56.1-beta (2025-08-21)
+
+Full Changelog: [v0.55.2...v0.56.1-beta](https://github.com/runloopai/api-client-python/compare/v0.55.2...v0.56.1-beta)
+
+### Features
+
+* **api:** api update ([9ad6951](https://github.com/runloopai/api-client-python/commit/9ad69513705ef867763ef306c15af777de542437))
+
+## 0.55.2 (2025-08-19)
+
+Full Changelog: [v0.55.1...v0.55.2](https://github.com/runloopai/api-client-python/compare/v0.55.1...v0.55.2)
+
+## 0.55.1 (2025-08-19)
+
+Full Changelog: [v0.55.0...v0.55.1](https://github.com/runloopai/api-client-python/compare/v0.55.0...v0.55.1)
+
+## 0.55.0 (2025-08-19)
+
+Full Changelog: [v0.54.0...v0.55.0](https://github.com/runloopai/api-client-python/compare/v0.54.0...v0.55.0)
+
+### Features
+
+* **api:** api update ([b861c73](https://github.com/runloopai/api-client-python/commit/b861c73595eb0d0744a7a3d81bb46cc2cc397486))
+* **api:** api update ([06ec7b9](https://github.com/runloopai/api-client-python/commit/06ec7b9b9b47b96c1876427f74a063640a4f6fb7))
+
+
+### Chores
+
+* **internal:** fix ruff target version ([91fb064](https://github.com/runloopai/api-client-python/commit/91fb0649d64f4982c292330ade9f61b26ff4841c))
+* **internal:** update comment in script ([4b8d5ba](https://github.com/runloopai/api-client-python/commit/4b8d5ba0dd2553ca32f56876bd6a20ec04991778))
+* update @stainless-api/prism-cli to v5.15.0 ([3119d91](https://github.com/runloopai/api-client-python/commit/3119d91af94985c86961db8b137753f70ef13748))
+
+## 0.54.0 (2025-08-05)
+
+Full Changelog: [v0.53.0...v0.54.0](https://github.com/runloopai/api-client-python/compare/v0.53.0...v0.54.0)
+
+### Features
+
+* **api:** api update ([9d40ca4](https://github.com/runloopai/api-client-python/commit/9d40ca48745596ae2fa29ea3ad7fba93961eb801))
+* **client:** support file upload requests ([5742a4b](https://github.com/runloopai/api-client-python/commit/5742a4ba701938607996b278531234121f81776d))
+
 ## 0.53.0 (2025-07-30)
 
 Full Changelog: [v0.52.0...v0.53.0](https://github.com/runloopai/api-client-python/compare/v0.52.0...v0.53.0)

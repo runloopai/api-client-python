@@ -84,7 +84,6 @@ class TestDevboxes:
             },
             metadata={"foo": "string"},
             name="name",
-            prebuilt="prebuilt",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
@@ -887,9 +886,7 @@ class TestDevboxes:
         devbox = client.devboxes.upload_file(
             id="id",
             path="path",
-            chmod="chmod",
             file=b"raw file contents",
-            owner="owner",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -933,17 +930,6 @@ class TestDevboxes:
             id="id",
             contents="contents",
             file_path="file_path",
-        )
-        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
-
-    @parametrize
-    def test_method_write_file_contents_with_all_params(self, client: Runloop) -> None:
-        devbox = client.devboxes.write_file_contents(
-            id="id",
-            contents="contents",
-            file_path="file_path",
-            chmod="chmod",
-            owner="owner",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
@@ -1181,7 +1167,9 @@ class TestDevboxes:
                 mock_create.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
-                result = client.devboxes.create_and_await_running(name="test")
+                result = client.devboxes.create_and_await_running(
+                    name="test",
+                )
 
                 assert result.id == "test_id"
                 assert result.status == "running"
@@ -1219,7 +1207,10 @@ class TestDevboxes:
                 mock_create.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
-                result = client.devboxes.create_and_await_running(name="test", polling_config=config)
+                result = client.devboxes.create_and_await_running(
+                    name="test",
+                    polling_config=config,
+                )
 
                 assert result.id == "test_id"
                 assert result.status == "running"
@@ -1237,7 +1228,9 @@ class TestDevboxes:
             mock_create.side_effect = mock_error
 
             with pytest.raises(APIStatusError, match="Bad request"):
-                client.devboxes.create_and_await_running(name="test")
+                client.devboxes.create_and_await_running(
+                    name="test",
+                )
 
     @parametrize
     def test_method_create_and_await_running_await_failure(self, client: Runloop) -> None:
@@ -1259,7 +1252,9 @@ class TestDevboxes:
                 mock_await.side_effect = RunloopError("Devbox entered non-running terminal state: failed")
 
                 with pytest.raises(RunloopError, match="Devbox entered non-running terminal state: failed"):
-                    client.devboxes.create_and_await_running(name="test")
+                    client.devboxes.create_and_await_running(
+                        name="test",
+                    )
 
 
 class TestAsyncDevboxes:
@@ -1309,7 +1304,6 @@ class TestAsyncDevboxes:
             },
             metadata={"foo": "string"},
             name="name",
-            prebuilt="prebuilt",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
@@ -2112,9 +2106,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.upload_file(
             id="id",
             path="path",
-            chmod="chmod",
             file=b"raw file contents",
-            owner="owner",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -2158,17 +2150,6 @@ class TestAsyncDevboxes:
             id="id",
             contents="contents",
             file_path="file_path",
-        )
-        assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
-
-    @parametrize
-    async def test_method_write_file_contents_with_all_params(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.write_file_contents(
-            id="id",
-            contents="contents",
-            file_path="file_path",
-            chmod="chmod",
-            owner="owner",
         )
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 

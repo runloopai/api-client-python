@@ -85,7 +85,6 @@ class TestScenarios:
                         "username": "username",
                     },
                 },
-                "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
@@ -93,6 +92,7 @@ class TestScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            validation_type="FORWARD",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -218,7 +218,6 @@ class TestScenarios:
                         "username": "username",
                     },
                 },
-                "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
@@ -230,7 +229,7 @@ class TestScenarios:
             name="name",
             reference_output="reference_output",
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -245,6 +244,7 @@ class TestScenarios:
                     }
                 ]
             },
+            validation_type="FORWARD",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -464,7 +464,6 @@ class TestAsyncScenarios:
                         "username": "username",
                     },
                 },
-                "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
@@ -472,6 +471,7 @@ class TestAsyncScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            validation_type="FORWARD",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -597,7 +597,6 @@ class TestAsyncScenarios:
                         "username": "username",
                     },
                 },
-                "prebuilt_id": "prebuilt_id",
                 "snapshot_id": "snapshot_id",
                 "working_directory": "working_directory",
             },
@@ -609,7 +608,7 @@ class TestAsyncScenarios:
             name="name",
             reference_output="reference_output",
             required_environment_variables=["string"],
-            required_secrets=["string"],
+            required_secret_names=["string"],
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -624,6 +623,7 @@ class TestAsyncScenarios:
                     }
                 ]
             },
+            validation_type="FORWARD",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 

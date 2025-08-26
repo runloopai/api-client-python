@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 import httpx
 
@@ -46,6 +47,7 @@ from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.input_context_param import InputContextParam
 from ...types.scoring_contract_param import ScoringContractParam
+from ...types.shared_params.run_profile import RunProfile
 from ...types.input_context_update_param import InputContextUpdateParam
 from ...types.scenario_environment_param import ScenarioEnvironmentParam
 from ...types.scoring_contract_update_param import ScoringContractUpdateParam
@@ -92,6 +94,7 @@ class ScenariosResource(SyncAPIResource):
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -126,6 +129,8 @@ class ScenariosResource(SyncAPIResource):
               secret name). If these secrets are not provided or the mapping is incorrect, the
               scenario will fail to start.
 
+          validation_type: Validation strategy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -148,6 +153,7 @@ class ScenariosResource(SyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "validation_type": validation_type,
                 },
                 scenario_create_params.ScenarioCreateParams,
             ),
@@ -204,8 +210,9 @@ class ScenariosResource(SyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
+        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -234,9 +241,11 @@ class ScenariosResource(SyncAPIResource):
 
           required_environment_variables: Environment variables required to run the scenario.
 
-          required_secrets: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario.
 
           scoring_contract: The scoring contract for the Scenario.
+
+          validation_type: Validation strategy.
 
           extra_headers: Send extra headers
 
@@ -260,8 +269,9 @@ class ScenariosResource(SyncAPIResource):
                     "name": name,
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scoring_contract": scoring_contract,
+                    "validation_type": validation_type,
                 },
                 scenario_update_params.ScenarioUpdateParams,
             ),
@@ -388,7 +398,7 @@ class ScenariosResource(SyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -541,6 +551,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
         required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -575,6 +586,8 @@ class AsyncScenariosResource(AsyncAPIResource):
               secret name). If these secrets are not provided or the mapping is incorrect, the
               scenario will fail to start.
 
+          validation_type: Validation strategy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -597,6 +610,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "validation_type": validation_type,
                 },
                 scenario_create_params.ScenarioCreateParams,
             ),
@@ -653,8 +667,9 @@ class AsyncScenariosResource(AsyncAPIResource):
         name: Optional[str] | NotGiven = NOT_GIVEN,
         reference_output: Optional[str] | NotGiven = NOT_GIVEN,
         required_environment_variables: Optional[List[str]] | NotGiven = NOT_GIVEN,
-        required_secrets: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        required_secret_names: Optional[List[str]] | NotGiven = NOT_GIVEN,
         scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
+        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -683,9 +698,11 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           required_environment_variables: Environment variables required to run the scenario.
 
-          required_secrets: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario.
 
           scoring_contract: The scoring contract for the Scenario.
+
+          validation_type: Validation strategy.
 
           extra_headers: Send extra headers
 
@@ -709,8 +726,9 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "name": name,
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
-                    "required_secrets": required_secrets,
+                    "required_secret_names": required_secret_names,
                     "scoring_contract": scoring_contract,
+                    "validation_type": validation_type,
                 },
                 scenario_update_params.ScenarioUpdateParams,
             ),
@@ -837,7 +855,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

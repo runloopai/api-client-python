@@ -52,12 +52,6 @@ class DevboxCreateParams(TypedDict, total=False):
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""
 
-    prebuilt: Optional[str]
-    """Reference to prebuilt Blueprint to create the Devbox from.
-
-    Should not be used together with (Snapshot ID, Blueprint ID, or Blueprint name).
-    """
-
     repo_connection_id: Optional[str]
     """Repository connection id the devbox should source its base image from."""
 

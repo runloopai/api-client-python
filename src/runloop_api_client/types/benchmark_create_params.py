@@ -12,6 +12,12 @@ class BenchmarkCreateParams(TypedDict, total=False):
     name: Required[str]
     """The name of the Benchmark. This must be unique."""
 
+    attribution: Optional[str]
+    """Attribution information for the benchmark."""
+
+    description: Optional[str]
+    """Detailed description of the benchmark."""
+
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the benchmark for organization."""
 
@@ -21,11 +27,11 @@ class BenchmarkCreateParams(TypedDict, total=False):
     If any required variables are not supplied, the benchmark will fail to start
     """
 
-    required_secrets: List[str]
+    required_secret_names: List[str]
     """
-    Secrets required to run the benchmark with (user secret name will be mapped to
-    benchmark required secret name). If any of these secrets are not provided or the
-    mapping is incorrect, the benchmark will fail to start.
+    Secrets required to run the benchmark with (environment variable name will be
+    mapped to the your user secret by name). If any of these secrets are not
+    provided or the mapping is incorrect, the benchmark will fail to start.
     """
 
     scenario_ids: Optional[List[str]]
