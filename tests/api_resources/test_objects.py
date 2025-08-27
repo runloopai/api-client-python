@@ -24,7 +24,7 @@ class TestObjects:
     @parametrize
     def test_method_create(self, client: Runloop) -> None:
         object_ = client.objects.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         )
         assert_matches_type(ObjectView, object_, path=["response"])
@@ -32,7 +32,7 @@ class TestObjects:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         object_ = client.objects.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
             metadata={"foo": "string"},
         )
@@ -41,7 +41,7 @@ class TestObjects:
     @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.objects.with_raw_response.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         )
 
@@ -53,7 +53,7 @@ class TestObjects:
     @parametrize
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.objects.with_streaming_response.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         ) as response:
             assert not response.is_closed
@@ -307,7 +307,7 @@ class TestAsyncObjects:
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         )
         assert_matches_type(ObjectView, object_, path=["response"])
@@ -315,7 +315,7 @@ class TestAsyncObjects:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
             metadata={"foo": "string"},
         )
@@ -324,7 +324,7 @@ class TestAsyncObjects:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.objects.with_raw_response.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         )
 
@@ -336,7 +336,7 @@ class TestAsyncObjects:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.objects.with_streaming_response.create(
-            content_type="UNSPECIFIED",
+            content_type="unspecified",
             name="name",
         ) as response:
             assert not response.is_closed
