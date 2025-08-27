@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.57.0 (2025-08-27)
+
+Full Changelog: [v0.56.2...v0.57.0](https://github.com/runloopai/api-client-python/compare/v0.56.2...v0.57.0)
+
+### Features
+
+* **api:** api update ([3a5d31a](https://github.com/runloopai/api-client-python/commit/3a5d31a6eafb76cf8013355ba22676945509681f))
+* **api:** api update ([104af9f](https://github.com/runloopai/api-client-python/commit/104af9fd5482701947186669748098b060715748))
+
+
+### Bug Fixes
+
+* avoid newer type syntax ([3412f2b](https://github.com/runloopai/api-client-python/commit/3412f2b11594e35ef48e4b283a9306eb645af6b3))
+
+
+### Chores
+
+* **internal:** change ci workflow machines ([b01847c](https://github.com/runloopai/api-client-python/commit/b01847caa9adcebfc4447c10c3723451dcb140a1))
+* **internal:** update pyright exclude list ([0da3132](https://github.com/runloopai/api-client-python/commit/0da3132fb19d9e1aac3770415b72fb1b413f3175))
+
 ## 0.56.2 (2025-08-25)
 
 Full Changelog: [v0.56.1-beta...v0.56.2](https://github.com/runloopai/api-client-python/compare/v0.56.1-beta...v0.56.2)
