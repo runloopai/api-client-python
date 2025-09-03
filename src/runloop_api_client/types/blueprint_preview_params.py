@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional
+from typing import Dict, Iterable, Optional
 from typing_extensions import Required, TypedDict
 
+from .._types import SequenceNotStr
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
@@ -43,7 +44,7 @@ class BlueprintPreviewParams(TypedDict, total=False):
     performance.
     """
 
-    system_setup_commands: Optional[List[str]]
+    system_setup_commands: Optional[SequenceNotStr[str]]
     """A list of commands to run to set up your system."""
 
 
@@ -71,7 +72,7 @@ class Service(TypedDict, total=False):
     options: Optional[str]
     """Additional Docker container create options."""
 
-    port_mappings: Optional[List[str]]
+    port_mappings: Optional[SequenceNotStr[str]]
     """The port mappings of the container service.
 
     Port mappings are in the format of <host_port>:<container_port>.

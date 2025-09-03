@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import Iterable, Optional
 from typing_extensions import Literal, Required, TypedDict
 
+from ..._types import SequenceNotStr
 from .after_idle import AfterIdle
 
 __all__ = ["LaunchParameters", "UserParameters"]
@@ -59,10 +60,10 @@ class LaunchParameters(TypedDict, total=False):
     Default is 1 hour.
     """
 
-    launch_commands: Optional[List[str]]
+    launch_commands: Optional[SequenceNotStr[str]]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
-    required_services: Optional[List[str]]
+    required_services: Optional[SequenceNotStr[str]]
     """A list of ContainerizedService names to be started when a Devbox is created.
 
     A valid ContainerizedService must be specified in Blueprint to be started.
