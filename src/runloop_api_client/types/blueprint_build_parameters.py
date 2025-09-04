@@ -50,6 +50,14 @@ class BlueprintBuildParameters(BaseModel):
     build.
     """
 
+    base_blueprint_name: Optional[str] = None
+    """
+    (Optional) Name of previously built blueprint to use as a base blueprint for
+    this build. When set, this will load the latest successfully built Blueprint
+    with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+    be specified.
+    """
+
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""
 
