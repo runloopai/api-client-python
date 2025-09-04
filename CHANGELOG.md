@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.58.0 (2025-09-04)
+
+Full Changelog: [v0.57.0...v0.58.0](https://github.com/runloopai/api-client-python/compare/v0.57.0...v0.58.0)
+
+### Features
+
+* **api:** api update ([59e649d](https://github.com/runloopai/api-client-python/commit/59e649db1632c06c7c6b7cdabaf7e42e003daa09))
+* improve future compat with pydantic v3 ([adb9765](https://github.com/runloopai/api-client-python/commit/adb97652aea509e832ab50f25d7e04e80d8fd09e))
+* **types:** replace List[str] with SequenceNotStr in params ([9c3bbcd](https://github.com/runloopai/api-client-python/commit/9c3bbcdfdaedcf60d9829bc3cad83f89c9add98a))
+
+
+### Chores
+
+* **internal:** add Sequence related utils ([dec07b5](https://github.com/runloopai/api-client-python/commit/dec07b5258bc057375c8412c76f0a7f29f12b723))
+
 ## 0.57.0 (2025-08-27)
 
 Full Changelog: [v0.56.2...v0.57.0](https://github.com/runloopai/api-client-python/compare/v0.56.2...v0.57.0)
