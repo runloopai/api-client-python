@@ -98,9 +98,9 @@ from .devbox_read_file_contents_response import DevboxReadFileContentsResponse a
 # This ensures that, when building the deferred (due to cyclical references) model schema,
 # Pydantic can resolve the necessary references.
 # See: https://github.com/pydantic/pydantic/issues/11250 for more context.
-if _compat.PYDANTIC_V2:
-    devboxes.code_segment_info_response.CodeSegmentInfoResponse.model_rebuild(_parent_namespace_depth=0)
-    devboxes.document_symbol.DocumentSymbol.model_rebuild(_parent_namespace_depth=0)
-else:
+if _compat.PYDANTIC_V1:
     devboxes.code_segment_info_response.CodeSegmentInfoResponse.update_forward_refs()  # type: ignore
     devboxes.document_symbol.DocumentSymbol.update_forward_refs()  # type: ignore
+else:
+    devboxes.code_segment_info_response.CodeSegmentInfoResponse.model_rebuild(_parent_namespace_depth=0)
+    devboxes.document_symbol.DocumentSymbol.model_rebuild(_parent_namespace_depth=0)
