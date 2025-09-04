@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional
+from typing import Dict, Iterable, Optional
 from typing_extensions import Required, TypedDict
 
+from .._types import SequenceNotStr
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
@@ -19,6 +20,14 @@ class BlueprintCreateParams(TypedDict, total=False):
     """
     (Optional) ID of previously built blueprint to use as a base blueprint for this
     build.
+    """
+
+    base_blueprint_name: Optional[str]
+    """
+    (Optional) Name of previously built blueprint to use as a base blueprint for
+    this build. When set, this will load the latest successfully built Blueprint
+    with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+    be specified.
     """
 
     code_mounts: Optional[Iterable[CodeMountParameters]]
@@ -43,7 +52,7 @@ class BlueprintCreateParams(TypedDict, total=False):
     performance.
     """
 
-    system_setup_commands: Optional[List[str]]
+    system_setup_commands: Optional[SequenceNotStr[str]]
     """A list of commands to run to set up your system."""
 
 
@@ -71,7 +80,7 @@ class Service(TypedDict, total=False):
     options: Optional[str]
     """Additional Docker container create options."""
 
-    port_mappings: Optional[List[str]]
+    port_mappings: Optional[SequenceNotStr[str]]
     """The port mappings of the container service.
 
     Port mappings are in the format of <host_port>:<container_port>.

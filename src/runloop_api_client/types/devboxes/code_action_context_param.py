@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Union, Iterable
+from typing import Dict, Union, Iterable
 from typing_extensions import Required, Annotated, TypeAlias, TypedDict
 
+from ..._types import SequenceNotStr
 from ..._utils import PropertyInfo
 from .code_action_kind import CodeActionKind
 from .diagnostic_param import DiagnosticParam
@@ -23,7 +24,7 @@ class CodeActionContextParamTyped(TypedDict, total=False):
     resource. The primary parameter to compute code actions is the provided range.
     """
 
-    only: List[CodeActionKind]
+    only: SequenceNotStr[CodeActionKind]
     """Requested kind of actions to return.
 
     Actions not of this kind are filtered out by the client before being shown. So

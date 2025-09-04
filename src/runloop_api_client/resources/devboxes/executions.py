@@ -19,10 +19,18 @@ from ..._response import (
 from ..._constants import DEFAULT_TIMEOUT
 from ..._exceptions import APIStatusError, APITimeoutError
 from ...lib.polling import PollingConfig, poll_until
+from ..._streaming import Stream, AsyncStream
 from ..._base_client import make_request_options
-from ...types.devboxes import execution_retrieve_params, execution_execute_sync_params, execution_execute_async_params
+from ...types.devboxes import (
+    execution_kill_params,
+    execution_retrieve_params,
+    execution_execute_sync_params,
+    execution_execute_async_params,
+    execution_stream_updates_params,
+)
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
+from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
@@ -277,6 +285,7 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
+        kill_process_group: Optional[bool] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -287,7 +296,7 @@ class ExecutionsResource(SyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Kill a previously launched asynchronous execution if it is still running by
-        killing the launched process.
+        killing the launched process. Optionally kill the entire process group.
 
         Args:
           extra_headers: Send extra headers
@@ -306,6 +315,7 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+            body=maybe_transform({"kill_process_group": kill_process_group}, execution_kill_params.ExecutionKillParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -314,6 +324,51 @@ class ExecutionsResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    def stream_updates(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        offset: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Stream[ExecutionUpdateChunk]:
+        """
+        Tails the logs for the given execution with SSE streaming
+
+        Args:
+          offset: The byte offset to start the stream from
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return self._get(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams),
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+            stream=True,
+            stream_cls=Stream[ExecutionUpdateChunk],
         )
 
 
@@ -554,6 +609,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
+        kill_process_group: Optional[bool] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -564,7 +620,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Kill a previously launched asynchronous execution if it is still running by
-        killing the launched process.
+        killing the launched process. Optionally kill the entire process group.
 
         Args:
           extra_headers: Send extra headers
@@ -583,6 +639,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+            body=await async_maybe_transform(
+                {"kill_process_group": kill_process_group}, execution_kill_params.ExecutionKillParams
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -591,6 +650,53 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    async def stream_updates(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        offset: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncStream[ExecutionUpdateChunk]:
+        """
+        Tails the logs for the given execution with SSE streaming
+
+        Args:
+          offset: The byte offset to start the stream from
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return await self._get(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                ),
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+            stream=True,
+            stream_cls=AsyncStream[ExecutionUpdateChunk],
         )
 
 
@@ -610,6 +716,9 @@ class ExecutionsResourceWithRawResponse:
         self.kill = to_raw_response_wrapper(
             executions.kill,
         )
+        self.stream_updates = to_raw_response_wrapper(
+            executions.stream_updates,
+        )
 
 
 class AsyncExecutionsResourceWithRawResponse:
@@ -627,6 +736,9 @@ class AsyncExecutionsResourceWithRawResponse:
         )
         self.kill = async_to_raw_response_wrapper(
             executions.kill,
+        )
+        self.stream_updates = async_to_raw_response_wrapper(
+            executions.stream_updates,
         )
 
 
@@ -646,6 +758,9 @@ class ExecutionsResourceWithStreamingResponse:
         self.kill = to_streamed_response_wrapper(
             executions.kill,
         )
+        self.stream_updates = to_streamed_response_wrapper(
+            executions.stream_updates,
+        )
 
 
 class AsyncExecutionsResourceWithStreamingResponse:
@@ -663,4 +778,7 @@ class AsyncExecutionsResourceWithStreamingResponse:
         )
         self.kill = async_to_streamed_response_wrapper(
             executions.kill,
+        )
+        self.stream_updates = async_to_streamed_response_wrapper(
+            executions.stream_updates,
         )

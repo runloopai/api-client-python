@@ -68,6 +68,11 @@ class BlueprintView(BaseModel):
     Services can be explicitly started when creating a Devbox.
     """
 
+    devbox_capabilities: Optional[
+        List[Literal["unknown", "computer_usage", "browser_usage", "language_server", "docker_in_docker"]]
+    ] = None
+    """Capabilities that will be available on Devbox."""
+
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
     """The failure reason if the Blueprint build failed, if any."""
 

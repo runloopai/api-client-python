@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from typing_extensions import Literal, Required, TypedDict
 
+from .._types import SequenceNotStr
 from .input_context_param import InputContextParam
 from .scoring_contract_param import ScoringContractParam
 from .scenario_environment_param import ScenarioEnvironmentParam
@@ -35,13 +36,13 @@ class ScenarioCreateParams(TypedDict, total=False):
     apply to the environment.
     """
 
-    required_environment_variables: Optional[List[str]]
+    required_environment_variables: Optional[SequenceNotStr[str]]
     """Environment variables required to run the scenario.
 
     If these variables are not provided, the scenario will fail to start.
     """
 
-    required_secret_names: Optional[List[str]]
+    required_secret_names: Optional[SequenceNotStr[str]]
     """
     Secrets required to run the scenario (user secret name to scenario required
     secret name). If these secrets are not provided or the mapping is incorrect, the

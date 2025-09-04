@@ -34,6 +34,7 @@ class TestBlueprints:
         blueprint = client.blueprints.create(
             name="name",
             base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -299,6 +300,7 @@ class TestBlueprints:
         blueprint = client.blueprints.preview(
             name="name",
             base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -388,6 +390,7 @@ class TestAsyncBlueprints:
         blueprint = await async_client.blueprints.create(
             name="name",
             base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -653,6 +656,7 @@ class TestAsyncBlueprints:
         blueprint = await async_client.blueprints.preview(
             name="name",
             base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
             code_mounts=[
                 {
                     "repo_name": "repo_name",

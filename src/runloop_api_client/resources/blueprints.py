@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional, TypedDict
+from typing import Dict, Iterable, Optional, TypedDict
 
 import httpx
 
@@ -12,7 +12,7 @@ from ..types import (
     blueprint_preview_params,
     blueprint_list_public_params,
 )
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -73,13 +73,14 @@ class BlueprintsResource(SyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,6 +101,11 @@ class BlueprintsResource(SyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -133,6 +139,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -472,13 +479,14 @@ class BlueprintsResource(SyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -497,6 +505,11 @@ class BlueprintsResource(SyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -530,6 +543,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -576,13 +590,14 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -603,6 +618,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -636,6 +656,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -975,13 +996,14 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
         metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
         services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[List[str]] | NotGiven = NOT_GIVEN,
+        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1000,6 +1022,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1033,6 +1060,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
