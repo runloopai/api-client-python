@@ -73,6 +73,7 @@ class BlueprintsResource(SyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -100,6 +101,11 @@ class BlueprintsResource(SyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -133,6 +139,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -472,6 +479,7 @@ class BlueprintsResource(SyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -497,6 +505,11 @@ class BlueprintsResource(SyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -530,6 +543,7 @@ class BlueprintsResource(SyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -576,6 +590,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -603,6 +618,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -636,6 +656,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -975,6 +996,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         *,
         name: str,
         base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
+        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
         code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
         dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
         file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
@@ -1000,6 +1022,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
               build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1033,6 +1060,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 {
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
