@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-__all__ = ["ExecutionStreamUpdatesParams"]
+__all__ = ["ExecutionStreamStdoutUpdatesParams"]
 
 
-class ExecutionStreamUpdatesParams(TypedDict, total=False):
+class ExecutionStreamStdoutUpdatesParams(TypedDict, total=False):
     devbox_id: Required[str]
 
     offset: str

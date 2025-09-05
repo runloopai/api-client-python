@@ -26,12 +26,14 @@ from ...types.devboxes import (
     execution_retrieve_params,
     execution_execute_sync_params,
     execution_execute_async_params,
-    execution_stream_updates_params,
+    execution_stream_stderr_updates_params,
+    execution_stream_stdout_updates_params,
 )
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
-from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
+from ...types.devboxes.execution_stream_stderr_updates_response import ExecutionStreamStderrUpdatesResponse
+from ...types.devboxes.execution_stream_stdout_updates_response import ExecutionStreamStdoutUpdatesResponse
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 
@@ -338,7 +340,7 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Stream[ExecutionUpdateChunk]:
+    ) -> Stream[ExecutionStreamStdoutUpdatesResponse]:
         """
         Tails the stdout logs for the given execution with SSE streaming
 
@@ -366,7 +368,7 @@ class ExecutionsResource(SyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=maybe_transform(
-                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -384,7 +386,7 @@ class ExecutionsResource(SyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=maybe_transform(
-                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": new_offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -445,7 +447,7 @@ class ExecutionsResource(SyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=maybe_transform(
-                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -463,7 +465,7 @@ class ExecutionsResource(SyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=maybe_transform(
-                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": new_offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -765,7 +767,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
-    async def stream_updates(
+    async def stream_stderr_updates(
         self,
         execution_id: str,
         *,
@@ -777,9 +779,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncStream[ExecutionUpdateChunk]:
+    ) -> AsyncStream[ExecutionStreamStderrUpdatesResponse]:
         """
-        Tails the logs for the given execution with SSE streaming
+        Tails the stderr logs for the given execution with SSE streaming
 
         Args:
           offset: The byte offset to start the stream from
@@ -799,14 +801,14 @@ class AsyncExecutionsResource(AsyncAPIResource):
         # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
         if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
                     extra_headers=extra_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -817,14 +819,14 @@ class AsyncExecutionsResource(AsyncAPIResource):
         async def create_stream(last_offset: str | None) -> AsyncStream[ExecutionUpdateChunk]:
             new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
                     extra_headers=extra_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": new_offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -885,7 +887,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -903,7 +905,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": new_offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -964,7 +966,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
@@ -982,7 +984,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=await async_maybe_transform(
-                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                        {"offset": new_offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                     ),
                 ),
                 cast_to=DevboxAsyncExecutionDetailView,
