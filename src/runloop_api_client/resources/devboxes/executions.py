@@ -24,11 +24,13 @@ from ...types.devboxes import (
     execution_retrieve_params,
     execution_execute_sync_params,
     execution_execute_async_params,
-    execution_stream_updates_params,
+    execution_stream_stderr_updates_params,
+    execution_stream_stdout_updates_params,
 )
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
-from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
+from ...types.devboxes.execution_stream_stderr_updates_response import ExecutionStreamStderrUpdatesResponse
+from ...types.devboxes.execution_stream_stdout_updates_response import ExecutionStreamStdoutUpdatesResponse
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 
@@ -263,7 +265,7 @@ class ExecutionsResource(SyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
-    def stream_updates(
+    def stream_stderr_updates(
         self,
         execution_id: str,
         *,
@@ -275,9 +277,9 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Stream[ExecutionUpdateChunk]:
+    ) -> Stream[ExecutionStreamStderrUpdatesResponse]:
         """
-        Tails the logs for the given execution with SSE streaming
+        Tails the stderr logs for the given execution with SSE streaming
 
         Args:
           offset: The byte offset to start the stream from
@@ -294,18 +296,69 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams),
+                query=maybe_transform(
+                    {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
+                ),
             ),
-            cast_to=DevboxAsyncExecutionDetailView,
+            cast_to=str,
             stream=True,
-            stream_cls=Stream[ExecutionUpdateChunk],
+            stream_cls=Stream[ExecutionStreamStderrUpdatesResponse],
+        )
+
+    def stream_stdout_updates(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        offset: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> Stream[ExecutionStreamStdoutUpdatesResponse]:
+        """
+        Tails the stdout logs for the given execution with SSE streaming
+
+        Args:
+          offset: The byte offset to start the stream from
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
+        return self._get(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {"offset": offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
+                ),
+            ),
+            cast_to=str,
+            stream=True,
+            stream_cls=Stream[ExecutionStreamStdoutUpdatesResponse],
         )
 
 
@@ -543,7 +596,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
-    async def stream_updates(
+    async def stream_stderr_updates(
         self,
         execution_id: str,
         *,
@@ -555,9 +608,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncStream[ExecutionUpdateChunk]:
+    ) -> AsyncStream[ExecutionStreamStderrUpdatesResponse]:
         """
-        Tails the logs for the given execution with SSE streaming
+        Tails the stderr logs for the given execution with SSE streaming
 
         Args:
           offset: The byte offset to start the stream from
@@ -574,20 +627,69 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
                 query=await async_maybe_transform(
-                    {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                    {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                 ),
             ),
-            cast_to=DevboxAsyncExecutionDetailView,
+            cast_to=str,
             stream=True,
-            stream_cls=AsyncStream[ExecutionUpdateChunk],
+            stream_cls=AsyncStream[ExecutionStreamStderrUpdatesResponse],
+        )
+
+    async def stream_stdout_updates(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        offset: str | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AsyncStream[ExecutionStreamStdoutUpdatesResponse]:
+        """
+        Tails the stdout logs for the given execution with SSE streaming
+
+        Args:
+          offset: The byte offset to start the stream from
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
+        return await self._get(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"offset": offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
+                ),
+            ),
+            cast_to=str,
+            stream=True,
+            stream_cls=AsyncStream[ExecutionStreamStdoutUpdatesResponse],
         )
 
 
@@ -607,8 +709,11 @@ class ExecutionsResourceWithRawResponse:
         self.kill = to_raw_response_wrapper(
             executions.kill,
         )
-        self.stream_updates = to_raw_response_wrapper(
-            executions.stream_updates,
+        self.stream_stderr_updates = to_raw_response_wrapper(
+            executions.stream_stderr_updates,
+        )
+        self.stream_stdout_updates = to_raw_response_wrapper(
+            executions.stream_stdout_updates,
         )
 
 
@@ -628,8 +733,11 @@ class AsyncExecutionsResourceWithRawResponse:
         self.kill = async_to_raw_response_wrapper(
             executions.kill,
         )
-        self.stream_updates = async_to_raw_response_wrapper(
-            executions.stream_updates,
+        self.stream_stderr_updates = async_to_raw_response_wrapper(
+            executions.stream_stderr_updates,
+        )
+        self.stream_stdout_updates = async_to_raw_response_wrapper(
+            executions.stream_stdout_updates,
         )
 
 
@@ -649,8 +757,11 @@ class ExecutionsResourceWithStreamingResponse:
         self.kill = to_streamed_response_wrapper(
             executions.kill,
         )
-        self.stream_updates = to_streamed_response_wrapper(
-            executions.stream_updates,
+        self.stream_stderr_updates = to_streamed_response_wrapper(
+            executions.stream_stderr_updates,
+        )
+        self.stream_stdout_updates = to_streamed_response_wrapper(
+            executions.stream_stdout_updates,
         )
 
 
@@ -670,6 +781,9 @@ class AsyncExecutionsResourceWithStreamingResponse:
         self.kill = async_to_streamed_response_wrapper(
             executions.kill,
         )
-        self.stream_updates = async_to_streamed_response_wrapper(
-            executions.stream_updates,
+        self.stream_stderr_updates = async_to_streamed_response_wrapper(
+            executions.stream_stderr_updates,
+        )
+        self.stream_stdout_updates = async_to_streamed_response_wrapper(
+            executions.stream_stdout_updates,
         )
