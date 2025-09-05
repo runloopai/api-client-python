@@ -52,7 +52,6 @@ from .lsp_references_params import LspReferencesParams as LspReferencesParams
 from .watched_file_response import WatchedFileResponse as WatchedFileResponse
 from .code_description_param import CodeDescriptionParam as CodeDescriptionParam
 from .computer_create_params import ComputerCreateParams as ComputerCreateParams
-from .execution_update_chunk import ExecutionUpdateChunk as ExecutionUpdateChunk
 from .file_contents_response import FileContentsResponse as FileContentsResponse
 from .health_status_response import HealthStatusResponse as HealthStatusResponse
 from .lsp_diagnostics_params import LspDiagnosticsParams as LspDiagnosticsParams
@@ -77,7 +76,6 @@ from .record_string_text_edit_array import RecordStringTextEditArray as RecordSt
 from .code_action_application_result import CodeActionApplicationResult as CodeActionApplicationResult
 from .execution_execute_async_params import ExecutionExecuteAsyncParams as ExecutionExecuteAsyncParams
 from .lsp_set_watch_directory_params import LspSetWatchDirectoryParams as LspSetWatchDirectoryParams
-from .execution_stream_updates_params import ExecutionStreamUpdatesParams as ExecutionStreamUpdatesParams
 from .lsp_get_code_segment_info_params import LspGetCodeSegmentInfoParams as LspGetCodeSegmentInfoParams
 from .lsp_set_watch_directory_response import LspSetWatchDirectoryResponse as LspSetWatchDirectoryResponse
 from .computer_mouse_interaction_params import ComputerMouseInteractionParams as ComputerMouseInteractionParams
@@ -90,6 +88,18 @@ from .computer_screen_interaction_response import ComputerScreenInteractionRespo
 from .diagnostic_related_information_param import DiagnosticRelatedInformationParam as DiagnosticRelatedInformationParam
 from .computer_keyboard_interaction_response import (
     ComputerKeyboardInteractionResponse as ComputerKeyboardInteractionResponse,
+)
+from .execution_stream_stderr_updates_params import (
+    ExecutionStreamStderrUpdatesParams as ExecutionStreamStderrUpdatesParams,
+)
+from .execution_stream_stdout_updates_params import (
+    ExecutionStreamStdoutUpdatesParams as ExecutionStreamStdoutUpdatesParams,
+)
+from .execution_stream_stderr_updates_response import (
+    ExecutionStreamStderrUpdatesResponse as ExecutionStreamStderrUpdatesResponse,
+)
+from .execution_stream_stdout_updates_response import (
+    ExecutionStreamStdoutUpdatesResponse as ExecutionStreamStdoutUpdatesResponse,
 )
 from .lsp_get_code_actions_for_diagnostic_params import (
     LspGetCodeActionsForDiagnosticParams as LspGetCodeActionsForDiagnosticParams,
