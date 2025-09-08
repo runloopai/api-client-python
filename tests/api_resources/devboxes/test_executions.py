@@ -6,6 +6,7 @@ import os
 from typing import Any, cast
 from unittest.mock import Mock, patch
 
+import httpx
 import pytest
 
 from tests.utils import assert_matches_type
@@ -286,6 +287,63 @@ class TestExecutions:
                 devbox_id="",
             )
 
+    @parametrize
+    def test_stream_updates_auto_reconnect_on_timeout(self, client: Runloop) -> None:
+        """Verify stream reconnects on timeout using last seen offset (sync)."""
+
+        # Minimal stream stub compatible with ReconnectingStream expectations
+        class IteratorStream:
+            def __init__(self, items: list[object], exc: Exception | None = None) -> None:
+                self._items = list(items)
+                self._exc = exc
+                self._raised = False
+                self.response = httpx.Response(200, request=httpx.Request("GET", "https://example.com"))
+
+            def __iter__(self):
+                for item in self._items:
+                    yield item
+                if self._exc is not None and not self._raised:
+                    self._raised = True
+                    raise self._exc
+
+            def close(self) -> None:  # called by reconnect wrapper
+                pass
+
+        # Items with offsets
+        item1 = type("X", (), {"offset": "5"})()
+        item2 = type("X", (), {"offset": "9"})()
+        item3 = type("X", (), {"offset": "10"})()
+
+        timeout_err = APITimeoutError(request=httpx.Request("GET", "https://example.com"))
+
+        calls: list[str | None] = []
+
+        def fake_get(*, options: Any):
+            params = cast("dict[str, object]", getattr(options, "params", cast(object, {})))
+            calls.append(cast(str | None, params.get("offset")))
+            # first call -> yields two items then timeout; second call -> yields one more and completes
+            if len(calls) == 1:
+                return IteratorStream([item1, item2], timeout_err)
+            elif len(calls) == 2:
+                return IteratorStream([item3], None)
+            raise AssertionError("Unexpected extra call to _get during auto-reconnect test")
+
+        with patch.object(client.devboxes.executions, "_get", side_effect=fake_get):
+            stream = client.devboxes.executions.stream_updates(
+                execution_id="execution_id",
+                devbox_id="devbox_id",
+            )
+
+            seen_offsets: list[str] = []
+            for chunk in stream:
+                # items are simple objects with an offset attribute
+                seen_offsets.append(getattr(chunk, "offset", ""))
+            stream.close()
+
+        # Should have retried once with last known offset "9"
+        assert calls[1] == "9"
+        assert seen_offsets == ["5", "9", "10"]
+
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
             client.devboxes.executions.with_raw_response.stream_updates(
                 execution_id="",
@@ -457,6 +515,7 @@ class TestExecutions:
             assert result.execution_id == "execution_id"
             assert result.status == "completed"
             assert mock_post.call_count == 2
+
 
 class TestAsyncExecutions:
     parametrize = pytest.mark.parametrize(
@@ -728,6 +787,64 @@ class TestAsyncExecutions:
                 execution_id="execution_id",
                 devbox_id="",
             )
+
+    @parametrize
+    async def test_stream_updates_auto_reconnect_on_timeout(self, async_client: AsyncRunloop) -> None:
+        """Verify stream reconnects on timeout using last seen offset (async)."""
+
+        class AsyncIteratorStream:
+            def __init__(self, items: list[object], exc: Exception | None = None) -> None:
+                self._items = list(items)
+                self._exc = exc
+                self._raised = False
+                self.response = httpx.Response(200, request=httpx.Request("GET", "https://example.com"))
+
+            def __aiter__(self):
+                self._iter = iter(self._items)
+                return self
+
+            async def __anext__(self):
+                try:
+                    return next(self._iter)
+                except StopIteration:
+                    if self._exc is not None and not self._raised:
+                        self._raised = True
+                        raise self._exc from None
+                    raise StopAsyncIteration from None
+
+            async def close(self) -> None:
+                pass
+
+        item1 = type("X", (), {"offset": "5"})()
+        item2 = type("X", (), {"offset": "9"})()
+        item3 = type("X", (), {"offset": "10"})()
+
+        timeout_err = APITimeoutError(request=httpx.Request("GET", "https://example.com"))
+
+        calls: list[str | None] = []
+
+        async def fake_get(*, options: Any):
+            params = cast("dict[str, object]", getattr(options, "params", cast(object, {})))
+            calls.append(cast(str | None, params.get("offset")))
+            if len(calls) == 1:
+                return AsyncIteratorStream([item1, item2], timeout_err)
+            elif len(calls) == 2:
+                return AsyncIteratorStream([item3], None)
+            raise AssertionError("Unexpected extra call to _get during auto-reconnect test")
+
+        with patch.object(async_client.devboxes.executions, "_get", side_effect=fake_get):
+            stream = await async_client.devboxes.executions.stream_updates(
+                execution_id="execution_id",
+                devbox_id="devbox_id",
+            )
+
+            seen_offsets: list[str] = []
+            async for chunk in stream:
+                seen_offsets.append(getattr(chunk, "offset", ""))
+            await stream.close()
+
+        assert calls[1] == "9"
+        assert seen_offsets == ["5", "9", "10"]
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
             await async_client.devboxes.executions.with_raw_response.stream_updates(

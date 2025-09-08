@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, cast
 
 import httpx
 
@@ -16,10 +16,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._constants import DEFAULT_TIMEOUT
+from ..._constants import DEFAULT_TIMEOUT, RAW_RESPONSE_HEADER
+from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
 from ..._exceptions import APIStatusError, APITimeoutError
 from ...lib.polling import PollingConfig, poll_until
-from ..._streaming import Stream, AsyncStream
 from ..._base_client import make_request_options
 from ...types.devboxes import (
     execution_kill_params,
@@ -357,18 +357,54 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        return self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform({"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams),
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
-            stream=True,
-            stream_cls=Stream[ExecutionUpdateChunk],
+        # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
+        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+            return self._get(
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                    ),
+                ),
+                cast_to=DevboxAsyncExecutionDetailView,
+                stream=True,
+                stream_cls=Stream[ExecutionUpdateChunk],
+            )
+
+        # Otherwise, wrap with auto-reconnect using last seen offset
+        def create_stream(last_offset: str | None) -> Stream[ExecutionUpdateChunk]:
+            new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
+            return self._get(
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                    ),
+                ),
+                cast_to=DevboxAsyncExecutionDetailView,
+                stream=True,
+                stream_cls=Stream[ExecutionUpdateChunk],
+            )
+
+        initial_stream = create_stream(None)
+
+        def get_offset(item: ExecutionUpdateChunk) -> str | None:
+            value = getattr(item, "offset", None)
+            if value is None:
+                return None
+            return str(value)
+
+        return cast(
+            Stream[ExecutionUpdateChunk],
+            ReconnectingStream(current_stream=initial_stream, stream_creator=create_stream, get_offset=get_offset),
         )
 
 
@@ -683,20 +719,53 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        return await self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+        # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
+        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+            return await self._get(
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {"offset": offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                    ),
                 ),
-            ),
-            cast_to=DevboxAsyncExecutionDetailView,
-            stream=True,
-            stream_cls=AsyncStream[ExecutionUpdateChunk],
+                cast_to=DevboxAsyncExecutionDetailView,
+                stream=True,
+                stream_cls=AsyncStream[ExecutionUpdateChunk],
+            )
+
+        async def create_stream(last_offset: str | None) -> AsyncStream[ExecutionUpdateChunk]:
+            new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
+            return await self._get(
+                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_updates",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {"offset": new_offset}, execution_stream_updates_params.ExecutionStreamUpdatesParams
+                    ),
+                ),
+                cast_to=DevboxAsyncExecutionDetailView,
+                stream=True,
+                stream_cls=AsyncStream[ExecutionUpdateChunk],
+            )
+
+        initial_stream = await create_stream(None)
+
+        def get_offset(item: ExecutionUpdateChunk) -> str | None:
+            value = getattr(item, "offset", None)
+            if value is None:
+                return None
+            return str(value)
+
+        return cast(
+            AsyncStream[ExecutionUpdateChunk],
+            AsyncReconnectingStream(current_stream=initial_stream, stream_creator=create_stream, get_offset=get_offset),
         )
 
 
