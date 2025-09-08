@@ -28,9 +28,8 @@ from ...types.devboxes import (
     execution_stream_stdout_updates_params,
 )
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
+from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
-from ...types.devboxes.execution_stream_stderr_updates_response import ExecutionStreamStderrUpdatesResponse
-from ...types.devboxes.execution_stream_stdout_updates_response import ExecutionStreamStdoutUpdatesResponse
 
 __all__ = ["ExecutionsResource", "AsyncExecutionsResource"]
 
@@ -277,7 +276,7 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Stream[ExecutionStreamStderrUpdatesResponse]:
+    ) -> Stream[ExecutionUpdateChunk]:
         """
         Tails the stderr logs for the given execution with SSE streaming
 
@@ -296,7 +295,6 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._get(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
             options=make_request_options(
@@ -308,9 +306,9 @@ class ExecutionsResource(SyncAPIResource):
                     {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                 ),
             ),
-            cast_to=str,
+            cast_to=ExecutionUpdateChunk,
             stream=True,
-            stream_cls=Stream[ExecutionStreamStderrUpdatesResponse],
+            stream_cls=Stream[ExecutionUpdateChunk],
         )
 
     def stream_stdout_updates(
@@ -325,7 +323,7 @@ class ExecutionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Stream[ExecutionStreamStdoutUpdatesResponse]:
+    ) -> Stream[ExecutionUpdateChunk]:
         """
         Tails the stdout logs for the given execution with SSE streaming
 
@@ -344,7 +342,6 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._get(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
             options=make_request_options(
@@ -356,9 +353,9 @@ class ExecutionsResource(SyncAPIResource):
                     {"offset": offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
                 ),
             ),
-            cast_to=str,
+            cast_to=ExecutionUpdateChunk,
             stream=True,
-            stream_cls=Stream[ExecutionStreamStdoutUpdatesResponse],
+            stream_cls=Stream[ExecutionUpdateChunk],
         )
 
 
@@ -608,7 +605,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncStream[ExecutionStreamStderrUpdatesResponse]:
+    ) -> AsyncStream[ExecutionUpdateChunk]:
         """
         Tails the stderr logs for the given execution with SSE streaming
 
@@ -627,7 +624,6 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._get(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
             options=make_request_options(
@@ -639,9 +635,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     {"offset": offset}, execution_stream_stderr_updates_params.ExecutionStreamStderrUpdatesParams
                 ),
             ),
-            cast_to=str,
+            cast_to=ExecutionUpdateChunk,
             stream=True,
-            stream_cls=AsyncStream[ExecutionStreamStderrUpdatesResponse],
+            stream_cls=AsyncStream[ExecutionUpdateChunk],
         )
 
     async def stream_stdout_updates(
@@ -656,7 +652,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncStream[ExecutionStreamStdoutUpdatesResponse]:
+    ) -> AsyncStream[ExecutionUpdateChunk]:
         """
         Tails the stdout logs for the given execution with SSE streaming
 
@@ -675,7 +671,6 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._get(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
             options=make_request_options(
@@ -687,9 +682,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
                     {"offset": offset}, execution_stream_stdout_updates_params.ExecutionStreamStdoutUpdatesParams
                 ),
             ),
-            cast_to=str,
+            cast_to=ExecutionUpdateChunk,
             stream=True,
-            stream_cls=AsyncStream[ExecutionStreamStdoutUpdatesResponse],
+            stream_cls=AsyncStream[ExecutionUpdateChunk],
         )
 
 
