@@ -52,6 +52,7 @@ from .lsp_references_params import LspReferencesParams as LspReferencesParams
 from .watched_file_response import WatchedFileResponse as WatchedFileResponse
 from .code_description_param import CodeDescriptionParam as CodeDescriptionParam
 from .computer_create_params import ComputerCreateParams as ComputerCreateParams
+from .execution_update_chunk import ExecutionUpdateChunk as ExecutionUpdateChunk
 from .file_contents_response import FileContentsResponse as FileContentsResponse
 from .health_status_response import HealthStatusResponse as HealthStatusResponse
 from .lsp_diagnostics_params import LspDiagnosticsParams as LspDiagnosticsParams
@@ -94,12 +95,6 @@ from .execution_stream_stderr_updates_params import (
 )
 from .execution_stream_stdout_updates_params import (
     ExecutionStreamStdoutUpdatesParams as ExecutionStreamStdoutUpdatesParams,
-)
-from .execution_stream_stderr_updates_response import (
-    ExecutionStreamStderrUpdatesResponse as ExecutionStreamStderrUpdatesResponse,
-)
-from .execution_stream_stdout_updates_response import (
-    ExecutionStreamStdoutUpdatesResponse as ExecutionStreamStdoutUpdatesResponse,
 )
 from .lsp_get_code_actions_for_diagnostic_params import (
     LspGetCodeActionsForDiagnosticParams as LspGetCodeActionsForDiagnosticParams,
