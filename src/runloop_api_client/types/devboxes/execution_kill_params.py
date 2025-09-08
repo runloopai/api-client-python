@@ -12,3 +12,7 @@ class ExecutionKillParams(TypedDict, total=False):
     devbox_id: Required[str]
 
     kill_process_group: Optional[bool]
+    """Whether to kill the entire process group (default: false).
+
+    If true, kills all processes in the same process group as the target process.
+    """
