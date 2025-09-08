@@ -300,6 +300,9 @@ class ExecutionsResource(SyncAPIResource):
         killing the launched process. Optionally kill the entire process group.
 
         Args:
+          kill_process_group: Whether to kill the entire process group (default: false). If true, kills all
+              processes in the same process group as the target process.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -673,6 +676,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
         killing the launched process. Optionally kill the entire process group.
 
         Args:
+          kill_process_group: Whether to kill the entire process group (default: false). If true, kills all
+              processes in the same process group as the target process.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
