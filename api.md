@@ -72,6 +72,7 @@ Types:
 from runloop_api_client.types import (
     DevboxAsyncExecutionDetailView,
     DevboxExecutionDetailView,
+    DevboxKillExecutionRequest,
     DevboxListView,
     DevboxSnapshotListView,
     DevboxSnapshotView,
