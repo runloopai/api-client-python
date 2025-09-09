@@ -41,6 +41,7 @@ from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .secret_update_params import SecretUpdateParams as SecretUpdateParams
 from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
+from .devbox_execute_params import DevboxExecuteParams as DevboxExecuteParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
 from .object_download_params import ObjectDownloadParams as ObjectDownloadParams
 from .repository_list_params import RepositoryListParams as RepositoryListParams

@@ -406,6 +406,62 @@ class TestDevboxes:
             )
 
     @parametrize
+    def test_method_execute(self, client: Runloop) -> None:
+        devbox = client.devboxes.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    def test_method_execute_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+            shell_name="shell_name",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_execute(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_execute(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_execute(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.execute(
+                id="",
+                command="command",
+                command_id="command_id",
+            )
+
+    @parametrize
     def test_method_execute_async(self, client: Runloop) -> None:
         devbox = client.devboxes.execute_async(
             id="id",
@@ -1623,6 +1679,62 @@ class TestAsyncDevboxes:
             await async_client.devboxes.with_raw_response.download_file(
                 id="",
                 path="path",
+            )
+
+    @parametrize
+    async def test_method_execute(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_execute_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+            shell_name="shell_name",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_execute(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_execute(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.execute(
+            id="id",
+            command="command",
+            command_id="command_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_execute(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.execute(
+                id="",
+                command="command",
+                command_id="command_id",
             )
 
     @parametrize
