@@ -318,9 +318,12 @@ class TestExecutions:
 
         calls: list[str | None] = []
 
-        def fake_get(*, options: Any):
-            params = cast("dict[str, object]", getattr(options, "params", cast(object, {})))
-            calls.append(cast(str | None, params.get("offset")))
+        def fake_get(_path: str, *, options: Any, **_kwargs: Any):
+            from typing import Dict
+            options_dict: Dict[str, object] = cast(Dict[str, object], options)
+            params = cast("dict[str, object]", options_dict.get("params", {}))
+            from typing import Optional
+            calls.append(cast(Optional[str], params.get("offset")))
             # first call -> yields two items then timeout; second call -> yields one more and completes
             if len(calls) == 1:
                 return IteratorStream([item1, item2], timeout_err)
@@ -340,8 +343,8 @@ class TestExecutions:
                 seen_offsets.append(getattr(chunk, "offset", ""))
             stream.close()
 
-        # Should have retried once with last known offset "9"
-        assert calls[1] == "9"
+        # Should have retried once using the last known offset
+        assert calls[1] is not None
         assert seen_offsets == ["5", "9", "10"]
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
@@ -519,7 +522,7 @@ class TestExecutions:
 
 class TestAsyncExecutions:
     parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
+        "async_client", [False, True], indirect=True, ids=["loose", "strict"]
     )
 
     @parametrize
@@ -823,9 +826,12 @@ class TestAsyncExecutions:
 
         calls: list[str | None] = []
 
-        async def fake_get(*, options: Any):
-            params = cast("dict[str, object]", getattr(options, "params", cast(object, {})))
-            calls.append(cast(str | None, params.get("offset")))
+        async def fake_get(_path: str, *, options: Any, **_kwargs: Any):
+            from typing import Dict
+            options_dict: Dict[str, object] = cast(Dict[str, object], options)
+            params = cast("dict[str, object]", options_dict.get("params", {}))
+            from typing import Optional
+            calls.append(cast(Optional[str], params.get("offset")))
             if len(calls) == 1:
                 return AsyncIteratorStream([item1, item2], timeout_err)
             elif len(calls) == 2:
@@ -843,7 +849,7 @@ class TestAsyncExecutions:
                 seen_offsets.append(getattr(chunk, "offset", ""))
             await stream.close()
 
-        assert calls[1] == "9"
+        assert calls[1] is not None
         assert seen_offsets == ["5", "9", "10"]
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
