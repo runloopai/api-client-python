@@ -8,6 +8,7 @@ from unittest.mock import Mock, patch
 
 import httpx
 import pytest
+from respx import MockRouter
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
@@ -238,7 +239,10 @@ class TestExecutions:
             )
 
     @parametrize
-    def test_method_stream_stdout_updates(self, client: Runloop) -> None:
+    def test_method_stream_stdout_updates(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         execution_stream = client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -246,7 +250,10 @@ class TestExecutions:
         execution_stream.response.close()
 
     @parametrize
-    def test_method_stream_stdout_updates_with_all_params(self, client: Runloop) -> None:
+    def test_method_stream_stdout_updates_with_all_params(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         execution_stream = client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -255,7 +262,10 @@ class TestExecutions:
         execution_stream.response.close()
 
     @parametrize
-    def test_raw_response_stream_stdout_updates(self, client: Runloop) -> None:
+    def test_raw_response_stream_stdout_updates(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         response = client.devboxes.executions.with_raw_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -266,7 +276,10 @@ class TestExecutions:
         stream.close()
 
     @parametrize
-    def test_streaming_response_stream_stdout_updates(self, client: Runloop) -> None:
+    def test_streaming_response_stream_stdout_updates(self, client: Runloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         with client.devboxes.executions.with_streaming_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -742,7 +755,10 @@ class TestAsyncExecutions:
             )
 
     @parametrize
-    async def test_method_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+    async def test_method_stream_stdout_updates(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         execution_stream = await async_client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -750,7 +766,12 @@ class TestAsyncExecutions:
         await execution_stream.response.aclose()
 
     @parametrize
-    async def test_method_stream_stdout_updates_with_all_params(self, async_client: AsyncRunloop) -> None:
+    async def test_method_stream_stdout_updates_with_all_params(
+        self, async_client: AsyncRunloop, respx_mock: MockRouter
+    ) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         execution_stream = await async_client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -759,7 +780,10 @@ class TestAsyncExecutions:
         await execution_stream.response.aclose()
 
     @parametrize
-    async def test_raw_response_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+    async def test_raw_response_stream_stdout_updates(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         response = await async_client.devboxes.executions.with_raw_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
@@ -770,7 +794,12 @@ class TestAsyncExecutions:
         await stream.close()
 
     @parametrize
-    async def test_streaming_response_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+    async def test_streaming_response_stream_stdout_updates(
+        self, async_client: AsyncRunloop, respx_mock: MockRouter
+    ) -> None:
+        respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
+            return_value=httpx.Response(200)
+        )
         async with async_client.devboxes.executions.with_streaming_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
