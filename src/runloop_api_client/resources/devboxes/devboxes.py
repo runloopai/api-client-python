@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional, cast
+from typing import Dict, List, Mapping, Iterable, Optional, cast
 from typing_extensions import Literal
 
 import httpx
@@ -35,6 +35,7 @@ from ...types import (
     devbox_execute_async_params,
     devbox_remove_tunnel_params,
     devbox_snapshot_disk_params,
+    devbox_wait_for_command_params,
     devbox_read_file_contents_params,
     devbox_list_disk_snapshots_params,
     devbox_snapshot_disk_async_params,
@@ -1260,6 +1261,66 @@ class DevboxesResource(SyncAPIResource):
             cast_to=object,
         )
 
+    def wait_for_command(
+        self,
+        id: str,
+        *,
+        statuses: List[
+            Literal[
+                "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+            ]
+        ],
+        timeout_seconds: Optional[int] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxView:
+        """
+        Polls the Devbox's status until it reaches one of the desired statuses or times
+        out.
+
+        Args:
+          statuses: The Devbox statuses to wait for. At least one status must be provided. The
+              devbox will be returned as soon as it reaches any of the provided statuses.
+
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 30 seconds. Defaults
+              to 10 seconds.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/wait_for_status",
+            body=maybe_transform(
+                {
+                    "statuses": statuses,
+                    "timeout_seconds": timeout_seconds,
+                },
+                devbox_wait_for_command_params.DevboxWaitForCommandParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxView,
+        )
+
     def write_file_contents(
         self,
         id: str,
@@ -2469,6 +2530,66 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    async def wait_for_command(
+        self,
+        id: str,
+        *,
+        statuses: List[
+            Literal[
+                "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+            ]
+        ],
+        timeout_seconds: Optional[int] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxView:
+        """
+        Polls the Devbox's status until it reaches one of the desired statuses or times
+        out.
+
+        Args:
+          statuses: The Devbox statuses to wait for. At least one status must be provided. The
+              devbox will be returned as soon as it reaches any of the provided statuses.
+
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 30 seconds. Defaults
+              to 10 seconds.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/wait_for_status",
+            body=await async_maybe_transform(
+                {
+                    "statuses": statuses,
+                    "timeout_seconds": timeout_seconds,
+                },
+                devbox_wait_for_command_params.DevboxWaitForCommandParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxView,
+        )
+
     async def write_file_contents(
         self,
         id: str,
@@ -2596,6 +2717,9 @@ class DevboxesResourceWithRawResponse:
         self.upload_file = to_raw_response_wrapper(
             devboxes.upload_file,
         )
+        self.wait_for_command = to_raw_response_wrapper(
+            devboxes.wait_for_command,
+        )
         self.write_file_contents = to_raw_response_wrapper(
             devboxes.write_file_contents,
         )
@@ -2692,6 +2816,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.upload_file = async_to_raw_response_wrapper(
             devboxes.upload_file,
+        )
+        self.wait_for_command = async_to_raw_response_wrapper(
+            devboxes.wait_for_command,
         )
         self.write_file_contents = async_to_raw_response_wrapper(
             devboxes.write_file_contents,
@@ -2790,6 +2917,9 @@ class DevboxesResourceWithStreamingResponse:
         self.upload_file = to_streamed_response_wrapper(
             devboxes.upload_file,
         )
+        self.wait_for_command = to_streamed_response_wrapper(
+            devboxes.wait_for_command,
+        )
         self.write_file_contents = to_streamed_response_wrapper(
             devboxes.write_file_contents,
         )
@@ -2886,6 +3016,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.upload_file = async_to_streamed_response_wrapper(
             devboxes.upload_file,
+        )
+        self.wait_for_command = async_to_streamed_response_wrapper(
+            devboxes.wait_for_command,
         )
         self.write_file_contents = async_to_streamed_response_wrapper(
             devboxes.write_file_contents,
