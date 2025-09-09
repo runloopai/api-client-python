@@ -27,6 +27,7 @@ from ...types import (
     devbox_list_params,
     devbox_create_params,
     devbox_update_params,
+    devbox_execute_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
     devbox_create_tunnel_params,
@@ -570,6 +571,72 @@ class DevboxesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=BinaryAPIResponse,
+        )
+
+    def execute(
+        self,
+        id: str,
+        *,
+        command: str,
+        command_id: str,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Execute a command with a known command ID on a devbox, optimistically waiting
+        for it to complete within the specified timeout. If it completes in time, return
+        the result. If not, return a status indicating the command is still running.
+
+        Args:
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
+
+          command_id: The command ID for idempotency and tracking
+
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
+        return self._post(
+            f"/v1/devboxes/{id}/execute",
+            body=maybe_transform(
+                {
+                    "command": command,
+                    "command_id": command_id,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_params.DevboxExecuteParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
         )
 
     def execute_async(
@@ -1715,6 +1782,72 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=AsyncBinaryAPIResponse,
         )
 
+    async def execute(
+        self,
+        id: str,
+        *,
+        command: str,
+        command_id: str,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Execute a command with a known command ID on a devbox, optimistically waiting
+        for it to complete within the specified timeout. If it completes in time, return
+        the result. If not, return a status indicating the command is still running.
+
+        Args:
+          command: The command to execute via the Devbox shell. By default, commands are run from
+              the user home directory unless shell_name is specified. If shell_name is
+              specified the command is run from the directory based on the recent state of the
+              persistent shell.
+
+          command_id: The command ID for idempotency and tracking
+
+          shell_name: The name of the persistent shell to create or use if already created. When using
+              a persistent shell, the command will run from the directory at the end of the
+              previous command and environment variables will be preserved.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
+            timeout = 600
+        return await self._post(
+            f"/v1/devboxes/{id}/execute",
+            body=await async_maybe_transform(
+                {
+                    "command": command,
+                    "command_id": command_id,
+                    "shell_name": shell_name,
+                },
+                devbox_execute_params.DevboxExecuteParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+        )
+
     async def execute_async(
         self,
         id: str,
@@ -2424,6 +2557,9 @@ class DevboxesResourceWithRawResponse:
             devboxes.download_file,
             BinaryAPIResponse,
         )
+        self.execute = to_raw_response_wrapper(
+            devboxes.execute,
+        )
         self.execute_async = to_raw_response_wrapper(
             devboxes.execute_async,
         )
@@ -2517,6 +2653,9 @@ class AsyncDevboxesResourceWithRawResponse:
         self.download_file = async_to_custom_raw_response_wrapper(
             devboxes.download_file,
             AsyncBinaryAPIResponse,
+        )
+        self.execute = async_to_raw_response_wrapper(
+            devboxes.execute,
         )
         self.execute_async = async_to_raw_response_wrapper(
             devboxes.execute_async,
@@ -2612,6 +2751,9 @@ class DevboxesResourceWithStreamingResponse:
             devboxes.download_file,
             StreamedBinaryAPIResponse,
         )
+        self.execute = to_streamed_response_wrapper(
+            devboxes.execute,
+        )
         self.execute_async = to_streamed_response_wrapper(
             devboxes.execute_async,
         )
@@ -2705,6 +2847,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.download_file = async_to_custom_streamed_response_wrapper(
             devboxes.download_file,
             AsyncStreamedBinaryAPIResponse,
+        )
+        self.execute = async_to_streamed_response_wrapper(
+            devboxes.execute,
         )
         self.execute_async = async_to_streamed_response_wrapper(
             devboxes.execute_async,
