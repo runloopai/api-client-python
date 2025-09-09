@@ -238,16 +238,16 @@ class TestExecutions:
             )
 
     @parametrize
-    def test_method_stream_updates(self, client: Runloop) -> None:
-        execution_stream = client.devboxes.executions.stream_updates(
+    def test_method_stream_stdout_updates(self, client: Runloop) -> None:
+        execution_stream = client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
         execution_stream.response.close()
 
     @parametrize
-    def test_method_stream_updates_with_all_params(self, client: Runloop) -> None:
-        execution_stream = client.devboxes.executions.stream_updates(
+    def test_method_stream_stdout_updates_with_all_params(self, client: Runloop) -> None:
+        execution_stream = client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
             offset="offset",
@@ -255,8 +255,8 @@ class TestExecutions:
         execution_stream.response.close()
 
     @parametrize
-    def test_raw_response_stream_updates(self, client: Runloop) -> None:
-        response = client.devboxes.executions.with_raw_response.stream_updates(
+    def test_raw_response_stream_stdout_updates(self, client: Runloop) -> None:
+        response = client.devboxes.executions.with_raw_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
@@ -266,8 +266,8 @@ class TestExecutions:
         stream.close()
 
     @parametrize
-    def test_streaming_response_stream_updates(self, client: Runloop) -> None:
-        with client.devboxes.executions.with_streaming_response.stream_updates(
+    def test_streaming_response_stream_stdout_updates(self, client: Runloop) -> None:
+        with client.devboxes.executions.with_streaming_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         ) as response:
@@ -280,15 +280,15 @@ class TestExecutions:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_path_params_stream_updates(self, client: Runloop) -> None:
+    def test_path_params_stream_stdout_updates(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `devbox_id` but received ''"):
-            client.devboxes.executions.with_raw_response.stream_updates(
+            client.devboxes.executions.with_raw_response.stream_stdout_updates(
                 execution_id="execution_id",
                 devbox_id="",
             )
 
     @parametrize
-    def test_stream_updates_auto_reconnect_on_timeout(self, client: Runloop) -> None:
+    def test_stream_stdout_updates_auto_reconnect_on_timeout(self, client: Runloop) -> None:
         """Verify stream reconnects on timeout using last seen offset (sync)."""
 
         # Minimal stream stub compatible with ReconnectingStream expectations
@@ -320,9 +320,11 @@ class TestExecutions:
 
         def fake_get(_path: str, *, options: Any, **_kwargs: Any):
             from typing import Dict
+
             options_dict: Dict[str, object] = cast(Dict[str, object], options)
             params = cast("dict[str, object]", options_dict.get("params", {}))
             from typing import Optional
+
             calls.append(cast(Optional[str], params.get("offset")))
             # first call -> yields two items then timeout; second call -> yields one more and completes
             if len(calls) == 1:
@@ -332,7 +334,7 @@ class TestExecutions:
             raise AssertionError("Unexpected extra call to _get during auto-reconnect test")
 
         with patch.object(client.devboxes.executions, "_get", side_effect=fake_get):
-            stream = client.devboxes.executions.stream_updates(
+            stream = client.devboxes.executions.stream_stdout_updates(
                 execution_id="execution_id",
                 devbox_id="devbox_id",
             )
@@ -348,7 +350,7 @@ class TestExecutions:
         assert seen_offsets == ["5", "9", "10"]
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
-            client.devboxes.executions.with_raw_response.stream_updates(
+            client.devboxes.executions.with_raw_response.stream_stdout_updates(
                 execution_id="",
                 devbox_id="devbox_id",
             )
@@ -521,9 +523,7 @@ class TestExecutions:
 
 
 class TestAsyncExecutions:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True], indirect=True, ids=["loose", "strict"]
-    )
+    parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncRunloop) -> None:
@@ -742,16 +742,16 @@ class TestAsyncExecutions:
             )
 
     @parametrize
-    async def test_method_stream_updates(self, async_client: AsyncRunloop) -> None:
-        execution_stream = await async_client.devboxes.executions.stream_updates(
+    async def test_method_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+        execution_stream = await async_client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
         await execution_stream.response.aclose()
 
     @parametrize
-    async def test_method_stream_updates_with_all_params(self, async_client: AsyncRunloop) -> None:
-        execution_stream = await async_client.devboxes.executions.stream_updates(
+    async def test_method_stream_stdout_updates_with_all_params(self, async_client: AsyncRunloop) -> None:
+        execution_stream = await async_client.devboxes.executions.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
             offset="offset",
@@ -759,8 +759,8 @@ class TestAsyncExecutions:
         await execution_stream.response.aclose()
 
     @parametrize
-    async def test_raw_response_stream_updates(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.devboxes.executions.with_raw_response.stream_updates(
+    async def test_raw_response_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.executions.with_raw_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
@@ -770,8 +770,8 @@ class TestAsyncExecutions:
         await stream.close()
 
     @parametrize
-    async def test_streaming_response_stream_updates(self, async_client: AsyncRunloop) -> None:
-        async with async_client.devboxes.executions.with_streaming_response.stream_updates(
+    async def test_streaming_response_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.executions.with_streaming_response.stream_stdout_updates(
             execution_id="execution_id",
             devbox_id="devbox_id",
         ) as response:
@@ -784,15 +784,15 @@ class TestAsyncExecutions:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_path_params_stream_updates(self, async_client: AsyncRunloop) -> None:
+    async def test_path_params_stream_stdout_updates(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `devbox_id` but received ''"):
-            await async_client.devboxes.executions.with_raw_response.stream_updates(
+            await async_client.devboxes.executions.with_raw_response.stream_stdout_updates(
                 execution_id="execution_id",
                 devbox_id="",
             )
 
     @parametrize
-    async def test_stream_updates_auto_reconnect_on_timeout(self, async_client: AsyncRunloop) -> None:
+    async def test_stream_stdout_updates_auto_reconnect_on_timeout(self, async_client: AsyncRunloop) -> None:
         """Verify stream reconnects on timeout using last seen offset (async)."""
 
         class AsyncIteratorStream:
@@ -828,9 +828,11 @@ class TestAsyncExecutions:
 
         async def fake_get(_path: str, *, options: Any, **_kwargs: Any):
             from typing import Dict
+
             options_dict: Dict[str, object] = cast(Dict[str, object], options)
             params = cast("dict[str, object]", options_dict.get("params", {}))
             from typing import Optional
+
             calls.append(cast(Optional[str], params.get("offset")))
             if len(calls) == 1:
                 return AsyncIteratorStream([item1, item2], timeout_err)
@@ -839,7 +841,7 @@ class TestAsyncExecutions:
             raise AssertionError("Unexpected extra call to _get during auto-reconnect test")
 
         with patch.object(async_client.devboxes.executions, "_get", side_effect=fake_get):
-            stream = await async_client.devboxes.executions.stream_updates(
+            stream = await async_client.devboxes.executions.stream_stdout_updates(
                 execution_id="execution_id",
                 devbox_id="devbox_id",
             )
@@ -853,7 +855,7 @@ class TestAsyncExecutions:
         assert seen_offsets == ["5", "9", "10"]
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
-            await async_client.devboxes.executions.with_raw_response.stream_updates(
+            await async_client.devboxes.executions.with_raw_response.stream_stdout_updates(
                 execution_id="",
                 devbox_id="devbox_id",
             )
