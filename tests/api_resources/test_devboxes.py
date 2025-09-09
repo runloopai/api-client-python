@@ -981,6 +981,57 @@ class TestDevboxes:
             )
 
     @parametrize
+    def test_method_wait_for_command(self, client: Runloop) -> None:
+        devbox = client.devboxes.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_method_wait_for_command_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+            timeout_seconds=0,
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_wait_for_command(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_wait_for_command(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_wait_for_command(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.wait_for_command(
+                id="",
+                statuses=["provisioning"],
+            )
+
+    @parametrize
     def test_method_write_file_contents(self, client: Runloop) -> None:
         devbox = client.devboxes.write_file_contents(
             id="id",
@@ -2254,6 +2305,57 @@ class TestAsyncDevboxes:
             await async_client.devboxes.with_raw_response.upload_file(
                 id="",
                 path="path",
+            )
+
+    @parametrize
+    async def test_method_wait_for_command(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_wait_for_command_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+            timeout_seconds=0,
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_wait_for_command(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_wait_for_command(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.wait_for_command(
+            id="id",
+            statuses=["provisioning"],
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_wait_for_command(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.wait_for_command(
+                id="",
+                statuses=["provisioning"],
             )
 
     @parametrize
