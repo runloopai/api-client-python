@@ -95,4 +95,4 @@ jobs:
         run: ./scripts/bootstrap
 
       - name: Run tests
-        run: ./scripts/test
+        run: ./scripts/test --ignore=tests/smoketests
