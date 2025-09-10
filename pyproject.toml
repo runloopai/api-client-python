@@ -9,7 +9,7 @@ authors = [
 ]
 dependencies = [
     "httpx>=0.23.0, <1",
-    "pydantic>=1.9.0, <3",
+    "pydantic>=1.9.0, <2.11",
     "typing-extensions>=4.10, <5",
     "anyio>=3.5.0, <5",
     "distro>=1.7.0, <2",
@@ -83,13 +83,10 @@ format = { chain = [
 
 "check:importable" = "python -c 'import runloop_api_client'"
 
-[typecheck]
-
-[tool.rye.scripts.typecheck]
-chain = [
+typecheck = { chain = [
   "typecheck:pyright",
   "typecheck:mypy"
-]
+]}
 
 "typecheck:pyright" = "pyright"
 "typecheck:verify-types" = "pyright --verifytypes runloop_api_client --ignoreexternal"
