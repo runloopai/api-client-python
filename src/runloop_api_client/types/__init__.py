@@ -41,6 +41,7 @@ from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .secret_update_params import SecretUpdateParams as SecretUpdateParams
 from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
+from .devbox_execute_params import DevboxExecuteParams as DevboxExecuteParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
 from .object_download_params import ObjectDownloadParams as ObjectDownloadParams
 from .repository_list_params import RepositoryListParams as RepositoryListParams
@@ -85,6 +86,7 @@ from .scenario_definition_list_view import ScenarioDefinitionListView as Scenari
 from .scoring_contract_update_param import ScoringContractUpdateParam as ScoringContractUpdateParam
 from .blueprint_build_logs_list_view import BlueprintBuildLogsListView as BlueprintBuildLogsListView
 from .devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse as DevboxCreateSSHKeyResponse
+from .devbox_wait_for_command_params import DevboxWaitForCommandParams as DevboxWaitForCommandParams
 from .repository_connection_list_view import RepositoryConnectionListView as RepositoryConnectionListView
 from .repository_inspection_list_view import RepositoryInspectionListView as RepositoryInspectionListView
 from .devbox_read_file_contents_params import DevboxReadFileContentsParams as DevboxReadFileContentsParams
