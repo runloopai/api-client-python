@@ -362,7 +362,7 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
-        default_headers = {'Accept': 'text/event-stream'}
+        default_headers: Headers = {'Accept': 'text/event-stream'}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
@@ -446,7 +446,7 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
-        default_headers = {'Accept': 'text/event-stream'}
+        default_headers: Headers = {'Accept': 'text/event-stream'}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
@@ -814,7 +814,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
-        default_headers = {'Accept': 'text/event-stream'}
+        default_headers: Headers = {'Accept': 'text/event-stream'}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
@@ -898,7 +898,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
-        default_headers = {'Accept': 'text/event-stream'}
+        default_headers: Headers = {'Accept': 'text/event-stream'}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
         
