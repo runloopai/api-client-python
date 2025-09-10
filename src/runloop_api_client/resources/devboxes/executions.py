@@ -363,10 +363,7 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
         default_headers = {'Accept': 'text/event-stream'}
-        if extra_headers:
-            merged_headers = {**default_headers, **extra_headers}
-        else:
-            merged_headers = default_headers
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
@@ -450,10 +447,7 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
         default_headers = {'Accept': 'text/event-stream'}
-        if extra_headers:
-            merged_headers = {**default_headers, **extra_headers}
-        else:
-            merged_headers = default_headers
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
@@ -821,10 +815,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
         default_headers = {'Accept': 'text/event-stream'}
-        if extra_headers:
-            merged_headers = {**default_headers, **extra_headers}
-        else:
-            merged_headers = default_headers
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
@@ -908,10 +899,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         
         default_headers = {'Accept': 'text/event-stream'}
-        if extra_headers:
-            merged_headers = {**default_headers, **extra_headers}
-        else:
-            merged_headers = default_headers
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
+
         
         # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
