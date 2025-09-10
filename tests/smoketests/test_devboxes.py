@@ -53,14 +53,15 @@ def test_shutdown_devbox() -> None:
     assert view.status == "shutdown"
 
 
-@pytest.mark.timeout(30)
+@pytest.mark.timeout(90)
 def test_create_and_await_running_long_set_up() -> None:
     created = client.devboxes.create_and_await_running(
         name=unique_name("smoketest-devbox-await-running-long-set-up"),
-        launch_parameters={"launch_commands": ["sleep 70"], "keep_alive_time_seconds": 30},
+        launch_parameters={"launch_commands": ["sleep 70"]},
         polling_config=PollingConfig(interval_seconds=5.0, timeout_seconds=80),
     )
     assert created.status == "running"
+    client.devboxes.shutdown(created.id)
 
 
 @pytest.mark.timeout(30)
@@ -68,6 +69,6 @@ def test_create_and_await_running_timeout() -> None:
     with pytest.raises(PollingTimeout):
         client.devboxes.create_and_await_running(
             name=unique_name("smoketest-devbox-await-running-timeout"),
-            launch_parameters={"launch_commands": ["sleep 70"], "keep_alive_time_seconds": 30},
+            launch_parameters={"launch_commands": ["sleep 70"]},
             polling_config=PollingConfig(max_attempts=1, interval_seconds=0.1),
         )
