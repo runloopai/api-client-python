@@ -335,7 +335,7 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        offset: str | NotGiven = NOT_GIVEN,
+        offset: str | NotGiven = '0',
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -361,11 +361,15 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+        
+        default_headers: Headers = {'Accept': 'text/event-stream'}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
+        
+        if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -383,7 +387,7 @@ class ExecutionsResource(SyncAPIResource):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -415,7 +419,7 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        offset: str | NotGiven = NOT_GIVEN,
+        offset: str | NotGiven = '0',
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -441,11 +445,15 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+        
+        default_headers: Headers = {'Accept': 'text/event-stream'}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
+        
+        if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -463,7 +471,7 @@ class ExecutionsResource(SyncAPIResource):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -779,7 +787,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        offset: str | NotGiven = NOT_GIVEN,
+        offset: str | NotGiven = '0',
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -805,11 +813,15 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+        
+        default_headers: Headers = {'Accept': 'text/event-stream'}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
+        
+        if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -827,7 +839,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             return await self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -859,7 +871,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        offset: str | NotGiven = NOT_GIVEN,
+        offset: str | NotGiven = '0',
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -885,12 +897,17 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        
+        default_headers: Headers = {'Accept': 'text/event-stream'}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
+
+        
         # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
-        if extra_headers and extra_headers.get(RAW_RESPONSE_HEADER):
+        if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
@@ -908,7 +925,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             return await self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
                 options=make_request_options(
-                    extra_headers=extra_headers,
+                    extra_headers=merged_headers,
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
