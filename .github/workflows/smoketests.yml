@@ -12,12 +12,9 @@ on:
           - prod
 
 jobs:
-  smoke:
+  smoketests:
     runs-on: ubuntu-latest
     timeout-minutes: 120
-    defaults:
-      run:
-        working-directory: api-client-python
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,6 +23,9 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           python-version: "3.11"
+
+      - name: Create virtualenv
+        run: uv venv
 
       - name: Install dependencies
         run: |
@@ -45,7 +45,7 @@ jobs:
           fi
           echo "DEBUG=false" >> $GITHUB_ENV
           echo "RUN_SMOKETESTS=1" >> $GITHUB_ENV
-          echo "PYTHONPATH=${{ github.workspace }}/api-client-python/src" >> $GITHUB_ENV
+          echo "PYTHONPATH=${{ github.workspace }}/src" >> $GITHUB_ENV
 
       - name: Run smoke tests (pytest via uv)
         env:
