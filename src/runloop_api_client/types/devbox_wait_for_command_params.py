@@ -9,21 +9,17 @@ __all__ = ["DevboxWaitForCommandParams"]
 
 
 class DevboxWaitForCommandParams(TypedDict, total=False):
-    statuses: Required[
-        List[
-            Literal[
-                "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
-            ]
-        ]
-    ]
-    """The Devbox statuses to wait for.
+    devbox_id: Required[str]
 
-    At least one status must be provided. The devbox will be returned as soon as it
+    statuses: Required[List[Literal["queued", "running", "completed"]]]
+    """The command execution statuses to wait for.
+
+    At least one status must be provided. The command will be returned as soon as it
     reaches any of the provided statuses.
     """
 
     timeout_seconds: Optional[int]
-    """(Optional) Timeout in seconds to wait for the status, up to 30 seconds.
+    """(Optional) Timeout in seconds to wait for the status, up to 60 seconds.
 
-    Defaults to 10 seconds.
+    Defaults to 60 seconds.
     """
