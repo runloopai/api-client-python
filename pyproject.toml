@@ -51,6 +51,7 @@ dev-dependencies = [
     "respx",
     "pytest",
     "pytest-asyncio",
+    "pytest-timeout",
     "ruff",
     "time-machine",
     "nox",
@@ -134,7 +135,7 @@ replacement = '[\1](https://github.com/runloopai/api-client-python/tree/main/\g<
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--tb=short -n auto"
+addopts = "--tb=short -n auto --dist=loadfile -m 'not smoketest'"
 xfail_strict = true
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
@@ -142,7 +143,9 @@ filterwarnings = [
   "error"
 ]
 markers = [
-  "skip_if_strict: skip test if using strict validation (for prism mock server issues)"
+  "skip_if_strict: skip test if using strict validation (for prism mock server issues)",
+  "timeout: per-test timeout provided by pytest-timeout",
+  "smoketest: end-to-end smoke tests against real API",
 ]
 
 [tool.pyright]

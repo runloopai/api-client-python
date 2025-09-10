@@ -55,7 +55,15 @@ fi
 export DEFER_PYDANTIC_BUILD=false
 
 echo "==> Running tests"
-rye run pytest "$@"
+
+# By default, exclude smoketests unless explicitly enabled.
+# This ensures PR CI doesn't run E2E smoketests unless RUN_SMOKETESTS=1.
+PYTEST_ARGS=()
+if [ "${RUN_SMOKETESTS}" != "1" ]; then
+  PYTEST_ARGS+=( -m "not smoketest" )
+fi
+
+rye run pytest "${PYTEST_ARGS[@]}" "$@"
 
 echo "==> Running Pydantic v1 tests"
-rye run nox -s test-pydantic-v1 -- "$@"
+rye run nox -s test-pydantic-v1 -- "${PYTEST_ARGS[@]}" "$@"
