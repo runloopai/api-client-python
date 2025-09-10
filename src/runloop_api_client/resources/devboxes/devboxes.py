@@ -1263,13 +1263,10 @@ class DevboxesResource(SyncAPIResource):
 
     def wait_for_command(
         self,
-        id: str,
+        execution_id: str,
         *,
-        statuses: List[
-            Literal[
-                "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
-            ]
-        ],
+        devbox_id: str,
+        statuses: List[Literal["queued", "running", "completed"]],
         timeout_seconds: Optional[int] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1278,17 +1275,18 @@ class DevboxesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> DevboxView:
+    ) -> DevboxAsyncExecutionDetailView:
         """
-        Polls the Devbox's status until it reaches one of the desired statuses or times
-        out.
+        Polls the asynchronous execution's status until it reaches one of the desired
+        statuses or times out. Defaults to 60 seconds.
 
         Args:
-          statuses: The Devbox statuses to wait for. At least one status must be provided. The
-              devbox will be returned as soon as it reaches any of the provided statuses.
+          statuses: The command execution statuses to wait for. At least one status must be
+              provided. The command will be returned as soon as it reaches any of the provided
+              statuses.
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 30 seconds. Defaults
-              to 10 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
+              to 60 seconds.
 
           extra_headers: Send extra headers
 
@@ -1300,10 +1298,12 @@ class DevboxesResource(SyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/wait_for_status",
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
             body=maybe_transform(
                 {
                     "statuses": statuses,
@@ -1318,7 +1318,7 @@ class DevboxesResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxView,
+            cast_to=DevboxAsyncExecutionDetailView,
         )
 
     def write_file_contents(
@@ -2532,13 +2532,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
     async def wait_for_command(
         self,
-        id: str,
+        execution_id: str,
         *,
-        statuses: List[
-            Literal[
-                "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
-            ]
-        ],
+        devbox_id: str,
+        statuses: List[Literal["queued", "running", "completed"]],
         timeout_seconds: Optional[int] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -2547,17 +2544,18 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
-    ) -> DevboxView:
+    ) -> DevboxAsyncExecutionDetailView:
         """
-        Polls the Devbox's status until it reaches one of the desired statuses or times
-        out.
+        Polls the asynchronous execution's status until it reaches one of the desired
+        statuses or times out. Defaults to 60 seconds.
 
         Args:
-          statuses: The Devbox statuses to wait for. At least one status must be provided. The
-              devbox will be returned as soon as it reaches any of the provided statuses.
+          statuses: The command execution statuses to wait for. At least one status must be
+              provided. The command will be returned as soon as it reaches any of the provided
+              statuses.
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 30 seconds. Defaults
-              to 10 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
+              to 60 seconds.
 
           extra_headers: Send extra headers
 
@@ -2569,10 +2567,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/wait_for_status",
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
             body=await async_maybe_transform(
                 {
                     "statuses": statuses,
@@ -2587,7 +2587,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxView,
+            cast_to=DevboxAsyncExecutionDetailView,
         )
 
     async def write_file_contents(
