@@ -1,13 +1,26 @@
+from __future__ import annotations
+
+from typing import Iterator
+
 import pytest
 
+from runloop_api_client import Runloop
 from runloop_api_client.lib.polling import PollingConfig
 
-from .utils import make_client, unique_name
+from .utils import unique_name
 
 pytestmark = [pytest.mark.smoketest]
 
 
-client = make_client()
+@pytest.fixture(autouse=True, scope="module")
+def _cleanup(client: Runloop) -> Iterator[None]:  # pyright: ignore[reportUnusedFunction]
+    yield
+    global _devbox_id
+    if _devbox_id:
+        try:
+            client.devboxes.shutdown(_devbox_id)
+        except Exception:
+            pass
 
 
 """
@@ -18,17 +31,8 @@ _devbox_id = None
 _exec_id = None
 
 
-@pytest.fixture(scope="session")
-def some_function_name():
-    # setup
-    yield
-    # teardown
-    if _devbox_id:
-        client.devboxes.shutdown(_devbox_id)
-
-
 @pytest.mark.timeout(30)
-def test_launch_devbox() -> None:
+def test_launch_devbox(client: Runloop) -> None:
     global _devbox_id
     created = client.devboxes.create_and_await_running(
         name=unique_name("exec-devbox"),
@@ -38,7 +42,7 @@ def test_launch_devbox() -> None:
 
 
 @pytest.mark.timeout(30)
-def test_execute_async_and_await_completion() -> None:
+def test_execute_async_and_await_completion(client: Runloop) -> None:
     assert _devbox_id
     global _exec_id
     started = client.devboxes.executions.execute_async(_devbox_id, command="echo hello && sleep 1")
@@ -52,7 +56,7 @@ def test_execute_async_and_await_completion() -> None:
 
 
 @pytest.mark.timeout(30)
-def test_tail_stdout_logs() -> None:
+def test_tail_stdout_logs(client: Runloop) -> None:
     assert _devbox_id and _exec_id
     stream = client.devboxes.executions.stream_stdout_updates(execution_id=_exec_id, devbox_id=_devbox_id)
     received = ""
@@ -64,7 +68,7 @@ def test_tail_stdout_logs() -> None:
 
 
 @pytest.mark.timeout(30)
-def test_execute_and_await_completion() -> None:
+def test_execute_and_await_completion(client: Runloop) -> None:
     assert _devbox_id
     completed = client.devboxes.execute_and_await_completion(
         _devbox_id,
@@ -75,7 +79,7 @@ def test_execute_and_await_completion() -> None:
 
 
 @pytest.mark.timeout(90)
-def test_execute_and_await_completion_long_running() -> None:
+def test_execute_and_await_completion_long_running(client: Runloop) -> None:
     assert _devbox_id
     completed = client.devboxes.execute_and_await_completion(
         _devbox_id,

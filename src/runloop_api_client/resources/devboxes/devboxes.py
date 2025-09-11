@@ -6,7 +6,9 @@ from typing import Dict, List, Mapping, Iterable, Optional, TypedDict, cast
 from typing_extensions import Literal
 
 import httpx
-from uuid_utils import uuid7
+
+# uuid_utils is not typed
+from uuid_utils import uuid7  # type: ignore
 
 from .lsp import (
     LspResource,
@@ -809,7 +811,7 @@ class DevboxesResource(SyncAPIResource):
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
-        command_id = str(uuid7())
+        command_id = str(uuid7()) # type: ignore
         execution = self.execute(
             devbox_id,
             command=command,
@@ -2251,7 +2253,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
 
-        command_id = str(uuid7())
+        command_id = str(uuid7()) # type: ignore
         execution = await self.execute(
             devbox_id,
             command=command,
