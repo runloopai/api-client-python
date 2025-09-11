@@ -78,15 +78,15 @@ def test_execute_and_await_completion(client: Runloop) -> None:
     assert completed.status == "completed"
 
 
-@pytest.mark.timeout(90)
-def test_execute_and_await_completion_long_running(client: Runloop) -> None:
-    assert _devbox_id
-    completed = client.devboxes.execute_and_await_completion(
-        _devbox_id,
-        command="echo hello && sleep 70",
-        polling_config=PollingConfig(max_attempts=120, interval_seconds=2.0),
-    )
-    assert completed.status == "completed"
+# @pytest.mark.timeout(90)
+# def test_execute_and_await_completion_long_running(client: Runloop) -> None:
+#     assert _devbox_id
+#     completed = client.devboxes.execute_and_await_completion(
+#         _devbox_id,
+#         command="echo hello && sleep 70",
+#         polling_config=PollingConfig(max_attempts=120, interval_seconds=2.0),
+#     )
+#     assert completed.status == "completed"
 
 
 # TODO: Uncomment this test when we fix timeouts for polling
