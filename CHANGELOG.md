@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.60.1 (2025-09-11)
+
+Full Changelog: [v0.60.0...v0.60.1](https://github.com/runloopai/api-client-python/compare/v0.60.0...v0.60.1)
+
 ## 0.60.0 (2025-09-10)
 
 Full Changelog: [v0.59.0...v0.60.0](https://github.com/runloopai/api-client-python/compare/v0.59.0...v0.60.0)
