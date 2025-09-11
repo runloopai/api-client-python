@@ -1,13 +1,26 @@
+from __future__ import annotations
+
+from typing import Iterator
+
 import pytest
 
+from runloop_api_client import Runloop
 from runloop_api_client.lib.polling import PollingConfig
 
-from .utils import make_client, unique_name
+from .utils import unique_name
 
 pytestmark = [pytest.mark.smoketest]
 
 
-client = make_client()
+@pytest.fixture(autouse=True, scope="module")
+def _cleanup(client: Runloop) -> Iterator[None]:  # pyright: ignore[reportUnusedFunction]
+    yield
+    global _devbox_id
+    if _devbox_id:
+        try:
+            client.devboxes.shutdown(_devbox_id)
+        except Exception:
+            pass
 
 
 """
@@ -19,7 +32,7 @@ _snapshot_id = None
 
 
 @pytest.mark.timeout(30)
-def test_snapshot_devbox() -> None:
+def test_snapshot_devbox(client: Runloop) -> None:
     global _devbox_id, _snapshot_id
     created = client.devboxes.create_and_await_running(
         name=unique_name("snap-devbox"),
@@ -33,7 +46,7 @@ def test_snapshot_devbox() -> None:
 
 
 @pytest.mark.timeout(30)
-def test_launch_devbox_from_snapshot() -> None:
+def test_launch_devbox_from_snapshot(client: Runloop) -> None:
     assert _snapshot_id
     launched = client.devboxes.create_and_await_running(
         snapshot_id=_snapshot_id,
