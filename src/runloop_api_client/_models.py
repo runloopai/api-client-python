@@ -179,7 +179,7 @@ class BaseModel(pydantic.BaseModel):
     @classmethod
     @override
     def construct(  # pyright: ignore[reportIncompatibleMethodOverride]
-        __cls: Type[ModelT],
+        __cls: Type[ModelT], # type: ignore
         _fields_set: set[str] | None = None,
         **values: object,
     ) -> ModelT:

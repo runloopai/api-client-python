@@ -6,6 +6,7 @@ from typing import Dict, List, Mapping, Iterable, Optional, TypedDict, cast
 from typing_extensions import Literal
 
 import httpx
+from uuid_utils import uuid7
 
 from .lsp import (
     LspResource,
@@ -785,6 +786,59 @@ class DevboxesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    def execute_and_await_completion(
+        self,
+        devbox_id: str,
+        *,
+        command: str,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        # The following are forwarded to the initial execute request
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Execute a command and wait for it to complete with optimal latency for long running commands.
+
+        This method launches an execution with a generated command_id and first attempts to
+        return the result within the initial request's timeout. If the execution is not yet
+        complete, it switches to using wait_for_command to minimize latency while waiting.
+        """
+        command_id = str(uuid7())
+        execution = self.execute(
+            devbox_id,
+            command=command,
+            command_id=command_id,
+            shell_name=shell_name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        if execution.status == "completed":
+            return execution
+
+        def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
+            if isinstance(error, APITimeoutError) or (
+                isinstance(error, APIStatusError) and error.response.status_code == 408
+            ):
+                return execution
+            raise error
+
+        def is_done(result: DevboxAsyncExecutionDetailView) -> bool:
+            return result.status == "completed"
+
+        return poll_until(
+            lambda: self.wait_for_command(execution.execution_id, devbox_id=devbox_id, statuses=["completed"]),
+            is_done,
+            polling_config,
+            handle_timeout_error,
         )
 
     def execute_async(
@@ -2173,6 +2227,60 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    async def execute_and_await_completion(
+        self,
+        devbox_id: str,
+        *,
+        command: str,
+        shell_name: Optional[str] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        # The following are forwarded to the initial execute request
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Execute a command and wait for it to complete with optimal latency for long running commands.
+
+        This method launches an execution with a generated command_id and first attempts to
+        return the result within the initial request's timeout. If the execution is not yet
+        complete, it switches to using wait_for_command to minimize latency while waiting.
+        """
+
+        command_id = str(uuid7())
+        execution = await self.execute(
+            devbox_id,
+            command=command,
+            command_id=command_id,
+            shell_name=shell_name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        if execution.status == "completed":
+            return execution
+
+        def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
+            if isinstance(error, APITimeoutError) or (
+                isinstance(error, APIStatusError) and error.response.status_code == 408
+            ):
+                return execution
+            raise error
+
+        def is_done(result: DevboxAsyncExecutionDetailView) -> bool:
+            return result.status == "completed"
+
+        return await async_poll_until(
+            lambda: self.wait_for_command(execution.execution_id, devbox_id=devbox_id, statuses=["completed"]),
+            is_done,
+            polling_config,
+            handle_timeout_error,
         )
 
     async def execute_async(

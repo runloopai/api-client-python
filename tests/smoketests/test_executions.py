@@ -61,3 +61,37 @@ def test_tail_stdout_logs() -> None:
         if received:
             break
     assert isinstance(received, str)
+
+
+@pytest.mark.timeout(30)
+def test_execute_and_await_completion() -> None:
+    assert _devbox_id
+    completed = client.devboxes.execute_and_await_completion(
+        _devbox_id,
+        command="echo hello && sleep 1",
+        polling_config=PollingConfig(max_attempts=120, interval_seconds=2.0, timeout_seconds=10 * 60),
+    )
+    assert completed.status == "completed"
+
+
+@pytest.mark.timeout(90)
+def test_execute_and_await_completion_long_running() -> None:
+    assert _devbox_id
+    completed = client.devboxes.execute_and_await_completion(
+        _devbox_id,
+        command="echo hello && sleep 70",
+        polling_config=PollingConfig(max_attempts=120, interval_seconds=2.0),
+    )
+    assert completed.status == "completed"
+
+
+# TODO: Uncomment this test when we fix timeouts for polling
+# @pytest.mark.timeout(30)
+# def test_execute_and_await_completion_timeout() -> None:
+#     assert _devbox_id
+#     with pytest.raises(PollingTimeout):
+#         client.devboxes.execute_and_await_completion(
+#             devbox_id=_devbox_id,
+#             command="echo hello && sleep 10",
+#             polling_config=PollingConfig(max_attempts=1, interval_seconds=2.0, timeout_seconds=3),
+#         )
