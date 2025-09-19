@@ -6,7 +6,7 @@ from typing import Dict, Optional
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -49,14 +49,14 @@ class DiskSnapshotsResource(SyncAPIResource):
         self,
         id: str,
         *,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxSnapshotView:
         """Updates disk snapshot metadata via update vs patch.
@@ -103,17 +103,17 @@ class DiskSnapshotsResource(SyncAPIResource):
     def list(
         self,
         *,
-        devbox_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        metadata_key: str | NotGiven = NOT_GIVEN,
-        metadata_key_in: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        devbox_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        metadata_key: str | Omit = omit,
+        metadata_key_in: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]:
         """
         List all snapshots of a Devbox while optionally filtering by Devbox ID and
@@ -170,7 +170,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -210,7 +210,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
         """
         Get the current status of an asynchronous disk snapshot operation, including
@@ -260,14 +260,14 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxSnapshotView:
         """Updates disk snapshot metadata via update vs patch.
@@ -314,17 +314,17 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        devbox_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        metadata_key: str | NotGiven = NOT_GIVEN,
-        metadata_key_in: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        devbox_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        metadata_key: str | Omit = omit,
+        metadata_key_in: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DevboxSnapshotView, AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]]:
         """
         List all snapshots of a Devbox while optionally filtering by Devbox ID and
@@ -381,7 +381,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -421,7 +421,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
         """
         Get the current status of an asynchronous disk snapshot operation, including

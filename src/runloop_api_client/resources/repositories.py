@@ -7,7 +7,7 @@ from typing import Optional
 import httpx
 
 from ..types import repository_list_params, repository_create_params, repository_refresh_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -50,14 +50,14 @@ class RepositoriesResource(SyncAPIResource):
         *,
         name: str,
         owner: str,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_id: Optional[str] | Omit = omit,
+        github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> RepositoryConnectionView:
         """
@@ -113,7 +113,7 @@ class RepositoriesResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RepositoryConnectionView:
         """
         Get Repository Connection details including latest inspection status and
@@ -141,16 +141,16 @@ class RepositoriesResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        owner: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        owner: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncRepositoriesCursorIDPage[RepositoryConnectionView]:
         """
         List all available repository connections.
@@ -202,7 +202,7 @@ class RepositoriesResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -243,7 +243,7 @@ class RepositoriesResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RepositoryInspectionListView:
         """
         List all inspections of a repository connection including automatically
@@ -272,14 +272,14 @@ class RepositoriesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_id: Optional[str] | Omit = omit,
+        github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -348,14 +348,14 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         *,
         name: str,
         owner: str,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_id: Optional[str] | Omit = omit,
+        github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> RepositoryConnectionView:
         """
@@ -411,7 +411,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RepositoryConnectionView:
         """
         Get Repository Connection details including latest inspection status and
@@ -439,16 +439,16 @@ class AsyncRepositoriesResource(AsyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        owner: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        owner: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[RepositoryConnectionView, AsyncRepositoriesCursorIDPage[RepositoryConnectionView]]:
         """
         List all available repository connections.
@@ -500,7 +500,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -541,7 +541,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RepositoryInspectionListView:
         """
         List all inspections of a repository connection including automatically
@@ -570,14 +570,14 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        github_auth_token: Optional[str] | NotGiven = NOT_GIVEN,
+        blueprint_id: Optional[str] | Omit = omit,
+        github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """

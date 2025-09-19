@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -55,14 +55,14 @@ class ComputersResource(SyncAPIResource):
     def create(
         self,
         *,
-        display_dimensions: Optional[computer_create_params.DisplayDimensions] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        display_dimensions: Optional[computer_create_params.DisplayDimensions] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerView:
         """Create a Computer and begin the boot process.
@@ -116,7 +116,7 @@ class ComputersResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ComputerView:
         """
         Get Computer Details.
@@ -145,13 +145,13 @@ class ComputersResource(SyncAPIResource):
         id: str,
         *,
         action: Literal["key", "type"],
-        text: Optional[str] | NotGiven = NOT_GIVEN,
+        text: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerKeyboardInteractionResponse:
         """
@@ -199,13 +199,13 @@ class ComputersResource(SyncAPIResource):
         id: str,
         *,
         action: Literal["mouse_move", "left_click", "left_click_drag", "right_click", "middle_click", "double_click"],
-        coordinate: Optional[computer_mouse_interaction_params.Coordinate] | NotGiven = NOT_GIVEN,
+        coordinate: Optional[computer_mouse_interaction_params.Coordinate] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerMouseInteractionResponse:
         """
@@ -260,7 +260,7 @@ class ComputersResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerScreenInteractionResponse:
         """
@@ -321,14 +321,14 @@ class AsyncComputersResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        display_dimensions: Optional[computer_create_params.DisplayDimensions] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
+        display_dimensions: Optional[computer_create_params.DisplayDimensions] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerView:
         """Create a Computer and begin the boot process.
@@ -382,7 +382,7 @@ class AsyncComputersResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ComputerView:
         """
         Get Computer Details.
@@ -411,13 +411,13 @@ class AsyncComputersResource(AsyncAPIResource):
         id: str,
         *,
         action: Literal["key", "type"],
-        text: Optional[str] | NotGiven = NOT_GIVEN,
+        text: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerKeyboardInteractionResponse:
         """
@@ -465,13 +465,13 @@ class AsyncComputersResource(AsyncAPIResource):
         id: str,
         *,
         action: Literal["mouse_move", "left_click", "left_click_drag", "right_click", "middle_click", "double_click"],
-        coordinate: Optional[computer_mouse_interaction_params.Coordinate] | NotGiven = NOT_GIVEN,
+        coordinate: Optional[computer_mouse_interaction_params.Coordinate] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerMouseInteractionResponse:
         """
@@ -526,7 +526,7 @@ class AsyncComputersResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ComputerScreenInteractionResponse:
         """
