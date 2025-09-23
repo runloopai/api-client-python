@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Optional
 
 import httpx
@@ -157,6 +158,7 @@ class ExecutionsResource(SyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def execute_sync(
         self,
         id: str,
@@ -487,6 +489,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def execute_sync(
         self,
         id: str,
@@ -704,8 +707,10 @@ class ExecutionsResourceWithRawResponse:
         self.execute_async = to_raw_response_wrapper(
             executions.execute_async,
         )
-        self.execute_sync = to_raw_response_wrapper(
-            executions.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                executions.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.kill = to_raw_response_wrapper(
             executions.kill,
@@ -728,8 +733,10 @@ class AsyncExecutionsResourceWithRawResponse:
         self.execute_async = async_to_raw_response_wrapper(
             executions.execute_async,
         )
-        self.execute_sync = async_to_raw_response_wrapper(
-            executions.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                executions.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.kill = async_to_raw_response_wrapper(
             executions.kill,
@@ -752,8 +759,10 @@ class ExecutionsResourceWithStreamingResponse:
         self.execute_async = to_streamed_response_wrapper(
             executions.execute_async,
         )
-        self.execute_sync = to_streamed_response_wrapper(
-            executions.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                executions.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.kill = to_streamed_response_wrapper(
             executions.kill,
@@ -776,8 +785,10 @@ class AsyncExecutionsResourceWithStreamingResponse:
         self.execute_async = async_to_streamed_response_wrapper(
             executions.execute_async,
         )
-        self.execute_sync = async_to_streamed_response_wrapper(
-            executions.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                executions.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.kill = async_to_streamed_response_wrapper(
             executions.kill,

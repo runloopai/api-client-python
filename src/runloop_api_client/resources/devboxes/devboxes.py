@@ -2,19 +2,12 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Dict, List, Mapping, Iterable, Optional, cast
 from typing_extensions import Literal
 
 import httpx
 
-from .lsp import (
-    LspResource,
-    AsyncLspResource,
-    LspResourceWithRawResponse,
-    AsyncLspResourceWithRawResponse,
-    LspResourceWithStreamingResponse,
-    AsyncLspResourceWithStreamingResponse,
-)
 from .logs import (
     LogsResource,
     AsyncLogsResource,
@@ -123,10 +116,6 @@ class DevboxesResource(SyncAPIResource):
     @cached_property
     def computers(self) -> ComputersResource:
         return ComputersResource(self._client)
-
-    @cached_property
-    def lsp(self) -> LspResource:
-        return LspResource(self._client)
 
     @cached_property
     def logs(self) -> LogsResource:
@@ -580,6 +569,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         command: str,
         command_id: str,
+        optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -601,6 +591,9 @@ class DevboxesResource(SyncAPIResource):
               persistent shell.
 
           command_id: The command ID for idempotency and tracking
+
+          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
+              is 600 seconds.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -626,6 +619,7 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "command": command,
                     "command_id": command_id,
+                    "optimistic_timeout": optimistic_timeout,
                     "shell_name": shell_name,
                 },
                 devbox_execute_params.DevboxExecuteParams,
@@ -699,6 +693,7 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def execute_sync(
         self,
         id: str,
@@ -1394,10 +1389,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return AsyncComputersResource(self._client)
 
     @cached_property
-    def lsp(self) -> AsyncLspResource:
-        return AsyncLspResource(self._client)
-
-    @cached_property
     def logs(self) -> AsyncLogsResource:
         return AsyncLogsResource(self._client)
 
@@ -1849,6 +1840,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         command: str,
         command_id: str,
+        optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1870,6 +1862,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
               persistent shell.
 
           command_id: The command ID for idempotency and tracking
+
+          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
+              is 600 seconds.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -1895,6 +1890,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "command": command,
                     "command_id": command_id,
+                    "optimistic_timeout": optimistic_timeout,
                     "shell_name": shell_name,
                 },
                 devbox_execute_params.DevboxExecuteParams,
@@ -1968,6 +1964,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def execute_sync(
         self,
         id: str,
@@ -2684,8 +2681,10 @@ class DevboxesResourceWithRawResponse:
         self.execute_async = to_raw_response_wrapper(
             devboxes.execute_async,
         )
-        self.execute_sync = to_raw_response_wrapper(
-            devboxes.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.keep_alive = to_raw_response_wrapper(
             devboxes.keep_alive,
@@ -2737,10 +2736,6 @@ class DevboxesResourceWithRawResponse:
         return ComputersResourceWithRawResponse(self._devboxes.computers)
 
     @cached_property
-    def lsp(self) -> LspResourceWithRawResponse:
-        return LspResourceWithRawResponse(self._devboxes.lsp)
-
-    @cached_property
     def logs(self) -> LogsResourceWithRawResponse:
         return LogsResourceWithRawResponse(self._devboxes.logs)
 
@@ -2784,8 +2779,10 @@ class AsyncDevboxesResourceWithRawResponse:
         self.execute_async = async_to_raw_response_wrapper(
             devboxes.execute_async,
         )
-        self.execute_sync = async_to_raw_response_wrapper(
-            devboxes.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.keep_alive = async_to_raw_response_wrapper(
             devboxes.keep_alive,
@@ -2837,10 +2834,6 @@ class AsyncDevboxesResourceWithRawResponse:
         return AsyncComputersResourceWithRawResponse(self._devboxes.computers)
 
     @cached_property
-    def lsp(self) -> AsyncLspResourceWithRawResponse:
-        return AsyncLspResourceWithRawResponse(self._devboxes.lsp)
-
-    @cached_property
     def logs(self) -> AsyncLogsResourceWithRawResponse:
         return AsyncLogsResourceWithRawResponse(self._devboxes.logs)
 
@@ -2884,8 +2877,10 @@ class DevboxesResourceWithStreamingResponse:
         self.execute_async = to_streamed_response_wrapper(
             devboxes.execute_async,
         )
-        self.execute_sync = to_streamed_response_wrapper(
-            devboxes.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.keep_alive = to_streamed_response_wrapper(
             devboxes.keep_alive,
@@ -2937,10 +2932,6 @@ class DevboxesResourceWithStreamingResponse:
         return ComputersResourceWithStreamingResponse(self._devboxes.computers)
 
     @cached_property
-    def lsp(self) -> LspResourceWithStreamingResponse:
-        return LspResourceWithStreamingResponse(self._devboxes.lsp)
-
-    @cached_property
     def logs(self) -> LogsResourceWithStreamingResponse:
         return LogsResourceWithStreamingResponse(self._devboxes.logs)
 
@@ -2984,8 +2975,10 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.execute_async = async_to_streamed_response_wrapper(
             devboxes.execute_async,
         )
-        self.execute_sync = async_to_streamed_response_wrapper(
-            devboxes.execute_sync,
+        self.execute_sync = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.keep_alive = async_to_streamed_response_wrapper(
             devboxes.keep_alive,
@@ -3035,10 +3028,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
     @cached_property
     def computers(self) -> AsyncComputersResourceWithStreamingResponse:
         return AsyncComputersResourceWithStreamingResponse(self._devboxes.computers)
-
-    @cached_property
-    def lsp(self) -> AsyncLspResourceWithStreamingResponse:
-        return AsyncLspResourceWithStreamingResponse(self._devboxes.lsp)
 
     @cached_property
     def logs(self) -> AsyncLogsResourceWithStreamingResponse:
