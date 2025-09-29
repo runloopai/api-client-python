@@ -37,7 +37,7 @@ from ...types import (
     devbox_snapshot_disk_async_params,
     devbox_write_file_contents_params,
 )
-from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
+from ..._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
 from ..._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .browsers import (
     BrowsersResource,
@@ -805,7 +805,7 @@ class DevboxesResource(SyncAPIResource):
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
-        command_id = str(uuid7()) # type: ignore
+        command_id = str(uuid7())  # type: ignore
         execution = self.execute(
             devbox_id,
             command=command,
@@ -2249,7 +2249,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
 
-        command_id = str(uuid7()) # type: ignore
+        command_id = str(uuid7())  # type: ignore
         execution = await self.execute(
             devbox_id,
             command=command,

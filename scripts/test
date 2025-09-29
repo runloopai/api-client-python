@@ -63,7 +63,7 @@ if [ "${RUN_SMOKETESTS}" != "1" ]; then
   PYTEST_ARGS+=( -m "not smoketest" )
 fi
 
-rye run pytest "${PYTEST_ARGS[@]}" "$@"
+uv run pytest "${PYTEST_ARGS[@]}" "$@"
 
 echo "==> Running Pydantic v1 tests"
-rye run nox -s test-pydantic-v1 -- "${PYTEST_ARGS[@]}" "$@"
+uv run nox -s test-pydantic-v1 -- "${PYTEST_ARGS[@]}" "$@"

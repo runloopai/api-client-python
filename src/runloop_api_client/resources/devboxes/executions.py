@@ -363,10 +363,10 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        
-        default_headers: Headers = {'Accept': 'text/event-stream'}
+
+        default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
-        
+
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
@@ -447,10 +447,10 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        
-        default_headers: Headers = {'Accept': 'text/event-stream'}
+
+        default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
-        
+
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
@@ -816,10 +816,10 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        
-        default_headers: Headers = {'Accept': 'text/event-stream'}
+
+        default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
-        
+
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
                 f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
@@ -900,11 +900,10 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
-        
-        default_headers: Headers = {'Accept': 'text/event-stream'}
+
+        default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
-        
         # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(

@@ -5,4 +5,8 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "==> Running formatters"
-rye run format
+uv run ruff format
+uv run python scripts/utils/ruffen-docs.py README.md api.md
+uv run ruff check --fix .
+# run formatting again to fix any inconsistencies when imports are stripped
+uv run ruff format
