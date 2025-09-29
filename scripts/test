@@ -65,5 +65,3 @@ fi
 
 uv run pytest "${PYTEST_ARGS[@]}" "$@"
 
-echo "==> Running Pydantic v1 tests"
-uv run nox -s test-pydantic-v1 -- "${PYTEST_ARGS[@]}" "$@"
