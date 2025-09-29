@@ -22,7 +22,7 @@ from ...types import (
     benchmark_definitions_params,
     benchmark_list_public_params,
 )
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -70,18 +70,18 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         name: str,
-        attribution: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        scenario_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        attribution: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
         """
@@ -148,7 +148,7 @@ class BenchmarksResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BenchmarkView:
         """
         Get a previously created Benchmark.
@@ -177,18 +177,18 @@ class BenchmarksResource(SyncAPIResource):
         id: str,
         *,
         name: str,
-        attribution: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        scenario_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        attribution: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
         """
@@ -251,14 +251,14 @@ class BenchmarksResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBenchmarksCursorIDPage[BenchmarkView]:
         """
         List all Benchmarks matching filter.
@@ -299,14 +299,14 @@ class BenchmarksResource(SyncAPIResource):
         self,
         id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScenarioDefinitionListView:
         """
         Get scenario definitions for a previously created Benchmark.
@@ -347,14 +347,14 @@ class BenchmarksResource(SyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBenchmarksCursorIDPage[BenchmarkView]:
         """
         List all public benchmarks matching filter.
@@ -395,15 +395,15 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         benchmark_id: str,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[RunProfile] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """
@@ -478,18 +478,18 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        attribution: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        scenario_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        attribution: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
         """
@@ -556,7 +556,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BenchmarkView:
         """
         Get a previously created Benchmark.
@@ -585,18 +585,18 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         id: str,
         *,
         name: str,
-        attribution: Optional[str] | NotGiven = NOT_GIVEN,
-        description: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        scenario_ids: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        attribution: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
         """
@@ -659,14 +659,14 @@ class AsyncBenchmarksResource(AsyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[BenchmarkView, AsyncBenchmarksCursorIDPage[BenchmarkView]]:
         """
         List all Benchmarks matching filter.
@@ -707,14 +707,14 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScenarioDefinitionListView:
         """
         Get scenario definitions for a previously created Benchmark.
@@ -755,14 +755,14 @@ class AsyncBenchmarksResource(AsyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[BenchmarkView, AsyncBenchmarksCursorIDPage[BenchmarkView]]:
         """
         List all public benchmarks matching filter.
@@ -803,15 +803,15 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         benchmark_id: str,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[RunProfile] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """

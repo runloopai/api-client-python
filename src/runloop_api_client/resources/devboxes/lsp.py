@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -82,16 +82,16 @@ class LspResource(SyncAPIResource):
         id: str,
         *,
         title: str,
-        command: BaseCommandParam | NotGiven = NOT_GIVEN,
-        edit: BaseWorkspaceEditParam | NotGiven = NOT_GIVEN,
-        is_preferred: bool | NotGiven = NOT_GIVEN,
-        kind: str | NotGiven = NOT_GIVEN,
+        command: BaseCommandParam | Omit = omit,
+        edit: BaseWorkspaceEditParam | Omit = omit,
+        is_preferred: bool | Omit = omit,
+        kind: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeActionApplicationResult:
         """
@@ -138,14 +138,14 @@ class LspResource(SyncAPIResource):
         id: str,
         *,
         uri: str,
-        context: CodeActionContextParam | NotGiven = NOT_GIVEN,
-        range: RangeParam | NotGiven = NOT_GIVEN,
+        context: CodeActionContextParam | Omit = omit,
+        range: RangeParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeActionsResponse:
         """Get code actions for a part of a document.
@@ -220,7 +220,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DiagnosticsResponse:
         """
@@ -262,7 +262,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DocumentSymbolResponse:
         """
@@ -304,7 +304,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FileContentsResponse:
         """
@@ -348,7 +348,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FileDefinitionResponse:
         """
@@ -397,7 +397,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> LspFilesResponse:
         """
         Get a list of all files being watched by the language server
@@ -431,7 +431,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FormattingResponse:
         """
@@ -475,7 +475,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> LspGetCodeActionsForDiagnosticResponse:
         """
@@ -519,13 +519,13 @@ class LspResource(SyncAPIResource):
         *,
         symbol_name: str,
         uri: FileUri,
-        symbol_type: SymbolType | NotGiven = NOT_GIVEN,
+        symbol_type: SymbolType | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeSegmentInfoResponse:
         """
@@ -577,7 +577,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> SignatureHelpResponse:
         """
@@ -626,7 +626,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> HealthStatusResponse:
         """
         This method provides a health check for the language server, including its
@@ -663,7 +663,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ReferencesResponse:
         """Get references for a given symbol.
@@ -716,7 +716,7 @@ class LspResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> str:
         """
@@ -775,16 +775,16 @@ class AsyncLspResource(AsyncAPIResource):
         id: str,
         *,
         title: str,
-        command: BaseCommandParam | NotGiven = NOT_GIVEN,
-        edit: BaseWorkspaceEditParam | NotGiven = NOT_GIVEN,
-        is_preferred: bool | NotGiven = NOT_GIVEN,
-        kind: str | NotGiven = NOT_GIVEN,
+        command: BaseCommandParam | Omit = omit,
+        edit: BaseWorkspaceEditParam | Omit = omit,
+        is_preferred: bool | Omit = omit,
+        kind: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeActionApplicationResult:
         """
@@ -831,14 +831,14 @@ class AsyncLspResource(AsyncAPIResource):
         id: str,
         *,
         uri: str,
-        context: CodeActionContextParam | NotGiven = NOT_GIVEN,
-        range: RangeParam | NotGiven = NOT_GIVEN,
+        context: CodeActionContextParam | Omit = omit,
+        range: RangeParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeActionsResponse:
         """Get code actions for a part of a document.
@@ -913,7 +913,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DiagnosticsResponse:
         """
@@ -955,7 +955,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DocumentSymbolResponse:
         """
@@ -997,7 +997,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FileContentsResponse:
         """
@@ -1041,7 +1041,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FileDefinitionResponse:
         """
@@ -1090,7 +1090,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> LspFilesResponse:
         """
         Get a list of all files being watched by the language server
@@ -1124,7 +1124,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> FormattingResponse:
         """
@@ -1168,7 +1168,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> LspGetCodeActionsForDiagnosticResponse:
         """
@@ -1212,13 +1212,13 @@ class AsyncLspResource(AsyncAPIResource):
         *,
         symbol_name: str,
         uri: FileUri,
-        symbol_type: SymbolType | NotGiven = NOT_GIVEN,
+        symbol_type: SymbolType | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> CodeSegmentInfoResponse:
         """
@@ -1270,7 +1270,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> SignatureHelpResponse:
         """
@@ -1319,7 +1319,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> HealthStatusResponse:
         """
         This method provides a health check for the language server, including its
@@ -1356,7 +1356,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ReferencesResponse:
         """Get references for a given symbol.
@@ -1409,7 +1409,7 @@ class AsyncLspResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> str:
         """
