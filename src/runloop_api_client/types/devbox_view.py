@@ -43,6 +43,12 @@ class DevboxView(BaseModel):
     create_time_ms: int
     """Creation time of the Devbox (Unix timestamp milliseconds)."""
 
+    end_time_ms: Optional[int] = None
+    """The time the Devbox finished execution (Unix timestamp milliseconds).
+
+    Present if the Devbox is in a terminal state.
+    """
+
     launch_parameters: LaunchParameters
     """The launch parameters used to create the Devbox."""
 
@@ -63,14 +69,14 @@ class DevboxView(BaseModel):
     a Blueprint.
     """
 
-    end_time_ms: Optional[int] = None
-    """The time the Devbox finished execution (Unix timestamp milliseconds).
-
-    Present if the Devbox is in a terminal state.
-    """
-
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
     """The failure reason if the Devbox failed, if the Devbox has a 'failure' status."""
+
+    initiator_id: Optional[str] = None
+    """The ID of the initiator that created the Devbox."""
+
+    initiator_type: Optional[Literal["unknown", "api", "scenario"]] = None
+    """The type of initiator that created the Devbox."""
 
     name: Optional[str] = None
     """The name of the Devbox."""

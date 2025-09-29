@@ -92,7 +92,7 @@ class TestScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
-            validation_type="FORWARD",
+            validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -244,7 +244,7 @@ class TestScenarios:
                     }
                 ]
             },
-            validation_type="FORWARD",
+            validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -490,7 +490,7 @@ class TestAsyncScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
-            validation_type="FORWARD",
+            validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 
@@ -642,7 +642,7 @@ class TestAsyncScenarios:
                     }
                 ]
             },
-            validation_type="FORWARD",
+            validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
 

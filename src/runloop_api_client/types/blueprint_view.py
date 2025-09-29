@@ -62,6 +62,9 @@ class BlueprintView(BaseModel):
     base_blueprint_id: Optional[str] = None
     """The ID of the base Blueprint."""
 
+    build_finish_time_ms: Optional[int] = None
+    """Build completion time of the Blueprint (Unix timestamp milliseconds)."""
+
     containerized_services: Optional[List[ContainerizedService]] = None
     """List of ContainerizedServices available in the Blueprint.
 

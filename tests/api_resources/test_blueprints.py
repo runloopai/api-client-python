@@ -35,6 +35,7 @@ class TestBlueprints:
             name="name",
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -301,6 +302,7 @@ class TestBlueprints:
             name="name",
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -391,6 +393,7 @@ class TestAsyncBlueprints:
             name="name",
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -657,6 +660,7 @@ class TestAsyncBlueprints:
             name="name",
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
             code_mounts=[
                 {
                     "repo_name": "repo_name",
