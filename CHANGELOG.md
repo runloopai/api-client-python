@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.61.0 (2025-09-29)
+
+Full Changelog: [v0.60.1...v0.61.0](https://github.com/runloopai/api-client-python/compare/v0.60.1...v0.61.0)
+
+### Features
+
+* **api:** api update ([6c66922](https://github.com/runloopai/api-client-python/commit/6c669226f72692500161d8cef6e9220fb474d748))
+* **api:** api update ([249f9d2](https://github.com/runloopai/api-client-python/commit/249f9d264e0f376bacdc2dc5625eb58f9ecd1adf))
+* **api:** api update ([6c9ba20](https://github.com/runloopai/api-client-python/commit/6c9ba20394ae5d5db138048cc95d6106fa6aeca3))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([d5ba1be](https://github.com/runloopai/api-client-python/commit/d5ba1beccdfc925274d91c225ff1141177978bdc))
+* **internal:** update pydantic dependency ([baecb39](https://github.com/runloopai/api-client-python/commit/baecb39b0f1d647a42dc40338215ddfabdcc2bbf))
+* **types:** change optional parameter type from NotGiven to Omit ([783fea5](https://github.com/runloopai/api-client-python/commit/783fea55e782d391c0f4332908e86b16ec318bd4))
+
 ## 0.60.1 (2025-09-11)
 
 Full Changelog: [v0.60.0...v0.60.1](https://github.com/runloopai/api-client-python/compare/v0.60.0...v0.60.1)
