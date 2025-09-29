@@ -49,5 +49,5 @@ class ScenarioCreateParams(TypedDict, total=False):
     scenario will fail to start.
     """
 
-    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]]
+    validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]]
     """Validation strategy."""

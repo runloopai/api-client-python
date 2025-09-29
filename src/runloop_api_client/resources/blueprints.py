@@ -74,6 +74,7 @@ class BlueprintsResource(SyncAPIResource):
         name: str,
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -106,6 +107,8 @@ class BlueprintsResource(SyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -140,6 +143,7 @@ class BlueprintsResource(SyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -480,6 +484,7 @@ class BlueprintsResource(SyncAPIResource):
         name: str,
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -510,6 +515,8 @@ class BlueprintsResource(SyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -544,6 +551,7 @@ class BlueprintsResource(SyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -591,6 +599,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         name: str,
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -623,6 +632,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -657,6 +668,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -997,6 +1009,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         name: str,
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -1027,6 +1040,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1061,6 +1076,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,

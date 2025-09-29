@@ -30,6 +30,9 @@ class BlueprintPreviewParams(TypedDict, total=False):
     be specified.
     """
 
+    build_args: Optional[Dict[str, str]]
+    """(Optional) Arbitrary Docker build args to pass during build."""
+
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Blueprint."""
 
