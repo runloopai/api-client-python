@@ -30,7 +30,7 @@ from .scorers import (
     ScorersResourceWithStreamingResponse,
     AsyncScorersResourceWithStreamingResponse,
 )
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
+from ..._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -89,18 +89,18 @@ class ScenariosResource(SyncAPIResource):
         input_context: InputContextParam,
         name: str,
         scoring_contract: ScoringContractParam,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        reference_output: Optional[str] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
         """
@@ -176,7 +176,7 @@ class ScenariosResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScenarioView:
         """
         Get a previously created scenario.
@@ -204,21 +204,21 @@ class ScenariosResource(SyncAPIResource):
         self,
         id: str,
         *,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        input_context: Optional[InputContextUpdateParam] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
-        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | Omit = omit,
+        input_context: Optional[InputContextUpdateParam] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        reference_output: Optional[str] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scoring_contract: Optional[ScoringContractUpdateParam] | Omit = omit,
+        validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
         """
@@ -288,16 +288,16 @@ class ScenariosResource(SyncAPIResource):
     def list(
         self,
         *,
-        benchmark_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        benchmark_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncScenariosCursorIDPage[ScenarioView]:
         """
         List all Scenarios matching filter.
@@ -343,15 +343,15 @@ class ScenariosResource(SyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncScenariosCursorIDPage[ScenarioView]:
         """
         List all public scenarios matching filter.
@@ -395,16 +395,16 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
+        benchmark_run_id: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[RunProfile] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioRunView:
         """
@@ -546,18 +546,18 @@ class AsyncScenariosResource(AsyncAPIResource):
         input_context: InputContextParam,
         name: str,
         scoring_contract: ScoringContractParam,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        reference_output: Optional[str] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
         """
@@ -633,7 +633,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScenarioView:
         """
         Get a previously created scenario.
@@ -661,21 +661,21 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        environment_parameters: Optional[ScenarioEnvironmentParam] | NotGiven = NOT_GIVEN,
-        input_context: Optional[InputContextUpdateParam] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        reference_output: Optional[str] | NotGiven = NOT_GIVEN,
-        required_environment_variables: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        required_secret_names: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
-        scoring_contract: Optional[ScoringContractUpdateParam] | NotGiven = NOT_GIVEN,
-        validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] | NotGiven = NOT_GIVEN,
+        environment_parameters: Optional[ScenarioEnvironmentParam] | Omit = omit,
+        input_context: Optional[InputContextUpdateParam] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        reference_output: Optional[str] | Omit = omit,
+        required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scoring_contract: Optional[ScoringContractUpdateParam] | Omit = omit,
+        validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
         """
@@ -745,16 +745,16 @@ class AsyncScenariosResource(AsyncAPIResource):
     def list(
         self,
         *,
-        benchmark_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        benchmark_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
         """
         List all Scenarios matching filter.
@@ -800,15 +800,15 @@ class AsyncScenariosResource(AsyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ScenarioView, AsyncScenariosCursorIDPage[ScenarioView]]:
         """
         List all public scenarios matching filter.
@@ -852,16 +852,16 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         *,
         scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[RunProfile] | NotGiven = NOT_GIVEN,
+        benchmark_run_id: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[RunProfile] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioRunView:
         """

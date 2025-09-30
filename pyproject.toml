@@ -1,6 +1,6 @@
 [project]
 name = "runloop_api_client"
-version = "0.60.1"
+version = "0.61.0"
 description = "The official Python library for the runloop API"
 dynamic = ["readme"]
 license = "MIT"
@@ -42,10 +42,13 @@ Repository = "https://github.com/runloopai/api-client-python"
 [project.optional-dependencies]
 aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.8"]
 
-[tool.rye]
+[tool.uv]
 managed = true
-# version pins are in requirements-dev.lock
-dev-dependencies = [
+required-version = ">=0.5.0"
+
+[dependency-groups]
+# version pins are in uv.lock
+dev = [
     "pyright==1.1.399",
     "mypy",
     "respx",
@@ -54,7 +57,6 @@ dev-dependencies = [
     "pytest-timeout",
     "ruff",
     "time-machine",
-    "nox",
     "dirty-equals>=0.6.0",
     "importlib-metadata>=6.7.0",
     "rich>=13.7.1",
@@ -96,10 +98,6 @@ typecheck = { chain = [
 requires = ["hatchling==1.26.3", "hatch-fancy-pypi-readme"]
 build-backend = "hatchling.build"
 
-[dependency-groups]
-dev = [
-    "ruff>=0.12.7",
-]
 
 [tool.hatch.build]
 include = [
@@ -117,7 +115,6 @@ include = [
   "/*.lock",
   "/*.md",
   "/mypy.ini",
-  "/noxfile.py",
   "bin/*",
   "examples/*",
   "src/*",
@@ -160,7 +157,6 @@ pythonVersion = "3.9"
 exclude = [
     "_dev",
     ".venv",
-    ".nox",
     ".git",
 ]
 

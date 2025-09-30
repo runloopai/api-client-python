@@ -36,6 +36,8 @@ from runloop_api_client._exceptions import RunloopError, APIStatusError
 from runloop_api_client.lib.polling import PollingConfig, PollingTimeout
 from runloop_api_client.types.shared.launch_parameters import LaunchParameters
 
+# pyright: reportDeprecated=false
+
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
@@ -420,6 +422,7 @@ class TestDevboxes:
             id="id",
             command="command",
             command_id="command_id",
+            optimistic_timeout=0,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
@@ -514,27 +517,32 @@ class TestDevboxes:
 
     @parametrize
     def test_method_execute_sync(self, client: Runloop) -> None:
-        devbox = client.devboxes.execute_sync(
-            id="id",
-            command="command",
-        )
+        with pytest.warns(DeprecationWarning):
+            devbox = client.devboxes.execute_sync(
+                id="id",
+                command="command",
+            )
+
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
     def test_method_execute_sync_with_all_params(self, client: Runloop) -> None:
-        devbox = client.devboxes.execute_sync(
-            id="id",
-            command="command",
-            shell_name="shell_name",
-        )
+        with pytest.warns(DeprecationWarning):
+            devbox = client.devboxes.execute_sync(
+                id="id",
+                command="command",
+                shell_name="shell_name",
+            )
+
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_execute_sync(self, client: Runloop) -> None:
-        response = client.devboxes.with_raw_response.execute_sync(
-            id="id",
-            command="command",
-        )
+        with pytest.warns(DeprecationWarning):
+            response = client.devboxes.with_raw_response.execute_sync(
+                id="id",
+                command="command",
+            )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -543,25 +551,27 @@ class TestDevboxes:
 
     @parametrize
     def test_streaming_response_execute_sync(self, client: Runloop) -> None:
-        with client.devboxes.with_streaming_response.execute_sync(
-            id="id",
-            command="command",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with pytest.warns(DeprecationWarning):
+            with client.devboxes.with_streaming_response.execute_sync(
+                id="id",
+                command="command",
+            ) as response:
+                assert not response.is_closed
+                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            devbox = response.parse()
-            assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+                devbox = response.parse()
+                assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_path_params_execute_sync(self, client: Runloop) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            client.devboxes.with_raw_response.execute_sync(
-                id="",
-                command="command",
-            )
+        with pytest.warns(DeprecationWarning):
+            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+                client.devboxes.with_raw_response.execute_sync(
+                    id="",
+                    command="command",
+                )
 
     @parametrize
     def test_method_keep_alive(self, client: Runloop) -> None:
@@ -1759,6 +1769,7 @@ class TestAsyncDevboxes:
             id="id",
             command="command",
             command_id="command_id",
+            optimistic_timeout=0,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
@@ -1853,27 +1864,32 @@ class TestAsyncDevboxes:
 
     @parametrize
     async def test_method_execute_sync(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.execute_sync(
-            id="id",
-            command="command",
-        )
+        with pytest.warns(DeprecationWarning):
+            devbox = await async_client.devboxes.execute_sync(
+                id="id",
+                command="command",
+            )
+
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
     async def test_method_execute_sync_with_all_params(self, async_client: AsyncRunloop) -> None:
-        devbox = await async_client.devboxes.execute_sync(
-            id="id",
-            command="command",
-            shell_name="shell_name",
-        )
+        with pytest.warns(DeprecationWarning):
+            devbox = await async_client.devboxes.execute_sync(
+                id="id",
+                command="command",
+                shell_name="shell_name",
+            )
+
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_execute_sync(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.devboxes.with_raw_response.execute_sync(
-            id="id",
-            command="command",
-        )
+        with pytest.warns(DeprecationWarning):
+            response = await async_client.devboxes.with_raw_response.execute_sync(
+                id="id",
+                command="command",
+            )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1882,25 +1898,27 @@ class TestAsyncDevboxes:
 
     @parametrize
     async def test_streaming_response_execute_sync(self, async_client: AsyncRunloop) -> None:
-        async with async_client.devboxes.with_streaming_response.execute_sync(
-            id="id",
-            command="command",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with pytest.warns(DeprecationWarning):
+            async with async_client.devboxes.with_streaming_response.execute_sync(
+                id="id",
+                command="command",
+            ) as response:
+                assert not response.is_closed
+                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            devbox = await response.parse()
-            assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
+                devbox = await response.parse()
+                assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_path_params_execute_sync(self, async_client: AsyncRunloop) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-            await async_client.devboxes.with_raw_response.execute_sync(
-                id="",
-                command="command",
-            )
+        with pytest.warns(DeprecationWarning):
+            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+                await async_client.devboxes.with_raw_response.execute_sync(
+                    id="",
+                    command="command",
+                )
 
     @parametrize
     async def test_method_keep_alive(self, async_client: AsyncRunloop) -> None:

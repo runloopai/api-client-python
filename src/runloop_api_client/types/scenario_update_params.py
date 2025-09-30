@@ -42,5 +42,5 @@ class ScenarioUpdateParams(TypedDict, total=False):
     scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""
 
-    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]]
+    validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]]
     """Validation strategy."""

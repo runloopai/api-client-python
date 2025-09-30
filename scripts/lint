@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "==> Running lints"
-rye run lint
+uv run ruff check .
 
 echo "==> Making sure it imports"
-rye run python -c 'import runloop_api_client'
+uv run python -c 'import runloop_api_client'

@@ -62,15 +62,18 @@ class BlueprintView(BaseModel):
     base_blueprint_id: Optional[str] = None
     """The ID of the base Blueprint."""
 
+    build_finish_time_ms: Optional[int] = None
+    """Build completion time of the Blueprint (Unix timestamp milliseconds)."""
+
     containerized_services: Optional[List[ContainerizedService]] = None
     """List of ContainerizedServices available in the Blueprint.
 
     Services can be explicitly started when creating a Devbox.
     """
 
-    devbox_capabilities: Optional[
-        List[Literal["unknown", "computer_usage", "browser_usage", "language_server", "docker_in_docker"]]
-    ] = None
+    devbox_capabilities: Optional[List[Literal["unknown", "computer_usage", "browser_usage", "docker_in_docker"]]] = (
+        None
+    )
     """Capabilities that will be available on Devbox."""
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None

@@ -6,7 +6,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -54,7 +54,7 @@ class RunsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BenchmarkRunView:
         """
         Get a BenchmarkRun given ID.
@@ -81,15 +81,15 @@ class RunsResource(SyncAPIResource):
     def list(
         self,
         *,
-        benchmark_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        benchmark_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBenchmarkRunsCursorIDPage[BenchmarkRunView]:
         """
         List all BenchmarkRuns matching filter.
@@ -138,7 +138,7 @@ class RunsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """
@@ -178,7 +178,7 @@ class RunsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """
@@ -213,16 +213,15 @@ class RunsResource(SyncAPIResource):
         self,
         id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
-        | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBenchmarkRunsCursorIDPage[ScenarioRunView]:
         """
         List started scenario runs for a benchmark run.
@@ -294,7 +293,7 @@ class AsyncRunsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BenchmarkRunView:
         """
         Get a BenchmarkRun given ID.
@@ -321,15 +320,15 @@ class AsyncRunsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        benchmark_id: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        benchmark_id: str | Omit = omit,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[BenchmarkRunView, AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView]]:
         """
         List all BenchmarkRuns matching filter.
@@ -378,7 +377,7 @@ class AsyncRunsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """
@@ -418,7 +417,7 @@ class AsyncRunsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
         """
@@ -453,16 +452,15 @@ class AsyncRunsResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"]
-        | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ScenarioRunView, AsyncBenchmarkRunsCursorIDPage[ScenarioRunView]]:
         """
         List started scenario runs for a benchmark run.

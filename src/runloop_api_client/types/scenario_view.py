@@ -53,5 +53,5 @@ class ScenarioView(BaseModel):
     If any required secrets are missing, the scenario will fail to start.
     """
 
-    validation_type: Optional[Literal["FORWARD", "REVERSE", "EVALUATION"]] = None
+    validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] = None
     """Validation strategy."""

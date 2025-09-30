@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import object_list_params, object_create_params, object_download_params, object_list_public_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -51,13 +51,13 @@ class ObjectsResource(SyncAPIResource):
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"],
         name: str,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """Create a new Object with content and metadata.
@@ -111,7 +111,7 @@ class ObjectsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ObjectView:
         """
         Retrieve a specific Object by its unique identifier.
@@ -138,18 +138,18 @@ class ObjectsResource(SyncAPIResource):
     def list(
         self,
         *,
-        content_type: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: str | NotGiven = NOT_GIVEN,
+        content_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncObjectsCursorIDPage[ObjectView]:
         """
         List all Objects for the authenticated account with pagination support.
@@ -207,7 +207,7 @@ class ObjectsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """Delete an existing Object by ID.
@@ -249,7 +249,7 @@ class ObjectsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """
@@ -285,13 +285,13 @@ class ObjectsResource(SyncAPIResource):
         self,
         id: str,
         *,
-        duration_seconds: int | NotGiven = NOT_GIVEN,
+        duration_seconds: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ObjectDownloadURLView:
         """Generate a presigned download URL for an Object.
 
@@ -328,18 +328,18 @@ class ObjectsResource(SyncAPIResource):
     def list_public(
         self,
         *,
-        content_type: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: str | NotGiven = NOT_GIVEN,
+        content_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncObjectsCursorIDPage[ObjectView]:
         """
         List all public Objects with pagination support.
@@ -414,13 +414,13 @@ class AsyncObjectsResource(AsyncAPIResource):
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"],
         name: str,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """Create a new Object with content and metadata.
@@ -474,7 +474,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ObjectView:
         """
         Retrieve a specific Object by its unique identifier.
@@ -501,18 +501,18 @@ class AsyncObjectsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        content_type: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: str | NotGiven = NOT_GIVEN,
+        content_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ObjectView, AsyncObjectsCursorIDPage[ObjectView]]:
         """
         List all Objects for the authenticated account with pagination support.
@@ -570,7 +570,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """Delete an existing Object by ID.
@@ -612,7 +612,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ObjectView:
         """
@@ -648,13 +648,13 @@ class AsyncObjectsResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        duration_seconds: int | NotGiven = NOT_GIVEN,
+        duration_seconds: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ObjectDownloadURLView:
         """Generate a presigned download URL for an Object.
 
@@ -691,18 +691,18 @@ class AsyncObjectsResource(AsyncAPIResource):
     def list_public(
         self,
         *,
-        content_type: str | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        search: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
-        state: str | NotGiven = NOT_GIVEN,
+        content_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[ObjectView, AsyncObjectsCursorIDPage[ObjectView]]:
         """
         List all public Objects with pagination support.

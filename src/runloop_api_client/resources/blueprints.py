@@ -12,7 +12,7 @@ from ..types import (
     blueprint_preview_params,
     blueprint_list_public_params,
 )
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
+from .._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -72,21 +72,22 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
-        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
         """Starts build of custom defined container Blueprint.
@@ -106,6 +107,8 @@ class BlueprintsResource(SyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -140,6 +143,7 @@ class BlueprintsResource(SyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -169,7 +173,7 @@ class BlueprintsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BlueprintView:
         """
         Get the details of a previously created Blueprint including the build status.
@@ -302,15 +306,15 @@ class BlueprintsResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBlueprintsCursorIDPage[BlueprintView]:
         """
         List all Blueprints or filter by name.
@@ -359,7 +363,7 @@ class BlueprintsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -393,15 +397,15 @@ class BlueprintsResource(SyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncBlueprintsCursorIDPage[BlueprintView]:
         """
         List all public Blueprints that are available to all users.
@@ -450,7 +454,7 @@ class BlueprintsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BlueprintBuildLogsListView:
         """
         Get all logs from the building of a Blueprint.
@@ -478,21 +482,22 @@ class BlueprintsResource(SyncAPIResource):
         self,
         *,
         name: str,
-        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintPreviewView:
         """Preview building a Blueprint with the specified configuration.
@@ -510,6 +515,8 @@ class BlueprintsResource(SyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -544,6 +551,7 @@ class BlueprintsResource(SyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -589,21 +597,22 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        services: Optional[Iterable[blueprint_create_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
         """Starts build of custom defined container Blueprint.
@@ -623,6 +632,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -657,6 +668,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -686,7 +698,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BlueprintView:
         """
         Get the details of a previously created Blueprint including the build status.
@@ -819,15 +831,15 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[BlueprintView, AsyncBlueprintsCursorIDPage[BlueprintView]]:
         """
         List all Blueprints or filter by name.
@@ -876,7 +888,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
         """
@@ -910,15 +922,15 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     def list_public(
         self,
         *,
-        limit: int | NotGiven = NOT_GIVEN,
-        name: str | NotGiven = NOT_GIVEN,
-        starting_after: str | NotGiven = NOT_GIVEN,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[BlueprintView, AsyncBlueprintsCursorIDPage[BlueprintView]]:
         """
         List all public Blueprints that are available to all users.
@@ -967,7 +979,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BlueprintBuildLogsListView:
         """
         Get all logs from the building of a Blueprint.
@@ -995,21 +1007,22 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        base_blueprint_name: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        services: Optional[Iterable[blueprint_preview_params.Service]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintPreviewView:
         """Preview building a Blueprint with the specified configuration.
@@ -1027,6 +1040,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               this build. When set, this will load the latest successfully built Blueprint
               with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
               be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1061,6 +1076,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "name": name,
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
