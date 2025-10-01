@@ -218,6 +218,73 @@ class TestBlueprints:
             )
 
     @parametrize
+    def test_method_create_from_inspection(self, client: Runloop) -> None:
+        blueprint = client.blueprints.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        )
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    def test_method_create_from_inspection_with_all_params(self, client: Runloop) -> None:
+        blueprint = client.blueprints.create_from_inspection(
+            inspection_source={
+                "inspection_id": "inspection_id",
+                "github_auth_token": "github_auth_token",
+            },
+            name="name",
+            file_mounts={"foo": "string"},
+            launch_parameters={
+                "after_idle": {
+                    "idle_time_seconds": 0,
+                    "on_idle": "shutdown",
+                },
+                "architecture": "x86_64",
+                "available_ports": [0],
+                "custom_cpu_cores": 0,
+                "custom_disk_size": 0,
+                "custom_gb_memory": 0,
+                "keep_alive_time_seconds": 0,
+                "launch_commands": ["string"],
+                "required_services": ["string"],
+                "resource_size_request": "X_SMALL",
+                "user_parameters": {
+                    "uid": 0,
+                    "username": "username",
+                },
+            },
+            metadata={"foo": "string"},
+            system_setup_commands=["string"],
+        )
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    def test_raw_response_create_from_inspection(self, client: Runloop) -> None:
+        response = client.blueprints.with_raw_response.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        blueprint = response.parse()
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    def test_streaming_response_create_from_inspection(self, client: Runloop) -> None:
+        with client.blueprints.with_streaming_response.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            blueprint = response.parse()
+            assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
     def test_method_list_public(self, client: Runloop) -> None:
         blueprint = client.blueprints.list_public()
         assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
@@ -574,6 +641,73 @@ class TestAsyncBlueprints:
             await async_client.blueprints.with_raw_response.delete(
                 "",
             )
+
+    @parametrize
+    async def test_method_create_from_inspection(self, async_client: AsyncRunloop) -> None:
+        blueprint = await async_client.blueprints.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        )
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    async def test_method_create_from_inspection_with_all_params(self, async_client: AsyncRunloop) -> None:
+        blueprint = await async_client.blueprints.create_from_inspection(
+            inspection_source={
+                "inspection_id": "inspection_id",
+                "github_auth_token": "github_auth_token",
+            },
+            name="name",
+            file_mounts={"foo": "string"},
+            launch_parameters={
+                "after_idle": {
+                    "idle_time_seconds": 0,
+                    "on_idle": "shutdown",
+                },
+                "architecture": "x86_64",
+                "available_ports": [0],
+                "custom_cpu_cores": 0,
+                "custom_disk_size": 0,
+                "custom_gb_memory": 0,
+                "keep_alive_time_seconds": 0,
+                "launch_commands": ["string"],
+                "required_services": ["string"],
+                "resource_size_request": "X_SMALL",
+                "user_parameters": {
+                    "uid": 0,
+                    "username": "username",
+                },
+            },
+            metadata={"foo": "string"},
+            system_setup_commands=["string"],
+        )
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    async def test_raw_response_create_from_inspection(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.blueprints.with_raw_response.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        blueprint = await response.parse()
+        assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_create_from_inspection(self, async_client: AsyncRunloop) -> None:
+        async with async_client.blueprints.with_streaming_response.create_from_inspection(
+            inspection_source={"inspection_id": "inspection_id"},
+            name="name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            blueprint = await response.parse()
+            assert_matches_type(BlueprintView, blueprint, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_list_public(self, async_client: AsyncRunloop) -> None:

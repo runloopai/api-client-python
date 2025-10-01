@@ -45,12 +45,14 @@ Types:
 
 ```python
 from runloop_api_client.types import (
+    BlueprintBuildFromInspectionParameters,
     BlueprintBuildLog,
     BlueprintBuildLogsListView,
     BlueprintBuildParameters,
     BlueprintListView,
     BlueprintPreviewView,
     BlueprintView,
+    InspectionSource,
 )
 ```
 
@@ -61,6 +63,7 @@ Methods:
 - <code title="get /v1/blueprints/{id}">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/blueprint_view.py">BlueprintView</a></code>
 - <code title="get /v1/blueprints">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">list</a>(\*\*<a href="src/runloop_api_client/types/blueprint_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/blueprint_view.py">SyncBlueprintsCursorIDPage[BlueprintView]</a></code>
 - <code title="post /v1/blueprints/{id}/delete">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">delete</a>(id) -> object</code>
+- <code title="post /v1/blueprints/create_from_inspection">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">create_from_inspection</a>(\*\*<a href="src/runloop_api_client/types/blueprint_create_from_inspection_params.py">params</a>) -> <a href="./src/runloop_api_client/types/blueprint_view.py">BlueprintView</a></code>
 - <code title="get /v1/blueprints/list_public">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/blueprint_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/blueprint_view.py">SyncBlueprintsCursorIDPage[BlueprintView]</a></code>
 - <code title="get /v1/blueprints/{id}/logs">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">logs</a>(id) -> <a href="./src/runloop_api_client/types/blueprint_build_logs_list_view.py">BlueprintBuildLogsListView</a></code>
 - <code title="post /v1/blueprints/preview">client.blueprints.<a href="./src/runloop_api_client/resources/blueprints.py">preview</a>(\*\*<a href="src/runloop_api_client/types/blueprint_preview_params.py">params</a>) -> <a href="./src/runloop_api_client/types/blueprint_preview_view.py">BlueprintPreviewView</a></code>
@@ -298,6 +301,7 @@ Methods:
 - <code title="get /v1/repositories/{id}">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">RepositoryConnectionView</a></code>
 - <code title="get /v1/repositories">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list</a>(\*\*<a href="src/runloop_api_client/types/repository_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">SyncRepositoriesCursorIDPage[RepositoryConnectionView]</a></code>
 - <code title="post /v1/repositories/{id}/delete">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">delete</a>(id) -> object</code>
+- <code title="post /v1/repositories/{id}/inspect">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">inspect</a>(id, \*\*<a href="src/runloop_api_client/types/repository_inspect_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_inspection_details.py">RepositoryInspectionDetails</a></code>
 - <code title="get /v1/repositories/{id}/inspections">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list_inspections</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_list_view.py">RepositoryInspectionListView</a></code>
 - <code title="post /v1/repositories/{id}/refresh">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">refresh</a>(id, \*\*<a href="src/runloop_api_client/types/repository_refresh_params.py">params</a>) -> object</code>
 

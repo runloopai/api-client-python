@@ -52,6 +52,7 @@ from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreatePar
 from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListView
 from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
+from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
@@ -59,6 +60,7 @@ from .repository_manifest_view import RepositoryManifestView as RepositoryManife
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
 from .devbox_upload_file_params import DevboxUploadFileParams as DevboxUploadFileParams
 from .object_list_public_params import ObjectListPublicParams as ObjectListPublicParams
+from .repository_inspect_params import RepositoryInspectParams as RepositoryInspectParams
 from .repository_refresh_params import RepositoryRefreshParams as RepositoryRefreshParams
 from .scenario_start_run_params import ScenarioStartRunParams as ScenarioStartRunParams
 from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStartRunParams
@@ -93,3 +95,6 @@ from .devbox_snapshot_disk_async_params import DevboxSnapshotDiskAsyncParams as 
 from .devbox_write_file_contents_params import DevboxWriteFileContentsParams as DevboxWriteFileContentsParams
 from .devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView as DevboxAsyncExecutionDetailView
 from .devbox_read_file_contents_response import DevboxReadFileContentsResponse as DevboxReadFileContentsResponse
+from .blueprint_create_from_inspection_params import (
+    BlueprintCreateFromInspectionParams as BlueprintCreateFromInspectionParams,
+)
