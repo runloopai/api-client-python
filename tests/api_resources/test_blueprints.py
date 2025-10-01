@@ -25,7 +25,6 @@ class TestBlueprints:
     @parametrize
     def test_method_create(self, client: Runloop) -> None:
         blueprint = client.blueprints.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -33,11 +32,19 @@ class TestBlueprints:
     @parametrize
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.create(
-            inspection_source={
-                "inspection_id": "inspection_id",
-                "github_auth_token": "github_auth_token",
-            },
             name="name",
+            base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
+            code_mounts=[
+                {
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
+                }
+            ],
+            dockerfile="dockerfile",
             file_mounts={"foo": "string"},
             launch_parameters={
                 "after_idle": {
@@ -59,6 +66,19 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -66,7 +86,6 @@ class TestBlueprints:
     @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.blueprints.with_raw_response.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         )
 
@@ -78,7 +97,6 @@ class TestBlueprints:
     @parametrize
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.blueprints.with_streaming_response.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         ) as response:
             assert not response.is_closed
@@ -365,7 +383,6 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -373,11 +390,19 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.create(
-            inspection_source={
-                "inspection_id": "inspection_id",
-                "github_auth_token": "github_auth_token",
-            },
             name="name",
+            base_blueprint_id="base_blueprint_id",
+            base_blueprint_name="base_blueprint_name",
+            build_args={"foo": "string"},
+            code_mounts=[
+                {
+                    "repo_name": "repo_name",
+                    "repo_owner": "repo_owner",
+                    "token": "token",
+                    "install_command": "install_command",
+                }
+            ],
+            dockerfile="dockerfile",
             file_mounts={"foo": "string"},
             launch_parameters={
                 "after_idle": {
@@ -399,6 +424,19 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            services=[
+                {
+                    "image": "image",
+                    "name": "name",
+                    "credentials": {
+                        "password": "password",
+                        "username": "username",
+                    },
+                    "env": {"foo": "string"},
+                    "options": "options",
+                    "port_mappings": ["string"],
+                }
+            ],
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -406,7 +444,6 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.blueprints.with_raw_response.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         )
 
@@ -418,7 +455,6 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.blueprints.with_streaming_response.create(
-            inspection_source={"inspection_id": "inspection_id"},
             name="name",
         ) as response:
             assert not response.is_closed
