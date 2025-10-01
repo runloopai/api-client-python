@@ -718,7 +718,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str,
-        command_id: str,
+        command_id: str = str(uuid7()),
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2161,7 +2161,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
-        command_id: str,
+        command_id: str = str(uuid7()),
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
