@@ -29,7 +29,6 @@ from .._base_client import AsyncPaginator, make_request_options
 from ..lib.polling_async import async_poll_until
 from ..types.blueprint_view import BlueprintView
 from ..types.blueprint_preview_view import BlueprintPreviewView
-from ..types.inspection_source_param import InspectionSourceParam
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
@@ -72,11 +71,16 @@ class BlueprintsResource(SyncAPIResource):
     def create(
         self,
         *,
-        inspection_source: InspectionSourceParam,
         name: str,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -86,22 +90,39 @@ class BlueprintsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
-        """
-        Starts build of custom defined container Blueprint using a RepositoryConnection
-        Inspection as a source container specification.
+        """Starts build of custom defined container Blueprint.
+
+        The Blueprint will begin in
+        the 'provisioning' step and transition to the 'building' step once it is
+        selected off the build queue., Upon build complete it will transition to
+        'building_complete' if the build is successful.
 
         Args:
-          inspection_source: (Optional) Use a RepositoryInspection a source of a Blueprint build. The
-              Dockerfile will be automatically created based on the RepositoryInspection
-              contents.
-
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          code_mounts: A list of code mounts to be included in the Blueprint.
+
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -119,11 +140,16 @@ class BlueprintsResource(SyncAPIResource):
             "/v1/blueprints",
             body=maybe_transform(
                 {
-                    "inspection_source": inspection_source,
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
@@ -570,11 +596,16 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        inspection_source: InspectionSourceParam,
         name: str,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -584,22 +615,39 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BlueprintView:
-        """
-        Starts build of custom defined container Blueprint using a RepositoryConnection
-        Inspection as a source container specification.
+        """Starts build of custom defined container Blueprint.
+
+        The Blueprint will begin in
+        the 'provisioning' step and transition to the 'building' step once it is
+        selected off the build queue., Upon build complete it will transition to
+        'building_complete' if the build is successful.
 
         Args:
-          inspection_source: (Optional) Use a RepositoryInspection a source of a Blueprint build. The
-              Dockerfile will be automatically created based on the RepositoryInspection
-              contents.
-
           name: Name of the Blueprint.
+
+          base_blueprint_id: (Optional) ID of previously built blueprint to use as a base blueprint for this
+              build.
+
+          base_blueprint_name: (Optional) Name of previously built blueprint to use as a base blueprint for
+              this build. When set, this will load the latest successfully built Blueprint
+              with the given name. Only one of (base_blueprint_id, base_blueprint_name) should
+              be specified.
+
+          build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          code_mounts: A list of code mounts to be included in the Blueprint.
+
+          dockerfile: Dockerfile contents to be used to build the Blueprint.
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          services: (Optional) List of containerized services to include in the Blueprint. These
+              services will be pre-pulled during the build phase for optimized startup
+              performance.
 
           system_setup_commands: A list of commands to run to set up your system.
 
@@ -617,11 +665,16 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             "/v1/blueprints",
             body=await async_maybe_transform(
                 {
-                    "inspection_source": inspection_source,
                     "name": name,
+                    "base_blueprint_id": base_blueprint_id,
+                    "base_blueprint_name": base_blueprint_name,
+                    "build_args": build_args,
+                    "code_mounts": code_mounts,
+                    "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_params.BlueprintCreateParams,
