@@ -11,6 +11,7 @@ from ..types import (
     blueprint_create_params,
     blueprint_preview_params,
     blueprint_list_public_params,
+    blueprint_create_from_inspection_params,
 )
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
@@ -26,6 +27,7 @@ from ..pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.blueprint_view import BlueprintView
 from ..types.blueprint_preview_view import BlueprintPreviewView
+from ..types.inspection_source_param import InspectionSourceParam
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
@@ -271,6 +273,75 @@ class BlueprintsResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=object,
+        )
+
+    def create_from_inspection(
+        self,
+        *,
+        inspection_source: InspectionSourceParam,
+        name: str,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BlueprintView:
+        """
+        Starts build of custom defined container Blueprint using a RepositoryConnection
+        Inspection as a source container specification.
+
+        Args:
+          inspection_source: (Optional) Use a RepositoryInspection a source of a Blueprint build. The
+              Dockerfile will be automatically created based on the RepositoryInspection
+              contents.
+
+          name: Name of the Blueprint.
+
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          metadata: (Optional) User defined metadata for the Blueprint.
+
+          system_setup_commands: A list of commands to run to set up your system.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return self._post(
+            "/v1/blueprints/create_from_inspection",
+            body=maybe_transform(
+                {
+                    "inspection_source": inspection_source,
+                    "name": name,
+                    "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
+                    "metadata": metadata,
+                    "system_setup_commands": system_setup_commands,
+                },
+                blueprint_create_from_inspection_params.BlueprintCreateFromInspectionParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BlueprintView,
         )
 
     def list_public(
@@ -692,6 +763,75 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    async def create_from_inspection(
+        self,
+        *,
+        inspection_source: InspectionSourceParam,
+        name: str,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BlueprintView:
+        """
+        Starts build of custom defined container Blueprint using a RepositoryConnection
+        Inspection as a source container specification.
+
+        Args:
+          inspection_source: (Optional) Use a RepositoryInspection a source of a Blueprint build. The
+              Dockerfile will be automatically created based on the RepositoryInspection
+              contents.
+
+          name: Name of the Blueprint.
+
+          file_mounts: (Optional) Map of paths and file contents to write before setup.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          metadata: (Optional) User defined metadata for the Blueprint.
+
+          system_setup_commands: A list of commands to run to set up your system.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return await self._post(
+            "/v1/blueprints/create_from_inspection",
+            body=await async_maybe_transform(
+                {
+                    "inspection_source": inspection_source,
+                    "name": name,
+                    "file_mounts": file_mounts,
+                    "launch_parameters": launch_parameters,
+                    "metadata": metadata,
+                    "system_setup_commands": system_setup_commands,
+                },
+                blueprint_create_from_inspection_params.BlueprintCreateFromInspectionParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BlueprintView,
+        )
+
     def list_public(
         self,
         *,
@@ -887,6 +1027,9 @@ class BlueprintsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             blueprints.delete,
         )
+        self.create_from_inspection = to_raw_response_wrapper(
+            blueprints.create_from_inspection,
+        )
         self.list_public = to_raw_response_wrapper(
             blueprints.list_public,
         )
@@ -913,6 +1056,9 @@ class AsyncBlueprintsResourceWithRawResponse:
         )
         self.delete = async_to_raw_response_wrapper(
             blueprints.delete,
+        )
+        self.create_from_inspection = async_to_raw_response_wrapper(
+            blueprints.create_from_inspection,
         )
         self.list_public = async_to_raw_response_wrapper(
             blueprints.list_public,
@@ -941,6 +1087,9 @@ class BlueprintsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             blueprints.delete,
         )
+        self.create_from_inspection = to_streamed_response_wrapper(
+            blueprints.create_from_inspection,
+        )
         self.list_public = to_streamed_response_wrapper(
             blueprints.list_public,
         )
@@ -967,6 +1116,9 @@ class AsyncBlueprintsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             blueprints.delete,
+        )
+        self.create_from_inspection = async_to_streamed_response_wrapper(
+            blueprints.create_from_inspection,
         )
         self.list_public = async_to_streamed_response_wrapper(
             blueprints.list_public,
