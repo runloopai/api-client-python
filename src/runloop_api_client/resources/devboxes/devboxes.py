@@ -897,6 +897,7 @@ class DevboxesResource(SyncAPIResource):
         )
 
     @typing_extensions.deprecated("deprecated")
+    # Use execute, executeAsync, or executeAndAwaitCompletion instead
     def execute_sync(
         self,
         id: str,
@@ -914,6 +915,9 @@ class DevboxesResource(SyncAPIResource):
         """
         Execute a bash command in the Devbox shell, await the command completion and
         return the output.
+
+        .. deprecated::
+           Use execute, executeAsync, or executeAndAwaitCompletion instead.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
@@ -2341,6 +2345,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         )
 
     @typing_extensions.deprecated("deprecated")
+    # Use execute, executeAsync, or executeAndAwaitCompletion instead
     async def execute_sync(
         self,
         id: str,
@@ -2358,6 +2363,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         Execute a bash command in the Devbox shell, await the command completion and
         return the output.
+
+        .. deprecated::
+           Use execute, executeAsync, or executeAndAwaitCompletion instead.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
