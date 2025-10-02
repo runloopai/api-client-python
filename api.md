@@ -1,7 +1,15 @@
 # Shared Types
 
 ```python
-from runloop_api_client.types import AfterIdle, CodeMountParameters, LaunchParameters, RunProfile
+from runloop_api_client.types import (
+    AfterIdle,
+    AgentMountParameters,
+    CodeMountParameters,
+    LaunchParameters,
+    Mount,
+    ObjectMountParameters,
+    RunProfile,
+)
 ```
 
 # Benchmarks
