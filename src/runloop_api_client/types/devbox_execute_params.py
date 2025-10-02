@@ -18,7 +18,7 @@ class DevboxExecuteParams(TypedDict, total=False):
     """
 
     command_id: Required[str]
-    """The command ID for idempotency and tracking"""
+    """The command ID in UUIDv7 string format for idempotency and tracking"""
 
     optimistic_timeout: Optional[int]
     """Timeout in seconds to wait for command completion.

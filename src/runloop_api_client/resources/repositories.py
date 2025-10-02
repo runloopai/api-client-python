@@ -244,7 +244,6 @@ class RepositoriesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        blueprint_id: Optional[str] | Omit = omit,
         github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -259,8 +258,6 @@ class RepositoriesResource(SyncAPIResource):
         repo's technical stack and developer environment requirements.
 
         Args:
-          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
-
           github_auth_token: GitHub authentication token for accessing private repositories.
 
           extra_headers: Send extra headers
@@ -278,11 +275,7 @@ class RepositoriesResource(SyncAPIResource):
         return self._post(
             f"/v1/repositories/{id}/inspect",
             body=maybe_transform(
-                {
-                    "blueprint_id": blueprint_id,
-                    "github_auth_token": github_auth_token,
-                },
-                repository_inspect_params.RepositoryInspectParams,
+                {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -596,7 +589,6 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        blueprint_id: Optional[str] | Omit = omit,
         github_auth_token: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -611,8 +603,6 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         repo's technical stack and developer environment requirements.
 
         Args:
-          blueprint_id: ID of blueprint to use as base for resulting RepositoryVersion blueprint.
-
           github_auth_token: GitHub authentication token for accessing private repositories.
 
           extra_headers: Send extra headers
@@ -630,11 +620,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         return await self._post(
             f"/v1/repositories/{id}/inspect",
             body=await async_maybe_transform(
-                {
-                    "blueprint_id": blueprint_id,
-                    "github_auth_token": github_auth_token,
-                },
-                repository_inspect_params.RepositoryInspectParams,
+                {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
