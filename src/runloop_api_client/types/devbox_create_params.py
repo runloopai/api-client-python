@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional
-from typing_extensions import TypedDict
+from typing import Dict, Union, Iterable, Optional
+from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxCreateParams"]
+__all__ = ["DevboxCreateParams", "Mount", "MountObjectMountParameters", "MountAgentMountParameters"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
@@ -49,6 +49,9 @@ class DevboxCreateParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the devbox for organization."""
 
+    mounts: Optional[Iterable[Mount]]
+    """A list of file system mounts to be included in the Devbox."""
+
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""
 
@@ -68,3 +71,33 @@ class DevboxCreateParams(TypedDict, total=False):
 
     Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
     """
+
+
+class MountObjectMountParameters(TypedDict, total=False):
+    object_id: Required[str]
+    """The ID of the object to write."""
+
+    object_path: Required[str]
+    """The path to write the object on the Devbox.
+
+    Use absolute path of object (ie /home/user/object.txt, or directory if archive
+    /home/user/archive_dir)
+    """
+
+    type: Required[Literal["object_mount"]]
+
+
+class MountAgentMountParameters(TypedDict, total=False):
+    agent_id: Required[str]
+    """The ID of the agent to mount."""
+
+    type: Required[Literal["agent_mount"]]
+
+    agent_path: Optional[str]
+    """Optional path to mount the agent on the Devbox.
+
+    Required for git and object agents. Use absolute path (e.g., /home/user/agent)
+    """
+
+
+Mount: TypeAlias = Union[MountObjectMountParameters, MountAgentMountParameters]
