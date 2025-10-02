@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Dict, Iterable, Optional
 from typing_extensions import TypedDict
 
+from .shared_params.mount import Mount
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
@@ -48,6 +49,9 @@ class DevboxCreateParams(TypedDict, total=False):
 
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the devbox for organization."""
+
+    mounts: Optional[Iterable[Mount]]
+    """A list of file system mounts to be included in the Devbox."""
 
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""

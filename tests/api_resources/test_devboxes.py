@@ -85,6 +85,13 @@ class TestDevboxes:
                 },
             },
             metadata={"foo": "string"},
+            mounts=[
+                {
+                    "object_id": "object_id",
+                    "object_path": "object_path",
+                    "type": "object_mount",
+                }
+            ],
             name="name",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
@@ -1432,6 +1439,13 @@ class TestAsyncDevboxes:
                 },
             },
             metadata={"foo": "string"},
+            mounts=[
+                {
+                    "object_id": "object_id",
+                    "object_path": "object_path",
+                    "type": "object_mount",
+                }
+            ],
             name="name",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},

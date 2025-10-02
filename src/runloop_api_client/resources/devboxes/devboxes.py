@@ -100,6 +100,7 @@ from .disk_snapshots import (
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.devbox_tunnel_view import DevboxTunnelView
+from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
@@ -185,6 +186,7 @@ class DevboxesResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
@@ -228,6 +230,8 @@ class DevboxesResource(SyncAPIResource):
 
           metadata: User defined metadata to attach to the devbox for organization.
 
+          mounts: A list of file system mounts to be included in the Devbox.
+
           name: (Optional) A user specified name to give the Devbox.
 
           repo_connection_id: Repository connection id the devbox should source its base image from.
@@ -262,6 +266,7 @@ class DevboxesResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "mounts": mounts,
                     "name": name,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
@@ -740,7 +745,7 @@ class DevboxesResource(SyncAPIResource):
               specified the command is run from the directory based on the recent state of the
               persistent shell.
 
-          command_id: The command ID for idempotency and tracking
+          command_id: The command ID in UUIDv7 string format for idempotency and tracking
 
           optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
               is 600 seconds.
@@ -1633,6 +1638,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
@@ -1676,6 +1682,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           metadata: User defined metadata to attach to the devbox for organization.
 
+          mounts: A list of file system mounts to be included in the Devbox.
+
           name: (Optional) A user specified name to give the Devbox.
 
           repo_connection_id: Repository connection id the devbox should source its base image from.
@@ -1710,6 +1718,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "mounts": mounts,
                     "name": name,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
@@ -2187,7 +2196,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
               specified the command is run from the directory based on the recent state of the
               persistent shell.
 
-          command_id: The command ID for idempotency and tracking
+          command_id: The command ID in UUIDv7 string format for idempotency and tracking
 
           optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
               is 600 seconds.

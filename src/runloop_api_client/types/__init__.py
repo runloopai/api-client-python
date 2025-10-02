@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 from .shared import (
+    Mount as Mount,
     AfterIdle as AfterIdle,
     RunProfile as RunProfile,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,
+    AgentMountParameters as AgentMountParameters,
+    ObjectMountParameters as ObjectMountParameters,
 )
 from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView

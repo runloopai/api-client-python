@@ -9,8 +9,5 @@ __all__ = ["RepositoryInspectParams"]
 
 
 class RepositoryInspectParams(TypedDict, total=False):
-    blueprint_id: Optional[str]
-    """ID of blueprint to use as base for resulting RepositoryVersion blueprint."""
-
     github_auth_token: Optional[str]
     """GitHub authentication token for accessing private repositories."""

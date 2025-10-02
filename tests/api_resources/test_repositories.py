@@ -188,7 +188,6 @@ class TestRepositories:
     def test_method_inspect_with_all_params(self, client: Runloop) -> None:
         repository = client.repositories.inspect(
             id="id",
-            blueprint_id="blueprint_id",
             github_auth_token="github_auth_token",
         )
         assert_matches_type(RepositoryInspectionDetails, repository, path=["response"])
@@ -481,7 +480,6 @@ class TestAsyncRepositories:
     async def test_method_inspect_with_all_params(self, async_client: AsyncRunloop) -> None:
         repository = await async_client.repositories.inspect(
             id="id",
-            blueprint_id="blueprint_id",
             github_auth_token="github_auth_token",
         )
         assert_matches_type(RepositoryInspectionDetails, repository, path=["response"])
