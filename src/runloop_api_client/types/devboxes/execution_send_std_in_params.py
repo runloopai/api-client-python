@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing import Optional
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["ExecutionSendStdInParams"]
 
@@ -10,5 +11,8 @@ __all__ = ["ExecutionSendStdInParams"]
 class ExecutionSendStdInParams(TypedDict, total=False):
     devbox_id: Required[str]
 
-    text: str
+    signal: Optional[Literal["EOF", "INTERRUPT"]]
+    """Signal to send to std in of the running execution."""
+
+    text: Optional[str]
     """Text to send to std in of the running execution."""

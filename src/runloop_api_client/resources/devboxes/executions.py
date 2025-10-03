@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typing_extensions
 from typing import Optional, cast
+from typing_extensions import Literal
 
 import httpx
 
@@ -338,7 +339,8 @@ class ExecutionsResource(SyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        text: str | Omit = omit,
+        signal: Optional[Literal["EOF", "INTERRUPT"]] | Omit = omit,
+        text: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -351,6 +353,8 @@ class ExecutionsResource(SyncAPIResource):
         Send content to the Std In of a running execution.
 
         Args:
+          signal: Signal to send to std in of the running execution.
+
           text: Text to send to std in of the running execution.
 
           extra_headers: Send extra headers
@@ -369,7 +373,13 @@ class ExecutionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
-            body=maybe_transform({"text": text}, execution_send_std_in_params.ExecutionSendStdInParams),
+            body=maybe_transform(
+                {
+                    "signal": signal,
+                    "text": text,
+                },
+                execution_send_std_in_params.ExecutionSendStdInParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -838,7 +848,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         execution_id: str,
         *,
         devbox_id: str,
-        text: str | Omit = omit,
+        signal: Optional[Literal["EOF", "INTERRUPT"]] | Omit = omit,
+        text: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -851,6 +862,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Send content to the Std In of a running execution.
 
         Args:
+          signal: Signal to send to std in of the running execution.
+
           text: Text to send to std in of the running execution.
 
           extra_headers: Send extra headers
@@ -869,7 +882,13 @@ class AsyncExecutionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
-            body=await async_maybe_transform({"text": text}, execution_send_std_in_params.ExecutionSendStdInParams),
+            body=await async_maybe_transform(
+                {
+                    "signal": signal,
+                    "text": text,
+                },
+                execution_send_std_in_params.ExecutionSendStdInParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

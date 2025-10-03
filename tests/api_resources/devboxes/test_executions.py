@@ -260,6 +260,7 @@ class TestExecutions:
         execution = client.devboxes.executions.send_std_in(
             execution_id="execution_id",
             devbox_id="devbox_id",
+            signal="EOF",
             text="text",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
@@ -840,6 +841,7 @@ class TestAsyncExecutions:
         execution = await async_client.devboxes.executions.send_std_in(
             execution_id="execution_id",
             devbox_id="devbox_id",
+            signal="EOF",
             text="text",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
