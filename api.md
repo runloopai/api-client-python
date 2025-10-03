@@ -310,6 +310,7 @@ Methods:
 - <code title="post /v1/repositories/{id}/inspect">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">inspect</a>(id, \*\*<a href="src/runloop_api_client/types/repository_inspect_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_inspection_details.py">RepositoryInspectionDetails</a></code>
 - <code title="get /v1/repositories/{id}/inspections">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list_inspections</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_list_view.py">RepositoryInspectionListView</a></code>
 - <code title="post /v1/repositories/{id}/refresh">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">refresh</a>(id, \*\*<a href="src/runloop_api_client/types/repository_refresh_params.py">params</a>) -> object</code>
+- <code title="get /v1/repositories/inspections/{id}">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">retrieve_inspection</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_details.py">RepositoryInspectionDetails</a></code>
 
 # Secrets
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Optional
 
 import httpx
@@ -321,6 +322,7 @@ class RepositoriesResource(SyncAPIResource):
             cast_to=RepositoryInspectionListView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def refresh(
         self,
         id: str,
@@ -373,6 +375,39 @@ class RepositoriesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=object,
+        )
+
+    def retrieve_inspection(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RepositoryInspectionDetails:
+        """
+        Get a repository inspection by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/repositories/inspections/{id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RepositoryInspectionDetails,
         )
 
 
@@ -666,6 +701,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
             cast_to=RepositoryInspectionListView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def refresh(
         self,
         id: str,
@@ -720,6 +756,39 @@ class AsyncRepositoriesResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    async def retrieve_inspection(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RepositoryInspectionDetails:
+        """
+        Get a repository inspection by id.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/repositories/inspections/{id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RepositoryInspectionDetails,
+        )
+
 
 class RepositoriesResourceWithRawResponse:
     def __init__(self, repositories: RepositoriesResource) -> None:
@@ -743,8 +812,13 @@ class RepositoriesResourceWithRawResponse:
         self.list_inspections = to_raw_response_wrapper(
             repositories.list_inspections,
         )
-        self.refresh = to_raw_response_wrapper(
-            repositories.refresh,
+        self.refresh = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                repositories.refresh,  # pyright: ignore[reportDeprecated],
+            )
+        )
+        self.retrieve_inspection = to_raw_response_wrapper(
+            repositories.retrieve_inspection,
         )
 
 
@@ -770,8 +844,13 @@ class AsyncRepositoriesResourceWithRawResponse:
         self.list_inspections = async_to_raw_response_wrapper(
             repositories.list_inspections,
         )
-        self.refresh = async_to_raw_response_wrapper(
-            repositories.refresh,
+        self.refresh = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                repositories.refresh,  # pyright: ignore[reportDeprecated],
+            )
+        )
+        self.retrieve_inspection = async_to_raw_response_wrapper(
+            repositories.retrieve_inspection,
         )
 
 
@@ -797,8 +876,13 @@ class RepositoriesResourceWithStreamingResponse:
         self.list_inspections = to_streamed_response_wrapper(
             repositories.list_inspections,
         )
-        self.refresh = to_streamed_response_wrapper(
-            repositories.refresh,
+        self.refresh = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                repositories.refresh,  # pyright: ignore[reportDeprecated],
+            )
+        )
+        self.retrieve_inspection = to_streamed_response_wrapper(
+            repositories.retrieve_inspection,
         )
 
 
@@ -824,6 +908,11 @@ class AsyncRepositoriesResourceWithStreamingResponse:
         self.list_inspections = async_to_streamed_response_wrapper(
             repositories.list_inspections,
         )
-        self.refresh = async_to_streamed_response_wrapper(
-            repositories.refresh,
+        self.refresh = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                repositories.refresh,  # pyright: ignore[reportDeprecated],
+            )
+        )
+        self.retrieve_inspection = async_to_streamed_response_wrapper(
+            repositories.retrieve_inspection,
         )
