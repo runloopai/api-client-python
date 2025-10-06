@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typing_extensions
 from typing import Optional, cast
+from typing_extensions import Literal
 
 import httpx
 
@@ -25,6 +26,7 @@ from ..._base_client import make_request_options
 from ...types.devboxes import (
     execution_kill_params,
     execution_retrieve_params,
+    execution_send_std_in_params,
     execution_execute_sync_params,
     execution_execute_async_params,
     execution_stream_stderr_updates_params,
@@ -322,6 +324,62 @@ class ExecutionsResource(SyncAPIResource):
         return self._post(
             f"/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
             body=maybe_transform({"kill_process_group": kill_process_group}, execution_kill_params.ExecutionKillParams),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    def send_std_in(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        signal: Optional[Literal["EOF", "INTERRUPT"]] | Omit = omit,
+        text: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Send content to the Std In of a running execution.
+
+        Args:
+          signal: Signal to send to std in of the running execution.
+
+          text: Text to send to std in of the running execution.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return self._post(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+            body=maybe_transform(
+                {
+                    "signal": signal,
+                    "text": text,
+                },
+                execution_send_std_in_params.ExecutionSendStdInParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -785,6 +843,62 @@ class AsyncExecutionsResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    async def send_std_in(
+        self,
+        execution_id: str,
+        *,
+        devbox_id: str,
+        signal: Optional[Literal["EOF", "INTERRUPT"]] | Omit = omit,
+        text: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> DevboxAsyncExecutionDetailView:
+        """
+        Send content to the Std In of a running execution.
+
+        Args:
+          signal: Signal to send to std in of the running execution.
+
+          text: Text to send to std in of the running execution.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not devbox_id:
+            raise ValueError(f"Expected a non-empty value for `devbox_id` but received {devbox_id!r}")
+        if not execution_id:
+            raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
+        return await self._post(
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+            body=await async_maybe_transform(
+                {
+                    "signal": signal,
+                    "text": text,
+                },
+                execution_send_std_in_params.ExecutionSendStdInParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxAsyncExecutionDetailView,
+        )
+
     async def stream_stderr_updates(
         self,
         execution_id: str,
@@ -973,6 +1087,9 @@ class ExecutionsResourceWithRawResponse:
         self.kill = to_raw_response_wrapper(
             executions.kill,
         )
+        self.send_std_in = to_raw_response_wrapper(
+            executions.send_std_in,
+        )
         self.stream_stdout_updates = to_raw_response_wrapper(
             executions.stream_stdout_updates,
         )
@@ -998,6 +1115,9 @@ class AsyncExecutionsResourceWithRawResponse:
         )
         self.kill = async_to_raw_response_wrapper(
             executions.kill,
+        )
+        self.send_std_in = async_to_raw_response_wrapper(
+            executions.send_std_in,
         )
         self.stream_stdout_updates = async_to_raw_response_wrapper(
             executions.stream_stdout_updates,
@@ -1025,6 +1145,9 @@ class ExecutionsResourceWithStreamingResponse:
         self.kill = to_streamed_response_wrapper(
             executions.kill,
         )
+        self.send_std_in = to_streamed_response_wrapper(
+            executions.send_std_in,
+        )
         self.stream_stdout_updates = to_streamed_response_wrapper(
             executions.stream_stdout_updates,
         )
@@ -1050,6 +1173,9 @@ class AsyncExecutionsResourceWithStreamingResponse:
         )
         self.kill = async_to_streamed_response_wrapper(
             executions.kill,
+        )
+        self.send_std_in = async_to_streamed_response_wrapper(
+            executions.send_std_in,
         )
         self.stream_stdout_updates = async_to_streamed_response_wrapper(
             executions.stream_stdout_updates,

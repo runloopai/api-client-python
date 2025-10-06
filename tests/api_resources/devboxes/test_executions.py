@@ -248,6 +248,64 @@ class TestExecutions:
             )
 
     @parametrize
+    def test_method_send_std_in(self, client: Runloop) -> None:
+        execution = client.devboxes.executions.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    def test_method_send_std_in_with_all_params(self, client: Runloop) -> None:
+        execution = client.devboxes.executions.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+            signal="EOF",
+            text="text",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    def test_raw_response_send_std_in(self, client: Runloop) -> None:
+        response = client.devboxes.executions.with_raw_response.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        execution = response.parse()
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    def test_streaming_response_send_std_in(self, client: Runloop) -> None:
+        with client.devboxes.executions.with_streaming_response.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            execution = response.parse()
+            assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_send_std_in(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `devbox_id` but received ''"):
+            client.devboxes.executions.with_raw_response.send_std_in(
+                execution_id="execution_id",
+                devbox_id="",
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
+            client.devboxes.executions.with_raw_response.send_std_in(
+                execution_id="",
+                devbox_id="devbox_id",
+            )
+
+    @parametrize
     def test_method_stream_stdout_updates(self, client: Runloop, respx_mock: MockRouter) -> None:
         respx_mock.get("/v1/devboxes/devbox_id/executions/execution_id/stream_stdout_updates").mock(
             return_value=httpx.Response(200)
@@ -766,6 +824,64 @@ class TestAsyncExecutions:
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
             await async_client.devboxes.executions.with_raw_response.kill(
+                execution_id="",
+                devbox_id="devbox_id",
+            )
+
+    @parametrize
+    async def test_method_send_std_in(self, async_client: AsyncRunloop) -> None:
+        execution = await async_client.devboxes.executions.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    async def test_method_send_std_in_with_all_params(self, async_client: AsyncRunloop) -> None:
+        execution = await async_client.devboxes.executions.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+            signal="EOF",
+            text="text",
+        )
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    async def test_raw_response_send_std_in(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.executions.with_raw_response.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        execution = await response.parse()
+        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_send_std_in(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.executions.with_streaming_response.send_std_in(
+            execution_id="execution_id",
+            devbox_id="devbox_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            execution = await response.parse()
+            assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_send_std_in(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `devbox_id` but received ''"):
+            await async_client.devboxes.executions.with_raw_response.send_std_in(
+                execution_id="execution_id",
+                devbox_id="",
+            )
+
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `execution_id` but received ''"):
+            await async_client.devboxes.executions.with_raw_response.send_std_in(
                 execution_id="",
                 devbox_id="devbox_id",
             )
