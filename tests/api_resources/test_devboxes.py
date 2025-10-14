@@ -425,6 +425,7 @@ class TestDevboxes:
             id="id",
             command="command",
             command_id="command_id",
+            last_n="last_n",
             optimistic_timeout=0,
             shell_name="shell_name",
         )
@@ -480,6 +481,7 @@ class TestDevboxes:
         devbox = client.devboxes.execute_async(
             id="id",
             command="command",
+            attach_stdin=True,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
@@ -534,6 +536,7 @@ class TestDevboxes:
             devbox = client.devboxes.execute_sync(
                 id="id",
                 command="command",
+                attach_stdin=True,
                 shell_name="shell_name",
             )
 
@@ -821,6 +824,7 @@ class TestDevboxes:
     def test_method_snapshot_disk_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.snapshot_disk(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
@@ -868,6 +872,7 @@ class TestDevboxes:
     def test_method_snapshot_disk_async_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.snapshot_disk_async(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
@@ -1008,6 +1013,7 @@ class TestDevboxes:
             execution_id="execution_id",
             devbox_id="devbox_id",
             statuses=["queued"],
+            last_n="last_n",
             timeout_seconds=0,
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
@@ -1493,6 +1499,7 @@ class TestAsyncDevboxes:
             id="id",
             command="command",
             command_id="command_id",
+            last_n="last_n",
             optimistic_timeout=0,
             shell_name="shell_name",
         )
@@ -1548,6 +1555,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.execute_async(
             id="id",
             command="command",
+            attach_stdin=True,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
@@ -1602,6 +1610,7 @@ class TestAsyncDevboxes:
             devbox = await async_client.devboxes.execute_sync(
                 id="id",
                 command="command",
+                attach_stdin=True,
                 shell_name="shell_name",
             )
 
@@ -1889,6 +1898,7 @@ class TestAsyncDevboxes:
     async def test_method_snapshot_disk_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.snapshot_disk(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
@@ -1936,6 +1946,7 @@ class TestAsyncDevboxes:
     async def test_method_snapshot_disk_async_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.snapshot_disk_async(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
@@ -2076,6 +2087,7 @@ class TestAsyncDevboxes:
             execution_id="execution_id",
             devbox_id="devbox_id",
             statuses=["queued"],
+            last_n="last_n",
             timeout_seconds=0,
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])

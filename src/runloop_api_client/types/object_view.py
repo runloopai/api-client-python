@@ -15,6 +15,9 @@ class ObjectView(BaseModel):
     content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
     """The content type of the Object."""
 
+    create_time_ms: int
+    """The creation time of the Object in milliseconds since epoch."""
+
     name: str
     """The name of the Object."""
 

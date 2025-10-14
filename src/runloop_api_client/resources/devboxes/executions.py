@@ -30,6 +30,7 @@ from ...types.devboxes import (
     execution_stream_stderr_updates_params,
     execution_stream_stdout_updates_params,
 )
+from ...types.devbox_send_std_in_result import DevboxSendStdInResult
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -75,7 +76,7 @@ class ExecutionsResource(SyncAPIResource):
         stdout/error and the exit code if complete.
 
         Args:
-          last_n: Last n lines of standard error / standard out to return
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           extra_headers: Send extra headers
 
@@ -106,6 +107,7 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -124,6 +126,9 @@ class ExecutionsResource(SyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -146,6 +151,7 @@ class ExecutionsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 execution_execute_async_params.ExecutionExecuteAsyncParams,
@@ -166,6 +172,7 @@ class ExecutionsResource(SyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -177,13 +184,17 @@ class ExecutionsResource(SyncAPIResource):
     ) -> DevboxExecutionDetailView:
         """
         Execute a bash command in the Devbox shell, await the command completion and
-        return the output.
+        return the output. Note: attach_stdin parameter is not supported for synchronous
+        execution.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -208,6 +219,7 @@ class ExecutionsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 execution_execute_sync_params.ExecutionExecuteSyncParams,
@@ -285,7 +297,7 @@ class ExecutionsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> DevboxAsyncExecutionDetailView:
+    ) -> DevboxSendStdInResult:
         """
         Send content to the Std In of a running execution.
 
@@ -324,7 +336,7 @@ class ExecutionsResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxAsyncExecutionDetailView,
+            cast_to=DevboxSendStdInResult,
         )
 
     def stream_stderr_updates(
@@ -460,7 +472,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         stdout/error and the exit code if complete.
 
         Args:
-          last_n: Last n lines of standard error / standard out to return
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           extra_headers: Send extra headers
 
@@ -493,6 +505,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -511,6 +524,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -533,6 +549,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 execution_execute_async_params.ExecutionExecuteAsyncParams,
@@ -553,6 +570,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -564,13 +582,17 @@ class AsyncExecutionsResource(AsyncAPIResource):
     ) -> DevboxExecutionDetailView:
         """
         Execute a bash command in the Devbox shell, await the command completion and
-        return the output.
+        return the output. Note: attach_stdin parameter is not supported for synchronous
+        execution.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -595,6 +617,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 execution_execute_sync_params.ExecutionExecuteSyncParams,
@@ -674,7 +697,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> DevboxAsyncExecutionDetailView:
+    ) -> DevboxSendStdInResult:
         """
         Send content to the Std In of a running execution.
 
@@ -713,7 +736,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=DevboxAsyncExecutionDetailView,
+            cast_to=DevboxSendStdInResult,
         )
 
     async def stream_stderr_updates(

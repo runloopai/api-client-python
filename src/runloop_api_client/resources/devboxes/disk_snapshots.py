@@ -49,6 +49,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -65,6 +66,8 @@ class DiskSnapshotsResource(SyncAPIResource):
         replaced.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -85,6 +88,7 @@ class DiskSnapshotsResource(SyncAPIResource):
             f"/v1/devboxes/disk_snapshots/{id}",
             body=maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },
@@ -260,6 +264,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -276,6 +281,8 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         replaced.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -296,6 +303,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
             f"/v1/devboxes/disk_snapshots/{id}",
             body=await async_maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },

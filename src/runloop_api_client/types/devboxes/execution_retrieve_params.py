@@ -11,4 +11,4 @@ class ExecutionRetrieveParams(TypedDict, total=False):
     devbox_id: Required[str]
 
     last_n: str
-    """Last n lines of standard error / standard out to return"""
+    """Last n lines of standard error / standard out to return (default: 100)"""
