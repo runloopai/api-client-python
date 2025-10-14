@@ -9,6 +9,9 @@ __all__ = ["DevboxSnapshotDiskParams"]
 
 
 class DevboxSnapshotDiskParams(TypedDict, total=False):
+    commit_message: Optional[str]
+    """(Optional) Commit message associated with the snapshot (max 1000 characters)"""
+
     metadata: Optional[Dict[str, str]]
     """(Optional) Metadata used to describe the snapshot"""
 

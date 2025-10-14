@@ -18,6 +18,9 @@ class DevboxWaitForCommandParams(TypedDict, total=False):
     reaches any of the provided statuses.
     """
 
+    last_n: str
+    """Last n lines of standard error / standard out to return (default: 100)"""
+
     timeout_seconds: Optional[int]
     """(Optional) Timeout in seconds to wait for the status, up to 60 seconds.
 

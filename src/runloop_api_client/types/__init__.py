@@ -60,6 +60,7 @@ from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreview
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
 from .repository_manifest_view import RepositoryManifestView as RepositoryManifestView
+from .devbox_send_std_in_result import DevboxSendStdInResult as DevboxSendStdInResult
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
 from .devbox_upload_file_params import DevboxUploadFileParams as DevboxUploadFileParams
 from .object_list_public_params import ObjectListPublicParams as ObjectListPublicParams

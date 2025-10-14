@@ -17,6 +17,12 @@ class DevboxExecuteSyncParams(TypedDict, total=False):
     based on the recent state of the persistent shell.
     """
 
+    attach_stdin: Optional[bool]
+    """Whether to attach stdin streaming for async commands.
+
+    Not valid for execute_sync endpoint. Defaults to false if not specified.
+    """
+
     shell_name: Optional[str]
     """The name of the persistent shell to create or use if already created.
 

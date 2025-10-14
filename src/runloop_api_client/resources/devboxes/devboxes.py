@@ -724,6 +724,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         command: str,
         command_id: str = str(uuid7()),
+        last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -738,6 +739,8 @@ class DevboxesResource(SyncAPIResource):
         Execute a command with a known command ID on a devbox, optimistically waiting
         for it to complete within the specified timeout. If it completes in time, return
         the result. If not, return a status indicating the command is still running.
+        Note: attach_stdin parameter is not supported; use execute_async for stdin
+        support.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
@@ -746,6 +749,8 @@ class DevboxesResource(SyncAPIResource):
               persistent shell.
 
           command_id: The command ID in UUIDv7 string format for idempotency and tracking
+
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
               is 600 seconds.
@@ -785,6 +790,7 @@ class DevboxesResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=maybe_transform({"last_n": last_n}, devbox_execute_params.DevboxExecuteParams),
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -847,6 +853,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -865,6 +872,9 @@ class DevboxesResource(SyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -887,6 +897,7 @@ class DevboxesResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 devbox_execute_async_params.DevboxExecuteAsyncParams,
@@ -908,6 +919,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -919,7 +931,8 @@ class DevboxesResource(SyncAPIResource):
     ) -> DevboxExecutionDetailView:
         """
         Execute a bash command in the Devbox shell, await the command completion and
-        return the output.
+        return the output. Note: attach_stdin parameter is not supported for synchronous
+        execution.
 
         .. deprecated::
            Use execute, executeAsync, or executeAndAwaitCompletion instead.
@@ -929,6 +942,9 @@ class DevboxesResource(SyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -953,6 +969,7 @@ class DevboxesResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 devbox_execute_sync_params.DevboxExecuteSyncParams,
@@ -1256,6 +1273,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -1271,6 +1289,8 @@ class DevboxesResource(SyncAPIResource):
         enable launching future Devboxes with the same disk state.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -1293,6 +1313,7 @@ class DevboxesResource(SyncAPIResource):
             f"/v1/devboxes/{id}/snapshot_disk",
             body=maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },
@@ -1312,6 +1333,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -1328,6 +1350,8 @@ class DevboxesResource(SyncAPIResource):
         monitored using the query endpoint.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -1348,6 +1372,7 @@ class DevboxesResource(SyncAPIResource):
             f"/v1/devboxes/{id}/snapshot_disk_async",
             body=maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },
@@ -1474,6 +1499,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         devbox_id: str,
         statuses: List[Literal["queued", "running", "completed"]],
+        last_n: str | Omit = omit,
         timeout_seconds: Optional[int] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1491,6 +1517,8 @@ class DevboxesResource(SyncAPIResource):
           statuses: The command execution statuses to wait for. At least one status must be
               provided. The command will be returned as soon as it reaches any of the provided
               statuses.
+
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
               to 60 seconds.
@@ -1524,6 +1552,7 @@ class DevboxesResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=maybe_transform({"last_n": last_n}, devbox_wait_for_command_params.DevboxWaitForCommandParams),
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -2175,6 +2204,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         command: str,
         command_id: str = str(uuid7()),
+        last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2189,6 +2219,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Execute a command with a known command ID on a devbox, optimistically waiting
         for it to complete within the specified timeout. If it completes in time, return
         the result. If not, return a status indicating the command is still running.
+        Note: attach_stdin parameter is not supported; use execute_async for stdin
+        support.
 
         Args:
           command: The command to execute via the Devbox shell. By default, commands are run from
@@ -2197,6 +2229,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
               persistent shell.
 
           command_id: The command ID in UUIDv7 string format for idempotency and tracking
+
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
               is 600 seconds.
@@ -2236,6 +2270,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=await async_maybe_transform({"last_n": last_n}, devbox_execute_params.DevboxExecuteParams),
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
@@ -2299,6 +2334,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -2317,6 +2353,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -2339,6 +2378,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 devbox_execute_async_params.DevboxExecuteAsyncParams,
@@ -2360,6 +2400,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
+        attach_stdin: Optional[bool] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -2371,7 +2412,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
     ) -> DevboxExecutionDetailView:
         """
         Execute a bash command in the Devbox shell, await the command completion and
-        return the output.
+        return the output. Note: attach_stdin parameter is not supported for synchronous
+        execution.
 
         .. deprecated::
            Use execute, executeAsync, or executeAndAwaitCompletion instead.
@@ -2381,6 +2423,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
               the user home directory unless shell_name is specified. If shell_name is
               specified the command is run from the directory based on the recent state of the
               persistent shell.
+
+          attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
+              endpoint. Defaults to false if not specified.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -2405,6 +2450,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "command": command,
+                    "attach_stdin": attach_stdin,
                     "shell_name": shell_name,
                 },
                 devbox_execute_sync_params.DevboxExecuteSyncParams,
@@ -2708,6 +2754,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2723,6 +2770,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         enable launching future Devboxes with the same disk state.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -2745,6 +2794,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             f"/v1/devboxes/{id}/snapshot_disk",
             body=await async_maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },
@@ -2764,6 +2814,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        commit_message: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2780,6 +2831,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         monitored using the query endpoint.
 
         Args:
+          commit_message: (Optional) Commit message associated with the snapshot (max 1000 characters)
+
           metadata: (Optional) Metadata used to describe the snapshot
 
           name: (Optional) A user specified name to give the snapshot
@@ -2800,6 +2853,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             f"/v1/devboxes/{id}/snapshot_disk_async",
             body=await async_maybe_transform(
                 {
+                    "commit_message": commit_message,
                     "metadata": metadata,
                     "name": name,
                 },
@@ -2926,6 +2980,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         devbox_id: str,
         statuses: List[Literal["queued", "running", "completed"]],
+        last_n: str | Omit = omit,
         timeout_seconds: Optional[int] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -2943,6 +2998,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
           statuses: The command execution statuses to wait for. At least one status must be
               provided. The command will be returned as soon as it reaches any of the provided
               statuses.
+
+          last_n: Last n lines of standard error / standard out to return (default: 100)
 
           timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
               to 60 seconds.
@@ -2976,6 +3033,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=await async_maybe_transform(
+                    {"last_n": last_n}, devbox_wait_for_command_params.DevboxWaitForCommandParams
+                ),
             ),
             cast_to=DevboxAsyncExecutionDetailView,
         )
