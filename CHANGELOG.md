@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.65.0 (2025-10-15)
+
+Full Changelog: [v0.64.0...v0.65.0](https://github.com/runloopai/api-client-python/compare/v0.64.0...v0.65.0)
+
+### Features
+
+* **api:** api update ([e6de5c0](https://github.com/runloopai/api-client-python/commit/e6de5c068a75512dd89a9240c281f46c69f14f07))
+
+
+### Chores
+
+* **internal:** detect missing future annotations with ruff ([e8914e3](https://github.com/runloopai/api-client-python/commit/e8914e3d40f6bbed2175d39f25e3b1da1c350225))
+
 ## 0.64.0 (2025-10-06)
 
 Full Changelog: [v0.63.0...v0.64.0](https://github.com/runloopai/api-client-python/compare/v0.63.0...v0.64.0)
