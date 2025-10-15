@@ -12,7 +12,7 @@ from respx import MockRouter
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
-from runloop_api_client.types import DevboxExecutionDetailView, DevboxAsyncExecutionDetailView
+from runloop_api_client.types import DevboxSendStdInResult, DevboxExecutionDetailView, DevboxAsyncExecutionDetailView
 from runloop_api_client._exceptions import APIStatusError, APITimeoutError
 from runloop_api_client.lib.polling import PollingConfig, PollingTimeout
 
@@ -94,6 +94,7 @@ class TestExecutions:
         execution = client.devboxes.executions.execute_async(
             id="id",
             command="command",
+            attach_stdin=True,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
@@ -148,6 +149,7 @@ class TestExecutions:
             execution = client.devboxes.executions.execute_sync(
                 id="id",
                 command="command",
+                attach_stdin=True,
                 shell_name="shell_name",
             )
 
@@ -253,7 +255,7 @@ class TestExecutions:
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     def test_method_send_std_in_with_all_params(self, client: Runloop) -> None:
@@ -263,7 +265,7 @@ class TestExecutions:
             signal="EOF",
             text="text",
         )
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     def test_raw_response_send_std_in(self, client: Runloop) -> None:
@@ -275,7 +277,7 @@ class TestExecutions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         execution = response.parse()
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     def test_streaming_response_send_std_in(self, client: Runloop) -> None:
@@ -287,7 +289,7 @@ class TestExecutions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             execution = response.parse()
-            assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+            assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -675,6 +677,7 @@ class TestAsyncExecutions:
         execution = await async_client.devboxes.executions.execute_async(
             id="id",
             command="command",
+            attach_stdin=True,
             shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
@@ -729,6 +732,7 @@ class TestAsyncExecutions:
             execution = await async_client.devboxes.executions.execute_sync(
                 id="id",
                 command="command",
+                attach_stdin=True,
                 shell_name="shell_name",
             )
 
@@ -834,7 +838,7 @@ class TestAsyncExecutions:
             execution_id="execution_id",
             devbox_id="devbox_id",
         )
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     async def test_method_send_std_in_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -844,7 +848,7 @@ class TestAsyncExecutions:
             signal="EOF",
             text="text",
         )
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     async def test_raw_response_send_std_in(self, async_client: AsyncRunloop) -> None:
@@ -856,7 +860,7 @@ class TestAsyncExecutions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         execution = await response.parse()
-        assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+        assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
     @parametrize
     async def test_streaming_response_send_std_in(self, async_client: AsyncRunloop) -> None:
@@ -868,7 +872,7 @@ class TestAsyncExecutions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             execution = await response.parse()
-            assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
+            assert_matches_type(DevboxSendStdInResult, execution, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

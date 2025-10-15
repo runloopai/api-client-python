@@ -32,6 +32,7 @@ class TestDiskSnapshots:
     def test_method_update_with_all_params(self, client: Runloop) -> None:
         disk_snapshot = client.devboxes.disk_snapshots.update(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
@@ -197,6 +198,7 @@ class TestAsyncDiskSnapshots:
     async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
         disk_snapshot = await async_client.devboxes.disk_snapshots.update(
             id="id",
+            commit_message="commit_message",
             metadata={"foo": "string"},
             name="name",
         )
