@@ -66,6 +66,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -254,6 +255,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -400,6 +402,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -491,6 +494,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             services=[
                 {
                     "image": "image",
@@ -679,6 +683,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
         assert_matches_type(BlueprintView, blueprint, path=["response"])
@@ -825,6 +830,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            secrets={"foo": "string"},
             services=[
                 {
                     "image": "image",
