@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from typing import Iterator
 
 import pytest
@@ -74,6 +75,10 @@ def test_start_devbox_from_base_blueprint_by_name(client: Runloop) -> None:
 
 
 @pytest.mark.timeout(60)
+@pytest.mark.skipif(
+    os.getenv("RUN_SMOKETESTS") != "1",
+    reason="Skip blueprint secrets test in local testing (requires RUN_SMOKETESTS=1)",
+)
 def test_create_blueprint_with_secret_and_await_build(client: Runloop) -> None:
     bpt = None
     try:
@@ -89,7 +94,7 @@ def test_create_blueprint_with_secret_and_await_build(client: Runloop) -> None:
             ),
             secrets={"GITHUB_TOKEN": "GITHUB_TOKEN_FOR_SMOKETESTS"},
         )
-        # Wait for build to complete
+
         completed = client.blueprints.await_build_complete(
             bpt.id,
             polling_config=PollingConfig(max_attempts=180, interval_seconds=5.0, timeout_seconds=30 * 60),
