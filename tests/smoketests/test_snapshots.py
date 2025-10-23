@@ -45,7 +45,7 @@ def test_snapshot_devbox(client: Runloop) -> None:
     _snapshot_id = snap.id
 
 
-@pytest.mark.timeout(30)
+@pytest.mark.timeout(120)
 def test_launch_devbox_from_snapshot(client: Runloop) -> None:
     assert _snapshot_id
     launched = None

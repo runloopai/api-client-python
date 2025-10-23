@@ -37,7 +37,7 @@ def test_create_devbox(client: Runloop) -> None:
     client.devboxes.shutdown(created.id)
 
 
-@pytest.mark.timeout(30)
+@pytest.mark.timeout(120)
 def test_await_running_create_and_await_running(client: Runloop) -> None:
     global _devbox_id
     created = client.devboxes.create_and_await_running(
@@ -67,7 +67,7 @@ def test_shutdown_devbox(client: Runloop) -> None:
     assert view.status == "shutdown"
 
 
-@pytest.mark.timeout(90)
+@pytest.mark.timeout(120)
 def test_create_and_await_running_long_set_up(client: Runloop) -> None:
     created = client.devboxes.create_and_await_running(
         name=unique_name("smoketest-devbox-await-running-long-set-up"),

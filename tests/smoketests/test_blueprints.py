@@ -32,7 +32,7 @@ _blueprint_id = None
 _blueprint_name = unique_name("bp")
 
 
-@pytest.mark.timeout(60)
+@pytest.mark.timeout(120)  # 2 minutes
 def test_create_blueprint_and_await_build(client: Runloop) -> None:
     global _blueprint_id
     created = client.blueprints.create_and_await_build_complete(
@@ -43,7 +43,7 @@ def test_create_blueprint_and_await_build(client: Runloop) -> None:
     _blueprint_id = created.id
 
 
-@pytest.mark.timeout(60)
+@pytest.mark.timeout(120)
 def test_start_devbox_from_base_blueprint_by_id(client: Runloop) -> None:
     assert _blueprint_id
     devbox = None
@@ -59,7 +59,7 @@ def test_start_devbox_from_base_blueprint_by_id(client: Runloop) -> None:
             client.devboxes.shutdown(devbox.id)
 
 
-@pytest.mark.timeout(60)
+@pytest.mark.timeout(120)
 def test_start_devbox_from_base_blueprint_by_name(client: Runloop) -> None:
     devbox = None
     try:
@@ -74,7 +74,7 @@ def test_start_devbox_from_base_blueprint_by_name(client: Runloop) -> None:
             client.devboxes.shutdown(devbox.id)
 
 
-@pytest.mark.timeout(60)
+@pytest.mark.timeout(120)
 @pytest.mark.skipif(
     os.getenv("RUN_SMOKETESTS") != "1",
     reason="Skip blueprint secrets test in local testing (requires RUN_SMOKETESTS=1)",
