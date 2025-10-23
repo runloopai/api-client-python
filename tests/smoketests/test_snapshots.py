@@ -49,7 +49,7 @@ def test_snapshot_devbox(client: Runloop) -> None:
 def test_launch_devbox_from_snapshot(client: Runloop) -> None:
     assert _snapshot_id
     launched = None
-    try: 
+    try:
         launched = client.devboxes.create_and_await_running(
             snapshot_id=_snapshot_id,
             polling_config=PollingConfig(max_attempts=120, interval_seconds=5.0, timeout_seconds=20 * 60),

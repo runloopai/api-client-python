@@ -46,11 +46,11 @@ def test_create_blueprint_and_await_build(client: Runloop) -> None:
 def test_start_devbox_from_base_blueprint_by_id(client: Runloop) -> None:
     assert _blueprint_id
     devbox = None
-    try: 
+    try:
         devbox = client.devboxes.create_and_await_running(
-        blueprint_id=_blueprint_id,
-        polling_config=PollingConfig(max_attempts=120, interval_seconds=5.0, timeout_seconds=20 * 60),
-    )
+            blueprint_id=_blueprint_id,
+            polling_config=PollingConfig(max_attempts=120, interval_seconds=5.0, timeout_seconds=20 * 60),
+        )
         assert devbox.blueprint_id == _blueprint_id
         assert devbox.status == "running"
     finally:
@@ -61,7 +61,7 @@ def test_start_devbox_from_base_blueprint_by_id(client: Runloop) -> None:
 @pytest.mark.timeout(30)
 def test_start_devbox_from_base_blueprint_by_name(client: Runloop) -> None:
     devbox = None
-    try: 
+    try:
         devbox = client.devboxes.create_and_await_running(
             blueprint_name=_blueprint_name,
             polling_config=PollingConfig(max_attempts=120, interval_seconds=5.0, timeout_seconds=20 * 60),
@@ -76,13 +76,13 @@ def test_start_devbox_from_base_blueprint_by_name(client: Runloop) -> None:
 @pytest.mark.timeout(60)
 def test_create_blueprint_with_secret_and_await_build(client: Runloop) -> None:
     bpt = None
-    try: 
+    try:
         bpt = client.blueprints.create(
             name=unique_name("bp-secrets"),
             dockerfile=(
                 "FROM runloop:runloop/starter-arm64\n"
                 "ARG GITHUB_TOKEN\n"
-                "RUN git config --global credential.helper '!f() { echo \"username=x-access-token\"; echo \"password=$GITHUB_TOKEN\"; }; f' "
+                'RUN git config --global credential.helper \'!f() { echo "username=x-access-token"; echo "password=$GITHUB_TOKEN"; }; f\' '
                 "&& git clone https://github.com/runloopai/runloop-fe.git /workspace/runloop-fe "
                 "&& git config --global --unset credential.helper\n"
                 "WORKDIR /workspace/runloop-fe"
@@ -97,6 +97,6 @@ def test_create_blueprint_with_secret_and_await_build(client: Runloop) -> None:
         assert completed.status == "build_complete"
         assert completed.parameters.secrets is not None
         assert completed.parameters.secrets.get("GITHUB_TOKEN") == "GITHUB_TOKEN_FOR_SMOKETESTS"
-    finally: 
+    finally:
         if bpt:
             client.blueprints.delete(bpt.id)
