@@ -32,5 +32,12 @@ class BlueprintCreateFromInspectionParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """(Optional) User defined metadata for the Blueprint."""
 
+    secrets: Optional[Dict[str, str]]
+    """(Optional) Map of mount IDs/environment variable names to secret names.
+
+    Secrets can be used as environment variables in system_setup_commands. Example:
+    {"GITHUB_TOKEN": "gh_secret"} makes 'gh_secret' available as GITHUB_TOKEN.
+    """
+
     system_setup_commands: Optional[SequenceNotStr[str]]
     """A list of commands to run to set up your system."""

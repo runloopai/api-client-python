@@ -76,6 +76,14 @@ class BlueprintBuildParameters(BaseModel):
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""
 
+    secrets: Optional[Dict[str, str]] = None
+    """(Optional) Map of mount IDs/environment variable names to secret names.
+
+    Secrets will be available to commands during the build. Secrets are NOT stored
+    in the blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the
+    secret 'DATABASE_PASSWORD' available as environment variable 'DB_PASS'.
+    """
+
     services: Optional[List[Service]] = None
     """(Optional) List of containerized services to include in the Blueprint.
 
