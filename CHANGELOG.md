@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.66.0 (2025-10-23)
+
+Full Changelog: [v0.65.0...v0.66.0](https://github.com/runloopai/api-client-python/compare/v0.65.0...v0.66.0)
+
+### Features
+
+* **api:** api update ([a0f1f40](https://github.com/runloopai/api-client-python/commit/a0f1f402b1f403fbe439bdebd9f96d5069c5fdf9))
+
+
+### Chores
+
+* bump `httpx-aiohttp` version to 0.1.9 ([8d29288](https://github.com/runloopai/api-client-python/commit/8d29288a957e7a8d14dfb4e4cfaf4d6345dbaf41))
+
 ## 0.65.0 (2025-10-15)
 
 Full Changelog: [v0.64.0...v0.65.0](https://github.com/runloopai/api-client-python/compare/v0.64.0...v0.65.0)
