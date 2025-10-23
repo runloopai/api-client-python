@@ -67,6 +67,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -107,6 +108,11 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              will be available to commands during the build. Secrets are NOT stored in the
+              blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
+              'DATABASE_PASSWORD' available as environment variable 'DB_PASS'.
+
           services: (Optional) List of containerized services to include in the Blueprint. These
               services will be pre-pulled during the build phase for optimized startup
               performance.
@@ -136,6 +142,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
@@ -283,6 +290,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -309,6 +317,10 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              can be used as environment variables in system_setup_commands. Example:
+              {"GITHUB_TOKEN": "gh_secret"} makes 'gh_secret' available as GITHUB_TOKEN.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -330,6 +342,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_from_inspection_params.BlueprintCreateFromInspectionParams,
@@ -440,6 +453,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -478,6 +492,11 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              will be available to commands during the build. Secrets are NOT stored in the
+              blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
+              'DATABASE_PASSWORD' available as environment variable 'DB_PASS'.
+
           services: (Optional) List of containerized services to include in the Blueprint. These
               services will be pre-pulled during the build phase for optimized startup
               performance.
@@ -507,6 +526,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
@@ -555,6 +575,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -595,6 +616,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              will be available to commands during the build. Secrets are NOT stored in the
+              blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
+              'DATABASE_PASSWORD' available as environment variable 'DB_PASS'.
+
           services: (Optional) List of containerized services to include in the Blueprint. These
               services will be pre-pulled during the build phase for optimized startup
               performance.
@@ -624,6 +650,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
@@ -771,6 +798,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -797,6 +825,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              can be used as environment variables in system_setup_commands. Example:
+              {"GITHUB_TOKEN": "gh_secret"} makes 'gh_secret' available as GITHUB_TOKEN.
+
           system_setup_commands: A list of commands to run to set up your system.
 
           extra_headers: Send extra headers
@@ -818,6 +850,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "system_setup_commands": system_setup_commands,
                 },
                 blueprint_create_from_inspection_params.BlueprintCreateFromInspectionParams,
@@ -928,6 +961,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -966,6 +1000,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
+              will be available to commands during the build. Secrets are NOT stored in the
+              blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
+              'DATABASE_PASSWORD' available as environment variable 'DB_PASS'.
+
           services: (Optional) List of containerized services to include in the Blueprint. These
               services will be pre-pulled during the build phase for optimized startup
               performance.
@@ -995,6 +1034,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
                 },
