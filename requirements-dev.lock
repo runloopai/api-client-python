@@ -119,5 +119,5 @@ virtualenv==20.24.5
     # via nox
 yarl==1.20.0
     # via aiohttp
-zipp==3.17.0
+zipp>=3.20
     # via importlib-metadata
