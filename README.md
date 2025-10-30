@@ -11,7 +11,9 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [runloop.ai](https://runloop.ai). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on
+[runloop.ai](https://runloop.ai). The full API of this library can be found in
+[api.md](https://github.com/runloopai/api-client-python/blob/main/api.md).
 
 ## Installation
 
