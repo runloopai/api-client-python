@@ -112,7 +112,7 @@ class TestBlueprints:
     def test_create_rejects_large_file_mount(self, client: Runloop) -> None:
         # 512KB + 1 byte
         too_large_content = "a" * (512 * 1024 + 1)
-        with pytest.raises(ValueError, match=r"exceeds maximum size"):
+        with pytest.raises(ValueError, match=r"over the limit"):
             client.blueprints.create(
                 name="name",
                 file_mounts={"/tmp/large.txt": too_large_content},
@@ -125,7 +125,7 @@ class TestBlueprints:
         content_a = "a" * per_file_max
         content_b = "b" * per_file_max
         content_c = "c" * 1
-        with pytest.raises(ValueError, match=r"total file_mounts size exceeds maximum"):
+        with pytest.raises(ValueError, match=r"total file_mounts size .* over the limit"):
             client.blueprints.create(
                 name="name",
                 file_mounts={
@@ -567,7 +567,7 @@ class TestAsyncBlueprints:
     async def test_create_rejects_large_file_mount(self, async_client: AsyncRunloop) -> None:
         # 512KB + 1 byte
         too_large_content = "a" * (512 * 1024 + 1)
-        with pytest.raises(ValueError, match=r"exceeds maximum size"):
+        with pytest.raises(ValueError, match=r"over the limit"):
             await async_client.blueprints.create(
                 name="name",
                 file_mounts={"/tmp/large.txt": too_large_content},
@@ -580,7 +580,7 @@ class TestAsyncBlueprints:
         content_a = "a" * per_file_max
         content_b = "b" * per_file_max
         content_c = "c" * 1
-        with pytest.raises(ValueError, match=r"total file_mounts size exceeds maximum"):
+        with pytest.raises(ValueError, match=r"total file_mounts size .* over the limit"):
             await async_client.blueprints.create(
                 name="name",
                 file_mounts={
