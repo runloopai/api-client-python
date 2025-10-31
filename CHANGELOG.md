@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.66.2 (2025-10-31)
+
+Full Changelog: [v0.66.1...v0.66.2](https://github.com/runloopai/api-client-python/compare/v0.66.1...v0.66.2)
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([ce71ef5](https://github.com/runloopai/api-client-python/commit/ce71ef54f8225f79b23044f9be08ed8fb7be53dc))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([1b52dea](https://github.com/runloopai/api-client-python/commit/1b52dea3fbe031d76d6245890f0bff84f9c464fb))
+
 ## 0.66.1 (2025-10-23)
 
 Full Changelog: [v0.66.0...v0.66.1](https://github.com/runloopai/api-client-python/compare/v0.66.0...v0.66.1)
