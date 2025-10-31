@@ -23,6 +23,7 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from .._constants import FILE_MOUNT_MAX_SIZE_BYTES, FILE_MOUNT_TOTAL_MAX_SIZE_BYTES
 from ..pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
 from .._exceptions import RunloopError
 from ..lib.polling import PollingConfig, poll_until
@@ -48,6 +49,33 @@ class BlueprintRequestArgs(TypedDict, total=False):
 
 
 __all__ = ["BlueprintsResource", "AsyncBlueprintsResource", "BlueprintRequestArgs"]
+
+
+def _validate_file_mounts(file_mounts: Optional[Dict[str, str]] | Omit) -> None:
+    """Validate file_mounts are within size constraints.
+
+    Currently enforces a maximum per-file size to avoid server-side issues with
+    large inline file contents. Also enforces a maximum total size across all
+    file_mounts.
+    """
+
+    if file_mounts is omit or file_mounts is None:
+        return
+
+    total_size_bytes = 0
+    for mount_path, content in file_mounts.items():
+        # Measure size in bytes using UTF-8 encoding since payloads are JSON strings
+        size_bytes = len(content.encode("utf-8"))
+        if size_bytes > FILE_MOUNT_MAX_SIZE_BYTES:
+            raise ValueError(
+                f"file_mount '{mount_path}' exceeds maximum size of {FILE_MOUNT_MAX_SIZE_BYTES} bytes. Use object_mounts instead."
+            )
+        total_size_bytes += size_bytes
+
+    if total_size_bytes > FILE_MOUNT_TOTAL_MAX_SIZE_BYTES:
+        raise ValueError(
+            f"total file_mounts size exceeds maximum of {FILE_MOUNT_TOTAL_MAX_SIZE_BYTES} bytes. Use object_mounts instead."
+        )
 
 
 class BlueprintsResource(SyncAPIResource):
@@ -144,6 +172,8 @@ class BlueprintsResource(SyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        _validate_file_mounts(file_mounts)
+
         return self._post(
             "/v1/blueprints",
             body=maybe_transform(
@@ -758,6 +788,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        _validate_file_mounts(file_mounts)
+
         return await self._post(
             "/v1/blueprints",
             body=await async_maybe_transform(

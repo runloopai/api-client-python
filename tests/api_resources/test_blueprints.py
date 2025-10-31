@@ -109,6 +109,33 @@ class TestBlueprints:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
+    def test_create_rejects_large_file_mount(self, client: Runloop) -> None:
+        # 512KB + 1 byte
+        too_large_content = "a" * (512 * 1024 + 1)
+        with pytest.raises(ValueError, match=r"exceeds maximum size"):
+            client.blueprints.create(
+                name="name",
+                file_mounts={"/tmp/large.txt": too_large_content},
+            )
+
+    @parametrize
+    def test_create_rejects_total_file_mount_size(self, client: Runloop) -> None:
+        # Two files at exactly per-file max, plus 1 extra byte across a third file to exceed 1MB total
+        per_file_max = 512 * 1024
+        content_a = "a" * per_file_max
+        content_b = "b" * per_file_max
+        content_c = "c" * 1
+        with pytest.raises(ValueError, match=r"total file_mounts size exceeds maximum"):
+            client.blueprints.create(
+                name="name",
+                file_mounts={
+                    "/tmp/a.txt": content_a,
+                    "/tmp/b.txt": content_b,
+                    "/tmp/c.txt": content_c,
+                },
+            )
+
+    @parametrize
     def test_method_retrieve(self, client: Runloop) -> None:
         blueprint = client.blueprints.retrieve(
             "id",
@@ -535,6 +562,33 @@ class TestAsyncBlueprints:
             assert_matches_type(BlueprintView, blueprint, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_create_rejects_large_file_mount(self, async_client: AsyncRunloop) -> None:
+        # 512KB + 1 byte
+        too_large_content = "a" * (512 * 1024 + 1)
+        with pytest.raises(ValueError, match=r"exceeds maximum size"):
+            await async_client.blueprints.create(
+                name="name",
+                file_mounts={"/tmp/large.txt": too_large_content},
+            )
+
+    @parametrize
+    async def test_create_rejects_total_file_mount_size(self, async_client: AsyncRunloop) -> None:
+        # Two files at exactly per-file max, plus 1 extra byte across a third file to exceed 1MB total
+        per_file_max = 512 * 1024
+        content_a = "a" * per_file_max
+        content_b = "b" * per_file_max
+        content_c = "c" * 1
+        with pytest.raises(ValueError, match=r"total file_mounts size exceeds maximum"):
+            await async_client.blueprints.create(
+                name="name",
+                file_mounts={
+                    "/tmp/a.txt": content_a,
+                    "/tmp/b.txt": content_b,
+                    "/tmp/c.txt": content_c,
+                },
+            )
 
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncRunloop) -> None:
