@@ -14,7 +14,10 @@ INITIAL_RETRY_DELAY = 1.0
 MAX_RETRY_DELAY = 60.0
 
 # Maximum allowed size (in bytes) for individual entries in `file_mounts` when creating Blueprints
-FILE_MOUNT_MAX_SIZE_BYTES = 512 * 1024
+# NOTE: Capped at ~786,000 bytes to align with the approximate macOS maximum
+# shell command length when embedding base64-encoded content. Since base64 is
+# ASCII, bytes ≈ characters here, and we measure size using UTF-8 encoding.
+FILE_MOUNT_MAX_SIZE_BYTES = 786_000
 
 # Maximum allowed total size (in bytes) across all `file_mounts` when creating Blueprints
-FILE_MOUNT_TOTAL_MAX_SIZE_BYTES = 1024 * 1024
+FILE_MOUNT_TOTAL_MAX_SIZE_BYTES = 786_000 * 10  # ~10 mb
