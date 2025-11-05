@@ -55,7 +55,7 @@ class LaunchParameters(BaseModel):
     keep_alive_time_seconds: Optional[int] = None
     """Time in seconds after which Devbox will automatically shutdown.
 
-    Default is 1 hour.
+    Default is 1 hour. Maximum is 48 hours (172800 seconds).
     """
 
     launch_commands: Optional[List[str]] = None
