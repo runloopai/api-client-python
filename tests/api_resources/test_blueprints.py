@@ -109,6 +109,28 @@ class TestBlueprints:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
+    def test_create_rejects_large_file_mount(self, client: Runloop) -> None:
+        # 98,250 bytes + 1 byte (pre-encoded limit to stay within ~131,000 b64'd)
+        too_large_content = "a" * (98_250 + 1)
+        with pytest.raises(ValueError, match=r"over the limit"):
+            client.blueprints.create(
+                name="name",
+                file_mounts={"/tmp/large.txt": too_large_content},
+            )
+
+    @parametrize
+    def test_create_rejects_total_file_mount_size(self, client: Runloop) -> None:
+        # Eighty files at per-file max (98,250) equals current total limit; add 1 byte to exceed
+        per_file_max = 98_250
+        file_mounts = {f"/tmp/{i}.txt": "a" * per_file_max for i in range(80)}
+        file_mounts["/tmp/extra.txt"] = "x"
+        with pytest.raises(ValueError, match=r"total file_mounts size .* over the limit"):
+            client.blueprints.create(
+                name="name",
+                file_mounts=file_mounts,
+            )
+
+    @parametrize
     def test_method_retrieve(self, client: Runloop) -> None:
         blueprint = client.blueprints.retrieve(
             "id",
@@ -535,6 +557,28 @@ class TestAsyncBlueprints:
             assert_matches_type(BlueprintView, blueprint, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_create_rejects_large_file_mount(self, async_client: AsyncRunloop) -> None:
+        # 98,250 bytes + 1 byte (pre-encoded limit to stay within ~131,000 b64'd)
+        too_large_content = "a" * (98_250 + 1)
+        with pytest.raises(ValueError, match=r"over the limit"):
+            await async_client.blueprints.create(
+                name="name",
+                file_mounts={"/tmp/large.txt": too_large_content},
+            )
+
+    @parametrize
+    async def test_create_rejects_total_file_mount_size(self, async_client: AsyncRunloop) -> None:
+        # Eighty files at per-file max (98,250) equals current total limit; add 1 byte to exceed
+        per_file_max = 98_250
+        file_mounts = {f"/tmp/{i}.txt": "a" * per_file_max for i in range(80)}
+        file_mounts["/tmp/extra.txt"] = "x"
+        with pytest.raises(ValueError, match=r"total file_mounts size .* over the limit"):
+            await async_client.blueprints.create(
+                name="name",
+                file_mounts=file_mounts,
+            )
 
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncRunloop) -> None:

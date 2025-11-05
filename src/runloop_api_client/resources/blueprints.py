@@ -1,4 +1,5 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+# isort: skip_file
 
 from __future__ import annotations
 
@@ -15,6 +16,7 @@ from ..types import (
 )
 from .._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
+from .._utils._validation import ValidationNotification
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -23,6 +25,7 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from .._constants import FILE_MOUNT_MAX_SIZE_BYTES, FILE_MOUNT_TOTAL_MAX_SIZE_BYTES
 from ..pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
 from .._exceptions import RunloopError
 from ..lib.polling import PollingConfig, poll_until
@@ -48,6 +51,57 @@ class BlueprintRequestArgs(TypedDict, total=False):
 
 
 __all__ = ["BlueprintsResource", "AsyncBlueprintsResource", "BlueprintRequestArgs"]
+
+
+def _format_bytes(num_bytes: int) -> str:
+    """Format a byte count in a human-friendly way (KB/MB/GB).
+
+    Uses binary units (1024). Avoids decimals when exact.
+    """
+    if num_bytes < 1024:
+        return f"{num_bytes} bytes"
+    for factor, unit in ((1 << 30, "GB"), (1 << 20, "MB"), (1 << 10, "KB")):
+        if num_bytes >= factor:
+            value = num_bytes / factor
+            if float(value).is_integer():
+                return f"{int(value)} {unit}"
+            return f"{value:.1f} {unit}"
+    return f"{num_bytes} bytes"
+
+
+def _validate_file_mounts(file_mounts: Optional[Dict[str, str]] | Omit) -> ValidationNotification:
+    """Validate file_mounts are within size constraints: returns validation failures.
+
+    Currently enforces a maximum per-file size to avoid server-side issues with
+    large inline file contents. Also enforces a maximum total size across all
+    file_mounts.
+    """
+
+    note = ValidationNotification()
+
+    if file_mounts is omit or file_mounts is None:
+        return note
+
+    total_size_bytes = 0
+    for mount_path, content in file_mounts.items():
+        # Measure size in bytes using UTF-8 encoding since payloads are JSON strings
+        size_bytes = len(content.encode("utf-8"))
+        if size_bytes > FILE_MOUNT_MAX_SIZE_BYTES:
+            over = size_bytes - FILE_MOUNT_MAX_SIZE_BYTES
+            note.add_error(
+                f"file_mount '{mount_path}' is {_format_bytes(over)} over the limit "
+                f"({_format_bytes(size_bytes)} / {_format_bytes(FILE_MOUNT_MAX_SIZE_BYTES)}). Use object_mounts instead."
+            )
+        total_size_bytes += size_bytes
+
+    if total_size_bytes > FILE_MOUNT_TOTAL_MAX_SIZE_BYTES:
+        total_over = total_size_bytes - FILE_MOUNT_TOTAL_MAX_SIZE_BYTES
+        note.add_error(
+            f"total file_mounts size is {_format_bytes(total_over)} over the limit "
+            f"({_format_bytes(total_size_bytes)} / {_format_bytes(FILE_MOUNT_TOTAL_MAX_SIZE_BYTES)}). Use object_mounts instead."
+        )
+
+    return note
 
 
 class BlueprintsResource(SyncAPIResource):
@@ -144,6 +198,10 @@ class BlueprintsResource(SyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        note = _validate_file_mounts(file_mounts)
+        if note.has_errors():
+            raise ValueError(note.error_message())
+
         return self._post(
             "/v1/blueprints",
             body=maybe_transform(
@@ -758,6 +816,10 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           idempotency_key: Specify a custom idempotency key for this request
         """
+        note = _validate_file_mounts(file_mounts)
+        if note.has_errors():
+            raise ValueError(note.error_message())
+
         return await self._post(
             "/v1/blueprints",
             body=await async_maybe_transform(
