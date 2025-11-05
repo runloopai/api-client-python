@@ -11,4 +11,7 @@ class ExecutionStreamStdoutUpdatesParams(TypedDict, total=False):
     devbox_id: Required[str]
 
     offset: str
-    """The byte offset to start the stream from"""
+    """
+    The byte offset to start the stream from (if unspecified, starts from the
+    beginning of the stream)
+    """
