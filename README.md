@@ -26,6 +26,10 @@ pip install runloop_api_client
 
 The full API of this library can be found in [api.md](api.md).
 
+### Object-Oriented SDK
+
+For a higher-level, Pythonic interface, check out the new [`RunloopSDK`](README-SDK.md) which layers an object-oriented API on top of the generated client (including synchronous and asynchronous variants).
+
 ```python
 import os
 from runloop_api_client import Runloop
