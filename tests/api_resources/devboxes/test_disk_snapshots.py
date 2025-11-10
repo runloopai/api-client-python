@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import Any, cast
+from unittest.mock import patch
 
 import pytest
 
@@ -14,6 +15,8 @@ from runloop_api_client.pagination import SyncDiskSnapshotsCursorIDPage, AsyncDi
 from runloop_api_client.types.devboxes import (
     DevboxSnapshotAsyncStatusView,
 )
+from runloop_api_client._exceptions import RunloopError
+from runloop_api_client.lib.polling import PollingConfig, PollingTimeout
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -181,6 +184,112 @@ class TestDiskSnapshots:
                 "",
             )
 
+    # Polling method tests
+    @parametrize
+    def test_method_await_completed_success(self, client: Runloop) -> None:
+        """Test await_completed with successful polling to complete state"""
+
+        # Mock the query_status calls - first returns in_progress, then complete
+        mock_status_in_progress = DevboxSnapshotAsyncStatusView(
+            status="in_progress",
+            error_message=None,
+        )
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.side_effect = [mock_status_in_progress, mock_status_complete]
+
+            result = client.devboxes.disk_snapshots.await_completed("test_id")
+
+            assert result.status == "complete"
+            assert mock_query.call_count == 2
+
+    @parametrize
+    def test_method_await_completed_immediate_success(self, client: Runloop) -> None:
+        """Test await_completed when snapshot is already complete"""
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_complete
+
+            result = client.devboxes.disk_snapshots.await_completed("test_id")
+
+            assert result.status == "complete"
+            assert mock_query.call_count == 1
+
+    @parametrize
+    def test_method_await_completed_error_state(self, client: Runloop) -> None:
+        """Test await_completed when snapshot status becomes error"""
+
+        mock_status_error = DevboxSnapshotAsyncStatusView(
+            status="error",
+            error_message="Snapshot creation failed",
+        )
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_error
+
+            with pytest.raises(RunloopError, match="Snapshot test_id failed: Snapshot creation failed"):
+                client.devboxes.disk_snapshots.await_completed("test_id")
+
+    @parametrize
+    def test_method_await_completed_error_state_no_message(self, client: Runloop) -> None:
+        """Test await_completed when snapshot status becomes error without error message"""
+
+        mock_status_error = DevboxSnapshotAsyncStatusView(
+            status="error",
+            error_message=None,
+        )
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_error
+
+            with pytest.raises(RunloopError, match="Snapshot test_id failed: Unknown error"):
+                client.devboxes.disk_snapshots.await_completed("test_id")
+
+    @parametrize
+    def test_method_await_completed_with_config(self, client: Runloop) -> None:
+        """Test await_completed with custom polling configuration"""
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        config = PollingConfig(interval_seconds=0.1, max_attempts=10)
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_complete
+
+            result = client.devboxes.disk_snapshots.await_completed("test_id", polling_config=config)
+
+            assert result.status == "complete"
+
+    @parametrize
+    def test_method_await_completed_polling_timeout(self, client: Runloop) -> None:
+        """Test await_completed raises PollingTimeout when max attempts exceeded"""
+
+        mock_status_in_progress = DevboxSnapshotAsyncStatusView(
+            status="in_progress",
+            error_message=None,
+        )
+
+        config = PollingConfig(interval_seconds=0.01, max_attempts=2)
+
+        with patch.object(client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_in_progress
+
+            with pytest.raises(PollingTimeout):
+                client.devboxes.disk_snapshots.await_completed("test_id", polling_config=config)
+
 
 class TestAsyncDiskSnapshots:
     parametrize = pytest.mark.parametrize(
@@ -346,3 +455,109 @@ class TestAsyncDiskSnapshots:
             await async_client.devboxes.disk_snapshots.with_raw_response.query_status(
                 "",
             )
+
+    # Polling method tests
+    @parametrize
+    async def test_method_await_completed_success(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed with successful polling to complete state"""
+
+        # Mock the query_status calls - first returns in_progress, then complete
+        mock_status_in_progress = DevboxSnapshotAsyncStatusView(
+            status="in_progress",
+            error_message=None,
+        )
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.side_effect = [mock_status_in_progress, mock_status_complete]
+
+            result = await async_client.devboxes.disk_snapshots.await_completed("test_id")
+
+            assert result.status == "complete"
+            assert mock_query.call_count == 2
+
+    @parametrize
+    async def test_method_await_completed_immediate_success(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed when snapshot is already complete"""
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_complete
+
+            result = await async_client.devboxes.disk_snapshots.await_completed("test_id")
+
+            assert result.status == "complete"
+            assert mock_query.call_count == 1
+
+    @parametrize
+    async def test_method_await_completed_error_state(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed when snapshot status becomes error"""
+
+        mock_status_error = DevboxSnapshotAsyncStatusView(
+            status="error",
+            error_message="Snapshot creation failed",
+        )
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_error
+
+            with pytest.raises(RunloopError, match="Snapshot test_id failed: Snapshot creation failed"):
+                await async_client.devboxes.disk_snapshots.await_completed("test_id")
+
+    @parametrize
+    async def test_method_await_completed_error_state_no_message(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed when snapshot status becomes error without error message"""
+
+        mock_status_error = DevboxSnapshotAsyncStatusView(
+            status="error",
+            error_message=None,
+        )
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_error
+
+            with pytest.raises(RunloopError, match="Snapshot test_id failed: Unknown error"):
+                await async_client.devboxes.disk_snapshots.await_completed("test_id")
+
+    @parametrize
+    async def test_method_await_completed_with_config(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed with custom polling configuration"""
+
+        mock_status_complete = DevboxSnapshotAsyncStatusView(
+            status="complete",
+            error_message=None,
+        )
+
+        config = PollingConfig(interval_seconds=0.1, max_attempts=10)
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_complete
+
+            result = await async_client.devboxes.disk_snapshots.await_completed("test_id", polling_config=config)
+
+            assert result.status == "complete"
+
+    @parametrize
+    async def test_method_await_completed_polling_timeout(self, async_client: AsyncRunloop) -> None:
+        """Test await_completed raises PollingTimeout when max attempts exceeded"""
+
+        mock_status_in_progress = DevboxSnapshotAsyncStatusView(
+            status="in_progress",
+            error_message=None,
+        )
+
+        config = PollingConfig(interval_seconds=0.01, max_attempts=2)
+
+        with patch.object(async_client.devboxes.disk_snapshots, "query_status") as mock_query:
+            mock_query.return_value = mock_status_in_progress
+
+            with pytest.raises(PollingTimeout):
+                await async_client.devboxes.disk_snapshots.await_completed("test_id", polling_config=config)
