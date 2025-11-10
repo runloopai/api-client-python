@@ -1398,6 +1398,193 @@ class TestDevboxes:
                         name="test",
                     )
 
+    @parametrize
+    def test_method_await_suspended_success(self, client: Runloop) -> None:
+        """Test await_suspended with successful polling to suspended state"""
+
+        # Mock the wait_for_status calls - first returns running, then suspended
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.side_effect = [mock_devbox_running, mock_devbox_suspended]
+
+            result = client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 2
+
+    @parametrize
+    def test_method_await_suspended_immediate_success(self, client: Runloop) -> None:
+        """Test await_suspended when devbox is already suspended"""
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_suspended
+
+            result = client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 1
+
+    @parametrize
+    def test_method_await_suspended_failure_state(self, client: Runloop) -> None:
+        """Test await_suspended when devbox enters failure state"""
+
+        mock_devbox_failed = DevboxView(
+            id="test_id",
+            status="failure",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_failed
+
+            with pytest.raises(RunloopError, match="Devbox entered non-suspended terminal state: failure"):
+                client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    def test_method_await_suspended_shutdown_state(self, client: Runloop) -> None:
+        """Test await_suspended when devbox enters shutdown state"""
+
+        mock_devbox_shutdown = DevboxView(
+            id="test_id",
+            status="shutdown",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_shutdown
+
+            with pytest.raises(RunloopError, match="Devbox entered non-suspended terminal state: shutdown"):
+                client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    def test_method_await_suspended_timeout_handling(self, client: Runloop) -> None:
+        """Test await_suspended handles 408 timeouts correctly"""
+
+        # Create a mock 408 response
+        mock_response = Mock()
+        mock_response.status_code = 408
+        mock_408_error = APIStatusError("Request timeout", response=mock_response, body=None)
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            # First call raises 408, second call succeeds
+            mock_post.side_effect = [mock_408_error, mock_devbox_suspended]
+
+            result = client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 2
+
+    @parametrize
+    def test_method_await_suspended_other_error(self, client: Runloop) -> None:
+        """Test await_suspended re-raises non-408 errors"""
+
+        # Create a mock 500 response
+        mock_response = Mock()
+        mock_response.status_code = 500
+        mock_500_error = APIStatusError("Internal server error", response=mock_response, body=None)
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.side_effect = mock_500_error
+
+            with pytest.raises(APIStatusError, match="Internal server error"):
+                client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    def test_method_await_suspended_with_config(self, client: Runloop) -> None:
+        """Test await_suspended with custom polling configuration"""
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        config = PollingConfig(interval_seconds=0.1, max_attempts=10)
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_suspended
+
+            result = client.devboxes.await_suspended("test_id", polling_config=config)
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+
+    @parametrize
+    def test_method_await_suspended_polling_timeout(self, client: Runloop) -> None:
+        """Test await_suspended raises PollingTimeout when max attempts exceeded"""
+
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        config = PollingConfig(interval_seconds=0.01, max_attempts=2)
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_running
+
+            with pytest.raises(PollingTimeout):
+                client.devboxes.await_suspended("test_id", polling_config=config)
+
 
 class TestAsyncDevboxes:
     parametrize = pytest.mark.parametrize(
@@ -2471,3 +2658,191 @@ class TestAsyncDevboxes:
                 contents="contents",
                 file_path="file_path",
             )
+
+    # Polling method tests
+    @parametrize
+    async def test_method_await_suspended_success(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended with successful polling to suspended state"""
+
+        # Mock the wait_for_status calls - first returns running, then suspended
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.side_effect = [mock_devbox_running, mock_devbox_suspended]
+
+            result = await async_client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 2
+
+    @parametrize
+    async def test_method_await_suspended_immediate_success(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended when devbox is already suspended"""
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_suspended
+
+            result = await async_client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 1
+
+    @parametrize
+    async def test_method_await_suspended_failure_state(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended when devbox enters failure state"""
+
+        mock_devbox_failed = DevboxView(
+            id="test_id",
+            status="failure",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_failed
+
+            with pytest.raises(RunloopError, match="Devbox entered non-suspended terminal state: failure"):
+                await async_client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    async def test_method_await_suspended_shutdown_state(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended when devbox enters shutdown state"""
+
+        mock_devbox_shutdown = DevboxView(
+            id="test_id",
+            status="shutdown",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_shutdown
+
+            with pytest.raises(RunloopError, match="Devbox entered non-suspended terminal state: shutdown"):
+                await async_client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    async def test_method_await_suspended_timeout_handling(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended handles 408 timeouts correctly"""
+
+        # Create a mock 408 response
+        mock_response = Mock()
+        mock_response.status_code = 408
+        mock_408_error = APIStatusError("Request timeout", response=mock_response, body=None)
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            # First call raises 408, second call succeeds
+            mock_post.side_effect = [mock_408_error, mock_devbox_suspended]
+
+            result = await async_client.devboxes.await_suspended("test_id")
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+            assert mock_post.call_count == 2
+
+    @parametrize
+    async def test_method_await_suspended_other_error(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended re-raises non-408 errors"""
+
+        # Create a mock 500 response
+        mock_response = Mock()
+        mock_response.status_code = 500
+        mock_500_error = APIStatusError("Internal server error", response=mock_response, body=None)
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.side_effect = mock_500_error
+
+            with pytest.raises(APIStatusError, match="Internal server error"):
+                await async_client.devboxes.await_suspended("test_id")
+
+    @parametrize
+    async def test_method_await_suspended_with_config(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended with custom polling configuration"""
+
+        mock_devbox_suspended = DevboxView(
+            id="test_id",
+            status="suspended",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        config = PollingConfig(interval_seconds=0.1, max_attempts=10)
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_suspended
+
+            result = await async_client.devboxes.await_suspended("test_id", polling_config=config)
+
+            assert result.id == "test_id"
+            assert result.status == "suspended"
+
+    @parametrize
+    async def test_method_await_suspended_polling_timeout(self, async_client: AsyncRunloop) -> None:
+        """Test await_suspended raises PollingTimeout when max attempts exceeded"""
+
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        config = PollingConfig(interval_seconds=0.01, max_attempts=2)
+
+        with patch.object(async_client.devboxes, "_post") as mock_post:
+            mock_post.return_value = mock_devbox_running
+
+            with pytest.raises(PollingTimeout):
+                await async_client.devboxes.await_suspended("test_id", polling_config=config)
