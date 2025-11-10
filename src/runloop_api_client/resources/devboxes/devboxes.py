@@ -426,6 +426,50 @@ class DevboxesResource(SyncAPIResource):
 
         return devbox
 
+    def await_suspended(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+    ) -> DevboxView:
+        """Wait for a devbox to reach the suspended state.
+
+        Args:
+            id: The ID of the devbox to wait for.
+            polling_config: Optional polling configuration.
+
+        Returns:
+            The devbox in the suspended state.
+
+        Raises:
+            PollingTimeout: If polling times out before the devbox is suspended.
+            RunloopError: If the devbox enters a non-suspended terminal state.
+        """
+
+        def wait_for_devbox_status() -> DevboxView:
+            return self._post(
+                f"/v1/devboxes/{id}/wait_for_status",
+                body={"statuses": ["suspended", "failure", "shutdown"]},
+                cast_to=DevboxView,
+            )
+
+        def handle_timeout_error(error: Exception) -> DevboxView:
+            if isinstance(error, APITimeoutError) or (
+                isinstance(error, APIStatusError) and error.response.status_code == 408
+            ):
+                return placeholder_devbox_view(id)
+            raise error
+
+        def is_terminal_state(devbox: DevboxView) -> bool:
+            return devbox.status in {"suspended", "failure", "shutdown"}
+
+        devbox = poll_until(wait_for_devbox_status, is_terminal_state, polling_config, handle_timeout_error)
+
+        if devbox.status != "suspended":
+            raise RunloopError(f"Devbox entered non-suspended terminal state: {devbox.status}")
+
+        return devbox
+
     def create_and_await_running(
         self,
         *,
@@ -1925,6 +1969,48 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
+
+        return devbox
+
+    async def await_suspended(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+    ) -> DevboxView:
+        """Wait for a devbox to reach the suspended state.
+
+        Args:
+            id: The ID of the devbox to wait for.
+            polling_config: Optional polling configuration.
+
+        Returns:
+            The devbox in the suspended state.
+
+        Raises:
+            PollingTimeout: If polling times out before the devbox is suspended.
+            RunloopError: If the devbox enters a non-suspended terminal state.
+        """
+
+        async def wait_for_devbox_status() -> DevboxView:
+            try:
+                return await self._post(
+                    f"/v1/devboxes/{id}/wait_for_status",
+                    body={"statuses": ["suspended", "failure", "shutdown"]},
+                    cast_to=DevboxView,
+                )
+            except (APITimeoutError, APIStatusError) as error:
+                if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+                    return placeholder_devbox_view(id)
+                raise
+
+        def is_terminal_state(devbox: DevboxView) -> bool:
+            return devbox.status in {"suspended", "failure", "shutdown"}
+
+        devbox = await async_poll_until(wait_for_devbox_status, is_terminal_state, polling_config)
+
+        if devbox.status != "suspended":
+            raise RunloopError(f"Devbox entered non-suspended terminal state: {devbox.status}")
 
         return devbox
 
