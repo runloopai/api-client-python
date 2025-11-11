@@ -2,13 +2,63 @@ from __future__ import annotations
 
 import io
 import os
-from typing import Union
 from pathlib import Path
+from typing import IO, Callable, Dict, Literal, Union, cast
 
 from .._types import FileTypes
 from .._utils import file_from_path
 
+LogCallback = Callable[[str], None]
 UploadInput = Union[FileTypes, str, os.PathLike[str], Path, bytes, bytearray, io.IOBase]
+
+ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
+UploadData = Union[str, bytes, bytearray, Path, os.PathLike[str], io.IOBase]
+
+_CONTENT_TYPE_MAP: Dict[str, ContentType] = {
+    ".txt": "text",
+    ".html": "text",
+    ".css": "text",
+    ".js": "text",
+    ".json": "text",
+    ".xml": "text",
+    ".yaml": "text",
+    ".yml": "text",
+    ".md": "text",
+    ".csv": "text",
+    ".gz": "gzip",
+    ".tar": "tar",
+    ".tgz": "tgz",
+    ".tar.gz": "tgz",
+}
+
+
+def detect_content_type(name: str) -> ContentType:
+    lower = name.lower()
+    if lower.endswith(".tar.gz") or lower.endswith(".tgz"):
+        return "tgz"
+    ext = Path(lower).suffix
+    return _CONTENT_TYPE_MAP.get(ext, "unspecified")
+
+
+def read_upload_data(data: UploadData) -> bytes:
+    if isinstance(data, bytes):
+        return data
+    if isinstance(data, bytearray):
+        return bytes(data)
+    if isinstance(data, (Path, os.PathLike)):
+        return Path(data).read_bytes()
+    if isinstance(data, str):
+        return data.encode("utf-8")
+    if isinstance(data, io.TextIOBase):
+        return data.read().encode("utf-8")
+    if isinstance(data, io.BufferedIOBase) or isinstance(data, io.RawIOBase):
+        return data.read()
+    if hasattr(data, "read"):
+        result = data.read()
+        if isinstance(result, str):
+            return result.encode("utf-8")
+        return result
+    raise TypeError("Unsupported upload data type. Provide str, bytes, path, or file-like object.")
 
 
 def normalize_upload_input(file: UploadInput) -> FileTypes:
@@ -22,11 +72,12 @@ def normalize_upload_input(file: UploadInput) -> FileTypes:
     if isinstance(file, bytearray):
         return bytes(file)
     if isinstance(file, (str, Path, os.PathLike)):
-        return file_from_path(file)
+        path_str = str(file)
+        return file_from_path(path_str)
     if isinstance(file, io.TextIOBase):
         return file.read().encode("utf-8")
     if isinstance(file, io.BufferedIOBase) or isinstance(file, io.RawIOBase):
-        return file
+        return cast(IO[bytes], file)
     if isinstance(file, io.IOBase) and hasattr(file, "read"):
         data = file.read()
         if isinstance(data, str):

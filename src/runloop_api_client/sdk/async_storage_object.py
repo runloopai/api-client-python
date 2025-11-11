@@ -1,85 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
-from pathlib import Path
+from typing import Any
 
 import httpx
 
+from typing_extensions import override
+
 from .._client import AsyncRunloop
-from .storage_object import UploadData, ContentType, _read_upload_data, _detect_content_type
+from .._types import Body, Headers, NotGiven, Query, Timeout, not_given
+from ._helpers import UploadData, read_upload_data
 from ..types.object_view import ObjectView
 from ..types.object_download_url_view import ObjectDownloadURLView
-
-
-class AsyncStorageObjectClient:
-    """
-    Async manager for :class:`AsyncStorageObject` instances.
-    """
-
-    def __init__(self, client: AsyncRunloop) -> None:
-        self._client = client
-
-    async def create(
-        self,
-        name: str,
-        *,
-        content_type: ContentType | None = None,
-        metadata: Optional[Dict[str, str]] = None,
-    ) -> "AsyncStorageObject":
-        content_type = content_type or _detect_content_type(name)
-        obj = await self._client.objects.create(
-            name=name,
-            content_type=content_type,
-            metadata=metadata,
-        )
-        return AsyncStorageObject(self._client, obj.id, upload_url=obj.upload_url)
-
-    def from_id(self, object_id: str) -> "AsyncStorageObject":
-        return AsyncStorageObject(self._client, object_id, upload_url=None)
-
-    async def list(self, **params: Any) -> List["AsyncStorageObject"]:
-        page = await self._client.objects.list(**params)
-        return [AsyncStorageObject(self._client, item.id, upload_url=None) for item in getattr(page, "objects", [])]
-
-    async def upload_from_file(
-        self,
-        path: str | Path,
-        name: str | None = None,
-        *,
-        metadata: Optional[Dict[str, str]] = None,
-        content_type: ContentType | None = None,
-    ) -> "AsyncStorageObject":
-        file_path = Path(path)
-        object_name = name or file_path.name
-        obj = await self.create(object_name, content_type=content_type, metadata=metadata)
-        await obj.upload_content(file_path)
-        await obj.complete()
-        return obj
-
-    async def upload_from_text(
-        self,
-        text: str,
-        name: str,
-        *,
-        metadata: Optional[Dict[str, str]] = None,
-    ) -> "AsyncStorageObject":
-        obj = await self.create(name, content_type="text", metadata=metadata)
-        await obj.upload_content(text)
-        await obj.complete()
-        return obj
-
-    async def upload_from_bytes(
-        self,
-        data: bytes,
-        name: str,
-        *,
-        metadata: Optional[Dict[str, str]] = None,
-        content_type: ContentType | None = None,
-    ) -> "AsyncStorageObject":
-        obj = await self.create(name, content_type=content_type or _detect_content_type(name), metadata=metadata)
-        await obj.upload_content(data)
-        await obj.complete()
-        return obj
 
 
 class AsyncStorageObject:
@@ -92,6 +23,7 @@ class AsyncStorageObject:
         self._id = object_id
         self._upload_url = upload_url
 
+    @override
     def __repr__(self) -> str:
         return f"<AsyncStorageObject id={self._id!r}>"
 
@@ -103,11 +35,39 @@ class AsyncStorageObject:
     def upload_url(self) -> str | None:
         return self._upload_url
 
-    async def refresh(self, **request_options: Any) -> ObjectView:
-        return await self._client.objects.retrieve(self._id, **request_options)
+    async def refresh(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> ObjectView:
+        return await self._client.objects.retrieve(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
-    async def complete(self, **request_options: Any) -> ObjectView:
-        result = await self._client.objects.complete(self._id, **request_options)
+    async def complete(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> ObjectView:
+        result = await self._client.objects.complete(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
         self._upload_url = None
         return result
 
@@ -115,19 +75,44 @@ class AsyncStorageObject:
         self,
         *,
         duration_seconds: int | None = None,
-        **request_options: Any,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
     ) -> ObjectDownloadURLView:
         if duration_seconds is None:
-            return await self._client.objects.download(self._id, **request_options)
-        return await self._client.objects.download(self._id, duration_seconds=duration_seconds, **request_options)
+            return await self._client.objects.download(
+                self._id,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+            )
+        return await self._client.objects.download(
+            self._id,
+            duration_seconds=duration_seconds,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
     async def download_as_bytes(
         self,
         *,
         duration_seconds: int | None = None,
-        **request_options: Any,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
     ) -> bytes:
-        url_view = await self.get_download_url(duration_seconds=duration_seconds, **request_options)
+        url_view = await self.get_download_url(
+            duration_seconds=duration_seconds,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
         async with httpx.AsyncClient() as client:
             response = await client.get(url_view.download_url)
         response.raise_for_status()
@@ -138,21 +123,45 @@ class AsyncStorageObject:
         *,
         duration_seconds: int | None = None,
         encoding: str = "utf-8",
-        **request_options: Any,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
     ) -> str:
-        url_view = await self.get_download_url(duration_seconds=duration_seconds, **request_options)
+        url_view = await self.get_download_url(
+            duration_seconds=duration_seconds,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
         async with httpx.AsyncClient() as client:
             response = await client.get(url_view.download_url)
         response.raise_for_status()
         response.encoding = encoding
         return response.text
 
-    async def delete(self, **request_options: Any) -> Any:
-        return await self._client.objects.delete(self._id, **request_options)
+    async def delete(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return await self._client.objects.delete(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
     async def upload_content(self, data: UploadData) -> None:
         url = self._ensure_upload_url()
-        payload = _read_upload_data(data)
+        payload = read_upload_data(data)
         async with httpx.AsyncClient() as client:
             response = await client.put(url, content=payload)
         response.raise_for_status()

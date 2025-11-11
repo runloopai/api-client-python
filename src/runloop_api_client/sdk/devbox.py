@@ -2,88 +2,22 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import Any, Callable, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 
-from .._types import not_given
+from typing_extensions import override
+
+from .._types import Body, Headers, NotGiven, Omit, Query, Timeout, not_given, omit
 from .._client import Runloop
-from ._helpers import UploadInput, normalize_upload_input
+from ._helpers import LogCallback, UploadInput, normalize_upload_input
 from .execution import Execution, _StreamingGroup
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
 from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
+from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
-LogCallback = Callable[[str], None]
-
-
-class DevboxClient:
-    """
-    High-level manager for creating and retrieving :class:`Devbox` instances.
-    """
-
-    def __init__(self, client: Runloop) -> None:
-        self._client = client
-
-    def create(self, *, polling_config: PollingConfig | None = None, **params: Any) -> "Devbox":
-        """
-        Create a new devbox and block until it is running.
-        """
-        params = dict(params)
-        if polling_config is None:
-            polling_config = params.pop("polling_config", None)
-
-        devbox_view = self._client.devboxes.create_and_await_running(
-            polling_config=polling_config,
-            **params,
-        )
-        return Devbox(self._client, devbox_view.id)
-
-    def create_from_blueprint_id(
-        self,
-        blueprint_id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        **params: Any,
-    ) -> "Devbox":
-        params = dict(params)
-        params["blueprint_id"] = blueprint_id
-        return self.create(polling_config=polling_config, **params)
-
-    def create_from_blueprint_name(
-        self,
-        blueprint_name: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        **params: Any,
-    ) -> "Devbox":
-        params = dict(params)
-        params["blueprint_name"] = blueprint_name
-        return self.create(polling_config=polling_config, **params)
-
-    def create_from_snapshot(
-        self,
-        snapshot_id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        **params: Any,
-    ) -> "Devbox":
-        params = dict(params)
-        params["snapshot_id"] = snapshot_id
-        return self.create(polling_config=polling_config, **params)
-
-    def from_id(self, devbox_id: str) -> "Devbox":
-        """
-        Create a :class:`Devbox` wrapper for an existing devbox ID.
-        """
-        return Devbox(self._client, devbox_id)
-
-    def list(self, **params: Any) -> list["Devbox"]:
-        """
-        List devboxes and return lightweight :class:`Devbox` wrappers.
-        """
-        page = self._client.devboxes.list(**params)
-        return [Devbox(self._client, item.id) for item in getattr(page, "devboxes", [])]
-
+if TYPE_CHECKING:
+    from .snapshot import Snapshot
 
 class Devbox:
     """
@@ -95,6 +29,7 @@ class Devbox:
         self._id = devbox_id
         self._logger = logging.getLogger(__name__)
 
+    @override
     def __repr__(self) -> str:
         return f"<Devbox id={self._id!r}>"
 
@@ -111,8 +46,21 @@ class Devbox:
     def id(self) -> str:
         return self._id
 
-    def get_info(self, **request_options: Any) -> Any:
-        return self._client.devboxes.retrieve(self._id, **request_options)
+    def get_info(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> Any:
+        return self._client.devboxes.retrieve(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
     def await_running(self, *, polling_config: PollingConfig | None = None) -> Any:
         return self._client.devboxes.await_running(self._id, polling_config=polling_config)
@@ -120,14 +68,81 @@ class Devbox:
     def await_suspended(self, *, polling_config: PollingConfig | None = None) -> Any:
         return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
-    def shutdown(self, **request_options: Any) -> Any:
-        return self._client.devboxes.shutdown(self._id, **request_options)
+    def shutdown(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._client.devboxes.shutdown(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
-    def suspend(self, **request_options: Any) -> Any:
-        return self._client.devboxes.suspend(self._id, **request_options)
+    def suspend(
+        self,
+        *,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        self._client.devboxes.suspend(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
-    def resume(self, **request_options: Any) -> Any:
-        return self._client.devboxes.resume(self._id, **request_options)
+    def resume(
+        self,
+        *,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        self._client.devboxes.resume(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return self._client.devboxes.await_running(self._id, polling_config=polling_config)
+
+    def keep_alive(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._client.devboxes.keep_alive(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
     def snapshot_disk(
         self,
@@ -304,20 +319,27 @@ class _CommandInterface:
         stderr: LogCallback | None = None,
         output: LogCallback | None = None,
         polling_config: PollingConfig | None = None,
-        **request_options: Any,
+        attach_stdin: bool | Omit = omit,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
     ) -> ExecutionResult:
         devbox = self._devbox
         client = devbox._client
-        request_options = dict(request_options)
-        if "shell_name" in request_options:
-            shell_name = request_options.pop("shell_name")
 
         if stdout or stderr or output:
-            execution = client.devboxes.execute_async(
+            execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
                 devbox.id,
                 command=command,
-                shell_name=shell_name,
-                **request_options,
+                shell_name=shell_name if shell_name is not None else omit,
+                attach_stdin=attach_stdin,
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
             )
             streaming_group = devbox._start_streaming(
                 execution.execution_id,
@@ -325,19 +347,21 @@ class _CommandInterface:
                 stderr=stderr,
                 output=output,
             )
-            try:
-                if execution.status == "completed":
-                    final = execution
-                else:
-                    final = client.devboxes.executions.await_completed(
-                        execution.execution_id,
-                        devbox_id=devbox.id,
-                        polling_config=polling_config,
-                    )
-            finally:
-                if streaming_group is not None:
-                    streaming_group.stop()
-                    streaming_group.join()
+            final = execution
+            if execution.status == "completed":
+                final: DevboxAsyncExecutionDetailView = execution
+            else:
+                final = client.devboxes.executions.await_completed(
+                    execution.execution_id,
+                    devbox_id=devbox.id,
+                    polling_config=polling_config,
+                )
+
+            if streaming_group is not None:
+                # Ensure log streaming has drained before returning the result. _stop_streaming()
+                # below will perform the final cleanup, but we still join here so callers only
+                # resume once all logs have been delivered.
+                streaming_group.join()
 
             return ExecutionResult(client, devbox.id, final)
 
@@ -346,7 +370,11 @@ class _CommandInterface:
             command=command,
             shell_name=shell_name if shell_name is not None else not_given,
             polling_config=polling_config,
-            **request_options,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
         return ExecutionResult(client, devbox.id, final)
 
@@ -358,19 +386,26 @@ class _CommandInterface:
         stdout: LogCallback | None = None,
         stderr: LogCallback | None = None,
         output: LogCallback | None = None,
-        **request_options: Any,
+        attach_stdin: bool | Omit = omit,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
     ) -> Execution:
         devbox = self._devbox
         client = devbox._client
-        request_options = dict(request_options)
-        if "shell_name" in request_options:
-            shell_name = request_options.pop("shell_name")
 
-        execution = client.devboxes.execute_async(
+        execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
             command=command,
-            shell_name=shell_name,
-            **request_options,
+            shell_name=shell_name if shell_name is not None else omit,
+            attach_stdin=attach_stdin,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
         streaming_group = devbox._start_streaming(
@@ -387,10 +422,37 @@ class _FileInterface:
     def __init__(self, devbox: Devbox) -> None:
         self._devbox = devbox
 
-    def read(self, path: str, **request_options: Any) -> str:
-        return self._devbox._client.devboxes.read_file_contents(self._devbox.id, file_path=path, **request_options)
+    def read(
+        self,
+        path: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> str:
+        return self._devbox._client.devboxes.read_file_contents(
+            self._devbox.id,
+            file_path=path,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
-    def write(self, path: str, contents: str | bytes, **request_options: Any) -> Any:
+    def write(
+        self,
+        path: str,
+        contents: str | bytes,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
         if isinstance(contents, bytes):
             contents_str = contents.decode("utf-8")
         else:
@@ -400,24 +462,55 @@ class _FileInterface:
             self._devbox.id,
             file_path=path,
             contents=contents_str,
-            **request_options,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
-    def download(self, path: str, **request_options: Any) -> bytes:
+    def download(
+        self,
+        path: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> bytes:
         response = self._devbox._client.devboxes.download_file(
             self._devbox.id,
             path=path,
-            **request_options,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
         return response.read()
 
-    def upload(self, path: str, file: UploadInput, **request_options: Any) -> Any:
+    def upload(
+        self,
+        path: str,
+        file: UploadInput,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
         file_param = normalize_upload_input(file)
         return self._devbox._client.devboxes.upload_file(
             self._devbox.id,
             path=path,
             file=file_param,
-            **request_options,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
 
@@ -425,11 +518,60 @@ class _NetworkInterface:
     def __init__(self, devbox: Devbox) -> None:
         self._devbox = devbox
 
-    def create_ssh_key(self, **request_options: Any) -> Any:
-        return self._devbox._client.devboxes.create_ssh_key(self._devbox.id, **request_options)
+    def create_ssh_key(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._devbox._client.devboxes.create_ssh_key(
+            self._devbox.id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
-    def create_tunnel(self, *, port: int, **request_options: Any) -> Any:
-        return self._devbox._client.devboxes.create_tunnel(self._devbox.id, port=port, **request_options)
+    def create_tunnel(
+        self,
+        *,
+        port: int,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._devbox._client.devboxes.create_tunnel(
+            self._devbox.id,
+            port=port,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
-    def remove_tunnel(self, *, port: int, **request_options: Any) -> Any:
-        return self._devbox._client.devboxes.remove_tunnel(self._devbox.id, port=port, **request_options)
+    def remove_tunnel(
+        self,
+        *,
+        port: int,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._devbox._client.devboxes.remove_tunnel(
+            self._devbox.id,
+            port=port,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )

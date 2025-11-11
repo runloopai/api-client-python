@@ -1,48 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any, Dict, Iterable, Optional
 
-from .devbox import Devbox, DevboxClient
+from typing_extensions import override
+
+from .devbox import Devbox
 from .._client import Runloop
 from ..lib.polling import PollingConfig
+from .._types import Body, Headers, NotGiven, NOT_GIVEN, Query, Timeout, not_given
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
+from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
-
-
-class BlueprintClient:
-    """
-    Manage :class:`Blueprint` objects through the object-oriented SDK.
-    """
-
-    def __init__(self, client: Runloop, devbox_client: DevboxClient) -> None:
-        self._client = client
-        self._devbox_client = devbox_client
-
-    def create(self, *, polling_config: PollingConfig | None = None, **params: Any) -> "Blueprint":
-        """
-        Create a blueprint and wait for the build to complete.
-        """
-        params = dict(params)
-        if polling_config is None:
-            polling_config = params.pop("polling_config", None)
-
-        blueprint = self._client.blueprints.create_and_await_build_complete(
-            polling_config=polling_config,
-            **params,
-        )
-        return Blueprint(self._client, blueprint.id, self._devbox_client)
-
-    def from_id(self, blueprint_id: str) -> "Blueprint":
-        """
-        Return a :class:`Blueprint` wrapper for an existing blueprint ID.
-        """
-        return Blueprint(self._client, blueprint_id, self._devbox_client)
-
-    def list(self, **params: Any) -> List["Blueprint"]:
-        """
-        List blueprints and return lightweight wrappers.
-        """
-        page = self._client.blueprints.list(**params)
-        return [Blueprint(self._client, item.id, self._devbox_client) for item in getattr(page, "blueprints", [])]
 
 
 class Blueprint:
@@ -50,11 +18,15 @@ class Blueprint:
     High-level wrapper around a blueprint resource.
     """
 
-    def __init__(self, client: Runloop, blueprint_id: str, devbox_client: DevboxClient) -> None:
+    def __init__(
+        self,
+        client: Runloop,
+        blueprint_id: str,
+    ) -> None:
         self._client = client
         self._id = blueprint_id
-        self._devbox_client = devbox_client
 
+    @override
     def __repr__(self) -> str:
         return f"<Blueprint id={self._id!r}>"
 
@@ -62,16 +34,91 @@ class Blueprint:
     def id(self) -> str:
         return self._id
 
-    def get_info(self, **request_options: Any) -> Any:
-        return self._client.blueprints.retrieve(self._id, **request_options)
+    def get_info(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> Any:
+        return self._client.blueprints.retrieve(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
-    def logs(self, **request_options: Any) -> BlueprintBuildLogsListView:
-        return self._client.blueprints.logs(self._id, **request_options)
+    def logs(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> BlueprintBuildLogsListView:
+        return self._client.blueprints.logs(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
-    def delete(self, **request_options: Any) -> Any:
-        return self._client.blueprints.delete(self._id, **request_options)
+    def delete(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> Any:
+        return self._client.blueprints.delete(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
-    def create_devbox(self, *, polling_config: PollingConfig | None = None, **params: Any) -> Devbox:
-        params = dict(params)
-        params["blueprint_id"] = self._id
-        return self._devbox_client.create(polling_config=polling_config, **params)
+    def create_devbox(
+        self,
+        *,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
+        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Devbox:
+        from ._sync import DevboxClient
+
+        devbox_client = DevboxClient(self._client)
+        return devbox_client.create_from_blueprint_id(
+            self._id,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            repo_connection_id=repo_connection_id,
+            secrets=secrets,
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
