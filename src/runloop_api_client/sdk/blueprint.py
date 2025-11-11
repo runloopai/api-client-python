@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional
+from typing import TYPE_CHECKING, Dict, Iterable, Optional
 from typing_extensions import override
 
-from ._sync import DevboxClient
+if TYPE_CHECKING:
+    from .devbox import Devbox
 from ..types import BlueprintView
-from .devbox import Devbox
 from .._types import NOT_GIVEN, Body, Query, Headers, Timeout, NotGiven, not_given
 from .._client import Runloop
 from ..lib.polling import PollingConfig
@@ -101,7 +101,9 @@ class Blueprint:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Devbox:
+    ) -> "Devbox":
+        from ._sync import DevboxClient
+
         devbox_client = DevboxClient(self._client)
         return devbox_client.create_from_blueprint_id(
             self._id,
