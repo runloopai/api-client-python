@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import tempfile
 from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
 
-from tests.sdk.conftest import create_mock_httpx_response
+from tests.sdk.conftest import MockObjectView, create_mock_httpx_response
 from runloop_api_client.sdk import StorageObject
 from runloop_api_client.sdk._sync import StorageObjectClient
 
@@ -34,7 +33,7 @@ class TestStorageObject:
         obj = StorageObject(mock_client, "obj_123", None)
         assert repr(obj) == "<StorageObject id='obj_123'>"
 
-    def test_refresh(self, mock_client: Mock, object_view: SimpleNamespace) -> None:
+    def test_refresh(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test refresh method."""
         mock_client.objects.retrieve.return_value = object_view
 
@@ -182,7 +181,7 @@ class TestStorageObject:
         assert mock_response.encoding == "latin-1"
         mock_get.assert_called_once()
 
-    def test_delete(self, mock_client: Mock, object_view: SimpleNamespace) -> None:
+    def test_delete(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test delete method."""
         mock_client.objects.delete.return_value = object_view
 
@@ -230,26 +229,22 @@ class TestStorageObject:
         mock_response.raise_for_status.assert_called_once()
 
     @patch("httpx.put")
-    def test_upload_content_path(self, mock_put: Mock, mock_client: Mock) -> None:
+    def test_upload_content_path(self, mock_put: Mock, mock_client: Mock, tmp_path: Path) -> None:
         """Test upload_content with Path."""
         mock_response = create_mock_httpx_response()
         mock_put.return_value = mock_response
 
-        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
-            f.write("test content")
-            temp_path = Path(f.name)
+        temp_file = tmp_path / "test_file.txt"
+        temp_file.write_text("test content")
 
-        try:
-            obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-            obj.upload_content(temp_path)
+        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
+        obj.upload_content(temp_file)
 
-            mock_put.assert_called_once()
-            call_args = mock_put.call_args
-            assert call_args[0][0] == "https://upload.example.com"
-            assert call_args[1]["content"] == b"test content"
-            mock_response.raise_for_status.assert_called_once()
-        finally:
-            temp_path.unlink()
+        mock_put.assert_called_once()
+        call_args = mock_put.call_args
+        assert call_args[0][0] == "https://upload.example.com"
+        assert call_args[1]["content"] == b"test content"
+        mock_response.raise_for_status.assert_called_once()
 
     def test_upload_content_no_url(self, mock_client: Mock) -> None:
         """Test upload_content raises error when no upload URL."""
@@ -298,7 +293,7 @@ class TestStorageObjectEdgeCases:
 class TestStorageObjectPythonSpecific:
     """Tests for Python-specific StorageObject behavior."""
 
-    def test_content_type_detection(self, mock_client: Mock, object_view: SimpleNamespace) -> None:
+    def test_content_type_detection(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test content type detection differences."""
         mock_client.objects.create.return_value = object_view
 
@@ -314,10 +309,8 @@ class TestStorageObjectPythonSpecific:
         call2 = mock_client.objects.create.call_args[1]
         assert call2["content_type"] == "binary"
 
-    def test_upload_data_types(self, mock_client: Mock) -> None:
+    def test_upload_data_types(self, mock_client: Mock, tmp_path: Path) -> None:
         """Test Python supports more upload data types."""
-        object_view = SimpleNamespace(id="obj_123", upload_url="https://upload.example.com")
-
         with patch("httpx.put") as mock_put:
             mock_response = create_mock_httpx_response()
             mock_put.return_value = mock_response
@@ -331,13 +324,8 @@ class TestStorageObjectPythonSpecific:
             obj.upload_content(b"bytes content")
 
             # Path (Python-specific)
-            with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
-                f.write("file content")
-                temp_path = Path(f.name)
-
-            try:
-                obj.upload_content(temp_path)
-            finally:
-                temp_path.unlink()
+            temp_file = tmp_path / "test_file.txt"
+            temp_file.write_text("file content")
+            obj.upload_content(temp_file)
 
             assert mock_put.call_count == 3

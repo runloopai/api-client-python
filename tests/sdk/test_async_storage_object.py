@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import tempfile
 from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import Mock, AsyncMock, patch
 
 import pytest
 
-from tests.sdk.conftest import create_mock_httpx_client, create_mock_httpx_response
+from tests.sdk.conftest import MockObjectView, create_mock_httpx_client, create_mock_httpx_response
 from runloop_api_client.sdk import AsyncStorageObject
 
 
@@ -34,7 +33,7 @@ class TestAsyncStorageObject:
         assert repr(obj) == "<AsyncStorageObject id='obj_123'>"
 
     @pytest.mark.asyncio
-    async def test_refresh(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_refresh(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test refresh method."""
         mock_async_client.objects.retrieve = AsyncMock(return_value=object_view)
 
@@ -172,7 +171,7 @@ class TestAsyncStorageObject:
         mock_http_client.get.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_delete(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_delete(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test delete method."""
         mock_async_client.objects.delete = AsyncMock(return_value=object_view)
 
@@ -224,28 +223,26 @@ class TestAsyncStorageObject:
 
     @pytest.mark.asyncio
     @patch("httpx.AsyncClient")
-    async def test_upload_content_path(self, mock_client_class: Mock, mock_async_client: AsyncMock) -> None:
+    async def test_upload_content_path(
+        self, mock_client_class: Mock, mock_async_client: AsyncMock, tmp_path: Path
+    ) -> None:
         """Test upload_content with Path."""
         mock_response = create_mock_httpx_response()
         mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
         mock_client_class.return_value = mock_http_client
 
-        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
-            f.write("test content")
-            temp_path = Path(f.name)
+        temp_file = tmp_path / "test_file.txt"
+        temp_file.write_text("test content")
 
-        try:
-            obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
-            await obj.upload_content(temp_path)
+        obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
+        await obj.upload_content(temp_file)
 
-            # Verify put was called
-            mock_http_client.put.assert_called_once()
-            call_args = mock_http_client.put.call_args
-            assert call_args[0][0] == "https://upload.example.com"
-            assert call_args[1]["content"] == b"test content"
-            mock_response.raise_for_status.assert_called_once()
-        finally:
-            temp_path.unlink()
+        # Verify put was called
+        mock_http_client.put.assert_called_once()
+        call_args = mock_http_client.put.call_args
+        assert call_args[0][0] == "https://upload.example.com"
+        assert call_args[1]["content"] == b"test content"
+        mock_response.raise_for_status.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_upload_content_no_url(self, mock_async_client: AsyncMock) -> None:

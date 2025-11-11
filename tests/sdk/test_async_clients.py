@@ -2,14 +2,20 @@
 
 from __future__ import annotations
 
-import tempfile
 from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from tests.sdk.conftest import create_mock_httpx_client, create_mock_httpx_response
+from tests.sdk.conftest import (
+    MockDevboxView,
+    MockObjectView,
+    MockSnapshotView,
+    MockBlueprintView,
+    create_mock_httpx_client,
+    create_mock_httpx_response,
+)
 from runloop_api_client.sdk import AsyncDevbox, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
 from runloop_api_client.sdk._async import (
     AsyncRunloopSDK,
@@ -25,7 +31,7 @@ class TestAsyncDevboxClient:
     """Tests for AsyncDevboxClient class."""
 
     @pytest.mark.asyncio
-    async def test_create(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_create(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test create method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
@@ -41,7 +47,7 @@ class TestAsyncDevboxClient:
         mock_async_client.devboxes.create_and_await_running.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_create_from_blueprint_id(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_create_from_blueprint_id(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test create_from_blueprint_id method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
@@ -56,7 +62,7 @@ class TestAsyncDevboxClient:
         assert call_kwargs["blueprint_id"] == "bp_123"
 
     @pytest.mark.asyncio
-    async def test_create_from_blueprint_name(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_create_from_blueprint_name(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test create_from_blueprint_name method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
@@ -71,7 +77,7 @@ class TestAsyncDevboxClient:
         assert call_kwargs["blueprint_name"] == "my-blueprint"
 
     @pytest.mark.asyncio
-    async def test_create_from_snapshot(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_create_from_snapshot(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test create_from_snapshot method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
@@ -97,7 +103,7 @@ class TestAsyncDevboxClient:
             assert not mock_async_client.devboxes.await_running.called
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_list(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test list method."""
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_async_client.devboxes.list = AsyncMock(return_value=page)
@@ -119,7 +125,7 @@ class TestAsyncSnapshotClient:
     """Tests for AsyncSnapshotClient class."""
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, snapshot_view: SimpleNamespace) -> None:
+    async def test_list(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
         """Test list method."""
         page = SimpleNamespace(disk_snapshots=[snapshot_view])
         mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
@@ -149,7 +155,7 @@ class TestAsyncBlueprintClient:
     """Tests for AsyncBlueprintClient class."""
 
     @pytest.mark.asyncio
-    async def test_create(self, mock_async_client: AsyncMock, blueprint_view: SimpleNamespace) -> None:
+    async def test_create(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
         """Test create method."""
         mock_async_client.blueprints.create_and_await_build_complete = AsyncMock(return_value=blueprint_view)
 
@@ -172,7 +178,7 @@ class TestAsyncBlueprintClient:
         assert blueprint.id == "bp_123"
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, blueprint_view: SimpleNamespace) -> None:
+    async def test_list(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
         """Test list method."""
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_async_client.blueprints.list = AsyncMock(return_value=page)
@@ -194,7 +200,7 @@ class TestAsyncStorageObjectClient:
     """Tests for AsyncStorageObjectClient class."""
 
     @pytest.mark.asyncio
-    async def test_create(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_create(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test create method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
 
@@ -208,7 +214,7 @@ class TestAsyncStorageObjectClient:
 
     @pytest.mark.asyncio
     async def test_create_auto_detect_content_type(
-        self, mock_async_client: AsyncMock, object_view: SimpleNamespace
+        self, mock_async_client: AsyncMock, object_view: MockObjectView
     ) -> None:
         """Test create auto-detects content type."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
@@ -230,7 +236,7 @@ class TestAsyncStorageObjectClient:
         assert obj.upload_url is None
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_list(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test list method."""
         page = SimpleNamespace(objects=[object_view])
         mock_async_client.objects.list = AsyncMock(return_value=page)
@@ -251,33 +257,31 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.list.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_upload_from_file(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_upload_from_file(
+        self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
         """Test upload_from_file method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
         mock_async_client.objects.complete = AsyncMock(return_value=object_view)
 
-        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".txt") as f:
-            f.write("test content")
-            temp_path = Path(f.name)
+        temp_file = tmp_path / "test_file.txt"
+        temp_file.write_text("test content")
 
-        try:
-            with patch("httpx.AsyncClient") as mock_client_class:
-                mock_response = create_mock_httpx_response()
-                mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-                mock_client_class.return_value = mock_http_client
+        with patch("httpx.AsyncClient") as mock_client_class:
+            mock_response = create_mock_httpx_response()
+            mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
+            mock_client_class.return_value = mock_http_client
 
-                client = AsyncStorageObjectClient(mock_async_client)
-                obj = await client.upload_from_file(temp_path, name="test.txt")
+            client = AsyncStorageObjectClient(mock_async_client)
+            obj = await client.upload_from_file(temp_file, name="test.txt")
 
-                assert isinstance(obj, AsyncStorageObject)
-                assert obj.id == "obj_123"
-                mock_async_client.objects.create.assert_called_once()
-                mock_async_client.objects.complete.assert_called_once()
-        finally:
-            temp_path.unlink()
+            assert isinstance(obj, AsyncStorageObject)
+            assert obj.id == "obj_123"
+            mock_async_client.objects.create.assert_called_once()
+            mock_async_client.objects.complete.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_upload_from_text(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_upload_from_text(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test upload_from_text method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
         mock_async_client.objects.complete = AsyncMock(return_value=object_view)
@@ -298,7 +302,7 @@ class TestAsyncStorageObjectClient:
             mock_async_client.objects.complete.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_upload_from_bytes(self, mock_async_client: AsyncMock, object_view: SimpleNamespace) -> None:
+    async def test_upload_from_bytes(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
         """Test upload_from_bytes method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
         mock_async_client.objects.complete = AsyncMock(return_value=object_view)
