@@ -3,8 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, Iterable, Optional
 from typing_extensions import override
 
-from ._async import AsyncDevboxClient
-
 if TYPE_CHECKING:
     from .async_devbox import AsyncDevbox
 from .._types import NOT_GIVEN, Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
@@ -131,7 +129,9 @@ class AsyncSnapshot:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> AsyncDevbox:
+    ) -> "AsyncDevbox":
+        from ._async import AsyncDevboxClient
+
         devbox_client = AsyncDevboxClient(self._client)
         return await devbox_client.create_from_snapshot(
             self._id,
