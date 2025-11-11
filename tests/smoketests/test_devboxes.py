@@ -111,5 +111,3 @@ def test_await_suspended(client: Runloop) -> None:
 
     # Cleanup
     client.devboxes.shutdown(created.id)
-
-
