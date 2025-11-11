@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional
+from typing import TYPE_CHECKING, Dict, Iterable, Optional
 from typing_extensions import override
 
+if TYPE_CHECKING:
+    from .async_devbox import AsyncDevbox
 from ..types import BlueprintView
-from ._async import AsyncDevboxClient
 from .._types import NOT_GIVEN, Body, Query, Headers, Timeout, NotGiven, not_given
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
-from .async_devbox import AsyncDevbox
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
@@ -101,7 +101,9 @@ class AsyncBlueprint:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> AsyncDevbox:
+    ) -> "AsyncDevbox":
+        from ._async import AsyncDevboxClient
+
         devbox_client = AsyncDevboxClient(self._client)
         return await devbox_client.create_from_blueprint_id(
             self._id,
