@@ -129,8 +129,65 @@ class Devbox:
     def resume(self, **request_options: Any) -> Any:
         return self._client.devboxes.resume(self._id, **request_options)
 
-    def keep_alive(self, **request_options: Any) -> Any:
-        return self._client.devboxes.keep_alive(self._id, **request_options)
+    def snapshot_disk(
+        self,
+        *,
+        commit_message: str | None | Omit = omit,
+        metadata: dict[str, str] | None | Omit = omit,
+        name: str | None | Omit = omit,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> "Snapshot":
+        snapshot_data = self._client.devboxes.snapshot_disk_async(
+            self._id,
+            commit_message=commit_message,
+            metadata=metadata,
+            name=name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        snapshot = self._snapshot_from_id(snapshot_data.id)
+        snapshot.await_completed(
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return snapshot
+
+    def snapshot_disk_async(
+        self,
+        *,
+        commit_message: str | None | Omit = omit,
+        metadata: dict[str, str] | None | Omit = omit,
+        name: str | None | Omit = omit,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> "Snapshot":
+        snapshot_data = self._client.devboxes.snapshot_disk_async(
+            self._id,
+            commit_message=commit_message,
+            metadata=metadata,
+            name=name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return self._snapshot_from_id(snapshot_data.id)
 
     def close(self) -> None:
         self.shutdown()
@@ -150,6 +207,11 @@ class Devbox:
     # --------------------------------------------------------------------- #
     # Internal helpers
     # --------------------------------------------------------------------- #
+
+    def _snapshot_from_id(self, snapshot_id: str) -> "Snapshot":
+        from .snapshot import Snapshot
+
+        return Snapshot(self._client, snapshot_id)
 
     def _start_streaming(
         self,
