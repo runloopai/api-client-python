@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, Optional
-
+from typing import TYPE_CHECKING, Dict, Iterable, Optional
 from typing_extensions import override
 
-from .devbox import Devbox
+from ._sync import DevboxClient
+
+if TYPE_CHECKING:
+    from .devbox import Devbox
+from .._types import NOT_GIVEN, Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import Runloop
 from ..lib.polling import PollingConfig
-from .._types import Body, Headers, NotGiven, NOT_GIVEN, Omit, Query, Timeout, not_given, omit
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
-from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.devbox_snapshot_view import DevboxSnapshotView
+from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
 from ..types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 
@@ -83,7 +85,7 @@ class Snapshot:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return self._client.devboxes.disk_snapshots.delete(
             self._id,
             extra_headers=extra_headers,
@@ -101,7 +103,6 @@ class Snapshot:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
     ) -> DevboxSnapshotAsyncStatusView:
         return self._client.devboxes.disk_snapshots.await_completed(
             self._id,
@@ -110,7 +111,6 @@ class Snapshot:
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
-            idempotency_key=idempotency_key,
         )
 
     def create_devbox(
@@ -132,8 +132,6 @@ class Snapshot:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> Devbox:
-        from ._sync import DevboxClient
-
         devbox_client = DevboxClient(self._client)
         return devbox_client.create_from_snapshot(
             self._id,

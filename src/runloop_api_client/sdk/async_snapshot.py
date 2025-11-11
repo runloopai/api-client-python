@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, Optional
-
+from typing import TYPE_CHECKING, Dict, Iterable, Optional
 from typing_extensions import override
 
+from ._async import AsyncDevboxClient
+
+if TYPE_CHECKING:
+    from .async_devbox import AsyncDevbox
+from .._types import NOT_GIVEN, Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
-from .._types import Body, Headers, NotGiven, NOT_GIVEN, Omit, Query, Timeout, not_given, omit
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
-from ..types.shared_params.launch_parameters import LaunchParameters
-from .async_devbox import AsyncDevbox
 from ..types.devbox_snapshot_view import DevboxSnapshotView
+from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
 from ..types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 
@@ -83,7 +85,7 @@ class AsyncSnapshot:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return await self._client.devboxes.disk_snapshots.delete(
             self._id,
             extra_headers=extra_headers,
@@ -101,7 +103,6 @@ class AsyncSnapshot:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
     ) -> DevboxSnapshotAsyncStatusView:
         return await self._client.devboxes.disk_snapshots.await_completed(
             self._id,
@@ -110,7 +111,6 @@ class AsyncSnapshot:
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
-            idempotency_key=idempotency_key,
         )
 
     async def create_devbox(
@@ -132,8 +132,6 @@ class AsyncSnapshot:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> AsyncDevbox:
-        from ._async import AsyncDevboxClient
-
         devbox_client = AsyncDevboxClient(self._client)
         return await devbox_client.create_from_snapshot(
             self._id,

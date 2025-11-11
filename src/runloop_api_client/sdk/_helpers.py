@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import io
 import os
+from typing import IO, Dict, Union, Literal, Callable, cast
 from pathlib import Path
-from typing import IO, Callable, Dict, Literal, Union, cast
 
 from .._types import FileTypes
 from .._utils import file_from_path

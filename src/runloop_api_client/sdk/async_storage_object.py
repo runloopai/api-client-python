@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing_extensions import override
 
 import httpx
 
-from typing_extensions import override
-
+from .._types import Body, Query, Headers, Timeout, NotGiven, not_given
 from .._client import AsyncRunloop
-from .._types import Body, Headers, NotGiven, Query, Timeout, not_given
 from ._helpers import UploadData, read_upload_data
 from ..types.object_view import ObjectView
 from ..types.object_download_url_view import ObjectDownloadURLView
@@ -149,7 +147,7 @@ class AsyncStorageObject:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> ObjectView:
         return await self._client.objects.delete(
             self._id,
             extra_headers=extra_headers,

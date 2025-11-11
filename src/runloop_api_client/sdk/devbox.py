@@ -3,10 +3,15 @@ from __future__ import annotations
 import logging
 import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
-
 from typing_extensions import override
 
-from .._types import Body, Headers, NotGiven, Omit, Query, Timeout, not_given, omit
+from ..types import (
+    DevboxView,
+    DevboxTunnelView,
+    DevboxExecutionDetailView,
+    DevboxCreateSSHKeyResponse,
+)
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import Runloop
 from ._helpers import LogCallback, UploadInput, normalize_upload_input
 from .execution import Execution, _StreamingGroup
@@ -18,6 +23,7 @@ from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetai
 
 if TYPE_CHECKING:
     from .snapshot import Snapshot
+
 
 class Devbox:
     """
@@ -53,7 +59,7 @@ class Devbox:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-    ) -> Any:
+    ) -> DevboxView:
         return self._client.devboxes.retrieve(
             self._id,
             extra_headers=extra_headers,
@@ -62,10 +68,10 @@ class Devbox:
             timeout=timeout,
         )
 
-    def await_running(self, *, polling_config: PollingConfig | None = None) -> Any:
+    def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         return self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
-    def await_suspended(self, *, polling_config: PollingConfig | None = None) -> Any:
+    def await_suspended(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
     def shutdown(
@@ -76,7 +82,7 @@ class Devbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         return self._client.devboxes.shutdown(
             self._id,
             extra_headers=extra_headers,
@@ -95,7 +101,7 @@ class Devbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         self._client.devboxes.suspend(
             self._id,
             extra_headers=extra_headers,
@@ -115,7 +121,7 @@ class Devbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         self._client.devboxes.resume(
             self._id,
             extra_headers=extra_headers,
@@ -134,7 +140,7 @@ class Devbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return self._client.devboxes.keep_alive(
             self._id,
             extra_headers=extra_headers,
@@ -175,7 +181,6 @@ class Devbox:
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
-            idempotency_key=idempotency_key,
         )
         return snapshot
 
@@ -452,7 +457,7 @@ class _FileInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxExecutionDetailView:
         if isinstance(contents, bytes):
             contents_str = contents.decode("utf-8")
         else:
@@ -500,7 +505,7 @@ class _FileInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         file_param = normalize_upload_input(file)
         return self._devbox._client.devboxes.upload_file(
             self._devbox.id,
@@ -526,7 +531,7 @@ class _NetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxCreateSSHKeyResponse:
         return self._devbox._client.devboxes.create_ssh_key(
             self._devbox.id,
             extra_headers=extra_headers,
@@ -545,7 +550,7 @@ class _NetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxTunnelView:
         return self._devbox._client.devboxes.create_tunnel(
             self._devbox.id,
             port=port,
@@ -565,7 +570,7 @@ class _NetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return self._devbox._client.devboxes.remove_tunnel(
             self._devbox.id,
             port=port,

@@ -1,20 +1,20 @@
 from __future__ import annotations
 
+from typing import Any, Dict, Literal, Mapping, Iterable, Optional
 from pathlib import Path
-from typing import Any, Dict, Iterable, Literal, Mapping, Optional
 
 import httpx
 
-from .._client import Runloop
-from .._types import Body, Headers, NotGiven, NOT_GIVEN, Omit, Query, SequenceNotStr, Timeout, not_given, omit
-from ..lib.polling import PollingConfig
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
-from ..types.shared_params.launch_parameters import LaunchParameters
 from .devbox import Devbox
+from .._types import NOT_GIVEN, Body, Omit, Query, Headers, Timeout, NotGiven, SequenceNotStr, omit, not_given
+from .._client import Runloop
+from ._helpers import ContentType, detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
+from ..lib.polling import PollingConfig
 from .storage_object import StorageObject
-from ._helpers import ContentType, detect_content_type
+from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
 
 class DevboxClient:
@@ -434,7 +434,6 @@ class RunloopSDK:
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
         http_client: httpx.Client | None = None,
-        _strict_response_validation: bool = False,
     ) -> None:
         if max_retries is None:
             self.api = Runloop(
@@ -444,7 +443,6 @@ class RunloopSDK:
                 default_headers=default_headers,
                 default_query=default_query,
                 http_client=http_client,
-                _strict_response_validation=_strict_response_validation,
             )
         else:
             self.api = Runloop(
@@ -455,7 +453,6 @@ class RunloopSDK:
                 default_headers=default_headers,
                 default_query=default_query,
                 http_client=http_client,
-                _strict_response_validation=_strict_response_validation,
             )
 
         self.devbox = DevboxClient(self.api)
