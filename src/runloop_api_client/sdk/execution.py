@@ -64,17 +64,21 @@ class Execution:
         """
         Wait for completion and return an :class:`ExecutionResult`.
         """
-        try:
-            if self._latest.status == "completed":
-                final = self._latest
-            else:
-                final = self._client.devboxes.executions.await_completed(
-                    self._execution_id,
-                    devbox_id=self._devbox_id,
-                    polling_config=polling_config,
-                )
-        finally:
-            self._stop_streaming()
+        if self._latest.status == "completed":
+            final = self._latest
+        else:
+            final = self._client.devboxes.executions.await_completed(
+                self._execution_id,
+                devbox_id=self._devbox_id,
+                polling_config=polling_config,
+            )
+
+        if self._streaming_group is not None:
+            # Block until streaming threads have drained so callers observe all log output
+            # before we hand back control. _stop_streaming() handles the tidy-up afterward.
+            self._streaming_group.join()
+
+        self._stop_streaming()
 
         self._latest = final
         return ExecutionResult(self._client, self._devbox_id, final)

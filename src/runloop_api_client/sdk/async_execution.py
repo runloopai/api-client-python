@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Optional
+from typing import Awaitable, Optional, cast
 
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
@@ -21,15 +21,15 @@ class _AsyncStreamingGroup:
 
     async def wait(self) -> None:
         results = await asyncio.gather(*self._tasks, return_exceptions=True)
-        self._log_results(results)
+        self._log_results(tuple(results))
 
     async def cancel(self) -> None:
         for task in self._tasks:
             task.cancel()
         results = await asyncio.gather(*self._tasks, return_exceptions=True)
-        self._log_results(results)
+        self._log_results(tuple(results))
 
-    def _log_results(self, results: list[object]) -> None:
+    def _log_results(self, results: tuple[object | BaseException | None, ...]) -> None:
         for result in results:
             if isinstance(result, Exception) and not isinstance(result, asyncio.CancelledError):
                 self._logger.debug("stream task error: %s", result)
@@ -62,18 +62,34 @@ class AsyncExecution:
         return self._devbox_id
 
     async def result(self, *, polling_config: PollingConfig | None = None) -> AsyncExecutionResult:
-        if self._latest.status == "completed":
-            final = self._latest
-        else:
-            final = await self._client.devboxes.executions.await_completed(
+        async def command_coro() -> DevboxAsyncExecutionDetailView:
+            if self._latest.status == "completed":
+                return self._latest
+            return await self._client.devboxes.executions.await_completed(
                 self._execution_id,
                 devbox_id=self._devbox_id,
                 polling_config=polling_config,
             )
-        await self._settle_streaming(cancel=False)
 
-        self._latest = final
-        return AsyncExecutionResult(self._client, self._devbox_id, final)
+        awaitables: list[Awaitable[DevboxAsyncExecutionDetailView | None]] = [command_coro()]
+        if self._streaming_group is not None:
+            awaitables.append(self._streaming_group.wait())
+
+        results = await asyncio.gather(*awaitables, return_exceptions=True)
+        command_result = results[0]
+
+        if isinstance(command_result, Exception):
+            if self._streaming_group is not None:
+                await self._streaming_group.cancel()
+            raise command_result
+
+        if self._streaming_group is not None:
+            self._streaming_group = None
+
+        # Streaming completion is orchestrated via the gather call above.
+        command_value = cast(DevboxAsyncExecutionDetailView, command_result)
+        self._latest = command_value
+        return AsyncExecutionResult(self._client, self._devbox_id, command_value)
 
     async def get_state(self) -> DevboxAsyncExecutionDetailView:
         self._latest = await self._client.devboxes.executions.retrieve(

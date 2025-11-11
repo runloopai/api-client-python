@@ -1,29 +1,17 @@
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any, Dict, Iterable, Optional
 
-from .devbox import Devbox, DevboxClient
+from typing_extensions import override
+
+from .devbox import Devbox
 from .._client import Runloop
 from ..lib.polling import PollingConfig
+from .._types import Body, Headers, NotGiven, NOT_GIVEN, Omit, Query, Timeout, not_given, omit
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
+from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.devbox_snapshot_view import DevboxSnapshotView
 from ..types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
-
-
-class SnapshotClient:
-    """
-    Manage :class:`Snapshot` objects through the SDK.
-    """
-
-    def __init__(self, client: Runloop, devbox_client: DevboxClient) -> None:
-        self._client = client
-        self._devbox_client = devbox_client
-
-    def list(self, **params: Any) -> List["Snapshot"]:
-        page = self._client.devboxes.disk_snapshots.list(**params)
-        return [Snapshot(self._client, item.id, self._devbox_client) for item in getattr(page, "disk_snapshots", [])]
-
-    def from_id(self, snapshot_id: str) -> "Snapshot":
-        return Snapshot(self._client, snapshot_id, self._devbox_client)
 
 
 class Snapshot:
@@ -31,11 +19,15 @@ class Snapshot:
     Wrapper around snapshot operations.
     """
 
-    def __init__(self, client: Runloop, snapshot_id: str, devbox_client: DevboxClient) -> None:
+    def __init__(
+        self,
+        client: Runloop,
+        snapshot_id: str,
+    ) -> None:
         self._client = client
         self._id = snapshot_id
-        self._devbox_client = devbox_client
 
+    @override
     def __repr__(self) -> str:
         return f"<Snapshot id={self._id!r}>"
 
@@ -43,25 +35,121 @@ class Snapshot:
     def id(self) -> str:
         return self._id
 
-    def get_info(self, **request_options: Any) -> DevboxSnapshotAsyncStatusView:
-        return self._client.devboxes.disk_snapshots.query_status(self._id, **request_options)
+    def get_info(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+    ) -> DevboxSnapshotAsyncStatusView:
+        return self._client.devboxes.disk_snapshots.query_status(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+        )
 
-    def update(self, **params: Any) -> DevboxSnapshotView:
-        return self._client.devboxes.disk_snapshots.update(self._id, **params)
+    def update(
+        self,
+        *,
+        commit_message: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> DevboxSnapshotView:
+        return self._client.devboxes.disk_snapshots.update(
+            self._id,
+            commit_message=commit_message,
+            metadata=metadata,
+            name=name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
-    def delete(self, **request_options: Any) -> Any:
-        return self._client.devboxes.disk_snapshots.delete(self._id, **request_options)
+    def delete(
+        self,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        return self._client.devboxes.disk_snapshots.delete(
+            self._id,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
 
     def await_completed(
-        self, *, polling_config: PollingConfig | None = None, **request_options: Any
+        self,
+        *,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
     ) -> DevboxSnapshotAsyncStatusView:
         return self._client.devboxes.disk_snapshots.await_completed(
             self._id,
             polling_config=polling_config,
-            **request_options,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
-    def create_devbox(self, *, polling_config: PollingConfig | None = None, **params: Any) -> Devbox:
-        params = dict(params)
-        params["snapshot_id"] = self._id
-        return self._devbox_client.create(polling_config=polling_config, **params)
+    def create_devbox(
+        self,
+        *,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
+        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
+        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
+        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        name: Optional[str] | NotGiven = NOT_GIVEN,
+        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
+        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> Devbox:
+        from ._sync import DevboxClient
+
+        devbox_client = DevboxClient(self._client)
+        return devbox_client.create_from_snapshot(
+            self._id,
+            code_mounts=code_mounts,
+            entrypoint=entrypoint,
+            environment_variables=environment_variables,
+            file_mounts=file_mounts,
+            launch_parameters=launch_parameters,
+            metadata=metadata,
+            name=name,
+            repo_connection_id=repo_connection_id,
+            secrets=secrets,
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
