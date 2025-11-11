@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Literal, Mapping, Iterable, Optional
+from typing import Dict, Literal, Mapping, Iterable, Optional
 from pathlib import Path
 
 import httpx
@@ -13,6 +13,7 @@ from .snapshot import Snapshot
 from .blueprint import Blueprint
 from ..lib.polling import PollingConfig
 from .storage_object import StorageObject
+from ..types.blueprint_create_params import Service
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
@@ -263,27 +264,35 @@ class BlueprintClient:
         self,
         *,
         name: str,
-        base_blueprint_id: Optional[str] | NotGiven = NOT_GIVEN,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        dockerfile: Optional[str] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        services: Optional[Iterable[Any]] | NotGiven = NOT_GIVEN,
-        system_setup_commands: Optional[SequenceNotStr[str]] | NotGiven = NOT_GIVEN,
+        base_blueprint_id: Optional[str] | Omit = omit,
+        base_blueprint_name: Optional[str] | Omit = omit,
+        build_args: Optional[Dict[str, str]] | Omit = omit,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        dockerfile: Optional[str] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
+        services: Optional[Iterable[Service]] | Omit = omit,
+        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         idempotency_key: str | None = None,
     ) -> Blueprint:
         blueprint = self._client.blueprints.create_and_await_build_complete(
             name=name,
             base_blueprint_id=base_blueprint_id,
+            base_blueprint_name=base_blueprint_name,
+            build_args=build_args,
             code_mounts=code_mounts,
             dockerfile=dockerfile,
             file_mounts=file_mounts,
             launch_parameters=launch_parameters,
+            metadata=metadata,
+            secrets=secrets,
             services=services,
             system_setup_commands=system_setup_commands,
             polling_config=polling_config,

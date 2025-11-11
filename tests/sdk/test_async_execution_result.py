@@ -7,32 +7,33 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk.async_execution_result import AsyncExecutionResult
 
 
 class TestAsyncExecutionResult:
     """Tests for AsyncExecutionResult class."""
 
-    def test_init(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_init(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test AsyncExecutionResult initialization."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         # Verify via public API
         assert result.devbox_id == "dev_123"
         assert result.execution_id == "exec_123"
 
-    def test_devbox_id_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_devbox_id_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test devbox_id property."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.devbox_id == "dev_123"
 
-    def test_execution_id_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_execution_id_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test execution_id property."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.execution_id == "exec_123"
 
-    def test_exit_code_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_exit_code_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test exit_code property."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.exit_code == 0
 
     def test_exit_code_none(self, mock_async_client: AsyncMock) -> None:
@@ -45,12 +46,12 @@ class TestAsyncExecutionResult:
             stdout="",
             stderr="",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.exit_code is None
 
-    def test_success_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_success_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test success property."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.success is True
 
     def test_success_false(self, mock_async_client: AsyncMock) -> None:
@@ -63,12 +64,12 @@ class TestAsyncExecutionResult:
             stdout="",
             stderr="error",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.success is False
 
-    def test_failed_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_failed_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test failed property when exit code is zero."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.failed is False
 
     def test_failed_true(self, mock_async_client: AsyncMock) -> None:
@@ -81,7 +82,7 @@ class TestAsyncExecutionResult:
             stdout="",
             stderr="error",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.failed is True
 
     def test_failed_none(self, mock_async_client: AsyncMock) -> None:
@@ -94,13 +95,13 @@ class TestAsyncExecutionResult:
             stdout="",
             stderr="",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.failed is False
 
     @pytest.mark.asyncio
-    async def test_stdout(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    async def test_stdout(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test stdout method."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert await result.stdout() == "output"
 
     @pytest.mark.asyncio
@@ -114,7 +115,7 @@ class TestAsyncExecutionResult:
             stdout=None,
             stderr="",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert await result.stdout() == ""
 
     @pytest.mark.asyncio
@@ -128,16 +129,16 @@ class TestAsyncExecutionResult:
             stdout="",
             stderr="error message",
         )
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert await result.stderr() == "error message"
 
     @pytest.mark.asyncio
-    async def test_stderr_empty(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    async def test_stderr_empty(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test stderr method when stderr is None."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert await result.stderr() == ""
 
-    def test_raw_property(self, mock_async_client: AsyncMock, execution_view: SimpleNamespace) -> None:
+    def test_raw_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test raw property."""
-        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.raw == execution_view

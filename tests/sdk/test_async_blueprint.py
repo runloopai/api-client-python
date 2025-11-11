@@ -7,6 +7,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from tests.sdk.conftest import MockDevboxView, MockBlueprintView
 from runloop_api_client.sdk import AsyncBlueprint
 
 
@@ -24,7 +25,7 @@ class TestAsyncBlueprint:
         assert repr(blueprint) == "<AsyncBlueprint id='bp_123'>"
 
     @pytest.mark.asyncio
-    async def test_get_info(self, mock_async_client: AsyncMock, blueprint_view: SimpleNamespace) -> None:
+    async def test_get_info(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
         """Test get_info method."""
         mock_async_client.blueprints.retrieve = AsyncMock(return_value=blueprint_view)
 
@@ -59,7 +60,6 @@ class TestAsyncBlueprint:
     @pytest.mark.asyncio
     async def test_delete(self, mock_async_client: AsyncMock) -> None:
         """Test delete method."""
-        # Return value not used - testing side effect only
         mock_async_client.blueprints.delete = AsyncMock(return_value=object())
 
         blueprint = AsyncBlueprint(mock_async_client, "bp_123")
@@ -70,11 +70,11 @@ class TestAsyncBlueprint:
             timeout=30.0,
         )
 
-        assert result is not None
+        assert result is not None  # Verify return value is propagated
         mock_async_client.blueprints.delete.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_create_devbox(self, mock_async_client: AsyncMock, devbox_view: SimpleNamespace) -> None:
+    async def test_create_devbox(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test create_devbox method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 

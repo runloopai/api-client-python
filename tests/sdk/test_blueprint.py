@@ -5,6 +5,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import Mock
 
+from tests.sdk.conftest import MockDevboxView, MockBlueprintView
 from runloop_api_client.sdk import Blueprint
 
 
@@ -21,7 +22,7 @@ class TestBlueprint:
         blueprint = Blueprint(mock_client, "bp_123")
         assert repr(blueprint) == "<Blueprint id='bp_123'>"
 
-    def test_get_info(self, mock_client: Mock, blueprint_view: SimpleNamespace) -> None:
+    def test_get_info(self, mock_client: Mock, blueprint_view: MockBlueprintView) -> None:
         """Test get_info method."""
         mock_client.blueprints.retrieve.return_value = blueprint_view
 
@@ -66,7 +67,6 @@ class TestBlueprint:
 
     def test_delete(self, mock_client: Mock) -> None:
         """Test delete method."""
-        # Return value not used - testing side effect only
         mock_client.blueprints.delete.return_value = object()
 
         blueprint = Blueprint(mock_client, "bp_123")
@@ -77,7 +77,7 @@ class TestBlueprint:
             timeout=30.0,
         )
 
-        assert result is not None
+        assert result is not None  # Verify return value is propagated
         mock_client.blueprints.delete.assert_called_once_with(
             "bp_123",
             extra_headers={"X-Custom": "value"},
@@ -86,7 +86,7 @@ class TestBlueprint:
             timeout=30.0,
         )
 
-    def test_create_devbox(self, mock_client: Mock, devbox_view: SimpleNamespace) -> None:
+    def test_create_devbox(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test create_devbox method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
