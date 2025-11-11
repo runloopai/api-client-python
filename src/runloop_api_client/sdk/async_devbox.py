@@ -121,8 +121,65 @@ class AsyncDevbox:
     async def resume(self, **request_options: Any) -> Any:
         return await self._client.devboxes.resume(self._id, **request_options)
 
-    async def keep_alive(self, **request_options: Any) -> Any:
-        return await self._client.devboxes.keep_alive(self._id, **request_options)
+    async def snapshot_disk(
+        self,
+        *,
+        commit_message: str | None | Omit = omit,
+        metadata: dict[str, str] | None | Omit = omit,
+        name: str | None | Omit = omit,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> "AsyncSnapshot":
+        snapshot_data = await self._client.devboxes.snapshot_disk_async(
+            self._id,
+            commit_message=commit_message,
+            metadata=metadata,
+            name=name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        snapshot = self._snapshot_from_id(snapshot_data.id)
+        await snapshot.await_completed(
+            polling_config=polling_config,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return snapshot
+
+    async def snapshot_disk_async(
+        self,
+        *,
+        commit_message: str | None | Omit = omit,
+        metadata: dict[str, str] | None | Omit = omit,
+        name: str | None | Omit = omit,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> "AsyncSnapshot":
+        snapshot_data = await self._client.devboxes.snapshot_disk_async(
+            self._id,
+            commit_message=commit_message,
+            metadata=metadata,
+            name=name,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
+        )
+        return self._snapshot_from_id(snapshot_data.id)
 
     async def close(self) -> None:
         await self.shutdown()
@@ -142,6 +199,11 @@ class AsyncDevbox:
     # ------------------------------------------------------------------ #
     # Internal helpers
     # ------------------------------------------------------------------ #
+
+    def _snapshot_from_id(self, snapshot_id: str) -> "AsyncSnapshot":
+        from .async_snapshot import AsyncSnapshot
+
+        return AsyncSnapshot(self._client, snapshot_id)
 
     def _start_streaming(
         self,
