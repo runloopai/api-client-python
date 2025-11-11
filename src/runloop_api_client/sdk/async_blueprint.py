@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, Optional
-
+from typing import Dict, Iterable, Optional
 from typing_extensions import override
 
+from ..types import BlueprintView
+from ._async import AsyncDevboxClient
+from .._types import NOT_GIVEN, Body, Query, Headers, Timeout, NotGiven, not_given
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
-from .._types import Body, Headers, NotGiven, NOT_GIVEN, Query, Timeout, not_given
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
-from ..types.shared_params.launch_parameters import LaunchParameters
 from .async_devbox import AsyncDevbox
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
+from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
 
 class AsyncBlueprint:
@@ -41,7 +42,7 @@ class AsyncBlueprint:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-    ) -> Any:
+    ) -> BlueprintView:
         return await self._client.blueprints.retrieve(
             self._id,
             extra_headers=extra_headers,
@@ -73,7 +74,7 @@ class AsyncBlueprint:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-    ) -> Any:
+    ) -> object:
         return await self._client.blueprints.delete(
             self._id,
             extra_headers=extra_headers,
@@ -101,8 +102,6 @@ class AsyncBlueprint:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> AsyncDevbox:
-        from ._async import AsyncDevboxClient
-
         devbox_client = AsyncDevboxClient(self._client)
         return await devbox_client.create_from_blueprint_id(
             self._id,

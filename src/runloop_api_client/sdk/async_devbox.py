@@ -2,20 +2,24 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, Optional, Sequence, cast
-
+from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence, Awaitable, cast
 from typing_extensions import override
 
-from .._types import Body, Headers, NotGiven, Omit, Query, Timeout, not_given, omit
+from ..types import (
+    DevboxView,
+    DevboxTunnelView,
+    DevboxExecutionDetailView,
+    DevboxCreateSSHKeyResponse,
+)
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import AsyncRunloop
 from ._helpers import LogCallback, UploadInput, normalize_upload_input
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
 from .async_execution_result import AsyncExecutionResult
-from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
-
+from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 StreamFactory = Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]
 
@@ -57,7 +61,7 @@ class AsyncDevbox:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-    ) -> Any:
+    ) -> DevboxView:
         return await self._client.devboxes.retrieve(
             self._id,
             extra_headers=extra_headers,
@@ -66,10 +70,10 @@ class AsyncDevbox:
             timeout=timeout,
         )
 
-    async def await_running(self, *, polling_config: PollingConfig | None = None) -> Any:
+    async def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         return await self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
-    async def await_suspended(self, *, polling_config: PollingConfig | None = None) -> Any:
+    async def await_suspended(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         return await self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
     async def shutdown(
@@ -80,7 +84,7 @@ class AsyncDevbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         return await self._client.devboxes.shutdown(
             self._id,
             extra_headers=extra_headers,
@@ -99,7 +103,7 @@ class AsyncDevbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         await self._client.devboxes.suspend(
             self._id,
             extra_headers=extra_headers,
@@ -122,7 +126,7 @@ class AsyncDevbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxView:
         await self._client.devboxes.resume(
             self._id,
             extra_headers=extra_headers,
@@ -144,7 +148,7 @@ class AsyncDevbox:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return await self._client.devboxes.keep_alive(
             self._id,
             extra_headers=extra_headers,
@@ -185,7 +189,6 @@ class AsyncDevbox:
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
-            idempotency_key=idempotency_key,
         )
         return snapshot
 
@@ -461,7 +464,7 @@ class _AsyncFileInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxExecutionDetailView:
         if isinstance(contents, bytes):
             contents_str = contents.decode("utf-8")
         else:
@@ -509,7 +512,7 @@ class _AsyncFileInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         file_param = normalize_upload_input(file)
         return await self._devbox._client.devboxes.upload_file(
             self._devbox.id,
@@ -535,7 +538,7 @@ class _AsyncNetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxCreateSSHKeyResponse:
         return await self._devbox._client.devboxes.create_ssh_key(
             self._devbox.id,
             extra_headers=extra_headers,
@@ -554,7 +557,7 @@ class _AsyncNetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> DevboxTunnelView:
         return await self._devbox._client.devboxes.create_tunnel(
             self._devbox.id,
             port=port,
@@ -574,7 +577,7 @@ class _AsyncNetworkInterface:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> object:
         return await self._devbox._client.devboxes.remove_tunnel(
             self._devbox.id,
             port=port,

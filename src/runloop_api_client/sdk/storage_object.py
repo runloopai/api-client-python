@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
-
 from typing_extensions import override
 
 import httpx
 
+from .._types import Body, Query, Headers, Timeout, NotGiven, not_given
 from .._client import Runloop
-from .._types import Body, Headers, NotGiven, Query, Timeout, not_given
+from ._helpers import UploadData, read_upload_data
 from ..types.object_view import ObjectView
 from ..types.object_download_url_view import ObjectDownloadURLView
-from ._helpers import UploadData, read_upload_data
 
 
 class StorageObject:
@@ -79,7 +77,6 @@ class StorageObject:
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
     ) -> ObjectDownloadURLView:
         if duration_seconds is None:
             return self._client.objects.download(
@@ -148,7 +145,7 @@ class StorageObject:
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> Any:
+    ) -> ObjectView:
         return self._client.objects.delete(
             self._id,
             extra_headers=extra_headers,

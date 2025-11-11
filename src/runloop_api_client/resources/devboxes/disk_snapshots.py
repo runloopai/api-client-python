@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import httpx
 
@@ -17,13 +17,13 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ...pagination import SyncDiskSnapshotsCursorIDPage, AsyncDiskSnapshotsCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.devboxes import disk_snapshot_list_params, disk_snapshot_update_params
-from ...types.devbox_snapshot_view import DevboxSnapshotView
-from ...types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 from ..._exceptions import RunloopError
 from ...lib.polling import PollingConfig, poll_until
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.devboxes import disk_snapshot_list_params, disk_snapshot_update_params
 from ...lib.polling_async import async_poll_until
+from ...types.devbox_snapshot_view import DevboxSnapshotView
+from ...types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 __all__ = ["DiskSnapshotsResource", "AsyncDiskSnapshotsResource"]
 
@@ -247,7 +247,10 @@ class DiskSnapshotsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
-        **request_options: Any,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
         """Wait for a disk snapshot operation to complete."""
 
@@ -257,7 +260,13 @@ class DiskSnapshotsResource(SyncAPIResource):
         def is_terminal(result: DevboxSnapshotAsyncStatusView) -> bool:
             return result.status in {"complete", "error"}
 
-        status = poll_until(lambda: self.query_status(id, **request_options), is_terminal, polling_config)
+        status = poll_until(
+            lambda: self.query_status(
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            is_terminal,
+            polling_config,
+        )
 
         if status.status == "error":
             message = status.error_message or "Unknown error"
@@ -485,7 +494,10 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
-        **request_options: Any,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
         """Wait asynchronously for a disk snapshot operation to complete."""
 
@@ -496,7 +508,9 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
             return result.status in {"complete", "error"}
 
         status = await async_poll_until(
-            lambda: self.query_status(id, **request_options),
+            lambda: self.query_status(
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
             is_terminal,
             polling_config,
         )
