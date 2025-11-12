@@ -5,7 +5,7 @@ from typing_extensions import override
 
 if TYPE_CHECKING:
     from .async_devbox import AsyncDevbox
-from .._types import NOT_GIVEN, Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
 from ..types.devbox_snapshot_view import DevboxSnapshotView
@@ -114,15 +114,15 @@ class AsyncSnapshot:
     async def create_devbox(
         self,
         *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
-        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        entrypoint: Optional[str] | Omit = omit,
+        environment_variables: Optional[Dict[str, str]] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        repo_connection_id: Optional[str] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
