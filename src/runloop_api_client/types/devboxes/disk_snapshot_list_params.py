@@ -25,5 +25,8 @@ class DiskSnapshotListParams(TypedDict, total=False):
     metadata_key_in: Annotated[str, PropertyInfo(alias="metadata[key][in]")]
     """Filter snapshots by metadata key with multiple possible values (OR condition)."""
 
+    source_blueprint_id: str
+    """Source Blueprint ID to filter snapshots by."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

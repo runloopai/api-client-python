@@ -254,8 +254,11 @@ class BlueprintsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        Delete a previously created Blueprint.
+        """Delete a previously created Blueprint.
+
+        If a blueprint has dependent snapshots,
+        it cannot be deleted. You can find them by querying: GET
+        /v1/devboxes/disk_snapshots?source_blueprint_id={blueprint_id}.
 
         Args:
           extra_headers: Send extra headers
@@ -762,8 +765,11 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        Delete a previously created Blueprint.
+        """Delete a previously created Blueprint.
+
+        If a blueprint has dependent snapshots,
+        it cannot be deleted. You can find them by querying: GET
+        /v1/devboxes/disk_snapshots?source_blueprint_id={blueprint_id}.
 
         Args:
           extra_headers: Send extra headers

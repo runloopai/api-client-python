@@ -4,6 +4,7 @@
 from runloop_api_client.types import (
     AfterIdle,
     AgentMountParameters,
+    AgentSource,
     CodeMountParameters,
     LaunchParameters,
     Mount,
@@ -46,6 +47,20 @@ Methods:
 - <code title="post /v1/benchmarks/runs/{id}/cancel">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="post /v1/benchmarks/runs/{id}/complete">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="get /v1/benchmarks/runs/{id}/scenario_runs">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmarks/run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
+
+# Agents
+
+Types:
+
+```python
+from runloop_api_client.types import AgentCreateParameters, AgentListView, AgentView
+```
+
+Methods:
+
+- <code title="post /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">create</a>(\*\*<a href="src/runloop_api_client/types/agent_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
+- <code title="get /v1/agents/{id}">client.agents.<a href="./src/runloop_api_client/resources/agents.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
+- <code title="get /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list</a>(\*\*<a href="src/runloop_api_client/types/agent_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
 
 # Blueprints
 

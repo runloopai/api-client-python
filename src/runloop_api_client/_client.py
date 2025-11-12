@@ -31,7 +31,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import objects, secrets, devboxes, scenarios, benchmarks, blueprints, repositories
+    from .resources import agents, objects, secrets, devboxes, scenarios, benchmarks, blueprints, repositories
+    from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
@@ -105,6 +106,12 @@ class Runloop(SyncAPIClient):
         from .resources.benchmarks import BenchmarksResource
 
         return BenchmarksResource(self)
+
+    @cached_property
+    def agents(self) -> AgentsResource:
+        from .resources.agents import AgentsResource
+
+        return AgentsResource(self)
 
     @cached_property
     def blueprints(self) -> BlueprintsResource:
@@ -319,6 +326,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncBenchmarksResource(self)
 
     @cached_property
+    def agents(self) -> AsyncAgentsResource:
+        from .resources.agents import AsyncAgentsResource
+
+        return AsyncAgentsResource(self)
+
+    @cached_property
     def blueprints(self) -> AsyncBlueprintsResource:
         from .resources.blueprints import AsyncBlueprintsResource
 
@@ -480,6 +493,12 @@ class RunloopWithRawResponse:
         return BenchmarksResourceWithRawResponse(self._client.benchmarks)
 
     @cached_property
+    def agents(self) -> agents.AgentsResourceWithRawResponse:
+        from .resources.agents import AgentsResourceWithRawResponse
+
+        return AgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
     def blueprints(self) -> blueprints.BlueprintsResourceWithRawResponse:
         from .resources.blueprints import BlueprintsResourceWithRawResponse
 
@@ -527,6 +546,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithRawResponse
 
         return AsyncBenchmarksResourceWithRawResponse(self._client.benchmarks)
+
+    @cached_property
+    def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
+        from .resources.agents import AsyncAgentsResourceWithRawResponse
+
+        return AsyncAgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
     def blueprints(self) -> blueprints.AsyncBlueprintsResourceWithRawResponse:
@@ -578,6 +603,12 @@ class RunloopWithStreamedResponse:
         return BenchmarksResourceWithStreamingResponse(self._client.benchmarks)
 
     @cached_property
+    def agents(self) -> agents.AgentsResourceWithStreamingResponse:
+        from .resources.agents import AgentsResourceWithStreamingResponse
+
+        return AgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
     def blueprints(self) -> blueprints.BlueprintsResourceWithStreamingResponse:
         from .resources.blueprints import BlueprintsResourceWithStreamingResponse
 
@@ -625,6 +656,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithStreamingResponse
 
         return AsyncBenchmarksResourceWithStreamingResponse(self._client.benchmarks)
+
+    @cached_property
+    def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
+        from .resources.agents import AsyncAgentsResourceWithStreamingResponse
+
+        return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
     def blueprints(self) -> blueprints.AsyncBlueprintsResourceWithStreamingResponse:

@@ -111,6 +111,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
+        source_blueprint_id: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -120,8 +121,8 @@ class DiskSnapshotsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]:
         """
-        List all snapshots of a Devbox while optionally filtering by Devbox ID and
-        metadata.
+        List all snapshots of a Devbox while optionally filtering by Devbox ID, source
+        Blueprint ID, and metadata.
 
         Args:
           devbox_id: Devbox ID to filter by.
@@ -132,6 +133,8 @@ class DiskSnapshotsResource(SyncAPIResource):
               different keys.
 
           metadata_key_in: Filter snapshots by metadata key with multiple possible values (OR condition).
+
+          source_blueprint_id: Source Blueprint ID to filter snapshots by.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -157,6 +160,7 @@ class DiskSnapshotsResource(SyncAPIResource):
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
+                        "source_blueprint_id": source_blueprint_id,
                         "starting_after": starting_after,
                     },
                     disk_snapshot_list_params.DiskSnapshotListParams,
@@ -326,6 +330,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
+        source_blueprint_id: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -335,8 +340,8 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[DevboxSnapshotView, AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]]:
         """
-        List all snapshots of a Devbox while optionally filtering by Devbox ID and
-        metadata.
+        List all snapshots of a Devbox while optionally filtering by Devbox ID, source
+        Blueprint ID, and metadata.
 
         Args:
           devbox_id: Devbox ID to filter by.
@@ -347,6 +352,8 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
               different keys.
 
           metadata_key_in: Filter snapshots by metadata key with multiple possible values (OR condition).
+
+          source_blueprint_id: Source Blueprint ID to filter snapshots by.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -372,6 +379,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
+                        "source_blueprint_id": source_blueprint_id,
                         "starting_after": starting_after,
                     },
                     disk_snapshot_list_params.DiskSnapshotListParams,
