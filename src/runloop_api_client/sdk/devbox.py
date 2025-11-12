@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Dict, Callable, Optional, Sequence
 from typing_extensions import override
 
 from ..types import (
@@ -153,9 +153,9 @@ class Devbox:
     def snapshot_disk(
         self,
         *,
-        commit_message: str | None | Omit = omit,
-        metadata: dict[str, str] | None | Omit = omit,
-        name: str | None | Omit = omit,
+        commit_message: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
@@ -187,9 +187,9 @@ class Devbox:
     def snapshot_disk_async(
         self,
         *,
-        commit_message: str | None | Omit = omit,
-        metadata: dict[str, str] | None | Omit = omit,
-        name: str | None | Omit = omit,
+        commit_message: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
@@ -237,9 +237,9 @@ class Devbox:
         self,
         execution_id: str,
         *,
-        stdout: LogCallback | None,
-        stderr: LogCallback | None,
-        output: LogCallback | None,
+        stdout: Optional[LogCallback] = None,
+        stderr: Optional[LogCallback] = None,
+        output: Optional[LogCallback] = None,
     ) -> Optional[_StreamingGroup]:
         threads: list[threading.Thread] = []
         stop_event = threading.Event()
@@ -319,10 +319,10 @@ class _CommandInterface:
         self,
         command: str,
         *,
-        shell_name: str | None = None,
-        stdout: LogCallback | None = None,
-        stderr: LogCallback | None = None,
-        output: LogCallback | None = None,
+        shell_name: Optional[str] | Omit = omit,
+        stdout: Optional[LogCallback] = None,
+        stderr: Optional[LogCallback] = None,
+        output: Optional[LogCallback] = None,
         polling_config: PollingConfig | None = None,
         attach_stdin: bool | Omit = omit,
         extra_headers: Headers | None = None,
@@ -338,7 +338,7 @@ class _CommandInterface:
             execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
                 devbox.id,
                 command=command,
-                shell_name=shell_name if shell_name is not None else omit,
+                shell_name=shell_name,
                 attach_stdin=attach_stdin,
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -373,7 +373,7 @@ class _CommandInterface:
         final = client.devboxes.execute_and_await_completion(
             devbox.id,
             command=command,
-            shell_name=shell_name if shell_name is not None else not_given,
+            shell_name=shell_name,
             polling_config=polling_config,
             extra_headers=extra_headers,
             extra_query=extra_query,
@@ -387,10 +387,10 @@ class _CommandInterface:
         self,
         command: str,
         *,
-        shell_name: str | None = None,
-        stdout: LogCallback | None = None,
-        stderr: LogCallback | None = None,
-        output: LogCallback | None = None,
+        shell_name: Optional[str] | Omit = omit,
+        stdout: Optional[LogCallback] = None,
+        stderr: Optional[LogCallback] = None,
+        output: Optional[LogCallback] = None,
         attach_stdin: bool | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
@@ -404,7 +404,7 @@ class _CommandInterface:
         execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
             command=command,
-            shell_name=shell_name if shell_name is not None else omit,
+            shell_name=shell_name,
             attach_stdin=attach_stdin,
             extra_headers=extra_headers,
             extra_query=extra_query,

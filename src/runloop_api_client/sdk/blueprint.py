@@ -6,9 +6,10 @@ from typing_extensions import override
 if TYPE_CHECKING:
     from .devbox import Devbox
 from ..types import BlueprintView
-from .._types import NOT_GIVEN, Body, Query, Headers, Timeout, NotGiven, not_given
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import Runloop
 from ..lib.polling import PollingConfig
+from ..types.shared_params.mount import Mount
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
@@ -86,15 +87,16 @@ class Blueprint:
     def create_devbox(
         self,
         *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | NotGiven = NOT_GIVEN,
-        entrypoint: Optional[str] | NotGiven = NOT_GIVEN,
-        environment_variables: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        file_mounts: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        launch_parameters: Optional[LaunchParameters] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        name: Optional[str] | NotGiven = NOT_GIVEN,
-        repo_connection_id: Optional[str] | NotGiven = NOT_GIVEN,
-        secrets: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
+        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
+        entrypoint: Optional[str] | Omit = omit,
+        environment_variables: Optional[Dict[str, str]] | Omit = omit,
+        file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        mounts: Optional[Iterable[Mount]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        repo_connection_id: Optional[str] | Omit = omit,
+        secrets: Optional[Dict[str, str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
@@ -113,6 +115,7 @@ class Blueprint:
             file_mounts=file_mounts,
             launch_parameters=launch_parameters,
             metadata=metadata,
+            mounts=mounts,
             name=name,
             repo_connection_id=repo_connection_id,
             secrets=secrets,
