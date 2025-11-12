@@ -15,7 +15,10 @@ class AgentMountParameters(BaseModel):
     type: Literal["agent_mount"]
 
     agent_path: Optional[str] = None
-    """Optional path to mount the agent on the Devbox.
+    """Path to mount the agent on the Devbox.
 
     Required for git and object agents. Use absolute path (e.g., /home/user/agent)
     """
+
+    auth_token: Optional[str] = None
+    """Optional auth token for private repositories. Only used for git agents."""

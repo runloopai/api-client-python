@@ -25,3 +25,6 @@ class DevboxSnapshotView(BaseModel):
 
     name: Optional[str] = None
     """(Optional) The custom name of the snapshot."""
+
+    source_blueprint_id: Optional[str] = None
+    """(Optional) The source Blueprint ID this snapshot was created from."""

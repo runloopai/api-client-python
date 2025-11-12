@@ -633,6 +633,7 @@ class TestDevboxes:
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
+            source_blueprint_id="source_blueprint_id",
             starting_after="starting_after",
         )
         assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
@@ -2180,6 +2181,7 @@ class TestAsyncDevboxes:
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
+            source_blueprint_id="source_blueprint_id",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])

@@ -15,7 +15,10 @@ class AgentMountParameters(TypedDict, total=False):
     type: Required[Literal["agent_mount"]]
 
     agent_path: Optional[str]
-    """Optional path to mount the agent on the Devbox.
+    """Path to mount the agent on the Devbox.
 
     Required for git and object agents. Use absolute path (e.g., /home/user/agent)
     """
+
+    auth_token: Optional[str]
+    """Optional auth token for private repositories. Only used for git agents."""

@@ -6,11 +6,13 @@ from .shared import (
     Mount as Mount,
     AfterIdle as AfterIdle,
     RunProfile as RunProfile,
+    AgentSource as AgentSource,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,
     AgentMountParameters as AgentMountParameters,
     ObjectMountParameters as ObjectMountParameters,
 )
+from .agent_view import AgentView as AgentView
 from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
@@ -18,17 +20,20 @@ from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .benchmark_view import BenchmarkView as BenchmarkView
 from .blueprint_view import BlueprintView as BlueprintView
+from .agent_list_view import AgentListView as AgentListView
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
 from .scoring_contract import ScoringContract as ScoringContract
 from .scoring_function import ScoringFunction as ScoringFunction
 from .secret_list_view import SecretListView as SecretListView
+from .agent_list_params import AgentListParams as AgentListParams
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
 from .devbox_tunnel_view import DevboxTunnelView as DevboxTunnelView
 from .object_list_params import ObjectListParams as ObjectListParams
 from .secret_list_params import SecretListParams as SecretListParams
+from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .blueprint_build_log import BlueprintBuildLog as BlueprintBuildLog
 from .blueprint_list_view import BlueprintListView as BlueprintListView
 from .input_context_param import InputContextParam as InputContextParam
