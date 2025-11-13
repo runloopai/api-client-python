@@ -13,6 +13,7 @@ This example demonstrates blueprint creation and management:
 import os
 
 from runloop_api_client import RunloopSDK
+from runloop_api_client.sdk import Blueprint
 
 
 def create_simple_blueprint(sdk: RunloopSDK):
@@ -119,7 +120,7 @@ WORKDIR /home/user
     return base_blueprint, derived_blueprint
 
 
-def use_blueprint_to_create_devbox(sdk: RunloopSDK, blueprint):
+def use_blueprint_to_create_devbox(blueprint: Blueprint):
     """Create and use a devbox from a blueprint."""
     print("\n=== Creating Devbox from Blueprint ===")
 
@@ -157,7 +158,7 @@ def list_blueprints(sdk: RunloopSDK):
         print(f"  - {info.name} ({bp.id}): {info.status}")
 
 
-def cleanup_blueprints(sdk: RunloopSDK, blueprints):
+def cleanup_blueprints(blueprints: list[Blueprint]):
     """Delete blueprints to clean up."""
     print("\n=== Cleaning Up Blueprints ===")
 
@@ -176,7 +177,7 @@ def main():
     sdk = RunloopSDK()
     print("Initialized Runloop SDK\n")
 
-    created_blueprints = []
+    created_blueprints: list[Blueprint] = []
 
     try:
         # Create simple blueprint
@@ -192,7 +193,7 @@ def main():
         created_blueprints.extend([base_bp, derived_bp])
 
         # Use a blueprint to create a devbox
-        use_blueprint_to_create_devbox(sdk, simple_bp)
+        use_blueprint_to_create_devbox(simple_bp)
 
         # List all blueprints
         list_blueprints(sdk)
@@ -200,7 +201,7 @@ def main():
     finally:
         # Cleanup all created blueprints
         if created_blueprints:
-            cleanup_blueprints(sdk, created_blueprints)
+            cleanup_blueprints(created_blueprints)
 
     print("\nBlueprint example completed!")
 
