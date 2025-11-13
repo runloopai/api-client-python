@@ -132,7 +132,7 @@ class Snapshot:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> "Devbox":
-        from ._sync import DevboxClient
+        from .sync import DevboxClient
 
         devbox_client = DevboxClient(self._client)
         return devbox_client.create_from_snapshot(

@@ -14,6 +14,7 @@ from ..types import (
 from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes, omit, not_given
 from .._client import AsyncRunloop
 from ._helpers import LogCallback
+from .protocols import AsyncFileInterface, AsyncCommandInterface, AsyncNetworkInterface
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
@@ -221,15 +222,15 @@ class AsyncDevbox:
         await self.shutdown()
 
     @property
-    def cmd(self) -> "_AsyncCommandInterface":
+    def cmd(self) -> AsyncCommandInterface:
         return _AsyncCommandInterface(self)
 
     @property
-    def file(self) -> "_AsyncFileInterface":
+    def file(self) -> AsyncFileInterface:
         return _AsyncFileInterface(self)
 
     @property
-    def net(self) -> "_AsyncNetworkInterface":
+    def net(self) -> AsyncNetworkInterface:
         return _AsyncNetworkInterface(self)
 
     # ------------------------------------------------------------------ #

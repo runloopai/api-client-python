@@ -15,6 +15,7 @@ from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes, o
 from .._client import Runloop
 from ._helpers import LogCallback
 from .execution import Execution, _StreamingGroup
+from .protocols import FileInterface, CommandInterface, NetworkInterface
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
@@ -313,15 +314,15 @@ class Devbox:
         self.shutdown()
 
     @property
-    def cmd(self) -> "_CommandInterface":
+    def cmd(self) -> CommandInterface:
         return _CommandInterface(self)
 
     @property
-    def file(self) -> "_FileInterface":
+    def file(self) -> FileInterface:
         return _FileInterface(self)
 
     @property
-    def net(self) -> "_NetworkInterface":
+    def net(self) -> NetworkInterface:
         return _NetworkInterface(self)
 
     # --------------------------------------------------------------------- #

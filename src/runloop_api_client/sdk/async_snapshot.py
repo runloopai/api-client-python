@@ -132,7 +132,7 @@ class AsyncSnapshot:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> "AsyncDevbox":
-        from ._async import AsyncDevboxClient
+        from .async_ import AsyncDevboxClient
 
         devbox_client = AsyncDevboxClient(self._client)
         return await devbox_client.create_from_snapshot(
