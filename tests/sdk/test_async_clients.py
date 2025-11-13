@@ -127,7 +127,7 @@ class TestAsyncSnapshotClient:
     @pytest.mark.asyncio
     async def test_list(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
         """Test list method."""
-        page = SimpleNamespace(disk_snapshots=[snapshot_view])
+        page = SimpleNamespace(snapshots=[snapshot_view])
         mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
 
         client = AsyncSnapshotClient(mock_async_client)
