@@ -118,11 +118,11 @@ class TestSnapshotLifecycle:
 
             snapshot_id = snapshot.id
             assert snapshot_id is not None
-            
+
             # Delete should succeed without error
             result = snapshot.delete()
             assert result is not None
-            
+
             # Verify it's deleted by checking the status
             info = snapshot.get_info()
             # After deletion, the snapshot should have a status indicating it's deleted

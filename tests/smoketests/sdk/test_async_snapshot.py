@@ -68,7 +68,9 @@ class TestAsyncSnapshotLifecycle:
                 info = await snapshot.get_info()
                 assert info.status == "complete"
                 # Check if commit message is preserved
-                assert info.snapshot is not None and info.snapshot.commit_message == "Test async commit message from SDK"
+                assert (
+                    info.snapshot is not None and info.snapshot.commit_message == "Test async commit message from SDK"
+                )
             finally:
                 await snapshot.delete()
         finally:
@@ -118,11 +120,11 @@ class TestAsyncSnapshotLifecycle:
 
             snapshot_id = snapshot.id
             assert snapshot_id is not None
-            
+
             # Delete should succeed without error
             result = await snapshot.delete()
             assert result is not None
-            
+
             # Verify it's deleted by checking the status
             info = await snapshot.get_info()
             # After deletion, the snapshot should have a status indicating it's deleted

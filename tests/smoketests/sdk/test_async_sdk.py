@@ -30,4 +30,3 @@ class TestAsyncRunloopSDKInitialization:
         assert async_sdk_client.api.devboxes is not None
         assert async_sdk_client.api.blueprints is not None
         assert async_sdk_client.api.objects is not None
-
