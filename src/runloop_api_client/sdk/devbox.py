@@ -293,7 +293,7 @@ class Devbox:
                     for chunk in stream:
                         if stop_event.is_set():
                             break
-                        text = getattr(chunk, "output", "")
+                        text = chunk.output
                         for callback in callbacks:
                             try:
                                 callback(text)

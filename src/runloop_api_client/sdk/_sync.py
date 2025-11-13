@@ -224,7 +224,7 @@ class DevboxClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [Devbox(self._client, item.id) for item in getattr(page, "devboxes", [])]
+        return [Devbox(self._client, item.id) for item in page.devboxes]
 
 
 class SnapshotClient:
@@ -257,7 +257,7 @@ class SnapshotClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [Snapshot(self._client, item.id) for item in getattr(page, "disk_snapshots", [])]
+        return [Snapshot(self._client, item.id) for item in page.snapshots]
 
     def from_id(self, snapshot_id: str) -> Snapshot:
         return Snapshot(self._client, snapshot_id)
@@ -336,7 +336,7 @@ class BlueprintClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [Blueprint(self._client, item.id) for item in getattr(page, "blueprints", [])]
+        return [Blueprint(self._client, item.id) for item in page.blueprints]
 
 
 class StorageObjectClient:
@@ -385,7 +385,7 @@ class StorageObjectClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [StorageObject(self._client, item.id, upload_url=None) for item in getattr(page, "objects", [])]
+        return [StorageObject(self._client, item.id, upload_url=item.upload_url) for item in page.objects]
 
     def upload_from_file(
         self,

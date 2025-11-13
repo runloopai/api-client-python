@@ -298,7 +298,7 @@ class AsyncDevbox:
             stream = await stream_factory()
             async with stream:
                 async for chunk in stream:
-                    text = getattr(chunk, "output", "")
+                    text = chunk.output
                     for callback in callbacks:
                         try:
                             callback(text)
