@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import Dict, Literal, Mapping, Iterable, Optional
+from typing import Dict, Mapping, Iterable, Optional
 from pathlib import Path
+from typing_extensions import Unpack
 
 import httpx
 
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, SequenceNotStr, omit, not_given
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import AsyncRunloop
 from ._helpers import ContentType, detect_content_type
 from ..lib.polling import PollingConfig
@@ -13,9 +14,14 @@ from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from .async_storage_object import AsyncStorageObject
+from ..types.devbox_list_params import DevboxListParams
+from ..types.object_list_params import ObjectListParams
 from ..types.shared_params.mount import Mount
-from ..types.blueprint_create_params import Service
+from ..types.devbox_create_params import DevboxCreateParams
+from ..types.blueprint_list_params import BlueprintListParams
+from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.shared_params.launch_parameters import LaunchParameters
+from ..types.devboxes.disk_snapshot_list_params import DiskSnapshotListParams
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
 
@@ -28,46 +34,22 @@ class AsyncDevboxClient:
     async def create(
         self,
         *,
-        blueprint_id: Optional[str] | Omit = omit,
-        blueprint_name: Optional[str] | Omit = omit,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        entrypoint: Optional[str] | Omit = omit,
-        environment_variables: Optional[Dict[str, str]] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        mounts: Optional[Iterable[Mount]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        snapshot_id: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
+        **params: Unpack[DevboxCreateParams],
     ) -> AsyncDevbox:
         devbox_view = await self._client.devboxes.create_and_await_running(
-            blueprint_id=blueprint_id,
-            blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            snapshot_id=snapshot_id,
             polling_config=polling_config,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
             idempotency_key=idempotency_key,
+            **params,
         )
         return AsyncDevbox(self._client, devbox_view.id)
 
@@ -203,25 +185,18 @@ class AsyncDevboxClient:
     async def list(
         self,
         *,
-        limit: int | Omit = omit,
-        starting_after: str | Omit = omit,
-        status: Literal[
-            "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
-        ]
-        | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[DevboxListParams],
     ) -> list[AsyncDevbox]:
         page = await self._client.devboxes.list(
-            limit=limit,
-            starting_after=starting_after,
-            status=status,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
+            **params,
         )
         return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
 
@@ -235,26 +210,18 @@ class AsyncSnapshotClient:
     async def list(
         self,
         *,
-        devbox_id: str | Omit = omit,
-        limit: int | Omit = omit,
-        metadata_key: str | Omit = omit,
-        metadata_key_in: str | Omit = omit,
-        starting_after: str | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[DiskSnapshotListParams],
     ) -> list[AsyncSnapshot]:
         page = await self._client.devboxes.disk_snapshots.list(
-            devbox_id=devbox_id,
-            limit=limit,
-            metadata_key=metadata_key,
-            metadata_key_in=metadata_key_in,
-            starting_after=starting_after,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
+            **params,
         )
         return [AsyncSnapshot(self._client, item.id) for item in page.snapshots]
 
@@ -271,44 +238,22 @@ class AsyncBlueprintClient:
     async def create(
         self,
         *,
-        name: str,
-        base_blueprint_id: Optional[str] | Omit = omit,
-        base_blueprint_name: Optional[str] | Omit = omit,
-        build_args: Optional[Dict[str, str]] | Omit = omit,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        dockerfile: Optional[str] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        services: Optional[Iterable[Service]] | Omit = omit,
-        system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
+        **params: Unpack[BlueprintCreateParams],
     ) -> AsyncBlueprint:
         blueprint = await self._client.blueprints.create_and_await_build_complete(
-            name=name,
-            base_blueprint_id=base_blueprint_id,
-            base_blueprint_name=base_blueprint_name,
-            build_args=build_args,
-            code_mounts=code_mounts,
-            dockerfile=dockerfile,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            secrets=secrets,
-            services=services,
-            system_setup_commands=system_setup_commands,
             polling_config=polling_config,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
             idempotency_key=idempotency_key,
+            **params,
         )
         return AsyncBlueprint(self._client, blueprint.id)
 
@@ -318,22 +263,18 @@ class AsyncBlueprintClient:
     async def list(
         self,
         *,
-        limit: int | Omit = omit,
-        name: str | Omit = omit,
-        starting_after: str | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[BlueprintListParams],
     ) -> list[AsyncBlueprint]:
         page = await self._client.blueprints.list(
-            limit=limit,
-            name=name,
-            starting_after=starting_after,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
+            **params,
         )
         return [AsyncBlueprint(self._client, item.id) for item in page.blueprints]
 
@@ -361,28 +302,18 @@ class AsyncStorageObjectClient:
     async def list(
         self,
         *,
-        content_type: str | Omit = omit,
-        limit: int | Omit = omit,
-        name: str | Omit = omit,
-        search: str | Omit = omit,
-        starting_after: str | Omit = omit,
-        state: str | Omit = omit,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[ObjectListParams],
     ) -> list[AsyncStorageObject]:
         page = await self._client.objects.list(
-            content_type=content_type,
-            limit=limit,
-            name=name,
-            search=search,
-            starting_after=starting_after,
-            state=state,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
             timeout=timeout,
+            **params,
         )
         return [AsyncStorageObject(self._client, item.id, upload_url=item.upload_url) for item in page.objects]
 
