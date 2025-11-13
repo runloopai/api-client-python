@@ -20,7 +20,16 @@ from ..types.shared_params.code_mount_parameters import CodeMountParameters
 
 
 class DevboxClient:
-    """High-level manager for :class:`Devbox` wrappers."""
+    """High-level manager for creating and managing Devbox instances.
+    
+    Accessed via sdk.devbox, provides methods to create devboxes from scratch,
+    blueprints, or snapshots, and to list existing devboxes.
+    
+    Example:
+        >>> sdk = RunloopSDK()
+        >>> devbox = sdk.devbox.create(name="my-devbox")
+        >>> devboxes = sdk.devbox.list(limit=10)
+    """
 
     def __init__(self, client: Runloop) -> None:
         self._client = client
@@ -228,7 +237,16 @@ class DevboxClient:
 
 
 class SnapshotClient:
-    """Manager for :class:`Snapshot` wrappers."""
+    """High-level manager for working with disk snapshots.
+    
+    Accessed via sdk.snapshot, provides methods to list snapshots and access
+    snapshot details.
+    
+    Example:
+        >>> sdk = RunloopSDK()
+        >>> snapshots = sdk.snapshot.list(devbox_id="dev-123")
+        >>> snapshot = sdk.snapshot.from_id("snap-123")
+    """
 
     def __init__(self, client: Runloop) -> None:
         self._client = client
@@ -264,7 +282,19 @@ class SnapshotClient:
 
 
 class BlueprintClient:
-    """Manager for :class:`Blueprint` wrappers."""
+    """High-level manager for creating and managing blueprints.
+    
+    Accessed via sdk.blueprint, provides methods to create blueprints with
+    Dockerfiles and system setup commands, and to list existing blueprints.
+    
+    Example:
+        >>> sdk = RunloopSDK()
+        >>> blueprint = sdk.blueprint.create(
+        ...     name="my-blueprint",
+        ...     dockerfile="FROM ubuntu:22.04\\nRUN apt-get update"
+        ... )
+        >>> blueprints = sdk.blueprint.list()
+    """
 
     def __init__(self, client: Runloop) -> None:
         self._client = client
@@ -340,7 +370,17 @@ class BlueprintClient:
 
 
 class StorageObjectClient:
-    """Manager for :class:`StorageObject` wrappers and upload helpers."""
+    """High-level manager for creating and managing storage objects.
+    
+    Accessed via sdk.storage_object, provides methods to create, upload, download,
+    and list storage objects with convenient helpers for file and text uploads.
+    
+    Example:
+        >>> sdk = RunloopSDK()
+        >>> obj = sdk.storage_object.upload_from_text("Hello!", "greeting.txt")
+        >>> content = obj.download_as_text()
+        >>> objects = sdk.storage_object.list()
+    """
 
     def __init__(self, client: Runloop) -> None:
         self._client = client
@@ -429,11 +469,24 @@ class StorageObjectClient:
 
 
 class RunloopSDK:
-    """
-    High-level synchronous entry point for the Runloop SDK.
-
-    This thin wrapper exposes the generated REST client via the ``api`` attribute.
-    Higher-level object-oriented helpers will be layered on top incrementally.
+    """High-level synchronous entry point for the Runloop SDK.
+    
+    Provides a Pythonic, object-oriented interface for managing devboxes, blueprints,
+    snapshots, and storage objects. Exposes the generated REST client via the ``api``
+    attribute for advanced use cases.
+    
+    Attributes:
+        api: Direct access to the generated REST API client.
+        devbox: High-level interface for devbox management.
+        blueprint: High-level interface for blueprint management.
+        snapshot: High-level interface for snapshot management.
+        storage_object: High-level interface for storage object management.
+        
+    Example:
+        >>> sdk = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
+        >>> with sdk.devbox.create(name="my-devbox") as devbox:
+        ...     result = devbox.cmd.exec("echo 'hello'")
+        ...     print(result.stdout())
     """
 
     api: Runloop

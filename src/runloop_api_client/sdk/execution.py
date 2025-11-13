@@ -35,8 +35,22 @@ class _StreamingGroup:
 
 
 class Execution:
-    """
-    Represents an asynchronous command execution on a devbox.
+    """Manages an asynchronous command execution on a devbox.
+    
+    Provides methods to poll execution state, wait for completion, and terminate
+    the running process. Created by devbox.cmd.exec_async().
+    
+    Attributes:
+        execution_id: The unique execution identifier.
+        devbox_id: The devbox where the command is executing.
+        
+    Example:
+        >>> execution = devbox.cmd.exec_async("python train.py")
+        >>> state = execution.get_state()
+        >>> if state.status == "running":
+        ...     execution.kill()
+        >>> result = execution.result()  # Wait for completion
+        >>> print(result.stdout())
     """
 
     def __init__(
