@@ -11,9 +11,9 @@ from ..types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes, omit, not_given
 from .._client import AsyncRunloop
-from ._helpers import LogCallback, UploadInput, normalize_upload_input
+from ._helpers import LogCallback
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
@@ -505,7 +505,7 @@ class _AsyncFileInterface:
     async def upload(
         self,
         path: str,
-        file: UploadInput,
+        file: FileTypes,
         *,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
@@ -513,11 +513,10 @@ class _AsyncFileInterface:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        file_param = normalize_upload_input(file)
         return await self._devbox._client.devboxes.upload_file(
             self._devbox.id,
             path=path,
-            file=file_param,
+            file=file,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
