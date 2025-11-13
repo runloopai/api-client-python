@@ -27,16 +27,16 @@ if TYPE_CHECKING:
 
 class Devbox:
     """High-level interface for managing a Runloop devbox.
-    
+
     This class provides a Pythonic, object-oriented API for interacting with devboxes,
     including command execution, file operations, networking, and lifecycle management.
-    
+
     The Devbox class supports context manager protocol for automatic cleanup:
         >>> with sdk.devbox.create(name="my-devbox") as devbox:
         ...     result = devbox.cmd.exec("echo 'hello'")
         ...     print(result.stdout())
         # Devbox is automatically shutdown on exit
-    
+
     Attributes:
         id: The devbox identifier.
         cmd: Command execution interface (exec, exec_async).
@@ -75,7 +75,7 @@ class Devbox:
         timeout: float | Timeout | None | NotGiven = not_given,
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
-        
+
         Returns:
             DevboxView containing the devbox's current state, status, and metadata.
         """
@@ -89,12 +89,12 @@ class Devbox:
 
     def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.
-        
+
         Blocks until the devbox is running or the polling timeout is reached.
-        
+
         Args:
             polling_config: Optional configuration for polling behavior (timeout, interval).
-            
+
         Returns:
             DevboxView with the devbox in running state.
         """
@@ -102,12 +102,12 @@ class Devbox:
 
     def await_suspended(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach suspended state.
-        
+
         Blocks until the devbox is suspended or the polling timeout is reached.
-        
+
         Args:
             polling_config: Optional configuration for polling behavior (timeout, interval).
-            
+
         Returns:
             DevboxView with the devbox in suspended state.
         """
@@ -123,7 +123,7 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> DevboxView:
         """Shutdown the devbox, terminating all processes and releasing resources.
-        
+
         Returns:
             DevboxView with the final devbox state.
         """
@@ -147,13 +147,13 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> DevboxView:
         """Suspend the devbox, pausing execution while preserving state.
-        
+
         This saves resources while maintaining the devbox state for later resumption.
         Waits for the devbox to reach suspended state before returning.
-        
+
         Args:
             polling_config: Optional configuration for polling behavior (timeout, interval).
-            
+
         Returns:
             DevboxView with the devbox in suspended state.
         """
@@ -178,12 +178,12 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> DevboxView:
         """Resume a suspended devbox, restoring it to running state.
-        
+
         Waits for the devbox to reach running state before returning.
-        
+
         Args:
             polling_config: Optional configuration for polling behavior (timeout, interval).
-            
+
         Returns:
             DevboxView with the devbox in running state.
         """
@@ -207,10 +207,10 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> object:
         """Extend the devbox timeout, preventing automatic shutdown.
-        
+
         Call this periodically for long-running workflows to prevent the devbox
         from being automatically shut down due to inactivity.
-        
+
         Returns:
             Response object confirming the keep-alive request.
         """
@@ -237,16 +237,16 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> "Snapshot":
         """Create a disk snapshot of the devbox and wait for completion.
-        
+
         Captures the current state of the devbox disk, which can be used to create
         new devboxes with the same state.
-        
+
         Args:
             commit_message: Optional message describing the snapshot.
             metadata: Optional key-value metadata to attach to the snapshot.
             name: Optional name for the snapshot.
             polling_config: Optional configuration for polling behavior (timeout, interval).
-            
+
         Returns:
             Snapshot object representing the completed snapshot.
         """
@@ -284,15 +284,15 @@ class Devbox:
         idempotency_key: str | None = None,
     ) -> "Snapshot":
         """Create a disk snapshot of the devbox asynchronously.
-        
+
         Starts the snapshot creation process and returns immediately without waiting
         for completion. Use snapshot.await_completed() to wait for completion.
-        
+
         Args:
             commit_message: Optional message describing the snapshot.
             metadata: Optional key-value metadata to attach to the snapshot.
             name: Optional name for the snapshot.
-            
+
         Returns:
             Snapshot object (snapshot may still be in progress).
         """
@@ -342,7 +342,7 @@ class Devbox:
         output: Optional[LogCallback] = None,
     ) -> Optional[_StreamingGroup]:
         """Set up background threads to stream command output to callbacks.
-        
+
         Creates separate threads for stdout and stderr streams, allowing real-time
         processing of command output through user-provided callbacks.
         """
@@ -420,11 +420,11 @@ class Devbox:
 
 class _CommandInterface:
     """Interface for executing commands on a devbox.
-    
+
     Accessed via devbox.cmd property. Provides exec() for synchronous execution
     and exec_async() for asynchronous execution with process management.
     """
-    
+
     def __init__(self, devbox: Devbox) -> None:
         self._devbox = devbox
 
@@ -445,7 +445,7 @@ class _CommandInterface:
         idempotency_key: str | None = None,
     ) -> ExecutionResult:
         """Execute a command synchronously and wait for completion.
-        
+
         Args:
             command: The shell command to execute.
             shell_name: Optional shell to use (e.g., "bash", "sh").
@@ -454,10 +454,10 @@ class _CommandInterface:
             output: Optional callback to receive combined output lines in real-time.
             polling_config: Optional configuration for polling behavior.
             attach_stdin: Whether to attach stdin for interactive commands.
-            
+
         Returns:
             ExecutionResult with exit code and captured output.
-            
+
         Example:
             >>> result = devbox.cmd.exec("ls -la")
             >>> print(result.stdout())
@@ -531,11 +531,11 @@ class _CommandInterface:
         idempotency_key: str | None = None,
     ) -> Execution:
         """Execute a command asynchronously without waiting for completion.
-        
+
         Starts command execution and returns immediately with an Execution object
         for process management. Use execution.result() to wait for completion or
         execution.kill() to terminate the process.
-        
+
         Args:
             command: The shell command to execute.
             shell_name: Optional shell to use (e.g., "bash", "sh").
@@ -543,10 +543,10 @@ class _CommandInterface:
             stderr: Optional callback to receive stderr lines in real-time.
             output: Optional callback to receive combined output lines in real-time.
             attach_stdin: Whether to attach stdin for interactive commands.
-            
+
         Returns:
             Execution object for managing the running process.
-            
+
         Example:
             >>> execution = devbox.cmd.exec_async("sleep 10")
             >>> state = execution.get_state()
@@ -580,11 +580,11 @@ class _CommandInterface:
 
 class _FileInterface:
     """Interface for file operations on a devbox.
-    
+
     Accessed via devbox.file property. Provides methods for reading, writing,
     uploading, and downloading files.
     """
-    
+
     def __init__(self, devbox: Devbox) -> None:
         self._devbox = devbox
 
@@ -599,13 +599,13 @@ class _FileInterface:
         idempotency_key: str | None = None,
     ) -> str:
         """Read a file from the devbox.
-        
+
         Args:
             path: Absolute path to the file in the devbox.
-            
+
         Returns:
             File contents as a string.
-            
+
         Example:
             >>> content = devbox.file.read("/home/user/data.txt")
             >>> print(content)
@@ -632,16 +632,16 @@ class _FileInterface:
         idempotency_key: str | None = None,
     ) -> DevboxExecutionDetailView:
         """Write contents to a file in the devbox.
-        
+
         Creates or overwrites the file at the specified path.
-        
+
         Args:
             path: Absolute path to the file in the devbox.
             contents: File contents as string or bytes (bytes are decoded as UTF-8).
-            
+
         Returns:
             Execution details for the write operation.
-            
+
         Example:
             >>> devbox.file.write("/home/user/config.json", '{"key": "value"}')
         """
@@ -672,13 +672,13 @@ class _FileInterface:
         idempotency_key: str | None = None,
     ) -> bytes:
         """Download a file from the devbox.
-        
+
         Args:
             path: Absolute path to the file in the devbox.
-            
+
         Returns:
             File contents as bytes.
-            
+
         Example:
             >>> data = devbox.file.download("/home/user/output.bin")
             >>> with open("local_output.bin", "wb") as f:
@@ -707,14 +707,14 @@ class _FileInterface:
         idempotency_key: str | None = None,
     ) -> object:
         """Upload a file to the devbox.
-        
+
         Args:
             path: Destination path in the devbox.
             file: File to upload (Path, file-like object, or bytes).
-            
+
         Returns:
             Response object confirming the upload.
-            
+
         Example:
             >>> from pathlib import Path
             >>> devbox.file.upload("/home/user/data.csv", Path("local_data.csv"))
@@ -733,10 +733,10 @@ class _FileInterface:
 
 class _NetworkInterface:
     """Interface for network operations on a devbox.
-    
+
     Accessed via devbox.net property. Provides methods for SSH access and tunneling.
     """
-    
+
     def __init__(self, devbox: Devbox) -> None:
         self._devbox = devbox
 
@@ -750,10 +750,10 @@ class _NetworkInterface:
         idempotency_key: str | None = None,
     ) -> DevboxCreateSSHKeyResponse:
         """Create an SSH key for remote access to the devbox.
-        
+
         Returns:
             SSH key response containing the SSH URL and credentials.
-            
+
         Example:
             >>> ssh_key = devbox.net.create_ssh_key()
             >>> print(f"SSH URL: {ssh_key.url}")
@@ -778,13 +778,13 @@ class _NetworkInterface:
         idempotency_key: str | None = None,
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
-        
+
         Args:
             port: The port number in the devbox to expose.
-            
+
         Returns:
             DevboxTunnelView containing the public URL for the tunnel.
-            
+
         Example:
             >>> tunnel = devbox.net.create_tunnel(port=8080)
             >>> print(f"Public URL: {tunnel.url}")
@@ -810,13 +810,13 @@ class _NetworkInterface:
         idempotency_key: str | None = None,
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
-        
+
         Args:
             port: The port number of the tunnel to remove.
-            
+
         Returns:
             Response object confirming the tunnel removal.
-            
+
         Example:
             >>> devbox.net.remove_tunnel(port=8080)
         """

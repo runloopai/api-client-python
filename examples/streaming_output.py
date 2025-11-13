@@ -13,44 +13,45 @@ This example demonstrates streaming command output in real-time:
 import os
 import asyncio
 from datetime import datetime
+
 from runloop_api_client import RunloopSDK, AsyncRunloopSDK
 
 
 def demonstrate_basic_streaming(sdk: RunloopSDK):
     """Demonstrate basic stdout streaming."""
     print("=== Basic Stdout Streaming ===")
-    
+
     with sdk.devbox.create(name="streaming-basic-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         # Simple callback to print output
         def print_output(line: str):
             timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
             print(f"[{timestamp}] {line.rstrip()}")
-        
+
         # Execute command with streaming
         print("Streaming command output:")
         result = devbox.cmd.exec(
-            "for i in 1 2 3 4 5; do echo \"Processing item $i\"; sleep 0.5; done",
+            'for i in 1 2 3 4 5; do echo "Processing item $i"; sleep 0.5; done',
             stdout=print_output,
         )
-        
+
         print(f"\nCommand completed with exit code: {result.exit_code}")
 
 
 def demonstrate_stderr_streaming(sdk: RunloopSDK):
     """Demonstrate stderr streaming separately."""
     print("\n=== Separate Stdout and Stderr Streaming ===")
-    
+
     with sdk.devbox.create(name="streaming-stderr-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         def handle_stdout(line: str):
             print(f"[STDOUT] {line.rstrip()}")
-        
+
         def handle_stderr(line: str):
             print(f"[STDERR] {line.rstrip()}")
-        
+
         # Command that writes to both stdout and stderr
         print("Streaming stdout and stderr separately:")
         result = devbox.cmd.exec(
@@ -63,25 +64,25 @@ def demonstrate_stderr_streaming(sdk: RunloopSDK):
             stdout=handle_stdout,
             stderr=handle_stderr,
         )
-        
+
         print(f"\nCommand completed with exit code: {result.exit_code}")
 
 
 def demonstrate_combined_streaming(sdk: RunloopSDK):
     """Demonstrate combined output streaming."""
     print("\n=== Combined Output Streaming ===")
-    
+
     with sdk.devbox.create(name="streaming-combined-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         # Track all output
         all_output = []
-        
+
         def capture_all(line: str):
             timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
             all_output.append((timestamp, line.rstrip()))
             print(f"[{timestamp}] {line.rstrip()}")
-        
+
         # Use the 'output' parameter to capture both stdout and stderr
         print("Streaming combined output:")
         result = devbox.cmd.exec(
@@ -94,7 +95,7 @@ def demonstrate_combined_streaming(sdk: RunloopSDK):
             """,
             output=capture_all,
         )
-        
+
         print(f"\nCommand completed with exit code: {result.exit_code}")
         print(f"Captured {len(all_output)} lines of output")
 
@@ -102,10 +103,10 @@ def demonstrate_combined_streaming(sdk: RunloopSDK):
 def demonstrate_output_processing(sdk: RunloopSDK):
     """Demonstrate processing streaming output."""
     print("\n=== Processing Streaming Output ===")
-    
+
     with sdk.devbox.create(name="streaming-processing-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         # Process and analyze output
         stats = {
             "total_lines": 0,
@@ -113,11 +114,11 @@ def demonstrate_output_processing(sdk: RunloopSDK):
             "warning_lines": 0,
             "info_lines": 0,
         }
-        
+
         def analyze_output(line: str):
             stats["total_lines"] += 1
             line_lower = line.lower()
-            
+
             if "error" in line_lower:
                 stats["error_lines"] += 1
                 print(f"❌ ERROR: {line.rstrip()}")
@@ -127,7 +128,7 @@ def demonstrate_output_processing(sdk: RunloopSDK):
             else:
                 stats["info_lines"] += 1
                 print(f"ℹ️  INFO: {line.rstrip()}")
-        
+
         # Execute a script that produces different types of output
         print("Analyzing output in real-time:")
         result = devbox.cmd.exec(
@@ -142,7 +143,7 @@ def demonstrate_output_processing(sdk: RunloopSDK):
             """,
             stdout=analyze_output,
         )
-        
+
         print(f"\nCommand completed with exit code: {result.exit_code}")
         print(f"\nOutput Statistics:")
         print(f"  Total lines: {stats['total_lines']}")
@@ -154,12 +155,12 @@ def demonstrate_output_processing(sdk: RunloopSDK):
 def demonstrate_long_running_stream(sdk: RunloopSDK):
     """Demonstrate streaming output from a long-running command."""
     print("\n=== Long-running Command Streaming ===")
-    
+
     with sdk.devbox.create(name="streaming-longrun-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         progress_items = []
-        
+
         def track_progress(line: str):
             line = line.rstrip()
             if "Progress:" in line:
@@ -168,7 +169,7 @@ def demonstrate_long_running_stream(sdk: RunloopSDK):
                 print(f"📊 {line}")
             else:
                 print(f"   {line}")
-        
+
         print("Streaming output from long-running task:")
         result = devbox.cmd.exec(
             """
@@ -181,7 +182,7 @@ def demonstrate_long_running_stream(sdk: RunloopSDK):
             """,
             stdout=track_progress,
         )
-        
+
         print(f"\nCommand completed with exit code: {result.exit_code}")
         print(f"Tracked {len(progress_items)} progress updates")
 
@@ -189,21 +190,21 @@ def demonstrate_long_running_stream(sdk: RunloopSDK):
 async def demonstrate_async_streaming():
     """Demonstrate async streaming with async callbacks."""
     print("\n=== Async Streaming ===")
-    
+
     sdk = AsyncRunloopSDK()
-    
+
     async with sdk.devbox.create(name="async-streaming-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
-        
+
         # Async callback with async operations
         output_queue = asyncio.Queue()
-        
+
         async def async_capture(line: str):
             # Simulate async processing (e.g., writing to a database)
             await asyncio.sleep(0.01)
             await output_queue.put(line.rstrip())
             print(f"[ASYNC] {line.rstrip()}")
-        
+
         # Start processing task
         async def process_queue():
             processed = []
@@ -214,16 +215,16 @@ async def demonstrate_async_streaming():
                 except asyncio.TimeoutError:
                     break
             return processed
-        
+
         processor = asyncio.create_task(process_queue())
-        
+
         # Execute with async streaming
         print("Streaming with async callbacks:")
         await devbox.cmd.exec(
-            "for i in 1 2 3 4 5; do echo \"Async line $i\"; sleep 0.2; done",
+            'for i in 1 2 3 4 5; do echo "Async line $i"; sleep 0.2; done',
             stdout=async_capture,
         )
-        
+
         # Wait for queue processing
         processed = await processor
         print(f"\nProcessed {len(processed)} lines asynchronously")
@@ -233,25 +234,25 @@ def main():
     # Initialize the SDK
     sdk = RunloopSDK()
     print("Initialized Runloop SDK\n")
-    
+
     # Run synchronous streaming demonstrations
     demonstrate_basic_streaming(sdk)
     demonstrate_stderr_streaming(sdk)
     demonstrate_combined_streaming(sdk)
     demonstrate_output_processing(sdk)
     demonstrate_long_running_stream(sdk)
-    
+
     print("\nSynchronous streaming examples completed!")
 
 
 async def async_main():
     """Run async streaming demonstrations."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Running Async Examples")
-    print("="*60 + "\n")
-    
+    print("=" * 60 + "\n")
+
     await demonstrate_async_streaming()
-    
+
     print("\nAsync streaming examples completed!")
 
 
@@ -262,18 +263,17 @@ if __name__ == "__main__":
         print("Please set it to your Runloop API key:")
         print("  export RUNLOOP_API_KEY=your-api-key")
         exit(1)
-    
+
     try:
         # Run synchronous examples
         main()
-        
+
         # Run async examples
         asyncio.run(async_main())
-        
-        print("\n" + "="*60)
+
+        print("\n" + "=" * 60)
         print("All streaming examples completed successfully!")
-        print("="*60)
+        print("=" * 60)
     except Exception as e:
         print(f"\nError: {e}")
         raise
-

@@ -11,13 +11,14 @@ This example demonstrates blueprint creation and management:
 """
 
 import os
+
 from runloop_api_client import RunloopSDK
 
 
 def create_simple_blueprint(sdk: RunloopSDK):
     """Create a simple blueprint with a Dockerfile."""
     print("=== Creating Simple Blueprint ===")
-    
+
     dockerfile = """FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \\
@@ -28,26 +29,26 @@ RUN apt-get update && apt-get install -y \\
 
 WORKDIR /home/user
 """
-    
+
     blueprint = sdk.blueprint.create(
         name="simple-python-blueprint",
         dockerfile=dockerfile,
     )
-    
+
     print(f"Created blueprint: {blueprint.id}")
-    
+
     # Get blueprint info
     info = blueprint.get_info()
     print(f"Blueprint name: {info.name}")
     print(f"Blueprint status: {info.status}")
-    
+
     return blueprint
 
 
 def create_blueprint_with_setup(sdk: RunloopSDK):
     """Create a blueprint with system setup commands."""
     print("\n=== Creating Blueprint with System Setup ===")
-    
+
     dockerfile = """FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \\
@@ -56,7 +57,7 @@ RUN apt-get update && apt-get install -y \\
 
 WORKDIR /home/user
 """
-    
+
     blueprint = sdk.blueprint.create(
         name="ml-environment-blueprint",
         dockerfile=dockerfile,
@@ -66,9 +67,9 @@ WORKDIR /home/user
             "echo 'ML environment ready!'",
         ],
     )
-    
+
     print(f"Created blueprint: {blueprint.id}")
-    
+
     # View build logs
     print("\nRetrieving build logs...")
     logs = blueprint.logs()
@@ -78,14 +79,14 @@ WORKDIR /home/user
             print(f"  {i}. {log_entry.message[:80]}...")
         if len(logs.logs) > 5:
             print(f"  ... and {len(logs.logs) - 5} more log entries")
-    
+
     return blueprint
 
 
 def create_blueprint_from_base(sdk: RunloopSDK):
     """Create a blueprint based on an existing blueprint."""
     print("\n=== Creating Blueprint from Base ===")
-    
+
     # First create a base blueprint
     base_blueprint = sdk.blueprint.create(
         name="base-nodejs-blueprint",
@@ -99,9 +100,9 @@ RUN apt-get update && apt-get install -y \\
 WORKDIR /home/user
 """,
     )
-    
+
     print(f"Created base blueprint: {base_blueprint.id}")
-    
+
     # Create a derived blueprint
     derived_blueprint = sdk.blueprint.create(
         name="nodejs-with-tools-blueprint",
@@ -112,29 +113,29 @@ WORKDIR /home/user
             "echo 'Node.js with tools ready!'",
         ],
     )
-    
+
     print(f"Created derived blueprint: {derived_blueprint.id}")
-    
+
     return base_blueprint, derived_blueprint
 
 
 def use_blueprint_to_create_devbox(sdk: RunloopSDK, blueprint):
     """Create and use a devbox from a blueprint."""
     print("\n=== Creating Devbox from Blueprint ===")
-    
+
     # Create devbox from blueprint
     devbox = blueprint.create_devbox(name="devbox-from-blueprint")
-    
+
     print(f"Created devbox: {devbox.id}")
-    
+
     try:
         # Verify the devbox has the expected environment
         result = devbox.cmd.exec("python3 --version")
         print(f"Python version: {result.stdout().strip()}")
-        
+
         result = devbox.cmd.exec("which pip3")
         print(f"pip3 location: {result.stdout().strip()}")
-        
+
         # Run a simple Python command
         result = devbox.cmd.exec("python3 -c 'import sys; print(sys.version)'")
         print(f"Python sys.version: {result.stdout().strip()}")
@@ -147,9 +148,9 @@ def use_blueprint_to_create_devbox(sdk: RunloopSDK, blueprint):
 def list_blueprints(sdk: RunloopSDK):
     """List all available blueprints."""
     print("\n=== Listing Blueprints ===")
-    
+
     blueprints = sdk.blueprint.list(limit=5)
-    
+
     print(f"Found {len(blueprints)} blueprints:")
     for bp in blueprints:
         info = bp.get_info()
@@ -159,7 +160,7 @@ def list_blueprints(sdk: RunloopSDK):
 def cleanup_blueprints(sdk: RunloopSDK, blueprints):
     """Delete blueprints to clean up."""
     print("\n=== Cleaning Up Blueprints ===")
-    
+
     for blueprint in blueprints:
         try:
             info = blueprint.get_info()
@@ -174,33 +175,33 @@ def main():
     # Initialize the SDK
     sdk = RunloopSDK()
     print("Initialized Runloop SDK\n")
-    
+
     created_blueprints = []
-    
+
     try:
         # Create simple blueprint
         simple_bp = create_simple_blueprint(sdk)
         created_blueprints.append(simple_bp)
-        
+
         # Create blueprint with setup commands
         ml_bp = create_blueprint_with_setup(sdk)
         created_blueprints.append(ml_bp)
-        
+
         # Create blueprint from base
         base_bp, derived_bp = create_blueprint_from_base(sdk)
         created_blueprints.extend([base_bp, derived_bp])
-        
+
         # Use a blueprint to create a devbox
         use_blueprint_to_create_devbox(sdk, simple_bp)
-        
+
         # List all blueprints
         list_blueprints(sdk)
-        
+
     finally:
         # Cleanup all created blueprints
         if created_blueprints:
             cleanup_blueprints(sdk, created_blueprints)
-    
+
     print("\nBlueprint example completed!")
 
 
@@ -211,10 +212,9 @@ if __name__ == "__main__":
         print("Please set it to your Runloop API key:")
         print("  export RUNLOOP_API_KEY=your-api-key")
         exit(1)
-    
+
     try:
         main()
     except Exception as e:
         print(f"\nError: {e}")
         raise
-
