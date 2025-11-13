@@ -30,4 +30,3 @@ class TestRunloopSDKInitialization:
         assert sdk_client.api.devboxes is not None
         assert sdk_client.api.blueprints is not None
         assert sdk_client.api.objects is not None
-

@@ -92,6 +92,7 @@ class TestBlueprintLifecycle:
         info = sdk_client.api.blueprints.retrieve(blueprint_id)
         assert info.state == "deleted"
 
+
 class TestBlueprintCreationVariations:
     """Test different blueprint creation scenarios."""
 
