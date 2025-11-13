@@ -14,7 +14,7 @@ import httpx
 
 from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk import Devbox
-from runloop_api_client._types import NotGiven
+from runloop_api_client._types import NotGiven, Omit
 
 
 class TestCommandInterface:
@@ -31,7 +31,7 @@ class TestCommandInterface:
         assert result.stdout() == "output"
         call_kwargs = mock_client.devboxes.execute_and_await_completion.call_args[1]
         assert call_kwargs["command"] == "echo hello"
-        assert isinstance(call_kwargs["shell_name"], NotGiven) or call_kwargs["shell_name"] is None
+        assert isinstance(call_kwargs["shell_name"], Omit)
         assert call_kwargs["polling_config"] is None
         assert isinstance(call_kwargs["timeout"], NotGiven)
 

@@ -120,7 +120,7 @@ class TestSnapshotClient:
 
     def test_list(self, mock_client: Mock, snapshot_view: MockSnapshotView) -> None:
         """Test list method."""
-        page = SimpleNamespace(disk_snapshots=[snapshot_view])
+        page = SimpleNamespace(snapshots=[snapshot_view])
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
         client = SnapshotClient(mock_client)
