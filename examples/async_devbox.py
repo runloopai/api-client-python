@@ -22,7 +22,7 @@ async def demonstrate_basic_async():
     sdk = AsyncRunloopSDK()
 
     # Create a devbox with async context manager
-    async with sdk.devbox.create(name="async-example-devbox") as devbox:
+    async with await sdk.devbox.create(name="async-example-devbox") as devbox:
         print(f"Created devbox: {devbox.id}")
 
         # Execute command asynchronously
@@ -47,7 +47,7 @@ async def demonstrate_concurrent_commands():
 
     sdk = AsyncRunloopSDK()
 
-    async with sdk.devbox.create(name="concurrent-commands-devbox") as devbox:
+    async with await sdk.devbox.create(name="concurrent-commands-devbox") as devbox:
         print(f"Created devbox: {devbox.id}")
 
         # Execute multiple commands concurrently
@@ -76,7 +76,7 @@ async def demonstrate_multiple_devboxes():
 
     async def create_and_use_devbox(name: str, number: int):
         """Create a devbox, run a command, and return the result."""
-        async with sdk.devbox.create(name=name) as devbox:
+        async with await sdk.devbox.create(name=name) as devbox:
             print(f"Devbox {number} ({devbox.id}): Created")
 
             # Run a command
@@ -97,18 +97,18 @@ async def demonstrate_multiple_devboxes():
 
 
 async def demonstrate_async_streaming():
-    """Demonstrate real-time command output streaming with async callbacks."""
+    """Demonstrate real-time command output streaming with synchronous callbacks."""
     print("=== Async Command Streaming ===")
 
     sdk = AsyncRunloopSDK()
 
-    async with sdk.devbox.create(name="streaming-devbox") as devbox:
+    async with await sdk.devbox.create(name="streaming-devbox") as devbox:
         print(f"Created devbox: {devbox.id}")
 
-        # Async callback to capture output
-        output_lines = []
+        # Synchronous callback to capture output (callbacks must be sync, not async)
+        output_lines: list[str] = []
 
-        async def capture_output(line: str):
+        def capture_output(line: str):
             print(f"[STREAM] {line.strip()}")
             output_lines.append(line)
 
@@ -128,7 +128,7 @@ async def demonstrate_async_execution():
 
     sdk = AsyncRunloopSDK()
 
-    async with sdk.devbox.create(name="async-exec-devbox") as devbox:
+    async with await sdk.devbox.create(name="async-exec-devbox") as devbox:
         print(f"Created devbox: {devbox.id}")
 
         # Start an async execution

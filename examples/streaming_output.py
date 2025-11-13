@@ -7,7 +7,7 @@ This example demonstrates streaming command output in real-time:
 - Streaming stderr
 - Streaming combined output
 - Processing output line-by-line
-- Async streaming callbacks
+- Using synchronous callbacks (async callbacks not supported)
 """
 
 import os
@@ -76,7 +76,7 @@ def demonstrate_combined_streaming(sdk: RunloopSDK):
         print(f"Created devbox: {devbox.id}\n")
 
         # Track all output
-        all_output = []
+        all_output: list[tuple[str, str]] = []
 
         def capture_all(line: str):
             timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
@@ -159,7 +159,7 @@ def demonstrate_long_running_stream(sdk: RunloopSDK):
     with sdk.devbox.create(name="streaming-longrun-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
 
-        progress_items = []
+        progress_items: list[str] = []
 
         def track_progress(line: str):
             line = line.rstrip()
@@ -188,46 +188,35 @@ def demonstrate_long_running_stream(sdk: RunloopSDK):
 
 
 async def demonstrate_async_streaming():
-    """Demonstrate async streaming with async callbacks."""
-    print("\n=== Async Streaming ===")
+    """Demonstrate async devbox with synchronous callbacks.
+
+    Note: Callbacks must be synchronous functions, not async.
+    Use thread-safe queues if you need to process output asynchronously.
+    """
+    print("\n=== Async Devbox with Synchronous Callbacks ===")
 
     sdk = AsyncRunloopSDK()
 
-    async with sdk.devbox.create(name="async-streaming-devbox") as devbox:
+    async with await sdk.devbox.create(name="async-streaming-devbox") as devbox:
         print(f"Created devbox: {devbox.id}\n")
 
-        # Async callback with async operations
-        output_queue = asyncio.Queue()
+        # Synchronous callback (callbacks must be sync, not async)
+        output_lines: list[str] = []
 
-        async def async_capture(line: str):
-            # Simulate async processing (e.g., writing to a database)
-            await asyncio.sleep(0.01)
-            await output_queue.put(line.rstrip())
-            print(f"[ASYNC] {line.rstrip()}")
+        def capture_output(line: str):
+            # Callback must be synchronous
+            output_lines.append(line.rstrip())
+            print(f"[CAPTURED] {line.rstrip()}")
 
-        # Start processing task
-        async def process_queue():
-            processed = []
-            while True:
-                try:
-                    line = await asyncio.wait_for(output_queue.get(), timeout=2.0)
-                    processed.append(line)
-                except asyncio.TimeoutError:
-                    break
-            return processed
-
-        processor = asyncio.create_task(process_queue())
-
-        # Execute with async streaming
-        print("Streaming with async callbacks:")
+        # Execute with synchronous callback
+        print("Streaming with synchronous callbacks:")
         await devbox.cmd.exec(
-            'for i in 1 2 3 4 5; do echo "Async line $i"; sleep 0.2; done',
-            stdout=async_capture,
+            'for i in 1 2 3 4 5; do echo "Line $i"; sleep 0.2; done',
+            stdout=capture_output,
         )
 
-        # Wait for queue processing
-        processed = await processor
-        print(f"\nProcessed {len(processed)} lines asynchronously")
+        print(f"\nCaptured {len(output_lines)} lines")
+        print(f"Output: {output_lines}")
 
 
 def main():

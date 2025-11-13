@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 from runloop_api_client import RunloopSDK
+from runloop_api_client.sdk import StorageObject
 
 
 def demonstrate_text_upload(sdk: RunloopSDK):
@@ -90,7 +91,8 @@ Line 4
         info = obj.refresh()
         print(f"Object name: {info.name}")
         print(f"Content type: {info.content_type}")
-        print(f"Metadata: {info.metadata}")
+        # TODO: Add metadata to the object
+        # print(f"Metadata: {info.metadata}")
 
         return obj
     finally:
@@ -110,7 +112,7 @@ def demonstrate_manual_upload(sdk: RunloopSDK):
     )
 
     print(f"Created storage object: {obj.id}")
-    print(f"Upload URL: {obj.upload_url[:50]}...")
+    print(f"Upload URL: {obj.upload_url[:50] if obj.upload_url is not None else 'None'}...")
 
     # Step 2: Upload content to the presigned URL
     content = b"This content was uploaded manually using the upload flow."
@@ -242,7 +244,7 @@ def list_storage_objects(sdk: RunloopSDK):
         print(f"  - {info.name} ({obj.id}): {info.content_type}")
 
 
-def cleanup_storage_objects(sdk: RunloopSDK, objects):
+def cleanup_storage_objects(objects: list[StorageObject]):
     """Delete storage objects to clean up."""
     print("\n=== Cleaning Up Storage Objects ===")
 
@@ -261,7 +263,7 @@ def main():
     sdk = RunloopSDK()
     print("Initialized Runloop SDK\n")
 
-    created_objects = []
+    created_objects: list[StorageObject] = []
 
     try:
         # Demonstrate different upload methods
@@ -290,7 +292,7 @@ def main():
     finally:
         # Cleanup all created objects
         if created_objects:
-            cleanup_storage_objects(sdk, created_objects)
+            cleanup_storage_objects(created_objects)
 
     print("\nStorage object example completed!")
 
