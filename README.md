@@ -31,6 +31,23 @@ The full API of this library can be found in [api.md](api.md).
 For a higher-level, Pythonic interface, check out the new [`RunloopSDK`](README-SDK.md) which layers an object-oriented API on top of the generated client (including synchronous and asynchronous variants).
 
 ```python
+from runloop_api_client import RunloopSDK
+
+sdk = RunloopSDK()  # Uses RUNLOOP_API_KEY environment variable by default
+
+# Create a devbox and execute commands with a clean, object-oriented interface
+with sdk.devbox.create(name="my-devbox") as devbox:
+    result = devbox.cmd.exec("echo 'Hello from Runloop!'")
+    print(result.stdout())
+```
+
+**See the [SDK documentation](README-SDK.md) for complete examples and API reference.**
+
+### REST API Client
+
+Alternatively, you can use the generated REST API client directly:
+
+```python
 import os
 from runloop_api_client import Runloop
 
