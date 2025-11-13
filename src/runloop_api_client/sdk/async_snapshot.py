@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
 from .._client import AsyncRunloop
 from ..lib.polling import PollingConfig
+from ..types.shared_params.mount import Mount
 from ..types.devbox_snapshot_view import DevboxSnapshotView
 from ..types.shared_params.launch_parameters import LaunchParameters
 from ..types.shared_params.code_mount_parameters import CodeMountParameters
@@ -120,6 +121,7 @@ class AsyncSnapshot:
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
@@ -141,6 +143,7 @@ class AsyncSnapshot:
             file_mounts=file_mounts,
             launch_parameters=launch_parameters,
             metadata=metadata,
+            mounts=mounts,
             name=name,
             repo_connection_id=repo_connection_id,
             secrets=secrets,
