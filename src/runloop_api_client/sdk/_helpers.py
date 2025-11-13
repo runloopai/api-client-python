@@ -2,14 +2,10 @@ from __future__ import annotations
 
 import io
 import os
-from typing import IO, Dict, Union, Literal, Callable, cast
+from typing import Dict, Union, Literal, Callable
 from pathlib import Path
 
-from .._types import FileTypes
-from .._utils import file_from_path
-
 LogCallback = Callable[[str], None]
-UploadInput = Union[FileTypes, str, os.PathLike[str], Path, bytes, bytearray, io.IOBase]
 
 ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
 UploadData = Union[str, bytes, bytearray, Path, os.PathLike[str], io.IOBase]
@@ -59,28 +55,3 @@ def read_upload_data(data: UploadData) -> bytes:
             return result.encode("utf-8")
         return result
     raise TypeError("Unsupported upload data type. Provide str, bytes, path, or file-like object.")
-
-
-def normalize_upload_input(file: UploadInput) -> FileTypes:
-    """
-    Normalize a variety of Python file representations into the generated client's FileTypes.
-    """
-    if isinstance(file, tuple):
-        return file
-    if isinstance(file, bytes):
-        return file
-    if isinstance(file, bytearray):
-        return bytes(file)
-    if isinstance(file, (str, Path, os.PathLike)):
-        path_str = str(file)
-        return file_from_path(path_str)
-    if isinstance(file, io.TextIOBase):
-        return file.read().encode("utf-8")
-    if isinstance(file, io.BufferedIOBase) or isinstance(file, io.RawIOBase):
-        return cast(IO[bytes], file)
-    if isinstance(file, io.IOBase) and hasattr(file, "read"):
-        data = file.read()
-        if isinstance(data, str):
-            return data.encode("utf-8")
-        return data
-    raise TypeError("Unsupported file type for upload. Provide path, bytes, or file-like object.")

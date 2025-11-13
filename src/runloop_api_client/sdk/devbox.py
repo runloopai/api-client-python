@@ -11,9 +11,9 @@ from ..types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
+from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes, omit, not_given
 from .._client import Runloop
-from ._helpers import LogCallback, UploadInput, normalize_upload_input
+from ._helpers import LogCallback
 from .execution import Execution, _StreamingGroup
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
@@ -498,7 +498,7 @@ class _FileInterface:
     def upload(
         self,
         path: str,
-        file: UploadInput,
+        file: FileTypes,
         *,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
@@ -506,11 +506,10 @@ class _FileInterface:
         timeout: float | Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        file_param = normalize_upload_input(file)
         return self._devbox._client.devboxes.upload_file(
             self._devbox.id,
             path=path,
-            file=file_param,
+            file=file,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
