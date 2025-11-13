@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ._sync import RunloopSDK, DevboxClient, SnapshotClient, BlueprintClient, StorageObjectClient
-from ._async import (
+from .sync import RunloopSDK, DevboxClient, SnapshotClient, BlueprintClient, StorageObjectClient
+from .async_ import (
     AsyncRunloopSDK,
     AsyncDevboxClient,
     AsyncSnapshotClient,
@@ -22,26 +22,29 @@ from .async_storage_object import AsyncStorageObject
 from .async_execution_result import AsyncExecutionResult
 
 __all__ = [
+    # Main SDK entry points
     "RunloopSDK",
     "AsyncRunloopSDK",
-    "Devbox",
+    # Management interfaces
     "DevboxClient",
-    "Execution",
-    "ExecutionResult",
-    "Blueprint",
-    "BlueprintClient",
-    "Snapshot",
-    "SnapshotClient",
-    "StorageObject",
-    "StorageObjectClient",
-    "AsyncDevbox",
     "AsyncDevboxClient",
-    "AsyncExecution",
-    "AsyncExecutionResult",
-    "AsyncBlueprint",
+    "BlueprintClient",
     "AsyncBlueprintClient",
-    "AsyncSnapshot",
+    "SnapshotClient",
     "AsyncSnapshotClient",
-    "AsyncStorageObject",
+    "StorageObjectClient",
     "AsyncStorageObjectClient",
+    # Resource classes
+    "Devbox",
+    "AsyncDevbox",
+    "Execution",
+    "AsyncExecution",
+    "ExecutionResult",
+    "AsyncExecutionResult",
+    "Blueprint",
+    "AsyncBlueprint",
+    "Snapshot",
+    "AsyncSnapshot",
+    "StorageObject",
+    "AsyncStorageObject",
 ]
