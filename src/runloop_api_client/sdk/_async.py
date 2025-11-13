@@ -217,7 +217,7 @@ class AsyncDevboxClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [AsyncDevbox(self._client, item.id) for item in getattr(page, "devboxes", [])]
+        return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
 
 
 class AsyncSnapshotClient:
@@ -250,7 +250,7 @@ class AsyncSnapshotClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [AsyncSnapshot(self._client, item.id) for item in getattr(page, "disk_snapshots", [])]
+        return [AsyncSnapshot(self._client, item.id) for item in page.snapshots]
 
     def from_id(self, snapshot_id: str) -> AsyncSnapshot:
         return AsyncSnapshot(self._client, snapshot_id)
@@ -329,7 +329,7 @@ class AsyncBlueprintClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [AsyncBlueprint(self._client, item.id) for item in getattr(page, "blueprints", [])]
+        return [AsyncBlueprint(self._client, item.id) for item in page.blueprints]
 
 
 class AsyncStorageObjectClient:
@@ -378,7 +378,7 @@ class AsyncStorageObjectClient:
             extra_body=extra_body,
             timeout=timeout,
         )
-        return [AsyncStorageObject(self._client, item.id, upload_url=None) for item in getattr(page, "objects", [])]
+        return [AsyncStorageObject(self._client, item.id, upload_url=item.upload_url) for item in page.objects]
 
     async def upload_from_file(
         self,
