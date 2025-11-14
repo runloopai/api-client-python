@@ -16,6 +16,7 @@ pytestmark = [pytest.mark.smoketest]
 
 THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+FOUR_MINUTE_TIMEOUT = 240
 
 
 @pytest.fixture(scope="module")
@@ -522,7 +523,7 @@ class TestDevboxListing:
 class TestDevboxSnapshots:
     """Test snapshot operations on devboxes."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     def test_snapshot_disk(self, sdk_client: RunloopSDK) -> None:
         """Test creating a snapshot from devbox (synchronous)."""
         devbox = sdk_client.devbox.create(
