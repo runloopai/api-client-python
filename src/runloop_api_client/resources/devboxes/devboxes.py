@@ -802,6 +802,7 @@ class DevboxesResource(SyncAPIResource):
         devbox_id: str,
         *,
         command: str,
+        command_id: str = str(uuid7()),
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -816,11 +817,10 @@ class DevboxesResource(SyncAPIResource):
         """
         Execute a command and wait for it to complete with optimal latency for long running commands.
 
-        This method launches an execution with a generated command_id and first attempts to
+        This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
-        command_id = str(uuid7())  # type: ignore
         execution = self.execute(
             devbox_id,
             command=command,
@@ -2288,6 +2288,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         devbox_id: str,
         *,
         command: str,
+        command_id: str = str(uuid7()),
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -2302,12 +2303,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         Execute a command and wait for it to complete with optimal latency for long running commands.
 
-        This method launches an execution with a generated command_id and first attempts to
+        This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
         """
 
-        command_id = str(uuid7())  # type: ignore
         execution = await self.execute(
             devbox_id,
             command=command,
