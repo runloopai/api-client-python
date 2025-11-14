@@ -820,6 +820,9 @@ class DevboxesResource(SyncAPIResource):
         This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
+
+        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        You can provide your own command_id to enable custom retry logic or external tracking.
         """
         execution = self.execute(
             devbox_id,
@@ -2306,6 +2309,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
+
+        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        You can provide your own command_id to enable custom retry logic or external tracking.
         """
 
         execution = await self.execute(
