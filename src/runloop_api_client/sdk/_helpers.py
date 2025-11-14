@@ -5,6 +5,7 @@ import os
 from typing import Dict, Union, Literal, Callable
 from pathlib import Path
 
+# Callback for streaming output. Must be synchronous even in async contexts.
 LogCallback = Callable[[str], None]
 
 ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
