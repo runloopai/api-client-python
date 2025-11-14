@@ -1,3 +1,4 @@
+"""Synchronous devbox resource class."""
 from __future__ import annotations
 
 import logging
