@@ -419,7 +419,8 @@ class ExecutionsResource(SyncAPIResource):
         Tails the stderr logs for the given execution with SSE streaming
 
         Args:
-          offset: The byte offset to start the stream from
+          offset: The byte offset to start the stream from (if unspecified, starts from the
+              beginning of the stream)
 
           extra_headers: Send extra headers
 
@@ -503,7 +504,8 @@ class ExecutionsResource(SyncAPIResource):
         Tails the stdout logs for the given execution with SSE streaming
 
         Args:
-          offset: The byte offset to start the stream from
+          offset: The byte offset to start the stream from (if unspecified, starts from the
+              beginning of the stream)
 
           extra_headers: Send extra headers
 
@@ -939,7 +941,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Tails the stderr logs for the given execution with SSE streaming
 
         Args:
-          offset: The byte offset to start the stream from
+          offset: The byte offset to start the stream from (if unspecified, starts from the
+              beginning of the stream)
 
           extra_headers: Send extra headers
 
@@ -1023,7 +1026,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
         Tails the stdout logs for the given execution with SSE streaming
 
         Args:
-          offset: The byte offset to start the stream from
+          offset: The byte offset to start the stream from (if unspecified, starts from the
+              beginning of the stream)
 
           extra_headers: Send extra headers
 

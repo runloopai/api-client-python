@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.67.0 (2025-11-14)
+
+Full Changelog: [v0.66.1...v0.67.0](https://github.com/runloopai/api-client-python/compare/v0.66.1...v0.67.0)
+
+### Features
+
+* **api:** api update ([516c20b](https://github.com/runloopai/api-client-python/commit/516c20b3095d7e75b0e15647621bf92e0d79f5f4))
+* **blueprint:** adds queued state ([5893559](https://github.com/runloopai/api-client-python/commit/5893559e8839260876947d31f1090dd343f1cf43))
+
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([30f9ee5](https://github.com/runloopai/api-client-python/commit/30f9ee5b6cc5f42ce642b918c4e0194a4ab8bc7a))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([7152280](https://github.com/runloopai/api-client-python/commit/71522809d211f5bbad89be807559ca2de591729f))
+* **internal:** grammar fix (it's -&gt; its) ([fd6963f](https://github.com/runloopai/api-client-python/commit/fd6963f1777dedc2db5b86dc222a5e70521134ba))
+* **package:** drop Python 3.8 support ([5026669](https://github.com/runloopai/api-client-python/commit/50266693caae9b3c6e6506cb58f096f1d439dcd0))
+
 ## 0.66.1 (2025-10-23)
 
 Full Changelog: [v0.66.0...v0.66.1](https://github.com/runloopai/api-client-python/compare/v0.66.0...v0.66.1)
