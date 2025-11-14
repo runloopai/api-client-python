@@ -17,7 +17,7 @@ from tests.sdk.conftest import (
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import AsyncDevbox, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
-from runloop_api_client.sdk._async import (
+from runloop_api_client.sdk.async_ import (
     AsyncRunloopSDK,
     AsyncDevboxClient,
     AsyncSnapshotClient,
