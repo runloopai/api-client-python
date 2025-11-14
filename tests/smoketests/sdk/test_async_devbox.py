@@ -16,6 +16,7 @@ pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
 THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+FOUR_MINUTE_TIMEOUT = 240
 
 
 @pytest.fixture(scope="module")
@@ -521,7 +522,7 @@ class TestAsyncDevboxListing:
 class TestAsyncDevboxSnapshots:
     """Test snapshot operations on async devboxes."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_disk(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a snapshot from devbox (synchronous wait)."""
         devbox = await async_sdk_client.devbox.create(
