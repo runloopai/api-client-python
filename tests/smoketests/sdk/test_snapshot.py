@@ -126,7 +126,7 @@ class TestSnapshotLifecycle:
             # Verify it's deleted by checking the status
             info = snapshot.get_info()
             # After deletion, the snapshot should have a status indicating it's deleted
-            assert info.status == "error"
+            assert info.status == "deleted"
             print(info.status)
             print(info.error_message)
             print(info.snapshot)
