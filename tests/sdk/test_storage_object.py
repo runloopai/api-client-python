@@ -10,7 +10,7 @@ import pytest
 
 from tests.sdk.conftest import MockObjectView, create_mock_httpx_response
 from runloop_api_client.sdk import StorageObject
-from runloop_api_client.sdk._sync import StorageObjectClient
+from runloop_api_client.sdk.sync import StorageObjectClient
 
 
 class TestStorageObject:

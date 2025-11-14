@@ -14,7 +14,7 @@ from tests.sdk.conftest import (
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import Devbox, Snapshot, Blueprint, StorageObject
-from runloop_api_client.sdk._sync import (
+from runloop_api_client.sdk.sync import (
     RunloopSDK,
     DevboxClient,
     SnapshotClient,
