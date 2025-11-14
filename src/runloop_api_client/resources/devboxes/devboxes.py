@@ -802,6 +802,9 @@ class DevboxesResource(SyncAPIResource):
         devbox_id: str,
         *,
         command: str,
+        command_id: str = str(uuid7()),
+        last_n: str | Omit = omit,
+        optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         # The following are forwarded to the initial execute request
@@ -814,15 +817,19 @@ class DevboxesResource(SyncAPIResource):
         """
         Execute a command and wait for it to complete with optimal latency for long running commands.
 
-        This method launches an execution with a generated command_id and first attempts to
+        This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
+
+        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        You can provide your own command_id to enable custom retry logic or external tracking.
         """
-        command_id = str(uuid7())  # type: ignore
         execution = self.execute(
             devbox_id,
             command=command,
             command_id=command_id,
+            last_n=last_n,
+            optimistic_timeout=optimistic_timeout,
             shell_name=shell_name,
             extra_headers=extra_headers,
             extra_query=extra_query,
@@ -2284,6 +2291,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         devbox_id: str,
         *,
         command: str,
+        command_id: str = str(uuid7()),
+        last_n: str | Omit = omit,
+        optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         # The following are forwarded to the initial execute request
@@ -2296,16 +2306,20 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         Execute a command and wait for it to complete with optimal latency for long running commands.
 
-        This method launches an execution with a generated command_id and first attempts to
+        This method launches an execution and first attempts to
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
+
+        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        You can provide your own command_id to enable custom retry logic or external tracking.
         """
 
-        command_id = str(uuid7())  # type: ignore
         execution = await self.execute(
             devbox_id,
             command=command,
             command_id=command_id,
+            last_n=last_n,
+            optimistic_timeout=optimistic_timeout,
             shell_name=shell_name,
             extra_headers=extra_headers,
             extra_query=extra_query,
