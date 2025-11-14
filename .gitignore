@@ -15,3 +15,12 @@ codegen.log
 Brewfile.lock.json
 
 .DS_Store
+
+# Coverage files
+.coverage
+.coverage.*
+htmlcov/
+coverage.json
+coverage-summary.json
+*.cover
+.pytest_cache/
