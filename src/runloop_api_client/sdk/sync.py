@@ -10,7 +10,7 @@ import httpx
 
 from .devbox import Devbox
 from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
-from .._client import Runloop
+from .._client import Runloop, DEFAULT_MAX_RETRIES
 from ._helpers import ContentType, detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
@@ -431,30 +431,20 @@ class RunloopSDK:
         bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
-        max_retries: int | None = None,
+        max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
         http_client: httpx.Client | None = None,
     ) -> None:
-        if max_retries is None:
-            self.api = Runloop(
-                bearer_token=bearer_token,
-                base_url=base_url,
-                timeout=timeout,
-                default_headers=default_headers,
-                default_query=default_query,
-                http_client=http_client,
-            )
-        else:
-            self.api = Runloop(
-                bearer_token=bearer_token,
-                base_url=base_url,
-                timeout=timeout,
-                max_retries=max_retries,
-                default_headers=default_headers,
-                default_query=default_query,
-                http_client=http_client,
-            )
+        self.api = Runloop(
+            bearer_token=bearer_token,
+            base_url=base_url,
+            timeout=timeout,
+            max_retries=max_retries,
+            default_headers=default_headers,
+            default_query=default_query,
+            http_client=http_client,
+        )
 
         self.devbox = DevboxClient(self.api)
         self.blueprint = BlueprintClient(self.api)
