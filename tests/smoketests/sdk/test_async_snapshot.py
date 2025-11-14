@@ -128,7 +128,7 @@ class TestAsyncSnapshotLifecycle:
             # Verify it's deleted by checking the status
             info = await snapshot.get_info()
             # After deletion, the snapshot should have a status indicating it's deleted
-            assert info.status == "error"
+            assert info.status == "deleted"
         finally:
             await devbox.shutdown()
 
