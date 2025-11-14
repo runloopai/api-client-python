@@ -48,11 +48,11 @@ from runloop_api_client import AsyncRunloopSDK
 
 async def main():
     sdk = AsyncRunloopSDK()
-    async with sdk.devbox.create(name="async-devbox") as devbox:
+    async with await sdk.devbox.create(name="async-devbox") as devbox:
         result = await devbox.cmd.exec("pwd")
         print(await result.stdout())
 
-        async def capture(line: str) -> None:
+        def capture(line: str) -> None:
             print(">>", line)
 
         await devbox.cmd.exec("ls", stdout=capture)
@@ -237,11 +237,15 @@ result = devbox.cmd.exec(
 print("exit code:", result.exit_code)
 ```
 
-Async example:
+**Note on Callbacks:** All callbacks (`stdout`, `stderr`, `output`) must be synchronous functions. Even when using `AsyncDevbox`, callbacks cannot be async functions. If you need to perform async operations with the output, use thread-safe queues and process them separately.
+
+Async example (note that the callback itself is still synchronous):
 
 ```python
-async def capture(line: str) -> None:
-    await log_queue.put(line)
+def capture(line: str) -> None:
+    # Callbacks must be synchronous
+    # Use thread-safe data structures if needed
+    log_queue.put_nowait(line)
 
 await devbox.cmd.exec(
     "tail -f /var/log/app.log",
@@ -345,7 +349,7 @@ with sdk.devbox.create(name="temp-devbox") as devbox:
 # devbox is automatically shutdown when exiting the context
 
 # Asynchronous
-async with sdk.devbox.create(name="temp-devbox") as devbox:
+async with await sdk.devbox.create(name="temp-devbox") as devbox:
     result = await devbox.cmd.exec("echo 'Hello'")
     print(await result.stdout())
 # devbox is automatically shutdown when exiting the context
@@ -665,12 +669,12 @@ async def main():
     sdk = AsyncRunloopSDK()
     
     # All the same operations, but with await
-    async with sdk.devbox.create(name="async-devbox") as devbox:
+    async with await sdk.devbox.create(name="async-devbox") as devbox:
         result = await devbox.cmd.exec("pwd")
         print(await result.stdout())
         
-        # Async streaming
-        async def capture(line: str) -> None:
+        # Streaming (note: callbacks must be synchronous)
+        def capture(line: str) -> None:
             print(">>", line)
         
         await devbox.cmd.exec("ls", stdout=capture)
