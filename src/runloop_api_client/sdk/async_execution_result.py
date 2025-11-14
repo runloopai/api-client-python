@@ -1,3 +1,4 @@
+"""Async execution result wrapper for completed commands."""
 from __future__ import annotations
 
 from .._client import AsyncRunloop

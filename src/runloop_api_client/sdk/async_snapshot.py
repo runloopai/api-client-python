@@ -1,3 +1,4 @@
+"""Snapshot resource class for asynchronous operations."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, Iterable, Optional

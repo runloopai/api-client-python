@@ -1,3 +1,4 @@
+"""Blueprint resource class for synchronous operations."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, Iterable, Optional
