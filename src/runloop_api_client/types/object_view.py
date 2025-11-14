@@ -21,8 +21,11 @@ class ObjectView(BaseModel):
     name: str
     """The name of the Object."""
 
-    state: str
+    state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"]
     """The current state of the Object."""
+
+    delete_after_time_ms: Optional[int] = None
+    """The time after which the Object will be deleted in milliseconds since epoch."""
 
     size_bytes: Optional[int] = None
     """The size of the Object content in bytes (null until uploaded)."""

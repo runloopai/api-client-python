@@ -35,6 +35,7 @@ class TestObjects:
             content_type="unspecified",
             name="name",
             metadata={"foo": "string"},
+            ttl_ms=0,
         )
         assert_matches_type(ObjectView, object_, path=["response"])
 
@@ -110,12 +111,12 @@ class TestObjects:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         object_ = client.objects.list(
-            content_type="content_type",
+            content_type="unspecified",
             limit=0,
             name="name",
             search="search",
             starting_after="starting_after",
-            state="state",
+            state="UPLOADING",
         )
         assert_matches_type(SyncObjectsCursorIDPage[ObjectView], object_, path=["response"])
 
@@ -269,12 +270,12 @@ class TestObjects:
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         object_ = client.objects.list_public(
-            content_type="content_type",
+            content_type="unspecified",
             limit=0,
             name="name",
             search="search",
             starting_after="starting_after",
-            state="state",
+            state="UPLOADING",
         )
         assert_matches_type(SyncObjectsCursorIDPage[ObjectView], object_, path=["response"])
 
@@ -318,6 +319,7 @@ class TestAsyncObjects:
             content_type="unspecified",
             name="name",
             metadata={"foo": "string"},
+            ttl_ms=0,
         )
         assert_matches_type(ObjectView, object_, path=["response"])
 
@@ -393,12 +395,12 @@ class TestAsyncObjects:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.list(
-            content_type="content_type",
+            content_type="unspecified",
             limit=0,
             name="name",
             search="search",
             starting_after="starting_after",
-            state="state",
+            state="UPLOADING",
         )
         assert_matches_type(AsyncObjectsCursorIDPage[ObjectView], object_, path=["response"])
 
@@ -552,12 +554,12 @@ class TestAsyncObjects:
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.list_public(
-            content_type="content_type",
+            content_type="unspecified",
             limit=0,
             name="name",
             search="search",
             starting_after="starting_after",
-            state="state",
+            state="UPLOADING",
         )
         assert_matches_type(AsyncObjectsCursorIDPage[ObjectView], object_, path=["response"])
 

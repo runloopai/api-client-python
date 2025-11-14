@@ -2,20 +2,20 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Literal, TypedDict
 
 __all__ = ["ObjectListParams"]
 
 
 class ObjectListParams(TypedDict, total=False):
-    content_type: str
-    """Filter objects by content type."""
+    content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
+    """Filter storage objects by content type."""
 
     limit: int
     """The limit of items to return. Default is 20."""
 
     name: str
-    """Filter objects by name (partial match supported)."""
+    """Filter storage objects by name (partial match supported)."""
 
     search: str
     """Search by object ID or name."""
@@ -23,5 +23,5 @@ class ObjectListParams(TypedDict, total=False):
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
 
-    state: str
-    """Filter objects by state (UPLOADING, READ_ONLY, DELETED)."""
+    state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"]
+    """Filter storage objects by state."""

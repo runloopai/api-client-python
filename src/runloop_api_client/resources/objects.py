@@ -52,6 +52,7 @@ class ObjectsResource(SyncAPIResource):
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"],
         name: str,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        ttl_ms: Optional[int] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -72,6 +73,9 @@ class ObjectsResource(SyncAPIResource):
 
           metadata: User defined metadata to attach to the object for organization.
 
+          ttl_ms: Optional lifetime of the object in milliseconds, after which the object is
+              automatically deleted. Time starts ticking after the object is created.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -89,6 +93,7 @@ class ObjectsResource(SyncAPIResource):
                     "content_type": content_type,
                     "name": name,
                     "metadata": metadata,
+                    "ttl_ms": ttl_ms,
                 },
                 object_create_params.ObjectCreateParams,
             ),
@@ -138,12 +143,12 @@ class ObjectsResource(SyncAPIResource):
     def list(
         self,
         *,
-        content_type: str | Omit = omit,
+        content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
-        state: str | Omit = omit,
+        state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -155,17 +160,17 @@ class ObjectsResource(SyncAPIResource):
         List all Objects for the authenticated account with pagination support.
 
         Args:
-          content_type: Filter objects by content type.
+          content_type: Filter storage objects by content type.
 
           limit: The limit of items to return. Default is 20.
 
-          name: Filter objects by name (partial match supported).
+          name: Filter storage objects by name (partial match supported).
 
           search: Search by object ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          state: Filter objects by state (UPLOADING, READ_ONLY, DELETED).
+          state: Filter storage objects by state.
 
           extra_headers: Send extra headers
 
@@ -328,12 +333,12 @@ class ObjectsResource(SyncAPIResource):
     def list_public(
         self,
         *,
-        content_type: str | Omit = omit,
+        content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
-        state: str | Omit = omit,
+        state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -345,17 +350,17 @@ class ObjectsResource(SyncAPIResource):
         List all public Objects with pagination support.
 
         Args:
-          content_type: Filter objects by content type.
+          content_type: Filter storage objects by content type.
 
           limit: The limit of items to return. Default is 20.
 
-          name: Filter objects by name (partial match supported).
+          name: Filter storage objects by name (partial match supported).
 
           search: Search by object ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          state: Filter objects by state (UPLOADING, READ_ONLY, DELETED).
+          state: Filter storage objects by state.
 
           extra_headers: Send extra headers
 
@@ -415,6 +420,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"],
         name: str,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        ttl_ms: Optional[int] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -435,6 +441,9 @@ class AsyncObjectsResource(AsyncAPIResource):
 
           metadata: User defined metadata to attach to the object for organization.
 
+          ttl_ms: Optional lifetime of the object in milliseconds, after which the object is
+              automatically deleted. Time starts ticking after the object is created.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -452,6 +461,7 @@ class AsyncObjectsResource(AsyncAPIResource):
                     "content_type": content_type,
                     "name": name,
                     "metadata": metadata,
+                    "ttl_ms": ttl_ms,
                 },
                 object_create_params.ObjectCreateParams,
             ),
@@ -501,12 +511,12 @@ class AsyncObjectsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        content_type: str | Omit = omit,
+        content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
-        state: str | Omit = omit,
+        state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -518,17 +528,17 @@ class AsyncObjectsResource(AsyncAPIResource):
         List all Objects for the authenticated account with pagination support.
 
         Args:
-          content_type: Filter objects by content type.
+          content_type: Filter storage objects by content type.
 
           limit: The limit of items to return. Default is 20.
 
-          name: Filter objects by name (partial match supported).
+          name: Filter storage objects by name (partial match supported).
 
           search: Search by object ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          state: Filter objects by state (UPLOADING, READ_ONLY, DELETED).
+          state: Filter storage objects by state.
 
           extra_headers: Send extra headers
 
@@ -691,12 +701,12 @@ class AsyncObjectsResource(AsyncAPIResource):
     def list_public(
         self,
         *,
-        content_type: str | Omit = omit,
+        content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
-        state: str | Omit = omit,
+        state: Literal["UPLOADING", "READ_ONLY", "DELETED", "ERROR"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -708,17 +718,17 @@ class AsyncObjectsResource(AsyncAPIResource):
         List all public Objects with pagination support.
 
         Args:
-          content_type: Filter objects by content type.
+          content_type: Filter storage objects by content type.
 
           limit: The limit of items to return. Default is 20.
 
-          name: Filter objects by name (partial match supported).
+          name: Filter storage objects by name (partial match supported).
 
           search: Search by object ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          state: Filter objects by state (UPLOADING, READ_ONLY, DELETED).
+          state: Filter storage objects by state.
 
           extra_headers: Send extra headers
 
