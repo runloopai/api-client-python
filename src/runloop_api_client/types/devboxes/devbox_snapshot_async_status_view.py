@@ -10,7 +10,7 @@ __all__ = ["DevboxSnapshotAsyncStatusView"]
 
 
 class DevboxSnapshotAsyncStatusView(BaseModel):
-    status: Literal["in_progress", "error", "complete"]
+    status: Literal["in_progress", "error", "complete", "deleted"]
     """The current status of the snapshot operation."""
 
     error_message: Optional[str] = None
