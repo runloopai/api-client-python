@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import TYPE_CHECKING, Any, Dict, Callable, Optional, Sequence
-from typing_extensions import override
+from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
+from typing_extensions import Unpack, override
 
 from ..types import (
     DevboxView,
@@ -13,14 +13,32 @@ from ..types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes, omit, not_given
+from ._types import (
+    LogCallback,
+    RequestOptions,
+    LongRequestOptions,
+    PollingRequestOptions,
+    SDKDevboxExecuteParams,
+    ExecuteStreamingCallbacks,
+    LongPollingRequestOptions,
+    SDKDevboxUploadFileParams,
+    SDKDevboxCreateTunnelParams,
+    SDKDevboxDownloadFileParams,
+    SDKDevboxExecuteAsyncParams,
+    SDKDevboxRemoveTunnelParams,
+    SDKDevboxSnapshotDiskParams,
+    SDKDevboxReadFileContentsParams,
+    SDKDevboxSnapshotDiskAsyncParams,
+    SDKDevboxWriteFileContentsParams,
+)
 from .._client import Runloop
-from ._helpers import LogCallback
+from ._helpers import filter_params
 from .execution import Execution, _StreamingGroup
 from .protocols import FileInterface, CommandInterface, NetworkInterface
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
+from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
 from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -71,11 +89,7 @@ class Devbox:
 
     def get_info(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **options: Unpack[RequestOptions],
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
@@ -84,10 +98,7 @@ class Devbox:
         """
         return self._client.devboxes.retrieve(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **options,
         )
 
     def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
@@ -118,12 +129,7 @@ class Devbox:
 
     def shutdown(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> DevboxView:
         """Shutdown the devbox, terminating all processes and releasing resources.
 
@@ -132,22 +138,12 @@ class Devbox:
         """
         return self._client.devboxes.shutdown(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
 
     def suspend(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongPollingRequestOptions],
     ) -> DevboxView:
         """Suspend the devbox, pausing execution while preserving state.
 
@@ -162,23 +158,13 @@ class Devbox:
         """
         self._client.devboxes.suspend(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **filter_params(options, LongRequestOptions),
         )
-        return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
+        return self._client.devboxes.await_suspended(self._id, polling_config=options.get("polling_config"))
 
     def resume(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongPollingRequestOptions],
     ) -> DevboxView:
         """Resume a suspended devbox, restoring it to running state.
 
@@ -192,22 +178,13 @@ class Devbox:
         """
         self._client.devboxes.resume(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **filter_params(options, LongRequestOptions),
         )
-        return self._client.devboxes.await_running(self._id, polling_config=polling_config)
+        return self._client.devboxes.await_running(self._id, polling_config=options.get("polling_config"))
 
     def keep_alive(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> object:
         """Extend the devbox timeout, preventing automatic shutdown.
 
@@ -219,25 +196,12 @@ class Devbox:
         """
         return self._client.devboxes.keep_alive(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
 
     def snapshot_disk(
         self,
-        *,
-        commit_message: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxSnapshotDiskParams],
     ) -> "Snapshot":
         """Create a disk snapshot of the devbox and wait for completion.
 
@@ -255,36 +219,15 @@ class Devbox:
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
-            commit_message=commit_message,
-            metadata=metadata,
-            name=name,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **filter_params(params, SDKDevboxSnapshotDiskAsyncParams),
         )
         snapshot = self._snapshot_from_id(snapshot_data.id)
-        snapshot.await_completed(
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
+        snapshot.await_completed(**filter_params(params, PollingRequestOptions))
         return snapshot
 
     def snapshot_disk_async(
         self,
-        *,
-        commit_message: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxSnapshotDiskAsyncParams],
     ) -> "Snapshot":
         """Create a disk snapshot of the devbox asynchronously.
 
@@ -301,14 +244,7 @@ class Devbox:
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
-            commit_message=commit_message,
-            metadata=metadata,
-            name=name,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
         return self._snapshot_from_id(snapshot_data.id)
 
@@ -433,19 +369,7 @@ class _CommandInterface:
 
     def exec(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = omit,
-        stdout: Optional[LogCallback] = None,
-        stderr: Optional[LogCallback] = None,
-        output: Optional[LogCallback] = None,
-        polling_config: PollingConfig | None = None,
-        attach_stdin: bool | Omit = omit,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteParams],
     ) -> ExecutionResult:
         """Execute a command synchronously and wait for completion.
 
@@ -469,69 +393,36 @@ class _CommandInterface:
         devbox = self._devbox
         client = devbox._client
 
-        if stdout or stderr or output:
-            execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
-                devbox.id,
-                command=command,
-                shell_name=shell_name,
-                attach_stdin=attach_stdin,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            )
-            streaming_group = devbox._start_streaming(
-                execution.execution_id,
-                stdout=stdout,
-                stderr=stderr,
-                output=output,
-            )
-            final = execution
-            if execution.status == "completed":
-                final: DevboxAsyncExecutionDetailView = execution
-            else:
-                final = client.devboxes.executions.await_completed(
-                    execution.execution_id,
-                    devbox_id=devbox.id,
-                    polling_config=polling_config,
-                )
-
-            if streaming_group is not None:
-                # Ensure log streaming has drained before returning the result. _stop_streaming()
-                # below will perform the final cleanup, but we still join here so callers only
-                # resume once all logs have been delivered.
-                streaming_group.join()
-
-            return ExecutionResult(client, devbox.id, final)
-
-        final = client.devboxes.execute_and_await_completion(
+        execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
-            command=command,
-            shell_name=shell_name,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **filter_params(params, DevboxExecuteAsyncParams),
+            **filter_params(params, LongRequestOptions),
         )
+        streaming_group = devbox._start_streaming(
+            execution.execution_id,
+            **filter_params(params, ExecuteStreamingCallbacks),
+        )
+        final = execution
+        if execution.status == "completed":
+            final: DevboxAsyncExecutionDetailView = execution
+        else:
+            final = client.devboxes.executions.await_completed(
+                execution.execution_id,
+                devbox_id=devbox.id,
+                polling_config=params.get("polling_config"),
+            )
+
+        if streaming_group is not None:
+            # Ensure log streaming has drained before returning the result. _stop_streaming()
+            # below will perform the final cleanup, but we still join here so callers only
+            # resume once all logs have been delivered.
+            streaming_group.join()
+
         return ExecutionResult(client, devbox.id, final)
 
     def exec_async(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = omit,
-        stdout: Optional[LogCallback] = None,
-        stderr: Optional[LogCallback] = None,
-        output: Optional[LogCallback] = None,
-        attach_stdin: bool | Omit = omit,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteAsyncParams],
     ) -> Execution:
         """Execute a command asynchronously without waiting for completion.
 
@@ -561,21 +452,13 @@ class _CommandInterface:
 
         execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
-            command=command,
-            shell_name=shell_name,
-            attach_stdin=attach_stdin,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **filter_params(params, DevboxExecuteAsyncParams),
+            **filter_params(params, LongRequestOptions),
         )
 
         streaming_group = devbox._start_streaming(
             execution.execution_id,
-            stdout=stdout,
-            stderr=stderr,
-            output=output,
+            **filter_params(params, ExecuteStreamingCallbacks),
         )
 
         return Execution(client, devbox.id, execution, streaming_group)
@@ -593,13 +476,7 @@ class _FileInterface:
 
     def read(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxReadFileContentsParams],
     ) -> str:
         """Read a file from the devbox.
 
@@ -615,64 +492,35 @@ class _FileInterface:
         """
         return self._devbox._client.devboxes.read_file_contents(
             self._devbox.id,
-            file_path=path,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
 
     def write(
         self,
-        path: str,
-        contents: str | bytes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxWriteFileContentsParams],
     ) -> DevboxExecutionDetailView:
         """Write contents to a file in the devbox.
 
         Creates or overwrites the file at the specified path.
 
         Args:
-            path: Absolute path to the file in the devbox.
-            contents: File contents as string or bytes (bytes are decoded as UTF-8).
+            file_path: Absolute path to the file in the devbox.
+            contents: File contents as string.
 
         Returns:
             Execution details for the write operation.
 
         Example:
-            >>> devbox.file.write("/home/user/config.json", '{"key": "value"}')
+            >>> devbox.file.write(file_path="/home/user/config.json", contents='{"key": "value"}')
         """
-        if isinstance(contents, bytes):
-            contents_str = contents.decode("utf-8")
-        else:
-            contents_str = contents
-
         return self._devbox._client.devboxes.write_file_contents(
             self._devbox.id,
-            file_path=path,
-            contents=contents_str,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
 
     def download(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxDownloadFileParams],
     ) -> bytes:
         """Download a file from the devbox.
 
@@ -689,31 +537,19 @@ class _FileInterface:
         """
         response = self._devbox._client.devboxes.download_file(
             self._devbox.id,
-            path=path,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
         return response.read()
 
     def upload(
         self,
-        path: str,
-        file: FileTypes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxUploadFileParams],
     ) -> object:
         """Upload a file to the devbox.
 
         Args:
             path: Destination path in the devbox.
-            file: File to upload (Path, file-like object, or bytes).
+            file: File to upload (Path-like object or bytes).
 
         Returns:
             Response object confirming the upload.
@@ -724,13 +560,7 @@ class _FileInterface:
         """
         return self._devbox._client.devboxes.upload_file(
             self._devbox.id,
-            path=path,
-            file=file,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
 
 
@@ -745,12 +575,7 @@ class _NetworkInterface:
 
     def create_ssh_key(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> DevboxCreateSSHKeyResponse:
         """Create an SSH key for remote access to the devbox.
 
@@ -763,22 +588,12 @@ class _NetworkInterface:
         """
         return self._devbox._client.devboxes.create_ssh_key(
             self._devbox.id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
 
     def create_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxCreateTunnelParams],
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
 
@@ -794,23 +609,12 @@ class _NetworkInterface:
         """
         return self._devbox._client.devboxes.create_tunnel(
             self._devbox.id,
-            port=port,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
 
     def remove_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
 
@@ -825,10 +629,5 @@ class _NetworkInterface:
         """
         return self._devbox._client.devboxes.remove_tunnel(
             self._devbox.id,
-            port=port,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )

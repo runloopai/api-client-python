@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from typing import Optional
+from typing_extensions import override
+
 from .._client import Runloop
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -17,11 +20,15 @@ class ExecutionResult:
         self,
         client: Runloop,
         devbox_id: str,
-        execution: DevboxAsyncExecutionDetailView,
+        result: DevboxAsyncExecutionDetailView,
     ) -> None:
         self._client = client
         self._devbox_id = devbox_id
-        self._execution = execution
+        self._result = result
+
+    @override
+    def __repr__(self) -> str:
+        return f"<ExecutionResult id={self.execution_id!r} exit={self.exit_code}>"
 
     @property
     def devbox_id(self) -> str:
@@ -31,12 +38,12 @@ class ExecutionResult:
     @property
     def execution_id(self) -> str:
         """Underlying execution identifier."""
-        return self._execution.execution_id
+        return self._result.execution_id
 
     @property
     def exit_code(self) -> int | None:
         """Process exit code, or ``None`` if unavailable."""
-        return self._execution.exit_status
+        return self._result.exit_status
 
     @property
     def success(self) -> bool:
@@ -49,15 +56,21 @@ class ExecutionResult:
         exit_code = self.exit_code
         return exit_code is not None and exit_code != 0
 
-    def stdout(self) -> str:
+    # TODO: add pagination support once we have it in the API
+    def stdout(self, num_lines: Optional[int] = None) -> str:
         """Return captured standard output."""
-        return self._execution.stdout or ""
+        if not num_lines or num_lines <= 0 or not self._result.stdout:
+            return ""
+        return self._result.stdout[-num_lines:]
 
-    def stderr(self) -> str:
+    # TODO: add pagination support once we have it in the API
+    def stderr(self, num_lines: Optional[int] = None) -> str:
         """Return captured standard error."""
-        return self._execution.stderr or ""
+        if not num_lines or num_lines <= 0 or not self._result.stderr:
+            return ""
+        return self._result.stderr[-num_lines:]
 
     @property
     def raw(self) -> DevboxAsyncExecutionDetailView:
         """Access the underlying API response."""
-        return self._execution
+        return self._result

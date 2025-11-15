@@ -12,22 +12,7 @@ from .shared_params.code_mount_parameters import CodeMountParameters
 __all__ = ["DevboxCreateParams"]
 
 
-class DevboxCreateParams(TypedDict, total=False):
-    blueprint_id: Optional[str]
-    """Blueprint ID to use for the Devbox.
-
-    If none set, the Devbox will be created with the default Runloop Devbox image.
-    Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
-    """
-
-    blueprint_name: Optional[str]
-    """Name of Blueprint to use for the Devbox.
-
-    When set, this will load the latest successfully built Blueprint with the given
-    name. Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be
-    specified.
-    """
-
+class DevboxBaseCreateParams(TypedDict, total=False):
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Devbox."""
 
@@ -65,6 +50,23 @@ class DevboxCreateParams(TypedDict, total=False):
     The secret values will be securely injected as environment variables in the
     Devbox. Example: {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable
     'DB_PASS' to the value of secret 'DATABASE_PASSWORD'.
+    """
+
+
+class DevboxCreateParams(DevboxBaseCreateParams, total=False):
+    blueprint_id: Optional[str]
+    """Blueprint ID to use for the Devbox.
+
+    If none set, the Devbox will be created with the default Runloop Devbox image.
+    Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
+    """
+
+    blueprint_name: Optional[str]
+    """Name of Blueprint to use for the Devbox.
+
+    When set, this will load the latest successfully built Blueprint with the given
+    name. Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be
+    specified.
     """
 
     snapshot_id: Optional[str]

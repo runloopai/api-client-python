@@ -2,16 +2,10 @@
 
 from __future__ import annotations
 
-import io
-import os
-from typing import Dict, Union, Literal, Callable
+from typing import Any, Dict, Type, Mapping, TypeVar
 from pathlib import Path
 
-# Callback for streaming output. Must be synchronous even in async contexts.
-LogCallback = Callable[[str], None]
-
-ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
-UploadData = Union[str, bytes, bytearray, Path, os.PathLike[str], io.IOBase]
+from ..types.object_create_params import ContentType
 
 _CONTENT_TYPE_MAP: Dict[str, ContentType] = {
     ".txt": "text",
@@ -39,22 +33,17 @@ def detect_content_type(name: str) -> ContentType:
     return _CONTENT_TYPE_MAP.get(ext, "unspecified")
 
 
-def read_upload_data(data: UploadData) -> bytes:
-    if isinstance(data, bytes):
-        return data
-    if isinstance(data, bytearray):
-        return bytes(data)
-    if isinstance(data, (Path, os.PathLike)):
-        return Path(data).read_bytes()
-    if isinstance(data, str):
-        return data.encode("utf-8")
-    if isinstance(data, io.TextIOBase):
-        return data.read().encode("utf-8")
-    if isinstance(data, io.BufferedIOBase) or isinstance(data, io.RawIOBase):
-        return data.read()
-    if hasattr(data, "read"):
-        result = data.read()
-        if isinstance(result, str):
-            return result.encode("utf-8")
-        return result
-    raise TypeError("Unsupported upload data type. Provide str, bytes, path, or file-like object.")
+T = TypeVar("T")
+
+
+def filter_params(params: Mapping[str, Any], type_filter: Type[T]) -> T:
+    """Filter params dict to only include keys defined in the given TypedDict type.
+
+    Args:
+        params: Dictionary or TypedDict of parameters to filter
+        type_filter: TypedDict class to filter against
+
+    Returns:
+        Filtered dictionary matching the TypedDict structure
+    """
+    return {k: v for k, v in params.items() if k in type_filter.__annotations__}  # type: ignore[return-value]

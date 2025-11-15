@@ -6,13 +6,22 @@ interface classes without exposing private implementation details in documentati
 
 from __future__ import annotations
 
-from typing import Callable, Optional, Protocol
-from typing_extensions import runtime_checkable
+from typing import Protocol
+from typing_extensions import Unpack, runtime_checkable
 
 from ..types import DevboxTunnelView, DevboxExecutionDetailView, DevboxCreateSSHKeyResponse
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, FileTypes
+from ._types import (
+    LongRequestOptions,
+    SDKDevboxExecuteParams,
+    SDKDevboxUploadFileParams,
+    SDKDevboxCreateTunnelParams,
+    SDKDevboxDownloadFileParams,
+    SDKDevboxExecuteAsyncParams,
+    SDKDevboxRemoveTunnelParams,
+    SDKDevboxReadFileContentsParams,
+    SDKDevboxWriteFileContentsParams,
+)
 from .execution import Execution
-from ..lib.polling import PollingConfig
 from .async_execution import AsyncExecution
 from .execution_result import ExecutionResult
 from .async_execution_result import AsyncExecutionResult
@@ -31,35 +40,12 @@ class CommandInterface(Protocol):
 
     def exec(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = ...,
-        stdout: Optional[Callable[[str], None]] = None,
-        stderr: Optional[Callable[[str], None]] = None,
-        output: Optional[Callable[[str], None]] = None,
-        polling_config: PollingConfig | None = None,
-        attach_stdin: bool | Omit = ...,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteParams],
     ) -> "ExecutionResult": ...
 
     def exec_async(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = ...,
-        stdout: Optional[Callable[[str], None]] = None,
-        stderr: Optional[Callable[[str], None]] = None,
-        output: Optional[Callable[[str], None]] = None,
-        attach_stdin: bool | Omit = ...,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteAsyncParams],
     ) -> "Execution": ...
 
 
@@ -73,48 +59,22 @@ class FileInterface(Protocol):
 
     def read(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxReadFileContentsParams],
     ) -> str: ...
 
     def write(
         self,
-        path: str,
-        contents: str | bytes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxWriteFileContentsParams],
     ) -> DevboxExecutionDetailView: ...
 
     def download(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxDownloadFileParams],
     ) -> bytes: ...
 
     def upload(
         self,
-        path: str,
-        file: FileTypes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxUploadFileParams],
     ) -> object: ...
 
 
@@ -128,34 +88,17 @@ class NetworkInterface(Protocol):
 
     def create_ssh_key(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[LongRequestOptions],
     ) -> DevboxCreateSSHKeyResponse: ...
 
     def create_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxCreateTunnelParams],
     ) -> DevboxTunnelView: ...
 
     def remove_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object: ...
 
 
@@ -173,35 +116,12 @@ class AsyncCommandInterface(Protocol):
 
     async def exec(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = ...,
-        stdout: Optional[Callable[[str], None]] = None,
-        stderr: Optional[Callable[[str], None]] = None,
-        output: Optional[Callable[[str], None]] = None,
-        polling_config: PollingConfig | None = None,
-        attach_stdin: bool | Omit = ...,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteParams],
     ) -> "AsyncExecutionResult": ...
 
     async def exec_async(
         self,
-        command: str,
-        *,
-        shell_name: Optional[str] | Omit = ...,
-        stdout: Optional[Callable[[str], None]] = None,
-        stderr: Optional[Callable[[str], None]] = None,
-        output: Optional[Callable[[str], None]] = None,
-        attach_stdin: bool | Omit = ...,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExecuteAsyncParams],
     ) -> "AsyncExecution": ...
 
 
@@ -215,48 +135,22 @@ class AsyncFileInterface(Protocol):
 
     async def read(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxReadFileContentsParams],
     ) -> str: ...
 
     async def write(
         self,
-        path: str,
-        contents: str | bytes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxWriteFileContentsParams],
     ) -> DevboxExecutionDetailView: ...
 
     async def download(
         self,
-        path: str,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxDownloadFileParams],
     ) -> bytes: ...
 
     async def upload(
         self,
-        path: str,
-        file: FileTypes,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxUploadFileParams],
     ) -> object: ...
 
 
@@ -270,32 +164,15 @@ class AsyncNetworkInterface(Protocol):
 
     async def create_ssh_key(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[LongRequestOptions],
     ) -> DevboxCreateSSHKeyResponse: ...
 
     async def create_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxCreateTunnelParams],
     ) -> DevboxTunnelView: ...
 
     async def remove_tunnel(
         self,
-        *,
-        port: int,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = ...,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object: ...

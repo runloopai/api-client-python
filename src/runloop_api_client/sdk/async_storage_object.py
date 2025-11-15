@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from typing_extensions import override
+from typing_extensions import Unpack, override
 
-import httpx
-
-from .._types import Body, Query, Headers, Timeout, NotGiven, not_given
+from ._types import RequestOptions, LongRequestOptions, SDKObjectDownloadParams
 from .._client import AsyncRunloop
-from ._helpers import UploadData, read_upload_data
 from ..types.object_view import ObjectView
 from ..types.object_download_url_view import ObjectDownloadURLView
 
@@ -37,133 +34,68 @@ class AsyncStorageObject:
 
     async def refresh(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **options: Unpack[RequestOptions],
     ) -> ObjectView:
         return await self._client.objects.retrieve(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **options,
         )
 
     async def complete(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> ObjectView:
         result = await self._client.objects.complete(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
         self._upload_url = None
         return result
 
     async def get_download_url(
         self,
-        *,
-        duration_seconds: int | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[SDKObjectDownloadParams],
     ) -> ObjectDownloadURLView:
-        if duration_seconds is None:
-            return await self._client.objects.download(
-                self._id,
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-            )
         return await self._client.objects.download(
             self._id,
-            duration_seconds=duration_seconds,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **params,
         )
 
     async def download_as_bytes(
         self,
-        *,
-        duration_seconds: int | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[SDKObjectDownloadParams],
     ) -> bytes:
         url_view = await self.get_download_url(
-            duration_seconds=duration_seconds,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **params,
         )
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url_view.download_url)
+        response = await self._client._client.get(url_view.download_url)
         response.raise_for_status()
         return response.content
 
     async def download_as_text(
         self,
-        *,
-        duration_seconds: int | None = None,
-        encoding: str = "utf-8",
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **params: Unpack[SDKObjectDownloadParams],
     ) -> str:
         url_view = await self.get_download_url(
-            duration_seconds=duration_seconds,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **params,
         )
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url_view.download_url)
+        response = await self._client._client.get(url_view.download_url)
         response.raise_for_status()
-        response.encoding = encoding
+        response.encoding = "utf-8"
         return response.text
 
     async def delete(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> ObjectView:
         return await self._client.objects.delete(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
 
-    async def upload_content(self, data: UploadData) -> None:
+    async def upload_content(self, content: str | bytes) -> None:
         url = self._ensure_upload_url()
-        payload = read_upload_data(data)
-        async with httpx.AsyncClient() as client:
-            response = await client.put(url, content=payload)
+        response = await self._client._client.put(url, content=content)
         response.raise_for_status()
 
     def _ensure_upload_url(self) -> str:
