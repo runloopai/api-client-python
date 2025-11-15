@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
-from typing_extensions import Literal, Required, TypedDict
+from typing import Dict, Literal, Optional
+from typing_extensions import Required, TypedDict
 
 __all__ = ["ObjectCreateParams"]
 
 
+ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
+
+
 class ObjectCreateParams(TypedDict, total=False):
-    content_type: Required[Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]]
+    content_type: Required[ContentType]
     """The content type of the Object."""
 
     name: Required[str]

@@ -17,8 +17,11 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ...pagination import SyncDiskSnapshotsCursorIDPage, AsyncDiskSnapshotsCursorIDPage
+from ..._exceptions import RunloopError
+from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.devboxes import disk_snapshot_list_params, disk_snapshot_update_params
+from ...lib.polling_async import async_poll_until
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
@@ -239,6 +242,38 @@ class DiskSnapshotsResource(SyncAPIResource):
             cast_to=DevboxSnapshotAsyncStatusView,
         )
 
+    def await_completed(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxSnapshotAsyncStatusView:
+        """Wait for a disk snapshot operation to complete."""
+
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+
+        def is_terminal(result: DevboxSnapshotAsyncStatusView) -> bool:
+            return result.status in {"complete", "error"}
+
+        status = poll_until(
+            lambda: self.query_status(
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            is_terminal,
+            polling_config,
+        )
+
+        if status.status == "error":
+            message = status.error_message or "Unknown error"
+            raise RunloopError(f"Snapshot {id} failed: {message}")
+
+        return status
+
 
 class AsyncDiskSnapshotsResource(AsyncAPIResource):
     @cached_property
@@ -453,6 +488,38 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
             ),
             cast_to=DevboxSnapshotAsyncStatusView,
         )
+
+    async def await_completed(
+        self,
+        id: str,
+        *,
+        polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxSnapshotAsyncStatusView:
+        """Wait asynchronously for a disk snapshot operation to complete."""
+
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+
+        def is_terminal(result: DevboxSnapshotAsyncStatusView) -> bool:
+            return result.status in {"complete", "error"}
+
+        status = await async_poll_until(
+            lambda: self.query_status(
+                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            is_terminal,
+            polling_config,
+        )
+
+        if status.status == "error":
+            message = status.error_message or "Unknown error"
+            raise RunloopError(f"Snapshot {id} failed: {message}")
+
+        return status
 
 
 class DiskSnapshotsResourceWithRawResponse:
