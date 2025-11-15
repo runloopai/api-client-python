@@ -2,18 +2,18 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Iterable, Optional
-from typing_extensions import override
+from typing_extensions import Unpack, override
 
-if TYPE_CHECKING:
-    from .async_devbox import AsyncDevbox
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
+from ._types import (
+    RequestOptions,
+    LongRequestOptions,
+    PollingRequestOptions,
+    SDKDevboxExtraCreateParams,
+    SDKDiskSnapshotUpdateParams,
+)
 from .._client import AsyncRunloop
-from ..lib.polling import PollingConfig
-from ..types.shared_params.mount import Mount
+from .async_devbox import AsyncDevbox
 from ..types.devbox_snapshot_view import DevboxSnapshotView
-from ..types.shared_params.launch_parameters import LaunchParameters
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
 from ..types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 
@@ -40,119 +40,46 @@ class AsyncSnapshot:
 
     async def get_info(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **options: Unpack[RequestOptions],
     ) -> DevboxSnapshotAsyncStatusView:
         return await self._client.devboxes.disk_snapshots.query_status(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **options,
         )
 
     async def update(
         self,
-        *,
-        commit_message: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDiskSnapshotUpdateParams],
     ) -> DevboxSnapshotView:
         return await self._client.devboxes.disk_snapshots.update(
             self._id,
-            commit_message=commit_message,
-            metadata=metadata,
-            name=name,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
 
     async def delete(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> object:
         return await self._client.devboxes.disk_snapshots.delete(
             self._id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **options,
         )
 
     async def await_completed(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
+        **options: Unpack[PollingRequestOptions],
     ) -> DevboxSnapshotAsyncStatusView:
         return await self._client.devboxes.disk_snapshots.await_completed(
             self._id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
+            **options,
         )
 
     async def create_devbox(
         self,
-        *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        entrypoint: Optional[str] | Omit = omit,
-        environment_variables: Optional[Dict[str, str]] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        mounts: Optional[Iterable[Mount]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> "AsyncDevbox":
-        from .async_ import AsyncDevboxClient
-
-        devbox_client = AsyncDevboxClient(self._client)
-        return await devbox_client.create_from_snapshot(
-            self._id,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+        devbox_view = await self._client.devboxes.create_and_await_running(
+            snapshot_id=self._id,
+            **params,
         )
+        return AsyncDevbox(self._client, devbox_view.id)

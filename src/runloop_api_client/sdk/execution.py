@@ -5,9 +5,10 @@ from __future__ import annotations
 import logging
 import threading
 from typing import Optional
+from typing_extensions import Unpack, override
 
+from ._types import RequestOptions, LongRequestOptions
 from .._client import Runloop
-from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -65,8 +66,12 @@ class Execution:
         self._client = client
         self._devbox_id = devbox_id
         self._execution_id = execution.execution_id
-        self._latest = execution
+        self._initial_result = execution
         self._streaming_group = streaming_group
+
+    @override
+    def __repr__(self) -> str:
+        return f"<Execution id={self._execution_id!r}>"
 
     @property
     def execution_id(self) -> str:
@@ -76,53 +81,41 @@ class Execution:
     def devbox_id(self) -> str:
         return self._devbox_id
 
-    def result(self, *, polling_config: PollingConfig | None = None) -> ExecutionResult:
+    def result(self, **options: Unpack[LongRequestOptions]) -> ExecutionResult:
         """
         Wait for completion and return an :class:`ExecutionResult`.
         """
-        if self._latest.status == "completed":
-            final = self._latest
-        else:
-            final = self._client.devboxes.executions.await_completed(
-                self._execution_id,
-                devbox_id=self._devbox_id,
-                polling_config=polling_config,
-            )
+        # Wait for command completion
+        final = self._client.devboxes.wait_for_command(
+            self._execution_id,
+            devbox_id=self._devbox_id,
+            statuses=["completed"],
+            **options,
+        )
 
+        # Wait for streaming to complete naturally (log but don't throw streaming errors)
         if self._streaming_group is not None:
-            # Block until streaming threads have drained so callers observe all log output
-            # before we hand back control. _stop_streaming() handles the tidy-up afterward.
             self._streaming_group.join()
+            self._streaming_group = None
 
-        self._stop_streaming()
-
-        self._latest = final
         return ExecutionResult(self._client, self._devbox_id, final)
 
-    def get_state(self) -> DevboxAsyncExecutionDetailView:
+    def get_state(self, **options: Unpack[RequestOptions]) -> DevboxAsyncExecutionDetailView:
         """
         Fetch the latest execution state.
         """
-        self._latest = self._client.devboxes.executions.retrieve(
+        return self._client.devboxes.executions.retrieve(
             self._execution_id,
             devbox_id=self._devbox_id,
+            **options,
         )
-        return self._latest
 
-    def kill(self, *, kill_process_group: bool | None = None) -> None:
+    def kill(self, **options: Unpack[LongRequestOptions]) -> None:
         """
         Request termination of the running execution.
         """
         self._client.devboxes.executions.kill(
             self._execution_id,
             devbox_id=self._devbox_id,
-            kill_process_group=kill_process_group,
+            **options,
         )
-        self._stop_streaming()
-
-    def _stop_streaming(self) -> None:
-        if self._streaming_group is None:
-            return
-        self._streaming_group.stop()
-        self._streaming_group.join()
-        self._streaming_group = None

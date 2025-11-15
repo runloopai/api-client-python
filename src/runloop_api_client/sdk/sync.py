@@ -2,29 +2,31 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Iterable, Optional
+from typing import Dict, Mapping, Optional
 from pathlib import Path
 from typing_extensions import Unpack
 
 import httpx
 
+from ._types import (
+    LongRequestOptions,
+    SDKDevboxListParams,
+    SDKObjectListParams,
+    SDKDevboxCreateParams,
+    SDKObjectCreateParams,
+    SDKBlueprintListParams,
+    SDKBlueprintCreateParams,
+    SDKDiskSnapshotListParams,
+    SDKDevboxExtraCreateParams,
+)
 from .devbox import Devbox
-from .._types import Body, Omit, Query, Headers, Timeout, NotGiven, omit, not_given
-from .._client import Runloop, DEFAULT_MAX_RETRIES
-from ._helpers import ContentType, detect_content_type
+from .._types import Timeout, NotGiven, not_given
+from .._client import DEFAULT_MAX_RETRIES, Runloop
+from ._helpers import detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
-from ..lib.polling import PollingConfig
 from .storage_object import StorageObject
-from ..types.devbox_list_params import DevboxListParams
-from ..types.object_list_params import ObjectListParams
-from ..types.shared_params.mount import Mount
-from ..types.devbox_create_params import DevboxCreateParams
-from ..types.blueprint_list_params import BlueprintListParams
-from ..types.blueprint_create_params import BlueprintCreateParams
-from ..types.shared_params.launch_parameters import LaunchParameters
-from ..types.devboxes.disk_snapshot_list_params import DiskSnapshotListParams
-from ..types.shared_params.code_mount_parameters import CodeMountParameters
+from ..types.object_create_params import ContentType
 
 
 class DevboxClient:
@@ -44,22 +46,9 @@ class DevboxClient:
 
     def create(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-        **params: Unpack[DevboxCreateParams],
+        **params: Unpack[SDKDevboxCreateParams],
     ) -> Devbox:
         devbox_view = self._client.devboxes.create_and_await_running(
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
             **params,
         )
         return Devbox(self._client, devbox_view.id)
@@ -67,126 +56,33 @@ class DevboxClient:
     def create_from_blueprint_id(
         self,
         blueprint_id: str,
-        *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        entrypoint: Optional[str] | Omit = omit,
-        environment_variables: Optional[Dict[str, str]] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        mounts: Optional[Iterable[Mount]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_id=blueprint_id,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
         return Devbox(self._client, devbox_view.id)
 
     def create_from_blueprint_name(
         self,
         blueprint_name: str,
-        *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        entrypoint: Optional[str] | Omit = omit,
-        environment_variables: Optional[Dict[str, str]] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        mounts: Optional[Iterable[Mount]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
         return Devbox(self._client, devbox_view.id)
 
     def create_from_snapshot(
         self,
         snapshot_id: str,
-        *,
-        code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
-        entrypoint: Optional[str] | Omit = omit,
-        environment_variables: Optional[Dict[str, str]] | Omit = omit,
-        file_mounts: Optional[Dict[str, str]] | Omit = omit,
-        launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        metadata: Optional[Dict[str, str]] | Omit = omit,
-        mounts: Optional[Iterable[Mount]] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
-        secrets: Optional[Dict[str, str]] | Omit = omit,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
+        **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
         devbox_view = self._client.devboxes.create_and_await_running(
             snapshot_id=snapshot_id,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            launch_parameters=launch_parameters,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            repo_connection_id=repo_connection_id,
-            secrets=secrets,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+            **params,
         )
         return Devbox(self._client, devbox_view.id)
 
@@ -196,18 +92,9 @@ class DevboxClient:
 
     def list(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        **params: Unpack[DevboxListParams],
+        **params: Unpack[SDKDevboxListParams],
     ) -> list[Devbox]:
         page = self._client.devboxes.list(
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
             **params,
         )
         return [Devbox(self._client, item.id) for item in page.devboxes]
@@ -230,18 +117,9 @@ class SnapshotClient:
 
     def list(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        **params: Unpack[DiskSnapshotListParams],
+        **params: Unpack[SDKDiskSnapshotListParams],
     ) -> list[Snapshot]:
         page = self._client.devboxes.disk_snapshots.list(
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
             **params,
         )
         return [Snapshot(self._client, item.id) for item in page.snapshots]
@@ -267,22 +145,9 @@ class BlueprintClient:
 
     def create(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-        **params: Unpack[BlueprintCreateParams],
+        **params: Unpack[SDKBlueprintCreateParams],
     ) -> Blueprint:
         blueprint = self._client.blueprints.create_and_await_build_complete(
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
             **params,
         )
         return Blueprint(self._client, blueprint.id)
@@ -292,18 +157,9 @@ class BlueprintClient:
 
     def list(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        **params: Unpack[BlueprintListParams],
+        **params: Unpack[SDKBlueprintListParams],
     ) -> list[Blueprint]:
         page = self._client.blueprints.list(
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
             **params,
         )
         return [Blueprint(self._client, item.id) for item in page.blueprints]
@@ -327,13 +183,9 @@ class StorageObjectClient:
 
     def create(
         self,
-        name: str,
-        *,
-        content_type: ContentType | None = None,
-        metadata: Optional[Dict[str, str]] = None,
+        **params: Unpack[SDKObjectCreateParams],
     ) -> StorageObject:
-        content_type = content_type or detect_content_type(name)
-        obj = self._client.objects.create(name=name, content_type=content_type, metadata=metadata)
+        obj = self._client.objects.create(**params)
         return StorageObject(self._client, obj.id, upload_url=obj.upload_url)
 
     def from_id(self, object_id: str) -> StorageObject:
@@ -341,34 +193,33 @@ class StorageObjectClient:
 
     def list(
         self,
-        *,
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | Timeout | None | NotGiven = not_given,
-        **params: Unpack[ObjectListParams],
+        **params: Unpack[SDKObjectListParams],
     ) -> list[StorageObject]:
         page = self._client.objects.list(
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
             **params,
         )
         return [StorageObject(self._client, item.id, upload_url=item.upload_url) for item in page.objects]
 
     def upload_from_file(
         self,
-        path: str | Path,
+        file_path: str | Path,
         name: str | None = None,
         *,
-        metadata: Optional[Dict[str, str]] = None,
         content_type: ContentType | None = None,
+        metadata: Optional[Dict[str, str]] = None,
+        **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
-        file_path = Path(path)
-        object_name = name or file_path.name
-        obj = self.create(object_name, content_type=content_type, metadata=metadata)
-        obj.upload_content(file_path)
+        path = Path(file_path)
+
+        try:
+            content = path.read_bytes()
+        except OSError as error:
+            raise OSError(f"Failed to read file {path}: {error}") from error
+
+        name = name or path.name
+        content_type = content_type or detect_content_type(str(file_path))
+        obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
+        obj.upload_content(content)
         obj.complete()
         return obj
 
@@ -378,8 +229,9 @@ class StorageObjectClient:
         name: str,
         *,
         metadata: Optional[Dict[str, str]] = None,
+        **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
-        obj = self.create(name, content_type="text", metadata=metadata)
+        obj = self.create(name=name, content_type="text", metadata=metadata, **options)
         obj.upload_content(text)
         obj.complete()
         return obj
@@ -389,10 +241,11 @@ class StorageObjectClient:
         data: bytes,
         name: str,
         *,
+        content_type: ContentType,
         metadata: Optional[Dict[str, str]] = None,
-        content_type: ContentType | None = None,
+        **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
-        obj = self.create(name, content_type=content_type or detect_content_type(name), metadata=metadata)
+        obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
         obj.upload_content(data)
         obj.complete()
         return obj
