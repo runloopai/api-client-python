@@ -59,18 +59,32 @@ class ExecutionResult:
     # TODO: add pagination support once we have it in the API
     def stdout(self, num_lines: Optional[int] = None) -> str:
         """Return captured standard output."""
-        if not num_lines or num_lines <= 0 or not self._result.stdout:
-            return ""
-        return self._result.stdout[-num_lines:]
+        text = self._result.stdout or ""
+        return _tail_lines(text, num_lines)
 
     # TODO: add pagination support once we have it in the API
     def stderr(self, num_lines: Optional[int] = None) -> str:
         """Return captured standard error."""
-        if not num_lines or num_lines <= 0 or not self._result.stderr:
-            return ""
-        return self._result.stderr[-num_lines:]
+        text = self._result.stderr or ""
+        return _tail_lines(text, num_lines)
 
     @property
     def raw(self) -> DevboxAsyncExecutionDetailView:
         """Access the underlying API response."""
         return self._result
+
+
+def _tail_lines(text: str, num_lines: Optional[int]) -> str:
+    if not text:
+        return ""
+    if num_lines is None or num_lines <= 0:
+        return text
+
+    lines = text.splitlines()
+    if not lines:
+        return text
+
+    clipped = "\n".join(lines[-num_lines:])
+    if text.endswith("\n"):
+        clipped += "\n"
+    return clipped
