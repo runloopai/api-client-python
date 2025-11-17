@@ -8,6 +8,8 @@ from typing_extensions import Required, TypedDict
 __all__ = ["ObjectCreateParams"]
 
 
+# We manually define the content type here to use as a type hint in the SDK.
+# If the API supports new content types, update this list accordingly.
 ContentType = Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"]
 
 
