@@ -51,6 +51,6 @@ jobs:
         env:
           # Use 2 workers to run files in parallel.
           # Tests within a file are run sequentially.
-          PYTEST_ADDOPTS: "-n 2 -m smoketest"
+          PYTEST_ADDOPTS: "-n 10 -m smoketest"
         run: |
           uv run pytest -q -vv tests/smoketests
