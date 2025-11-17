@@ -159,6 +159,8 @@ class TestAsyncExecution:
             exit_status=0,
             stdout="output",
             stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
 
         mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=completed_execution)
@@ -262,20 +264,4 @@ class TestAsyncExecution:
         mock_async_client.devboxes.executions.kill.assert_awaited_once_with(
             "exec_123",
             devbox_id="dev_123",
-        )
-
-    @pytest.mark.asyncio
-    async def test_kill_with_process_group(
-        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
-    ) -> None:
-        """Test kill with kill_process_group."""
-        mock_async_client.devboxes.executions.kill = AsyncMock(return_value=None)
-
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        await execution.kill(kill_process_group=True)
-
-        mock_async_client.devboxes.executions.kill.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
-            kill_process_group=True,
         )

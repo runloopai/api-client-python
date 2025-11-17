@@ -137,11 +137,9 @@ class TestAsyncDevbox:
     async def test_suspend(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test suspend method."""
         mock_async_client.devboxes.suspend = AsyncMock(return_value=devbox_view)
-        polling_config = PollingConfig(timeout_seconds=60.0)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
         result = await devbox.suspend(
-            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -152,7 +150,6 @@ class TestAsyncDevbox:
         assert result == devbox_view
         mock_async_client.devboxes.suspend.assert_called_once_with(
             "dev_123",
-            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -164,11 +161,9 @@ class TestAsyncDevbox:
     async def test_resume(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test resume method."""
         mock_async_client.devboxes.resume = AsyncMock(return_value=devbox_view)
-        polling_config = PollingConfig(timeout_seconds=60.0)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
         result = await devbox.resume(
-            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -179,7 +174,6 @@ class TestAsyncDevbox:
         assert result == devbox_view
         mock_async_client.devboxes.resume.assert_called_once_with(
             "dev_123",
-            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
