@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
+
+import pytest
 
 from tests.sdk.conftest import (
     MockDevboxView,
@@ -195,7 +197,7 @@ class TestStorageObjectClient:
         mock_client.objects.create.return_value = object_view
 
         client = StorageObjectClient(mock_client)
-        obj = client.create("test.txt", content_type="text", metadata={"key": "value"})
+        obj = client.create(name="test.txt", content_type="text", metadata={"key": "value"})
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
@@ -207,12 +209,11 @@ class TestStorageObjectClient:
         mock_client.objects.create.return_value = object_view
 
         client = StorageObjectClient(mock_client)
-        obj = client.create("test.txt")
+        obj = client.create(name="test.txt")
 
         assert isinstance(obj, StorageObject)
-        # Should detect "text" from .txt extension
         call_kwargs = mock_client.objects.create.call_args[1]
-        assert call_kwargs["content_type"] == "text"
+        assert "content_type" not in call_kwargs
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
@@ -250,55 +251,71 @@ class TestStorageObjectClient:
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
 
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            client = StorageObjectClient(mock_client)
-            obj = client.upload_from_file(temp_file, name="test.txt")
+        client = StorageObjectClient(mock_client)
+        obj = client.upload_from_file(temp_file, name="test.txt")
 
-            assert isinstance(obj, StorageObject)
-            assert obj.id == "obj_123"
-            mock_client.objects.create.assert_called_once()
-            mock_client.objects.complete.assert_called_once()
-            mock_put.assert_called_once()
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once()
+        mock_client.objects.complete.assert_called_once()
+        http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
 
     def test_upload_from_text(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test upload_from_text method."""
         mock_client.objects.create.return_value = object_view
 
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            client = StorageObjectClient(mock_client)
-            obj = client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
+        client = StorageObjectClient(mock_client)
+        obj = client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
 
-            assert isinstance(obj, StorageObject)
-            assert obj.id == "obj_123"
-            mock_client.objects.create.assert_called_once()
-            call_kwargs = mock_client.objects.create.call_args[1]
-            assert call_kwargs["content_type"] == "text"
-            assert call_kwargs["metadata"] == {"key": "value"}
-            mock_client.objects.complete.assert_called_once()
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata={"key": "value"},
+        )
+        http_client.put.assert_called_once_with(object_view.upload_url, content="test content")
+        mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_bytes(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test upload_from_bytes method."""
         mock_client.objects.create.return_value = object_view
 
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            client = StorageObjectClient(mock_client)
-            obj = client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
+        client = StorageObjectClient(mock_client)
+        obj = client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
 
-            assert isinstance(obj, StorageObject)
-            assert obj.id == "obj_123"
-            mock_client.objects.create.assert_called_once()
-            call_kwargs = mock_client.objects.create.call_args[1]
-            assert call_kwargs["content_type"] == "binary"
-            mock_client.objects.complete.assert_called_once()
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once_with(
+            name="test.bin",
+            content_type="binary",
+            metadata=None,
+        )
+        http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
+        mock_client.objects.complete.assert_called_once()
+
+    def test_upload_from_file_missing_path(self, mock_client: Mock, tmp_path: Path) -> None:
+        """upload_from_file should raise when file cannot be read."""
+        client = StorageObjectClient(mock_client)
+        missing_file = tmp_path / "missing.txt"
+
+        with pytest.raises(OSError, match="Failed to read file"):
+            client.upload_from_file(missing_file)
 
 
 class TestRunloopSDK:

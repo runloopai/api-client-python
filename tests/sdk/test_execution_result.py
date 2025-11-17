@@ -100,6 +100,7 @@ class TestExecutionResult:
         """Test stdout method."""
         result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.stdout() == "output"
+        assert result.stdout(num_lines=10) == "output"
 
     def test_stdout_empty(self, mock_client: Mock) -> None:
         """Test stdout method when stdout is None."""
@@ -126,6 +127,7 @@ class TestExecutionResult:
         )
         result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.stderr() == "error message"
+        assert result.stderr(num_lines=20) == "error message"
 
     def test_stderr_empty(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test stderr method when stderr is None."""

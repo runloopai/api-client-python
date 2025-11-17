@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from pathlib import Path
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
-from tests.sdk.conftest import MockObjectView, create_mock_httpx_client, create_mock_httpx_response
+from tests.sdk.conftest import MockObjectView, create_mock_httpx_response
 from runloop_api_client.sdk import AsyncStorageObject
 
 
@@ -105,15 +104,15 @@ class TestAsyncStorageObject:
         mock_async_client.objects.download.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_download_as_bytes(self, mock_client_class: Mock, mock_async_client: AsyncMock) -> None:
+    async def test_download_as_bytes(self, mock_async_client: AsyncMock) -> None:
         """Test download_as_bytes method."""
         download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
         mock_async_client.objects.download = AsyncMock(return_value=download_url_view)
 
         mock_response = create_mock_httpx_response(content=b"file content")
-        mock_http_client = create_mock_httpx_client(methods={"get": mock_response})
-        mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        http_client.get = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
         obj = AsyncStorageObject(mock_async_client, "obj_123", None)
         result = await obj.download_as_bytes(
@@ -125,50 +124,26 @@ class TestAsyncStorageObject:
         )
 
         assert result == b"file content"
-        # Verify get was called
-        mock_http_client.get.assert_called_once()
+        http_client.get.assert_awaited_once_with("https://download.example.com/obj_123")
         mock_response.raise_for_status.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_download_as_text_default_encoding(
-        self, mock_client_class: Mock, mock_async_client: AsyncMock
-    ) -> None:
-        """Test download_as_text with default encoding."""
+    async def test_download_as_text(self, mock_async_client: AsyncMock) -> None:
+        """Test download_as_text forces UTF-8 encoding."""
         download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
         mock_async_client.objects.download = AsyncMock(return_value=download_url_view)
 
-        mock_response = create_mock_httpx_response(text="file content", encoding="utf-8")
-        mock_http_client = create_mock_httpx_client(methods={"get": mock_response})
-        mock_client_class.return_value = mock_http_client
+        mock_response = create_mock_httpx_response(text="file content", encoding="latin-1")
+        http_client = AsyncMock()
+        http_client.get = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
         obj = AsyncStorageObject(mock_async_client, "obj_123", None)
         result = await obj.download_as_text()
 
         assert result == "file content"
         assert mock_response.encoding == "utf-8"
-        # Verify get was called
-        mock_http_client.get.assert_called_once()
-
-    @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_download_as_text_custom_encoding(
-        self, mock_client_class: Mock, mock_async_client: AsyncMock
-    ) -> None:
-        """Test download_as_text with custom encoding."""
-        download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
-        mock_async_client.objects.download = AsyncMock(return_value=download_url_view)
-
-        mock_response = create_mock_httpx_response(text="file content", encoding="utf-8")
-        mock_http_client = create_mock_httpx_client(methods={"get": mock_response})
-        mock_client_class.return_value = mock_http_client
-
-        obj = AsyncStorageObject(mock_async_client, "obj_123", None)
-        result = await obj.download_as_text(encoding="latin-1")
-
-        assert result == "file content"
-        assert mock_response.encoding == "latin-1"
-        mock_http_client.get.assert_called_once()
+        http_client.get.assert_awaited_once_with("https://download.example.com/obj_123")
 
     @pytest.mark.asyncio
     async def test_delete(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -188,60 +163,31 @@ class TestAsyncStorageObject:
         mock_async_client.objects.delete.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_upload_content_string(self, mock_client_class: Mock, mock_async_client: AsyncMock) -> None:
+    async def test_upload_content_string(self, mock_async_client: AsyncMock) -> None:
         """Test upload_content with string."""
         mock_response = create_mock_httpx_response()
-        mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-        mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
         obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
         await obj.upload_content("test content")
 
-        # Verify put was called with correct URL
-        mock_http_client.put.assert_called_once()
-        call_args = mock_http_client.put.call_args
-        assert call_args[0][0] == "https://upload.example.com"
+        http_client.put.assert_awaited_once_with("https://upload.example.com", content="test content")
         mock_response.raise_for_status.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_upload_content_bytes(self, mock_client_class: Mock, mock_async_client: AsyncMock) -> None:
+    async def test_upload_content_bytes(self, mock_async_client: AsyncMock) -> None:
         """Test upload_content with bytes."""
         mock_response = create_mock_httpx_response()
-        mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-        mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
         obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
         await obj.upload_content(b"test content")
 
-        # Verify put was called with correct URL
-        mock_http_client.put.assert_called_once()
-        call_args = mock_http_client.put.call_args
-        assert call_args[0][0] == "https://upload.example.com"
-        mock_response.raise_for_status.assert_called_once()
-
-    @pytest.mark.asyncio
-    @patch("httpx.AsyncClient")
-    async def test_upload_content_path(
-        self, mock_client_class: Mock, mock_async_client: AsyncMock, tmp_path: Path
-    ) -> None:
-        """Test upload_content with Path."""
-        mock_response = create_mock_httpx_response()
-        mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-        mock_client_class.return_value = mock_http_client
-
-        temp_file = tmp_path / "test_file.txt"
-        temp_file.write_text("test content")
-
-        obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
-        await obj.upload_content(temp_file)
-
-        # Verify put was called
-        mock_http_client.put.assert_called_once()
-        call_args = mock_http_client.put.call_args
-        assert call_args[0][0] == "https://upload.example.com"
-        assert call_args[1]["content"] == b"test content"
+        http_client.put.assert_awaited_once_with("https://upload.example.com", content=b"test content")
         mock_response.raise_for_status.assert_called_once()
 
     @pytest.mark.asyncio

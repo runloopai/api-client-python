@@ -8,7 +8,6 @@ from types import SimpleNamespace
 from unittest.mock import Mock
 
 from tests.sdk.conftest import (
-    TASK_COMPLETION_LONG,
     THREAD_STARTUP_DELAY,
     TASK_COMPLETION_SHORT,
     MockExecutionView,
@@ -18,7 +17,6 @@ from runloop_api_client.sdk.execution import Execution, _StreamingGroup
 # Legacy aliases for backward compatibility during transition
 SHORT_SLEEP = THREAD_STARTUP_DELAY
 MEDIUM_SLEEP = TASK_COMPLETION_SHORT * 10  # 0.2
-LONG_SLEEP = TASK_COMPLETION_LONG
 
 
 class TestStreamingGroup:
@@ -87,7 +85,7 @@ class TestExecution:
         execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
-        assert execution._latest == execution_view
+        assert execution._initial_result == execution_view
 
     def test_init_with_streaming_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test Execution initialization with streaming group."""
@@ -104,19 +102,29 @@ class TestExecution:
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
 
+    def test_repr(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
+        """Test Execution repr formatting."""
+        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        assert repr(execution) == "<Execution id='exec_123'>"
+
     def test_result_already_completed(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test result when execution is already completed."""
+        """Test result delegates to wait_for_command when already completed."""
+        mock_client.devboxes = Mock()
+        mock_client.devboxes.wait_for_command.return_value = execution_view
+
         execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
         result = execution.result()
 
         assert result.exit_code == 0
-        assert result.stdout() == "output"
-        # Verify await_completed is not called when already completed
-        if hasattr(mock_client.devboxes.executions, "await_completed"):
-            assert not mock_client.devboxes.executions.await_completed.called
+        assert result.stdout(num_lines=10) == "output"
+        mock_client.devboxes.wait_for_command.assert_called_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+            statuses=["completed"],
+        )
 
     def test_result_needs_polling(self, mock_client: Mock) -> None:
-        """Test result when execution needs polling."""
+        """Test result when execution needs to poll for completion."""
         running_execution = SimpleNamespace(
             execution_id="exec_123",
             devbox_id="dev_123",
@@ -131,21 +139,22 @@ class TestExecution:
             stderr="",
         )
 
-        mock_client.devboxes.executions.await_completed.return_value = completed_execution
+        mock_client.devboxes = Mock()
+        mock_client.devboxes.wait_for_command.return_value = completed_execution
 
         execution = Execution(mock_client, "dev_123", running_execution)  # type: ignore[arg-type]
         result = execution.result()
 
         assert result.exit_code == 0
-        assert result.stdout() == "output"
-        mock_client.devboxes.executions.await_completed.assert_called_once_with(
+        assert result.stdout(num_lines=10) == "output"
+        mock_client.devboxes.wait_for_command.assert_called_once_with(
             "exec_123",
             devbox_id="dev_123",
-            polling_config=None,
+            statuses=["completed"],
         )
 
     def test_result_with_streaming_group(self, mock_client: Mock) -> None:
-        """Test result with streaming group cleanup."""
+        """Test result waits for streaming group to finish."""
         running_execution = SimpleNamespace(
             execution_id="exec_123",
             devbox_id="dev_123",
@@ -160,7 +169,8 @@ class TestExecution:
             stderr="",
         )
 
-        mock_client.devboxes.executions.await_completed.return_value = completed_execution
+        mock_client.devboxes = Mock()
+        mock_client.devboxes.wait_for_command.return_value = completed_execution
 
         stop_event = threading.Event()
         thread = threading.Thread(target=lambda: time.sleep(SHORT_SLEEP))
@@ -172,6 +182,32 @@ class TestExecution:
 
         assert result.exit_code == 0
         assert execution._streaming_group is None  # Should be cleaned up
+        mock_client.devboxes.wait_for_command.assert_called_once()
+
+    def test_result_passes_options(self, mock_client: Mock) -> None:
+        """Ensure options are forwarded to wait_for_command."""
+        execution_view = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="output",
+            stderr="",
+        )
+
+        mock_client.devboxes = Mock()
+        mock_client.devboxes.wait_for_command.return_value = execution_view
+
+        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution.result(timeout=30.0, idempotency_key="abc123")
+
+        mock_client.devboxes.wait_for_command.assert_called_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+            statuses=["completed"],
+            timeout=30.0,
+            idempotency_key="abc123",
+        )
 
     def test_get_state(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test get_state method."""
@@ -180,13 +216,14 @@ class TestExecution:
             devbox_id="dev_123",
             status="running",
         )
+        mock_client.devboxes.executions = Mock()
         mock_client.devboxes.executions.retrieve.return_value = updated_execution
 
         execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
         result = execution.get_state()
 
         assert result == updated_execution
-        assert execution._latest == updated_execution
+        assert execution._initial_result == execution_view
         mock_client.devboxes.executions.retrieve.assert_called_once_with(
             "exec_123",
             devbox_id="dev_123",
@@ -202,7 +239,6 @@ class TestExecution:
         mock_client.devboxes.executions.kill.assert_called_once_with(
             "exec_123",
             devbox_id="dev_123",
-            kill_process_group=None,
         )
 
     def test_kill_with_process_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
@@ -217,38 +253,3 @@ class TestExecution:
             devbox_id="dev_123",
             kill_process_group=True,
         )
-
-    def test_kill_with_streaming_cleanup(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test kill cleans up streaming."""
-        mock_client.devboxes.executions.kill.return_value = None
-
-        stop_event = threading.Event()
-        # Thread needs to be started to be joinable
-        thread = threading.Thread(target=lambda: time.sleep(LONG_SLEEP))
-        thread.start()
-        streaming_group = _StreamingGroup([thread], stop_event)
-
-        execution = Execution(mock_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
-        execution.kill()
-
-        assert execution._streaming_group is None  # Should be cleaned up
-        assert stop_event.is_set()  # Should be stopped
-
-    def test_stop_streaming_no_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test _stop_streaming when no streaming group."""
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        execution._stop_streaming()  # Should not raise
-
-    def test_stop_streaming_with_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test _stop_streaming with streaming group."""
-        stop_event = threading.Event()
-        # Thread needs to be started to be joinable
-        thread = threading.Thread(target=lambda: time.sleep(LONG_SLEEP))
-        thread.start()
-        streaming_group = _StreamingGroup([thread], stop_event)
-
-        execution = Execution(mock_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
-        execution._stop_streaming()
-
-        assert execution._streaming_group is None
-        assert stop_event.is_set()

@@ -14,7 +14,6 @@ import pytest
 
 from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk import AsyncDevbox
-from runloop_api_client._types import Omit, NotGiven
 
 
 class TestAsyncCommandInterface:
@@ -25,17 +24,19 @@ class TestAsyncCommandInterface:
         self, mock_async_client: AsyncMock, execution_view: MockExecutionView
     ) -> None:
         """Test exec without streaming callbacks."""
-        mock_async_client.devboxes.execute_and_await_completion = AsyncMock(return_value=execution_view)
+        mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_view)
+        mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=execution_view)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.cmd.exec("echo hello")
+        result = await devbox.cmd.exec(command="echo hello")
 
         assert result.exit_code == 0
-        assert await result.stdout() == "output"
-        call_kwargs = mock_async_client.devboxes.execute_and_await_completion.call_args[1]
+        assert await result.stdout(num_lines=10) == "output"
+        call_kwargs = mock_async_client.devboxes.execute_async.call_args[1]
         assert call_kwargs["command"] == "echo hello"
-        assert isinstance(call_kwargs["shell_name"], Omit)
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
+        mock_async_client.devboxes.executions.await_completed.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_exec_with_stdout_callback(self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock) -> None:
@@ -61,7 +62,7 @@ class TestAsyncCommandInterface:
         stdout_calls: list[str] = []
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
+        result = await devbox.cmd.exec(command="echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
         mock_async_client.devboxes.execute_async.assert_called_once()
@@ -81,7 +82,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        execution = await devbox.cmd.exec_async("long-running command")
+        execution = await devbox.cmd.exec_async(command="long-running command")
 
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
@@ -97,7 +98,7 @@ class TestAsyncFileInterface:
         mock_async_client.devboxes.read_file_contents = AsyncMock(return_value="file content")
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.file.read("/path/to/file")
+        result = await devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
         mock_async_client.devboxes.read_file_contents.assert_called_once()
@@ -109,7 +110,7 @@ class TestAsyncFileInterface:
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.file.write("/path/to/file", "content")
+        result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
         mock_async_client.devboxes.write_file_contents.assert_called_once()
@@ -121,7 +122,7 @@ class TestAsyncFileInterface:
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.file.write("/path/to/file", b"content")
+        result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
         mock_async_client.devboxes.write_file_contents.assert_called_once()
@@ -134,7 +135,7 @@ class TestAsyncFileInterface:
         mock_async_client.devboxes.download_file = AsyncMock(return_value=mock_response)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.file.download("/path/to/file")
+        result = await devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
         mock_async_client.devboxes.download_file.assert_called_once()
@@ -150,7 +151,7 @@ class TestAsyncFileInterface:
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
 
-        result = await devbox.file.upload("/remote/path", temp_file)
+        result = await devbox.file.upload(path="/remote/path", file=temp_file)
 
         assert result == execution_detail
         mock_async_client.devboxes.upload_file.assert_called_once()

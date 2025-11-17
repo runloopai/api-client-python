@@ -93,7 +93,7 @@ class TestAsyncExecution:
         execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
-        assert execution._latest == execution_view
+        assert execution._initial_result == execution_view
 
     @pytest.mark.asyncio
     async def test_init_with_streaming_group(
@@ -121,19 +121,28 @@ class TestAsyncExecution:
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
 
+    def test_repr(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
+        """Test AsyncExecution repr formatting."""
+        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        assert repr(execution) == "<AsyncExecution id='exec_123'>"
+
     @pytest.mark.asyncio
     async def test_result_already_completed(
         self, mock_async_client: AsyncMock, execution_view: MockExecutionView
     ) -> None:
         """Test result when execution is already completed."""
+        mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=execution_view)
+
         execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         result = await execution.result()
 
         assert result.exit_code == 0
-        assert await result.stdout() == "output"
-        # Verify await_completed is not called when already completed
-        if hasattr(mock_async_client.devboxes.executions, "await_completed"):
-            assert not mock_async_client.devboxes.executions.await_completed.called
+        assert await result.stdout(num_lines=10) == "output"
+        mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+            statuses=["completed"],
+        )
 
     @pytest.mark.asyncio
     async def test_result_needs_polling(self, mock_async_client: AsyncMock) -> None:
@@ -152,14 +161,18 @@ class TestAsyncExecution:
             stderr="",
         )
 
-        mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=completed_execution)
+        mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=completed_execution)
 
         execution = AsyncExecution(mock_async_client, "dev_123", running_execution)  # type: ignore[arg-type]
         result = await execution.result()
 
         assert result.exit_code == 0
-        assert await result.stdout() == "output"
-        mock_async_client.devboxes.executions.await_completed.assert_called_once()
+        assert await result.stdout(num_lines=10) == "output"
+        mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+            statuses=["completed"],
+        )
 
     @pytest.mark.asyncio
     async def test_result_with_streaming_group(self, mock_async_client: AsyncMock) -> None:
@@ -178,7 +191,7 @@ class TestAsyncExecution:
             stderr="",
         )
 
-        mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=completed_execution)
+        mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=completed_execution)
 
         async def task() -> None:
             await asyncio.sleep(SHORT_SLEEP)
@@ -191,6 +204,32 @@ class TestAsyncExecution:
 
         assert result.exit_code == 0
         assert execution._streaming_group is None  # Should be cleaned up
+        mock_async_client.devboxes.wait_for_command.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_result_passes_options(self, mock_async_client: AsyncMock) -> None:
+        """Ensure result forwards options to wait_for_command."""
+        execution_view = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="output",
+            stderr="",
+        )
+
+        mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=execution_view)
+
+        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        await execution.result(timeout=30.0, idempotency_key="abc123")
+
+        mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+            statuses=["completed"],
+            timeout=30.0,
+            idempotency_key="abc123",
+        )
 
     @pytest.mark.asyncio
     async def test_get_state(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
@@ -206,8 +245,11 @@ class TestAsyncExecution:
         result = await execution.get_state()
 
         assert result == updated_execution
-        assert execution._latest == updated_execution
-        mock_async_client.devboxes.executions.retrieve.assert_called_once()
+        assert execution._initial_result == execution_view
+        mock_async_client.devboxes.executions.retrieve.assert_awaited_once_with(
+            "exec_123",
+            devbox_id="dev_123",
+        )
 
     @pytest.mark.asyncio
     async def test_kill(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
@@ -217,10 +259,9 @@ class TestAsyncExecution:
         execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         await execution.kill()
 
-        mock_async_client.devboxes.executions.kill.assert_called_once_with(
+        mock_async_client.devboxes.executions.kill.assert_awaited_once_with(
             "exec_123",
             devbox_id="dev_123",
-            kill_process_group=None,
         )
 
     @pytest.mark.asyncio
@@ -233,71 +274,8 @@ class TestAsyncExecution:
         execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         await execution.kill(kill_process_group=True)
 
-        mock_async_client.devboxes.executions.kill.assert_called_once_with(
+        mock_async_client.devboxes.executions.kill.assert_awaited_once_with(
             "exec_123",
             devbox_id="dev_123",
             kill_process_group=True,
         )
-
-    @pytest.mark.asyncio
-    async def test_kill_with_streaming_cleanup(
-        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
-    ) -> None:
-        """Test kill cleans up streaming."""
-        mock_async_client.devboxes.executions.kill = AsyncMock(return_value=None)
-
-        async def task() -> None:
-            await asyncio.sleep(LONG_SLEEP)  # Long-running task
-
-        tasks = [asyncio.create_task(task())]
-        streaming_group = _AsyncStreamingGroup(tasks)
-
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
-        await execution.kill()
-
-        assert execution._streaming_group is None  # Should be cleaned up
-        assert all(task.cancelled() for task in tasks)  # Tasks should be cancelled
-
-    @pytest.mark.asyncio
-    async def test_settle_streaming_no_group(
-        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
-    ) -> None:
-        """Test _settle_streaming when no streaming group."""
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        await execution._settle_streaming(cancel=True)  # Should not raise
-
-    @pytest.mark.asyncio
-    async def test_settle_streaming_with_group_cancel(
-        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
-    ) -> None:
-        """Test _settle_streaming with streaming group and cancel."""
-
-        async def task() -> None:
-            await asyncio.sleep(LONG_SLEEP)  # Long-running task
-
-        tasks = [asyncio.create_task(task())]
-        streaming_group = _AsyncStreamingGroup(tasks)
-
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
-        await execution._settle_streaming(cancel=True)
-
-        assert execution._streaming_group is None
-        assert all(task.cancelled() for task in tasks)
-
-    @pytest.mark.asyncio
-    async def test_settle_streaming_with_group_wait(
-        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
-    ) -> None:
-        """Test _settle_streaming with streaming group and wait."""
-
-        async def task() -> None:
-            await asyncio.sleep(SHORT_SLEEP)
-
-        tasks = [asyncio.create_task(task())]
-        streaming_group = _AsyncStreamingGroup(tasks)
-
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
-        await execution._settle_streaming(cancel=False)
-
-        assert execution._streaming_group is None
-        assert all(task.done() for task in tasks)

@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 
@@ -127,14 +126,15 @@ class TestStorageObject:
             timeout=30.0,
         )
 
-    @patch("httpx.get")
-    def test_download_as_bytes(self, mock_get: Mock, mock_client: Mock) -> None:
+    def test_download_as_bytes(self, mock_client: Mock) -> None:
         """Test download_as_bytes method."""
         download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
         mock_client.objects.download.return_value = download_url_view
 
         mock_response = create_mock_httpx_response(content=b"file content")
-        mock_get.return_value = mock_response
+        http_client = Mock()
+        http_client.get.return_value = mock_response
+        mock_client._client = http_client
 
         obj = StorageObject(mock_client, "obj_123", None)
         result = obj.download_as_bytes(
@@ -146,40 +146,25 @@ class TestStorageObject:
         )
 
         assert result == b"file content"
-        mock_get.assert_called_once_with("https://download.example.com/obj_123")
+        http_client.get.assert_called_once_with("https://download.example.com/obj_123")
         mock_response.raise_for_status.assert_called_once()
 
-    @patch("httpx.get")
-    def test_download_as_text_default_encoding(self, mock_get: Mock, mock_client: Mock) -> None:
-        """Test download_as_text with default encoding."""
+    def test_download_as_text(self, mock_client: Mock) -> None:
+        """Test download_as_text forces UTF-8 encoding."""
         download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
         mock_client.objects.download.return_value = download_url_view
 
-        mock_response = create_mock_httpx_response(text="file content", encoding="utf-8")
-        mock_get.return_value = mock_response
+        mock_response = create_mock_httpx_response(text="file content", encoding="latin-1")
+        http_client = Mock()
+        http_client.get.return_value = mock_response
+        mock_client._client = http_client
 
         obj = StorageObject(mock_client, "obj_123", None)
         result = obj.download_as_text()
 
         assert result == "file content"
         assert mock_response.encoding == "utf-8"
-        mock_get.assert_called_once()
-
-    @patch("httpx.get")
-    def test_download_as_text_custom_encoding(self, mock_get: Mock, mock_client: Mock) -> None:
-        """Test download_as_text with custom encoding."""
-        download_url_view = SimpleNamespace(download_url="https://download.example.com/obj_123")
-        mock_client.objects.download.return_value = download_url_view
-
-        mock_response = create_mock_httpx_response(text="file content", encoding="utf-8")
-        mock_get.return_value = mock_response
-
-        obj = StorageObject(mock_client, "obj_123", None)
-        result = obj.download_as_text(encoding="latin-1")
-
-        assert result == "file content"
-        assert mock_response.encoding == "latin-1"
-        mock_get.assert_called_once()
+        http_client.get.assert_called_once_with("https://download.example.com/obj_123")
 
     def test_delete(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test delete method."""
@@ -204,46 +189,30 @@ class TestStorageObject:
             idempotency_key="key-123",
         )
 
-    @patch("httpx.put")
-    def test_upload_content_string(self, mock_put: Mock, mock_client: Mock) -> None:
+    def test_upload_content_string(self, mock_client: Mock) -> None:
         """Test upload_content with string."""
         mock_response = create_mock_httpx_response()
-        mock_put.return_value = mock_response
+        http_client = Mock()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
         obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
         obj.upload_content("test content")
 
-        mock_put.assert_called_once_with("https://upload.example.com", content=b"test content")
+        http_client.put.assert_called_once_with("https://upload.example.com", content="test content")
         mock_response.raise_for_status.assert_called_once()
 
-    @patch("httpx.put")
-    def test_upload_content_bytes(self, mock_put: Mock, mock_client: Mock) -> None:
+    def test_upload_content_bytes(self, mock_client: Mock) -> None:
         """Test upload_content with bytes."""
         mock_response = create_mock_httpx_response()
-        mock_put.return_value = mock_response
+        http_client = Mock()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
         obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
         obj.upload_content(b"test content")
 
-        mock_put.assert_called_once_with("https://upload.example.com", content=b"test content")
-        mock_response.raise_for_status.assert_called_once()
-
-    @patch("httpx.put")
-    def test_upload_content_path(self, mock_put: Mock, mock_client: Mock, tmp_path: Path) -> None:
-        """Test upload_content with Path."""
-        mock_response = create_mock_httpx_response()
-        mock_put.return_value = mock_response
-
-        temp_file = tmp_path / "test_file.txt"
-        temp_file.write_text("test content")
-
-        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-        obj.upload_content(temp_file)
-
-        mock_put.assert_called_once()
-        call_args = mock_put.call_args
-        assert call_args[0][0] == "https://upload.example.com"
-        assert call_args[1]["content"] == b"test content"
+        http_client.put.assert_called_once_with("https://upload.example.com", content=b"test content")
         mock_response.raise_for_status.assert_called_once()
 
     def test_upload_content_no_url(self, mock_client: Mock) -> None:
@@ -277,17 +246,16 @@ class TestStorageObjectEdgeCases:
         object_view = SimpleNamespace(id="obj_123", upload_url="https://upload.example.com")
         mock_client.objects.create.return_value = object_view
 
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-            large_content = b"x" * LARGE_FILE_SIZE  # 10MB
-            obj.upload_content(large_content)
+        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
+        large_content = b"x" * LARGE_FILE_SIZE  # 10MB
+        obj.upload_content(large_content)
 
-            mock_put.assert_called_once()
-            call_args = mock_put.call_args
-            assert len(call_args[1]["content"]) == LARGE_FILE_SIZE
+        http_client.put.assert_called_once_with("https://upload.example.com", content=large_content)
 
 
 class TestStorageObjectPythonSpecific:
@@ -299,33 +267,29 @@ class TestStorageObjectPythonSpecific:
 
         client = StorageObjectClient(mock_client)
 
-        # Python detects from extension
-        client.create("test.txt")
+        # When no content type provided, create forwards only provided params
+        client.create(name="test.txt")
         call1 = mock_client.objects.create.call_args[1]
-        assert call1["content_type"] == "text"
+        assert "content_type" not in call1
 
         # Explicit content type
-        client.create("test.bin", content_type="binary")
+        client.create(name="test.bin", content_type="binary")
         call2 = mock_client.objects.create.call_args[1]
         assert call2["content_type"] == "binary"
 
-    def test_upload_data_types(self, mock_client: Mock, tmp_path: Path) -> None:
+    def test_upload_data_types(self, mock_client: Mock) -> None:
         """Test Python supports more upload data types."""
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
+        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
 
-            # String
-            obj.upload_content("string content")
+        # String
+        obj.upload_content("string content")
 
-            # Bytes
-            obj.upload_content(b"bytes content")
+        # Bytes
+        obj.upload_content(b"bytes content")
 
-            # Path (Python-specific)
-            temp_file = tmp_path / "test_file.txt"
-            temp_file.write_text("file content")
-            obj.upload_content(temp_file)
-
-            assert mock_put.call_count == 3
+        assert http_client.put.call_count == 2

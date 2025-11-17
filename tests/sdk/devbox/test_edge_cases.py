@@ -9,7 +9,7 @@ from __future__ import annotations
 import threading
 from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import httpx
 import pytest
@@ -136,11 +136,13 @@ class TestDevboxPythonSpecific:
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test")
 
-        with patch("httpx.put") as mock_put:
-            mock_response = create_mock_httpx_response()
-            mock_put.return_value = mock_response
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
 
-            obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-            obj.upload_content(temp_file)  # Path object works
+        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
+        obj.upload_content(temp_file.read_text())
+        obj.upload_content(temp_file.read_bytes())
 
-            mock_put.assert_called_once()
+        assert http_client.put.call_count == 2

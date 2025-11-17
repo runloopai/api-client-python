@@ -103,6 +103,7 @@ class TestAsyncExecutionResult:
         """Test stdout method."""
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert await result.stdout() == "output"
+        assert await result.stdout(num_lines=10) == "output"
 
     @pytest.mark.asyncio
     async def test_stdout_empty(self, mock_async_client: AsyncMock) -> None:
@@ -131,6 +132,7 @@ class TestAsyncExecutionResult:
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert await result.stderr() == "error message"
+        assert await result.stderr(num_lines=20) == "error message"
 
     @pytest.mark.asyncio
     async def test_stderr_empty(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:

@@ -15,7 +15,7 @@ from tests.sdk.conftest import (
     MockDevboxView,
 )
 from runloop_api_client.sdk import Devbox
-from runloop_api_client._types import NotGiven, omit
+from runloop_api_client._types import omit
 from runloop_api_client.sdk.devbox import (
     _FileInterface,
     _CommandInterface,
@@ -45,7 +45,7 @@ class TestDevbox:
             assert devbox.id == "dev_123"
 
         call_kwargs = mock_client.devboxes.shutdown.call_args[1]
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_context_manager_exception_handling(self, mock_client: Mock) -> None:
         """Test context manager handles exceptions during shutdown."""
@@ -232,14 +232,15 @@ class TestDevbox:
 
         assert snapshot.id == "snap_123"
         call_kwargs = mock_client.devboxes.snapshot_disk_async.call_args[1]
-        assert call_kwargs["commit_message"] is omit or call_kwargs["commit_message"] is None
+        assert "commit_message" not in call_kwargs or call_kwargs["commit_message"] in (omit, None)
         assert call_kwargs["metadata"] == {"key": "value"}
         assert call_kwargs["name"] == "test-snapshot"
         assert call_kwargs["extra_headers"] == {"X-Custom": "value"}
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
         call_kwargs2 = mock_client.devboxes.disk_snapshots.await_completed.call_args[1]
         assert call_kwargs2["polling_config"] == polling_config
-        assert isinstance(call_kwargs2["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs2
 
     def test_snapshot_disk_async(self, mock_client: Mock) -> None:
         """Test snapshot_disk_async returns immediately."""
@@ -255,11 +256,12 @@ class TestDevbox:
 
         assert snapshot.id == "snap_123"
         call_kwargs = mock_client.devboxes.snapshot_disk_async.call_args[1]
-        assert call_kwargs["commit_message"] is omit or call_kwargs["commit_message"] is None
+        assert "commit_message" not in call_kwargs or call_kwargs["commit_message"] in (omit, None)
         assert call_kwargs["metadata"] == {"key": "value"}
         assert call_kwargs["name"] == "test-snapshot"
         assert call_kwargs["extra_headers"] == {"X-Custom": "value"}
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
         # Verify async method does not wait for completion
         if hasattr(mock_client.devboxes.disk_snapshots, "await_completed"):
             assert not mock_client.devboxes.disk_snapshots.await_completed.called
@@ -272,7 +274,7 @@ class TestDevbox:
         devbox.close()
 
         call_kwargs = mock_client.devboxes.shutdown.call_args[1]
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_cmd_property(self, mock_client: Mock) -> None:
         """Test cmd property returns CommandInterface."""

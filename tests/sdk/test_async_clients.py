@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -13,7 +13,6 @@ from tests.sdk.conftest import (
     MockObjectView,
     MockSnapshotView,
     MockBlueprintView,
-    create_mock_httpx_client,
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import AsyncDevbox, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
@@ -205,12 +204,16 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
 
         client = AsyncStorageObjectClient(mock_async_client)
-        obj = await client.create("test.txt", content_type="text", metadata={"key": "value"})
+        obj = await client.create(name="test.txt", content_type="text", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
         assert obj.upload_url == "https://upload.example.com/obj_123"
-        mock_async_client.objects.create.assert_called_once()
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata={"key": "value"},
+        )
 
     @pytest.mark.asyncio
     async def test_create_auto_detect_content_type(
@@ -220,11 +223,11 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
 
         client = AsyncStorageObjectClient(mock_async_client)
-        obj = await client.create("test.txt")
+        obj = await client.create(name="test.txt")
 
         assert isinstance(obj, AsyncStorageObject)
         call_kwargs = mock_async_client.objects.create.call_args[1]
-        assert call_kwargs["content_type"] == "text"
+        assert "content_type" not in call_kwargs
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
@@ -254,7 +257,7 @@ class TestAsyncStorageObjectClient:
         assert len(objects) == 1
         assert isinstance(objects[0], AsyncStorageObject)
         assert objects[0].id == "obj_123"
-        mock_async_client.objects.list.assert_called_once()
+        mock_async_client.objects.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_upload_from_file(
@@ -267,18 +270,19 @@ class TestAsyncStorageObjectClient:
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
 
-        with patch("httpx.AsyncClient") as mock_client_class:
-            mock_response = create_mock_httpx_response()
-            mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-            mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
-            client = AsyncStorageObjectClient(mock_async_client)
-            obj = await client.upload_from_file(temp_file, name="test.txt")
+        client = AsyncStorageObjectClient(mock_async_client)
+        obj = await client.upload_from_file(temp_file, name="test.txt")
 
-            assert isinstance(obj, AsyncStorageObject)
-            assert obj.id == "obj_123"
-            mock_async_client.objects.create.assert_called_once()
-            mock_async_client.objects.complete.assert_called_once()
+        assert isinstance(obj, AsyncStorageObject)
+        assert obj.id == "obj_123"
+        mock_async_client.objects.create.assert_awaited_once()
+        mock_async_client.objects.complete.assert_awaited_once()
+        http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
 
     @pytest.mark.asyncio
     async def test_upload_from_text(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -286,20 +290,23 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
         mock_async_client.objects.complete = AsyncMock(return_value=object_view)
 
-        with patch("httpx.AsyncClient") as mock_client_class:
-            mock_response = create_mock_httpx_response()
-            mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-            mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
-            client = AsyncStorageObjectClient(mock_async_client)
-            obj = await client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
+        client = AsyncStorageObjectClient(mock_async_client)
+        obj = await client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
 
-            assert isinstance(obj, AsyncStorageObject)
-            assert obj.id == "obj_123"
-            mock_async_client.objects.create.assert_called_once()
-            call_kwargs = mock_async_client.objects.create.call_args[1]
-            assert call_kwargs["content_type"] == "text"
-            mock_async_client.objects.complete.assert_called_once()
+        assert isinstance(obj, AsyncStorageObject)
+        assert obj.id == "obj_123"
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata={"key": "value"},
+        )
+        http_client.put.assert_awaited_once_with(object_view.upload_url, content="test content")
+        mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_upload_from_bytes(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -307,20 +314,32 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
         mock_async_client.objects.complete = AsyncMock(return_value=object_view)
 
-        with patch("httpx.AsyncClient") as mock_client_class:
-            mock_response = create_mock_httpx_response()
-            mock_http_client = create_mock_httpx_client(methods={"put": mock_response})
-            mock_client_class.return_value = mock_http_client
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
 
-            client = AsyncStorageObjectClient(mock_async_client)
-            obj = await client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
+        client = AsyncStorageObjectClient(mock_async_client)
+        obj = await client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
 
-            assert isinstance(obj, AsyncStorageObject)
-            assert obj.id == "obj_123"
-            mock_async_client.objects.create.assert_called_once()
-            call_kwargs = mock_async_client.objects.create.call_args[1]
-            assert call_kwargs["content_type"] == "binary"
-            mock_async_client.objects.complete.assert_called_once()
+        assert isinstance(obj, AsyncStorageObject)
+        assert obj.id == "obj_123"
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="test.bin",
+            content_type="binary",
+            metadata=None,
+        )
+        http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
+        mock_async_client.objects.complete.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_upload_from_file_missing_path(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
+        """upload_from_file should raise when file cannot be read."""
+        client = AsyncStorageObjectClient(mock_async_client)
+        missing_file = tmp_path / "missing.txt"
+
+        with pytest.raises(OSError, match="Failed to read file"):
+            await client.upload_from_file(missing_file)
 
 
 class TestAsyncRunloopSDK:

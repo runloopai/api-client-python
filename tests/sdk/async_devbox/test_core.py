@@ -13,7 +13,6 @@ import pytest
 
 from tests.sdk.conftest import MockDevboxView
 from runloop_api_client.sdk import AsyncDevbox
-from runloop_api_client._types import NotGiven
 from runloop_api_client.lib.polling import PollingConfig
 from runloop_api_client.sdk.async_devbox import (
     _AsyncFileInterface,
@@ -44,7 +43,7 @@ class TestAsyncDevbox:
             assert devbox.id == "dev_123"
 
         call_kwargs = mock_async_client.devboxes.shutdown.call_args[1]
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     @pytest.mark.asyncio
     async def test_context_manager_exception_handling(self, mock_async_client: AsyncMock) -> None:
@@ -137,8 +136,7 @@ class TestAsyncDevbox:
     @pytest.mark.asyncio
     async def test_suspend(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test suspend method."""
-        mock_async_client.devboxes.suspend = AsyncMock(return_value=None)
-        mock_async_client.devboxes.await_suspended = AsyncMock(return_value=devbox_view)
+        mock_async_client.devboxes.suspend = AsyncMock(return_value=devbox_view)
         polling_config = PollingConfig(timeout_seconds=60.0)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
@@ -154,22 +152,18 @@ class TestAsyncDevbox:
         assert result == devbox_view
         mock_async_client.devboxes.suspend.assert_called_once_with(
             "dev_123",
+            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
             timeout=30.0,
             idempotency_key="key-123",
         )
-        mock_async_client.devboxes.await_suspended.assert_called_once_with(
-            "dev_123",
-            polling_config=polling_config,
-        )
 
     @pytest.mark.asyncio
     async def test_resume(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test resume method."""
-        mock_async_client.devboxes.resume = AsyncMock(return_value=None)
-        mock_async_client.devboxes.await_running = AsyncMock(return_value=devbox_view)
+        mock_async_client.devboxes.resume = AsyncMock(return_value=devbox_view)
         polling_config = PollingConfig(timeout_seconds=60.0)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
@@ -185,15 +179,12 @@ class TestAsyncDevbox:
         assert result == devbox_view
         mock_async_client.devboxes.resume.assert_called_once_with(
             "dev_123",
+            polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
             timeout=30.0,
             idempotency_key="key-123",
-        )
-        mock_async_client.devboxes.await_running.assert_called_once_with(
-            "dev_123",
-            polling_config=polling_config,
         )
 
     @pytest.mark.asyncio
@@ -240,7 +231,17 @@ class TestAsyncDevbox:
 
         assert snapshot.id == "snap_123"
         mock_async_client.devboxes.snapshot_disk_async.assert_called_once()
+        call_kwargs = mock_async_client.devboxes.snapshot_disk_async.call_args[1]
+        assert "commit_message" not in call_kwargs
+        assert call_kwargs["metadata"] == {"key": "value"}
+        assert call_kwargs["name"] == "test-snapshot"
+        assert call_kwargs["extra_headers"] == {"X-Custom": "value"}
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
         mock_async_client.devboxes.disk_snapshots.await_completed.assert_called_once()
+        call_kwargs2 = mock_async_client.devboxes.disk_snapshots.await_completed.call_args[1]
+        assert call_kwargs2["polling_config"] == polling_config
+        assert "timeout" not in call_kwargs2
 
     @pytest.mark.asyncio
     async def test_snapshot_disk_async(self, mock_async_client: AsyncMock) -> None:
@@ -257,6 +258,13 @@ class TestAsyncDevbox:
 
         assert snapshot.id == "snap_123"
         mock_async_client.devboxes.snapshot_disk_async.assert_called_once()
+        call_kwargs = mock_async_client.devboxes.snapshot_disk_async.call_args[1]
+        assert "commit_message" not in call_kwargs
+        assert call_kwargs["metadata"] == {"key": "value"}
+        assert call_kwargs["name"] == "test-snapshot"
+        assert call_kwargs["extra_headers"] == {"X-Custom": "value"}
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
 
     @pytest.mark.asyncio
     async def test_close(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -267,6 +275,8 @@ class TestAsyncDevbox:
         await devbox.close()
 
         mock_async_client.devboxes.shutdown.assert_called_once()
+        call_kwargs = mock_async_client.devboxes.shutdown.call_args[1]
+        assert "timeout" not in call_kwargs
 
     def test_cmd_property(self, mock_async_client: AsyncMock) -> None:
         """Test cmd property returns AsyncCommandInterface."""

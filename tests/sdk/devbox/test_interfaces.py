@@ -14,7 +14,6 @@ import httpx
 
 from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk import Devbox
-from runloop_api_client._types import Omit, NotGiven
 
 
 class TestCommandInterface:
@@ -22,18 +21,19 @@ class TestCommandInterface:
 
     def test_exec_without_callbacks(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test exec without streaming callbacks."""
-        mock_client.devboxes.execute_and_await_completion.return_value = execution_view
+        mock_client.devboxes.execute_async.return_value = execution_view
+        mock_client.devboxes.executions.await_completed.return_value = execution_view
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec("echo hello")
+        result = devbox.cmd.exec(command="echo hello")
 
         assert result.exit_code == 0
-        assert result.stdout() == "output"
-        call_kwargs = mock_client.devboxes.execute_and_await_completion.call_args[1]
+        assert result.stdout(num_lines=10) == "output"
+        call_kwargs = mock_client.devboxes.execute_async.call_args[1]
         assert call_kwargs["command"] == "echo hello"
-        assert isinstance(call_kwargs["shell_name"], Omit)
-        assert call_kwargs["polling_config"] is None
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "polling_config" not in call_kwargs
+        assert "timeout" not in call_kwargs
+        mock_client.devboxes.executions.await_completed.assert_not_called()
 
     def test_exec_with_stdout_callback(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with stdout callback."""
@@ -58,7 +58,7 @@ class TestCommandInterface:
         stdout_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
+        result = devbox.cmd.exec(command="echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -87,7 +87,7 @@ class TestCommandInterface:
         stderr_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec("echo hello", stderr=stderr_calls.append)
+        result = devbox.cmd.exec(command="echo hello", stderr=stderr_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -116,7 +116,7 @@ class TestCommandInterface:
         output_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec("echo hello", output=output_calls.append)
+        result = devbox.cmd.exec(command="echo hello", output=output_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -148,7 +148,7 @@ class TestCommandInterface:
 
         devbox = Devbox(mock_client, "dev_123")
         result = devbox.cmd.exec(
-            "echo hello",
+            command="echo hello",
             stdout=stdout_calls.append,
             stderr=stderr_calls.append,
             output=output_calls.append,
@@ -169,7 +169,7 @@ class TestCommandInterface:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
         devbox = Devbox(mock_client, "dev_123")
-        execution = devbox.cmd.exec_async("long-running command")
+        execution = devbox.cmd.exec_async(command="long-running command")
 
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"
@@ -184,12 +184,12 @@ class TestFileInterface:
         mock_client.devboxes.read_file_contents.return_value = "file content"
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.file.read("/path/to/file")
+        result = devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
         call_kwargs = mock_client.devboxes.read_file_contents.call_args[1]
         assert call_kwargs["file_path"] == "/path/to/file"
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_write_string(self, mock_client: Mock) -> None:
         """Test file write with string."""
@@ -197,13 +197,13 @@ class TestFileInterface:
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.file.write("/path/to/file", "content")
+        result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
         call_kwargs = mock_client.devboxes.write_file_contents.call_args[1]
         assert call_kwargs["file_path"] == "/path/to/file"
         assert call_kwargs["contents"] == "content"
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_write_bytes(self, mock_client: Mock) -> None:
         """Test file write with bytes."""
@@ -211,13 +211,13 @@ class TestFileInterface:
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.file.write("/path/to/file", b"content")
+        result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
         call_kwargs = mock_client.devboxes.write_file_contents.call_args[1]
         assert call_kwargs["file_path"] == "/path/to/file"
         assert call_kwargs["contents"] == "content"
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_download(self, mock_client: Mock) -> None:
         """Test file download."""
@@ -226,12 +226,12 @@ class TestFileInterface:
         mock_client.devboxes.download_file.return_value = mock_response
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.file.download("/path/to/file")
+        result = devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
         call_kwargs = mock_client.devboxes.download_file.call_args[1]
         assert call_kwargs["path"] == "/path/to/file"
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
     def test_upload(self, mock_client: Mock, tmp_path: Path) -> None:
         """Test file upload."""
@@ -243,13 +243,13 @@ class TestFileInterface:
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
 
-        result = devbox.file.upload("/remote/path", temp_file)
+        result = devbox.file.upload(path="/remote/path", file=temp_file)
 
         assert result == execution_detail
         call_kwargs = mock_client.devboxes.upload_file.call_args[1]
         assert call_kwargs["path"] == "/remote/path"
         assert call_kwargs["file"] is not None  # File object from temp_path
-        assert isinstance(call_kwargs["timeout"], NotGiven)
+        assert "timeout" not in call_kwargs
 
 
 class TestNetworkInterface:
