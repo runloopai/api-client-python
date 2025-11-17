@@ -106,7 +106,7 @@ class TestAsyncStorageObjectUploadMethods:
             assert obj.id is not None
 
             # Verify content
-            downloaded = await obj.download_as_text()
+            downloaded = await obj.download_as_text(duration_seconds=120)
             assert downloaded == text_content
         finally:
             await obj.delete()
@@ -126,7 +126,7 @@ class TestAsyncStorageObjectUploadMethods:
             assert obj.id is not None
 
             # Verify content
-            downloaded = await obj.download_as_bytes()
+            downloaded = await obj.download_as_bytes(duration_seconds=120)
             assert downloaded == bytes_content
         finally:
             await obj.delete()
@@ -150,7 +150,7 @@ class TestAsyncStorageObjectUploadMethods:
                 assert obj.id is not None
 
                 # Verify content
-                downloaded = await obj.download_as_text()
+                downloaded = await obj.download_as_text(duration_seconds=150)
                 assert downloaded == "Content from async file upload"
             finally:
                 await obj.delete()
@@ -171,7 +171,7 @@ class TestAsyncStorageObjectDownloadMethods:
         )
 
         try:
-            downloaded = await obj.download_as_text()
+            downloaded = await obj.download_as_text(duration_seconds=90)
             assert downloaded == content
         finally:
             await obj.delete()
@@ -187,7 +187,7 @@ class TestAsyncStorageObjectDownloadMethods:
         )
 
         try:
-            downloaded = await obj.download_as_bytes()
+            downloaded = await obj.download_as_bytes(duration_seconds=120)
             assert downloaded == content
             assert isinstance(downloaded, bytes)
         finally:
@@ -322,12 +322,12 @@ class TestAsyncStorageObjectDevboxIntegration:
 
             try:
                 # Read the mounted file
-                content = await devbox.file.read("/home/user/async-mounted-file")
+                content = await devbox.file.read(file_path="/home/user/async-mounted-file")
                 assert content == "Async content to mount and access"
 
                 # Verify file exists via command
-                result = await devbox.cmd.exec("test -f /home/user/async-mounted-file && echo 'exists'")
-                stdout = await result.stdout()
+                result = await devbox.cmd.exec(command="test -f /home/user/async-mounted-file && echo 'exists'")
+                stdout = await result.stdout(num_lines=1)
                 assert "exists" in stdout
             finally:
                 await devbox.shutdown()
@@ -351,7 +351,7 @@ class TestAsyncStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = await obj.download_as_text()
+            downloaded = await obj.download_as_text(duration_seconds=120)
             assert len(downloaded) == len(large_content)
             assert downloaded == large_content
         finally:
@@ -371,7 +371,7 @@ class TestAsyncStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = await obj.download_as_bytes()
+            downloaded = await obj.download_as_bytes(duration_seconds=120)
             assert downloaded == binary_content
         finally:
             await obj.delete()
@@ -386,7 +386,7 @@ class TestAsyncStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = await obj.download_as_text()
+            downloaded = await obj.download_as_text(duration_seconds=60)
             assert downloaded == ""
         finally:
             await obj.delete()
@@ -415,7 +415,7 @@ class TestAsyncStorageObjectWorkflows:
             assert result.state == "READ_ONLY"
 
             # Download and verify
-            downloaded = await obj.download_as_text()
+            downloaded = await obj.download_as_text(duration_seconds=120)
             assert downloaded == original_content
 
             # Refresh info
@@ -454,12 +454,12 @@ class TestAsyncStorageObjectWorkflows:
 
             try:
                 # Read mounted content in devbox
-                content = await devbox.file.read("/home/user/async-workflow-data")
+                content = await devbox.file.read(file_path="/home/user/async-workflow-data")
                 assert content == "Async initial content"
 
                 # Verify we can work with the file
-                result = await devbox.cmd.exec("cat /home/user/async-workflow-data")
-                stdout = await result.stdout()
+                result = await devbox.cmd.exec(command="cat /home/user/async-workflow-data")
+                stdout = await result.stdout(num_lines=1)
                 assert "Async initial content" in stdout
             finally:
                 await devbox.shutdown()

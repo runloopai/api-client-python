@@ -222,7 +222,7 @@ class TestAsyncBlueprintDevboxIntegration:
         try:
             # Create devbox from the blueprint
             devbox = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-async-devbox-from-blueprint"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -235,9 +235,10 @@ class TestAsyncBlueprintDevboxIntegration:
                 assert info.status == "running"
 
                 # Verify the blueprint's software is installed
-                result = await devbox.cmd.exec("which python3")
+                result = await devbox.cmd.exec(command="which python3")
                 assert result.exit_code == 0
                 assert result.success is True
+                assert "python" in await result.stdout(num_lines=1)
             finally:
                 await devbox.shutdown()
         finally:
@@ -255,14 +256,14 @@ class TestAsyncBlueprintDevboxIntegration:
         try:
             # Create first devbox
             devbox1 = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-async-devbox-1"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
 
             # Create second devbox
             devbox2 = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-async-devbox-2"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )

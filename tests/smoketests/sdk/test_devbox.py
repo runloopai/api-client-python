@@ -107,27 +107,28 @@ class TestDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_simple_command(self, shared_devbox: Devbox) -> None:
         """Test executing a simple command synchronously."""
-        result = shared_devbox.cmd.exec("echo 'Hello from SDK!'")
+        result = shared_devbox.cmd.exec(command="echo 'Hello from SDK!'")
 
         assert result is not None
         assert result.exit_code == 0
         assert result.success is True
 
-        stdout = result.stdout()
+        stdout = result.stdout(num_lines=1)
         assert "Hello from SDK!" in stdout
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_with_exit_code(self, shared_devbox: Devbox) -> None:
         """Test command execution captures exit codes correctly."""
-        result = shared_devbox.cmd.exec("exit 42")
+        result = shared_devbox.cmd.exec(command="exit 42")
 
         assert result.exit_code == 42
         assert result.success is False
+        assert "" == result.stdout(num_lines=1)
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_async_command(self, shared_devbox: Devbox) -> None:
         """Test executing a command asynchronously."""
-        execution = shared_devbox.cmd.exec_async("echo 'Async command' && sleep 1")
+        execution = shared_devbox.cmd.exec_async(command="echo 'Async command' && sleep 1")
 
         assert execution is not None
         assert execution.execution_id is not None
@@ -137,7 +138,7 @@ class TestDevboxCommandExecution:
         assert result.exit_code == 0
         assert result.success is True
 
-        stdout = result.stdout()
+        stdout = result.stdout(num_lines=2)
         assert "Async command" in stdout
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -149,12 +150,15 @@ class TestDevboxCommandExecution:
             stdout_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            'echo "line1" && echo "line2" && echo "line3"',
+            command='echo "line1" && echo "line2" && echo "line3"',
             stdout=stdout_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
+
+        combined_stdout = result.stdout(num_lines=3)
+        assert "line1" in combined_stdout
 
         # Verify callback received output
         assert len(stdout_lines) > 0
@@ -172,18 +176,35 @@ class TestDevboxCommandExecution:
             stderr_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            'echo "error1" >&2 && echo "error2" >&2',
+            command='echo "error1" >&2 && echo "error2" >&2',
             stderr=stderr_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
 
+        combined_stderr = result.stderr(num_lines=2)
+        assert "error1" in combined_stderr
+
         # Verify callback received stderr output
         assert len(stderr_lines) > 0
         stderr_combined = "".join(stderr_lines)
         assert "error1" in stderr_combined
         assert "error2" in stderr_combined
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_exec_with_large_stdout(self, shared_devbox: Devbox) -> None:
+        """Ensure we capture all stdout lines (similar to TS last_n coverage)."""
+        result = shared_devbox.cmd.exec(
+            command="; ".join([f"echo line {i}" for i in range(1, 7)]),
+        )
+
+        assert result.exit_code == 0
+        lines = result.stdout().strip().split("\n")
+        assert lines == [f"line {i}" for i in range(1, 7)]
+
+        tail = result.stdout(num_lines=3).strip().split("\n")
+        assert tail == ["line 4", "line 5", "line 6"]
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_with_output_callback(self, shared_devbox: Devbox) -> None:
@@ -194,12 +215,15 @@ class TestDevboxCommandExecution:
             output_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            'echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
+            command='echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
             output=output_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
+
+        stdout_capture = result.stdout(num_lines=2)
+        assert "stdout1" in stdout_capture or "stdout2" in stdout_capture
 
         # Verify callback received both stdout and stderr
         assert len(output_lines) > 0
@@ -215,7 +239,7 @@ class TestDevboxCommandExecution:
             stdout_lines.append(line)
 
         execution = shared_devbox.cmd.exec_async(
-            'echo "async output"',
+            command='echo "async output"',
             stdout=stdout_callback,
         )
 
@@ -225,6 +249,9 @@ class TestDevboxCommandExecution:
         result = execution.result()
         assert result.success is True
         assert result.exit_code == 0
+
+        async_stdout = result.stdout(num_lines=1)
+        assert "async output" in async_stdout
 
         # Verify streaming captured output
         assert len(stdout_lines) > 0
@@ -242,10 +269,10 @@ class TestDevboxFileOperations:
         content = "Hello from SDK file operations!"
 
         # Write file
-        shared_devbox.file.write(file_path, content)
+        shared_devbox.file.write(file_path=file_path, contents=content)
 
         # Read file
-        read_content = shared_devbox.file.read(file_path)
+        read_content = shared_devbox.file.read(file_path=file_path)
         assert read_content == content
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -255,10 +282,10 @@ class TestDevboxFileOperations:
         content = b"Binary content from SDK"
 
         # Write bytes
-        shared_devbox.file.write(file_path, content)
+        shared_devbox.file.write(file_path=file_path, contents=content.decode("utf-8"))
 
         # Read and verify
-        read_content = shared_devbox.file.read(file_path)
+        read_content = shared_devbox.file.read(file_path=file_path)
         assert read_content == content.decode("utf-8")
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -268,10 +295,10 @@ class TestDevboxFileOperations:
         content = "Content to download"
 
         # Write file first
-        shared_devbox.file.write(file_path, content)
+        shared_devbox.file.write(file_path=file_path, contents=content)
 
         # Download file
-        downloaded = shared_devbox.file.download(file_path)
+        downloaded = shared_devbox.file.download(path=file_path)
         assert isinstance(downloaded, bytes)
         assert downloaded.decode("utf-8") == content
 
@@ -286,10 +313,10 @@ class TestDevboxFileOperations:
         try:
             # Upload file
             remote_path = "~/uploaded_test.txt"
-            shared_devbox.file.upload(remote_path, Path(tmp_path))
+            shared_devbox.file.upload(path=remote_path, file=Path(tmp_path))
 
             # Verify by reading
-            content = shared_devbox.file.read(remote_path)
+            content = shared_devbox.file.read(file_path=remote_path)
             assert content == "Uploaded content from SDK"
         finally:
             # Cleanup temp file
@@ -309,7 +336,9 @@ class TestDevboxStateManagement:
 
         try:
             # Suspend the devbox
-            suspended_info = devbox.suspend()
+            suspended_info = devbox.suspend(
+                polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0),
+            )
             assert suspended_info.status == "suspended"
 
             # Verify suspended state
@@ -317,7 +346,9 @@ class TestDevboxStateManagement:
             assert info.status == "suspended"
 
             # Resume the devbox
-            resumed_info = devbox.resume()
+            resumed_info = devbox.resume(
+                polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0),
+            )
             assert resumed_info.status == "running"
 
             # Verify running state
@@ -403,7 +434,7 @@ class TestDevboxCreationMethods:
         try:
             # Create devbox from blueprint
             devbox = sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-devbox-from-blueprint-id"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -431,7 +462,7 @@ class TestDevboxCreationMethods:
         try:
             # Create devbox from blueprint name
             devbox = sdk_client.devbox.create_from_blueprint_name(
-                blueprint_name,
+                blueprint_name=blueprint_name,
                 name=unique_name("sdk-devbox-from-blueprint-name"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -456,7 +487,7 @@ class TestDevboxCreationMethods:
 
         try:
             # Create a file in the devbox
-            source_devbox.file.write("/tmp/test_snapshot.txt", "Snapshot test content")
+            source_devbox.file.write(file_path="/tmp/test_snapshot.txt", contents="Snapshot test content")
 
             # Create snapshot
             snapshot = source_devbox.snapshot_disk(
@@ -466,7 +497,7 @@ class TestDevboxCreationMethods:
             try:
                 # Create devbox from snapshot
                 devbox = sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-devbox-from-snapshot"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -477,7 +508,7 @@ class TestDevboxCreationMethods:
                     assert info.status == "running"
 
                     # Verify snapshot content is present
-                    content = devbox.file.read("/tmp/test_snapshot.txt")
+                    content = devbox.file.read(file_path="/tmp/test_snapshot.txt")
                     assert content == "Snapshot test content"
                 finally:
                     devbox.shutdown()
@@ -533,7 +564,7 @@ class TestDevboxSnapshots:
 
         try:
             # Create a file to snapshot
-            devbox.file.write("/tmp/snapshot_test.txt", "Snapshot content")
+            devbox.file.write(file_path="/tmp/snapshot_test.txt", contents="Snapshot content")
 
             # Create snapshot (waits for completion)
             snapshot = devbox.snapshot_disk(

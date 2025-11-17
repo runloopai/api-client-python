@@ -106,27 +106,28 @@ class TestAsyncDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_simple_command(self, shared_devbox: AsyncDevbox) -> None:
         """Test executing a simple command asynchronously."""
-        result = await shared_devbox.cmd.exec("echo 'Hello from async SDK!'")
+        result = await shared_devbox.cmd.exec(command="echo 'Hello from async SDK!'")
 
         assert result is not None
         assert result.exit_code == 0
         assert result.success is True
 
-        stdout = await result.stdout()
+        stdout = await result.stdout(num_lines=1)
         assert "Hello from async SDK!" in stdout
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_with_exit_code(self, shared_devbox: AsyncDevbox) -> None:
         """Test command execution captures exit codes correctly."""
-        result = await shared_devbox.cmd.exec("exit 42")
+        result = await shared_devbox.cmd.exec(command="exit 42")
 
         assert result.exit_code == 42
         assert result.success is False
+        assert await result.stdout(num_lines=1) == ""
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_async_command(self, shared_devbox: AsyncDevbox) -> None:
         """Test executing a command asynchronously with exec_async."""
-        execution = await shared_devbox.cmd.exec_async("echo 'Async command' && sleep 1")
+        execution = await shared_devbox.cmd.exec_async(command="echo 'Async command' && sleep 1")
 
         assert execution is not None
         assert execution.execution_id is not None
@@ -136,7 +137,7 @@ class TestAsyncDevboxCommandExecution:
         assert result.exit_code == 0
         assert result.success is True
 
-        stdout = await result.stdout()
+        stdout = await result.stdout(num_lines=2)
         assert "Async command" in stdout
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -148,12 +149,15 @@ class TestAsyncDevboxCommandExecution:
             stdout_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            'echo "line1" && echo "line2" && echo "line3"',
+            command='echo "line1" && echo "line2" && echo "line3"',
             stdout=stdout_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
+
+        combined_stdout = await result.stdout(num_lines=3)
+        assert "line1" in combined_stdout
 
         # Verify callback received output
         assert len(stdout_lines) > 0
@@ -171,18 +175,35 @@ class TestAsyncDevboxCommandExecution:
             stderr_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            'echo "error1" >&2 && echo "error2" >&2',
+            command='echo "error1" >&2 && echo "error2" >&2',
             stderr=stderr_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
 
+        combined_stderr = await result.stderr(num_lines=2)
+        assert "error1" in combined_stderr
+
         # Verify callback received stderr output
         assert len(stderr_lines) > 0
         stderr_combined = "".join(stderr_lines)
         assert "error1" in stderr_combined
         assert "error2" in stderr_combined
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_exec_with_large_stdout(self, shared_devbox: AsyncDevbox) -> None:
+        """Ensure we capture all stdout lines (similar to TS last_n coverage)."""
+        result = await shared_devbox.cmd.exec(
+            command="; ".join([f"echo line {i}" for i in range(1, 7)]),
+        )
+
+        assert result.exit_code == 0
+        lines = (await result.stdout()).strip().split("\n")
+        assert lines == [f"line {i}" for i in range(1, 7)]
+
+        tail = (await result.stdout(num_lines=3)).strip().split("\n")
+        assert tail == ["line 4", "line 5", "line 6"]
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_with_output_callback(self, shared_devbox: AsyncDevbox) -> None:
@@ -193,12 +214,15 @@ class TestAsyncDevboxCommandExecution:
             output_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            'echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
+            command='echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
             output=output_callback,
         )
 
         assert result.success is True
         assert result.exit_code == 0
+
+        stdout_capture = await result.stdout(num_lines=2)
+        assert "stdout1" in stdout_capture or "stdout2" in stdout_capture
 
         # Verify callback received both stdout and stderr
         assert len(output_lines) > 0
@@ -214,7 +238,7 @@ class TestAsyncDevboxCommandExecution:
             stdout_lines.append(line)
 
         execution = await shared_devbox.cmd.exec_async(
-            'echo "async output"',
+            command='echo "async output"',
             stdout=stdout_callback,
         )
 
@@ -224,6 +248,9 @@ class TestAsyncDevboxCommandExecution:
         result = await execution.result()
         assert result.success is True
         assert result.exit_code == 0
+
+        async_stdout = await result.stdout(num_lines=1)
+        assert "async output" in async_stdout
 
         # Verify streaming captured output
         assert len(stdout_lines) > 0
@@ -241,10 +268,10 @@ class TestAsyncDevboxFileOperations:
         content = "Hello from async SDK file operations!"
 
         # Write file
-        await shared_devbox.file.write(file_path, content)
+        await shared_devbox.file.write(file_path=file_path, contents=content)
 
         # Read file
-        read_content = await shared_devbox.file.read(file_path)
+        read_content = await shared_devbox.file.read(file_path=file_path)
         assert read_content == content
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -254,10 +281,10 @@ class TestAsyncDevboxFileOperations:
         content = b"Binary content from async SDK"
 
         # Write bytes
-        await shared_devbox.file.write(file_path, content)
+        await shared_devbox.file.write(file_path=file_path, contents=content.decode("utf-8"))
 
         # Read and verify
-        read_content = await shared_devbox.file.read(file_path)
+        read_content = await shared_devbox.file.read(file_path=file_path)
         assert read_content == content.decode("utf-8")
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -267,10 +294,10 @@ class TestAsyncDevboxFileOperations:
         content = "Content to download"
 
         # Write file first
-        await shared_devbox.file.write(file_path, content)
+        await shared_devbox.file.write(file_path=file_path, contents=content)
 
         # Download file
-        downloaded = await shared_devbox.file.download(file_path)
+        downloaded = await shared_devbox.file.download(path=file_path)
         assert isinstance(downloaded, bytes)
         assert downloaded.decode("utf-8") == content
 
@@ -285,10 +312,10 @@ class TestAsyncDevboxFileOperations:
         try:
             # Upload file
             remote_path = "~/uploaded_async_test.txt"
-            await shared_devbox.file.upload(remote_path, Path(tmp_path))
+            await shared_devbox.file.upload(path=remote_path, file=Path(tmp_path))
 
             # Verify by reading
-            content = await shared_devbox.file.read(remote_path)
+            content = await shared_devbox.file.read(file_path=remote_path)
             assert content == "Uploaded content from async SDK"
         finally:
             # Cleanup temp file
@@ -309,6 +336,10 @@ class TestAsyncDevboxStateManagement:
         try:
             # Suspend the devbox
             suspended_info = await devbox.suspend()
+            if suspended_info.status != "suspended":
+                suspended_info = await devbox.await_suspended(
+                    polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0)
+                )
             assert suspended_info.status == "suspended"
 
             # Verify suspended state
@@ -317,6 +348,10 @@ class TestAsyncDevboxStateManagement:
 
             # Resume the devbox
             resumed_info = await devbox.resume()
+            if resumed_info.status != "running":
+                resumed_info = await devbox.await_running(
+                    polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0)
+                )
             assert resumed_info.status == "running"
 
             # Verify running state
@@ -402,7 +437,7 @@ class TestAsyncDevboxCreationMethods:
         try:
             # Create devbox from blueprint
             devbox = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-async-devbox-from-blueprint-id"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -430,7 +465,7 @@ class TestAsyncDevboxCreationMethods:
         try:
             # Create devbox from blueprint name
             devbox = await async_sdk_client.devbox.create_from_blueprint_name(
-                blueprint_name,
+                blueprint_name=blueprint_name,
                 name=unique_name("sdk-async-devbox-from-blueprint-name"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -455,7 +490,9 @@ class TestAsyncDevboxCreationMethods:
 
         try:
             # Create a file in the devbox
-            await source_devbox.file.write("/tmp/test_async_snapshot.txt", "Async snapshot test content")
+            await source_devbox.file.write(
+                file_path="/tmp/test_async_snapshot.txt", contents="Async snapshot test content"
+            )
 
             # Create snapshot
             snapshot = await source_devbox.snapshot_disk(
@@ -465,7 +502,7 @@ class TestAsyncDevboxCreationMethods:
             try:
                 # Create devbox from snapshot
                 devbox = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-async-devbox-from-snapshot"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -476,7 +513,7 @@ class TestAsyncDevboxCreationMethods:
                     assert info.status == "running"
 
                     # Verify snapshot content is present
-                    content = await devbox.file.read("/tmp/test_async_snapshot.txt")
+                    content = await devbox.file.read(file_path="/tmp/test_async_snapshot.txt")
                     assert content == "Async snapshot test content"
                 finally:
                     await devbox.shutdown()
@@ -532,7 +569,7 @@ class TestAsyncDevboxSnapshots:
 
         try:
             # Create a file to snapshot
-            await devbox.file.write("/tmp/async_snapshot_test.txt", "Async snapshot content")
+            await devbox.file.write(file_path="/tmp/async_snapshot_test.txt", contents="Async snapshot content")
 
             # Create snapshot (waits for completion)
             snapshot = await devbox.snapshot_disk(

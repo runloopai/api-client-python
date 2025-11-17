@@ -106,7 +106,7 @@ class TestStorageObjectUploadMethods:
             assert obj.id is not None
 
             # Verify content
-            downloaded = obj.download_as_text()
+            downloaded = obj.download_as_text(duration_seconds=120)
             assert downloaded == text_content
         finally:
             obj.delete()
@@ -126,7 +126,7 @@ class TestStorageObjectUploadMethods:
             assert obj.id is not None
 
             # Verify content
-            downloaded = obj.download_as_bytes()
+            downloaded = obj.download_as_bytes(duration_seconds=120)
             assert downloaded == bytes_content
         finally:
             obj.delete()
@@ -150,7 +150,7 @@ class TestStorageObjectUploadMethods:
                 assert obj.id is not None
 
                 # Verify content
-                downloaded = obj.download_as_text()
+                downloaded = obj.download_as_text(duration_seconds=150)
                 assert downloaded == "Content from file upload"
             finally:
                 obj.delete()
@@ -171,7 +171,7 @@ class TestStorageObjectDownloadMethods:
         )
 
         try:
-            downloaded = obj.download_as_text()
+            downloaded = obj.download_as_text(duration_seconds=120)
             assert downloaded == content
         finally:
             obj.delete()
@@ -187,7 +187,7 @@ class TestStorageObjectDownloadMethods:
         )
 
         try:
-            downloaded = obj.download_as_bytes()
+            downloaded = obj.download_as_bytes(duration_seconds=120)
             assert downloaded == content
             assert isinstance(downloaded, bytes)
         finally:
@@ -322,12 +322,12 @@ class TestStorageObjectDevboxIntegration:
 
             try:
                 # Read the mounted file
-                content = devbox.file.read("/home/user/mounted-file")
+                content = devbox.file.read(file_path="/home/user/mounted-file")
                 assert content == "Content to mount and access"
 
                 # Verify file exists via command
-                result = devbox.cmd.exec("test -f /home/user/mounted-file && echo 'exists'")
-                assert "exists" in result.stdout()
+                result = devbox.cmd.exec(command="test -f /home/user/mounted-file && echo 'exists'")
+                assert "exists" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()
         finally:
@@ -350,7 +350,7 @@ class TestStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = obj.download_as_text()
+            downloaded = obj.download_as_text(duration_seconds=120)
             assert len(downloaded) == len(large_content)
             assert downloaded == large_content
         finally:
@@ -370,7 +370,7 @@ class TestStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = obj.download_as_bytes()
+            downloaded = obj.download_as_bytes(duration_seconds=120)
             assert downloaded == binary_content
         finally:
             obj.delete()
@@ -385,7 +385,7 @@ class TestStorageObjectEdgeCases:
 
         try:
             # Verify content
-            downloaded = obj.download_as_text()
+            downloaded = obj.download_as_text(duration_seconds=90)
             assert downloaded == ""
         finally:
             obj.delete()
@@ -414,7 +414,7 @@ class TestStorageObjectWorkflows:
             assert result.state == "READ_ONLY"
 
             # Download and verify
-            downloaded = obj.download_as_text()
+            downloaded = obj.download_as_text(duration_seconds=120)
             assert downloaded == original_content
 
             # Refresh info
@@ -453,12 +453,12 @@ class TestStorageObjectWorkflows:
 
             try:
                 # Read mounted content in devbox
-                content = devbox.file.read("/home/user/workflow-data")
+                content = devbox.file.read(file_path="/home/user/workflow-data")
                 assert content == "Initial content"
 
                 # Verify we can work with the file
-                result = devbox.cmd.exec("cat /home/user/workflow-data")
-                assert "Initial content" in result.stdout()
+                result = devbox.cmd.exec(command="cat /home/user/workflow-data")
+                assert "Initial content" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()
         finally:

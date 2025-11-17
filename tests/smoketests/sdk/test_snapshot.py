@@ -28,7 +28,7 @@ class TestSnapshotLifecycle:
 
         try:
             # Create a file to verify snapshot captures state
-            devbox.file.write("/tmp/snapshot_marker.txt", "This file should be in snapshot")
+            devbox.file.write(file_path="/tmp/snapshot_marker.txt", contents="This file should be in snapshot")
 
             # Create snapshot
             snapshot = devbox.snapshot_disk(
@@ -210,7 +210,7 @@ class TestSnapshotDevboxRestoration:
         try:
             # Create unique content in source devbox
             test_content = f"Unique content: {unique_name('content')}"
-            source_devbox.file.write("/tmp/test_restore.txt", test_content)
+            source_devbox.file.write(file_path="/tmp/test_restore.txt", contents=test_content)
 
             # Create snapshot
             snapshot = source_devbox.snapshot_disk(
@@ -220,7 +220,7 @@ class TestSnapshotDevboxRestoration:
             try:
                 # Create new devbox from snapshot
                 restored_devbox = sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-restored-devbox"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -232,7 +232,7 @@ class TestSnapshotDevboxRestoration:
                     assert info.status == "running"
 
                     # Verify content from snapshot is present
-                    restored_content = restored_devbox.file.read("/tmp/test_restore.txt")
+                    restored_content = restored_devbox.file.read(file_path="/tmp/test_restore.txt")
                     assert restored_content == test_content
                 finally:
                     restored_devbox.shutdown()
@@ -252,7 +252,7 @@ class TestSnapshotDevboxRestoration:
 
         try:
             # Create content
-            source_devbox.file.write("/tmp/shared.txt", "Shared content")
+            source_devbox.file.write(file_path="/tmp/shared.txt", contents="Shared content")
 
             # Create snapshot
             snapshot = source_devbox.snapshot_disk(
@@ -262,14 +262,14 @@ class TestSnapshotDevboxRestoration:
             try:
                 # Create first devbox from snapshot
                 devbox1 = sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-restored-1"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
 
                 # Create second devbox from snapshot
                 devbox2 = sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-restored-2"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -281,8 +281,8 @@ class TestSnapshotDevboxRestoration:
                     assert devbox2.get_info().status == "running"
 
                     # Both should have the snapshot content
-                    content1 = devbox1.file.read("/tmp/shared.txt")
-                    content2 = devbox2.file.read("/tmp/shared.txt")
+                    content1 = devbox1.file.read(file_path="/tmp/shared.txt")
+                    content2 = devbox2.file.read(file_path="/tmp/shared.txt")
                     assert content1 == "Shared content"
                     assert content2 == "Shared content"
                 finally:
@@ -378,12 +378,12 @@ class TestSnapshotEdgeCases:
 
         try:
             # Create executable file
-            devbox.file.write("/tmp/test_exec.sh", "#!/bin/bash\necho 'Hello'")
-            devbox.cmd.exec("chmod +x /tmp/test_exec.sh")
+            devbox.file.write(file_path="/tmp/test_exec.sh", contents="#!/bin/bash\necho 'Hello'")
+            devbox.cmd.exec(command="chmod +x /tmp/test_exec.sh")
 
             # Verify it's executable
-            result = devbox.cmd.exec("test -x /tmp/test_exec.sh && echo 'executable'")
-            assert "executable" in result.stdout()
+            result = devbox.cmd.exec(command="test -x /tmp/test_exec.sh && echo 'executable'")
+            assert "executable" in result.stdout(num_lines=1)
 
             # Create snapshot
             snapshot = devbox.snapshot_disk(
@@ -393,15 +393,15 @@ class TestSnapshotEdgeCases:
             try:
                 # Restore from snapshot
                 restored_devbox = sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-restored-permissions"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
 
                 try:
                     # Verify file is still executable
-                    result = restored_devbox.cmd.exec("test -x /tmp/test_exec.sh && echo 'still_executable'")
-                    assert "still_executable" in result.stdout()
+                    result = restored_devbox.cmd.exec(command="test -x /tmp/test_exec.sh && echo 'still_executable'")
+                    assert "still_executable" in result.stdout(num_lines=1)
                 finally:
                     restored_devbox.shutdown()
             finally:

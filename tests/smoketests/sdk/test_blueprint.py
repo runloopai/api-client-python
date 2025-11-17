@@ -222,7 +222,7 @@ class TestBlueprintDevboxIntegration:
         try:
             # Create devbox from the blueprint
             devbox = sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-devbox-from-blueprint"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -235,9 +235,10 @@ class TestBlueprintDevboxIntegration:
                 assert info.status == "running"
 
                 # Verify the blueprint's software is installed
-                result = devbox.cmd.exec("which python3")
+                result = devbox.cmd.exec(command="which python3")
                 assert result.exit_code == 0
                 assert result.success is True
+                assert "python" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()
         finally:
@@ -255,14 +256,14 @@ class TestBlueprintDevboxIntegration:
         try:
             # Create first devbox
             devbox1 = sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-devbox-1"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
 
             # Create second devbox
             devbox2 = sdk_client.devbox.create_from_blueprint_id(
-                blueprint.id,
+                blueprint_id=blueprint.id,
                 name=unique_name("sdk-devbox-2"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )

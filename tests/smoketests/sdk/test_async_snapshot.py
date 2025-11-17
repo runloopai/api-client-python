@@ -28,7 +28,9 @@ class TestAsyncSnapshotLifecycle:
 
         try:
             # Create a file to verify snapshot captures state
-            await devbox.file.write("/tmp/async_snapshot_marker.txt", "This file should be in snapshot")
+            await devbox.file.write(
+                file_path="/tmp/async_snapshot_marker.txt", contents="This file should be in snapshot"
+            )
 
             # Create snapshot
             snapshot = await devbox.snapshot_disk(
@@ -209,7 +211,7 @@ class TestAsyncSnapshotDevboxRestoration:
         try:
             # Create unique content in source devbox
             test_content = f"Async unique content: {unique_name('content')}"
-            await source_devbox.file.write("/tmp/test_async_restore.txt", test_content)
+            await source_devbox.file.write(file_path="/tmp/test_async_restore.txt", contents=test_content)
 
             # Create snapshot
             snapshot = await source_devbox.snapshot_disk(
@@ -219,7 +221,7 @@ class TestAsyncSnapshotDevboxRestoration:
             try:
                 # Create new devbox from snapshot
                 restored_devbox = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-async-restored-devbox"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -231,7 +233,7 @@ class TestAsyncSnapshotDevboxRestoration:
                     assert info.status == "running"
 
                     # Verify content from snapshot is present
-                    restored_content = await restored_devbox.file.read("/tmp/test_async_restore.txt")
+                    restored_content = await restored_devbox.file.read(file_path="/tmp/test_async_restore.txt")
                     assert restored_content == test_content
                 finally:
                     await restored_devbox.shutdown()
@@ -251,7 +253,7 @@ class TestAsyncSnapshotDevboxRestoration:
 
         try:
             # Create content
-            await source_devbox.file.write("/tmp/async_shared.txt", "Async shared content")
+            await source_devbox.file.write(file_path="/tmp/async_shared.txt", contents="Async shared content")
 
             # Create snapshot
             snapshot = await source_devbox.snapshot_disk(
@@ -261,14 +263,14 @@ class TestAsyncSnapshotDevboxRestoration:
             try:
                 # Create first devbox from snapshot
                 devbox1 = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-async-restored-1"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
 
                 # Create second devbox from snapshot
                 devbox2 = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-async-restored-2"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -282,8 +284,8 @@ class TestAsyncSnapshotDevboxRestoration:
                     assert info2.status == "running"
 
                     # Both should have the snapshot content
-                    content1 = await devbox1.file.read("/tmp/async_shared.txt")
-                    content2 = await devbox2.file.read("/tmp/async_shared.txt")
+                    content1 = await devbox1.file.read(file_path="/tmp/async_shared.txt")
+                    content2 = await devbox2.file.read(file_path="/tmp/async_shared.txt")
                     assert content1 == "Async shared content"
                     assert content2 == "Async shared content"
                 finally:
@@ -379,12 +381,12 @@ class TestAsyncSnapshotEdgeCases:
 
         try:
             # Create executable file
-            await devbox.file.write("/tmp/test_async_exec.sh", "#!/bin/bash\necho 'Hello'")
-            await devbox.cmd.exec("chmod +x /tmp/test_async_exec.sh")
+            await devbox.file.write(file_path="/tmp/test_async_exec.sh", contents="#!/bin/bash\necho 'Hello'")
+            await devbox.cmd.exec(command="chmod +x /tmp/test_async_exec.sh")
 
             # Verify it's executable
-            result = await devbox.cmd.exec("test -x /tmp/test_async_exec.sh && echo 'executable'")
-            stdout = await result.stdout()
+            result = await devbox.cmd.exec(command="test -x /tmp/test_async_exec.sh && echo 'executable'")
+            stdout = await result.stdout(num_lines=1)
             assert "executable" in stdout
 
             # Create snapshot
@@ -395,7 +397,7 @@ class TestAsyncSnapshotEdgeCases:
             try:
                 # Restore from snapshot
                 restored_devbox = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot.id,
+                    snapshot_id=snapshot.id,
                     name=unique_name("sdk-async-restored-permissions"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -403,9 +405,9 @@ class TestAsyncSnapshotEdgeCases:
                 try:
                     # Verify file is still executable
                     result = await restored_devbox.cmd.exec(
-                        "test -x /tmp/test_async_exec.sh && echo 'still_executable'"
+                        command="test -x /tmp/test_async_exec.sh && echo 'still_executable'"
                     )
-                    stdout = await result.stdout()
+                    stdout = await result.stdout(num_lines=1)
                     assert "still_executable" in stdout
                 finally:
                     await restored_devbox.shutdown()
