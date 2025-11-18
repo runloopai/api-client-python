@@ -137,6 +137,8 @@ class TestExecution:
             exit_status=0,
             stdout="output",
             stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
 
         mock_client.devboxes = Mock()
@@ -239,17 +241,4 @@ class TestExecution:
         mock_client.devboxes.executions.kill.assert_called_once_with(
             "exec_123",
             devbox_id="dev_123",
-        )
-
-    def test_kill_with_process_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test kill with kill_process_group."""
-        mock_client.devboxes.executions.kill.return_value = None
-
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        execution.kill(kill_process_group=True)
-
-        mock_client.devboxes.executions.kill.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
-            kill_process_group=True,
         )

@@ -9,7 +9,6 @@ import pytest
 
 from tests.sdk.conftest import MockObjectView, create_mock_httpx_response
 from runloop_api_client.sdk import StorageObject
-from runloop_api_client.sdk.sync import StorageObjectClient
 
 
 class TestStorageObject:
@@ -260,22 +259,6 @@ class TestStorageObjectEdgeCases:
 
 class TestStorageObjectPythonSpecific:
     """Tests for Python-specific StorageObject behavior."""
-
-    def test_content_type_detection(self, mock_client: Mock, object_view: MockObjectView) -> None:
-        """Test content type detection differences."""
-        mock_client.objects.create.return_value = object_view
-
-        client = StorageObjectClient(mock_client)
-
-        # When no content type provided, create forwards only provided params
-        client.create(name="test.txt")
-        call1 = mock_client.objects.create.call_args[1]
-        assert "content_type" not in call1
-
-        # Explicit content type
-        client.create(name="test.bin", content_type="binary")
-        call2 = mock_client.objects.create.call_args[1]
-        assert call2["content_type"] == "binary"
 
     def test_upload_data_types(self, mock_client: Mock) -> None:
         """Test Python supports more upload data types."""

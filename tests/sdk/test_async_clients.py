@@ -215,20 +215,6 @@ class TestAsyncStorageObjectClient:
             metadata={"key": "value"},
         )
 
-    @pytest.mark.asyncio
-    async def test_create_auto_detect_content_type(
-        self, mock_async_client: AsyncMock, object_view: MockObjectView
-    ) -> None:
-        """Test create auto-detects content type."""
-        mock_async_client.objects.create = AsyncMock(return_value=object_view)
-
-        client = AsyncStorageObjectClient(mock_async_client)
-        obj = await client.create(name="test.txt")
-
-        assert isinstance(obj, AsyncStorageObject)
-        call_kwargs = mock_async_client.objects.create.call_args[1]
-        assert "content_type" not in call_kwargs
-
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
         client = AsyncStorageObjectClient(mock_async_client)

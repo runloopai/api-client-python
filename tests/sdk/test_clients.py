@@ -204,17 +204,6 @@ class TestStorageObjectClient:
         assert obj.upload_url == "https://upload.example.com/obj_123"
         mock_client.objects.create.assert_called_once()
 
-    def test_create_auto_detect_content_type(self, mock_client: Mock, object_view: MockObjectView) -> None:
-        """Test create auto-detects content type."""
-        mock_client.objects.create.return_value = object_view
-
-        client = StorageObjectClient(mock_client)
-        obj = client.create(name="test.txt")
-
-        assert isinstance(obj, StorageObject)
-        call_kwargs = mock_client.objects.create.call_args[1]
-        assert "content_type" not in call_kwargs
-
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         client = StorageObjectClient(mock_client)

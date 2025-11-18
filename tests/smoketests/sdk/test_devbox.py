@@ -609,3 +609,71 @@ class TestDevboxSnapshots:
                 snapshot.delete()
         finally:
             devbox.shutdown()
+
+
+class TestDevboxExecutionPagination:
+    """Test stdout/stderr pagination and streaming functionality."""
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_exec_with_large_stdout_streaming(self, shared_devbox: Devbox) -> None:
+        """Test that large stdout output is fully captured via streaming when truncated."""
+        # Generate 1000 lines of output
+        result = shared_devbox.cmd.exec(
+            command='for i in $(seq 1 1000); do echo "Line $i with some content to make it realistic"; done',
+        )
+
+        assert result.exit_code == 0
+        stdout = result.stdout()
+        lines = stdout.strip().split("\n")
+
+        # Verify we got all 1000 lines
+        assert len(lines) == 1000, f"Expected 1000 lines, got {len(lines)}"
+
+        # Verify first and last lines
+        assert "Line 1" in lines[0]
+        assert "Line 1000" in lines[-1]
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_exec_with_large_stderr_streaming(self, shared_devbox: Devbox) -> None:
+        """Test that large stderr output is fully captured via streaming when truncated."""
+        # Generate 1000 lines of stderr output
+        result = shared_devbox.cmd.exec(
+            command='for i in $(seq 1 1000); do echo "Error line $i" >&2; done',
+        )
+
+        assert result.exit_code == 0
+        stderr = result.stderr()
+        lines = stderr.strip().split("\n")
+
+        # Verify we got all 1000 lines
+        assert len(lines) == 1000, f"Expected 1000 lines, got {len(lines)}"
+
+        # Verify first and last lines
+        assert "Error line 1" in lines[0]
+        assert "Error line 1000" in lines[-1]
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_exec_with_truncated_stdout_num_lines(self, shared_devbox: Devbox) -> None:
+        """Test num_lines parameter works correctly with potentially truncated output."""
+        # Generate 2000 lines of output
+        result = shared_devbox.cmd.exec(
+            command='for i in $(seq 1 2000); do echo "Line $i"; done',
+        )
+
+        assert result.exit_code == 0
+
+        # Request last 50 lines
+        stdout = result.stdout(num_lines=50)
+        lines = stdout.strip().split("\n")
+
+        # Verify we got exactly 50 lines
+        assert len(lines) == 50, f"Expected 50 lines, got {len(lines)}"
+
+        # Verify these are the last 50 lines
+        assert "Line 1951" in lines[0]
+        assert "Line 2000" in lines[-1]
+
+    # TODO: Add test_exec_stdout_line_counting test once empty line logic is fixed.
+    # Currently there's an inconsistency where _count_non_empty_lines counts non-empty
+    # lines but _get_last_n_lines returns N lines (including empty ones). This affects
+    # both Python and TypeScript SDKs and needs to be fixed together.

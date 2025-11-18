@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
+from unittest.mock import Mock, AsyncMock
 
 import pytest
 
@@ -45,6 +45,8 @@ class TestAsyncExecutionResult:
             exit_status=None,
             stdout="",
             stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.exit_code is None
@@ -63,6 +65,8 @@ class TestAsyncExecutionResult:
             exit_status=1,
             stdout="",
             stderr="error",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.success is False
@@ -81,6 +85,8 @@ class TestAsyncExecutionResult:
             exit_status=1,
             stdout="",
             stderr="error",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.failed is True
@@ -94,6 +100,8 @@ class TestAsyncExecutionResult:
             exit_status=None,
             stdout="",
             stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert result.failed is False
@@ -115,6 +123,8 @@ class TestAsyncExecutionResult:
             exit_status=0,
             stdout=None,
             stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert await result.stdout() == ""
@@ -129,6 +139,8 @@ class TestAsyncExecutionResult:
             exit_status=1,
             stdout="",
             stderr="error message",
+            stdout_truncated=False,
+            stderr_truncated=False,
         )
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
         assert await result.stderr() == "error message"
@@ -144,3 +156,171 @@ class TestAsyncExecutionResult:
         """Test raw property."""
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.raw == execution_view
+
+    @pytest.mark.asyncio
+    async def test_stdout_with_truncation_and_streaming(
+        self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock
+    ) -> None:
+        """Test stdout streams full output when truncated."""
+        from types import SimpleNamespace as SN
+
+        # Mock chunk data
+        async def mock_iter():
+            yield SN(output="line1\n")
+            yield SN(output="line2\n")
+            yield SN(output="line3\n")
+
+        mock_async_stream.__aiter__ = Mock(return_value=mock_iter())
+
+        # Setup client mock to return our stream
+        mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
+
+        execution = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="partial",
+            stderr="",
+            stdout_truncated=True,
+            stderr_truncated=False,
+        )
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
+
+        # Should stream full output
+        output = await result.stdout()
+        assert output == "line1\nline2\nline3\n"
+        mock_async_client.devboxes.executions.stream_stdout_updates.assert_called_once_with(
+            "exec_123", devbox_id="dev_123"
+        )
+
+    @pytest.mark.asyncio
+    async def test_stderr_with_truncation_and_streaming(
+        self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock
+    ) -> None:
+        """Test stderr streams full output when truncated."""
+        from types import SimpleNamespace as SN
+
+        # Mock chunk data
+        async def mock_iter():
+            yield SN(output="error1\n")
+            yield SN(output="error2\n")
+
+        mock_async_stream.__aiter__ = Mock(return_value=mock_iter())
+
+        # Setup client mock to return our stream
+        mock_async_client.devboxes.executions.stream_stderr_updates = AsyncMock(return_value=mock_async_stream)
+
+        execution = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="",
+            stderr="partial error",
+            stdout_truncated=False,
+            stderr_truncated=True,
+        )
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
+
+        # Should stream full output
+        output = await result.stderr()
+        assert output == "error1\nerror2\n"
+        mock_async_client.devboxes.executions.stream_stderr_updates.assert_called_once_with(
+            "exec_123", devbox_id="dev_123"
+        )
+
+    @pytest.mark.asyncio
+    async def test_stdout_with_num_lines_when_truncated(
+        self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock
+    ) -> None:
+        """Test stdout with num_lines parameter when truncated."""
+        from types import SimpleNamespace as SN
+
+        # Mock chunk data with many lines
+        async def mock_iter():
+            yield SN(output="line1\nline2\nline3\n")
+            yield SN(output="line4\nline5\n")
+
+        mock_async_stream.__aiter__ = Mock(return_value=mock_iter())
+
+        # Setup client mock to return our stream
+        mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
+
+        execution = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="line1\n",
+            stderr="",
+            stdout_truncated=True,
+            stderr_truncated=False,
+        )
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
+
+        # Should stream and return last 2 lines
+        output = await result.stdout(num_lines=2)
+        assert output == "line4\nline5"
+
+    @pytest.mark.asyncio
+    async def test_stdout_no_streaming_when_not_truncated(self, mock_async_client: AsyncMock) -> None:
+        """Test stdout doesn't stream when not truncated."""
+        execution = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="complete output",
+            stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
+        )
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
+
+        # Should return existing output without streaming
+        output = await result.stdout()
+        assert output == "complete output"
+
+    @pytest.mark.asyncio
+    async def test_stdout_with_num_lines_no_truncation(self, mock_async_client: AsyncMock) -> None:
+        """Test stdout with num_lines when not truncated."""
+        execution = SimpleNamespace(
+            execution_id="exec_123",
+            devbox_id="dev_123",
+            status="completed",
+            exit_status=0,
+            stdout="line1\nline2\nline3\nline4\nline5",
+            stderr="",
+            stdout_truncated=False,
+            stderr_truncated=False,
+        )
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution)  # type: ignore[arg-type]
+
+        # Should return last 2 lines without streaming
+        output = await result.stdout(num_lines=2)
+        assert output == "line4\nline5"
+
+    def test_count_non_empty_lines(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
+        """Test the _count_non_empty_lines helper method."""
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+
+        # Test various input strings
+        assert result._count_non_empty_lines("") == 0
+        assert result._count_non_empty_lines("single") == 1
+        assert result._count_non_empty_lines("line1\nline2") == 2
+        assert result._count_non_empty_lines("line1\nline2\n") == 2
+        assert result._count_non_empty_lines("line1\n\nline3") == 2  # Empty line in middle
+        assert result._count_non_empty_lines("line1\nline2\nline3\n\n") == 3  # Trailing newlines
+
+    def test_get_last_n_lines(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
+        """Test the _get_last_n_lines helper method."""
+        result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+
+        # Test various scenarios
+        assert result._get_last_n_lines("", 5) == ""
+        assert result._get_last_n_lines("single", 1) == "single"
+        assert result._get_last_n_lines("line1\nline2\nline3", 2) == "line2\nline3"
+        assert result._get_last_n_lines("line1\nline2\nline3\n", 2) == "line2\nline3"
+        assert result._get_last_n_lines("line1\nline2", 10) == "line1\nline2"  # Request more than available
+        assert result._get_last_n_lines("line1\nline2", 0) == ""  # Zero lines

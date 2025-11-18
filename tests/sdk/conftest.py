@@ -55,6 +55,8 @@ class MockExecutionView:
     exit_status: int = 0
     stdout: str = "output"
     stderr: str = ""
+    stdout_truncated: bool = False
+    stderr_truncated: bool = False
 
 
 @dataclass
