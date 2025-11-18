@@ -60,6 +60,12 @@ class AsyncExecutionResult:
 
     def _get_last_n_lines(self, text: str, n: int) -> str:
         """Extract the last N lines from text."""
+        # TODO: Fix inconsistency - _count_non_empty_lines counts non-empty lines but
+        # _get_last_n_lines returns N lines (may include empty ones). This means
+        # num_lines=50 might return fewer than 50 non-empty lines. Should either:
+        # 1. Make _get_last_n_lines return N non-empty lines, OR
+        # 2. Make _count_non_empty_lines count all lines
+        # This affects both Python and TypeScript SDKs - fix together.
         if n <= 0 or not text:
             return ""
         # Remove trailing newlines before splitting and slicing
