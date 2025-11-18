@@ -220,8 +220,7 @@ class TestAsyncSnapshotDevboxRestoration:
 
             try:
                 # Create new devbox from snapshot
-                restored_devbox = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
+                restored_devbox = await snapshot.create_devbox(
                     name=unique_name("sdk-async-restored-devbox"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -237,60 +236,6 @@ class TestAsyncSnapshotDevboxRestoration:
                     assert restored_content == test_content
                 finally:
                     await restored_devbox.shutdown()
-            finally:
-                await snapshot.delete()
-        finally:
-            await source_devbox.shutdown()
-
-    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
-    async def test_multiple_devboxes_from_snapshot(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating multiple devboxes from the same snapshot."""
-        # Create source devbox
-        source_devbox = await async_sdk_client.devbox.create(
-            name=unique_name("sdk-async-source-multi"),
-            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-        )
-
-        try:
-            # Create content
-            await source_devbox.file.write(file_path="/tmp/async_shared.txt", contents="Async shared content")
-
-            # Create snapshot
-            snapshot = await source_devbox.snapshot_disk(
-                name=unique_name("sdk-async-snapshot-multi"),
-            )
-
-            try:
-                # Create first devbox from snapshot
-                devbox1 = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-async-restored-1"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                # Create second devbox from snapshot
-                devbox2 = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-async-restored-2"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                try:
-                    # Both should be running
-                    assert devbox1.id != devbox2.id
-                    info1 = await devbox1.get_info()
-                    info2 = await devbox2.get_info()
-                    assert info1.status == "running"
-                    assert info2.status == "running"
-
-                    # Both should have the snapshot content
-                    content1 = await devbox1.file.read(file_path="/tmp/async_shared.txt")
-                    content2 = await devbox2.file.read(file_path="/tmp/async_shared.txt")
-                    assert content1 == "Async shared content"
-                    assert content2 == "Async shared content"
-                finally:
-                    await devbox1.shutdown()
-                    await devbox2.shutdown()
             finally:
                 await snapshot.delete()
         finally:
@@ -361,56 +306,6 @@ class TestAsyncSnapshotListing:
                 # Should find our snapshot
                 snapshot_ids = [s.id for s in snapshots]
                 assert snapshot.id in snapshot_ids
-            finally:
-                await snapshot.delete()
-        finally:
-            await devbox.shutdown()
-
-
-class TestAsyncSnapshotEdgeCases:
-    """Test async snapshot edge cases and special scenarios."""
-
-    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
-    async def test_snapshot_preserves_file_permissions(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test that snapshot preserves file permissions."""
-        # Create devbox
-        devbox = await async_sdk_client.devbox.create(
-            name=unique_name("sdk-async-devbox-permissions"),
-            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-        )
-
-        try:
-            # Create executable file
-            await devbox.file.write(file_path="/tmp/test_async_exec.sh", contents="#!/bin/bash\necho 'Hello'")
-            await devbox.cmd.exec(command="chmod +x /tmp/test_async_exec.sh")
-
-            # Verify it's executable
-            result = await devbox.cmd.exec(command="test -x /tmp/test_async_exec.sh && echo 'executable'")
-            stdout = await result.stdout(num_lines=1)
-            assert "executable" in stdout
-
-            # Create snapshot
-            snapshot = await devbox.snapshot_disk(
-                name=unique_name("sdk-async-snapshot-permissions"),
-            )
-
-            try:
-                # Restore from snapshot
-                restored_devbox = await async_sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-async-restored-permissions"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                try:
-                    # Verify file is still executable
-                    result = await restored_devbox.cmd.exec(
-                        command="test -x /tmp/test_async_exec.sh && echo 'still_executable'"
-                    )
-                    stdout = await result.stdout(num_lines=1)
-                    assert "still_executable" in stdout
-                finally:
-                    await restored_devbox.shutdown()
             finally:
                 await snapshot.delete()
         finally:

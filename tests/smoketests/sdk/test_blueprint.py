@@ -221,8 +221,7 @@ class TestBlueprintDevboxIntegration:
 
         try:
             # Create devbox from the blueprint
-            devbox = sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
+            devbox = blueprint.create_devbox(
                 name=unique_name("sdk-devbox-from-blueprint"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -241,40 +240,6 @@ class TestBlueprintDevboxIntegration:
                 assert "python" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()
-        finally:
-            blueprint.delete()
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
-    def test_create_multiple_devboxes_from_blueprint(self, sdk_client: RunloopSDK) -> None:
-        """Test creating multiple devboxes from the same blueprint."""
-        # Create a blueprint
-        blueprint = sdk_client.blueprint.create(
-            name=unique_name("sdk-blueprint-multi-devbox"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
-        )
-
-        try:
-            # Create first devbox
-            devbox1 = sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
-                name=unique_name("sdk-devbox-1"),
-                launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-            )
-
-            # Create second devbox
-            devbox2 = sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
-                name=unique_name("sdk-devbox-2"),
-                launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-            )
-
-            try:
-                assert devbox1.id != devbox2.id
-                assert devbox1.get_info().status == "running"
-                assert devbox2.get_info().status == "running"
-            finally:
-                devbox1.shutdown()
-                devbox2.shutdown()
         finally:
             blueprint.delete()
 

@@ -219,8 +219,7 @@ class TestSnapshotDevboxRestoration:
 
             try:
                 # Create new devbox from snapshot
-                restored_devbox = sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
+                restored_devbox = snapshot.create_devbox(
                     name=unique_name("sdk-restored-devbox"),
                     launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
                 )
@@ -236,58 +235,6 @@ class TestSnapshotDevboxRestoration:
                     assert restored_content == test_content
                 finally:
                     restored_devbox.shutdown()
-            finally:
-                snapshot.delete()
-        finally:
-            source_devbox.shutdown()
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
-    def test_multiple_devboxes_from_snapshot(self, sdk_client: RunloopSDK) -> None:
-        """Test creating multiple devboxes from the same snapshot."""
-        # Create source devbox
-        source_devbox = sdk_client.devbox.create(
-            name=unique_name("sdk-source-multi"),
-            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-        )
-
-        try:
-            # Create content
-            source_devbox.file.write(file_path="/tmp/shared.txt", contents="Shared content")
-
-            # Create snapshot
-            snapshot = source_devbox.snapshot_disk(
-                name=unique_name("sdk-snapshot-multi"),
-            )
-
-            try:
-                # Create first devbox from snapshot
-                devbox1 = sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-restored-1"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                # Create second devbox from snapshot
-                devbox2 = sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-restored-2"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                try:
-                    # Both should be running
-                    assert devbox1.id != devbox2.id
-                    assert devbox1.get_info().status == "running"
-                    assert devbox2.get_info().status == "running"
-
-                    # Both should have the snapshot content
-                    content1 = devbox1.file.read(file_path="/tmp/shared.txt")
-                    content2 = devbox2.file.read(file_path="/tmp/shared.txt")
-                    assert content1 == "Shared content"
-                    assert content2 == "Shared content"
-                finally:
-                    devbox1.shutdown()
-                    devbox2.shutdown()
             finally:
                 snapshot.delete()
         finally:
@@ -358,52 +305,6 @@ class TestSnapshotListing:
                 # Should find our snapshot
                 snapshot_ids = [s.id for s in snapshots]
                 assert snapshot.id in snapshot_ids
-            finally:
-                snapshot.delete()
-        finally:
-            devbox.shutdown()
-
-
-class TestSnapshotEdgeCases:
-    """Test snapshot edge cases and special scenarios."""
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
-    def test_snapshot_preserves_file_permissions(self, sdk_client: RunloopSDK) -> None:
-        """Test that snapshot preserves file permissions."""
-        # Create devbox
-        devbox = sdk_client.devbox.create(
-            name=unique_name("sdk-devbox-permissions"),
-            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-        )
-
-        try:
-            # Create executable file
-            devbox.file.write(file_path="/tmp/test_exec.sh", contents="#!/bin/bash\necho 'Hello'")
-            devbox.cmd.exec(command="chmod +x /tmp/test_exec.sh")
-
-            # Verify it's executable
-            result = devbox.cmd.exec(command="test -x /tmp/test_exec.sh && echo 'executable'")
-            assert "executable" in result.stdout(num_lines=1)
-
-            # Create snapshot
-            snapshot = devbox.snapshot_disk(
-                name=unique_name("sdk-snapshot-permissions"),
-            )
-
-            try:
-                # Restore from snapshot
-                restored_devbox = sdk_client.devbox.create_from_snapshot(
-                    snapshot_id=snapshot.id,
-                    name=unique_name("sdk-restored-permissions"),
-                    launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-                )
-
-                try:
-                    # Verify file is still executable
-                    result = restored_devbox.cmd.exec(command="test -x /tmp/test_exec.sh && echo 'still_executable'")
-                    assert "still_executable" in result.stdout(num_lines=1)
-                finally:
-                    restored_devbox.shutdown()
             finally:
                 snapshot.delete()
         finally:

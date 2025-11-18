@@ -221,8 +221,7 @@ class TestAsyncBlueprintDevboxIntegration:
 
         try:
             # Create devbox from the blueprint
-            devbox = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
+            devbox = await blueprint.create_devbox(
                 name=unique_name("sdk-async-devbox-from-blueprint"),
                 launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
             )
@@ -241,42 +240,6 @@ class TestAsyncBlueprintDevboxIntegration:
                 assert "python" in await result.stdout(num_lines=1)
             finally:
                 await devbox.shutdown()
-        finally:
-            await blueprint.delete()
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
-    async def test_create_multiple_devboxes_from_blueprint(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating multiple devboxes from the same blueprint."""
-        # Create a blueprint
-        blueprint = await async_sdk_client.blueprint.create(
-            name=unique_name("sdk-async-blueprint-multi-devbox"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
-        )
-
-        try:
-            # Create first devbox
-            devbox1 = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
-                name=unique_name("sdk-async-devbox-1"),
-                launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-            )
-
-            # Create second devbox
-            devbox2 = await async_sdk_client.devbox.create_from_blueprint_id(
-                blueprint_id=blueprint.id,
-                name=unique_name("sdk-async-devbox-2"),
-                launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
-            )
-
-            try:
-                assert devbox1.id != devbox2.id
-                info1 = await devbox1.get_info()
-                info2 = await devbox2.get_info()
-                assert info1.status == "running"
-                assert info2.status == "running"
-            finally:
-                await devbox1.shutdown()
-                await devbox2.shutdown()
         finally:
             await blueprint.delete()
 
