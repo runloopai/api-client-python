@@ -11,14 +11,15 @@ from .shared_params.code_mount_parameters import CodeMountParameters
 
 __all__ = ["DevboxCreateParams"]
 
-# We split up the original DevboxCreateParams into two nested classes to enable us to
+# We split up the original DevboxCreateParams into two nested types to enable us to
 # omit blueprint_id, blueprint_name, and snapshot_id when we unpack the TypedDict
 # params for methods like create_from_blueprint_id, create_from_blueprint_name, and
 # create_from_snapshot, which shouldn't allow you to specify creation source kwargs.
+# These should be updated whenever DevboxCreateParams is changed in the OpenAPI spec.
 
 
 # DevboxBaseCreateParams should contain all the fields that are common to all the
-# create methods. Any updates to the OpenAPI spec should be reflected here.
+# create methods.
 class DevboxBaseCreateParams(TypedDict, total=False):
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Devbox."""
