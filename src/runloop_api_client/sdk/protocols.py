@@ -26,6 +26,10 @@ from .async_execution import AsyncExecution
 from .execution_result import ExecutionResult
 from .async_execution_result import AsyncExecutionResult
 
+# ==============================================================================
+# Synchronous Interfaces
+# ==============================================================================
+
 
 @runtime_checkable
 class CommandInterface(Protocol):
@@ -102,6 +106,11 @@ class NetworkInterface(Protocol):
     ) -> object: ...
 
 
+# ==============================================================================
+# Asynchronous Interfaces
+# ==============================================================================
+
+
 @runtime_checkable
 class AsyncCommandInterface(Protocol):
     """Async interface for executing commands on a devbox.
@@ -112,6 +121,20 @@ class AsyncCommandInterface(Protocol):
     Important: All streaming callbacks (stdout, stderr, output) must be synchronous
     functions, not async functions. The devbox operations are async, but the callbacks
     themselves are called synchronously.
+
+    Examples:
+        >>> # Async execution (waits for completion)
+        >>> result = await devbox.cmd.exec(command="ls -la")
+        >>> print(await result.stdout())
+
+        >>> # Async non-blocking execution
+        >>> execution = await devbox.cmd.exec_async(command="npm run dev")
+        >>> result = await execution.result()  # Waits for completion
+
+        >>> # Callbacks must still be synchronous!
+        >>> def stdout_callback(line: str) -> None:  # Not async!
+        ...     print(f">> {line}")
+        >>> await devbox.cmd.exec(command="tail -f /var/log/app.log", stdout=stdout_callback)
     """
 
     async def exec(
