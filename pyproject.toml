@@ -16,7 +16,6 @@ dependencies = [
     "sniffio",
     "uuid-utils>=0.11.0",
 ]
-
 requires-python = ">= 3.9"
 classifiers = [
   "Typing :: Typed",
@@ -45,6 +44,12 @@ aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.9"]
 [tool.uv]
 managed = true
 required-version = ">=0.5.0"
+conflicts = [
+    [
+      { group = "pydantic-v1" },
+      { group = "pydantic-v2" },
+    ],
+]
 
 [dependency-groups]
 # version pins are in uv.lock
@@ -64,7 +69,10 @@ dev = [
     "uuid-utils>=0.11.0"
 ]
 pydantic-v1 = [
-    "pydantic>=1.9.0, <2",
+    "pydantic>=1.9.0,<2",
+]
+pydantic-v2 = [
+    "pydantic>=2,<3",
 ]
 
 [tool.rye.scripts]
