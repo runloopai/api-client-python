@@ -444,7 +444,7 @@ class AsyncRunloopSDK:
         storage_object: High-level async interface for storage object management.
 
     Example:
-        >>> runloop = AsyncRunloopSDK() # Uses RUNLOOP_API_KEY env var
+        >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
         >>> devbox = await runloop.devbox.create(name="my-devbox")
         >>> result = await devbox.cmd.exec(command="echo 'hello'")
         >>> print(await result.stdout())

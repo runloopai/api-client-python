@@ -211,7 +211,9 @@ class BlueprintClient:
 
     Example:
         >>> runloop = RunloopSDK()
-        >>> blueprint = runloop.blueprint.create(name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update")
+        >>> blueprint = runloop.blueprint.create(
+        ...     name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update"
+        ... )
         >>> blueprints = runloop.blueprint.list()
     """
 
