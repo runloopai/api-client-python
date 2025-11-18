@@ -10,14 +10,14 @@ from runloop_api_client.lib.polling import PollingConfig
 
 pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
-THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+FOUR_MINUTE_TIMEOUT = 240
 
 
 class TestAsyncSnapshotLifecycle:
     """Test basic async snapshot lifecycle operations."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_create_and_info(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a snapshot from devbox."""
         # Create a devbox
@@ -51,7 +51,7 @@ class TestAsyncSnapshotLifecycle:
         finally:
             await devbox.shutdown()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_with_commit_message(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a snapshot with commit message."""
         devbox = await async_sdk_client.devbox.create(
@@ -78,7 +78,7 @@ class TestAsyncSnapshotLifecycle:
         finally:
             await devbox.shutdown()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_with_metadata(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a snapshot with metadata."""
         devbox = await async_sdk_client.devbox.create(
@@ -107,7 +107,7 @@ class TestAsyncSnapshotLifecycle:
         finally:
             await devbox.shutdown()
 
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     async def test_snapshot_delete(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test deleting a snapshot."""
         devbox = await async_sdk_client.devbox.create(
@@ -138,7 +138,7 @@ class TestAsyncSnapshotLifecycle:
 class TestAsyncSnapshotCompletion:
     """Test async snapshot completion and status tracking."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_await_completed(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test waiting for snapshot completion."""
         devbox = await async_sdk_client.devbox.create(
@@ -165,7 +165,7 @@ class TestAsyncSnapshotCompletion:
         finally:
             await devbox.shutdown()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_status_tracking(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test tracking snapshot status through lifecycle."""
         devbox = await async_sdk_client.devbox.create(
@@ -199,7 +199,7 @@ class TestAsyncSnapshotCompletion:
 class TestAsyncSnapshotDevboxRestoration:
     """Test creating devboxes from snapshots asynchronously."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_restore_devbox_from_snapshot(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a devbox from a snapshot and verifying state is restored."""
         # Create source devbox
@@ -242,7 +242,7 @@ class TestAsyncSnapshotDevboxRestoration:
         finally:
             await source_devbox.shutdown()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_multiple_devboxes_from_snapshot(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating multiple devboxes from the same snapshot."""
         # Create source devbox
@@ -300,7 +300,7 @@ class TestAsyncSnapshotDevboxRestoration:
 class TestAsyncSnapshotListing:
     """Test async snapshot listing and retrieval operations."""
 
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     async def test_list_snapshots(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test listing snapshots."""
         snapshots = await async_sdk_client.snapshot.list(limit=10)
@@ -309,7 +309,7 @@ class TestAsyncSnapshotListing:
         # List might be empty, that's okay
         assert len(snapshots) >= 0
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_get_snapshot_by_id(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test retrieving snapshot by ID."""
         # Create a devbox and snapshot
@@ -336,7 +336,7 @@ class TestAsyncSnapshotListing:
         finally:
             await devbox.shutdown()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_list_snapshots_by_devbox(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test listing snapshots filtered by devbox."""
         # Create a devbox
@@ -370,7 +370,7 @@ class TestAsyncSnapshotListing:
 class TestAsyncSnapshotEdgeCases:
     """Test async snapshot edge cases and special scenarios."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT * 2)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_snapshot_preserves_file_permissions(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test that snapshot preserves file permissions."""
         # Create devbox

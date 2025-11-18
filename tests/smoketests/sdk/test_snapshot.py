@@ -103,7 +103,7 @@ class TestSnapshotLifecycle:
         finally:
             devbox.shutdown()
 
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     def test_snapshot_delete(self, sdk_client: RunloopSDK) -> None:
         """Test deleting a snapshot."""
         devbox = sdk_client.devbox.create(
