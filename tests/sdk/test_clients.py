@@ -18,10 +18,10 @@ from tests.sdk.conftest import (
 from runloop_api_client.sdk import Devbox, Snapshot, Blueprint, StorageObject
 from runloop_api_client.sdk.sync import (
     RunloopSDK,
-    DevboxClient,
-    SnapshotClient,
-    BlueprintClient,
-    StorageObjectClient,
+    DevboxOps,
+    SnapshotOps,
+    BlueprintOps,
+    StorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -33,7 +33,7 @@ class TestDevboxClient:
         """Test create method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devbox = client.create(
             name="test-devbox",
             metadata={"key": "value"},
@@ -48,7 +48,7 @@ class TestDevboxClient:
         """Test create_from_blueprint_id method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devbox = client.create_from_blueprint_id(
             "bp_123",
             name="test-devbox",
@@ -64,7 +64,7 @@ class TestDevboxClient:
         """Test create_from_blueprint_name method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devbox = client.create_from_blueprint_name(
             "my-blueprint",
             name="test-devbox",
@@ -78,7 +78,7 @@ class TestDevboxClient:
         """Test create_from_snapshot method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devbox = client.create_from_snapshot(
             "snap_123",
             name="test-devbox",
@@ -92,7 +92,7 @@ class TestDevboxClient:
         """Test from_id method waits for running."""
         mock_client.devboxes.await_running.return_value = devbox_view
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devbox = client.from_id("dev_123")
 
         assert isinstance(devbox, Devbox)
@@ -104,7 +104,7 @@ class TestDevboxClient:
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_client.devboxes.list.return_value = page
 
-        client = DevboxClient(mock_client)
+        client = DevboxOps(mock_client)
         devboxes = client.list(
             limit=10,
             status="running",
@@ -125,7 +125,7 @@ class TestSnapshotClient:
         page = SimpleNamespace(snapshots=[snapshot_view])
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
-        client = SnapshotClient(mock_client)
+        client = SnapshotOps(mock_client)
         snapshots = client.list(
             devbox_id="dev_123",
             limit=10,
@@ -139,7 +139,7 @@ class TestSnapshotClient:
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
-        client = SnapshotClient(mock_client)
+        client = SnapshotOps(mock_client)
         snapshot = client.from_id("snap_123")
 
         assert isinstance(snapshot, Snapshot)
@@ -153,7 +153,7 @@ class TestBlueprintClient:
         """Test create method."""
         mock_client.blueprints.create_and_await_build_complete.return_value = blueprint_view
 
-        client = BlueprintClient(mock_client)
+        client = BlueprintOps(mock_client)
         blueprint = client.create(
             name="test-blueprint",
             polling_config=PollingConfig(timeout_seconds=60.0),
@@ -165,7 +165,7 @@ class TestBlueprintClient:
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
-        client = BlueprintClient(mock_client)
+        client = BlueprintOps(mock_client)
         blueprint = client.from_id("bp_123")
 
         assert isinstance(blueprint, Blueprint)
@@ -176,7 +176,7 @@ class TestBlueprintClient:
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_client.blueprints.list.return_value = page
 
-        client = BlueprintClient(mock_client)
+        client = BlueprintOps(mock_client)
         blueprints = client.list(
             limit=10,
             name="test",
@@ -196,7 +196,7 @@ class TestStorageObjectClient:
         """Test create method."""
         mock_client.objects.create.return_value = object_view
 
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         obj = client.create(name="test.txt", content_type="text", metadata={"key": "value"})
 
         assert isinstance(obj, StorageObject)
@@ -206,7 +206,7 @@ class TestStorageObjectClient:
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         obj = client.from_id("obj_123")
 
         assert isinstance(obj, StorageObject)
@@ -218,7 +218,7 @@ class TestStorageObjectClient:
         page = SimpleNamespace(objects=[object_view])
         mock_client.objects.list.return_value = page
 
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         objects = client.list(
             content_type="text",
             limit=10,
@@ -245,7 +245,7 @@ class TestStorageObjectClient:
         http_client.put.return_value = mock_response
         mock_client._client = http_client
 
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         obj = client.upload_from_file(temp_file, name="test.txt")
 
         assert isinstance(obj, StorageObject)
@@ -263,7 +263,7 @@ class TestStorageObjectClient:
         http_client.put.return_value = mock_response
         mock_client._client = http_client
 
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         obj = client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, StorageObject)
@@ -285,7 +285,7 @@ class TestStorageObjectClient:
         http_client.put.return_value = mock_response
         mock_client._client = http_client
 
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         obj = client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
 
         assert isinstance(obj, StorageObject)
@@ -300,7 +300,7 @@ class TestStorageObjectClient:
 
     def test_upload_from_file_missing_path(self, mock_client: Mock, tmp_path: Path) -> None:
         """upload_from_file should raise when file cannot be read."""
-        client = StorageObjectClient(mock_client)
+        client = StorageObjectOps(mock_client)
         missing_file = tmp_path / "missing.txt"
 
         with pytest.raises(OSError, match="Failed to read file"):
@@ -314,10 +314,10 @@ class TestRunloopSDK:
         """Test RunloopSDK initialization."""
         sdk = RunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
-        assert isinstance(sdk.devbox, DevboxClient)
-        assert isinstance(sdk.snapshot, SnapshotClient)
-        assert isinstance(sdk.blueprint, BlueprintClient)
-        assert isinstance(sdk.storage_object, StorageObjectClient)
+        assert isinstance(sdk.devbox, DevboxOps)
+        assert isinstance(sdk.snapshot, SnapshotOps)
+        assert isinstance(sdk.blueprint, BlueprintOps)
+        assert isinstance(sdk.storage_object, StorageObjectOps)
 
     def test_init_with_max_retries(self) -> None:
         """Test RunloopSDK initialization with max_retries."""

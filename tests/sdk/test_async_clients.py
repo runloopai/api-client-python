@@ -18,10 +18,10 @@ from tests.sdk.conftest import (
 from runloop_api_client.sdk import AsyncDevbox, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
 from runloop_api_client.sdk.async_ import (
     AsyncRunloopSDK,
-    AsyncDevboxClient,
-    AsyncSnapshotClient,
-    AsyncBlueprintClient,
-    AsyncStorageObjectClient,
+    AsyncDevboxOps,
+    AsyncSnapshotOps,
+    AsyncBlueprintOps,
+    AsyncStorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -34,7 +34,7 @@ class TestAsyncDevboxClient:
         """Test create method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devbox = await client.create(
             name="test-devbox",
             metadata={"key": "value"},
@@ -50,7 +50,7 @@ class TestAsyncDevboxClient:
         """Test create_from_blueprint_id method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devbox = await client.create_from_blueprint_id(
             "bp_123",
             name="test-devbox",
@@ -65,7 +65,7 @@ class TestAsyncDevboxClient:
         """Test create_from_blueprint_name method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devbox = await client.create_from_blueprint_name(
             "my-blueprint",
             name="test-devbox",
@@ -80,7 +80,7 @@ class TestAsyncDevboxClient:
         """Test create_from_snapshot method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devbox = await client.create_from_snapshot(
             "snap_123",
             name="test-devbox",
@@ -92,7 +92,7 @@ class TestAsyncDevboxClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devbox = client.from_id("dev_123")
 
         assert isinstance(devbox, AsyncDevbox)
@@ -107,7 +107,7 @@ class TestAsyncDevboxClient:
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_async_client.devboxes.list = AsyncMock(return_value=page)
 
-        client = AsyncDevboxClient(mock_async_client)
+        client = AsyncDevboxOps(mock_async_client)
         devboxes = await client.list(
             limit=10,
             status="running",
@@ -129,7 +129,7 @@ class TestAsyncSnapshotClient:
         page = SimpleNamespace(snapshots=[snapshot_view])
         mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
 
-        client = AsyncSnapshotClient(mock_async_client)
+        client = AsyncSnapshotOps(mock_async_client)
         snapshots = await client.list(
             devbox_id="dev_123",
             limit=10,
@@ -143,7 +143,7 @@ class TestAsyncSnapshotClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncSnapshotClient(mock_async_client)
+        client = AsyncSnapshotOps(mock_async_client)
         snapshot = client.from_id("snap_123")
 
         assert isinstance(snapshot, AsyncSnapshot)
@@ -158,7 +158,7 @@ class TestAsyncBlueprintClient:
         """Test create method."""
         mock_async_client.blueprints.create_and_await_build_complete = AsyncMock(return_value=blueprint_view)
 
-        client = AsyncBlueprintClient(mock_async_client)
+        client = AsyncBlueprintOps(mock_async_client)
         blueprint = await client.create(
             name="test-blueprint",
             polling_config=PollingConfig(timeout_seconds=60.0),
@@ -170,7 +170,7 @@ class TestAsyncBlueprintClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncBlueprintClient(mock_async_client)
+        client = AsyncBlueprintOps(mock_async_client)
         blueprint = client.from_id("bp_123")
 
         assert isinstance(blueprint, AsyncBlueprint)
@@ -182,7 +182,7 @@ class TestAsyncBlueprintClient:
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_async_client.blueprints.list = AsyncMock(return_value=page)
 
-        client = AsyncBlueprintClient(mock_async_client)
+        client = AsyncBlueprintOps(mock_async_client)
         blueprints = await client.list(
             limit=10,
             name="test",
@@ -203,7 +203,7 @@ class TestAsyncStorageObjectClient:
         """Test create method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
 
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         obj = await client.create(name="test.txt", content_type="text", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
@@ -217,7 +217,7 @@ class TestAsyncStorageObjectClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         obj = client.from_id("obj_123")
 
         assert isinstance(obj, AsyncStorageObject)
@@ -230,7 +230,7 @@ class TestAsyncStorageObjectClient:
         page = SimpleNamespace(objects=[object_view])
         mock_async_client.objects.list = AsyncMock(return_value=page)
 
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         objects = await client.list(
             content_type="text",
             limit=10,
@@ -261,7 +261,7 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         obj = await client.upload_from_file(temp_file, name="test.txt")
 
         assert isinstance(obj, AsyncStorageObject)
@@ -281,7 +281,7 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         obj = await client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
@@ -305,7 +305,7 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         obj = await client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
 
         assert isinstance(obj, AsyncStorageObject)
@@ -321,7 +321,7 @@ class TestAsyncStorageObjectClient:
     @pytest.mark.asyncio
     async def test_upload_from_file_missing_path(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
         """upload_from_file should raise when file cannot be read."""
-        client = AsyncStorageObjectClient(mock_async_client)
+        client = AsyncStorageObjectOps(mock_async_client)
         missing_file = tmp_path / "missing.txt"
 
         with pytest.raises(OSError, match="Failed to read file"):
@@ -335,10 +335,10 @@ class TestAsyncRunloopSDK:
         """Test AsyncRunloopSDK initialization."""
         sdk = AsyncRunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
-        assert isinstance(sdk.devbox, AsyncDevboxClient)
-        assert isinstance(sdk.snapshot, AsyncSnapshotClient)
-        assert isinstance(sdk.blueprint, AsyncBlueprintClient)
-        assert isinstance(sdk.storage_object, AsyncStorageObjectClient)
+        assert isinstance(sdk.devbox, AsyncDevboxOps)
+        assert isinstance(sdk.snapshot, AsyncSnapshotOps)
+        assert isinstance(sdk.blueprint, AsyncBlueprintOps)
+        assert isinstance(sdk.storage_object, AsyncStorageObjectOps)
 
     @pytest.mark.asyncio
     async def test_aclose(self) -> None:

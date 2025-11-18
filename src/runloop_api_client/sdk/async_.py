@@ -29,7 +29,7 @@ from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
 
 
-class AsyncDevboxClient:
+class AsyncDevboxOps:
     """High-level async manager for creating and managing AsyncDevbox instances.
 
     Accessed via ``runloop.devbox`` from :class:`AsyncRunloopSDK`, provides
@@ -156,7 +156,7 @@ class AsyncDevboxClient:
         return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
 
 
-class AsyncSnapshotClient:
+class AsyncSnapshotOps:
     """High-level async manager for working with disk snapshots.
 
     Accessed via ``runloop.snapshot`` from :class:`AsyncRunloopSDK`, provides
@@ -205,7 +205,7 @@ class AsyncSnapshotClient:
         return AsyncSnapshot(self._client, snapshot_id)
 
 
-class AsyncBlueprintClient:
+class AsyncBlueprintOps:
     """High-level async manager for creating and managing blueprints.
 
     Accessed via ``runloop.blueprint`` from :class:`AsyncRunloopSDK`, provides
@@ -275,7 +275,7 @@ class AsyncBlueprintClient:
         return [AsyncBlueprint(self._client, item.id) for item in page.blueprints]
 
 
-class AsyncStorageObjectClient:
+class AsyncStorageObjectOps:
     """High-level async manager for creating and managing storage objects.
 
     Accessed via ``runloop.storage_object`` from :class:`AsyncRunloopSDK`, provides
@@ -452,10 +452,10 @@ class AsyncRunloopSDK:
     """
 
     api: AsyncRunloop
-    devbox: AsyncDevboxClient
-    blueprint: AsyncBlueprintClient
-    snapshot: AsyncSnapshotClient
-    storage_object: AsyncStorageObjectClient
+    devbox: AsyncDevboxOps
+    blueprint: AsyncBlueprintOps
+    snapshot: AsyncSnapshotOps
+    storage_object: AsyncStorageObjectOps
 
     def __init__(
         self,
@@ -489,10 +489,10 @@ class AsyncRunloopSDK:
             http_client=http_client,
         )
 
-        self.devbox = AsyncDevboxClient(self.api)
-        self.blueprint = AsyncBlueprintClient(self.api)
-        self.snapshot = AsyncSnapshotClient(self.api)
-        self.storage_object = AsyncStorageObjectClient(self.api)
+        self.devbox = AsyncDevboxOps(self.api)
+        self.blueprint = AsyncBlueprintOps(self.api)
+        self.snapshot = AsyncSnapshotOps(self.api)
+        self.storage_object = AsyncStorageObjectOps(self.api)
 
     async def aclose(self) -> None:
         """Close the underlying HTTP client and release resources."""

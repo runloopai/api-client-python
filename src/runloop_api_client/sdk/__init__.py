@@ -5,13 +5,13 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 
 from __future__ import annotations
 
-from .sync import RunloopSDK, DevboxClient, SnapshotClient, BlueprintClient, StorageObjectClient
+from .sync import RunloopSDK, DevboxOps, SnapshotOps, BlueprintOps, StorageObjectOps
 from .async_ import (
     AsyncRunloopSDK,
-    AsyncDevboxClient,
-    AsyncSnapshotClient,
-    AsyncBlueprintClient,
-    AsyncStorageObjectClient,
+    AsyncDevboxOps,
+    AsyncSnapshotOps,
+    AsyncBlueprintOps,
+    AsyncStorageObjectOps,
 )
 from .devbox import Devbox
 from .snapshot import Snapshot
@@ -31,14 +31,14 @@ __all__ = [
     "RunloopSDK",
     "AsyncRunloopSDK",
     # Management interfaces
-    "DevboxClient",
-    "AsyncDevboxClient",
-    "BlueprintClient",
-    "AsyncBlueprintClient",
-    "SnapshotClient",
-    "AsyncSnapshotClient",
-    "StorageObjectClient",
-    "AsyncStorageObjectClient",
+    "DevboxOps",
+    "AsyncDevboxOps",
+    "BlueprintOps",
+    "AsyncBlueprintOps",
+    "SnapshotOps",
+    "AsyncSnapshotOps",
+    "StorageObjectOps",
+    "AsyncStorageObjectOps",
     # Resource classes
     "Devbox",
     "AsyncDevbox",

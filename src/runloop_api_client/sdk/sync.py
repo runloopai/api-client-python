@@ -29,7 +29,7 @@ from .storage_object import StorageObject
 from ..types.object_create_params import ContentType
 
 
-class DevboxClient:
+class DevboxOps:
     """High-level manager for creating and managing Devbox instances.
 
     Accessed via ``runloop.devbox`` from :class:`RunloopSDK`, provides methods to
@@ -157,7 +157,7 @@ class DevboxClient:
         return [Devbox(self._client, item.id) for item in page.devboxes]
 
 
-class SnapshotClient:
+class SnapshotOps:
     """High-level manager for working with disk snapshots.
 
     Accessed via ``runloop.snapshot`` from :class:`RunloopSDK`, provides methods
@@ -202,7 +202,7 @@ class SnapshotClient:
         return Snapshot(self._client, snapshot_id)
 
 
-class BlueprintClient:
+class BlueprintOps:
     """High-level manager for creating and managing blueprints.
 
     Accessed via ``runloop.blueprint`` from :class:`RunloopSDK`, provides methods
@@ -271,7 +271,7 @@ class BlueprintClient:
         return [Blueprint(self._client, item.id) for item in page.blueprints]
 
 
-class StorageObjectClient:
+class StorageObjectOps:
     """High-level manager for creating and managing storage objects.
 
     Accessed via ``runloop.storage_object`` from :class:`RunloopSDK`, provides
@@ -444,10 +444,10 @@ class RunloopSDK:
     """
 
     api: Runloop
-    devbox: DevboxClient
-    blueprint: BlueprintClient
-    snapshot: SnapshotClient
-    storage_object: StorageObjectClient
+    devbox: DevboxOps
+    blueprint: BlueprintOps
+    snapshot: SnapshotOps
+    storage_object: StorageObjectOps
 
     def __init__(
         self,
@@ -481,10 +481,10 @@ class RunloopSDK:
             http_client=http_client,
         )
 
-        self.devbox = DevboxClient(self.api)
-        self.blueprint = BlueprintClient(self.api)
-        self.snapshot = SnapshotClient(self.api)
-        self.storage_object = StorageObjectClient(self.api)
+        self.devbox = DevboxOps(self.api)
+        self.blueprint = BlueprintOps(self.api)
+        self.snapshot = SnapshotOps(self.api)
+        self.storage_object = StorageObjectOps(self.api)
 
     def close(self) -> None:
         """Close the underlying HTTP client and release resources."""
