@@ -25,4 +25,3 @@ uv python install
 echo "==> Installing Python dependencies…"
 uv sync --all-extras
 
-uv sync --all-extras --all-groups
