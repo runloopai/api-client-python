@@ -168,10 +168,10 @@ class AsyncExecutionResult:
         )
 
     @property
-    def raw(self) -> DevboxAsyncExecutionDetailView:
-        """Access the underlying API response.
+    def result(self) -> DevboxAsyncExecutionDetailView:
+        """Get the raw execution result.
 
         Returns:
-            DevboxAsyncExecutionDetailView: Raw API payload.
+            DevboxAsyncExecutionDetailView: Raw execution result.
         """
         return self._result

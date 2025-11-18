@@ -152,10 +152,10 @@ class TestAsyncExecutionResult:
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert await result.stderr() == ""
 
-    def test_raw_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
-        """Test raw property."""
+    def test_result_property(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
+        """Test result property."""
         result = AsyncExecutionResult(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert result.raw == execution_view
+        assert result.result == execution_view
 
     @pytest.mark.asyncio
     async def test_stdout_with_truncation_and_streaming(

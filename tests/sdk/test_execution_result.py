@@ -146,10 +146,10 @@ class TestExecutionResult:
         result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
         assert result.stderr() == ""
 
-    def test_raw_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
-        """Test raw property."""
+    def test_result_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
+        """Test result property."""
         result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert result.raw == execution_view
+        assert result.result == execution_view
 
     def test_stdout_with_truncation_and_streaming(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test stdout streams full output when truncated."""
