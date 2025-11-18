@@ -1,12 +1,65 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 from .shared.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintBuildParameters", "Service", "ServiceCredentials"]
+__all__ = [
+    "BlueprintBuildParameters",
+    "BuildContexts",
+    "BuildContextsHTTP",
+    "BuildContextsObject",
+    "LocalBuildContext",
+    "LocalBuildContextHTTP",
+    "LocalBuildContextObject",
+    "Service",
+    "ServiceCredentials",
+]
+
+
+class BuildContextsHTTP(BaseModel):
+    url: str
+    """HTTP(S) URL to a tarball or directory to use as context."""
+
+
+class BuildContextsObject(BaseModel):
+    object_id: str
+    """Handle for a Runloop stored object to use as context."""
+
+
+class BuildContexts(BaseModel):
+    type: Literal["OBJECT", "HTTP"]
+    """Type of the context. Supported values: object, http"""
+
+    http: Optional[BuildContextsHTTP] = None
+    """HTTP(S) context parameters."""
+
+    object: Optional[BuildContextsObject] = None
+    """Object context parameters (named build context)."""
+
+
+class LocalBuildContextHTTP(BaseModel):
+    url: str
+    """HTTP(S) URL to a tarball or directory to use as context."""
+
+
+class LocalBuildContextObject(BaseModel):
+    object_id: str
+    """Handle for a Runloop stored object to use as context."""
+
+
+class LocalBuildContext(BaseModel):
+    type: Literal["OBJECT", "HTTP"]
+    """Type of the context. Supported values: object, http"""
+
+    http: Optional[LocalBuildContextHTTP] = None
+    """HTTP(S) context parameters."""
+
+    object: Optional[LocalBuildContextObject] = None
+    """Object context parameters (named build context)."""
 
 
 class ServiceCredentials(BaseModel):
@@ -61,6 +114,14 @@ class BlueprintBuildParameters(BaseModel):
     build_args: Optional[Dict[str, str]] = None
     """(Optional) Arbitrary Docker build args to pass during build."""
 
+    build_contexts: Optional[Dict[str, BuildContexts]] = None
+    """(Optional) Map of named Docker build contexts.
+
+    Keys are context names, values are typed context definitions (object or http).
+    See Docker buildx additional contexts for details:
+    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+    """
+
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""
 
@@ -72,6 +133,9 @@ class BlueprintBuildParameters(BaseModel):
 
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
+
+    local_build_context: Optional[LocalBuildContext] = None
+    """(Optional) Local build context stored in object-storage."""
 
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""

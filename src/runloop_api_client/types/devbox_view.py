@@ -18,7 +18,7 @@ class StateTransition(BaseModel):
     provisioning: Runloop is allocating and booting the necessary infrastructure
     resources. initializing: Runloop defined boot scripts are running to enable the
     environment for interaction. running: The Devbox is ready for interaction.
-    suspending: The Devbox disk is being snaphsotted and as part of suspension.
+    suspending: The Devbox disk is being snapshotted as part of suspension.
     suspended: The Devbox disk is saved and no more active compute is being used for
     the Devbox. resuming: The Devbox disk is being loaded as part of booting a
     suspended Devbox. failure: The Devbox failed as part of booting or running user
@@ -27,6 +27,7 @@ class StateTransition(BaseModel):
     """
 
     transition_time_ms: Optional[object] = None
+    """The time the status change occurred"""
 
 
 class DevboxView(BaseModel):

@@ -14,16 +14,19 @@ class Git(TypedDict, total=False):
     repository: Required[str]
     """Git repository URL"""
 
+    agent_setup: Optional[SequenceNotStr[str]]
+    """Setup commands to run after cloning"""
+
     ref: Optional[str]
     """Optional Git ref (branch/tag/commit), defaults to main/HEAD"""
-
-    setup: Optional[SequenceNotStr[str]]
-    """Setup commands to run after cloning"""
 
 
 class Npm(TypedDict, total=False):
     package_name: Required[str]
     """NPM package name"""
+
+    agent_setup: Optional[SequenceNotStr[str]]
+    """Setup commands to run after installation"""
 
     npm_version: Optional[str]
     """NPM version constraint"""
@@ -36,10 +39,16 @@ class Object(TypedDict, total=False):
     object_id: Required[str]
     """Object ID"""
 
+    agent_setup: Optional[SequenceNotStr[str]]
+    """Setup commands to run after unpacking"""
+
 
 class Pip(TypedDict, total=False):
     package_name: Required[str]
     """Pip package name"""
+
+    agent_setup: Optional[SequenceNotStr[str]]
+    """Setup commands to run after installation"""
 
     pip_version: Optional[str]
     """Pip version constraint"""
