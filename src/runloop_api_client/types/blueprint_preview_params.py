@@ -3,13 +3,23 @@
 from __future__ import annotations
 
 from typing import Dict, Iterable, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .._types import SequenceNotStr
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintPreviewParams", "Service", "ServiceCredentials"]
+__all__ = [
+    "BlueprintPreviewParams",
+    "BuildContexts",
+    "BuildContextsHTTP",
+    "BuildContextsObject",
+    "LocalBuildContext",
+    "LocalBuildContextHTTP",
+    "LocalBuildContextObject",
+    "Service",
+    "ServiceCredentials",
+]
 
 
 class BlueprintPreviewParams(TypedDict, total=False):
@@ -33,6 +43,14 @@ class BlueprintPreviewParams(TypedDict, total=False):
     build_args: Optional[Dict[str, str]]
     """(Optional) Arbitrary Docker build args to pass during build."""
 
+    build_contexts: Optional[Dict[str, BuildContexts]]
+    """(Optional) Map of named Docker build contexts.
+
+    Keys are context names, values are typed context definitions (object or http).
+    See Docker buildx additional contexts for details:
+    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+    """
+
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Blueprint."""
 
@@ -44,6 +62,9 @@ class BlueprintPreviewParams(TypedDict, total=False):
 
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure your Devbox at launch time."""
+
+    local_build_context: Optional[LocalBuildContext]
+    """(Optional) Local build context stored in object-storage."""
 
     metadata: Optional[Dict[str, str]]
     """(Optional) User defined metadata for the Blueprint."""
@@ -65,6 +86,48 @@ class BlueprintPreviewParams(TypedDict, total=False):
 
     system_setup_commands: Optional[SequenceNotStr[str]]
     """A list of commands to run to set up your system."""
+
+
+class BuildContextsHTTP(TypedDict, total=False):
+    url: Required[str]
+    """HTTP(S) URL to a tarball or directory to use as context."""
+
+
+class BuildContextsObject(TypedDict, total=False):
+    object_id: Required[str]
+    """Handle for a Runloop stored object to use as context."""
+
+
+class BuildContexts(TypedDict, total=False):
+    type: Required[Literal["OBJECT", "HTTP"]]
+    """Type of the context. Supported values: object, http"""
+
+    http: Optional[BuildContextsHTTP]
+    """HTTP(S) context parameters."""
+
+    object: Optional[BuildContextsObject]
+    """Object context parameters (named build context)."""
+
+
+class LocalBuildContextHTTP(TypedDict, total=False):
+    url: Required[str]
+    """HTTP(S) URL to a tarball or directory to use as context."""
+
+
+class LocalBuildContextObject(TypedDict, total=False):
+    object_id: Required[str]
+    """Handle for a Runloop stored object to use as context."""
+
+
+class LocalBuildContext(TypedDict, total=False):
+    type: Required[Literal["OBJECT", "HTTP"]]
+    """Type of the context. Supported values: object, http"""
+
+    http: Optional[LocalBuildContextHTTP]
+    """HTTP(S) context parameters."""
+
+    object: Optional[LocalBuildContextObject]
+    """Object context parameters (named build context)."""
 
 
 class ServiceCredentials(TypedDict, total=False):

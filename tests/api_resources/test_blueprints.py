@@ -36,6 +36,13 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_contexts={
+                "foo": {
+                    "type": "OBJECT",
+                    "http": {"url": "url"},
+                    "object": {"object_id": "object_id"},
+                }
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -64,6 +71,11 @@ class TestBlueprints:
                     "uid": 0,
                     "username": "username",
                 },
+            },
+            local_build_context={
+                "type": "OBJECT",
+                "http": {"url": "url"},
+                "object": {"object_id": "object_id"},
             },
             metadata={"foo": "string"},
             secrets={"foo": "string"},
@@ -372,6 +384,13 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_contexts={
+                "foo": {
+                    "type": "OBJECT",
+                    "http": {"url": "url"},
+                    "object": {"object_id": "object_id"},
+                }
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -400,6 +419,11 @@ class TestBlueprints:
                     "uid": 0,
                     "username": "username",
                 },
+            },
+            local_build_context={
+                "type": "OBJECT",
+                "http": {"url": "url"},
+                "object": {"object_id": "object_id"},
             },
             metadata={"foo": "string"},
             secrets={"foo": "string"},
@@ -464,6 +488,13 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_contexts={
+                "foo": {
+                    "type": "OBJECT",
+                    "http": {"url": "url"},
+                    "object": {"object_id": "object_id"},
+                }
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -492,6 +523,11 @@ class TestAsyncBlueprints:
                     "uid": 0,
                     "username": "username",
                 },
+            },
+            local_build_context={
+                "type": "OBJECT",
+                "http": {"url": "url"},
+                "object": {"object_id": "object_id"},
             },
             metadata={"foo": "string"},
             secrets={"foo": "string"},
@@ -800,6 +836,13 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_contexts={
+                "foo": {
+                    "type": "OBJECT",
+                    "http": {"url": "url"},
+                    "object": {"object_id": "object_id"},
+                }
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -828,6 +871,11 @@ class TestAsyncBlueprints:
                     "uid": 0,
                     "username": "username",
                 },
+            },
+            local_build_context={
+                "type": "OBJECT",
+                "http": {"url": "url"},
+                "object": {"object_id": "object_id"},
             },
             metadata={"foo": "string"},
             secrets={"foo": "string"},

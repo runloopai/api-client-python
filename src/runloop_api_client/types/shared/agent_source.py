@@ -11,16 +11,19 @@ class Git(BaseModel):
     repository: str
     """Git repository URL"""
 
+    agent_setup: Optional[List[str]] = None
+    """Setup commands to run after cloning"""
+
     ref: Optional[str] = None
     """Optional Git ref (branch/tag/commit), defaults to main/HEAD"""
-
-    setup: Optional[List[str]] = None
-    """Setup commands to run after cloning"""
 
 
 class Npm(BaseModel):
     package_name: str
     """NPM package name"""
+
+    agent_setup: Optional[List[str]] = None
+    """Setup commands to run after installation"""
 
     npm_version: Optional[str] = None
     """NPM version constraint"""
@@ -33,10 +36,16 @@ class Object(BaseModel):
     object_id: str
     """Object ID"""
 
+    agent_setup: Optional[List[str]] = None
+    """Setup commands to run after unpacking"""
+
 
 class Pip(BaseModel):
     package_name: str
     """Pip package name"""
+
+    agent_setup: Optional[List[str]] = None
+    """Setup commands to run after installation"""
 
     pip_version: Optional[str] = None
     """Pip version constraint"""

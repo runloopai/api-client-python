@@ -33,17 +33,22 @@ class TestAgents:
                 "type": "type",
                 "git": {
                     "repository": "repository",
+                    "agent_setup": ["string"],
                     "ref": "ref",
-                    "setup": ["string"],
                 },
                 "npm": {
                     "package_name": "package_name",
+                    "agent_setup": ["string"],
                     "npm_version": "npm_version",
                     "registry_url": "registry_url",
                 },
-                "object": {"object_id": "object_id"},
+                "object": {
+                    "object_id": "object_id",
+                    "agent_setup": ["string"],
+                },
                 "pip": {
                     "package_name": "package_name",
+                    "agent_setup": ["string"],
                     "pip_version": "pip_version",
                     "registry_url": "registry_url",
                 },
@@ -170,17 +175,22 @@ class TestAsyncAgents:
                 "type": "type",
                 "git": {
                     "repository": "repository",
+                    "agent_setup": ["string"],
                     "ref": "ref",
-                    "setup": ["string"],
                 },
                 "npm": {
                     "package_name": "package_name",
+                    "agent_setup": ["string"],
                     "npm_version": "npm_version",
                     "registry_url": "registry_url",
                 },
-                "object": {"object_id": "object_id"},
+                "object": {
+                    "object_id": "object_id",
+                    "agent_setup": ["string"],
+                },
                 "pip": {
                     "package_name": "package_name",
+                    "agent_setup": ["string"],
                     "pip_version": "pip_version",
                     "registry_url": "registry_url",
                 },
