@@ -32,22 +32,36 @@ from ..types.object_create_params import ContentType
 class DevboxClient:
     """High-level manager for creating and managing Devbox instances.
 
-    Accessed via sdk.devbox, provides methods to create devboxes from scratch,
-    blueprints, or snapshots, and to list existing devboxes.
+    Accessed via ``runloop.devbox`` from :class:`RunloopSDK`, provides methods to
+    create devboxes from scratch, blueprints, or snapshots, and to list
+    existing devboxes.
 
     Example:
-        >>> sdk = RunloopSDK()
-        >>> devbox = sdk.devbox.create(name="my-devbox")
-        >>> devboxes = sdk.devbox.list(limit=10)
+        >>> runloop = RunloopSDK()
+        >>> devbox = runloop.devbox.create(name="my-devbox")
+        >>> devboxes = runloop.devbox.list(limit=10)
     """
 
     def __init__(self, client: Runloop) -> None:
+        """Initialize the manager.
+
+        Args:
+            client: Generated Runloop client to wrap.
+        """
         self._client = client
 
     def create(
         self,
         **params: Unpack[SDKDevboxCreateParams],
     ) -> Devbox:
+        """Provision a new devbox and wait until it reaches ``running`` state.
+
+        Args:
+            **params: Keyword arguments forwarded to the devbox creation API.
+
+        Returns:
+            Devbox: Wrapper bound to the newly created devbox.
+        """
         devbox_view = self._client.devboxes.create_and_await_running(
             **params,
         )
@@ -58,6 +72,15 @@ class DevboxClient:
         blueprint_id: str,
         **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
+        """Create a devbox from an existing blueprint by identifier.
+
+        Args:
+            blueprint_id: Blueprint ID to create from.
+            **params: Additional creation parameters (metadata, launch parameters, etc.).
+
+        Returns:
+            Devbox: Wrapper bound to the newly created devbox.
+        """
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_id=blueprint_id,
             **params,
@@ -69,6 +92,15 @@ class DevboxClient:
         blueprint_name: str,
         **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
+        """Create a devbox from the latest blueprint with the given name.
+
+        Args:
+            blueprint_name: Blueprint name to create from.
+            **params: Additional creation parameters (metadata, launch parameters, etc.).
+
+        Returns:
+            Devbox: Wrapper bound to the newly created devbox.
+        """
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_name=blueprint_name,
             **params,
@@ -80,6 +112,15 @@ class DevboxClient:
         snapshot_id: str,
         **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> Devbox:
+        """Create a devbox initialized from a snapshot.
+
+        Args:
+            snapshot_id: Snapshot ID to create from.
+            **params: Additional creation parameters (metadata, launch parameters, etc.).
+
+        Returns:
+            Devbox: Wrapper bound to the newly created devbox.
+        """
         devbox_view = self._client.devboxes.create_and_await_running(
             snapshot_id=snapshot_id,
             **params,
@@ -87,6 +128,14 @@ class DevboxClient:
         return Devbox(self._client, devbox_view.id)
 
     def from_id(self, devbox_id: str) -> Devbox:
+        """Attach to an existing devbox by ID.
+
+        Args:
+            devbox_id: Existing devbox ID.
+
+        Returns:
+            Devbox: Wrapper bound to the requested devbox.
+        """
         self._client.devboxes.await_running(devbox_id)
         return Devbox(self._client, devbox_id)
 
@@ -94,6 +143,14 @@ class DevboxClient:
         self,
         **params: Unpack[SDKDevboxListParams],
     ) -> list[Devbox]:
+        """List devboxes accessible to the caller.
+
+        Args:
+            **params: Filtering and pagination parameters.
+
+        Returns:
+            list[Devbox]: Collection of devbox wrappers.
+        """
         page = self._client.devboxes.list(
             **params,
         )
@@ -103,62 +160,109 @@ class DevboxClient:
 class SnapshotClient:
     """High-level manager for working with disk snapshots.
 
-    Accessed via sdk.snapshot, provides methods to list snapshots and access
-    snapshot details.
+    Accessed via ``runloop.snapshot`` from :class:`RunloopSDK`, provides methods
+    to list snapshots and access snapshot details.
 
     Example:
-        >>> sdk = RunloopSDK()
-        >>> snapshots = sdk.snapshot.list(devbox_id="dev-123")
-        >>> snapshot = sdk.snapshot.from_id("snap-123")
+        >>> runloop = RunloopSDK()
+        >>> snapshots = runloop.snapshot.list(devbox_id="dev-123")
+        >>> snapshot = runloop.snapshot.from_id("snap-123")
     """
 
     def __init__(self, client: Runloop) -> None:
+        """Initialize the manager with the generated Runloop client."""
         self._client = client
 
     def list(
         self,
         **params: Unpack[SDKDiskSnapshotListParams],
     ) -> list[Snapshot]:
+        """List snapshots created from devboxes.
+
+        Args:
+            **params: Filtering and pagination parameters.
+
+        Returns:
+            list[Snapshot]: Snapshot wrappers for each record.
+        """
         page = self._client.devboxes.disk_snapshots.list(
             **params,
         )
         return [Snapshot(self._client, item.id) for item in page.snapshots]
 
     def from_id(self, snapshot_id: str) -> Snapshot:
+        """Return a snapshot wrapper for the given ID.
+
+        Args:
+            snapshot_id: Snapshot ID to wrap.
+
+        Returns:
+            Snapshot: Wrapper for the snapshot resource.
+        """
         return Snapshot(self._client, snapshot_id)
 
 
 class BlueprintClient:
     """High-level manager for creating and managing blueprints.
 
-    Accessed via sdk.blueprint, provides methods to create blueprints with
-    Dockerfiles and system setup commands, and to list existing blueprints.
+    Accessed via ``runloop.blueprint`` from :class:`RunloopSDK`, provides methods
+    to create blueprints with Dockerfiles and system setup commands, and to
+    list existing blueprints.
 
     Example:
-        >>> sdk = RunloopSDK()
-        >>> blueprint = sdk.blueprint.create(name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update")
-        >>> blueprints = sdk.blueprint.list()
+        >>> runloop = RunloopSDK()
+        >>> blueprint = runloop.blueprint.create(name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update")
+        >>> blueprints = runloop.blueprint.list()
     """
 
     def __init__(self, client: Runloop) -> None:
+        """Initialize the manager.
+
+        Args:
+            client: Generated Runloop client to wrap.
+        """
         self._client = client
 
     def create(
         self,
         **params: Unpack[SDKBlueprintCreateParams],
     ) -> Blueprint:
+        """Create a blueprint and wait for the build to finish.
+
+        Args:
+            **params: Blueprint definition (Dockerfile, metadata, etc.).
+
+        Returns:
+            Blueprint: Wrapper bound to the finished blueprint.
+        """
         blueprint = self._client.blueprints.create_and_await_build_complete(
             **params,
         )
         return Blueprint(self._client, blueprint.id)
 
     def from_id(self, blueprint_id: str) -> Blueprint:
+        """Return a blueprint wrapper for the given ID.
+
+        Args:
+            blueprint_id: Blueprint ID to wrap.
+
+        Returns:
+            Blueprint: Wrapper for the blueprint resource.
+        """
         return Blueprint(self._client, blueprint_id)
 
     def list(
         self,
         **params: Unpack[SDKBlueprintListParams],
     ) -> list[Blueprint]:
+        """List available blueprints.
+
+        Args:
+            **params: Filtering and pagination parameters.
+
+        Returns:
+            list[Blueprint]: Blueprint wrappers for each record.
+        """
         page = self._client.blueprints.list(
             **params,
         )
@@ -168,33 +272,59 @@ class BlueprintClient:
 class StorageObjectClient:
     """High-level manager for creating and managing storage objects.
 
-    Accessed via sdk.storage_object, provides methods to create, upload, download,
-    and list storage objects with convenient helpers for file and text uploads.
+    Accessed via ``runloop.storage_object`` from :class:`RunloopSDK`, provides
+    methods to create, upload, download, and list storage objects with convenient
+    helpers for file and text uploads.
 
     Example:
-        >>> sdk = RunloopSDK()
-        >>> obj = sdk.storage_object.upload_from_text("Hello!", "greeting.txt")
+        >>> runloop = RunloopSDK()
+        >>> obj = runloop.storage_object.upload_from_text("Hello!", "greeting.txt")
         >>> content = obj.download_as_text()
-        >>> objects = sdk.storage_object.list()
+        >>> objects = runloop.storage_object.list()
     """
 
     def __init__(self, client: Runloop) -> None:
+        """Initialize the manager with the generated Runloop client."""
         self._client = client
 
     def create(
         self,
         **params: Unpack[SDKObjectCreateParams],
     ) -> StorageObject:
+        """Create a storage object and obtain an upload URL.
+
+        Args:
+            **params: Object creation parameters (name, content type, metadata).
+
+        Returns:
+            StorageObject: Wrapper with upload URL set for immediate uploads.
+        """
         obj = self._client.objects.create(**params)
         return StorageObject(self._client, obj.id, upload_url=obj.upload_url)
 
     def from_id(self, object_id: str) -> StorageObject:
+        """Return a storage object wrapper by identifier.
+
+        Args:
+            object_id: Storage object identifier to wrap.
+
+        Returns:
+            StorageObject: Wrapper for the storage object resource.
+        """
         return StorageObject(self._client, object_id, upload_url=None)
 
     def list(
         self,
         **params: Unpack[SDKObjectListParams],
     ) -> list[StorageObject]:
+        """List storage objects owned by the caller.
+
+        Args:
+            **params: Filtering and pagination parameters.
+
+        Returns:
+            list[StorageObject]: Storage object wrappers for each record.
+        """
         page = self._client.objects.list(
             **params,
         )
@@ -209,6 +339,21 @@ class StorageObjectClient:
         metadata: Optional[Dict[str, str]] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
+        """Create and upload an object from a local file path.
+
+        Args:
+            file_path: Local filesystem path to read.
+            name: Optional object name; defaults to the file name.
+            content_type: Optional MIME type to apply to the object.
+            metadata: Optional key-value metadata.
+            **options: Additional request configuration.
+
+        Returns:
+            StorageObject: Wrapper for the uploaded object.
+
+        Raises:
+            OSError: If the local file cannot be read.
+        """
         path = Path(file_path)
 
         try:
@@ -231,6 +376,17 @@ class StorageObjectClient:
         metadata: Optional[Dict[str, str]] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
+        """Create and upload an object from a text payload.
+
+        Args:
+            text: Text content to upload.
+            name: Object display name.
+            metadata: Optional key-value metadata.
+            **options: Additional request configuration.
+
+        Returns:
+            StorageObject: Wrapper for the uploaded object.
+        """
         obj = self.create(name=name, content_type="text", metadata=metadata, **options)
         obj.upload_content(text)
         obj.complete()
@@ -245,6 +401,18 @@ class StorageObjectClient:
         metadata: Optional[Dict[str, str]] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
+        """Create and upload an object from a bytes payload.
+
+        Args:
+            data: Binary payload to upload.
+            name: Object display name.
+            content_type: MIME type describing the payload.
+            metadata: Optional key-value metadata.
+            **options: Additional request configuration.
+
+        Returns:
+            StorageObject: Wrapper for the uploaded object.
+        """
         obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
         obj.upload_content(data)
         obj.complete()
@@ -266,10 +434,11 @@ class RunloopSDK:
         storage_object: High-level interface for storage object management.
 
     Example:
-        >>> sdk = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
-        >>> with sdk.devbox.create(name="my-devbox") as devbox:
-        ...     result = devbox.cmd.exec("echo 'hello'")
-        ...     print(result.stdout())
+        >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
+        >>> devbox = runloop.devbox.create(name="my-devbox")
+        >>> result = devbox.cmd.exec(command="echo 'hello'")
+        >>> print(result.stdout())
+        >>> devbox.shutdown()
     """
 
     api: Runloop
@@ -289,6 +458,17 @@ class RunloopSDK:
         default_query: Mapping[str, object] | None = None,
         http_client: httpx.Client | None = None,
     ) -> None:
+        """Configure the synchronous SDK wrapper.
+
+        Args:
+            bearer_token: API token; falls back to ``RUNLOOP_API_KEY`` env var.
+            base_url: Override the API base URL.
+            timeout: Request timeout (seconds) or ``Timeout`` object.
+            max_retries: Maximum automatic retry attempts.
+            default_headers: Headers merged into every request.
+            default_query: Default query parameters merged into every request.
+            http_client: Custom ``httpx.Client`` instance to reuse.
+        """
         self.api = Runloop(
             bearer_token=bearer_token,
             base_url=base_url,
@@ -305,10 +485,17 @@ class RunloopSDK:
         self.storage_object = StorageObjectClient(self.api)
 
     def close(self) -> None:
+        """Close the underlying HTTP client and release resources."""
         self.api.close()
 
     def __enter__(self) -> "RunloopSDK":
+        """Allow ``with RunloopSDK() as runloop`` usage.
+
+        Returns:
+            RunloopSDK: The active SDK instance.
+        """
         return self
 
     def __exit__(self, *_exc_info: object) -> None:
+        """Ensure the API client closes when leaving the context manager."""
         self.close()

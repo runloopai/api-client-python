@@ -12,8 +12,10 @@ from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetai
 
 
 class AsyncExecutionResult:
-    """
-    Completed asynchronous command execution result.
+    """Completed asynchronous command execution result.
+
+    Provides convenient helpers to inspect process exit status and captured
+    output.
     """
 
     def __init__(
@@ -32,22 +34,47 @@ class AsyncExecutionResult:
 
     @property
     def devbox_id(self) -> str:
+        """Associated devbox identifier.
+
+        Returns:
+            str: Devbox ID where the command executed.
+        """
         return self._devbox_id
 
     @property
     def execution_id(self) -> str:
+        """Underlying execution identifier.
+
+        Returns:
+            str: Unique execution ID.
+        """
         return self._result.execution_id
 
     @property
     def exit_code(self) -> int | None:
+        """Process exit code, or ``None`` if unavailable.
+
+        Returns:
+            int | None: Exit status code.
+        """
         return self._result.exit_status
 
     @property
     def success(self) -> bool:
+        """Whether the process exited successfully (exit code ``0``).
+
+        Returns:
+            bool: ``True`` if the exit code is ``0``.
+        """
         return self.exit_code == 0
 
     @property
     def failed(self) -> bool:
+        """Whether the process exited with a non-zero exit code.
+
+        Returns:
+            bool: ``True`` if the exit code is non-zero.
+        """
         exit_code = self.exit_code
         return exit_code is not None and exit_code != 0
 
@@ -78,7 +105,17 @@ class AsyncExecutionResult:
         num_lines: Optional[int],
         stream_fn: Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]],
     ) -> str:
-        """Common logic for getting output with optional line limiting and streaming."""
+        """Common helper for fetching buffered or streamed output.
+
+        Args:
+            current_output: Cached output string from the API.
+            is_truncated: Whether ``current_output`` is truncated.
+            num_lines: Optional number of tail lines to return.
+            stream_fn: Awaitable returning a streaming iterator for full output.
+
+        Returns:
+            str: Output string honoring ``num_lines`` if provided.
+        """
         # Check if we have enough lines already
         if num_lines is not None and (not is_truncated or self._count_non_empty_lines(current_output) >= num_lines):
             return self._get_last_n_lines(current_output, num_lines)
@@ -97,10 +134,10 @@ class AsyncExecutionResult:
         Return captured standard output, streaming full output if truncated.
 
         Args:
-            num_lines: Optional number of lines to return from the end (most recent)
+            num_lines: Optional number of lines to return from the end (most recent).
 
         Returns:
-            stdout content, optionally limited to last N lines
+            str: Stdout content, optionally limited to the last ``num_lines`` lines.
         """
         return await self._get_output(
             self._result.stdout or "",
@@ -116,10 +153,10 @@ class AsyncExecutionResult:
         Return captured standard error, streaming full output if truncated.
 
         Args:
-            num_lines: Optional number of lines to return from the end (most recent)
+            num_lines: Optional number of lines to return from the end (most recent).
 
         Returns:
-            stderr content, optionally limited to last N lines
+            str: Stderr content, optionally limited to the last ``num_lines`` lines.
         """
         return await self._get_output(
             self._result.stderr or "",
@@ -132,4 +169,9 @@ class AsyncExecutionResult:
 
     @property
     def raw(self) -> DevboxAsyncExecutionDetailView:
+        """Access the underlying API response.
+
+        Returns:
+            DevboxAsyncExecutionDetailView: Raw API payload.
+        """
         return self._result

@@ -66,6 +66,12 @@ class Devbox:
     """
 
     def __init__(self, client: Runloop, devbox_id: str) -> None:
+        """Initialize the wrapper.
+
+        Args:
+            client: Generated Runloop client.
+            devbox_id: Devbox identifier returned by the API.
+        """
         self._client = client
         self._id = devbox_id
         self._logger = logging.getLogger(__name__)
@@ -75,9 +81,15 @@ class Devbox:
         return f"<Devbox id={self._id!r}>"
 
     def __enter__(self) -> "Devbox":
+        """Enable ``with devbox`` usage by returning ``self``.
+
+        Returns:
+            Devbox: The active devbox instance.
+        """
         return self
 
     def __exit__(self, exc_type: type[BaseException] | None, exc: BaseException | None, tb: Any) -> None:
+        """Shutdown the devbox when leaving a context manager."""
         try:
             self.shutdown()
         except Exception:
@@ -85,6 +97,11 @@ class Devbox:
 
     @property
     def id(self) -> str:
+        """Return the devbox identifier.
+
+        Returns:
+            str: Unique devbox ID.
+        """
         return self._id
 
     def get_info(
@@ -93,8 +110,11 @@ class Devbox:
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
+        Args:
+            **options: Optional request configuration.
+
         Returns:
-            DevboxView containing the devbox's current state, status, and metadata.
+            DevboxView: Current devbox state info.
         """
         return self._client.devboxes.retrieve(
             self._id,
@@ -110,7 +130,7 @@ class Devbox:
             polling_config: Optional configuration for polling behavior (timeout, interval).
 
         Returns:
-            DevboxView with the devbox in running state.
+            DevboxView: Devbox state info after it reaches running status.
         """
         return self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
@@ -123,7 +143,7 @@ class Devbox:
             polling_config: Optional configuration for polling behavior (timeout, interval).
 
         Returns:
-            DevboxView with the devbox in suspended state.
+            DevboxView: Devbox state info after it reaches suspended status.
         """
         return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
@@ -133,8 +153,11 @@ class Devbox:
     ) -> DevboxView:
         """Shutdown the devbox, terminating all processes and releasing resources.
 
+        Args:
+            **options: Long-running request configuration (timeouts, retries, etc.).
+
         Returns:
-            DevboxView with the final devbox state.
+            DevboxView: Final devbox state info.
         """
         return self._client.devboxes.shutdown(
             self._id,
@@ -151,10 +174,10 @@ class Devbox:
         Waits for the devbox to reach suspended state before returning.
 
         Args:
-            polling_config: Optional configuration for polling behavior (timeout, interval).
+            **options: Optional long-running request and polling configuration.
 
         Returns:
-            DevboxView with the devbox in suspended state.
+            DevboxView: Suspended devbox state info.
         """
         self._client.devboxes.suspend(
             self._id,
@@ -171,10 +194,10 @@ class Devbox:
         Waits for the devbox to reach running state before returning.
 
         Args:
-            polling_config: Optional configuration for polling behavior (timeout, interval).
+            **options: Optional long-running request and polling configuration.
 
         Returns:
-            DevboxView with the devbox in running state.
+            DevboxView: Resumed devbox state info.
         """
         self._client.devboxes.resume(
             self._id,
@@ -191,8 +214,11 @@ class Devbox:
         Call this periodically for long-running workflows to prevent the devbox
         from being automatically shut down due to inactivity.
 
+        Args:
+            **options: Optional long-running request configuration.
+
         Returns:
-            Response object confirming the keep-alive request.
+            object: Response confirming the keep-alive request.
         """
         return self._client.devboxes.keep_alive(
             self._id,
@@ -209,13 +235,10 @@ class Devbox:
         new devboxes with the same state.
 
         Args:
-            commit_message: Optional message describing the snapshot.
-            metadata: Optional key-value metadata to attach to the snapshot.
-            name: Optional name for the snapshot.
-            polling_config: Optional configuration for polling behavior (timeout, interval).
+            **params: Snapshot metadata, naming, and polling configuration.
 
         Returns:
-            Snapshot object representing the completed snapshot.
+            Snapshot: Wrapper representing the completed snapshot.
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -235,12 +258,10 @@ class Devbox:
         for completion. Use snapshot.await_completed() to wait for completion.
 
         Args:
-            commit_message: Optional message describing the snapshot.
-            metadata: Optional key-value metadata to attach to the snapshot.
-            name: Optional name for the snapshot.
+            **params: Snapshot metadata and naming options.
 
         Returns:
-            Snapshot object (snapshot may still be in progress).
+            Snapshot: Wrapper representing the snapshot (may still be processing).
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -249,18 +270,34 @@ class Devbox:
         return self._snapshot_from_id(snapshot_data.id)
 
     def close(self) -> None:
+        """Alias for :meth:`shutdown` to support common resource patterns."""
         self.shutdown()
 
     @property
     def cmd(self) -> CommandInterface:
+        """Return the command execution interface.
+
+        Returns:
+            CommandInterface: Helper for running shell commands.
+        """
         return _CommandInterface(self)
 
     @property
     def file(self) -> FileInterface:
+        """Return the file operations interface.
+
+        Returns:
+            FileInterface: Helper for reading/writing files.
+        """
         return _FileInterface(self)
 
     @property
     def net(self) -> NetworkInterface:
+        """Return the networking interface.
+
+        Returns:
+            NetworkInterface: Helper for SSH keys and tunnels.
+        """
         return _NetworkInterface(self)
 
     # --------------------------------------------------------------------- #
@@ -374,19 +411,13 @@ class _CommandInterface:
         """Execute a command synchronously and wait for completion.
 
         Args:
-            command: The shell command to execute.
-            shell_name: Optional shell to use (e.g., "bash", "sh").
-            stdout: Optional callback to receive stdout lines in real-time.
-            stderr: Optional callback to receive stderr lines in real-time.
-            output: Optional callback to receive combined output lines in real-time.
-            polling_config: Optional configuration for polling behavior.
-            attach_stdin: Whether to attach stdin for interactive commands.
+            **params: Command parameters, streaming callbacks, and polling config.
 
         Returns:
-            ExecutionResult with exit code and captured output.
+            ExecutionResult: Wrapper with exit status and output helpers.
 
         Example:
-            >>> result = devbox.cmd.exec("ls -la")
+            >>> result = devbox.cmd.exec(command="ls -la")
             >>> print(result.stdout())
             >>> print(f"Exit code: {result.exit_code}")
         """
@@ -413,9 +444,7 @@ class _CommandInterface:
             )
 
         if streaming_group is not None:
-            # Ensure log streaming has drained before returning the result. _stop_streaming()
-            # below will perform the final cleanup, but we still join here so callers only
-            # resume once all logs have been delivered.
+            # Ensure log streaming has completed before returning the result.
             streaming_group.join()
 
         return ExecutionResult(client, devbox.id, final)
@@ -431,18 +460,12 @@ class _CommandInterface:
         execution.kill() to terminate the process.
 
         Args:
-            command: The shell command to execute.
-            shell_name: Optional shell to use (e.g., "bash", "sh").
-            stdout: Optional callback to receive stdout lines in real-time.
-            stderr: Optional callback to receive stderr lines in real-time.
-            output: Optional callback to receive combined output lines in real-time.
-            attach_stdin: Whether to attach stdin for interactive commands.
-
+            **params: Command parameters and streaming callbacks.
         Returns:
-            Execution object for managing the running process.
+            Execution: Handle for managing the running process.
 
         Example:
-            >>> execution = devbox.cmd.exec_async("sleep 10")
+            >>> execution = devbox.cmd.exec_async(command="sleep 10")
             >>> state = execution.get_state()
             >>> print(f"Status: {state.status}")
             >>> execution.kill()  # Terminate early if needed
@@ -481,10 +504,10 @@ class _FileInterface:
         """Read a file from the devbox.
 
         Args:
-            path: Absolute path to the file in the devbox.
+            **params: Parameters such as ``path``.
 
         Returns:
-            File contents as a string.
+            str: File contents.
 
         Example:
             >>> content = devbox.file.read("/home/user/data.txt")
@@ -504,11 +527,10 @@ class _FileInterface:
         Creates or overwrites the file at the specified path.
 
         Args:
-            file_path: Absolute path to the file in the devbox.
-            contents: File contents as string.
+            **params: Parameters such as ``file_path`` and ``contents``.
 
         Returns:
-            Execution details for the write operation.
+            DevboxExecutionDetailView: Execution metadata for the write command.
 
         Example:
             >>> devbox.file.write(file_path="/home/user/config.json", contents='{"key": "value"}')
@@ -525,10 +547,10 @@ class _FileInterface:
         """Download a file from the devbox.
 
         Args:
-            path: Absolute path to the file in the devbox.
+            **params: Parameters such as ``path``.
 
         Returns:
-            File contents as bytes.
+            bytes: Raw file contents.
 
         Example:
             >>> data = devbox.file.download("/home/user/output.bin")
@@ -548,11 +570,10 @@ class _FileInterface:
         """Upload a file to the devbox.
 
         Args:
-            path: Destination path in the devbox.
-            file: File to upload (Path-like object or bytes).
+            **params: Parameters such as destination ``path`` and local ``file``.
 
         Returns:
-            Response object confirming the upload.
+            object: API response confirming the upload.
 
         Example:
             >>> from pathlib import Path
@@ -579,8 +600,11 @@ class _NetworkInterface:
     ) -> DevboxCreateSSHKeyResponse:
         """Create an SSH key for remote access to the devbox.
 
+        Args:
+            **options: Optional long-running request configuration.
+
         Returns:
-            SSH key response containing the SSH URL and credentials.
+            DevboxCreateSSHKeyResponse: Response containing SSH connection info.
 
         Example:
             >>> ssh_key = devbox.net.create_ssh_key()
@@ -598,10 +622,10 @@ class _NetworkInterface:
         """Create a network tunnel to expose a devbox port publicly.
 
         Args:
-            port: The port number in the devbox to expose.
+            **params: Parameters such as the devbox ``port`` to expose.
 
         Returns:
-            DevboxTunnelView containing the public URL for the tunnel.
+            DevboxTunnelView: Details about the public endpoint.
 
         Example:
             >>> tunnel = devbox.net.create_tunnel(port=8080)
@@ -619,10 +643,10 @@ class _NetworkInterface:
         """Remove a network tunnel, disabling public access to the port.
 
         Args:
-            port: The port number of the tunnel to remove.
+            **params: Parameters such as the ``port`` to close.
 
         Returns:
-            Response object confirming the tunnel removal.
+            object: Response confirming the tunnel removal.
 
         Example:
             >>> devbox.net.remove_tunnel(port=8080)

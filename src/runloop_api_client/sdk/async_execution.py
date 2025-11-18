@@ -39,8 +39,22 @@ class _AsyncStreamingGroup:
 
 
 class AsyncExecution:
-    """
-    Represents an asynchronous command execution on a devbox.
+    """Manages an asynchronous command execution on a devbox.
+
+    Provides coroutines to poll execution state, wait for completion, and
+    terminate the running process. Created by ``await devbox.cmd.exec_async()``.
+
+    Attributes:
+        execution_id: The unique execution identifier.
+        devbox_id: The devbox where the command is executing.
+
+    Example:
+        >>> execution = await devbox.cmd.exec_async(command="python train.py")
+        >>> state = await execution.get_state()
+        >>> if state.status == "running":
+        ...     await execution.kill()
+        >>> result = await execution.result()  # Wait for completion
+        >>> print(await result.stdout())
     """
 
     def __init__(
@@ -62,13 +76,31 @@ class AsyncExecution:
 
     @property
     def execution_id(self) -> str:
+        """Return the execution identifier.
+
+        Returns:
+            str: Unique execution ID.
+        """
         return self._execution_id
 
     @property
     def devbox_id(self) -> str:
+        """Return the devbox identifier.
+
+        Returns:
+            str: Devbox ID where the command is running.
+        """
         return self._devbox_id
 
     async def result(self, **options: Unpack[LongRequestOptions]) -> AsyncExecutionResult:
+        """Wait for completion and return an :class:`AsyncExecutionResult`.
+
+        Args:
+            **options: Optional long-running request configuration.
+
+        Returns:
+            AsyncExecutionResult: Wrapper with exit status and output helpers.
+        """
         # Wait for both command completion and streaming to finish
         awaitables: list[Awaitable[DevboxAsyncExecutionDetailView | None]] = [
             self._client.devboxes.wait_for_command(
@@ -96,6 +128,14 @@ class AsyncExecution:
         return AsyncExecutionResult(self._client, self._devbox_id, final)
 
     async def get_state(self, **options: Unpack[RequestOptions]) -> DevboxAsyncExecutionDetailView:
+        """Fetch the latest execution state.
+
+        Args:
+            **options: Optional request configuration.
+
+        Returns:
+            DevboxAsyncExecutionDetailView: Current execution metadata.
+        """
         return await self._client.devboxes.executions.retrieve(
             self._execution_id,
             devbox_id=self._devbox_id,
@@ -103,6 +143,11 @@ class AsyncExecution:
         )
 
     async def kill(self, **options: Unpack[LongRequestOptions]) -> None:
+        """Request termination of the running execution.
+
+        Args:
+            **options: Optional long-running request configuration.
+        """
         await self._client.devboxes.executions.kill(
             self._execution_id,
             devbox_id=self._devbox_id,

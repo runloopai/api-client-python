@@ -12,15 +12,19 @@ from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 
 
 class AsyncBlueprint:
-    """
-    Async wrapper around blueprint operations.
-    """
+    """Asynchronous wrapper around a blueprint resource."""
 
     def __init__(
         self,
         client: AsyncRunloop,
         blueprint_id: str,
     ) -> None:
+        """Initialize the wrapper.
+
+        Args:
+            client: Generated AsyncRunloop client.
+            blueprint_id: Blueprint ID returned by the API.
+        """
         self._client = client
         self._id = blueprint_id
 
@@ -30,12 +34,25 @@ class AsyncBlueprint:
 
     @property
     def id(self) -> str:
+        """Return the blueprint ID.
+
+        Returns:
+            str: Unique blueprint ID.
+        """
         return self._id
 
     async def get_info(
         self,
         **options: Unpack[RequestOptions],
     ) -> BlueprintView:
+        """Retrieve the latest blueprint details.
+
+        Args:
+            **options: Optional request configuration.
+
+        Returns:
+            BlueprintView: API response describing the blueprint.
+        """
         return await self._client.blueprints.retrieve(
             self._id,
             **options,
@@ -45,6 +62,14 @@ class AsyncBlueprint:
         self,
         **options: Unpack[RequestOptions],
     ) -> BlueprintBuildLogsListView:
+        """Retrieve build logs for the blueprint.
+
+        Args:
+            **options: Optional request configuration.
+
+        Returns:
+            BlueprintBuildLogsListView: Log entries for the most recent build.
+        """
         return await self._client.blueprints.logs(
             self._id,
             **options,
@@ -54,6 +79,14 @@ class AsyncBlueprint:
         self,
         **options: Unpack[LongRequestOptions],
     ) -> object:
+        """Delete the blueprint.
+
+        Args:
+            **options: Optional long-running request configuration.
+
+        Returns:
+            object: API response acknowledging deletion.
+        """
         return await self._client.blueprints.delete(
             self._id,
             **options,
@@ -63,6 +96,14 @@ class AsyncBlueprint:
         self,
         **params: Unpack[SDKDevboxExtraCreateParams],
     ) -> "AsyncDevbox":
+        """Create a devbox derived from the blueprint.
+
+        Args:
+            **params: Creation parameters to forward to the devbox API.
+
+        Returns:
+            AsyncDevbox: Wrapper bound to the running devbox.
+        """
         devbox_view = await self._client.devboxes.create_and_await_running(
             blueprint_id=self._id,
             **params,
