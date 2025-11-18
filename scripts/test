@@ -54,14 +54,23 @@ fi
 
 export DEFER_PYDANTIC_BUILD=false
 
-echo "==> Running tests"
+function run_tests() {
+    echo "==> Running tests with Pydantic v2"
+    uv run --isolated --all-extras pytest "$@"
 
-# By default, exclude smoketests unless explicitly enabled.
-# This ensures PR CI doesn't run E2E smoketests unless RUN_SMOKETESTS=1.
-PYTEST_ARGS=()
-if [ "${RUN_SMOKETESTS}" != "1" ]; then
-  PYTEST_ARGS+=( -m "not smoketest" )
+    echo "==> Running tests with Pydantic v1"
+    uv run --isolated --all-extras --group=pydantic-v1 pytest "$@"
+}
+
+# If UV_PYTHON is already set in the environment, just run the command once
+if [[ -n "$UV_PYTHON" ]]; then
+  run_tests "$@"
+else
+  # If UV_PYTHON is not set, run the command for min and max versions
+
+  echo "==> Running tests for Python 3.9"
+  UV_PYTHON=3.9 run_tests "$@"
+
+  echo "==> Running tests for Python 3.13"
+  UV_PYTHON=3.13 run_tests "$@"
 fi
-
-uv run pytest "${PYTEST_ARGS[@]}" "$@"
-

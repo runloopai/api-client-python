@@ -63,6 +63,9 @@ dev = [
     "pytest-xdist>=3.6.1",
     "uuid-utils>=0.11.0"
 ]
+pydantic-v1 = [
+    "pydantic>=1.9.0, <2",
+]
 
 [tool.rye.scripts]
 format = { chain = [

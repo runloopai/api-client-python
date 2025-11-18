@@ -44,7 +44,6 @@ jobs:
             echo "RUNLOOP_BASE_URL=https://api.runloop.pro" >> $GITHUB_ENV
           fi
           echo "DEBUG=false" >> $GITHUB_ENV
-          echo "RUN_SMOKETESTS=1" >> $GITHUB_ENV
           echo "PYTHONPATH=${{ github.workspace }}/src" >> $GITHUB_ENV
 
       - name: Run smoke tests (pytest via uv)
