@@ -112,6 +112,7 @@ from ...types.shared_params.code_mount_parameters import CodeMountParameters
 __all__ = ["DevboxesResource", "AsyncDevboxesResource", "DevboxRequestArgs"]
 
 DEVBOX_BOOTING_STATES = frozenset(("provisioning", "initializing"))
+DEVBOX_TERMINAL_STATES = frozenset(("suspended", "failure", "shutdown"))
 
 
 # Type for request arguments that combine polling config with additional request options
@@ -449,7 +450,7 @@ class DevboxesResource(SyncAPIResource):
         def wait_for_devbox_status() -> DevboxView:
             return self._post(
                 f"/v1/devboxes/{id}/wait_for_status",
-                body={"statuses": ["suspended", "failure", "shutdown"]},
+                body={"statuses": list(DEVBOX_TERMINAL_STATES)},
                 cast_to=DevboxView,
             )
 
@@ -461,7 +462,7 @@ class DevboxesResource(SyncAPIResource):
             raise error
 
         def is_terminal_state(devbox: DevboxView) -> bool:
-            return devbox.status in {"suspended", "failure", "shutdown"}
+            return devbox.status in DEVBOX_TERMINAL_STATES
 
         devbox = poll_until(wait_for_devbox_status, is_terminal_state, polling_config, handle_timeout_error)
 
@@ -1996,7 +1997,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             try:
                 return await self._post(
                     f"/v1/devboxes/{id}/wait_for_status",
-                    body={"statuses": ["suspended", "failure", "shutdown"]},
+                    body={"statuses": list(DEVBOX_TERMINAL_STATES)},
                     cast_to=DevboxView,
                 )
             except (APITimeoutError, APIStatusError) as error:
@@ -2005,7 +2006,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 raise
 
         def is_terminal_state(devbox: DevboxView) -> bool:
-            return devbox.status in {"suspended", "failure", "shutdown"}
+            return devbox.status in DEVBOX_TERMINAL_STATES
 
         devbox = await async_poll_until(wait_for_devbox_status, is_terminal_state, polling_config)
 
