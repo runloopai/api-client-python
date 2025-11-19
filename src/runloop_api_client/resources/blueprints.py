@@ -131,13 +131,13 @@ class BlueprintsResource(SyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
-        build_contexts: Optional[Dict[str, blueprint_create_params.BuildContexts]] | Omit = omit,
+        build_context: Optional[blueprint_create_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        local_build_context: Optional[blueprint_create_params.LocalBuildContext] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        named_build_contexts: Optional[Dict[str, blueprint_create_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -169,10 +169,7 @@ class BlueprintsResource(SyncAPIResource):
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
 
-          build_contexts: (Optional) Map of named Docker build contexts. Keys are context names, values
-              are typed context definitions (object or http). See Docker buildx additional
-              contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -182,9 +179,12 @@ class BlueprintsResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
-          local_build_context: (Optional) Local build context stored in object-storage.
-
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
+              the keys are the name used when referencing the contexts in a Dockerfile. See
+              Docker buildx additional contexts for details:
+              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
 
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
@@ -219,13 +219,13 @@ class BlueprintsResource(SyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
-                    "build_contexts": build_contexts,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "local_build_context": local_build_context,
                     "metadata": metadata,
+                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -649,13 +649,13 @@ class BlueprintsResource(SyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
-        build_contexts: Optional[Dict[str, blueprint_preview_params.BuildContexts]] | Omit = omit,
+        build_context: Optional[blueprint_preview_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        local_build_context: Optional[blueprint_preview_params.LocalBuildContext] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        named_build_contexts: Optional[Dict[str, blueprint_preview_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -685,10 +685,7 @@ class BlueprintsResource(SyncAPIResource):
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
 
-          build_contexts: (Optional) Map of named Docker build contexts. Keys are context names, values
-              are typed context definitions (object or http). See Docker buildx additional
-              contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -698,9 +695,12 @@ class BlueprintsResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
-          local_build_context: (Optional) Local build context stored in object-storage.
-
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
+              the keys are the name used when referencing the contexts in a Dockerfile. See
+              Docker buildx additional contexts for details:
+              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
 
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
@@ -731,13 +731,13 @@ class BlueprintsResource(SyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
-                    "build_contexts": build_contexts,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "local_build_context": local_build_context,
                     "metadata": metadata,
+                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -782,13 +782,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
-        build_contexts: Optional[Dict[str, blueprint_create_params.BuildContexts]] | Omit = omit,
+        build_context: Optional[blueprint_create_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        local_build_context: Optional[blueprint_create_params.LocalBuildContext] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        named_build_contexts: Optional[Dict[str, blueprint_create_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -820,10 +820,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
 
-          build_contexts: (Optional) Map of named Docker build contexts. Keys are context names, values
-              are typed context definitions (object or http). See Docker buildx additional
-              contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -833,9 +830,12 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
-          local_build_context: (Optional) Local build context stored in object-storage.
-
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
+              the keys are the name used when referencing the contexts in a Dockerfile. See
+              Docker buildx additional contexts for details:
+              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
 
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
@@ -870,13 +870,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
-                    "build_contexts": build_contexts,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "local_build_context": local_build_context,
                     "metadata": metadata,
+                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -1300,13 +1300,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
-        build_contexts: Optional[Dict[str, blueprint_preview_params.BuildContexts]] | Omit = omit,
+        build_context: Optional[blueprint_preview_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        local_build_context: Optional[blueprint_preview_params.LocalBuildContext] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        named_build_contexts: Optional[Dict[str, blueprint_preview_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -1336,10 +1336,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
 
-          build_contexts: (Optional) Map of named Docker build contexts. Keys are context names, values
-              are typed context definitions (object or http). See Docker buildx additional
-              contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1349,9 +1346,12 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure your Devbox at launch time.
 
-          local_build_context: (Optional) Local build context stored in object-storage.
-
           metadata: (Optional) User defined metadata for the Blueprint.
+
+          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
+              the keys are the name used when referencing the contexts in a Dockerfile. See
+              Docker buildx additional contexts for details:
+              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
 
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
@@ -1382,13 +1382,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
-                    "build_contexts": build_contexts,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
-                    "local_build_context": local_build_context,
                     "metadata": metadata,
+                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,

@@ -12,6 +12,9 @@ class AgentView(BaseModel):
     id: str
     """The unique identifier of the Agent."""
 
+    create_time_ms: int
+    """The creation time of the Agent (Unix timestamp milliseconds)."""
+
     is_public: bool
     """Whether the Agent is publicly accessible."""
 

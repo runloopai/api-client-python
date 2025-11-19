@@ -7,59 +7,21 @@ from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 from .shared.code_mount_parameters import CodeMountParameters
 
-__all__ = [
-    "BlueprintBuildParameters",
-    "BuildContexts",
-    "BuildContextsHTTP",
-    "BuildContextsObject",
-    "LocalBuildContext",
-    "LocalBuildContextHTTP",
-    "LocalBuildContextObject",
-    "Service",
-    "ServiceCredentials",
-]
+__all__ = ["BlueprintBuildParameters", "BuildContext", "NamedBuildContexts", "Service", "ServiceCredentials"]
 
 
-class BuildContextsHTTP(BaseModel):
-    url: str
-    """HTTP(S) URL to a tarball or directory to use as context."""
-
-
-class BuildContextsObject(BaseModel):
+class BuildContext(BaseModel):
     object_id: str
-    """Handle for a Runloop stored object to use as context."""
+    """The ID of an object, whose contents are to be used as a build context."""
+
+    type: Literal["object"]
 
 
-class BuildContexts(BaseModel):
-    type: Literal["OBJECT", "HTTP"]
-    """Type of the context. Supported values: object, http"""
-
-    http: Optional[BuildContextsHTTP] = None
-    """HTTP(S) context parameters."""
-
-    object: Optional[BuildContextsObject] = None
-    """Object context parameters (named build context)."""
-
-
-class LocalBuildContextHTTP(BaseModel):
-    url: str
-    """HTTP(S) URL to a tarball or directory to use as context."""
-
-
-class LocalBuildContextObject(BaseModel):
+class NamedBuildContexts(BaseModel):
     object_id: str
-    """Handle for a Runloop stored object to use as context."""
+    """The ID of an object, whose contents are to be used as a build context."""
 
-
-class LocalBuildContext(BaseModel):
-    type: Literal["OBJECT", "HTTP"]
-    """Type of the context. Supported values: object, http"""
-
-    http: Optional[LocalBuildContextHTTP] = None
-    """HTTP(S) context parameters."""
-
-    object: Optional[LocalBuildContextObject] = None
-    """Object context parameters (named build context)."""
+    type: Literal["object"]
 
 
 class ServiceCredentials(BaseModel):
@@ -114,13 +76,8 @@ class BlueprintBuildParameters(BaseModel):
     build_args: Optional[Dict[str, str]] = None
     """(Optional) Arbitrary Docker build args to pass during build."""
 
-    build_contexts: Optional[Dict[str, BuildContexts]] = None
-    """(Optional) Map of named Docker build contexts.
-
-    Keys are context names, values are typed context definitions (object or http).
-    See Docker buildx additional contexts for details:
-    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-    """
+    build_context: Optional[BuildContext] = None
+    """A build context backed by an Object."""
 
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""
@@ -134,11 +91,16 @@ class BlueprintBuildParameters(BaseModel):
     launch_parameters: Optional[LaunchParameters] = None
     """Parameters to configure your Devbox at launch time."""
 
-    local_build_context: Optional[LocalBuildContext] = None
-    """(Optional) Local build context stored in object-storage."""
-
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""
+
+    named_build_contexts: Optional[Dict[str, NamedBuildContexts]] = None
+    """
+    (Optional) Map of named build contexts to attach to the Blueprint build, where
+    the keys are the name used when referencing the contexts in a Dockerfile. See
+    Docker buildx additional contexts for details:
+    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+    """
 
     secrets: Optional[Dict[str, str]] = None
     """(Optional) Map of mount IDs/environment variable names to secret names.
