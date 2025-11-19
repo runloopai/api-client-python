@@ -86,3 +86,28 @@ def test_create_and_await_running_timeout(client: Runloop) -> None:
             launch_parameters={"launch_commands": ["sleep 70"]},
             polling_config=PollingConfig(max_attempts=1, interval_seconds=0.1),
         )
+
+
+@pytest.mark.timeout(120)
+def test_await_suspended(client: Runloop) -> None:
+    """Test await_suspended: create devbox, wait for running, suspend, then await suspended"""
+    created = client.devboxes.create_and_await_running(
+        name=unique_name("smoketest-devbox-await-suspended"),
+        polling_config=PollingConfig(max_attempts=120, interval_seconds=5.0, timeout_seconds=20 * 60),
+    )
+    assert created.status == "running"
+
+    # Suspend the devbox
+    suspended = client.devboxes.suspend(created.id)
+    assert suspended.id == created.id
+
+    # Wait for suspended state
+    result = client.devboxes.await_suspended(
+        created.id,
+        polling_config=PollingConfig(max_attempts=60, interval_seconds=2.0, timeout_seconds=5 * 60),
+    )
+    assert result.status == "suspended"
+    assert result.id == created.id
+
+    # Cleanup
+    client.devboxes.shutdown(created.id)

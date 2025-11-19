@@ -11,23 +11,16 @@ from .shared_params.code_mount_parameters import CodeMountParameters
 
 __all__ = ["DevboxCreateParams"]
 
+# We split up the original DevboxCreateParams into two nested types to enable us to
+# omit blueprint_id, blueprint_name, and snapshot_id when we unpack the TypedDict
+# params for methods like create_from_blueprint_id, create_from_blueprint_name, and
+# create_from_snapshot, which shouldn't allow you to specify creation source kwargs.
+# These should be updated whenever DevboxCreateParams is changed in the OpenAPI spec.
 
-class DevboxCreateParams(TypedDict, total=False):
-    blueprint_id: Optional[str]
-    """Blueprint ID to use for the Devbox.
 
-    If none set, the Devbox will be created with the default Runloop Devbox image.
-    Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
-    """
-
-    blueprint_name: Optional[str]
-    """Name of Blueprint to use for the Devbox.
-
-    When set, this will load the latest successfully built Blueprint with the given
-    name. Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be
-    specified.
-    """
-
+# DevboxBaseCreateParams should contain all the fields that are common to all the
+# create methods.
+class DevboxBaseCreateParams(TypedDict, total=False):
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Devbox."""
 
@@ -65,6 +58,25 @@ class DevboxCreateParams(TypedDict, total=False):
     The secret values will be securely injected as environment variables in the
     Devbox. Example: {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable
     'DB_PASS' to the value of secret 'DATABASE_PASSWORD'.
+    """
+
+
+# DevboxCreateParams should only implement fields that specify the devbox creation source.
+# These are omitted from specialized create methods.
+class DevboxCreateParams(DevboxBaseCreateParams, total=False):
+    blueprint_id: Optional[str]
+    """Blueprint ID to use for the Devbox.
+
+    If none set, the Devbox will be created with the default Runloop Devbox image.
+    Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
+    """
+
+    blueprint_name: Optional[str]
+    """Name of Blueprint to use for the Devbox.
+
+    When set, this will load the latest successfully built Blueprint with the given
+    name. Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be
+    specified.
     """
 
     snapshot_id: Optional[str]
