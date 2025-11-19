@@ -169,6 +169,10 @@ class AsyncDevbox:
     ) -> DevboxView:
         """Suspend the devbox without destroying state.
 
+        Returns immediately after issuing the suspend request. Call
+        :meth:`await_suspended` if you need to wait for the devbox to reach the
+        ``suspended`` state (contrast with the synchronous SDK, which blocks).
+
         Args:
             **options: Optional long-running request configuration.
 
@@ -185,6 +189,10 @@ class AsyncDevbox:
         **options: Unpack[LongRequestOptions],
     ) -> DevboxView:
         """Resume a suspended devbox.
+
+        Returns immediately after issuing the resume request. Call
+        :meth:`await_running` if you need to wait for the devbox to reach the
+        ``running`` state (contrast with the synchronous SDK, which blocks).
 
         Args:
             **options: Optional long-running request configuration.

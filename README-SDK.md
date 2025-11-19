@@ -356,6 +356,8 @@ devbox.await_suspended()
 devbox.shutdown()
 ```
 
+> **State-waiting behavior:** In the synchronous SDK, `DevboxOps.from_id()` and `Devbox.resume()` block until the devbox reaches the `running` state, and `Devbox.suspend()` blocks until the devbox is `suspended`. The async counterparts (`AsyncDevboxOps.from_id()`, `AsyncDevbox.resume()`, `AsyncDevbox.suspend()`) return immediately; call `await_running()` / `await_suspended()` explicitly if you need to wait for the state transition.
+
 #### Context Manager Support
 
 Devboxes support context managers for automatic cleanup:

@@ -130,6 +130,9 @@ class DevboxOps:
     def from_id(self, devbox_id: str) -> Devbox:
         """Attach to an existing devbox by ID.
 
+        Blocks until the devbox reaches ``running`` state so callers can begin
+        issuing commands immediately.
+
         Args:
             devbox_id: Existing devbox ID.
 
