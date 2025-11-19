@@ -75,7 +75,7 @@ class DevboxOps:
         :param blueprint_id: Blueprint ID to create from
         :type blueprint_id: str
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
-        :type params: 
+        :type params:
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
