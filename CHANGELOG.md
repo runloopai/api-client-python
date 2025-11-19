@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.68.0 (2025-11-19)
+
+Full Changelog: [v0.67.0...v0.68.0](https://github.com/runloopai/api-client-python/compare/v0.67.0...v0.68.0)
+
+### Features
+
+* **blueprints:** Cleanup the BuildContext API ([#6407](https://github.com/runloopai/api-client-python/issues/6407))\n\nTest ([c87b986](https://github.com/runloopai/api-client-python/commit/c87b986e558ad3a0cca2ad1609b9833baf86fef8))
+* **blueprints:** prevent deletion of blueprints with dependent snapshots ([ce55350](https://github.com/runloopai/api-client-python/commit/ce55350d81f7f5ba3a3aff8faea88c0e1366cea9))
+* **object:** Added ability to give objects a Time To Live, after which they are automatically deleted.\nfeat(blueprints): Added the ability to attach objects as build contexts that can be referenced in your Dockerfile. ([f2bc83c](https://github.com/runloopai/api-client-python/commit/f2bc83c126696aea224bb5978294fc3362a94eeb))
+
+
+### Bug Fixes
+
+* compat with Python 3.14 ([a52802a](https://github.com/runloopai/api-client-python/commit/a52802a6d12d96c3bf4bd670e77c9ec50d08b459))
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([50340b2](https://github.com/runloopai/api-client-python/commit/50340b20148f72cb645bba0bafde6f902e063425))
+* **snapshot:** added "deleted" status to DevboxSnapshotStatus enum \n fix(storage-object): added ObjectState enum, fixed createObject() to appropriately type content_type and state as the respective enums ([7c26593](https://github.com/runloopai/api-client-python/commit/7c265936088c074d00bd3c65b52dde5dcde3ccfb))
+
+
+### Chores
+
+* **package:** drop Python 3.8 support ([07a0b8c](https://github.com/runloopai/api-client-python/commit/07a0b8c1825c78b0a6c30c2d374b82aced2f97d5))
+* **package:** drop Python 3.8 support ([d67abf1](https://github.com/runloopai/api-client-python/commit/d67abf1c52a089e192987a261e69219d60514bc3))
+
 ## 0.67.0 (2025-11-14)
 
 Full Changelog: [v0.66.1...v0.67.0](https://github.com/runloopai/api-client-python/compare/v0.66.1...v0.67.0)

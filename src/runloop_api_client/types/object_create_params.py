@@ -22,3 +22,9 @@ class ObjectCreateParams(TypedDict, total=False):
 
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the object for organization."""
+
+    ttl_ms: Optional[int]
+    """
+    Optional lifetime of the object in milliseconds, after which the object is
+    automatically deleted. Time starts ticking after the object is created.
+    """

@@ -36,6 +36,10 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -66,6 +70,12 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -394,6 +404,10 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -424,6 +438,12 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -486,6 +506,10 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -516,6 +540,12 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -844,6 +874,10 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
+            },
             code_mounts=[
                 {
                     "repo_name": "repo_name",
@@ -874,6 +908,12 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
