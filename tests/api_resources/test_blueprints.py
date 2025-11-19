@@ -36,12 +36,9 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
-            build_contexts={
-                "foo": {
-                    "type": "OBJECT",
-                    "http": {"url": "url"},
-                    "object": {"object_id": "object_id"},
-                }
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
             },
             code_mounts=[
                 {
@@ -72,12 +69,13 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
-            local_build_context={
-                "type": "OBJECT",
-                "http": {"url": "url"},
-                "object": {"object_id": "object_id"},
-            },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -384,12 +382,9 @@ class TestBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
-            build_contexts={
-                "foo": {
-                    "type": "OBJECT",
-                    "http": {"url": "url"},
-                    "object": {"object_id": "object_id"},
-                }
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
             },
             code_mounts=[
                 {
@@ -420,12 +415,13 @@ class TestBlueprints:
                     "username": "username",
                 },
             },
-            local_build_context={
-                "type": "OBJECT",
-                "http": {"url": "url"},
-                "object": {"object_id": "object_id"},
-            },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -488,12 +484,9 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
-            build_contexts={
-                "foo": {
-                    "type": "OBJECT",
-                    "http": {"url": "url"},
-                    "object": {"object_id": "object_id"},
-                }
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
             },
             code_mounts=[
                 {
@@ -524,12 +517,13 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
-            local_build_context={
-                "type": "OBJECT",
-                "http": {"url": "url"},
-                "object": {"object_id": "object_id"},
-            },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -836,12 +830,9 @@ class TestAsyncBlueprints:
             base_blueprint_id="base_blueprint_id",
             base_blueprint_name="base_blueprint_name",
             build_args={"foo": "string"},
-            build_contexts={
-                "foo": {
-                    "type": "OBJECT",
-                    "http": {"url": "url"},
-                    "object": {"object_id": "object_id"},
-                }
+            build_context={
+                "object_id": "object_id",
+                "type": "object",
             },
             code_mounts=[
                 {
@@ -872,12 +863,13 @@ class TestAsyncBlueprints:
                     "username": "username",
                 },
             },
-            local_build_context={
-                "type": "OBJECT",
-                "http": {"url": "url"},
-                "object": {"object_id": "object_id"},
-            },
             metadata={"foo": "string"},
+            named_build_contexts={
+                "foo": {
+                    "object_id": "object_id",
+                    "type": "object",
+                }
+            },
             secrets={"foo": "string"},
             services=[
                 {

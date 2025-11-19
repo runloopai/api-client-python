@@ -9,17 +9,7 @@ from .._types import SequenceNotStr
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = [
-    "BlueprintCreateParams",
-    "BuildContexts",
-    "BuildContextsHTTP",
-    "BuildContextsObject",
-    "LocalBuildContext",
-    "LocalBuildContextHTTP",
-    "LocalBuildContextObject",
-    "Service",
-    "ServiceCredentials",
-]
+__all__ = ["BlueprintCreateParams", "BuildContext", "NamedBuildContexts", "Service", "ServiceCredentials"]
 
 
 class BlueprintCreateParams(TypedDict, total=False):
@@ -43,13 +33,8 @@ class BlueprintCreateParams(TypedDict, total=False):
     build_args: Optional[Dict[str, str]]
     """(Optional) Arbitrary Docker build args to pass during build."""
 
-    build_contexts: Optional[Dict[str, BuildContexts]]
-    """(Optional) Map of named Docker build contexts.
-
-    Keys are context names, values are typed context definitions (object or http).
-    See Docker buildx additional contexts for details:
-    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-    """
+    build_context: Optional[BuildContext]
+    """A build context backed by an Object."""
 
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Blueprint."""
@@ -63,11 +48,16 @@ class BlueprintCreateParams(TypedDict, total=False):
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure your Devbox at launch time."""
 
-    local_build_context: Optional[LocalBuildContext]
-    """(Optional) Local build context stored in object-storage."""
-
     metadata: Optional[Dict[str, str]]
     """(Optional) User defined metadata for the Blueprint."""
+
+    named_build_contexts: Optional[Dict[str, NamedBuildContexts]]
+    """
+    (Optional) Map of named build contexts to attach to the Blueprint build, where
+    the keys are the name used when referencing the contexts in a Dockerfile. See
+    Docker buildx additional contexts for details:
+    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
+    """
 
     secrets: Optional[Dict[str, str]]
     """(Optional) Map of mount IDs/environment variable names to secret names.
@@ -88,46 +78,18 @@ class BlueprintCreateParams(TypedDict, total=False):
     """A list of commands to run to set up your system."""
 
 
-class BuildContextsHTTP(TypedDict, total=False):
-    url: Required[str]
-    """HTTP(S) URL to a tarball or directory to use as context."""
-
-
-class BuildContextsObject(TypedDict, total=False):
+class BuildContext(TypedDict, total=False):
     object_id: Required[str]
-    """Handle for a Runloop stored object to use as context."""
+    """The ID of an object, whose contents are to be used as a build context."""
+
+    type: Required[Literal["object"]]
 
 
-class BuildContexts(TypedDict, total=False):
-    type: Required[Literal["OBJECT", "HTTP"]]
-    """Type of the context. Supported values: object, http"""
-
-    http: Optional[BuildContextsHTTP]
-    """HTTP(S) context parameters."""
-
-    object: Optional[BuildContextsObject]
-    """Object context parameters (named build context)."""
-
-
-class LocalBuildContextHTTP(TypedDict, total=False):
-    url: Required[str]
-    """HTTP(S) URL to a tarball or directory to use as context."""
-
-
-class LocalBuildContextObject(TypedDict, total=False):
+class NamedBuildContexts(TypedDict, total=False):
     object_id: Required[str]
-    """Handle for a Runloop stored object to use as context."""
+    """The ID of an object, whose contents are to be used as a build context."""
 
-
-class LocalBuildContext(TypedDict, total=False):
-    type: Required[Literal["OBJECT", "HTTP"]]
-    """Type of the context. Supported values: object, http"""
-
-    http: Optional[LocalBuildContextHTTP]
-    """HTTP(S) context parameters."""
-
-    object: Optional[LocalBuildContextObject]
-    """Object context parameters (named build context)."""
+    type: Required[Literal["object"]]
 
 
 class ServiceCredentials(TypedDict, total=False):
