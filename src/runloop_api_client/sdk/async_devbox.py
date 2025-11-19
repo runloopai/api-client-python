@@ -71,9 +71,10 @@ class AsyncDevbox:
     def __init__(self, client: AsyncRunloop, devbox_id: str) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated async Runloop client.
-            devbox_id: Devbox identifier returned by the API.
+        :param client: Generated async Runloop client
+        :type client: AsyncRunloop
+        :param devbox_id: Devbox identifier returned by the API
+        :type devbox_id: str
         """
         self._client = client
         self._id = devbox_id
@@ -86,8 +87,8 @@ class AsyncDevbox:
     async def __aenter__(self) -> "AsyncDevbox":
         """Enable ``async with devbox`` usage by returning ``self``.
 
-        Returns:
-            AsyncDevbox: The active devbox instance.
+        :return: The active devbox instance
+        :rtype: AsyncDevbox
         """
         return self
 
@@ -102,8 +103,8 @@ class AsyncDevbox:
     def id(self) -> str:
         """Return the devbox identifier.
 
-        Returns:
-            str: Unique devbox ID.
+        :return: Unique devbox ID
+        :rtype: str
         """
         return self._id
 
@@ -113,11 +114,9 @@ class AsyncDevbox:
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            DevboxView: Current devbox state info.
+        :param options: Optional request configuration
+        :return: Current devbox state info
+        :rtype: DevboxView
         """
         return await self._client.devboxes.retrieve(
             self._id,
@@ -127,22 +126,20 @@ class AsyncDevbox:
     async def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.
 
-        Args:
-            polling_config: Optional polling behavior overrides.
-
-        Returns:
-            DevboxView: Devbox state info after it reaches running status.
+        :param polling_config: Optional polling behavior overrides, defaults to None
+        :type polling_config: PollingConfig | None, optional
+        :return: Devbox state info after it reaches running status
+        :rtype: DevboxView
         """
         return await self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
     async def await_suspended(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach suspended state.
 
-        Args:
-            polling_config: Optional polling behavior overrides.
-
-        Returns:
-            DevboxView: Devbox state info after it reaches suspended status.
+        :param polling_config: Optional polling behavior overrides, defaults to None
+        :type polling_config: PollingConfig | None, optional
+        :return: Devbox state info after it reaches suspended status
+        :rtype: DevboxView
         """
         return await self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
@@ -152,11 +149,9 @@ class AsyncDevbox:
     ) -> DevboxView:
         """Shutdown the devbox, terminating all processes and releasing resources.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            DevboxView: Final devbox state info.
+        :param options: Optional long-running request configuration
+        :return: Final devbox state info
+        :rtype: DevboxView
         """
         return await self._client.devboxes.shutdown(
             self._id,
@@ -173,11 +168,9 @@ class AsyncDevbox:
         :meth:`await_suspended` if you need to wait for the devbox to reach the
         ``suspended`` state (contrast with the synchronous SDK, which blocks).
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            DevboxView: Suspended devbox state info.
+        :param options: Optional long-running request configuration
+        :return: Suspended devbox state info
+        :rtype: DevboxView
         """
         return await self._client.devboxes.suspend(
             self._id,
@@ -194,11 +187,9 @@ class AsyncDevbox:
         :meth:`await_running` if you need to wait for the devbox to reach the
         ``running`` state (contrast with the synchronous SDK, which blocks).
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            DevboxView: Resumed devbox state info.
+        :param options: Optional long-running request configuration
+        :return: Resumed devbox state info
+        :rtype: DevboxView
         """
         return await self._client.devboxes.resume(
             self._id,
@@ -214,11 +205,9 @@ class AsyncDevbox:
         Call this periodically for long-running workflows to prevent the devbox
         from being automatically shut down due to inactivity.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            object: Response confirming the keep-alive request.
+        :param options: Optional long-running request configuration
+        :return: Response confirming the keep-alive request
+        :rtype: object
         """
         return await self._client.devboxes.keep_alive(
             self._id,
@@ -234,11 +223,9 @@ class AsyncDevbox:
         Captures the current state of the devbox disk, which can be used to create
         new devboxes with the same state.
 
-        Args:
-            **params: Snapshot metadata, naming, and polling configuration.
-
-        Returns:
-            AsyncSnapshot: Wrapper representing the completed snapshot.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams` for available parameters
+        :return: Wrapper representing the completed snapshot
+        :rtype: AsyncSnapshot
         """
         snapshot_data = await self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -257,11 +244,9 @@ class AsyncDevbox:
         Starts the snapshot creation process and returns immediately without waiting
         for completion. Use snapshot.await_completed() to wait for completion.
 
-        Args:
-            **params: Snapshot metadata and naming options.
-
-        Returns:
-            AsyncSnapshot: Wrapper representing the snapshot request.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams` for available parameters
+        :return: Wrapper representing the snapshot request
+        :rtype: AsyncSnapshot
         """
         snapshot_data = await self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -277,8 +262,8 @@ class AsyncDevbox:
     def cmd(self) -> AsyncCommandInterface:
         """Return the command execution interface.
 
-        Returns:
-            AsyncCommandInterface: Helper for running shell commands.
+        :return: Helper for running shell commands
+        :rtype: AsyncCommandInterface
         """
         return _AsyncCommandInterface(self)
 
@@ -286,8 +271,8 @@ class AsyncDevbox:
     def file(self) -> AsyncFileInterface:
         """Return the file operations interface.
 
-        Returns:
-            AsyncFileInterface: Helper for reading/writing files.
+        :return: Helper for reading/writing files
+        :rtype: AsyncFileInterface
         """
         return _AsyncFileInterface(self)
 
@@ -295,8 +280,8 @@ class AsyncDevbox:
     def net(self) -> AsyncNetworkInterface:
         """Return the networking interface.
 
-        Returns:
-            AsyncNetworkInterface: Helper for SSH keys and tunnels.
+        :return: Helper for SSH keys and tunnels
+        :rtype: AsyncNetworkInterface
         """
         return _AsyncNetworkInterface(self)
 
@@ -394,11 +379,9 @@ class _AsyncCommandInterface:
     ) -> AsyncExecutionResult:
         """Execute a command synchronously and wait for completion.
 
-        Args:
-            **params: Command parameters, streaming callbacks, and polling config.
-
-        Returns:
-            AsyncExecutionResult: Wrapper with exit status and output helpers.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteParams` for available parameters
+        :return: Wrapper with exit status and output helpers
+        :rtype: AsyncExecutionResult
 
         Example:
             >>> result = await devbox.cmd.exec(command="echo 'hello'")
@@ -453,11 +436,9 @@ class _AsyncCommandInterface:
         for process management. Use execution.result() to wait for completion or
         execution.kill() to terminate the process.
 
-        Args:
-            **params: Command parameters and streaming callbacks.
-
-        Returns:
-            AsyncExecution: Handle for managing the running process.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams` for available parameters
+        :return: Handle for managing the running process
+        :rtype: AsyncExecution
 
         Example:
             >>> execution = await devbox.cmd.exec_async(command="sleep 10")
@@ -498,11 +479,9 @@ class _AsyncFileInterface:
     ) -> str:
         """Read a file from the devbox.
 
-        Args:
-            **params: Parameters such as ``path``.
-
-        Returns:
-            str: File contents.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams` for available parameters
+        :return: File contents
+        :rtype: str
 
         Example:
             >>> content = await devbox.file.read(path="/home/user/data.txt")
@@ -521,11 +500,9 @@ class _AsyncFileInterface:
 
         Creates or overwrites the file at the specified path.
 
-        Args:
-            **params: Parameters such as ``file_path`` and ``contents``.
-
-        Returns:
-            DevboxExecutionDetailView: Execution metadata for the write command.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams` for available parameters
+        :return: Execution metadata for the write command
+        :rtype: DevboxExecutionDetailView
 
         Example:
             >>> await devbox.file.write(file_path="/home/user/config.json", contents='{"key": "value"}')
@@ -541,11 +518,9 @@ class _AsyncFileInterface:
     ) -> bytes:
         """Download a file from the devbox.
 
-        Args:
-            **params: Parameters such as ``path``.
-
-        Returns:
-            bytes: Raw file contents.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxDownloadFileParams` for available parameters
+        :return: Raw file contents
+        :rtype: bytes
 
         Example:
             >>> data = await devbox.file.download(path="/home/user/output.bin")
@@ -564,11 +539,9 @@ class _AsyncFileInterface:
     ) -> object:
         """Upload a file to the devbox.
 
-        Args:
-            **params: Parameters such as destination ``path`` and local ``file``.
-
-        Returns:
-            object: API response confirming the upload.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxUploadFileParams` for available parameters
+        :return: API response confirming the upload
+        :rtype: object
 
         Example:
             >>> from pathlib import Path
@@ -595,11 +568,9 @@ class _AsyncNetworkInterface:
     ) -> DevboxCreateSSHKeyResponse:
         """Create an SSH key for remote access to the devbox.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            DevboxCreateSSHKeyResponse: Response containing SSH connection info.
+        :param options: Optional long-running request configuration
+        :return: Response containing SSH connection info
+        :rtype: DevboxCreateSSHKeyResponse
 
         Example:
             >>> ssh_key = await devbox.net.create_ssh_key()
@@ -616,11 +587,9 @@ class _AsyncNetworkInterface:
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
 
-        Args:
-            **params: Parameters such as the devbox ``port`` to expose.
-
-        Returns:
-            DevboxTunnelView: Details about the public endpoint.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
+        :return: Details about the public endpoint
+        :rtype: DevboxTunnelView
 
         Example:
             >>> tunnel = await devbox.net.create_tunnel(port=8080)
@@ -637,11 +606,9 @@ class _AsyncNetworkInterface:
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
 
-        Args:
-            **params: Parameters such as the ``port`` to close.
-
-        Returns:
-            object: Response confirming the tunnel removal.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
+        :return: Response confirming the tunnel removal
+        :rtype: object
 
         Example:
             >>> await devbox.net.remove_tunnel(port=8080)

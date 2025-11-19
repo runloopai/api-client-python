@@ -45,8 +45,8 @@ class DevboxOps:
     def __init__(self, client: Runloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated Runloop client to wrap.
+        :param client: Generated Runloop client to wrap
+        :type client: Runloop
         """
         self._client = client
 
@@ -56,11 +56,9 @@ class DevboxOps:
     ) -> Devbox:
         """Provision a new devbox and wait until it reaches ``running`` state.
 
-        Args:
-            **params: Keyword arguments forwarded to the devbox creation API.
-
-        Returns:
-            Devbox: Wrapper bound to the newly created devbox.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateParams` for available parameters
+        :return: Wrapper bound to the newly created devbox
+        :rtype: Devbox
         """
         devbox_view = self._client.devboxes.create_and_await_running(
             **params,
@@ -74,12 +72,12 @@ class DevboxOps:
     ) -> Devbox:
         """Create a devbox from an existing blueprint by identifier.
 
-        Args:
-            blueprint_id: Blueprint ID to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            Devbox: Wrapper bound to the newly created devbox.
+        :param blueprint_id: Blueprint ID to create from
+        :type blueprint_id: str
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :type params:
+        :return: Wrapper bound to the newly created devbox
+        :rtype: Devbox
         """
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_id=blueprint_id,
@@ -94,12 +92,11 @@ class DevboxOps:
     ) -> Devbox:
         """Create a devbox from the latest blueprint with the given name.
 
-        Args:
-            blueprint_name: Blueprint name to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            Devbox: Wrapper bound to the newly created devbox.
+        :param blueprint_name: Blueprint name to create from
+        :type blueprint_name: str
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :return: Wrapper bound to the newly created devbox
+        :rtype: Devbox
         """
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_name=blueprint_name,
@@ -114,12 +111,11 @@ class DevboxOps:
     ) -> Devbox:
         """Create a devbox initialized from a snapshot.
 
-        Args:
-            snapshot_id: Snapshot ID to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            Devbox: Wrapper bound to the newly created devbox.
+        :param snapshot_id: Snapshot ID to create from
+        :type snapshot_id: str
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :return: Wrapper bound to the newly created devbox
+        :rtype: Devbox
         """
         devbox_view = self._client.devboxes.create_and_await_running(
             snapshot_id=snapshot_id,
@@ -133,11 +129,10 @@ class DevboxOps:
         Blocks until the devbox reaches ``running`` state so callers can begin
         issuing commands immediately.
 
-        Args:
-            devbox_id: Existing devbox ID.
-
-        Returns:
-            Devbox: Wrapper bound to the requested devbox.
+        :param devbox_id: Existing devbox ID
+        :type devbox_id: str
+        :return: Wrapper bound to the requested devbox
+        :rtype: Devbox
         """
         self._client.devboxes.await_running(devbox_id)
         return Devbox(self._client, devbox_id)
@@ -148,11 +143,9 @@ class DevboxOps:
     ) -> list[Devbox]:
         """List devboxes accessible to the caller.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[Devbox]: Collection of devbox wrappers.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxListParams` for available parameters
+        :return: Collection of devbox wrappers
+        :rtype: list[Devbox]
         """
         page = self._client.devboxes.list(
             **params,
@@ -173,7 +166,11 @@ class SnapshotOps:
     """
 
     def __init__(self, client: Runloop) -> None:
-        """Initialize the manager with the generated Runloop client."""
+        """Initialize the manager with the generated Runloop client.
+
+        :param client: Generated Runloop client
+        :type client: Runloop
+        """
         self._client = client
 
     def list(
@@ -182,11 +179,9 @@ class SnapshotOps:
     ) -> list[Snapshot]:
         """List snapshots created from devboxes.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[Snapshot]: Snapshot wrappers for each record.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDiskSnapshotListParams` for available parameters
+        :return: Snapshot wrappers for each record
+        :rtype: list[Snapshot]
         """
         page = self._client.devboxes.disk_snapshots.list(
             **params,
@@ -196,11 +191,10 @@ class SnapshotOps:
     def from_id(self, snapshot_id: str) -> Snapshot:
         """Return a snapshot wrapper for the given ID.
 
-        Args:
-            snapshot_id: Snapshot ID to wrap.
-
-        Returns:
-            Snapshot: Wrapper for the snapshot resource.
+        :param snapshot_id: Snapshot ID to wrap
+        :type snapshot_id: str
+        :return: Wrapper for the snapshot resource
+        :rtype: Snapshot
         """
         return Snapshot(self._client, snapshot_id)
 
@@ -223,8 +217,8 @@ class BlueprintOps:
     def __init__(self, client: Runloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated Runloop client to wrap.
+        :param client: Generated Runloop client to wrap
+        :type client: Runloop
         """
         self._client = client
 
@@ -234,11 +228,9 @@ class BlueprintOps:
     ) -> Blueprint:
         """Create a blueprint and wait for the build to finish.
 
-        Args:
-            **params: Blueprint definition (Dockerfile, metadata, etc.).
-
-        Returns:
-            Blueprint: Wrapper bound to the finished blueprint.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintCreateParams` for available parameters
+        :return: Wrapper bound to the finished blueprint
+        :rtype: Blueprint
         """
         blueprint = self._client.blueprints.create_and_await_build_complete(
             **params,
@@ -248,11 +240,10 @@ class BlueprintOps:
     def from_id(self, blueprint_id: str) -> Blueprint:
         """Return a blueprint wrapper for the given ID.
 
-        Args:
-            blueprint_id: Blueprint ID to wrap.
-
-        Returns:
-            Blueprint: Wrapper for the blueprint resource.
+        :param blueprint_id: Blueprint ID to wrap
+        :type blueprint_id: str
+        :return: Wrapper for the blueprint resource
+        :rtype: Blueprint
         """
         return Blueprint(self._client, blueprint_id)
 
@@ -262,11 +253,9 @@ class BlueprintOps:
     ) -> list[Blueprint]:
         """List available blueprints.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[Blueprint]: Blueprint wrappers for each record.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintListParams` for available parameters
+        :return: Blueprint wrappers for each record
+        :rtype: list[Blueprint]
         """
         page = self._client.blueprints.list(
             **params,
@@ -289,7 +278,11 @@ class StorageObjectOps:
     """
 
     def __init__(self, client: Runloop) -> None:
-        """Initialize the manager with the generated Runloop client."""
+        """Initialize the manager with the generated Runloop client.
+
+        :param client: Generated Runloop client
+        :type client: Runloop
+        """
         self._client = client
 
     def create(
@@ -298,11 +291,9 @@ class StorageObjectOps:
     ) -> StorageObject:
         """Create a storage object and obtain an upload URL.
 
-        Args:
-            **params: Object creation parameters (name, content type, metadata).
-
-        Returns:
-            StorageObject: Wrapper with upload URL set for immediate uploads.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectCreateParams` for available parameters
+        :return: Wrapper with upload URL set for immediate uploads
+        :rtype: StorageObject
         """
         obj = self._client.objects.create(**params)
         return StorageObject(self._client, obj.id, upload_url=obj.upload_url)
@@ -310,11 +301,10 @@ class StorageObjectOps:
     def from_id(self, object_id: str) -> StorageObject:
         """Return a storage object wrapper by identifier.
 
-        Args:
-            object_id: Storage object identifier to wrap.
-
-        Returns:
-            StorageObject: Wrapper for the storage object resource.
+        :param object_id: Storage object identifier to wrap
+        :type object_id: str
+        :return: Wrapper for the storage object resource
+        :rtype: StorageObject
         """
         return StorageObject(self._client, object_id, upload_url=None)
 
@@ -324,11 +314,9 @@ class StorageObjectOps:
     ) -> list[StorageObject]:
         """List storage objects owned by the caller.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[StorageObject]: Storage object wrappers for each record.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectListParams` for available parameters
+        :return: Storage object wrappers for each record
+        :rtype: list[StorageObject]
         """
         page = self._client.objects.list(
             **params,
@@ -346,18 +334,18 @@ class StorageObjectOps:
     ) -> StorageObject:
         """Create and upload an object from a local file path.
 
-        Args:
-            file_path: Local filesystem path to read.
-            name: Optional object name; defaults to the file name.
-            content_type: Optional MIME type to apply to the object.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            StorageObject: Wrapper for the uploaded object.
-
-        Raises:
-            OSError: If the local file cannot be read.
+        :param file_path: Local filesystem path to read
+        :type file_path: str | Path
+        :param name: Optional object name; defaults to the file name, defaults to None
+        :type name: str | None, optional
+        :param content_type: Optional MIME type to apply to the object, defaults to None
+        :type content_type: ContentType | None, optional
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: StorageObject
+        :raises OSError: If the local file cannot be read
         """
         path = Path(file_path)
 
@@ -383,14 +371,15 @@ class StorageObjectOps:
     ) -> StorageObject:
         """Create and upload an object from a text payload.
 
-        Args:
-            text: Text content to upload.
-            name: Object display name.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            StorageObject: Wrapper for the uploaded object.
+        :param text: Text content to upload
+        :type text: str
+        :param name: Object display name
+        :type name: str
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: StorageObject
         """
         obj = self.create(name=name, content_type="text", metadata=metadata, **options)
         obj.upload_content(text)
@@ -408,15 +397,17 @@ class StorageObjectOps:
     ) -> StorageObject:
         """Create and upload an object from a bytes payload.
 
-        Args:
-            data: Binary payload to upload.
-            name: Object display name.
-            content_type: MIME type describing the payload.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            StorageObject: Wrapper for the uploaded object.
+        :param data: Binary payload to upload
+        :type data: bytes
+        :param name: Object display name
+        :type name: str
+        :param content_type: MIME type describing the payload
+        :type content_type: ContentType
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: StorageObject
         """
         obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
         obj.upload_content(data)
@@ -465,14 +456,20 @@ class RunloopSDK:
     ) -> None:
         """Configure the synchronous SDK wrapper.
 
-        Args:
-            bearer_token: API token; falls back to ``RUNLOOP_API_KEY`` env var.
-            base_url: Override the API base URL.
-            timeout: Request timeout (seconds) or ``Timeout`` object.
-            max_retries: Maximum automatic retry attempts.
-            default_headers: Headers merged into every request.
-            default_query: Default query parameters merged into every request.
-            http_client: Custom ``httpx.Client`` instance to reuse.
+        :param bearer_token: API token; falls back to ``RUNLOOP_API_KEY`` env var, defaults to None
+        :type bearer_token: str | None, optional
+        :param base_url: Override the API base URL, defaults to None
+        :type base_url: str | httpx.URL | None, optional
+        :param timeout: Request timeout (seconds) or ``Timeout`` object, defaults to not_given
+        :type timeout: float | Timeout | None | NotGiven, optional
+        :param max_retries: Maximum automatic retry attempts, defaults to DEFAULT_MAX_RETRIES
+        :type max_retries: int, optional
+        :param default_headers: Headers merged into every request, defaults to None
+        :type default_headers: Mapping[str, str] | None, optional
+        :param default_query: Default query parameters merged into every request, defaults to None
+        :type default_query: Mapping[str, object] | None, optional
+        :param http_client: Custom ``httpx.Client`` instance to reuse, defaults to None
+        :type http_client: httpx.Client | None, optional
         """
         self.api = Runloop(
             bearer_token=bearer_token,
@@ -496,8 +493,8 @@ class RunloopSDK:
     def __enter__(self) -> "RunloopSDK":
         """Allow ``with RunloopSDK() as runloop`` usage.
 
-        Returns:
-            RunloopSDK: The active SDK instance.
+        :return: The active SDK instance
+        :rtype: RunloopSDK
         """
         return self
 
