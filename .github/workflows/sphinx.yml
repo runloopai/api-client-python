@@ -18,7 +18,8 @@ jobs:
     - name: Install dependencies
       run: uv sync --group docs
     - name: Build HTML
-      uses: ammaraskar/sphinx-action@master
+      working-directory: docs
+      run: uv run make html
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
