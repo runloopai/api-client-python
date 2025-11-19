@@ -24,3 +24,6 @@ coverage.json
 coverage-summary.json
 *.cover
 .pytest_cache/
+
+# Docs
+site/
