@@ -45,8 +45,8 @@ class AsyncDevboxOps:
     def __init__(self, client: AsyncRunloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated AsyncRunloop client to wrap.
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
         """
         self._client = client
 
@@ -56,11 +56,9 @@ class AsyncDevboxOps:
     ) -> AsyncDevbox:
         """Provision a new devbox and wait until it reaches ``running`` state.
 
-        Args:
-            **params: Keyword arguments forwarded to the devbox creation API.
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the newly created devbox.
+        :param params: Keyword arguments forwarded to the devbox creation API
+        :return: Wrapper bound to the newly created devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             **params,
@@ -74,12 +72,11 @@ class AsyncDevboxOps:
     ) -> AsyncDevbox:
         """Create a devbox from an existing blueprint by identifier.
 
-        Args:
-            blueprint_id: Blueprint ID to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the newly created devbox.
+        :param blueprint_id: Blueprint ID to create from
+        :type blueprint_id: str
+        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :return: Wrapper bound to the newly created devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             blueprint_id=blueprint_id,
@@ -94,12 +91,11 @@ class AsyncDevboxOps:
     ) -> AsyncDevbox:
         """Create a devbox from the latest blueprint with the given name.
 
-        Args:
-            blueprint_name: Blueprint name to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the newly created devbox.
+        :param blueprint_name: Blueprint name to create from
+        :type blueprint_name: str
+        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :return: Wrapper bound to the newly created devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             blueprint_name=blueprint_name,
@@ -114,12 +110,11 @@ class AsyncDevboxOps:
     ) -> AsyncDevbox:
         """Create a devbox initialized from a snapshot.
 
-        Args:
-            snapshot_id: Snapshot ID to create from.
-            **params: Additional creation parameters (metadata, launch parameters, etc.).
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the newly created devbox.
+        :param snapshot_id: Snapshot ID to create from
+        :type snapshot_id: str
+        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :return: Wrapper bound to the newly created devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             snapshot_id=snapshot_id,
@@ -130,11 +125,10 @@ class AsyncDevboxOps:
     def from_id(self, devbox_id: str) -> AsyncDevbox:
         """Attach to an existing devbox by ID.
 
-        Args:
-            devbox_id: Existing devbox ID.
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the requested devbox.
+        :param devbox_id: Existing devbox ID
+        :type devbox_id: str
+        :return: Wrapper bound to the requested devbox
+        :rtype: AsyncDevbox
         """
         return AsyncDevbox(self._client, devbox_id)
 
@@ -144,11 +138,9 @@ class AsyncDevboxOps:
     ) -> list[AsyncDevbox]:
         """List devboxes accessible to the caller.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[AsyncDevbox]: Collection of devbox wrappers.
+        :param params: Filtering and pagination parameters
+        :return: Collection of devbox wrappers
+        :rtype: list[AsyncDevbox]
         """
         page = await self._client.devboxes.list(
             **params,
@@ -171,8 +163,8 @@ class AsyncSnapshotOps:
     def __init__(self, client: AsyncRunloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated AsyncRunloop client to wrap.
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
         """
         self._client = client
 
@@ -182,11 +174,9 @@ class AsyncSnapshotOps:
     ) -> list[AsyncSnapshot]:
         """List snapshots created from devboxes.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[AsyncSnapshot]: Snapshot wrappers for each record.
+        :param params: Filtering and pagination parameters
+        :return: Snapshot wrappers for each record
+        :rtype: list[AsyncSnapshot]
         """
         page = await self._client.devboxes.disk_snapshots.list(
             **params,
@@ -196,11 +186,10 @@ class AsyncSnapshotOps:
     def from_id(self, snapshot_id: str) -> AsyncSnapshot:
         """Return a snapshot wrapper for the given ID.
 
-        Args:
-            snapshot_id: Snapshot ID to wrap.
-
-        Returns:
-            AsyncSnapshot: Wrapper for the snapshot resource.
+        :param snapshot_id: Snapshot ID to wrap
+        :type snapshot_id: str
+        :return: Wrapper for the snapshot resource
+        :rtype: AsyncSnapshot
         """
         return AsyncSnapshot(self._client, snapshot_id)
 
@@ -224,8 +213,8 @@ class AsyncBlueprintOps:
     def __init__(self, client: AsyncRunloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated AsyncRunloop client to wrap.
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
         """
         self._client = client
 
@@ -235,11 +224,9 @@ class AsyncBlueprintOps:
     ) -> AsyncBlueprint:
         """Create a blueprint and wait for the build to finish.
 
-        Args:
-            **params: Blueprint definition (Dockerfile, metadata, etc.).
-
-        Returns:
-            AsyncBlueprint: Wrapper bound to the finished blueprint.
+        :param params: Blueprint definition (Dockerfile, metadata, etc.)
+        :return: Wrapper bound to the finished blueprint
+        :rtype: AsyncBlueprint
         """
         blueprint = await self._client.blueprints.create_and_await_build_complete(
             **params,
@@ -249,11 +236,10 @@ class AsyncBlueprintOps:
     def from_id(self, blueprint_id: str) -> AsyncBlueprint:
         """Return a blueprint wrapper for the given ID.
 
-        Args:
-            blueprint_id: Blueprint ID to wrap.
-
-        Returns:
-            AsyncBlueprint: Wrapper for the blueprint resource.
+        :param blueprint_id: Blueprint ID to wrap
+        :type blueprint_id: str
+        :return: Wrapper for the blueprint resource
+        :rtype: AsyncBlueprint
         """
         return AsyncBlueprint(self._client, blueprint_id)
 
@@ -263,11 +249,9 @@ class AsyncBlueprintOps:
     ) -> list[AsyncBlueprint]:
         """List available blueprints.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[AsyncBlueprint]: Blueprint wrappers for each record.
+        :param params: Filtering and pagination parameters
+        :return: Blueprint wrappers for each record
+        :rtype: list[AsyncBlueprint]
         """
         page = await self._client.blueprints.list(
             **params,
@@ -292,8 +276,8 @@ class AsyncStorageObjectOps:
     def __init__(self, client: AsyncRunloop) -> None:
         """Initialize the manager.
 
-        Args:
-            client: Generated AsyncRunloop client to wrap.
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
         """
         self._client = client
 
@@ -303,11 +287,9 @@ class AsyncStorageObjectOps:
     ) -> AsyncStorageObject:
         """Create a storage object and obtain an upload URL.
 
-        Args:
-            **params: Object creation parameters (name, content type, metadata).
-
-        Returns:
-            AsyncStorageObject: Wrapper with upload URL set for immediate uploads.
+        :param params: Object creation parameters (name, content type, metadata)
+        :return: Wrapper with upload URL set for immediate uploads
+        :rtype: AsyncStorageObject
         """
         obj = await self._client.objects.create(**params)
         return AsyncStorageObject(self._client, obj.id, upload_url=obj.upload_url)
@@ -315,11 +297,10 @@ class AsyncStorageObjectOps:
     def from_id(self, object_id: str) -> AsyncStorageObject:
         """Return a storage object wrapper by identifier.
 
-        Args:
-            object_id: Storage object identifier to wrap.
-
-        Returns:
-            AsyncStorageObject: Wrapper for the storage object resource.
+        :param object_id: Storage object identifier to wrap
+        :type object_id: str
+        :return: Wrapper for the storage object resource
+        :rtype: AsyncStorageObject
         """
         return AsyncStorageObject(self._client, object_id, upload_url=None)
 
@@ -329,11 +310,9 @@ class AsyncStorageObjectOps:
     ) -> list[AsyncStorageObject]:
         """List storage objects owned by the caller.
 
-        Args:
-            **params: Filtering and pagination parameters.
-
-        Returns:
-            list[AsyncStorageObject]: Storage object wrappers for each record.
+        :param params: Filtering and pagination parameters
+        :return: Storage object wrappers for each record
+        :rtype: list[AsyncStorageObject]
         """
         page = await self._client.objects.list(
             **params,
@@ -351,18 +330,18 @@ class AsyncStorageObjectOps:
     ) -> AsyncStorageObject:
         """Create and upload an object from a local file path.
 
-        Args:
-            file_path: Local filesystem path to read.
-            name: Optional object name; defaults to the file name.
-            content_type: Optional MIME type to apply to the object.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            AsyncStorageObject: Wrapper for the uploaded object.
-
-        Raises:
-            OSError: If the local file cannot be read.
+        :param file_path: Local filesystem path to read
+        :type file_path: str | Path
+        :param name: Optional object name; defaults to the file name, defaults to None
+        :type name: str | None, optional
+        :param content_type: Optional MIME type to apply to the object, defaults to None
+        :type content_type: ContentType | None, optional
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: Additional request configuration
+        :return: Wrapper for the uploaded object
+        :rtype: AsyncStorageObject
+        :raises OSError: If the local file cannot be read
         """
         path = Path(file_path)
 
@@ -388,14 +367,15 @@ class AsyncStorageObjectOps:
     ) -> AsyncStorageObject:
         """Create and upload an object from a text payload.
 
-        Args:
-            text: Text content to upload.
-            name: Object display name.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            AsyncStorageObject: Wrapper for the uploaded object.
+        :param text: Text content to upload
+        :type text: str
+        :param name: Object display name
+        :type name: str
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: Additional request configuration
+        :return: Wrapper for the uploaded object
+        :rtype: AsyncStorageObject
         """
         obj = await self.create(name=name, content_type="text", metadata=metadata, **options)
         await obj.upload_content(text)
@@ -413,15 +393,17 @@ class AsyncStorageObjectOps:
     ) -> AsyncStorageObject:
         """Create and upload an object from a bytes payload.
 
-        Args:
-            data: Binary payload to upload.
-            name: Object display name.
-            content_type: MIME type describing the payload.
-            metadata: Optional key-value metadata.
-            **options: Additional request configuration.
-
-        Returns:
-            AsyncStorageObject: Wrapper for the uploaded object.
+        :param data: Binary payload to upload
+        :type data: bytes
+        :param name: Object display name
+        :type name: str
+        :param content_type: MIME type describing the payload
+        :type content_type: ContentType
+        :param metadata: Optional key-value metadata, defaults to None
+        :type metadata: Optional[Dict[str, str]], optional
+        :param options: Additional request configuration
+        :return: Wrapper for the uploaded object
+        :rtype: AsyncStorageObject
         """
         obj = await self.create(name=name, content_type=content_type, metadata=metadata, **options)
         await obj.upload_content(data)
@@ -470,14 +452,20 @@ class AsyncRunloopSDK:
     ) -> None:
         """Configure the asynchronous SDK wrapper.
 
-        Args:
-            bearer_token: API token; falls back to ``RUNLOOP_API_KEY`` env var.
-            base_url: Override the API base URL.
-            timeout: Request timeout (seconds) or ``Timeout`` object.
-            max_retries: Maximum automatic retry attempts.
-            default_headers: Headers merged into every request.
-            default_query: Default query parameters merged into every request.
-            http_client: Custom ``httpx.AsyncClient`` instance to reuse.
+        :param bearer_token: API token; falls back to ``RUNLOOP_API_KEY`` env var, defaults to None
+        :type bearer_token: str | None, optional
+        :param base_url: Override the API base URL, defaults to None
+        :type base_url: str | httpx.URL | None, optional
+        :param timeout: Request timeout (seconds) or ``Timeout`` object, defaults to not_given
+        :type timeout: float | Timeout | None | NotGiven, optional
+        :param max_retries: Maximum automatic retry attempts, defaults to DEFAULT_MAX_RETRIES
+        :type max_retries: int, optional
+        :param default_headers: Headers merged into every request, defaults to None
+        :type default_headers: Mapping[str, str] | None, optional
+        :param default_query: Default query parameters merged into every request, defaults to None
+        :type default_query: Mapping[str, object] | None, optional
+        :param http_client: Custom ``httpx.AsyncClient`` instance to reuse, defaults to None
+        :type http_client: httpx.AsyncClient | None, optional
         """
         self.api = AsyncRunloop(
             bearer_token=bearer_token,
@@ -501,8 +489,8 @@ class AsyncRunloopSDK:
     async def __aenter__(self) -> "AsyncRunloopSDK":
         """Allow ``async with AsyncRunloopSDK() as runloop`` usage.
 
-        Returns:
-            AsyncRunloopSDK: The active SDK instance.
+        :return: The active SDK instance
+        :rtype: AsyncRunloopSDK
         """
         return self
 

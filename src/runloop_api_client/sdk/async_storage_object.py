@@ -16,10 +16,12 @@ class AsyncStorageObject:
     def __init__(self, client: AsyncRunloop, object_id: str, upload_url: str | None) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated AsyncRunloop client.
-            object_id: Storage object identifier returned by the API.
-            upload_url: Optional pre-signed upload URL if the object is still open.
+        :param client: Generated AsyncRunloop client
+        :type client: AsyncRunloop
+        :param object_id: Storage object identifier returned by the API
+        :type object_id: str
+        :param upload_url: Optional pre-signed upload URL if the object is still open, defaults to None
+        :type upload_url: str | None, optional
         """
         self._client = client
         self._id = object_id
@@ -33,8 +35,8 @@ class AsyncStorageObject:
     def id(self) -> str:
         """Return the storage object identifier.
 
-        Returns:
-            str: Unique object ID.
+        :return: Unique object ID
+        :rtype: str
         """
         return self._id
 
@@ -42,8 +44,8 @@ class AsyncStorageObject:
     def upload_url(self) -> str | None:
         """Return the pre-signed upload URL, if available.
 
-        Returns:
-            str | None: Upload URL when the object is pending completion.
+        :return: Upload URL when the object is pending completion
+        :rtype: str | None
         """
         return self._upload_url
 
@@ -53,11 +55,9 @@ class AsyncStorageObject:
     ) -> ObjectView:
         """Fetch the latest metadata for the object.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            ObjectView: Updated object metadata.
+        :param options: Optional request configuration
+        :return: Updated object metadata
+        :rtype: ObjectView
         """
         return await self._client.objects.retrieve(
             self._id,
@@ -70,11 +70,9 @@ class AsyncStorageObject:
     ) -> ObjectView:
         """Mark the object as fully uploaded.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            ObjectView: Finalized object metadata.
+        :param options: Optional long-running request configuration
+        :return: Finalized object metadata
+        :rtype: ObjectView
         """
         result = await self._client.objects.complete(
             self._id,
@@ -89,11 +87,9 @@ class AsyncStorageObject:
     ) -> ObjectDownloadURLView:
         """Request a signed download URL for the object.
 
-        Args:
-            **params: Parameters controlling the download URL (e.g., expiry).
-
-        Returns:
-            ObjectDownloadURLView: URL + metadata describing the download.
+        :param params: Parameters controlling the download URL (e.g., expiry)
+        :return: URL + metadata describing the download
+        :rtype: ObjectDownloadURLView
         """
         return await self._client.objects.download(
             self._id,
@@ -106,11 +102,9 @@ class AsyncStorageObject:
     ) -> bytes:
         """Download the object contents as bytes.
 
-        Args:
-            **params: Parameters forwarded to ``get_download_url``.
-
-        Returns:
-            bytes: Entire object payload.
+        :param params: Parameters forwarded to ``get_download_url``
+        :return: Entire object payload
+        :rtype: bytes
         """
         url_view = await self.get_download_url(
             **params,
@@ -125,11 +119,9 @@ class AsyncStorageObject:
     ) -> str:
         """Download the object contents as UTF-8 text.
 
-        Args:
-            **params: Parameters forwarded to ``get_download_url``.
-
-        Returns:
-            str: Entire object payload decoded as UTF-8.
+        :param params: Parameters forwarded to ``get_download_url``
+        :return: Entire object payload decoded as UTF-8
+        :rtype: str
         """
         url_view = await self.get_download_url(
             **params,
@@ -145,11 +137,9 @@ class AsyncStorageObject:
     ) -> ObjectView:
         """Delete the storage object.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            ObjectView: API response for the deleted object.
+        :param options: Optional long-running request configuration
+        :return: API response for the deleted object
+        :rtype: ObjectView
         """
         return await self._client.objects.delete(
             self._id,
@@ -159,12 +149,10 @@ class AsyncStorageObject:
     async def upload_content(self, content: str | bytes) -> None:
         """Upload content to the object's pre-signed URL.
 
-        Args:
-            content: Bytes or text payload to upload.
-
-        Raises:
-            RuntimeError: If no upload URL is available.
-            httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails.
+        :param content: Bytes or text payload to upload
+        :type content: str | bytes
+        :raises RuntimeError: If no upload URL is available
+        :raises httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails
         """
         url = self._ensure_upload_url()
         response = await self._client._client.put(url, content=content)
@@ -173,11 +161,9 @@ class AsyncStorageObject:
     def _ensure_upload_url(self) -> str:
         """Return the upload URL, ensuring it exists.
 
-        Returns:
-            str: Upload URL ready for use.
-
-        Raises:
-            RuntimeError: If no upload URL is available.
+        :return: Upload URL ready for use
+        :rtype: str
+        :raises RuntimeError: If no upload URL is available
         """
         if not self._upload_url:
             raise RuntimeError("No upload URL available. Create a new object before uploading content.")

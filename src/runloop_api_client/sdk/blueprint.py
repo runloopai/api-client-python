@@ -21,9 +21,10 @@ class Blueprint:
     ) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated Runloop client.
-            blueprint_id: Blueprint ID returned by the API.
+        :param client: Generated Runloop client
+        :type client: Runloop
+        :param blueprint_id: Blueprint ID returned by the API
+        :type blueprint_id: str
         """
         self._client = client
         self._id = blueprint_id
@@ -36,8 +37,8 @@ class Blueprint:
     def id(self) -> str:
         """Return the blueprint ID.
 
-        Returns:
-            str: Unique blueprint ID.
+        :return: Unique blueprint ID
+        :rtype: str
         """
         return self._id
 
@@ -47,11 +48,9 @@ class Blueprint:
     ) -> BlueprintView:
         """Retrieve the latest blueprint details.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            BlueprintView: API response describing the blueprint.
+        :param options: Optional request configuration
+        :return: API response describing the blueprint
+        :rtype: BlueprintView
         """
         return self._client.blueprints.retrieve(
             self._id,
@@ -64,11 +63,9 @@ class Blueprint:
     ) -> BlueprintBuildLogsListView:
         """Retrieve build logs for the blueprint.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            BlueprintBuildLogsListView: Log entries for the most recent build.
+        :param options: Optional request configuration
+        :return: Log entries for the most recent build
+        :rtype: BlueprintBuildLogsListView
         """
         return self._client.blueprints.logs(
             self._id,
@@ -81,11 +78,9 @@ class Blueprint:
     ) -> object:
         """Delete the blueprint.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            object: API response acknowledging deletion.
+        :param options: Optional long-running request configuration
+        :return: API response acknowledging deletion
+        :rtype: object
         """
         return self._client.blueprints.delete(
             self._id,
@@ -98,11 +93,9 @@ class Blueprint:
     ) -> "Devbox":
         """Create a devbox derived from the blueprint.
 
-        Args:
-            **params: Creation parameters to forward to the devbox API.
-
-        Returns:
-            Devbox: Wrapper bound to the running devbox.
+        :param params: Creation parameters to forward to the devbox API
+        :return: Wrapper bound to the running devbox
+        :rtype: Devbox
         """
         devbox_view = self._client.devboxes.create_and_await_running(
             blueprint_id=self._id,

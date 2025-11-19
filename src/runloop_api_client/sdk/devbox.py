@@ -68,9 +68,10 @@ class Devbox:
     def __init__(self, client: Runloop, devbox_id: str) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated Runloop client.
-            devbox_id: Devbox identifier returned by the API.
+        :param client: Generated Runloop client
+        :type client: Runloop
+        :param devbox_id: Devbox identifier returned by the API
+        :type devbox_id: str
         """
         self._client = client
         self._id = devbox_id
@@ -83,8 +84,8 @@ class Devbox:
     def __enter__(self) -> "Devbox":
         """Enable ``with devbox`` usage by returning ``self``.
 
-        Returns:
-            Devbox: The active devbox instance.
+        :return: The active devbox instance
+        :rtype: Devbox
         """
         return self
 
@@ -99,8 +100,8 @@ class Devbox:
     def id(self) -> str:
         """Return the devbox identifier.
 
-        Returns:
-            str: Unique devbox ID.
+        :return: Unique devbox ID
+        :rtype: str
         """
         return self._id
 
@@ -110,11 +111,9 @@ class Devbox:
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            DevboxView: Current devbox state info.
+        :param options: Optional request configuration
+        :return: Current devbox state info
+        :rtype: DevboxView
         """
         return self._client.devboxes.retrieve(
             self._id,
@@ -126,11 +125,10 @@ class Devbox:
 
         Blocks until the devbox is running or the polling timeout is reached.
 
-        Args:
-            polling_config: Optional configuration for polling behavior (timeout, interval).
-
-        Returns:
-            DevboxView: Devbox state info after it reaches running status.
+        :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None
+        :type polling_config: PollingConfig | None, optional
+        :return: Devbox state info after it reaches running status
+        :rtype: DevboxView
         """
         return self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
@@ -139,11 +137,10 @@ class Devbox:
 
         Blocks until the devbox is suspended or the polling timeout is reached.
 
-        Args:
-            polling_config: Optional configuration for polling behavior (timeout, interval).
-
-        Returns:
-            DevboxView: Devbox state info after it reaches suspended status.
+        :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None
+        :type polling_config: PollingConfig | None, optional
+        :return: Devbox state info after it reaches suspended status
+        :rtype: DevboxView
         """
         return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
@@ -153,11 +150,9 @@ class Devbox:
     ) -> DevboxView:
         """Shutdown the devbox, terminating all processes and releasing resources.
 
-        Args:
-            **options: Long-running request configuration (timeouts, retries, etc.).
-
-        Returns:
-            DevboxView: Final devbox state info.
+        :param options: Long-running request configuration (timeouts, retries, etc.)
+        :return: Final devbox state info
+        :rtype: DevboxView
         """
         return self._client.devboxes.shutdown(
             self._id,
@@ -173,11 +168,9 @@ class Devbox:
         This saves resources while maintaining the devbox state for later resumption.
         Waits for the devbox to reach suspended state before returning.
 
-        Args:
-            **options: Optional long-running request and polling configuration.
-
-        Returns:
-            DevboxView: Suspended devbox state info.
+        :param options: Optional long-running request and polling configuration
+        :return: Suspended devbox state info
+        :rtype: DevboxView
         """
         self._client.devboxes.suspend(
             self._id,
@@ -193,11 +186,9 @@ class Devbox:
 
         Waits for the devbox to reach running state before returning.
 
-        Args:
-            **options: Optional long-running request and polling configuration.
-
-        Returns:
-            DevboxView: Resumed devbox state info.
+        :param options: Optional long-running request and polling configuration
+        :return: Resumed devbox state info
+        :rtype: DevboxView
         """
         self._client.devboxes.resume(
             self._id,
@@ -214,11 +205,9 @@ class Devbox:
         Call this periodically for long-running workflows to prevent the devbox
         from being automatically shut down due to inactivity.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            object: Response confirming the keep-alive request.
+        :param options: Optional long-running request configuration
+        :return: Response confirming the keep-alive request
+        :rtype: object
         """
         return self._client.devboxes.keep_alive(
             self._id,
@@ -234,11 +223,9 @@ class Devbox:
         Captures the current state of the devbox disk, which can be used to create
         new devboxes with the same state.
 
-        Args:
-            **params: Snapshot metadata, naming, and polling configuration.
-
-        Returns:
-            Snapshot: Wrapper representing the completed snapshot.
+        :param params: Snapshot metadata, naming, and polling configuration
+        :return: Wrapper representing the completed snapshot
+        :rtype: Snapshot
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -257,11 +244,9 @@ class Devbox:
         Starts the snapshot creation process and returns immediately without waiting
         for completion. Use snapshot.await_completed() to wait for completion.
 
-        Args:
-            **params: Snapshot metadata and naming options.
-
-        Returns:
-            Snapshot: Wrapper representing the snapshot (may still be processing).
+        :param params: Snapshot metadata and naming options
+        :return: Wrapper representing the snapshot (may still be processing)
+        :rtype: Snapshot
         """
         snapshot_data = self._client.devboxes.snapshot_disk_async(
             self._id,
@@ -277,8 +262,8 @@ class Devbox:
     def cmd(self) -> CommandInterface:
         """Return the command execution interface.
 
-        Returns:
-            CommandInterface: Helper for running shell commands.
+        :return: Helper for running shell commands
+        :rtype: CommandInterface
         """
         return _CommandInterface(self)
 
@@ -286,8 +271,8 @@ class Devbox:
     def file(self) -> FileInterface:
         """Return the file operations interface.
 
-        Returns:
-            FileInterface: Helper for reading/writing files.
+        :return: Helper for reading/writing files
+        :rtype: FileInterface
         """
         return _FileInterface(self)
 
@@ -295,8 +280,8 @@ class Devbox:
     def net(self) -> NetworkInterface:
         """Return the networking interface.
 
-        Returns:
-            NetworkInterface: Helper for SSH keys and tunnels.
+        :return: Helper for SSH keys and tunnels
+        :rtype: NetworkInterface
         """
         return _NetworkInterface(self)
 
@@ -410,11 +395,9 @@ class _CommandInterface:
     ) -> ExecutionResult:
         """Execute a command synchronously and wait for completion.
 
-        Args:
-            **params: Command parameters, streaming callbacks, and polling config.
-
-        Returns:
-            ExecutionResult: Wrapper with exit status and output helpers.
+        :param params: Command parameters, streaming callbacks, and polling config
+        :return: Wrapper with exit status and output helpers
+        :rtype: ExecutionResult
 
         Example:
             >>> result = devbox.cmd.exec(command="ls -la")
@@ -459,10 +442,9 @@ class _CommandInterface:
         for process management. Use execution.result() to wait for completion or
         execution.kill() to terminate the process.
 
-        Args:
-            **params: Command parameters and streaming callbacks.
-        Returns:
-            Execution: Handle for managing the running process.
+        :param params: Command parameters and streaming callbacks
+        :return: Handle for managing the running process
+        :rtype: Execution
 
         Example:
             >>> execution = devbox.cmd.exec_async(command="sleep 10")
@@ -503,11 +485,9 @@ class _FileInterface:
     ) -> str:
         """Read a file from the devbox.
 
-        Args:
-            **params: Parameters such as ``path``.
-
-        Returns:
-            str: File contents.
+        :param params: Parameters such as ``path``
+        :return: File contents
+        :rtype: str
 
         Example:
             >>> content = devbox.file.read("/home/user/data.txt")
@@ -526,11 +506,9 @@ class _FileInterface:
 
         Creates or overwrites the file at the specified path.
 
-        Args:
-            **params: Parameters such as ``file_path`` and ``contents``.
-
-        Returns:
-            DevboxExecutionDetailView: Execution metadata for the write command.
+        :param params: Parameters such as ``file_path`` and ``contents``
+        :return: Execution metadata for the write command
+        :rtype: DevboxExecutionDetailView
 
         Example:
             >>> devbox.file.write(file_path="/home/user/config.json", contents='{"key": "value"}')
@@ -546,11 +524,9 @@ class _FileInterface:
     ) -> bytes:
         """Download a file from the devbox.
 
-        Args:
-            **params: Parameters such as ``path``.
-
-        Returns:
-            bytes: Raw file contents.
+        :param params: Parameters such as ``path``
+        :return: Raw file contents
+        :rtype: bytes
 
         Example:
             >>> data = devbox.file.download("/home/user/output.bin")
@@ -569,11 +545,9 @@ class _FileInterface:
     ) -> object:
         """Upload a file to the devbox.
 
-        Args:
-            **params: Parameters such as destination ``path`` and local ``file``.
-
-        Returns:
-            object: API response confirming the upload.
+        :param params: Parameters such as destination ``path`` and local ``file``
+        :return: API response confirming the upload
+        :rtype: object
 
         Example:
             >>> from pathlib import Path
@@ -600,11 +574,9 @@ class _NetworkInterface:
     ) -> DevboxCreateSSHKeyResponse:
         """Create an SSH key for remote access to the devbox.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            DevboxCreateSSHKeyResponse: Response containing SSH connection info.
+        :param options: Optional long-running request configuration
+        :return: Response containing SSH connection info
+        :rtype: DevboxCreateSSHKeyResponse
 
         Example:
             >>> ssh_key = devbox.net.create_ssh_key()
@@ -621,11 +593,9 @@ class _NetworkInterface:
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
 
-        Args:
-            **params: Parameters such as the devbox ``port`` to expose.
-
-        Returns:
-            DevboxTunnelView: Details about the public endpoint.
+        :param params: Parameters such as the devbox ``port`` to expose
+        :return: Details about the public endpoint
+        :rtype: DevboxTunnelView
 
         Example:
             >>> tunnel = devbox.net.create_tunnel(port=8080)
@@ -642,11 +612,9 @@ class _NetworkInterface:
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
 
-        Args:
-            **params: Parameters such as the ``port`` to close.
-
-        Returns:
-            object: Response confirming the tunnel removal.
+        :param params: Parameters such as the ``port`` to close
+        :return: Response confirming the tunnel removal
+        :rtype: object
 
         Example:
             >>> devbox.net.remove_tunnel(port=8080)

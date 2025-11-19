@@ -27,9 +27,10 @@ class AsyncSnapshot:
     ) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated AsyncRunloop client.
-            snapshot_id: Snapshot identifier returned by the API.
+        :param client: Generated AsyncRunloop client
+        :type client: AsyncRunloop
+        :param snapshot_id: Snapshot identifier returned by the API
+        :type snapshot_id: str
         """
         self._client = client
         self._id = snapshot_id
@@ -42,8 +43,8 @@ class AsyncSnapshot:
     def id(self) -> str:
         """Return the snapshot identifier.
 
-        Returns:
-            str: Unique snapshot ID.
+        :return: Unique snapshot ID
+        :rtype: str
         """
         return self._id
 
@@ -53,11 +54,9 @@ class AsyncSnapshot:
     ) -> DevboxSnapshotAsyncStatusView:
         """Retrieve the latest snapshot status.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            DevboxSnapshotAsyncStatusView: Snapshot state payload.
+        :param options: Optional request configuration
+        :return: Snapshot state payload
+        :rtype: DevboxSnapshotAsyncStatusView
         """
         return await self._client.devboxes.disk_snapshots.query_status(
             self._id,
@@ -70,11 +69,9 @@ class AsyncSnapshot:
     ) -> DevboxSnapshotView:
         """Update snapshot metadata.
 
-        Args:
-            **params: Fields to update on the snapshot.
-
-        Returns:
-            DevboxSnapshotView: Updated snapshot details.
+        :param params: Fields to update on the snapshot
+        :return: Updated snapshot details
+        :rtype: DevboxSnapshotView
         """
         return await self._client.devboxes.disk_snapshots.update(
             self._id,
@@ -87,11 +84,9 @@ class AsyncSnapshot:
     ) -> object:
         """Delete the snapshot.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            object: API response acknowledging deletion.
+        :param options: Optional long-running request configuration
+        :return: API response acknowledging deletion
+        :rtype: object
         """
         return await self._client.devboxes.disk_snapshots.delete(
             self._id,
@@ -104,11 +99,9 @@ class AsyncSnapshot:
     ) -> DevboxSnapshotAsyncStatusView:
         """Block until the snapshot operation finishes.
 
-        Args:
-            **options: Polling configuration (timeouts, intervals).
-
-        Returns:
-            DevboxSnapshotAsyncStatusView: Final snapshot status.
+        :param options: Polling configuration (timeouts, intervals)
+        :return: Final snapshot status
+        :rtype: DevboxSnapshotAsyncStatusView
         """
         return await self._client.devboxes.disk_snapshots.await_completed(
             self._id,
@@ -121,11 +114,9 @@ class AsyncSnapshot:
     ) -> "AsyncDevbox":
         """Create a devbox restored from this snapshot.
 
-        Args:
-            **params: Creation parameters forwarded to the devbox API.
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the running devbox.
+        :param params: Creation parameters forwarded to the devbox API
+        :return: Wrapper bound to the running devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             snapshot_id=self._id,

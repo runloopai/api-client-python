@@ -39,11 +39,11 @@ T = TypeVar("T")
 def filter_params(params: Mapping[str, Any], type_filter: Type[T]) -> T:
     """Filter params dict to only include keys defined in the given TypedDict type.
 
-    Args:
-        params: Dictionary or TypedDict of parameters to filter
-        type_filter: TypedDict class to filter against
-
-    Returns:
-        Filtered dictionary matching the TypedDict structure
+    :param params: Dictionary or TypedDict of parameters to filter
+    :type params: Mapping[str, Any]
+    :param type_filter: TypedDict class to filter against
+    :type type_filter: Type[T]
+    :return: Filtered dictionary matching the TypedDict structure
+    :rtype: T
     """
     return {k: v for k, v in params.items() if k in type_filter.__annotations__}  # type: ignore[return-value]
