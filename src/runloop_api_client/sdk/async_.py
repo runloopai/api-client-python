@@ -130,6 +130,10 @@ class AsyncDevboxOps:
     def from_id(self, devbox_id: str) -> AsyncDevbox:
         """Attach to an existing devbox by ID.
 
+        Returns immediately without waiting for the devbox to reach ``running``
+        state. Call ``await_running()`` on the returned :class:`AsyncDevbox` if
+        you need to wait for readiness (contrast with the synchronous SDK, which blocks).
+
         Args:
             devbox_id: Existing devbox ID.
 
