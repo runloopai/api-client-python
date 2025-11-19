@@ -56,7 +56,7 @@ class DevboxOps:
     ) -> Devbox:
         """Provision a new devbox and wait until it reaches ``running`` state.
 
-        :param params: Keyword arguments forwarded to the devbox creation API
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -74,7 +74,8 @@ class DevboxOps:
 
         :param blueprint_id: Blueprint ID to create from
         :type blueprint_id: str
-        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :type params: 
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -93,7 +94,7 @@ class DevboxOps:
 
         :param blueprint_name: Blueprint name to create from
         :type blueprint_name: str
-        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -112,7 +113,7 @@ class DevboxOps:
 
         :param snapshot_id: Snapshot ID to create from
         :type snapshot_id: str
-        :param params: Additional creation parameters (metadata, launch parameters, etc.)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -139,7 +140,7 @@ class DevboxOps:
     ) -> list[Devbox]:
         """List devboxes accessible to the caller.
 
-        :param params: Filtering and pagination parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxListParams` for available parameters
         :return: Collection of devbox wrappers
         :rtype: list[Devbox]
         """
@@ -175,7 +176,7 @@ class SnapshotOps:
     ) -> list[Snapshot]:
         """List snapshots created from devboxes.
 
-        :param params: Filtering and pagination parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDiskSnapshotListParams` for available parameters
         :return: Snapshot wrappers for each record
         :rtype: list[Snapshot]
         """
@@ -224,7 +225,7 @@ class BlueprintOps:
     ) -> Blueprint:
         """Create a blueprint and wait for the build to finish.
 
-        :param params: Blueprint definition (Dockerfile, metadata, etc.)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintCreateParams` for available parameters
         :return: Wrapper bound to the finished blueprint
         :rtype: Blueprint
         """
@@ -249,7 +250,7 @@ class BlueprintOps:
     ) -> list[Blueprint]:
         """List available blueprints.
 
-        :param params: Filtering and pagination parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintListParams` for available parameters
         :return: Blueprint wrappers for each record
         :rtype: list[Blueprint]
         """
@@ -287,7 +288,7 @@ class StorageObjectOps:
     ) -> StorageObject:
         """Create a storage object and obtain an upload URL.
 
-        :param params: Object creation parameters (name, content type, metadata)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectCreateParams` for available parameters
         :return: Wrapper with upload URL set for immediate uploads
         :rtype: StorageObject
         """
@@ -310,7 +311,7 @@ class StorageObjectOps:
     ) -> list[StorageObject]:
         """List storage objects owned by the caller.
 
-        :param params: Filtering and pagination parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectListParams` for available parameters
         :return: Storage object wrappers for each record
         :rtype: list[StorageObject]
         """
@@ -338,7 +339,7 @@ class StorageObjectOps:
         :type content_type: ContentType | None, optional
         :param metadata: Optional key-value metadata, defaults to None
         :type metadata: Optional[Dict[str, str]], optional
-        :param options: Additional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         :raises OSError: If the local file cannot be read
@@ -373,7 +374,7 @@ class StorageObjectOps:
         :type name: str
         :param metadata: Optional key-value metadata, defaults to None
         :type metadata: Optional[Dict[str, str]], optional
-        :param options: Additional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         """
@@ -401,7 +402,7 @@ class StorageObjectOps:
         :type content_type: ContentType
         :param metadata: Optional key-value metadata, defaults to None
         :type metadata: Optional[Dict[str, str]], optional
-        :param options: Additional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         """

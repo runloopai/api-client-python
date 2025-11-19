@@ -93,7 +93,7 @@ class AsyncBlueprint:
     ) -> "AsyncDevbox":
         """Create a devbox derived from the blueprint.
 
-        :param params: Creation parameters to forward to the devbox API
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
         :return: Wrapper bound to the running devbox
         :rtype: AsyncDevbox
         """

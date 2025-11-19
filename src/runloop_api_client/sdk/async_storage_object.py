@@ -87,7 +87,7 @@ class AsyncStorageObject:
     ) -> ObjectDownloadURLView:
         """Request a signed download URL for the object.
 
-        :param params: Parameters controlling the download URL (e.g., expiry)
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectDownloadParams` for available parameters
         :return: URL + metadata describing the download
         :rtype: ObjectDownloadURLView
         """
@@ -102,7 +102,7 @@ class AsyncStorageObject:
     ) -> bytes:
         """Download the object contents as bytes.
 
-        :param params: Parameters forwarded to ``get_download_url``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectDownloadParams` for available parameters
         :return: Entire object payload
         :rtype: bytes
         """
@@ -119,7 +119,7 @@ class AsyncStorageObject:
     ) -> str:
         """Download the object contents as UTF-8 text.
 
-        :param params: Parameters forwarded to ``get_download_url``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectDownloadParams` for available parameters
         :return: Entire object payload decoded as UTF-8
         :rtype: str
         """

@@ -69,7 +69,7 @@ class Snapshot:
     ) -> DevboxSnapshotView:
         """Update snapshot metadata.
 
-        :param params: Fields to update on the snapshot
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams` for available parameters
         :return: Updated snapshot details
         :rtype: DevboxSnapshotView
         """
@@ -114,7 +114,7 @@ class Snapshot:
     ) -> "Devbox":
         """Create a devbox restored from this snapshot.
 
-        :param params: Creation parameters to forward to the devbox API
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
         :return: Wrapper bound to the running devbox
         :rtype: Devbox
         """

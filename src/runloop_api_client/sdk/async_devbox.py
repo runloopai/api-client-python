@@ -215,7 +215,7 @@ class AsyncDevbox:
         Captures the current state of the devbox disk, which can be used to create
         new devboxes with the same state.
 
-        :param params: Snapshot metadata, naming, and polling configuration
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams` for available parameters
         :return: Wrapper representing the completed snapshot
         :rtype: AsyncSnapshot
         """
@@ -236,7 +236,7 @@ class AsyncDevbox:
         Starts the snapshot creation process and returns immediately without waiting
         for completion. Use snapshot.await_completed() to wait for completion.
 
-        :param params: Snapshot metadata and naming options
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams` for available parameters
         :return: Wrapper representing the snapshot request
         :rtype: AsyncSnapshot
         """
@@ -371,7 +371,7 @@ class _AsyncCommandInterface:
     ) -> AsyncExecutionResult:
         """Execute a command synchronously and wait for completion.
 
-        :param params: Command parameters, streaming callbacks, and polling config
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteParams` for available parameters
         :return: Wrapper with exit status and output helpers
         :rtype: AsyncExecutionResult
 
@@ -428,7 +428,7 @@ class _AsyncCommandInterface:
         for process management. Use execution.result() to wait for completion or
         execution.kill() to terminate the process.
 
-        :param params: Command parameters and streaming callbacks
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams` for available parameters
         :return: Handle for managing the running process
         :rtype: AsyncExecution
 
@@ -471,7 +471,7 @@ class _AsyncFileInterface:
     ) -> str:
         """Read a file from the devbox.
 
-        :param params: Parameters such as ``path``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams` for available parameters
         :return: File contents
         :rtype: str
 
@@ -492,7 +492,7 @@ class _AsyncFileInterface:
 
         Creates or overwrites the file at the specified path.
 
-        :param params: Parameters such as ``file_path`` and ``contents``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams` for available parameters
         :return: Execution metadata for the write command
         :rtype: DevboxExecutionDetailView
 
@@ -510,7 +510,7 @@ class _AsyncFileInterface:
     ) -> bytes:
         """Download a file from the devbox.
 
-        :param params: Parameters such as ``path``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxDownloadFileParams` for available parameters
         :return: Raw file contents
         :rtype: bytes
 
@@ -531,7 +531,7 @@ class _AsyncFileInterface:
     ) -> object:
         """Upload a file to the devbox.
 
-        :param params: Parameters such as destination ``path`` and local ``file``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxUploadFileParams` for available parameters
         :return: API response confirming the upload
         :rtype: object
 
@@ -579,7 +579,7 @@ class _AsyncNetworkInterface:
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
 
-        :param params: Parameters such as the devbox ``port`` to expose
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
         :return: Details about the public endpoint
         :rtype: DevboxTunnelView
 
@@ -598,7 +598,7 @@ class _AsyncNetworkInterface:
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
 
-        :param params: Parameters such as the ``port`` to close
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
         :rtype: object
 

@@ -223,7 +223,7 @@ class Devbox:
         Captures the current state of the devbox disk, which can be used to create
         new devboxes with the same state.
 
-        :param params: Snapshot metadata, naming, and polling configuration
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams` for available parameters
         :return: Wrapper representing the completed snapshot
         :rtype: Snapshot
         """
@@ -244,7 +244,7 @@ class Devbox:
         Starts the snapshot creation process and returns immediately without waiting
         for completion. Use snapshot.await_completed() to wait for completion.
 
-        :param params: Snapshot metadata and naming options
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams` for available parameters
         :return: Wrapper representing the snapshot (may still be processing)
         :rtype: Snapshot
         """
@@ -395,7 +395,7 @@ class _CommandInterface:
     ) -> ExecutionResult:
         """Execute a command synchronously and wait for completion.
 
-        :param params: Command parameters, streaming callbacks, and polling config
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteParams` for available parameters
         :return: Wrapper with exit status and output helpers
         :rtype: ExecutionResult
 
@@ -442,7 +442,7 @@ class _CommandInterface:
         for process management. Use execution.result() to wait for completion or
         execution.kill() to terminate the process.
 
-        :param params: Command parameters and streaming callbacks
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams` for available parameters
         :return: Handle for managing the running process
         :rtype: Execution
 
@@ -485,7 +485,7 @@ class _FileInterface:
     ) -> str:
         """Read a file from the devbox.
 
-        :param params: Parameters such as ``path``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams` for available parameters
         :return: File contents
         :rtype: str
 
@@ -506,7 +506,7 @@ class _FileInterface:
 
         Creates or overwrites the file at the specified path.
 
-        :param params: Parameters such as ``file_path`` and ``contents``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams` for available parameters
         :return: Execution metadata for the write command
         :rtype: DevboxExecutionDetailView
 
@@ -524,7 +524,7 @@ class _FileInterface:
     ) -> bytes:
         """Download a file from the devbox.
 
-        :param params: Parameters such as ``path``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxDownloadFileParams` for available parameters
         :return: Raw file contents
         :rtype: bytes
 
@@ -545,7 +545,7 @@ class _FileInterface:
     ) -> object:
         """Upload a file to the devbox.
 
-        :param params: Parameters such as destination ``path`` and local ``file``
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxUploadFileParams` for available parameters
         :return: API response confirming the upload
         :rtype: object
 
@@ -593,7 +593,7 @@ class _NetworkInterface:
     ) -> DevboxTunnelView:
         """Create a network tunnel to expose a devbox port publicly.
 
-        :param params: Parameters such as the devbox ``port`` to expose
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
         :return: Details about the public endpoint
         :rtype: DevboxTunnelView
 
@@ -612,7 +612,7 @@ class _NetworkInterface:
     ) -> object:
         """Remove a network tunnel, disabling public access to the port.
 
-        :param params: Parameters such as the ``port`` to close
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
         :rtype: object
 
