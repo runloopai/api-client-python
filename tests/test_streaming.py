@@ -215,6 +215,8 @@ async def test_multi_byte_character_multiple_chunks(
     assert sse.event is None
     assert sse.json() == {"content": "известни"}
 
+    await assert_empty_iter(iterator)
+
 
 async def to_aiter(iter: Iterator[bytes]) -> AsyncIterator[bytes]:
     for chunk in iter:
