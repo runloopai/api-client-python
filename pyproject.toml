@@ -64,6 +64,12 @@ dev = [
     "uuid-utils>=0.11.0",
     "pytest-cov>=7.0.0",
 ]
+docs = [
+    "furo>=2025.9.25",
+    "sphinx>=7.4.7",
+    "sphinx-autodoc-typehints>=2.3.0",
+    "sphinx-toolbox>=4.0.0",
+]
 pydantic-v1 = [
     "pydantic>=1.9.0, <2",
 ]
