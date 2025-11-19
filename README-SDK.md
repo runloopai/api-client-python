@@ -1,9 +1,29 @@
 # Runloop SDK – Python Object-Oriented Client
 
-The `RunloopSDK` builds on top of the generated REST client and provides a Pythonic, object-oriented API for managing devboxes, blueprints, snapshots, and storage objects. The SDK exposes synchronous and asynchronous variants to match your runtime requirements.
+The `RunloopSDK` builds on top of the underlying REST client and provides a Pythonic, object-oriented API for managing devboxes, blueprints, snapshots, and storage objects. The SDK exposes synchronous and asynchronous variants to match your runtime requirements.
 
-> **Installation**  
-> The SDK ships with the `runloop_api_client` package—no extra dependencies are required.
+## Table of Contents
+
+- [Installation](#installation)
+- [Quickstart (synchronous)](#quickstart-synchronous)
+- [Quickstart (asynchronous)](#quickstart-asynchronous)
+- [Core Concepts](#core-concepts)
+- [Devbox](#devbox)
+- [Blueprint](#blueprint)
+- [Snapshot](#snapshot)
+- [StorageObject](#storageobject)
+- [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
+- [Accessing the Underlying REST Client](#accessing-the-underlying-rest-client)
+- [Error Handling](#error-handling)
+- [Advanced Configuration](#advanced-configuration)
+- [Async Usage](#async-usage)
+- [Polling Configuration](#polling-configuration)
+- [Complete API Reference](#complete-api-reference)
+- [Feedback](#feedback)
+
+## Installation
+
+The SDK ships with the `runloop_api_client` package—no extra dependencies are required.
 
 ```bash
 pip install runloop_api_client
@@ -14,29 +34,28 @@ pip install runloop_api_client
 ```python
 from runloop_api_client import RunloopSDK
 
-sdk = RunloopSDK()
+runloop = RunloopSDK()
 
 # Create a ready-to-use devbox
-with sdk.devbox.create(name="my-devbox") as devbox:
-    result = devbox.cmd.exec("echo 'Hello from Runloop!'")
+with runloop.devbox.create(name="my-devbox") as devbox:
+    result = devbox.cmd.exec(command="echo 'Hello from Runloop!'")
     print(result.stdout())
 
     # Stream stdout in real time
     devbox.cmd.exec(
-        "ls -la",
+        command="ls -la",
         stdout=lambda line: print("stdout:", line),
-        output=lambda line: print("combined:", line),
     )
 
 # Blueprints
-blueprint = sdk.blueprint.create(
+blueprint = runloop.blueprint.create(
     name="my-blueprint",
     dockerfile="FROM ubuntu:22.04\nRUN echo 'Hello' > /hello.txt\n",
 )
 devbox = blueprint.create_devbox(name="dev-from-blueprint")
 
 # Storage objects
-obj = sdk.storage_object.upload_from_text("Hello world!", name="greeting.txt")
+obj = runloop.storage_object.upload_from_text("Hello world!", name="greeting.txt")
 print(obj.download_as_text())
 ```
 
@@ -47,15 +66,15 @@ import asyncio
 from runloop_api_client import AsyncRunloopSDK
 
 async def main():
-    sdk = AsyncRunloopSDK()
-    async with await sdk.devbox.create(name="async-devbox") as devbox:
-        result = await devbox.cmd.exec("pwd")
+    runloop = AsyncRunloopSDK()
+    async with await runloop.devbox.create(name="async-devbox") as devbox:
+        result = await devbox.cmd.exec(command="pwd")
         print(await result.stdout())
 
         def capture(line: str) -> None:
             print(">>", line)
 
-        await devbox.cmd.exec("ls", stdout=capture)
+        await devbox.cmd.exec(command="ls", stdout=capture)
 
 asyncio.run(main())
 ```
@@ -69,7 +88,7 @@ The main SDK class that provides access to all Runloop functionality:
 ```python
 from runloop_api_client import RunloopSDK
 
-sdk = RunloopSDK(
+runloop = RunloopSDK(
     bearer_token="your-api-key",  # defaults to RUNLOOP_API_KEY env var
     # ... other options
 )
@@ -79,43 +98,43 @@ sdk = RunloopSDK(
 
 The SDK provides object-oriented interfaces for all major Runloop resources:
 
-- **`sdk.devbox`** - Devbox management (create, list, execute commands, file operations)
-- **`sdk.blueprint`** - Blueprint management (create, list, build blueprints)
-- **`sdk.snapshot`** - Snapshot management (list disk snapshots)
-- **`sdk.storage_object`** - Storage object management (upload, download, list objects)
-- **`sdk.api`** - Direct access to the generated REST API client
+- **`runloop.devbox`** - Devbox management (create, list, execute commands, file operations)
+- **`runloop.blueprint`** - Blueprint management (create, list, build blueprints)
+- **`runloop.snapshot`** - Snapshot management (list disk snapshots)
+- **`runloop.storage_object`** - Storage object management (upload, download, list objects)
+- **`runloop.api`** - Direct access to the underlying REST API client
 
 ### Devbox
 
-Object-oriented interface for working with devboxes. Created via `sdk.devbox.create()`, `sdk.devbox.create_from_blueprint_id()`, `sdk.devbox.create_from_blueprint_name()`, `sdk.devbox.create_from_snapshot()`, or `sdk.devbox.from_id()`:
+Object-oriented interface for working with devboxes. Created via `runloop.devbox.create()`, `runloop.devbox.create_from_blueprint_id()`, `runloop.devbox.create_from_blueprint_name()`, `runloop.devbox.create_from_snapshot()`, or `runloop.devbox.from_id()`:
 
 ```python
 # Create a new devbox
-devbox = sdk.devbox.create(name="my-devbox")
+devbox = runloop.devbox.create(name="my-devbox")
 
 # Create a devbox from a blueprint ID
-devbox_from_blueprint = sdk.devbox.create_from_blueprint_id(
-    "bpt-123",
+devbox_from_blueprint = runloop.devbox.create_from_blueprint_id(
+    blueprint_id="bpt_123",
     name="my-devbox-from-blueprint",
 )
 
 # Create a devbox from a blueprint name
-devbox_from_name = sdk.devbox.create_from_blueprint_name(
-    "my-blueprint-name",
+devbox_from_name = runloop.devbox.create_from_blueprint_name(
+    blueprint_name="my-blueprint-name",
     name="my-devbox-from-blueprint",
 )
 
 # Create a devbox from a snapshot
-devbox_from_snapshot = sdk.devbox.create_from_snapshot(
-    "snp-123",
+devbox_from_snapshot = runloop.devbox.create_from_snapshot(
+    snapshot_id="snp_123",
     name="my-devbox-from-snapshot",
 )
 
 # Or get an existing one (waits for it to be running)
-existing_devbox = sdk.devbox.from_id("dev-123")
+existing_devbox = runloop.devbox.from_id(devbox_id="dbx_123")
 
 # List all devboxes
-devboxes = sdk.devbox.list(limit=10)
+devboxes = runloop.devbox.list(limit=10)
 
 # Get devbox information
 info = devbox.get_info()
@@ -128,13 +147,13 @@ Execute commands synchronously or asynchronously:
 
 ```python
 # Synchronous command execution (waits for completion)
-result = devbox.cmd.exec("ls -la")
+result = devbox.cmd.exec(command="ls -la")
 print("Output:", result.stdout())
 print("Exit code:", result.exit_code)
 print("Success:", result.success)
 
 # Asynchronous command execution (returns immediately)
-execution = devbox.cmd.exec_async("npm run dev")
+execution = devbox.cmd.exec_async(command="npm run dev")
 
 # Check execution status
 state = execution.get_state()
@@ -154,7 +173,7 @@ The `Execution` object provides fine-grained control over asynchronous command e
 
 ```python
 # Start a long-running process
-execution = devbox.cmd.exec_async("python train_model.py")
+execution = devbox.cmd.exec_async(command="python train_model.py")
 
 # Get the execution ID
 print("Execution ID:", execution.execution_id)
@@ -163,7 +182,7 @@ print("Devbox ID:", execution.devbox_id)
 # Poll for current state
 state = execution.get_state()
 print("Status:", state.status)  # "running", "completed", etc.
-print("Exit code:", state.exit_status)
+print("Exit code:", state.exit_status) # only set when execution has completed
 
 # Wait for completion and get results
 result = execution.result()
@@ -189,10 +208,10 @@ The `ExecutionResult` object contains the output and exit status of a completed 
 
 ```python
 # From synchronous execution
-result = devbox.cmd.exec("ls -la /tmp")
+result = devbox.cmd.exec(command="ls -la /tmp")
 
 # Or from asynchronous execution
-execution = devbox.cmd.exec_async("echo 'test'")
+execution = devbox.cmd.exec_async(command="echo 'test'")
 result = execution.result()
 
 # Access execution results
@@ -222,6 +241,8 @@ print("Raw result:", raw_result)
 
 #### Streaming Command Output
 
+> **Callback requirement:** All callbacks (`stdout`, `stderr`, `output`) must be synchronous functions. Even when using `AsyncDevbox`, callbacks cannot be async. Use thread-safe queues or other coordination primitives if you need to bridge into async code.
+
 Pass callbacks into `cmd.exec` / `cmd.exec_async` to process logs in real time:
 
 ```python
@@ -229,15 +250,13 @@ def handle_output(line: str) -> None:
     print("LOG:", line)
 
 result = devbox.cmd.exec(
-    "python train.py",
+    command="python train.py",
     stdout=handle_output,
     stderr=lambda line: print("ERR:", line),
     output=lambda line: print("ANY:", line),
 )
 print("exit code:", result.exit_code)
 ```
-
-**Note on Callbacks:** All callbacks (`stdout`, `stderr`, `output`) must be synchronous functions. Even when using `AsyncDevbox`, callbacks cannot be async functions. If you need to perform async operations with the output, use thread-safe queues and process them separately.
 
 Async example (note that the callback itself is still synchronous):
 
@@ -248,7 +267,7 @@ def capture(line: str) -> None:
     log_queue.put_nowait(line)
 
 await devbox.cmd.exec(
-    "tail -f /var/log/app.log",
+    command="tail -f /var/log/app.log",
     stdout=capture,
 )
 ```
@@ -343,14 +362,14 @@ Devboxes support context managers for automatic cleanup:
 
 ```python
 # Synchronous
-with sdk.devbox.create(name="temp-devbox") as devbox:
-    result = devbox.cmd.exec("echo 'Hello'")
+with runloop.devbox.create(name="temp-devbox") as devbox:
+    result = devbox.cmd.exec(command="echo 'Hello'")
     print(result.stdout())
 # devbox is automatically shutdown when exiting the context
 
 # Asynchronous
-async with await sdk.devbox.create(name="temp-devbox") as devbox:
-    result = await devbox.cmd.exec("echo 'Hello'")
+async with await runloop.devbox.create(name="temp-devbox") as devbox:
+    result = await devbox.cmd.exec(command="echo 'Hello'")
     print(await result.stdout())
 # devbox is automatically shutdown when exiting the context
 ```
@@ -378,21 +397,21 @@ async with await sdk.devbox.create(name="temp-devbox") as devbox:
 
 ### Blueprint
 
-Object-oriented interface for working with blueprints. Created via `sdk.blueprint.create()` or `sdk.blueprint.from_id()`:
+Object-oriented interface for working with blueprints. Created via `runloop.blueprint.create()` or `runloop.blueprint.from_id()`:
 
 ```python
 # Create a new blueprint
-blueprint = sdk.blueprint.create(
+blueprint = runloop.blueprint.create(
     name="my-blueprint",
     dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y python3\n",
     system_setup_commands=["pip install numpy pandas"],
 )
 
 # Or get an existing one
-blueprint = sdk.blueprint.from_id("bp-123")
+blueprint = runloop.blueprint.from_id(blueprint_id="bpt_123")
 
 # List all blueprints
-blueprints = sdk.blueprint.list()
+blueprints = runloop.blueprint.list()
 
 # Get blueprint details and build logs
 info = blueprint.get_info()
@@ -414,17 +433,17 @@ blueprint.delete()
 
 ### Snapshot
 
-Object-oriented interface for working with disk snapshots. Created via `sdk.snapshot.from_id()`:
+Object-oriented interface for working with disk snapshots. Created via `runloop.snapshot.from_id()`:
 
 ```python
 # Get an existing snapshot
-snapshot = sdk.snapshot.from_id("snp-123")
+snapshot = runloop.snapshot.from_id(snapshot_id="snp_123")
 
 # List all snapshots
-snapshots = sdk.snapshot.list()
+snapshots = runloop.snapshot.list()
 
 # List snapshots for a specific devbox
-devbox_snapshots = sdk.snapshot.list(devbox_id="dev-123")
+devbox_snapshots = runloop.snapshot.list(devbox_id="dbx_123")
 
 # Get snapshot details and check status
 info = snapshot.get_info()
@@ -456,11 +475,11 @@ snapshot.delete()
 
 ### StorageObject
 
-Object-oriented interface for working with storage objects. Created via `sdk.storage_object.create()` or `sdk.storage_object.from_id()`:
+Object-oriented interface for working with storage objects. Created via `runloop.storage_object.create()` or `runloop.storage_object.from_id()`:
 
 ```python
 # Create a new storage object
-storage_object = sdk.storage_object.create(
+storage_object = runloop.storage_object.create(
     name="my-file.txt",
     content_type="text",
     metadata={"project": "demo"},
@@ -472,20 +491,20 @@ storage_object.complete()
 
 # Upload from file
 from pathlib import Path
-uploaded = sdk.storage_object.upload_from_file(
+uploaded = runloop.storage_object.upload_from_file(
     Path("/path/to/file.txt"),
     name="my-file.txt",
 )
 
 # Upload text content directly
-uploaded = sdk.storage_object.upload_from_text(
+uploaded = runloop.storage_object.upload_from_text(
     "Hello, World!",
     name="my-text.txt",
     metadata={"source": "text"},
 )
 
 # Upload from bytes
-uploaded = sdk.storage_object.upload_from_bytes(
+uploaded = runloop.storage_object.upload_from_bytes(
     b"binary content",
     name="my-file.bin",
     content_type="binary",
@@ -500,7 +519,7 @@ text_content = storage_object.download_as_text()
 binary_content = storage_object.download_as_bytes()
 
 # List all storage objects
-objects = sdk.storage_object.list()
+objects = runloop.storage_object.list()
 
 # Delete when done
 storage_object.delete()
@@ -514,10 +533,13 @@ The storage helpers manage the multi-step upload flow (create → PUT to presign
 from pathlib import Path
 
 # Upload local file with content-type detection
-obj = sdk.storage_object.upload_from_file(Path("./report.csv"))
+obj = runloop.storage_object.upload_from_file(file_path=Path("./report.csv"))
 
 # Manual control
-obj = sdk.storage_object.create("data.bin", content_type="binary")
+obj = runloop.storage_object.create(
+    name="data.bin",
+    content_type="binary",
+)
 obj.upload_content(b"\xDE\xAD\xBE\xEF")
 obj.complete()
 ```
@@ -534,9 +556,9 @@ obj.complete()
 
 **Static upload methods:**
 
-- `sdk.storage_object.upload_from_file()` - Upload from filesystem
-- `sdk.storage_object.upload_from_text()` - Upload text content directly
-- `sdk.storage_object.upload_from_bytes()` - Upload from bytes
+- `runloop.storage_object.upload_from_file()` - Upload from filesystem
+- `runloop.storage_object.upload_from_text()` - Upload text content directly
+- `runloop.storage_object.upload_from_bytes()` - Upload from bytes
 
 ### Mounting Storage Objects to Devboxes
 
@@ -544,13 +566,13 @@ You can mount storage objects to devboxes to access their contents:
 
 ```python
 # Create a storage object first
-storage_object = sdk.storage_object.upload_from_text(
+storage_object = runloop.storage_object.upload_from_text(
     "Hello, World!",
     name="my-data.txt",
 )
 
 # Create a devbox and mount the storage object
-devbox = sdk.devbox.create(
+devbox = runloop.devbox.create(
     name="my-devbox",
     mounts=[
         {
@@ -562,16 +584,16 @@ devbox = sdk.devbox.create(
 )
 
 # The storage object is now accessible at /home/user/data.txt in the devbox
-result = devbox.cmd.exec("cat /home/user/data.txt")
+result = devbox.cmd.exec(command="cat /home/user/data.txt")
 print(result.stdout())  # "Hello, World!"
 
 # Mount archived objects (tar, tgz, gzip) - they get extracted to a directory
-archive_object = sdk.storage_object.upload_from_file(
+archive_object = runloop.storage_object.upload_from_file(
     Path("./project.tar.gz"),
     name="project.tar.gz",
 )
 
-devbox_with_archive = sdk.devbox.create(
+devbox_with_archive = runloop.devbox.create(
     name="archive-devbox",
     mounts=[
         {
@@ -583,17 +605,17 @@ devbox_with_archive = sdk.devbox.create(
 )
 
 # Access extracted archive contents
-result = devbox_with_archive.cmd.exec("ls -la /home/user/project/")
+result = devbox_with_archive.cmd.exec(command="ls -la /home/user/project/")
 print(result.stdout())
 ```
 
-## Accessing the Generated REST Client
+## Accessing the Underlying REST Client
 
-The SDK always exposes the underlying generated client through the `.api` attribute:
+The SDK always exposes the underlying client through the `.api` attribute:
 
 ```python
-sdk = RunloopSDK()
-raw_devbox = sdk.api.devboxes.create()
+runloop = RunloopSDK()
+raw_devbox = runloop.api.devboxes.create()
 ```
 
 This makes it straightforward to mix high-level helpers with low-level calls whenever you need advanced control.
@@ -606,11 +628,11 @@ The SDK provides comprehensive error handling with typed exceptions:
 from runloop_api_client import RunloopSDK
 import runloop_api_client
 
-sdk = RunloopSDK()
+runloop = RunloopSDK()
 
 try:
-    devbox = sdk.devbox.create()
-    result = devbox.cmd.exec("invalid-command")
+    devbox = runloop.devbox.create(name="example-devbox")
+    result = devbox.cmd.exec(command="invalid-command")
 except runloop_api_client.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -641,7 +663,7 @@ Error codes are as follows:
 import httpx
 from runloop_api_client import RunloopSDK, DefaultHttpxClient
 
-sdk = RunloopSDK(
+runloop = RunloopSDK(
     bearer_token="your-api-key",  # defaults to RUNLOOP_API_KEY env var
     base_url="https://api.runloop.ai",  # or use RUNLOOP_BASE_URL env var
     timeout=60.0,  # 60 second timeout (default is 30)
@@ -666,18 +688,18 @@ import asyncio
 from runloop_api_client import AsyncRunloopSDK
 
 async def main():
-    sdk = AsyncRunloopSDK()
+    runloop = AsyncRunloopSDK()
     
     # All the same operations, but with await
-    async with await sdk.devbox.create(name="async-devbox") as devbox:
-        result = await devbox.cmd.exec("pwd")
+    async with await runloop.devbox.create(name="async-devbox") as devbox:
+        result = await devbox.cmd.exec(command="pwd")
         print(await result.stdout())
         
         # Streaming (note: callbacks must be synchronous)
         def capture(line: str) -> None:
             print(">>", line)
         
-        await devbox.cmd.exec("ls", stdout=capture)
+        await devbox.cmd.exec(command="ls", stdout=capture)
         
         # Async file operations
         await devbox.file.write(path="/tmp/test.txt", contents="Hello")
@@ -698,7 +720,7 @@ Many operations that wait for state changes accept a `polling_config` parameter:
 from runloop_api_client.lib.polling import PollingConfig
 
 # Create devbox with custom polling
-devbox = sdk.devbox.create(
+devbox = runloop.devbox.create(
     name="my-devbox",
     polling_config=PollingConfig(
         timeout_seconds=300.0,  # Wait up to 5 minutes
