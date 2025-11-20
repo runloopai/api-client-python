@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Iterable
 from typing_extensions import Unpack, override
 
 from ._types import RequestOptions, LongRequestOptions, SDKObjectDownloadParams
@@ -146,7 +147,7 @@ class StorageObject:
             **options,
         )
 
-    def upload_content(self, content: str | bytes) -> None:
+    def upload_content(self, content: str | bytes | Iterable[bytes]) -> None:
         """Upload content to the object's pre-signed URL.
 
         :param content: Bytes or text payload to upload

@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import io
+import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
+from datetime import timedelta
 from typing_extensions import Unpack
 
 import httpx
@@ -358,6 +361,46 @@ class StorageObjectOps:
         content_type = content_type or detect_content_type(str(file_path))
         obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
         obj.upload_content(content)
+        obj.complete()
+        return obj
+
+    def upload_from_dir(
+        self,
+        dir_path: str | Path,
+        *,
+        name: Optional[str] = None,
+        metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
+        **options: Unpack[LongRequestOptions],
+    ) -> StorageObject:
+        """Create and upload an object from a local directory.
+
+        The resulting object will be uploaded as a compressed tarball.
+
+        :param dir_path: Local filesystem directory path to tar
+        :type dir_path: str | Path
+        :param name: Optional object name; defaults to the directory name + '.tar.gz'
+        :type name: Optional[str]
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: StorageObject
+        :raises OSError: If the local file cannot be read
+        """
+        path = Path(dir_path)
+        name = name or f"{path.name}.tar.gz"
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+
+        tar_buffer = io.BytesIO()
+        with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
+            tar.add(path, arcname=".", recursive=True)
+        tar_buffer.seek(0)
+
+        obj = self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
+        obj.upload_content(tar_buffer)
         obj.complete()
         return obj
 
