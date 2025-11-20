@@ -50,8 +50,6 @@ napoleon_use_ivar = True
 # Autodoc settings
 autodoc_default_options = {
     "members": None,
-    "undoc-members": None,
-    "show-inheritance": None,
 }
 
 autodoc_typehints = "description"
