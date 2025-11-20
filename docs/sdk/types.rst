@@ -28,7 +28,7 @@ Creation Parameters
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateParams
 
-.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExtraCreateParams
+.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams
 
 Execution Parameters
 ~~~~~~~~~~~~~~~~~~~~
