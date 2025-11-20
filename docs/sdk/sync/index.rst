@@ -8,6 +8,8 @@ Core Module
 
 The core synchronous SDK module provides the main entry point and operation classes.
 
+.. autoclass:: runloop_api_client.sdk.sync.RunloopSDK
+
 .. automodule:: runloop_api_client.sdk.sync
 
 Resource Modules
@@ -15,15 +17,13 @@ Resource Modules
 
 Synchronous resource classes for working with devboxes, blueprints, snapshots, and more.
 
-.. automodule:: runloop_api_client.sdk.devbox
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: runloop_api_client.sdk.blueprint
-
-.. automodule:: runloop_api_client.sdk.snapshot
-
-.. automodule:: runloop_api_client.sdk.storage_object
-
-.. automodule:: runloop_api_client.sdk.execution
-
-.. automodule:: runloop_api_client.sdk.execution_result
+   devbox
+   execution
+   execution_result
+   blueprint
+   snapshot
+   storage_object
 

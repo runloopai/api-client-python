@@ -9,6 +9,6 @@ The Runloop SDK provides both synchronous and asynchronous interfaces for managi
    :maxdepth: 2
    :caption: SDK Documentation
 
-   sync
-   async
+   sync/index
+   async/index
    types

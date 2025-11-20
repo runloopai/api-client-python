@@ -8,6 +8,8 @@ Core Module
 
 The core asynchronous SDK module provides async operation classes.
 
+.. autoclass:: runloop_api_client.sdk.async_.AsyncRunloopSDK
+
 .. automodule:: runloop_api_client.sdk.async_
 
 Resource Modules
@@ -15,15 +17,13 @@ Resource Modules
 
 Asynchronous resource classes for working with devboxes, blueprints, snapshots, and more.
 
-.. automodule:: runloop_api_client.sdk.async_devbox
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: runloop_api_client.sdk.async_blueprint
-
-.. automodule:: runloop_api_client.sdk.async_snapshot
-
-.. automodule:: runloop_api_client.sdk.async_storage_object
-
-.. automodule:: runloop_api_client.sdk.async_execution
-
-.. automodule:: runloop_api_client.sdk.async_execution_result
+   devbox
+   execution
+   execution_result
+   blueprint
+   snapshot
+   storage_object
 
