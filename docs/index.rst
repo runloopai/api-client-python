@@ -9,7 +9,7 @@ and asynchronous variants to match your runtime requirements.
    :maxdepth: 2
    :caption: Contents:
 
-   api/index
+   sdk/index
 
 Installation
 ------------
@@ -42,6 +42,7 @@ Asynchronous Example
 
 .. code-block:: python
 
+   import asyncio
    from runloop_api_client import AsyncRunloopSDK
 
    async def main():
@@ -51,7 +52,6 @@ Asynchronous Example
            result = await devbox.cmd.exec(command="echo 'Hello from Runloop!'")
            print(await result.stdout())
 
-   import asyncio
    asyncio.run(main())
 
 Indices and tables

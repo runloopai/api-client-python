@@ -1,17 +1,12 @@
-TypedDict Reference
-===================
+Type Reference
+==============
 
-This page documents all TypedDict parameter types used throughout the SDK.
-These typed dictionaries define the structure of parameters passed to SDK methods.
-
-SDK TypedDicts
---------------
-
-These are the primary TypedDict classes used in SDK methods, combining multiple
-parameter types and options.
+This page documents all TypeDict parameter types used throughout the SDK.
 
 Core Request Options
-~~~~~~~~~~~~~~~~~~~~
+--------------------
+
+These TypeDicts define options for streaming, timeouts, polling, and other request configuration.
 
 .. autotypeddict:: runloop_api_client.sdk._types.ExecuteStreamingCallbacks
 
@@ -24,15 +19,26 @@ Core Request Options
 .. autotypeddict:: runloop_api_client.sdk._types.LongPollingRequestOptions
 
 Devbox Parameters
-~~~~~~~~~~~~~~~~~
+-----------------
+
+These TypeDicts define parameters for devbox creation, execution, file operations, network tunnels, and snapshots.
+
+Creation Parameters
+~~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExtraCreateParams
 
+Execution Parameters
+~~~~~~~~~~~~~~~~~~~~
+
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams
+
+Listing Parameters
+~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxListParams
 
@@ -47,8 +53,8 @@ File Operation Parameters
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxUploadFileParams
 
-Network Operation Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Network Tunnel Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams
 
@@ -66,14 +72,18 @@ Snapshot Parameters
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams
 
 Blueprint Parameters
-~~~~~~~~~~~~~~~~~~~~
+--------------------
+
+These TypeDicts define parameters for blueprint creation and listing.
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintCreateParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintListParams
 
 Storage Object Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
+
+These TypeDicts define parameters for storage object creation, listing, and downloading.
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKObjectCreateParams
 
