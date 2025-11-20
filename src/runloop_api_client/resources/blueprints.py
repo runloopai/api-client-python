@@ -1,5 +1,4 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-# isort: skip_file
 
 from __future__ import annotations
 
@@ -15,8 +14,7 @@ from ..types import (
     blueprint_create_from_inspection_params,
 )
 from .._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
-from .._utils._validation import ValidationNotification
+from .._utils import is_given, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -31,6 +29,7 @@ from .._exceptions import RunloopError
 from ..lib.polling import PollingConfig, poll_until
 from .._base_client import AsyncPaginator, make_request_options
 from ..lib.polling_async import async_poll_until
+from .._utils._validation import ValidationNotification
 from ..types.blueprint_view import BlueprintView
 from ..types.blueprint_preview_view import BlueprintPreviewView
 from ..types.inspection_source_param import InspectionSourceParam
@@ -79,7 +78,7 @@ def _validate_file_mounts(file_mounts: Optional[Dict[str, str]] | Omit) -> Valid
 
     note = ValidationNotification()
 
-    if file_mounts is omit or file_mounts is None:
+    if file_mounts is None or not is_given(file_mounts):
         return note
 
     total_size_bytes = 0
