@@ -36,8 +36,8 @@ class AsyncExecutionResult:
     def devbox_id(self) -> str:
         """Associated devbox identifier.
 
-        Returns:
-            str: Devbox ID where the command executed.
+        :return: Devbox ID where the command executed
+        :rtype: str
         """
         return self._devbox_id
 
@@ -45,8 +45,8 @@ class AsyncExecutionResult:
     def execution_id(self) -> str:
         """Underlying execution identifier.
 
-        Returns:
-            str: Unique execution ID.
+        :return: Unique execution ID
+        :rtype: str
         """
         return self._result.execution_id
 
@@ -54,8 +54,8 @@ class AsyncExecutionResult:
     def exit_code(self) -> int | None:
         """Process exit code, or ``None`` if unavailable.
 
-        Returns:
-            int | None: Exit status code.
+        :return: Exit status code
+        :rtype: int | None
         """
         return self._result.exit_status
 
@@ -63,8 +63,8 @@ class AsyncExecutionResult:
     def success(self) -> bool:
         """Whether the process exited successfully (exit code ``0``).
 
-        Returns:
-            bool: ``True`` if the exit code is ``0``.
+        :return: ``True`` if the exit code is ``0``
+        :rtype: bool
         """
         return self.exit_code == 0
 
@@ -72,8 +72,8 @@ class AsyncExecutionResult:
     def failed(self) -> bool:
         """Whether the process exited with a non-zero exit code.
 
-        Returns:
-            bool: ``True`` if the exit code is non-zero.
+        :return: ``True`` if the exit code is non-zero
+        :rtype: bool
         """
         exit_code = self.exit_code
         return exit_code is not None and exit_code != 0
@@ -107,14 +107,16 @@ class AsyncExecutionResult:
     ) -> str:
         """Common helper for fetching buffered or streamed output.
 
-        Args:
-            current_output: Cached output string from the API.
-            is_truncated: Whether ``current_output`` is truncated.
-            num_lines: Optional number of tail lines to return.
-            stream_fn: Awaitable returning a streaming iterator for full output.
-
-        Returns:
-            str: Output string honoring ``num_lines`` if provided.
+        :param current_output: Cached output string from the API
+        :type current_output: str
+        :param is_truncated: Whether ``current_output`` is truncated
+        :type is_truncated: bool
+        :param num_lines: Optional number of tail lines to return, defaults to None
+        :type num_lines: Optional[int], optional
+        :param stream_fn: Awaitable returning a streaming iterator for full output
+        :type stream_fn: Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]
+        :return: Output string honoring ``num_lines`` if provided
+        :rtype: str
         """
         # Check if we have enough lines already
         if num_lines is not None and (not is_truncated or self._count_non_empty_lines(current_output) >= num_lines):
@@ -130,14 +132,12 @@ class AsyncExecutionResult:
         return self._get_last_n_lines(current_output, num_lines) if num_lines is not None else current_output
 
     async def stdout(self, num_lines: Optional[int] = None) -> str:
-        """
-        Return captured standard output, streaming full output if truncated.
+        """Return captured standard output, streaming full output if truncated.
 
-        Args:
-            num_lines: Optional number of lines to return from the end (most recent).
-
-        Returns:
-            str: Stdout content, optionally limited to the last ``num_lines`` lines.
+        :param num_lines: Optional number of lines to return from the end (most recent), defaults to None
+        :type num_lines: Optional[int], optional
+        :return: Stdout content, optionally limited to the last ``num_lines`` lines
+        :rtype: str
         """
         return await self._get_output(
             self._result.stdout or "",
@@ -149,14 +149,12 @@ class AsyncExecutionResult:
         )
 
     async def stderr(self, num_lines: Optional[int] = None) -> str:
-        """
-        Return captured standard error, streaming full output if truncated.
+        """Return captured standard error, streaming full output if truncated.
 
-        Args:
-            num_lines: Optional number of lines to return from the end (most recent).
-
-        Returns:
-            str: Stderr content, optionally limited to the last ``num_lines`` lines.
+        :param num_lines: Optional number of lines to return from the end (most recent), defaults to None
+        :type num_lines: Optional[int], optional
+        :return: Stderr content, optionally limited to the last ``num_lines`` lines
+        :rtype: str
         """
         return await self._get_output(
             self._result.stderr or "",
@@ -171,7 +169,7 @@ class AsyncExecutionResult:
     def result(self) -> DevboxAsyncExecutionDetailView:
         """Get the raw execution result.
 
-        Returns:
-            DevboxAsyncExecutionDetailView: Raw execution result.
+        :return: Raw execution result
+        :rtype: DevboxAsyncExecutionDetailView
         """
         return self._result

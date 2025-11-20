@@ -21,9 +21,10 @@ class AsyncBlueprint:
     ) -> None:
         """Initialize the wrapper.
 
-        Args:
-            client: Generated AsyncRunloop client.
-            blueprint_id: Blueprint ID returned by the API.
+        :param client: Generated AsyncRunloop client
+        :type client: AsyncRunloop
+        :param blueprint_id: Blueprint ID returned by the API
+        :type blueprint_id: str
         """
         self._client = client
         self._id = blueprint_id
@@ -36,8 +37,8 @@ class AsyncBlueprint:
     def id(self) -> str:
         """Return the blueprint ID.
 
-        Returns:
-            str: Unique blueprint ID.
+        :return: Unique blueprint ID
+        :rtype: str
         """
         return self._id
 
@@ -47,11 +48,9 @@ class AsyncBlueprint:
     ) -> BlueprintView:
         """Retrieve the latest blueprint details.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            BlueprintView: API response describing the blueprint.
+        :param options: Optional request configuration
+        :return: API response describing the blueprint
+        :rtype: BlueprintView
         """
         return await self._client.blueprints.retrieve(
             self._id,
@@ -64,11 +63,9 @@ class AsyncBlueprint:
     ) -> BlueprintBuildLogsListView:
         """Retrieve build logs for the blueprint.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            BlueprintBuildLogsListView: Log entries for the most recent build.
+        :param options: Optional request configuration
+        :return: Log entries for the most recent build
+        :rtype: BlueprintBuildLogsListView
         """
         return await self._client.blueprints.logs(
             self._id,
@@ -81,11 +78,9 @@ class AsyncBlueprint:
     ) -> object:
         """Delete the blueprint.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            object: API response acknowledging deletion.
+        :param options: Optional long-running request configuration
+        :return: API response acknowledging deletion
+        :rtype: object
         """
         return await self._client.blueprints.delete(
             self._id,
@@ -98,11 +93,9 @@ class AsyncBlueprint:
     ) -> "AsyncDevbox":
         """Create a devbox derived from the blueprint.
 
-        Args:
-            **params: Creation parameters to forward to the devbox API.
-
-        Returns:
-            AsyncDevbox: Wrapper bound to the running devbox.
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :return: Wrapper bound to the running devbox
+        :rtype: AsyncDevbox
         """
         devbox_view = await self._client.devboxes.create_and_await_running(
             blueprint_id=self._id,

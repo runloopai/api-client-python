@@ -14,9 +14,7 @@ from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetai
 
 
 class _StreamingGroup:
-    """
-    Internal helper used to coordinate stdout/stderr streaming threads.
-    """
+    """Internal helper used to coordinate stdout/stderr streaming threads."""
 
     def __init__(self, threads: list[threading.Thread], stop_event: threading.Event) -> None:
         self._threads = threads
@@ -77,8 +75,8 @@ class Execution:
     def execution_id(self) -> str:
         """Return the execution identifier.
 
-        Returns:
-            str: Unique execution ID.
+        :return: Unique execution ID
+        :rtype: str
         """
         return self._execution_id
 
@@ -86,19 +84,17 @@ class Execution:
     def devbox_id(self) -> str:
         """Return the devbox identifier.
 
-        Returns:
-            str: Devbox ID where the command is running.
+        :return: Devbox ID where the command is running
+        :rtype: str
         """
         return self._devbox_id
 
     def result(self, **options: Unpack[LongRequestOptions]) -> ExecutionResult:
         """Wait for completion and return an :class:`ExecutionResult`.
 
-        Args:
-            **options: Optional long-running request configuration.
-
-        Returns:
-            ExecutionResult: Wrapper with exit status and output helpers.
+        :param options: Optional long-running request configuration
+        :return: Wrapper with exit status and output helpers
+        :rtype: ExecutionResult
         """
         # Wait for command completion
         final = self._client.devboxes.wait_for_command(
@@ -118,11 +114,9 @@ class Execution:
     def get_state(self, **options: Unpack[RequestOptions]) -> DevboxAsyncExecutionDetailView:
         """Fetch the latest execution state.
 
-        Args:
-            **options: Optional request configuration.
-
-        Returns:
-            DevboxAsyncExecutionDetailView: Current execution metadata.
+        :param options: Optional request configuration
+        :return: Current execution metadata
+        :rtype: DevboxAsyncExecutionDetailView
         """
         return self._client.devboxes.executions.retrieve(
             self._execution_id,
@@ -133,8 +127,7 @@ class Execution:
     def kill(self, **options: Unpack[LongRequestOptions]) -> None:
         """Request termination of the running execution.
 
-        Args:
-            **options: Optional long-running request configuration.
+        :param options: Optional long-running request configuration
         """
         self._client.devboxes.executions.kill(
             self._execution_id,
