@@ -17,7 +17,7 @@ from ._types import (
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
-    SDKDevboxExtraCreateParams,
+    SDKDevboxCreateFromImageParams,
 )
 from .devbox import Devbox
 from .._types import Timeout, NotGiven, not_given
@@ -68,13 +68,13 @@ class DevboxOps:
     def create_from_blueprint_id(
         self,
         blueprint_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox from an existing blueprint by identifier.
 
         :param blueprint_id: Blueprint ID to create from
         :type blueprint_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :type params:
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
@@ -88,13 +88,13 @@ class DevboxOps:
     def create_from_blueprint_name(
         self,
         blueprint_name: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox from the latest blueprint with the given name.
 
         :param blueprint_name: Blueprint name to create from
         :type blueprint_name: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -107,13 +107,13 @@ class DevboxOps:
     def create_from_snapshot(
         self,
         snapshot_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox initialized from a snapshot.
 
         :param snapshot_id: Snapshot ID to create from
         :type snapshot_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """

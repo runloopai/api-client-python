@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing_extensions import Unpack, override
 
 from ..types import BlueprintView
-from ._types import RequestOptions, LongRequestOptions, SDKDevboxExtraCreateParams
+from ._types import RequestOptions, LongRequestOptions, SDKDevboxCreateFromImageParams
 from .._client import AsyncRunloop
 from .async_devbox import AsyncDevbox
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
@@ -89,11 +89,11 @@ class AsyncBlueprint:
 
     async def create_devbox(
         self,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> "AsyncDevbox":
         """Create a devbox derived from the blueprint.
 
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the running devbox
         :rtype: AsyncDevbox
         """

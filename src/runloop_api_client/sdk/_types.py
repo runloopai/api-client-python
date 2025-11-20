@@ -68,7 +68,7 @@ class SDKDevboxCreateParams(DevboxCreateParams, LongPollingRequestOptions):
     pass
 
 
-class SDKDevboxExtraCreateParams(DevboxBaseCreateParams, LongPollingRequestOptions):
+class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestOptions):
     pass
 
 
