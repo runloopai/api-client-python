@@ -395,17 +395,17 @@ class AsyncStorageObjectOps:
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
-        def synchronous_io() -> io.BytesIO:
-            tar_buffer = io.BytesIO()
-            with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-                tar.add(path, arcname=".", recursive=True)
-            tar_buffer.seek(0)
-            return tar_buffer
+        def synchronous_io() -> bytes:
+            with io.BytesIO() as tar_buffer:
+                with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
+                    tar.add(path, arcname=".", recursive=True)
+                tar_buffer.seek(0)
+                return tar_buffer.read()
 
-        tar_buffer = await asyncio.to_thread(synchronous_io)
+        tar_bytes = await asyncio.to_thread(synchronous_io)
 
         obj = await self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
-        await obj.upload_content(tar_buffer)
+        await obj.upload_content(tar_bytes)
         await obj.complete()
         return obj
 

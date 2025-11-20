@@ -306,6 +306,137 @@ class TestStorageObjectClient:
         with pytest.raises(OSError, match="Failed to read file"):
             client.upload_from_file(missing_file)
 
+    def test_upload_from_dir(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
+        """Test upload_from_dir method."""
+        mock_client.objects.create.return_value = object_view
+
+        # Create a temporary directory with some files
+        test_dir = tmp_path / "test_directory"
+        test_dir.mkdir()
+        (test_dir / "file1.txt").write_text("content1")
+        (test_dir / "file2.txt").write_text("content2")
+        subdir = test_dir / "subdir"
+        subdir.mkdir()
+        (subdir / "file3.txt").write_text("content3")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir, name="archive.tar.gz", metadata={"key": "value"})
+
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once_with(
+            name="archive.tar.gz",
+            content_type="tgz",
+            metadata={"key": "value"},
+            ttl_ms=None,
+        )
+        # Verify that put was called with tarball content
+        http_client.put.assert_called_once()
+        call_args = http_client.put.call_args
+        assert call_args[0][0] == object_view.upload_url
+        # Verify it's a BytesIO object
+        uploaded_content = call_args[1]["content"]
+        assert hasattr(uploaded_content, "read")
+        mock_client.objects.complete.assert_called_once()
+
+    def test_upload_from_dir_default_name(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
+        """Test upload_from_dir uses directory name by default."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "my_folder"
+        test_dir.mkdir()
+        (test_dir / "file.txt").write_text("content")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir)
+
+        assert isinstance(obj, StorageObject)
+        # Name should be directory name + .tar.gz
+        mock_client.objects.create.assert_called_once()
+        call_args = mock_client.objects.create.call_args
+        assert call_args[1]["name"] == "my_folder.tar.gz"
+        assert call_args[1]["content_type"] == "tgz"
+
+    def test_upload_from_dir_with_ttl(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
+        """Test upload_from_dir with TTL."""
+        from datetime import timedelta
+
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "temp_dir"
+        test_dir.mkdir()
+        (test_dir / "file.txt").write_text("temporary content")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir, ttl=timedelta(hours=2))
+
+        assert isinstance(obj, StorageObject)
+        mock_client.objects.create.assert_called_once()
+        call_args = mock_client.objects.create.call_args
+        # 2 hours = 7200 seconds = 7200000 milliseconds
+        assert call_args[1]["ttl_ms"] == 7200000
+
+    def test_upload_from_dir_empty_directory(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """Test upload_from_dir with empty directory."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "empty_dir"
+        test_dir.mkdir()
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir)
+
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once()
+        http_client.put.assert_called_once()
+        mock_client.objects.complete.assert_called_once()
+
+    def test_upload_from_dir_with_string_path(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """Test upload_from_dir with string path instead of Path object."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "string_path_dir"
+        test_dir.mkdir()
+        (test_dir / "file.txt").write_text("content")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        # Pass string path instead of Path object
+        obj = client.upload_from_dir(str(test_dir))
+
+        assert isinstance(obj, StorageObject)
+        assert obj.id == "obj_123"
+        mock_client.objects.create.assert_called_once()
+
 
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
