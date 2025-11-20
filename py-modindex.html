@@ -2,12 +2,10 @@
 <html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SDK Reference" href="sdk/index.html">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html">
 
-    <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
-        <title>Runloop Python SDK documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 --><title>Python Module Index - Runloop Python SDK documentation</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -161,7 +159,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">Runloop Python SDK  documentation</div></a>
+      <a href="index.html"><div class="brand">Runloop Python SDK  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -172,7 +170,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -180,7 +178,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   <span class="sidebar-brand-text">Runloop Python SDK  documentation</span>
   
@@ -233,13 +231,7 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="view-this-page">
-  <a class="muted-link" href="_sources/index.rst.txt" title="View this page">
-    <svg><use href="#svg-eye"></use></svg>
-    <span class="visually-hidden">View this page</span>
-  </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -247,90 +239,122 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="runloop-python-sdk-documentation">
-<h1>Runloop Python SDK Documentation<a class="headerlink" href="#runloop-python-sdk-documentation" title="Link to this heading">¶</a></h1>
-<p>The Runloop Python SDK provides a Pythonic, object-oriented interface for managing
-devboxes, blueprints, snapshots, and storage objects. The SDK offers both synchronous
-and asynchronous variants to match your runtime requirements.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="sdk/index.html">SDK Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sdk/sync/index.html">Synchronous SDK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sdk/async/index.html">Asynchronous SDK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sdk/types.html">Type Reference</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>Install the SDK using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>runloop_api_client
-</pre></div>
-</div>
+          
+<section class="domainindex-section">
+  <h1>Python Module Index</h1>
+  <div class="domainindex-jumpbox"><a href="#cap-r"><strong>r</strong></a></div>
 </section>
-<section id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<section id="synchronous-example">
-<h3>Synchronous Example<a class="headerlink" href="#synchronous-example" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">runloop_api_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunloopSDK</span>
-
-<span class="n">runloop</span> <span class="o">=</span> <span class="n">RunloopSDK</span><span class="p">()</span>
-
-<span class="c1"># Create a ready-to-use devbox</span>
-<span class="k">with</span> <span class="n">runloop</span><span class="o">.</span><span class="n">devbox</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-devbox&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">devbox</span><span class="p">:</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s2">&quot;echo &#39;Hello from Runloop!&#39;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">())</span>
-</pre></div>
-</div>
-</section>
-<section id="asynchronous-example">
-<h3>Asynchronous Example<a class="headerlink" href="#asynchronous-example" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">runloop_api_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncRunloopSDK</span>
-
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">runloop</span> <span class="o">=</span> <span class="n">AsyncRunloopSDK</span><span class="p">()</span>
-
-    <span class="k">async</span> <span class="k">with</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">devbox</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-devbox&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">devbox</span><span class="p">:</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s2">&quot;echo &#39;Hello from Runloop!&#39;&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">())</span>
-
-<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</pre></div>
-</div>
-</section>
-</section>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
+<table class="domainindex-table">
+  <tr class="pcap">
+    <td></td><td>&#160;</td><td></td>
+  </tr>
+  <tr class="cap" id="cap-r">
+    <td></td><td><strong>r</strong></td><td></td>
+  </tr>
+  <tr>
+    <td><img src="_static/minus.png" class="toggler"
+              id="toggle-1" style="display: none" alt="-" /></td>
+    <td>
+        <code class="xref">runloop_api_client</code></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/index.html#module-runloop_api_client.sdk.async_"><code class="xref">runloop_api_client.sdk.async_</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/blueprint.html#module-runloop_api_client.sdk.async_blueprint"><code class="xref">runloop_api_client.sdk.async_blueprint</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/devbox.html#module-runloop_api_client.sdk.async_devbox"><code class="xref">runloop_api_client.sdk.async_devbox</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/execution.html#module-runloop_api_client.sdk.async_execution"><code class="xref">runloop_api_client.sdk.async_execution</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/execution_result.html#module-runloop_api_client.sdk.async_execution_result"><code class="xref">runloop_api_client.sdk.async_execution_result</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/snapshot.html#module-runloop_api_client.sdk.async_snapshot"><code class="xref">runloop_api_client.sdk.async_snapshot</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/async/storage_object.html#module-runloop_api_client.sdk.async_storage_object"><code class="xref">runloop_api_client.sdk.async_storage_object</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/blueprint.html#module-runloop_api_client.sdk.blueprint"><code class="xref">runloop_api_client.sdk.blueprint</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/devbox.html#module-runloop_api_client.sdk.devbox"><code class="xref">runloop_api_client.sdk.devbox</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/execution.html#module-runloop_api_client.sdk.execution"><code class="xref">runloop_api_client.sdk.execution</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/execution_result.html#module-runloop_api_client.sdk.execution_result"><code class="xref">runloop_api_client.sdk.execution_result</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/snapshot.html#module-runloop_api_client.sdk.snapshot"><code class="xref">runloop_api_client.sdk.snapshot</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/storage_object.html#module-runloop_api_client.sdk.storage_object"><code class="xref">runloop_api_client.sdk.storage_object</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="sdk/sync/index.html#module-runloop_api_client.sdk.sync"><code class="xref">runloop_api_client.sdk.sync</code></a></td><td>
+    <em></em></td>
+  </tr>
+</table>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="sdk/index.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">SDK Reference</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
+          
           
         </div>
         <div class="bottom-of-page">
@@ -350,33 +374,8 @@ and asynchronous variants to match your runtime requirements.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Runloop Python SDK Documentation</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#quick-start">Quick Start</a><ul>
-<li><a class="reference internal" href="#synchronous-example">Synchronous Example</a></li>
-<li><a class="reference internal" href="#asynchronous-example">Asynchronous Example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

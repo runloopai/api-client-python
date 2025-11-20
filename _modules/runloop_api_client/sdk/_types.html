@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
-        <title>runloop_api_client.sdk._types - Runloop Python SDK 0.68.0 documentation</title>
+        <title>runloop_api_client.sdk._types - Runloop Python SDK documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Runloop Python SDK 0.68.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Runloop Python SDK  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">Runloop Python SDK 0.68.0 documentation</span>
+  <span class="sidebar-brand-text">Runloop Python SDK  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -191,8 +191,26 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/typedicts.html">TypedDict Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../sdk/index.html">SDK Reference</a><input aria-label="Toggle navigation of SDK Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/sync/index.html">Synchronous SDK</a><input aria-label="Toggle navigation of Synchronous SDK" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/async/index.html">Asynchronous SDK</a><input aria-label="Toggle navigation of Asynchronous SDK" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sdk/types.html">Type Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -256,7 +274,7 @@
 
 
 <div class="viewcode-block" id="ExecuteStreamingCallbacks">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.ExecuteStreamingCallbacks">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.ExecuteStreamingCallbacks">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ExecuteStreamingCallbacks</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LogCallback</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback invoked for each stdout log line&quot;&quot;&quot;</span>
@@ -270,7 +288,7 @@
 
 
 <div class="viewcode-block" id="RequestOptions">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.RequestOptions">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.RequestOptions">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RequestOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">extra_headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Headers</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send extra headers&quot;&quot;&quot;</span>
@@ -287,7 +305,7 @@
 
 
 <div class="viewcode-block" id="LongRequestOptions">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.LongRequestOptions">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.LongRequestOptions">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LongRequestOptions</span><span class="p">(</span><span class="n">RequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">idempotency_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Specify a custom idempotency key for this request&quot;&quot;&quot;</span></div>
@@ -295,7 +313,7 @@
 
 
 <div class="viewcode-block" id="PollingRequestOptions">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.PollingRequestOptions">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.PollingRequestOptions">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PollingRequestOptions</span><span class="p">(</span><span class="n">RequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">polling_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PollingConfig</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for polling behavior&quot;&quot;&quot;</span></div>
@@ -303,147 +321,147 @@
 
 
 <div class="viewcode-block" id="LongPollingRequestOptions">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.LongPollingRequestOptions">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.LongPollingRequestOptions">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LongPollingRequestOptions</span><span class="p">(</span><span class="n">LongRequestOptions</span><span class="p">,</span> <span class="n">PollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxCreateParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxCreateParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxCreateParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxCreateParams</span><span class="p">(</span><span class="n">DevboxCreateParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
-<div class="viewcode-block" id="SDKDevboxExtraCreateParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxExtraCreateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExtraCreateParams</span><span class="p">(</span><span class="n">DevboxBaseCreateParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
+<div class="viewcode-block" id="SDKDevboxCreateFromImageParams">
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxCreateFromImageParams</span><span class="p">(</span><span class="n">DevboxBaseCreateParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxExecuteParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteParams</span><span class="p">(</span><span class="n">DevboxExecuteAsyncParams</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxExecuteAsyncParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteAsyncParams</span><span class="p">(</span><span class="n">DevboxExecuteAsyncParams</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxListParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxListParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxListParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxListParams</span><span class="p">(</span><span class="n">DevboxListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxReadFileContentsParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxReadFileContentsParams</span><span class="p">(</span><span class="n">DevboxReadFileContentsParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxWriteFileContentsParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxWriteFileContentsParams</span><span class="p">(</span><span class="n">DevboxWriteFileContentsParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxDownloadFileParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxDownloadFileParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxDownloadFileParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxDownloadFileParams</span><span class="p">(</span><span class="n">DevboxDownloadFileParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxUploadFileParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxUploadFileParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxUploadFileParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxUploadFileParams</span><span class="p">(</span><span class="n">DevboxUploadFileParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxCreateTunnelParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxCreateTunnelParams</span><span class="p">(</span><span class="n">DevboxCreateTunnelParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxRemoveTunnelParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxRemoveTunnelParams</span><span class="p">(</span><span class="n">DevboxRemoveTunnelParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxSnapshotDiskAsyncParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxSnapshotDiskAsyncParams</span><span class="p">(</span><span class="n">DevboxSnapshotDiskParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxSnapshotDiskParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxSnapshotDiskParams</span><span class="p">(</span><span class="n">DevboxSnapshotDiskParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDiskSnapshotListParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDiskSnapshotListParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDiskSnapshotListParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDiskSnapshotListParams</span><span class="p">(</span><span class="n">DiskSnapshotListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDiskSnapshotUpdateParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKDiskSnapshotUpdateParams</span><span class="p">(</span><span class="n">DiskSnapshotUpdateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKBlueprintCreateParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKBlueprintCreateParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKBlueprintCreateParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKBlueprintCreateParams</span><span class="p">(</span><span class="n">BlueprintCreateParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKBlueprintListParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKBlueprintListParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKBlueprintListParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKBlueprintListParams</span><span class="p">(</span><span class="n">BlueprintListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKObjectListParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKObjectListParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKObjectListParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectListParams</span><span class="p">(</span><span class="n">ObjectListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKObjectCreateParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKObjectCreateParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKObjectCreateParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectCreateParams</span><span class="p">(</span><span class="n">ObjectCreateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKObjectDownloadParams">
-<a class="viewcode-back" href="../../../api/typedicts.html#runloop_api_client.sdk._types.SDKObjectDownloadParams">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKObjectDownloadParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectDownloadParams</span><span class="p">(</span><span class="n">ObjectDownloadParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
@@ -479,7 +497,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=c67ccf4f"></script>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

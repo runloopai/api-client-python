@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="API Reference" href="index.html">
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="Storage Object" href="async/storage_object.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
-        <title>TypedDict Reference - Runloop Python SDK 0.68.0 documentation</title>
+        <title>Type Reference - Runloop Python SDK documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Runloop Python SDK 0.68.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">Runloop Python SDK  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Runloop Python SDK 0.68.0 documentation</span>
+  <span class="sidebar-brand-text">Runloop Python SDK  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,8 +192,26 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">TypedDict Reference</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">SDK Reference</a><input aria-label="Toggle navigation of SDK Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="sync/index.html">Synchronous SDK</a><input aria-label="Toggle navigation of Synchronous SDK" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="sync/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="async/index.html">Asynchronous SDK</a><input aria-label="Toggle navigation of Asynchronous SDK" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="async/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Type Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -216,7 +234,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/api/typedicts.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/sdk/types.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -234,21 +252,16 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="typeddict-reference">
-<h1>TypedDict Reference<a class="headerlink" href="#typeddict-reference" title="Link to this heading">¶</a></h1>
-<p>This page documents all TypedDict parameter types used throughout the SDK.
-These typed dictionaries define the structure of parameters passed to SDK methods.</p>
-<section id="sdk-typeddicts">
-<h2>SDK TypedDicts<a class="headerlink" href="#sdk-typeddicts" title="Link to this heading">¶</a></h2>
-<p>These are the primary TypedDict classes used in SDK methods, combining multiple
-parameter types and options.</p>
+          <section id="type-reference">
+<h1>Type Reference<a class="headerlink" href="#type-reference" title="Link to this heading">¶</a></h1>
+<p>This page documents all TypeDict parameter types used throughout the SDK.</p>
 <section id="core-request-options">
-<h3>Core Request Options<a class="headerlink" href="#core-request-options" title="Link to this heading">¶</a></h3>
+<h2>Core Request Options<a class="headerlink" href="#core-request-options" title="Link to this heading">¶</a></h2>
+<p>These TypeDicts define options for streaming, timeouts, polling, and other request configuration.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.ExecuteStreamingCallbacks">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">ExecuteStreamingCallbacks</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#ExecuteStreamingCallbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.ExecuteStreamingCallbacks" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -263,8 +276,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.RequestOptions">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">RequestOptions</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#RequestOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.RequestOptions" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -280,8 +292,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.LongRequestOptions">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">LongRequestOptions</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#LongRequestOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.LongRequestOptions" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -298,8 +309,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.PollingRequestOptions">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">PollingRequestOptions</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#PollingRequestOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.PollingRequestOptions" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -316,8 +326,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.LongPollingRequestOptions">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">LongPollingRequestOptions</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#LongPollingRequestOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>, <a class="reference internal" href="#runloop_api_client.sdk._types.PollingRequestOptions" title="runloop_api_client.sdk._types.PollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -334,12 +343,14 @@ parameter types and options.</p>
 
 </section>
 <section id="devbox-parameters">
-<h3>Devbox Parameters<a class="headerlink" href="#devbox-parameters" title="Link to this heading">¶</a></h3>
+<h2>Devbox Parameters<a class="headerlink" href="#devbox-parameters" title="Link to this heading">¶</a></h2>
+<p>These TypeDicts define parameters for devbox creation, execution, file operations, network tunnels, and snapshots.</p>
+<section id="creation-parameters">
+<h3>Creation Parameters<a class="headerlink" href="#creation-parameters" title="Link to this heading">¶</a></h3>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxCreateParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxCreateParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxCreateParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxCreateParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxCreateParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="runloop_api_client.sdk._types.LongPollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongPollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -368,10 +379,9 @@ parameter types and options.</p>
 </dd></dl>
 
 <dl class="py class typeddict">
-<dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxExtraCreateParams">
-<em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxExtraCreateParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxExtraCreateParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxExtraCreateParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxBaseCreateParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="runloop_api_client.sdk._types.LongPollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongPollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams">
+<em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxCreateFromImageParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxCreateFromImageParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -396,11 +406,13 @@ parameter types and options.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="execution-parameters">
+<h3>Execution Parameters<a class="headerlink" href="#execution-parameters" title="Link to this heading">¶</a></h3>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxExecuteParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxExecuteParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxExecuteParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxExecuteAsyncParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.ExecuteStreamingCallbacks" title="runloop_api_client.sdk._types.ExecuteStreamingCallbacks"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecuteStreamingCallbacks</span></code></a>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="runloop_api_client.sdk._types.LongPollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongPollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -424,8 +436,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxExecuteAsyncParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxExecuteAsyncParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxExecuteAsyncParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.ExecuteStreamingCallbacks" title="runloop_api_client.sdk._types.ExecuteStreamingCallbacks"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecuteStreamingCallbacks</span></code></a>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -445,11 +456,13 @@ parameter types and options.</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="listing-parameters">
+<h3>Listing Parameters<a class="headerlink" href="#listing-parameters" title="Link to this heading">¶</a></h3>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxListParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxListParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxListParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxListParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxListParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -471,8 +484,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxReadFileContentsParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxReadFileContentsParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxReadFileContentsParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -490,8 +502,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxWriteFileContentsParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxWriteFileContentsParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxWriteFileContentsParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -510,8 +521,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxDownloadFileParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxDownloadFileParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxDownloadFileParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxDownloadFileParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxDownloadFileParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -529,8 +539,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxUploadFileParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxUploadFileParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxUploadFileParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxUploadFileParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxUploadFileParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -547,13 +556,12 @@ parameter types and options.</p>
 </dd></dl>
 
 </section>
-<section id="network-operation-parameters">
-<h3>Network Operation Parameters<a class="headerlink" href="#network-operation-parameters" title="Link to this heading">¶</a></h3>
+<section id="network-tunnel-parameters">
+<h3>Network Tunnel Parameters<a class="headerlink" href="#network-tunnel-parameters" title="Link to this heading">¶</a></h3>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxCreateTunnelParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxCreateTunnelParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxCreateTunnelParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -571,8 +579,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxRemoveTunnelParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxRemoveTunnelParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxRemoveTunnelParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -593,8 +600,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxSnapshotDiskParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxSnapshotDiskParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxSnapshotDiskParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="runloop_api_client.sdk._types.LongPollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongPollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -615,8 +621,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDevboxSnapshotDiskAsyncParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDevboxSnapshotDiskAsyncParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DevboxSnapshotDiskParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -636,8 +641,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDiskSnapshotListParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDiskSnapshotListParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDiskSnapshotListParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDiskSnapshotListParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DiskSnapshotListParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -659,8 +663,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKDiskSnapshotUpdateParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKDiskSnapshotUpdateParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DiskSnapshotUpdateParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -678,13 +681,14 @@ parameter types and options.</p>
 </dd></dl>
 
 </section>
+</section>
 <section id="blueprint-parameters">
-<h3>Blueprint Parameters<a class="headerlink" href="#blueprint-parameters" title="Link to this heading">¶</a></h3>
+<h2>Blueprint Parameters<a class="headerlink" href="#blueprint-parameters" title="Link to this heading">¶</a></h2>
+<p>These TypeDicts define parameters for blueprint creation and listing.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKBlueprintCreateParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKBlueprintCreateParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKBlueprintCreateParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKBlueprintCreateParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlueprintCreateParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongPollingRequestOptions" title="runloop_api_client.sdk._types.LongPollingRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongPollingRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -716,8 +720,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKBlueprintListParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKBlueprintListParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKBlueprintListParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKBlueprintListParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BlueprintListParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -735,12 +738,12 @@ parameter types and options.</p>
 
 </section>
 <section id="storage-object-parameters">
-<h3>Storage Object Parameters<a class="headerlink" href="#storage-object-parameters" title="Link to this heading">¶</a></h3>
+<h2>Storage Object Parameters<a class="headerlink" href="#storage-object-parameters" title="Link to this heading">¶</a></h2>
+<p>These TypeDicts define parameters for storage object creation, listing, and downloading.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKObjectCreateParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKObjectCreateParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKObjectCreateParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKObjectCreateParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectCreateParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -761,8 +764,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKObjectListParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKObjectListParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKObjectListParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKObjectListParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectListParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -784,8 +786,7 @@ parameter types and options.</p>
 <dl class="py class typeddict">
 <dt class="sig sig-object py" id="runloop_api_client.sdk._types.SDKObjectDownloadParams">
 <em class="property"><span class="pre">typeddict</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk._types.</span></span><span class="sig-name descname"><span class="pre">SDKObjectDownloadParams</span></span><a class="reference internal" href="../_modules/runloop_api_client/sdk/_types.html#SDKObjectDownloadParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk._types.SDKObjectDownloadParams" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDownloadParams</span></code>, <a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></p>
-<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.TypedDict</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Optional Keys<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -801,7 +802,6 @@ parameter types and options.</p>
 
 </section>
 </section>
-</section>
 
         </article>
       </div>
@@ -809,14 +809,14 @@ parameter types and options.</p>
         
         <div class="related-pages">
           
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="async/storage_object.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">API Reference</div>
+                <div class="title">Storage Object</div>
                 
               </div>
             </a>
@@ -850,8 +850,7 @@ parameter types and options.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">TypedDict Reference</a><ul>
-<li><a class="reference internal" href="#sdk-typeddicts">SDK TypedDicts</a><ul>
+<li><a class="reference internal" href="#">Type Reference</a><ul>
 <li><a class="reference internal" href="#core-request-options">Core Request Options</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.ExecuteStreamingCallbacks"><code class="docutils literal notranslate"><span class="pre">ExecuteStreamingCallbacks</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.RequestOptions"><code class="docutils literal notranslate"><span class="pre">RequestOptions</span></code></a></li>
@@ -861,10 +860,17 @@ parameter types and options.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#devbox-parameters">Devbox Parameters</a><ul>
+<li><a class="reference internal" href="#creation-parameters">Creation Parameters</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxCreateParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxCreateParams</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxExtraCreateParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxExtraCreateParams</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#execution-parameters">Execution Parameters</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listing-parameters">Listing Parameters</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxListParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxListParams</span></code></a></li>
 </ul>
 </li>
@@ -875,7 +881,7 @@ parameter types and options.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxUploadFileParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxUploadFileParams</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#network-operation-parameters">Network Operation Parameters</a><ul>
+<li><a class="reference internal" href="#network-tunnel-parameters">Network Tunnel Parameters</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxCreateTunnelParams</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxRemoveTunnelParams</span></code></a></li>
 </ul>
@@ -885,6 +891,8 @@ parameter types and options.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDevboxSnapshotDiskAsyncParams"><code class="docutils literal notranslate"><span class="pre">SDKDevboxSnapshotDiskAsyncParams</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDiskSnapshotListParams"><code class="docutils literal notranslate"><span class="pre">SDKDiskSnapshotListParams</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams"><code class="docutils literal notranslate"><span class="pre">SDKDiskSnapshotUpdateParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#blueprint-parameters">Blueprint Parameters</a><ul>
@@ -901,8 +909,6 @@ parameter types and options.</p>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 
           </div>
         </div>
@@ -911,7 +917,7 @@ parameter types and options.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=c67ccf4f"></script>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

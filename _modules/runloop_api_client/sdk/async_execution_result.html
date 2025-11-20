@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
-        <title>runloop_api_client.sdk.async_execution_result - Runloop Python SDK 0.68.0 documentation</title>
+        <title>runloop_api_client.sdk.async_execution_result - Runloop Python SDK documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Runloop Python SDK 0.68.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Runloop Python SDK  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">Runloop Python SDK 0.68.0 documentation</span>
+  <span class="sidebar-brand-text">Runloop Python SDK  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -191,8 +191,26 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/typedicts.html">TypedDict Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../sdk/index.html">SDK Reference</a><input aria-label="Toggle navigation of SDK Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/sync/index.html">Synchronous SDK</a><input aria-label="Toggle navigation of Synchronous SDK" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/async/index.html">Asynchronous SDK</a><input aria-label="Toggle navigation of Asynchronous SDK" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sdk/types.html">Type Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -242,7 +260,7 @@
 
 
 <div class="viewcode-block" id="AsyncExecutionResult">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/async/execution_result.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AsyncExecutionResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Completed asynchronous command execution result.</span>
 
@@ -364,7 +382,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_last_n_lines</span><span class="p">(</span><span class="n">current_output</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_lines</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">current_output</span>
 
 <div class="viewcode-block" id="AsyncExecutionResult.stdout">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult.stdout">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/async/execution_result.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult.stdout">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">stdout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return captured standard output, streaming full output if truncated.</span>
 
@@ -384,7 +402,7 @@
 
 
 <div class="viewcode-block" id="AsyncExecutionResult.stderr">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult.stderr">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/async/execution_result.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult.stderr">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">stderr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_lines</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return captured standard error, streaming full output if truncated.</span>
 
@@ -444,7 +462,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=c67ccf4f"></script>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

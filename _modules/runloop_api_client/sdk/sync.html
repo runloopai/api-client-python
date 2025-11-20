@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
-        <title>runloop_api_client.sdk.sync - Runloop Python SDK 0.68.0 documentation</title>
+        <title>runloop_api_client.sdk.sync - Runloop Python SDK documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Runloop Python SDK 0.68.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Runloop Python SDK  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">Runloop Python SDK 0.68.0 documentation</span>
+  <span class="sidebar-brand-text">Runloop Python SDK  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -191,8 +191,26 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/typedicts.html">TypedDict Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../sdk/index.html">SDK Reference</a><input aria-label="Toggle navigation of SDK Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/sync/index.html">Synchronous SDK</a><input aria-label="Toggle navigation of Synchronous SDK" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/sync/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sdk/async/index.html">Asynchronous SDK</a><input aria-label="Toggle navigation of Asynchronous SDK" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/devbox.html">Devbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution.html">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/execution_result.html">Execution Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/blueprint.html">Blueprint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/snapshot.html">Snapshot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../sdk/async/storage_object.html">Storage Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sdk/types.html">Type Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -247,7 +265,7 @@
     <span class="n">SDKBlueprintListParams</span><span class="p">,</span>
     <span class="n">SDKBlueprintCreateParams</span><span class="p">,</span>
     <span class="n">SDKDiskSnapshotListParams</span><span class="p">,</span>
-    <span class="n">SDKDevboxExtraCreateParams</span><span class="p">,</span>
+    <span class="n">SDKDevboxCreateFromImageParams</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.devbox</span><span class="w"> </span><span class="kn">import</span> <span class="n">Devbox</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">NotGiven</span><span class="p">,</span> <span class="n">not_given</span>
@@ -260,7 +278,7 @@
 
 
 <div class="viewcode-block" id="DevboxOps">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DevboxOps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level manager for creating and managing Devbox instances.</span>
 
@@ -283,7 +301,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
 
 <div class="viewcode-block" id="DevboxOps.create">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.create">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.create">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateParams</span><span class="p">],</span>
@@ -301,17 +319,17 @@
 
 
 <div class="viewcode-block" id="DevboxOps.create_from_blueprint_id">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.create_from_blueprint_id">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.create_from_blueprint_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_from_blueprint_id</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">blueprint_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExtraCreateParams</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateFromImageParams</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Devbox</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a devbox from an existing blueprint by identifier.</span>
 
 <span class="sd">        :param blueprint_id: Blueprint ID to create from</span>
 <span class="sd">        :type blueprint_id: str</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters</span>
+<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters</span>
 <span class="sd">        :type params:</span>
 <span class="sd">        :return: Wrapper bound to the newly created devbox</span>
 <span class="sd">        :rtype: Devbox</span>
@@ -324,17 +342,17 @@
 
 
 <div class="viewcode-block" id="DevboxOps.create_from_blueprint_name">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.create_from_blueprint_name">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.create_from_blueprint_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_from_blueprint_name</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">blueprint_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExtraCreateParams</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateFromImageParams</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Devbox</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a devbox from the latest blueprint with the given name.</span>
 
 <span class="sd">        :param blueprint_name: Blueprint name to create from</span>
 <span class="sd">        :type blueprint_name: str</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters</span>
+<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters</span>
 <span class="sd">        :return: Wrapper bound to the newly created devbox</span>
 <span class="sd">        :rtype: Devbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -346,17 +364,17 @@
 
 
 <div class="viewcode-block" id="DevboxOps.create_from_snapshot">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.create_from_snapshot">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.create_from_snapshot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_from_snapshot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">snapshot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExtraCreateParams</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateFromImageParams</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Devbox</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a devbox initialized from a snapshot.</span>
 
 <span class="sd">        :param snapshot_id: Snapshot ID to create from</span>
 <span class="sd">        :type snapshot_id: str</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters</span>
+<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters</span>
 <span class="sd">        :return: Wrapper bound to the newly created devbox</span>
 <span class="sd">        :rtype: Devbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -368,7 +386,7 @@
 
 
 <div class="viewcode-block" id="DevboxOps.from_id">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.from_id">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.from_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Devbox</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Attach to an existing devbox by ID.</span>
 
@@ -385,7 +403,7 @@
 
 
 <div class="viewcode-block" id="DevboxOps.list">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.DevboxOps.list">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.DevboxOps.list">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxListParams</span><span class="p">],</span>
@@ -405,7 +423,7 @@
 
 
 <div class="viewcode-block" id="SnapshotOps">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.SnapshotOps">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.SnapshotOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SnapshotOps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level manager for working with disk snapshots.</span>
 
@@ -427,7 +445,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
 
 <div class="viewcode-block" id="SnapshotOps.list">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.SnapshotOps.list">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.SnapshotOps.list">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDiskSnapshotListParams</span><span class="p">],</span>
@@ -445,7 +463,7 @@
 
 
 <div class="viewcode-block" id="SnapshotOps.from_id">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.SnapshotOps.from_id">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.SnapshotOps.from_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snapshot_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Snapshot</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a snapshot wrapper for the given ID.</span>
 
@@ -460,7 +478,7 @@
 
 
 <div class="viewcode-block" id="BlueprintOps">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.BlueprintOps">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.BlueprintOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BlueprintOps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level manager for creating and managing blueprints.</span>
 
@@ -485,7 +503,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
 
 <div class="viewcode-block" id="BlueprintOps.create">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.BlueprintOps.create">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.BlueprintOps.create">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKBlueprintCreateParams</span><span class="p">],</span>
@@ -503,7 +521,7 @@
 
 
 <div class="viewcode-block" id="BlueprintOps.from_id">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.BlueprintOps.from_id">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.BlueprintOps.from_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blueprint_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blueprint</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a blueprint wrapper for the given ID.</span>
 
@@ -516,7 +534,7 @@
 
 
 <div class="viewcode-block" id="BlueprintOps.list">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.BlueprintOps.list">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.BlueprintOps.list">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKBlueprintListParams</span><span class="p">],</span>
@@ -536,7 +554,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StorageObjectOps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level manager for creating and managing storage objects.</span>
 
@@ -560,7 +578,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
 
 <div class="viewcode-block" id="StorageObjectOps.create">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.create">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.create">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKObjectCreateParams</span><span class="p">],</span>
@@ -576,7 +594,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps.from_id">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.from_id">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.from_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StorageObject</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a storage object wrapper by identifier.</span>
 
@@ -589,7 +607,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps.list">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.list">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.list">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKObjectListParams</span><span class="p">],</span>
@@ -607,7 +625,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps.upload_from_file">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.upload_from_file">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.upload_from_file">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_file</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
@@ -648,7 +666,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps.upload_from_text">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.upload_from_text">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.upload_from_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_text</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -676,7 +694,7 @@
 
 
 <div class="viewcode-block" id="StorageObjectOps.upload_from_bytes">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.StorageObjectOps.upload_from_bytes">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.StorageObjectOps.upload_from_bytes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_bytes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
@@ -715,12 +733,16 @@
 <span class="sd">    snapshots, and storage objects. Exposes the generated REST client via the ``api``</span>
 <span class="sd">    attribute for advanced use cases.</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        api: Direct access to the generated REST API client.</span>
-<span class="sd">        devbox: High-level interface for devbox management.</span>
-<span class="sd">        blueprint: High-level interface for blueprint management.</span>
-<span class="sd">        snapshot: High-level interface for snapshot management.</span>
-<span class="sd">        storage_object: High-level interface for storage object management.</span>
+<span class="sd">    :ivar api: Direct access to the generated REST API client</span>
+<span class="sd">    :vartype api: Runloop</span>
+<span class="sd">    :ivar devbox: High-level interface for devbox management</span>
+<span class="sd">    :vartype devbox: DevboxOps</span>
+<span class="sd">    :ivar blueprint: High-level interface for blueprint management</span>
+<span class="sd">    :vartype blueprint: BlueprintOps</span>
+<span class="sd">    :ivar snapshot: High-level interface for snapshot management</span>
+<span class="sd">    :vartype snapshot: SnapshotOps</span>
+<span class="sd">    :ivar storage_object: High-level interface for storage object management</span>
+<span class="sd">    :vartype storage_object: StorageObjectOps</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var</span>
@@ -780,7 +802,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">storage_object</span> <span class="o">=</span> <span class="n">StorageObjectOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RunloopSDK.close">
-<a class="viewcode-back" href="../../../api/index.html#runloop_api_client.RunloopSDK.close">[docs]</a>
+<a class="viewcode-back" href="../../../sdk/sync/index.html#runloop_api_client.sdk.sync.RunloopSDK.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the underlying HTTP client and release resources.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
@@ -829,7 +851,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=c67ccf4f"></script>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
