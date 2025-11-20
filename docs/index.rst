@@ -48,7 +48,7 @@ Asynchronous Example
    async def main():
        runloop = AsyncRunloopSDK()
        
-       async with runloop.devbox.create(name="my-devbox") as devbox:
+       async with await runloop.devbox.create(name="my-devbox") as devbox:
            result = await devbox.cmd.exec(command="echo 'Hello from Runloop!'")
            print(await result.stdout())
 
