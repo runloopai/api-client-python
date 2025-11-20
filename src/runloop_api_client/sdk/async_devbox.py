@@ -60,12 +60,6 @@ class AsyncDevbox:
         ...     result = await devbox.cmd.exec(command="echo 'hello'")
         ...     print(await result.stdout())
         # Devbox is automatically shut down on exit
-
-    Attributes:
-        id: The devbox identifier.
-        cmd: Command execution interface (exec, exec_async).
-        file: File operations interface (read, write, upload, download).
-        net: Network operations interface (SSH keys, tunnels).
     """
 
     def __init__(self, client: AsyncRunloop, devbox_id: str) -> None:

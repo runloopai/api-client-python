@@ -422,12 +422,16 @@ class AsyncRunloopSDK:
     blueprints, snapshots, and storage objects. Exposes the generated async REST
     client via the ``api`` attribute for advanced use cases.
 
-    Attributes:
-        api: Direct access to the generated async REST API client.
-        devbox: High-level async interface for devbox management.
-        blueprint: High-level async interface for blueprint management.
-        snapshot: High-level async interface for snapshot management.
-        storage_object: High-level async interface for storage object management.
+    :ivar api: Direct access to the generated async REST API client
+    :vartype api: AsyncRunloop
+    :ivar devbox: High-level async interface for devbox management
+    :vartype devbox: AsyncDevboxOps
+    :ivar blueprint: High-level async interface for blueprint management
+    :vartype blueprint: AsyncBlueprintOps
+    :ivar snapshot: High-level async interface for snapshot management
+    :vartype snapshot: AsyncSnapshotOps
+    :ivar storage_object: High-level async interface for storage object management
+    :vartype storage_object: AsyncStorageObjectOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var

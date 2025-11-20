@@ -422,12 +422,16 @@ class RunloopSDK:
     snapshots, and storage objects. Exposes the generated REST client via the ``api``
     attribute for advanced use cases.
 
-    Attributes:
-        api: Direct access to the generated REST API client.
-        devbox: High-level interface for devbox management.
-        blueprint: High-level interface for blueprint management.
-        snapshot: High-level interface for snapshot management.
-        storage_object: High-level interface for storage object management.
+    :ivar api: Direct access to the generated REST API client
+    :vartype api: Runloop
+    :ivar devbox: High-level interface for devbox management
+    :vartype devbox: DevboxOps
+    :ivar blueprint: High-level interface for blueprint management
+    :vartype blueprint: BlueprintOps
+    :ivar snapshot: High-level interface for snapshot management
+    :vartype snapshot: SnapshotOps
+    :ivar storage_object: High-level interface for storage object management
+    :vartype storage_object: StorageObjectOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
