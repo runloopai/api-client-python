@@ -202,7 +202,11 @@ class TestStorageObjectClient:
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
         assert obj.upload_url == "https://upload.example.com/obj_123"
-        mock_client.objects.create.assert_called_once()
+        mock_client.objects.create.assert_called_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata={"key": "value"},
+        )
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
@@ -231,7 +235,14 @@ class TestStorageObjectClient:
         assert len(objects) == 1
         assert isinstance(objects[0], StorageObject)
         assert objects[0].id == "obj_123"
-        mock_client.objects.list.assert_called_once()
+        mock_client.objects.list.assert_called_once_with(
+            content_type="text",
+            limit=10,
+            name="test",
+            search="query",
+            starting_after="obj_000",
+            state="READ_ONLY",
+        )
 
     def test_upload_from_file(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
         """Test upload_from_file method."""
@@ -250,9 +261,14 @@ class TestStorageObjectClient:
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
-        mock_client.objects.create.assert_called_once()
-        mock_client.objects.complete.assert_called_once()
+        mock_client.objects.create.assert_called_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata=None,
+            ttl_ms=None,
+        )
         http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
+        mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_text(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test upload_from_text method."""
@@ -272,6 +288,7 @@ class TestStorageObjectClient:
             name="test.txt",
             content_type="text",
             metadata={"key": "value"},
+            ttl_ms=None,
         )
         http_client.put.assert_called_once_with(object_view.upload_url, content="test content")
         mock_client.objects.complete.assert_called_once()
@@ -294,6 +311,7 @@ class TestStorageObjectClient:
             name="test.bin",
             content_type="binary",
             metadata=None,
+            ttl_ms=None,
         )
         http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
         mock_client.objects.complete.assert_called_once()
@@ -362,10 +380,12 @@ class TestStorageObjectClient:
 
         assert isinstance(obj, StorageObject)
         # Name should be directory name + .tar.gz
-        mock_client.objects.create.assert_called_once()
-        call_args = mock_client.objects.create.call_args
-        assert call_args[1]["name"] == "my_folder.tar.gz"
-        assert call_args[1]["content_type"] == "tgz"
+        mock_client.objects.create.assert_called_once_with(
+            name="my_folder.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
 
     def test_upload_from_dir_with_ttl(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
         """Test upload_from_dir with TTL."""
@@ -386,10 +406,12 @@ class TestStorageObjectClient:
         obj = client.upload_from_dir(test_dir, ttl=timedelta(hours=2))
 
         assert isinstance(obj, StorageObject)
-        mock_client.objects.create.assert_called_once()
-        call_args = mock_client.objects.create.call_args
-        # 2 hours = 7200 seconds = 7200000 milliseconds
-        assert call_args[1]["ttl_ms"] == 7200000
+        mock_client.objects.create.assert_called_once_with(
+            name="temp_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=7200000,  # 2 hours = 7200 seconds = 7200000 milliseconds
+        )
 
     def test_upload_from_dir_empty_directory(
         self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
@@ -410,7 +432,12 @@ class TestStorageObjectClient:
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
-        mock_client.objects.create.assert_called_once()
+        mock_client.objects.create.assert_called_once_with(
+            name="empty_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
         http_client.put.assert_called_once()
         mock_client.objects.complete.assert_called_once()
 
@@ -435,7 +462,14 @@ class TestStorageObjectClient:
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
-        mock_client.objects.create.assert_called_once()
+        mock_client.objects.create.assert_called_once_with(
+            name="string_path_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
+        http_client.put.assert_called_once()
+        mock_client.objects.complete.assert_called_once()
 
 
 class TestRunloopSDK:
