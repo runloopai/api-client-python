@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["CodeMountParameters"]
 
@@ -17,6 +17,8 @@ class CodeMountParameters(TypedDict, total=False):
 
     repo_owner: Required[str]
     """The owner of the repo."""
+
+    type: Required[Literal["code_mount"]]
 
     token: Optional[str]
     """The authentication token necessary to pull repo."""
