@@ -450,6 +450,8 @@ blueprint_with_context = runloop.blueprint.create(
     dockerfile=\"\"\"\
 FROM ubuntu:22.04
 WORKDIR /app
+# copy using the build context from the object
+COPY app /app
 # use the named context
 RUN --mount=type=bind,from=shared,source=/,target=/shared ls -R /shared
 \"\"\",
