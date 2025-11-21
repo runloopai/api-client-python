@@ -5,6 +5,8 @@ from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
+from ..types.agent_list_params import AgentListParams
+from ..types.agent_create_params import AgentCreateParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
@@ -156,4 +158,12 @@ class SDKScorerUpdateParams(ScorerUpdateParams, LongRequestOptions):
 
 
 class SDKScorerValidateParams(ScorerValidateParams, LongRequestOptions):
+    pass
+
+
+class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKAgentListParams(AgentListParams, RequestOptions):
     pass
