@@ -8,6 +8,7 @@ from typing_extensions import Unpack
 
 import httpx
 
+from .agent import Agent
 from ._types import (
     LongRequestOptions,
     SDKAgentListParams,
@@ -21,7 +22,6 @@ from ._types import (
     SDKDiskSnapshotListParams,
     SDKDevboxCreateFromImageParams,
 )
-from .agent import Agent
 from .devbox import Devbox
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
