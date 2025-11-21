@@ -225,7 +225,7 @@ class TestStorageObjectClient:
             name="test",
             search="query",
             starting_after="obj_000",
-            state="ready",
+            state="READ_ONLY",
         )
 
         assert len(objects) == 1
@@ -264,7 +264,7 @@ class TestStorageObjectClient:
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
-        obj = client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
+        obj = client.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"
@@ -286,7 +286,7 @@ class TestStorageObjectClient:
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
-        obj = client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
+        obj = client.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
 
         assert isinstance(obj, StorageObject)
         assert obj.id == "obj_123"

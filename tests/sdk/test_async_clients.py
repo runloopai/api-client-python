@@ -239,7 +239,7 @@ class TestAsyncStorageObjectClient:
             name="test",
             search="query",
             starting_after="obj_000",
-            state="ready",
+            state="READ_ONLY",
         )
 
         assert len(objects) == 1
@@ -284,7 +284,7 @@ class TestAsyncStorageObjectClient:
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
+        obj = await client.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -308,7 +308,7 @@ class TestAsyncStorageObjectClient:
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
+        obj = await client.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"

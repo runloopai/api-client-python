@@ -98,7 +98,7 @@ class TestStorageObjectUploadMethods:
         text_content = "Hello from upload_from_text!"
         obj = sdk_client.storage_object.upload_from_text(
             text_content,
-            unique_name("sdk-text-upload"),
+            name=unique_name("sdk-text-upload"),
             metadata={"source": "upload_from_text"},
         )
 
@@ -117,7 +117,7 @@ class TestStorageObjectUploadMethods:
         bytes_content = b"Binary content from SDK"
         obj = sdk_client.storage_object.upload_from_bytes(
             bytes_content,
-            unique_name("sdk-bytes-upload"),
+            name=unique_name("sdk-bytes-upload"),
             content_type="text",
             metadata={"source": "upload_from_bytes"},
         )
@@ -142,7 +142,7 @@ class TestStorageObjectUploadMethods:
         try:
             obj = sdk_client.storage_object.upload_from_file(
                 tmp_path,
-                unique_name("sdk-file-upload"),
+                name=unique_name("sdk-file-upload"),
                 metadata={"source": "upload_from_file"},
             )
 
@@ -206,7 +206,7 @@ class TestStorageObjectDownloadMethods:
         content = "Text content to download"
         obj = sdk_client.storage_object.upload_from_text(
             content,
-            unique_name("sdk-download-text"),
+            name=unique_name("sdk-download-text"),
         )
 
         try:
@@ -221,7 +221,7 @@ class TestStorageObjectDownloadMethods:
         content = b"Bytes content to download"
         obj = sdk_client.storage_object.upload_from_bytes(
             content,
-            unique_name("sdk-download-bytes"),
+            name=unique_name("sdk-download-bytes"),
             content_type="text",
         )
 
@@ -237,7 +237,7 @@ class TestStorageObjectDownloadMethods:
         """Test getting download URL."""
         obj = sdk_client.storage_object.upload_from_text(
             "Content for URL",
-            unique_name("sdk-download-url"),
+            name=unique_name("sdk-download-url"),
         )
 
         try:
@@ -266,7 +266,7 @@ class TestStorageObjectListing:
         # Create an object
         created = sdk_client.storage_object.upload_from_text(
             "Content for retrieval",
-            unique_name("sdk-storage-retrieve"),
+            name=unique_name("sdk-storage-retrieve"),
         )
 
         try:
@@ -286,7 +286,7 @@ class TestStorageObjectListing:
         # Create object with specific content type
         obj = sdk_client.storage_object.upload_from_text(
             "Text content",
-            unique_name("sdk-storage-list-type"),
+            name=unique_name("sdk-storage-list-type"),
         )
 
         try:
@@ -310,7 +310,7 @@ class TestStorageObjectDevboxIntegration:
         # Create storage object with content
         obj = sdk_client.storage_object.upload_from_text(
             "Mounted content from SDK",
-            unique_name("sdk-mount-object"),
+            name=unique_name("sdk-mount-object"),
         )
 
         try:
@@ -342,7 +342,7 @@ class TestStorageObjectDevboxIntegration:
         # Create storage object
         obj = sdk_client.storage_object.upload_from_text(
             "Content to mount and access",
-            unique_name("sdk-mount-access"),
+            name=unique_name("sdk-mount-access"),
         )
 
         try:
@@ -384,7 +384,7 @@ class TestStorageObjectEdgeCases:
 
         obj = sdk_client.storage_object.upload_from_text(
             large_content,
-            unique_name("sdk-storage-large"),
+            name=unique_name("sdk-storage-large"),
         )
 
         try:
@@ -403,7 +403,7 @@ class TestStorageObjectEdgeCases:
 
         obj = sdk_client.storage_object.upload_from_bytes(
             binary_content,
-            unique_name("sdk-storage-binary"),
+            name=unique_name("sdk-storage-binary"),
             content_type="binary",
         )
 
@@ -419,7 +419,7 @@ class TestStorageObjectEdgeCases:
         """Test uploading empty content."""
         obj = sdk_client.storage_object.upload_from_text(
             "",
-            unique_name("sdk-storage-empty"),
+            name=unique_name("sdk-storage-empty"),
         )
 
         try:
