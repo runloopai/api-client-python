@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import io
+import asyncio
+import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
+from datetime import timedelta
 from typing_extensions import Unpack
 
 import httpx
@@ -350,7 +354,7 @@ class AsyncStorageObjectOps:
         path = Path(file_path)
 
         try:
-            content = path.read_bytes()
+            content = await asyncio.to_thread(lambda: path.read_bytes())
         except OSError as error:
             raise OSError(f"Failed to read file {path}: {error}") from error
 
@@ -358,6 +362,50 @@ class AsyncStorageObjectOps:
         content_type = content_type or detect_content_type(str(file_path))
         obj = await self.create(name=name, content_type=content_type, metadata=metadata, **options)
         await obj.upload_content(content)
+        await obj.complete()
+        return obj
+
+    async def upload_from_dir(
+        self,
+        dir_path: str | Path,
+        *,
+        name: Optional[str] = None,
+        metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
+        **options: Unpack[LongRequestOptions],
+    ) -> AsyncStorageObject:
+        """Create and upload an object from a local directory.
+
+        The resulting object will be uploaded as a compressed tarball.
+
+        :param dir_path: Local filesystem directory path to tar
+        :type dir_path: str | Path
+        :param name: Optional object name; defaults to the directory name + '.tar.gz'
+        :type name: Optional[str]
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: AsyncStorageObject
+        :raises OSError: If the local file cannot be read
+        """
+        path = Path(dir_path)
+        name = name or f"{path.name}.tar.gz"
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+
+        def synchronous_io() -> bytes:
+            with io.BytesIO() as tar_buffer:
+                with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
+                    tar.add(path, arcname=".", recursive=True)
+                tar_buffer.seek(0)
+                return tar_buffer.read()
+
+        tar_bytes = await asyncio.to_thread(synchronous_io)
+
+        obj = await self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
+        await obj.upload_content(tar_bytes)
         await obj.complete()
         return obj
 

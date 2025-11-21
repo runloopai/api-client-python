@@ -157,6 +157,45 @@ class TestAsyncStorageObjectUploadMethods:
         finally:
             Path(tmp_path).unlink(missing_ok=True)
 
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_upload_from_dir(self, async_sdk_client: AsyncRunloopSDK) -> None:
+        """Test uploading from directory as tarball."""
+        # Create temporary directory with files
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            (tmp_path / "file1.txt").write_text("Async Content 1")
+            (tmp_path / "file2.txt").write_text("Async Content 2")
+            subdir = tmp_path / "subdir"
+            subdir.mkdir()
+            (subdir / "file3.txt").write_text("Async Content 3")
+
+            obj = await async_sdk_client.storage_object.upload_from_dir(
+                tmp_path,
+                name=unique_name("sdk-async-dir-upload"),
+                metadata={"source": "upload_from_dir"},
+            )
+
+            try:
+                assert obj.id is not None
+
+                # Verify it's a tarball
+                info = await obj.refresh()
+                assert info.content_type == "tgz"
+
+                # Download and verify tarball can be extracted
+                import io
+                import tarfile
+
+                tarball_bytes = await obj.download_as_bytes(duration_seconds=120)
+                with tarfile.open(fileobj=io.BytesIO(tarball_bytes), mode="r:gz") as tar:
+                    # Verify files exist in tarball
+                    names = tar.getnames()
+                    assert any("file1.txt" in name for name in names)
+                    assert any("file2.txt" in name for name in names)
+                    assert any("file3.txt" in name for name in names)
+            finally:
+                await obj.delete()
+
 
 class TestAsyncStorageObjectDownloadMethods:
     """Test async storage object download methods."""
