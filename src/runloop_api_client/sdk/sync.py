@@ -10,8 +10,10 @@ import httpx
 
 from ._types import (
     LongRequestOptions,
+    SDKAgentListParams,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
     SDKBlueprintListParams,
@@ -19,6 +21,7 @@ from ._types import (
     SDKDiskSnapshotListParams,
     SDKDevboxExtraCreateParams,
 )
+from .agent import Agent
 from .devbox import Devbox
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
@@ -415,6 +418,67 @@ class StorageObjectOps:
         return obj
 
 
+class AgentOps:
+    """High-level manager for creating and managing agents.
+
+    Accessed via ``runloop.agent`` from :class:`RunloopSDK`, provides methods to
+    create, retrieve, and list agents.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> agent = runloop.agent.create(name="my-agent")
+        >>> agents = runloop.agent.list(limit=10)
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize the manager.
+
+        :param client: Generated Runloop client to wrap
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(
+        self,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> Agent:
+        """Create a new agent.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for available parameters
+        :return: Wrapper bound to the newly created agent
+        :rtype: Agent
+        """
+        agent_view = self._client.agents.create(
+            **params,
+        )
+        return Agent(self._client, agent_view.id)
+
+    def from_id(self, agent_id: str) -> Agent:
+        """Attach to an existing agent by ID.
+
+        :param agent_id: Existing agent ID
+        :type agent_id: str
+        :return: Wrapper bound to the requested agent
+        :rtype: Agent
+        """
+        return Agent(self._client, agent_id)
+
+    def list(
+        self,
+        **params: Unpack[SDKAgentListParams],
+    ) -> list[Agent]:
+        """List agents accessible to the caller.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
+        :return: Collection of agent wrappers
+        :rtype: list[Agent]
+        """
+        page = self._client.agents.list(
+            **params,
+        )
+        return [Agent(self._client, item.id) for item in page.agents]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -424,6 +488,7 @@ class RunloopSDK:
 
     Attributes:
         api: Direct access to the generated REST API client.
+        agent: High-level interface for agent management.
         devbox: High-level interface for devbox management.
         blueprint: High-level interface for blueprint management.
         snapshot: High-level interface for snapshot management.
@@ -438,6 +503,7 @@ class RunloopSDK:
     """
 
     api: Runloop
+    agent: AgentOps
     devbox: DevboxOps
     blueprint: BlueprintOps
     snapshot: SnapshotOps
@@ -481,6 +547,7 @@ class RunloopSDK:
             http_client=http_client,
         )
 
+        self.agent = AgentOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
         self.snapshot = SnapshotOps(self.api)
