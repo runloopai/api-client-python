@@ -8,8 +8,8 @@ from ._types import (
     RequestOptions,
     LongRequestOptions,
     PollingRequestOptions,
-    SDKDevboxExtraCreateParams,
     SDKDiskSnapshotUpdateParams,
+    SDKDevboxCreateFromImageParams,
 )
 from .devbox import Devbox
 from .._client import Runloop
@@ -110,11 +110,11 @@ class Snapshot:
 
     def create_devbox(
         self,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> "Devbox":
         """Create a devbox restored from this snapshot.
 
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the running devbox
         :rtype: Devbox
         """

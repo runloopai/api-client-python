@@ -19,7 +19,7 @@ from ._types import (
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
-    SDKDevboxExtraCreateParams,
+    SDKDevboxCreateFromImageParams,
 )
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
@@ -71,13 +71,13 @@ class AsyncDevboxOps:
     async def create_from_blueprint_id(
         self,
         blueprint_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> AsyncDevbox:
         """Create a devbox from an existing blueprint by identifier.
 
         :param blueprint_id: Blueprint ID to create from
         :type blueprint_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: AsyncDevbox
         """
@@ -90,13 +90,13 @@ class AsyncDevboxOps:
     async def create_from_blueprint_name(
         self,
         blueprint_name: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> AsyncDevbox:
         """Create a devbox from the latest blueprint with the given name.
 
         :param blueprint_name: Blueprint name to create from
         :type blueprint_name: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: AsyncDevbox
         """
@@ -109,13 +109,13 @@ class AsyncDevboxOps:
     async def create_from_snapshot(
         self,
         snapshot_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> AsyncDevbox:
         """Create a devbox initialized from a snapshot.
 
         :param snapshot_id: Snapshot ID to create from
         :type snapshot_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: AsyncDevbox
         """
@@ -486,13 +486,18 @@ class AsyncRunloopSDK:
     blueprints, snapshots, and storage objects. Exposes the generated async REST
     client via the ``api`` attribute for advanced use cases.
 
-    Attributes:
-        api: Direct access to the generated async REST API client.
-        agent: High-level async interface for agent management.
-        devbox: High-level async interface for devbox management.
-        blueprint: High-level async interface for blueprint management.
-        snapshot: High-level async interface for snapshot management.
-        storage_object: High-level async interface for storage object management.
+    :ivar api: Direct access to the generated async REST API client
+    :vartype api: AsyncRunloop
+    :ivar agent: High-level async interface for agent management
+    :vartype agent: AsyncAgentOps
+    :ivar devbox: High-level async interface for devbox management
+    :vartype devbox: AsyncDevboxOps
+    :ivar blueprint: High-level async interface for blueprint management
+    :vartype blueprint: AsyncBlueprintOps
+    :ivar snapshot: High-level async interface for snapshot management
+    :vartype snapshot: AsyncSnapshotOps
+    :ivar storage_object: High-level async interface for storage object management
+    :vartype storage_object: AsyncStorageObjectOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var

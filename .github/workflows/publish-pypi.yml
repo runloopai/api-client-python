@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: runloopai/checkout@main
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: runloopai/setup-uv@main
         with:
           version: '0.8.11'
 

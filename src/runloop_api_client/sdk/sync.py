@@ -19,7 +19,7 @@ from ._types import (
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
-    SDKDevboxExtraCreateParams,
+    SDKDevboxCreateFromImageParams,
 )
 from .agent import Agent
 from .devbox import Devbox
@@ -71,13 +71,13 @@ class DevboxOps:
     def create_from_blueprint_id(
         self,
         blueprint_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox from an existing blueprint by identifier.
 
         :param blueprint_id: Blueprint ID to create from
         :type blueprint_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :type params:
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
@@ -91,13 +91,13 @@ class DevboxOps:
     def create_from_blueprint_name(
         self,
         blueprint_name: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox from the latest blueprint with the given name.
 
         :param blueprint_name: Blueprint name to create from
         :type blueprint_name: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -110,13 +110,13 @@ class DevboxOps:
     def create_from_snapshot(
         self,
         snapshot_id: str,
-        **params: Unpack[SDKDevboxExtraCreateParams],
+        **params: Unpack[SDKDevboxCreateFromImageParams],
     ) -> Devbox:
         """Create a devbox initialized from a snapshot.
 
         :param snapshot_id: Snapshot ID to create from
         :type snapshot_id: str
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExtraCreateParams` for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams` for available parameters
         :return: Wrapper bound to the newly created devbox
         :rtype: Devbox
         """
@@ -486,13 +486,18 @@ class RunloopSDK:
     snapshots, and storage objects. Exposes the generated REST client via the ``api``
     attribute for advanced use cases.
 
-    Attributes:
-        api: Direct access to the generated REST API client.
-        agent: High-level interface for agent management.
-        devbox: High-level interface for devbox management.
-        blueprint: High-level interface for blueprint management.
-        snapshot: High-level interface for snapshot management.
-        storage_object: High-level interface for storage object management.
+    :ivar api: Direct access to the generated REST API client
+    :vartype api: Runloop
+    :ivar agent: High-level interface for agent management
+    :vartype agent: AgentOps
+    :ivar devbox: High-level interface for devbox management
+    :vartype devbox: DevboxOps
+    :ivar blueprint: High-level interface for blueprint management
+    :vartype blueprint: BlueprintOps
+    :ivar snapshot: High-level interface for snapshot management
+    :vartype snapshot: SnapshotOps
+    :ivar storage_object: High-level interface for storage object management
+    :vartype storage_object: StorageObjectOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var

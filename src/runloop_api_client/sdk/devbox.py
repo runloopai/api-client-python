@@ -52,17 +52,13 @@ class Devbox:
     This class provides a Pythonic, object-oriented API for interacting with devboxes,
     including command execution, file operations, networking, and lifecycle management.
 
-    The Devbox class supports context manager protocol for automatic cleanup:
+    The Devbox class supports context manager protocol for automatic cleanup.
+
+    Example:
         >>> with sdk.devbox.create(name="my-devbox") as devbox:
         ...     result = devbox.cmd.exec("echo 'hello'")
         ...     print(result.stdout())
         # Devbox is automatically shutdown on exit
-
-    Attributes:
-        id: The devbox identifier.
-        cmd: Command execution interface (exec, exec_async).
-        file: File operations interface (read, write, upload, download).
-        net: Network operations interface (SSH keys, tunnels).
     """
 
     def __init__(self, client: Runloop, devbox_id: str) -> None:
