@@ -448,12 +448,18 @@ shared_ctx_obj = runloop.storage_object.upload_from_bytes(
 blueprint_with_context = runloop.blueprint.create(
     name="my-blueprint-with-context",
     dockerfile=\"\"\"\
-FROM ubuntu:22.04
-WORKDIR /app
+FROM node:22
+WORKDIR /usr/src/app
+
 # copy using the build context from the object
-COPY app /app
-# use the named context
-RUN --mount=type=bind,from=shared,source=/,target=/shared ls -R /shared
+COPY package.json package.json
+COPY src src
+
+# copy from named context
+COPY --from=shared / ./libs
+
+RUN npm install --only=production
+CMD ["node", "src/app.js"]
 \"\"\",
     # Primary build context
     build_context=build_ctx_obj.as_build_context(),
