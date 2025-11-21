@@ -6,14 +6,15 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 from __future__ import annotations
 
 from .sync import AgentOps, DevboxOps, ScorerOps, RunloopSDK, SnapshotOps, BlueprintOps, StorageObjectOps
+from .agent import Agent
 from .async_ import (
+    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
-    AsyncAgentOps,
 )
 from .agent import Agent
 from .devbox import Devbox, NamedShell
