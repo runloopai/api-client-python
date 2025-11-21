@@ -15,7 +15,7 @@ from ..types import (
 )
 from ._types import (
     LogCallback,
-    RequestOptions,
+    BaseRequestOptions,
     LongRequestOptions,
     PollingRequestOptions,
     SDKDevboxExecuteParams,
@@ -104,7 +104,7 @@ class AsyncDevbox:
 
     async def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 

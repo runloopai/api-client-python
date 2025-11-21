@@ -83,7 +83,7 @@ Core Request Options
 
 These TypeDicts define options for timeouts, idempotency, polling, and other low-level request configuration. All other TypeDicts in the SDK extend from one of these core types.
 
-.. autotypeddict:: runloop_api_client.sdk._types.RequestOptions
+.. autotypeddict:: runloop_api_client.sdk._types.BaseRequestOptions
 
 .. autotypeddict:: runloop_api_client.sdk._types.LongRequestOptions
 
