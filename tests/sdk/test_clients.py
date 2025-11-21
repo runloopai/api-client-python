@@ -306,6 +306,15 @@ class TestStorageObjectClient:
         with pytest.raises(OSError, match="Failed to read file"):
             client.upload_from_file(missing_file)
 
+    def test_as_build_context(self, mock_client: Mock, object_view: MockObjectView) -> None:
+        """as_build_context should return the correct dict shape."""
+        obj = StorageObject(mock_client, object_view.id, upload_url=None)
+
+        assert obj.as_build_context() == {
+            "object_id": object_view.id,
+            "type": "object",
+        }
+
 
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
