@@ -239,13 +239,20 @@ class TestAsyncStorageObjectClient:
             name="test",
             search="query",
             starting_after="obj_000",
-            state="ready",
+            state="READ_ONLY",
         )
 
         assert len(objects) == 1
         assert isinstance(objects[0], AsyncStorageObject)
         assert objects[0].id == "obj_123"
-        mock_async_client.objects.list.assert_awaited_once()
+        mock_async_client.objects.list.assert_awaited_once_with(
+            content_type="text",
+            limit=10,
+            name="test",
+            search="query",
+            starting_after="obj_000",
+            state="READ_ONLY",
+        )
 
     @pytest.mark.asyncio
     async def test_upload_from_file(
@@ -268,9 +275,14 @@ class TestAsyncStorageObjectClient:
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
-        mock_async_client.objects.create.assert_awaited_once()
-        mock_async_client.objects.complete.assert_awaited_once()
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="test.txt",
+            content_type="text",
+            metadata=None,
+            ttl_ms=None,
+        )
         http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
+        mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_upload_from_text(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -284,7 +296,7 @@ class TestAsyncStorageObjectClient:
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_text("test content", "test.txt", metadata={"key": "value"})
+        obj = await client.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -292,6 +304,7 @@ class TestAsyncStorageObjectClient:
             name="test.txt",
             content_type="text",
             metadata={"key": "value"},
+            ttl_ms=None,
         )
         http_client.put.assert_awaited_once_with(object_view.upload_url, content="test content")
         mock_async_client.objects.complete.assert_awaited_once()
@@ -308,7 +321,7 @@ class TestAsyncStorageObjectClient:
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_bytes(b"test content", "test.bin", content_type="binary")
+        obj = await client.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -316,6 +329,7 @@ class TestAsyncStorageObjectClient:
             name="test.bin",
             content_type="binary",
             metadata=None,
+            ttl_ms=None,
         )
         http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
         mock_async_client.objects.complete.assert_awaited_once()
@@ -401,10 +415,12 @@ class TestAsyncStorageObjectClient:
 
         assert isinstance(obj, AsyncStorageObject)
         # Name should be directory name + .tar.gz
-        mock_async_client.objects.create.assert_awaited_once()
-        call_args = mock_async_client.objects.create.call_args
-        assert call_args[1]["name"] == "my_folder.tar.gz"
-        assert call_args[1]["content_type"] == "tgz"
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="my_folder.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
 
     @pytest.mark.asyncio
     async def test_upload_from_dir_with_ttl(
@@ -429,10 +445,12 @@ class TestAsyncStorageObjectClient:
         obj = await client.upload_from_dir(test_dir, ttl=timedelta(hours=2))
 
         assert isinstance(obj, AsyncStorageObject)
-        mock_async_client.objects.create.assert_awaited_once()
-        call_args = mock_async_client.objects.create.call_args
-        # 2 hours = 7200 seconds = 7200000 milliseconds
-        assert call_args[1]["ttl_ms"] == 7200000
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="temp_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=7200000,  # 2 hours = 7200 seconds = 7200000 milliseconds
+        )
 
     @pytest.mark.asyncio
     async def test_upload_from_dir_empty_directory(
@@ -455,7 +473,12 @@ class TestAsyncStorageObjectClient:
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
-        mock_async_client.objects.create.assert_awaited_once()
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="empty_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
         http_client.put.assert_awaited_once()
         mock_async_client.objects.complete.assert_awaited_once()
 
@@ -482,7 +505,14 @@ class TestAsyncStorageObjectClient:
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
-        mock_async_client.objects.create.assert_awaited_once()
+        mock_async_client.objects.create.assert_awaited_once_with(
+            name="string_path_dir.tar.gz",
+            content_type="tgz",
+            metadata=None,
+            ttl_ms=None,
+        )
+        http_client.put.assert_awaited_once()
+        mock_async_client.objects.complete.assert_awaited_once()
 
 
 class TestAsyncRunloopSDK:

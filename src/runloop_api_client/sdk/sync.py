@@ -329,22 +329,25 @@ class StorageObjectOps:
     def upload_from_file(
         self,
         file_path: str | Path,
-        name: str | None = None,
         *,
-        content_type: ContentType | None = None,
+        name: Optional[str] = None,
+        content_type: Optional[ContentType] = None,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a local file path.
 
         :param file_path: Local filesystem path to read
         :type file_path: str | Path
-        :param name: Optional object name; defaults to the file name, defaults to None
-        :type name: str | None, optional
-        :param content_type: Optional MIME type to apply to the object, defaults to None
-        :type content_type: ContentType | None, optional
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param name: Optional object name; defaults to the file name
+        :type name: Optional[str]
+        :param content_type: Optional MIME type to apply to the object
+        :type content_type: Optional[ContentType]
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
@@ -359,7 +362,8 @@ class StorageObjectOps:
 
         name = name or path.name
         content_type = content_type or detect_content_type(str(file_path))
-        obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = self.create(name=name, content_type=content_type, metadata=metadata, ttl_ms=ttl_ms, **options)
         obj.upload_content(content)
         obj.complete()
         return obj
@@ -407,9 +411,10 @@ class StorageObjectOps:
     def upload_from_text(
         self,
         text: str,
-        name: str,
         *,
+        name: str,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a text payload.
@@ -418,13 +423,16 @@ class StorageObjectOps:
         :type text: str
         :param name: Object display name
         :type name: str
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         """
-        obj = self.create(name=name, content_type="text", metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = self.create(name=name, content_type="text", metadata=metadata, ttl_ms=ttl_ms, **options)
         obj.upload_content(text)
         obj.complete()
         return obj
@@ -432,10 +440,11 @@ class StorageObjectOps:
     def upload_from_bytes(
         self,
         data: bytes,
-        name: str,
         *,
+        name: str,
         content_type: ContentType,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a bytes payload.
@@ -446,13 +455,16 @@ class StorageObjectOps:
         :type name: str
         :param content_type: MIME type describing the payload
         :type content_type: ContentType
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         """
-        obj = self.create(name=name, content_type=content_type, metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = self.create(name=name, content_type=content_type, metadata=metadata, ttl_ms=ttl_ms, **options)
         obj.upload_content(data)
         obj.complete()
         return obj
