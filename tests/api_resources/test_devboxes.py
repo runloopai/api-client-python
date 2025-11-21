@@ -58,6 +58,7 @@ class TestDevboxes:
                 {
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "type": "code_mount",
                     "token": "token",
                     "install_command": "install_command",
                 }
@@ -1606,6 +1607,7 @@ class TestAsyncDevboxes:
                 {
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
+                    "type": "code_mount",
                     "token": "token",
                     "install_command": "install_command",
                 }
