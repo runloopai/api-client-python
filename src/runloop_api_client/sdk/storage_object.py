@@ -158,6 +158,17 @@ class StorageObject:
         response = self._client._client.put(url, content=content)
         response.raise_for_status()
 
+    def as_build_context(self) -> dict[str, str]:
+        """Return this object in the shape expected for a Blueprint build context.
+
+        The returned dict can be passed directly to ``build_context`` or
+        ``named_build_contexts`` when creating a blueprint.
+        """
+        return {
+            "object_id": self._id,
+            "type": "object",
+        }
+
     def _ensure_upload_url(self) -> str:
         """Return the upload URL, ensuring it is present.
 

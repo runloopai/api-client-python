@@ -327,6 +327,15 @@ class TestAsyncStorageObjectClient:
         with pytest.raises(OSError, match="Failed to read file"):
             await client.upload_from_file(missing_file)
 
+    def test_as_build_context(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
+        """as_build_context should return the correct dict shape."""
+        obj = AsyncStorageObject(mock_async_client, object_view.id, upload_url=None)
+
+        assert obj.as_build_context() == {
+            "object_id": object_view.id,
+            "type": "object",
+        }
+
 
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
