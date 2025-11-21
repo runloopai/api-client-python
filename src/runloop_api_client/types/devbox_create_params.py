@@ -51,7 +51,7 @@ class DevboxCreateParams(TypedDict, total=False):
     """User defined metadata to attach to the devbox for organization."""
 
     mounts: Optional[Iterable[Mount]]
-    """A list of file system mounts to be included in the Devbox."""
+    """A list of mounts to be included in the Devbox."""
 
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""

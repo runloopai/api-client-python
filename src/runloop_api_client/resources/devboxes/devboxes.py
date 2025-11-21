@@ -200,7 +200,7 @@ class DevboxesResource(SyncAPIResource):
 
           metadata: User defined metadata to attach to the devbox for organization.
 
-          mounts: A list of file system mounts to be included in the Devbox.
+          mounts: A list of mounts to be included in the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
@@ -1508,7 +1508,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           metadata: User defined metadata to attach to the devbox for organization.
 
-          mounts: A list of file system mounts to be included in the Devbox.
+          mounts: A list of mounts to be included in the Devbox.
 
           name: (Optional) A user specified name to give the Devbox.
 
