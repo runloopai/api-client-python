@@ -30,7 +30,7 @@ Listing Parameters
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxListParams
 
 Command Execution Parameters
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteParams
 
@@ -48,7 +48,7 @@ File Operation Parameters
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxUploadFileParams
 
 Network Tunnel Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams
 
