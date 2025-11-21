@@ -42,10 +42,6 @@ class AsyncExecution:
     Provides coroutines to poll execution state, wait for completion, and
     terminate the running process. Created by ``await devbox.cmd.exec_async()``.
 
-    Attributes:
-        execution_id: The unique execution identifier.
-        devbox_id: The devbox where the command is executing.
-
     Example:
         >>> execution = await devbox.cmd.exec_async(command="python train.py")
         >>> state = await execution.get_state()
