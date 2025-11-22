@@ -21,6 +21,7 @@ TEST_IDS = {
     "blueprint": "bp_123",
     "object": "obj_123",
     "scorer": "scorer_123",
+    "agent": "agent_123",
 }
 
 # Test URL constants
@@ -94,6 +95,14 @@ class MockScorerView:
     id: str = "scorer_123"
     bash_script: str = "echo 'score=1.0'"
     type: str = "test_scorer"
+
+
+@dataclass
+class MockAgentView:
+    """Mock AgentView for testing."""
+
+    id: str = "agent_123"
+    name: str = "test-agent"
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
@@ -184,6 +193,12 @@ def object_view() -> MockObjectView:
 def scorer_view() -> MockScorerView:
     """Create a mock ScorerView."""
     return MockScorerView()
+
+
+@pytest.fixture
+def agent_view() -> MockAgentView:
+    """Create a mock AgentView."""
+    return MockAgentView()
 
 
 @pytest.fixture
