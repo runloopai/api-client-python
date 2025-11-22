@@ -13,15 +13,17 @@ from tests.sdk.conftest import (
     MockObjectView,
     MockSnapshotView,
     MockBlueprintView,
+    MockAgentView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Devbox, Snapshot, Blueprint, StorageObject
+from runloop_api_client.sdk import Devbox, Snapshot, Blueprint, StorageObject, Agent
 from runloop_api_client.sdk.sync import (
     DevboxOps,
     RunloopSDK,
     SnapshotOps,
     BlueprintOps,
     StorageObjectOps,
+    AgentOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -472,6 +474,48 @@ class TestStorageObjectClient:
         mock_client.objects.complete.assert_called_once()
 
 
+class TestAgentClient:
+    """Tests for AgentClient class."""
+
+    def test_create(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create(
+            name="test-agent",
+            metadata={"key": "value"},
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once()
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        client = AgentOps(mock_client)
+        agent = client.from_id("agent_123")
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+
+    def test_list(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test list method."""
+        page = SimpleNamespace(agents=[agent_view])
+        mock_client.agents.list.return_value = page
+
+        client = AgentOps(mock_client)
+        agents = client.list(
+            limit=10,
+            starting_after="agent_000",
+        )
+
+        assert len(agents) == 1
+        assert isinstance(agents[0], Agent)
+        assert agents[0].id == "agent_123"
+        mock_client.agents.list.assert_called_once()
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -479,6 +523,7 @@ class TestRunloopSDK:
         """Test RunloopSDK initialization."""
         sdk = RunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
+        assert isinstance(sdk.agent, AgentOps)
         assert isinstance(sdk.devbox, DevboxOps)
         assert isinstance(sdk.snapshot, SnapshotOps)
         assert isinstance(sdk.blueprint, BlueprintOps)
