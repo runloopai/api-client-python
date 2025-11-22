@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Iterable
 from typing_extensions import Unpack, override
 
-from ._types import RequestOptions, LongRequestOptions, SDKObjectDownloadParams
+from ._types import BaseRequestOptions, LongRequestOptions, SDKObjectDownloadParams
 from .._client import AsyncRunloop
 from ..types.object_view import ObjectView
 from ..types.object_download_url_view import ObjectDownloadURLView
@@ -52,7 +52,7 @@ class AsyncStorageObject:
 
     async def refresh(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> ObjectView:
         """Fetch the latest metadata for the object.
 

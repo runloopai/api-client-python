@@ -1,27 +1,21 @@
 Type Reference
 ==============
 
-This page documents all TypeDict parameter types used throughout the SDK.
+The Runloop Python SDK uses TypeDict objects for configuration parameters to the various API calls. This page documents the TypeDict objects used throughout the SDK.
 
-Core Request Options
+Blueprint Parameters
 --------------------
 
-These TypeDicts define options for streaming, timeouts, polling, and other request configuration.
+These TypeDicts define parameters for blueprint creation and listing.
 
-.. autotypeddict:: runloop_api_client.sdk._types.ExecuteStreamingCallbacks
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintCreateParams
 
-.. autotypeddict:: runloop_api_client.sdk._types.RequestOptions
-
-.. autotypeddict:: runloop_api_client.sdk._types.LongRequestOptions
-
-.. autotypeddict:: runloop_api_client.sdk._types.PollingRequestOptions
-
-.. autotypeddict:: runloop_api_client.sdk._types.LongPollingRequestOptions
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintListParams
 
 Devbox Parameters
 -----------------
 
-These TypeDicts define parameters for devbox creation, execution, file operations, network tunnels, and snapshots.
+These TypeDicts define parameters for devbox creation, listing, and operations.
 
 Creation Parameters
 ~~~~~~~~~~~~~~~~~~~
@@ -30,17 +24,17 @@ Creation Parameters
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams
 
-Execution Parameters
-~~~~~~~~~~~~~~~~~~~~
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams
-
 Listing Parameters
 ~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxListParams
+
+Command Execution Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams
 
 File Operation Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,14 +48,16 @@ File Operation Parameters
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxUploadFileParams
 
 Network Tunnel Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams
 
 Snapshot Parameters
-~~~~~~~~~~~~~~~~~~~
+-------------------
+
+These TypeDicts define parameters for snapshot creation, listing, and updating.
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxSnapshotDiskParams
 
@@ -70,15 +66,6 @@ Snapshot Parameters
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDiskSnapshotListParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams
-
-Blueprint Parameters
---------------------
-
-These TypeDicts define parameters for blueprint creation and listing.
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintCreateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBlueprintListParams
 
 Storage Object Parameters
 -------------------------
@@ -90,3 +77,33 @@ These TypeDicts define parameters for storage object creation, listing, and down
 .. autotypeddict:: runloop_api_client.sdk._types.SDKObjectListParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKObjectDownloadParams
+
+Core Request Options
+--------------------
+
+These TypeDicts define options for timeouts, idempotency, polling, and other low-level request configuration. All other TypeDicts in the SDK extend from one of these core types.
+
+.. autotypeddict:: runloop_api_client.sdk._types.BaseRequestOptions
+
+.. autotypeddict:: runloop_api_client.sdk._types.LongRequestOptions
+
+.. autoclass:: runloop_api_client.sdk._types.PollingConfig
+   :members:
+   :undoc-members:
+
+.. autotypeddict:: runloop_api_client.sdk._types.PollingRequestOptions
+
+.. autotypeddict:: runloop_api_client.sdk._types.LongPollingRequestOptions
+
+Base API Type Reference
+-----------------------
+
+.. automodule:: runloop_api_client.types.shared_params
+   :members:
+   :undoc-members:
+   :imported-members:
+
+.. automodule:: runloop_api_client.types
+   :members:
+   :undoc-members:
+   :imported-members:
