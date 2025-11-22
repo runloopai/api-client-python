@@ -253,7 +253,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">override</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlueprintView</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RequestOptions</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">,</span> <span class="n">SDKDevboxCreateFromImageParams</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">,</span> <span class="n">SDKDevboxCreateFromImageParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncRunloop</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.async_devbox</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncDevbox</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.blueprint_build_logs_list_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlueprintBuildLogsListView</span>
@@ -296,7 +296,7 @@
 <a class="viewcode-back" href="../../../sdk/async/blueprint.html#runloop_api_client.sdk.async_blueprint.AsyncBlueprint.get_info">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">RequestOptions</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlueprintView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the latest blueprint details.</span>
 
@@ -314,7 +314,7 @@
 <a class="viewcode-back" href="../../../sdk/async/blueprint.html#runloop_api_client.sdk.async_blueprint.AsyncBlueprint.logs">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">logs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">RequestOptions</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlueprintBuildLogsListView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve build logs for the blueprint.</span>
 

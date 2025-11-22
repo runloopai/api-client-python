@@ -274,20 +274,6 @@ the running process. Created by <code class="docutils literal notranslate"><span
 <dl class="field-list simple">
 </dl>
 <dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.devbox_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">devbox_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.devbox_id" title="Link to this definition">¶</a></dt>
-<dd><p>Return the devbox identifier.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Devbox ID where the command is running</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.execution_id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execution_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.execution_id" title="Link to this definition">¶</a></dt>
 <dd><p>Return the execution identifier.</p>
@@ -301,33 +287,16 @@ the running process. Created by <code class="docutils literal notranslate"><span
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.get_state">
-<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution.html#Execution.get_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.get_state" title="Link to this definition">¶</a></dt>
-<dd><p>Fetch the latest execution state.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.devbox_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">devbox_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.devbox_id" title="Link to this definition">¶</a></dt>
+<dd><p>Return the devbox identifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a>]</span>) – Optional request configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Current execution metadata</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxAsyncExecutionDetailView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.kill">
-<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution.html#Execution.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.kill" title="Link to this definition">¶</a></dt>
-<dd><p>Request termination of the running execution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Devbox ID where the command is running</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,6 +314,37 @@ the running process. Created by <code class="docutils literal notranslate"><span
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="execution_result.html#runloop_api_client.sdk.execution_result.ExecutionResult" title="runloop_api_client.sdk.execution_result.ExecutionResult">ExecutionResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.get_state">
+<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution.html#Execution.get_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.get_state" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the latest execution state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.BaseRequestOptions" title="runloop_api_client.sdk._types.BaseRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRequestOptions</span></code></a>]</span>) – Optional request configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Current execution metadata</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxAsyncExecutionDetailView" title="runloop_api_client.types.DevboxAsyncExecutionDetailView">DevboxAsyncExecutionDetailView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution.Execution.kill">
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution.html#Execution.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution.Execution.kill" title="Link to this definition">¶</a></dt>
+<dd><p>Request termination of the running execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -410,11 +410,11 @@ the running process. Created by <code class="docutils literal notranslate"><span
             <ul>
 <li><a class="reference internal" href="#">Execution</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution"><code class="docutils literal notranslate"><span class="pre">Execution</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.devbox_id"><code class="docutils literal notranslate"><span class="pre">Execution.devbox_id</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.execution_id"><code class="docutils literal notranslate"><span class="pre">Execution.execution_id</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.devbox_id"><code class="docutils literal notranslate"><span class="pre">Execution.devbox_id</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.result"><code class="docutils literal notranslate"><span class="pre">Execution.result()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.get_state"><code class="docutils literal notranslate"><span class="pre">Execution.get_state()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.kill"><code class="docutils literal notranslate"><span class="pre">Execution.kill()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution.Execution.result"><code class="docutils literal notranslate"><span class="pre">Execution.result()</span></code></a></li>
 </ul>
 </li>
 </ul>

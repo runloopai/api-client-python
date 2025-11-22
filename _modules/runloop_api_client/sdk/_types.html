@@ -273,8 +273,6 @@
 <span class="n">LogCallback</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ExecuteStreamingCallbacks">
-<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.ExecuteStreamingCallbacks">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ExecuteStreamingCallbacks</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LogCallback</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback invoked for each stdout log line&quot;&quot;&quot;</span>
@@ -283,13 +281,12 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback invoked for each stderr log line&quot;&quot;&quot;</span>
 
     <span class="n">output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LogCallback</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback invoked for all log lines (both stdout and stderr)&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback invoked for all log lines (both stdout and stderr)&quot;&quot;&quot;</span>
 
 
-
-<div class="viewcode-block" id="RequestOptions">
-<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.RequestOptions">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">RequestOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseRequestOptions">
+<a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.BaseRequestOptions">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseRequestOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">extra_headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Headers</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send extra headers&quot;&quot;&quot;</span>
 
@@ -306,7 +303,7 @@
 
 <div class="viewcode-block" id="LongRequestOptions">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.LongRequestOptions">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">LongRequestOptions</span><span class="p">(</span><span class="n">RequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LongRequestOptions</span><span class="p">(</span><span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">idempotency_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Specify a custom idempotency key for this request&quot;&quot;&quot;</span></div>
 
@@ -314,7 +311,7 @@
 
 <div class="viewcode-block" id="PollingRequestOptions">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.PollingRequestOptions">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PollingRequestOptions</span><span class="p">(</span><span class="n">RequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PollingRequestOptions</span><span class="p">(</span><span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">polling_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PollingConfig</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for polling behavior&quot;&quot;&quot;</span></div>
 
@@ -357,7 +354,7 @@
 
 <div class="viewcode-block" id="SDKDevboxListParams">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDevboxListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxListParams</span><span class="p">(</span><span class="n">DevboxListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxListParams</span><span class="p">(</span><span class="n">DevboxListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
@@ -420,7 +417,7 @@
 
 <div class="viewcode-block" id="SDKDiskSnapshotListParams">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKDiskSnapshotListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKDiskSnapshotListParams</span><span class="p">(</span><span class="n">DiskSnapshotListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKDiskSnapshotListParams</span><span class="p">(</span><span class="n">DiskSnapshotListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
@@ -441,14 +438,14 @@
 
 <div class="viewcode-block" id="SDKBlueprintListParams">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKBlueprintListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBlueprintListParams</span><span class="p">(</span><span class="n">BlueprintListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKBlueprintListParams</span><span class="p">(</span><span class="n">BlueprintListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKObjectListParams">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKObjectListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectListParams</span><span class="p">(</span><span class="n">ObjectListParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectListParams</span><span class="p">(</span><span class="n">ObjectListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
@@ -462,7 +459,7 @@
 
 <div class="viewcode-block" id="SDKObjectDownloadParams">
 <a class="viewcode-back" href="../../../sdk/types.html#runloop_api_client.sdk._types.SDKObjectDownloadParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectDownloadParams</span><span class="p">(</span><span class="n">ObjectDownloadParams</span><span class="p">,</span> <span class="n">RequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectDownloadParams</span><span class="p">(</span><span class="n">ObjectDownloadParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 </pre></div>

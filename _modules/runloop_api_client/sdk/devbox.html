@@ -263,7 +263,7 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LogCallback</span><span class="p">,</span>
-    <span class="n">RequestOptions</span><span class="p">,</span>
+    <span class="n">BaseRequestOptions</span><span class="p">,</span>
     <span class="n">LongRequestOptions</span><span class="p">,</span>
     <span class="n">PollingRequestOptions</span><span class="p">,</span>
     <span class="n">SDKDevboxExecuteParams</span><span class="p">,</span>
@@ -282,7 +282,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runloop</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">filter_params</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Execution</span><span class="p">,</span> <span class="n">_StreamingGroup</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileInterface</span><span class="p">,</span> <span class="n">CommandInterface</span><span class="p">,</span> <span class="n">NetworkInterface</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._streaming</span><span class="w"> </span><span class="kn">import</span> <span class="n">Stream</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..lib.polling</span><span class="w"> </span><span class="kn">import</span> <span class="n">PollingConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.execution_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExecutionResult</span>
@@ -355,13 +354,13 @@
 <a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.Devbox.get_info">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">RequestOptions</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DevboxView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve current devbox status and metadata.</span>
 
 <span class="sd">        :param options: Optional request configuration</span>
 <span class="sd">        :return: Current devbox state info</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span>
@@ -379,7 +378,7 @@
 <span class="sd">        :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None</span>
 <span class="sd">        :type polling_config: PollingConfig | None, optional</span>
 <span class="sd">        :return: Devbox state info after it reaches running status</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">await_running</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="n">polling_config</span><span class="o">=</span><span class="n">polling_config</span><span class="p">)</span></div>
 
@@ -394,7 +393,7 @@
 <span class="sd">        :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None</span>
 <span class="sd">        :type polling_config: PollingConfig | None, optional</span>
 <span class="sd">        :return: Devbox state info after it reaches suspended status</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">await_suspended</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="n">polling_config</span><span class="o">=</span><span class="n">polling_config</span><span class="p">)</span></div>
 
@@ -409,7 +408,7 @@
 
 <span class="sd">        :param options: Long-running request configuration (timeouts, retries, etc.)</span>
 <span class="sd">        :return: Final devbox state info</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span>
@@ -430,7 +429,7 @@
 
 <span class="sd">        :param options: Optional long-running request and polling configuration</span>
 <span class="sd">        :return: Suspended devbox state info</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">suspend</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span>
@@ -451,7 +450,7 @@
 
 <span class="sd">        :param options: Optional long-running request and polling configuration</span>
 <span class="sd">        :return: Resumed devbox state info</span>
-<span class="sd">        :rtype: DevboxView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">resume</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span>
@@ -541,7 +540,7 @@
 <span class="sd">        :return: Helper for running shell commands</span>
 <span class="sd">        :rtype: CommandInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_CommandInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">CommandInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileInterface</span><span class="p">:</span>
@@ -550,7 +549,7 @@
 <span class="sd">        :return: Helper for reading/writing files</span>
 <span class="sd">        :rtype: FileInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_FileInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FileInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">net</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NetworkInterface</span><span class="p">:</span>
@@ -559,7 +558,7 @@
 <span class="sd">        :return: Helper for SSH keys and tunnels</span>
 <span class="sd">        :rtype: NetworkInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_NetworkInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">NetworkInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="c1"># --------------------------------------------------------------------- #</span>
     <span class="c1"># Internal helpers</span>
@@ -656,7 +655,9 @@
 
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_CommandInterface</span><span class="p">:</span>
+<div class="viewcode-block" id="CommandInterface">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.CommandInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CommandInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for executing commands on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.cmd property. Provides exec() for synchronous execution</span>
@@ -666,6 +667,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">Devbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="CommandInterface.exec">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.CommandInterface.exec">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">exec</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteParams</span><span class="p">],</span>
@@ -707,8 +710,11 @@
             <span class="c1"># Ensure log streaming has completed before returning the result.</span>
             <span class="n">streaming_group</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">ExecutionResult</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ExecutionResult</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="CommandInterface.exec_async">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.CommandInterface.exec_async">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">exec_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteAsyncParams</span><span class="p">],</span>
@@ -743,10 +749,14 @@
             <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">Execution</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">streaming_group</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Execution</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">streaming_group</span><span class="p">)</span></div>
+</div>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_FileInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="FileInterface">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.FileInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FileInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for file operations on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.file property. Provides methods for reading, writing,</span>
@@ -756,6 +766,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">Devbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="FileInterface.read">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.FileInterface.read">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxReadFileContentsParams</span><span class="p">],</span>
@@ -773,8 +785,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">read_file_contents</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="FileInterface.write">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.FileInterface.write">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxWriteFileContentsParams</span><span class="p">],</span>
@@ -785,7 +800,7 @@
 
 <span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams` for available parameters</span>
 <span class="sd">        :return: Execution metadata for the write command</span>
-<span class="sd">        :rtype: DevboxExecutionDetailView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_execution_detail_view.DevboxExecutionDetailView`</span>
 
 <span class="sd">        Example:</span>
 <span class="sd">            &gt;&gt;&gt; devbox.file.write(file_path=&quot;/home/user/config.json&quot;, contents=&#39;{&quot;key&quot;: &quot;value&quot;}&#39;)</span>
@@ -793,8 +808,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">write_file_contents</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="FileInterface.download">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.FileInterface.download">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxDownloadFileParams</span><span class="p">],</span>
@@ -814,8 +832,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
 
+
+<div class="viewcode-block" id="FileInterface.upload">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.FileInterface.upload">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxUploadFileParams</span><span class="p">],</span>
@@ -833,10 +854,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_NetworkInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="NetworkInterface">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.NetworkInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NetworkInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for network operations on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.net property. Provides methods for SSH access and tunneling.</span>
@@ -845,6 +870,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">Devbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="NetworkInterface.create_ssh_key">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.NetworkInterface.create_ssh_key">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_ssh_key</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
@@ -853,7 +880,7 @@
 
 <span class="sd">        :param options: Optional long-running request configuration</span>
 <span class="sd">        :return: Response containing SSH connection info</span>
-<span class="sd">        :rtype: DevboxCreateSSHKeyResponse</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_create_ssh_key_response.DevboxCreateSSHKeyResponse`</span>
 
 <span class="sd">        Example:</span>
 <span class="sd">            &gt;&gt;&gt; ssh_key = devbox.net.create_ssh_key()</span>
@@ -862,8 +889,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">create_ssh_key</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="NetworkInterface.create_tunnel">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.NetworkInterface.create_tunnel">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_tunnel</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateTunnelParams</span><span class="p">],</span>
@@ -872,7 +902,7 @@
 
 <span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters</span>
 <span class="sd">        :return: Details about the public endpoint</span>
-<span class="sd">        :rtype: DevboxTunnelView</span>
+<span class="sd">        :rtype: :class:`~runloop_api_client.types.devbox_tunnel_view.DevboxTunnelView`</span>
 
 <span class="sd">        Example:</span>
 <span class="sd">            &gt;&gt;&gt; tunnel = devbox.net.create_tunnel(port=8080)</span>
@@ -881,8 +911,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">create_tunnel</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="NetworkInterface.remove_tunnel">
+<a class="viewcode-back" href="../../../sdk/sync/devbox.html#runloop_api_client.sdk.devbox.NetworkInterface.remove_tunnel">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">remove_tunnel</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxRemoveTunnelParams</span><span class="p">],</span>
@@ -899,7 +932,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">remove_tunnel</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
         </article>
       </div>

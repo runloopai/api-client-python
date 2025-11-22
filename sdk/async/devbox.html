@@ -273,96 +273,6 @@ management.</p>
 </div>
 <dl class="field-list simple">
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_running">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">await_running</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.await_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_running" title="Link to this definition">¶</a></dt>
-<dd><p>Wait for the devbox to reach running state.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polling_config</strong> (<em>PollingConfig</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – Optional polling behavior overrides, defaults to None</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Devbox state info after it reaches running status</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">await_suspended</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.await_suspended"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended" title="Link to this definition">¶</a></dt>
-<dd><p>Wait for the devbox to reach suspended state.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polling_config</strong> (<em>PollingConfig</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – Optional polling behavior overrides, defaults to None</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Devbox state info after it reaches suspended status</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.close">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.close" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for <a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown" title="runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code></a> to support common resource patterns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.cmd">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmd</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AsyncCommandInterface</span></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.cmd" title="Link to this definition">¶</a></dt>
-<dd><p>Return the command execution interface.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Helper for running shell commands</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncCommandInterface</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.file">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AsyncFileInterface</span></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.file" title="Link to this definition">¶</a></dt>
-<dd><p>Return the file operations interface.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Helper for reading/writing files</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncFileInterface</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve current devbox status and metadata.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a>]</span>) – Optional request configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Current devbox state info</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.id" title="Link to this definition">¶</a></dt>
@@ -378,34 +288,89 @@ management.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keep_alive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.keep_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive" title="Link to this definition">¶</a></dt>
-<dd><p>Extend the devbox timeout, preventing automatic shutdown.</p>
-<p>Call this periodically for long-running workflows to prevent the devbox
-from being automatically shut down due to inactivity.</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve current devbox status and metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.BaseRequestOptions" title="runloop_api_client.sdk._types.BaseRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRequestOptions</span></code></a>]</span>) – Optional request configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Current devbox state info</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_running">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">await_running</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.await_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_running" title="Link to this definition">¶</a></dt>
+<dd><p>Wait for the devbox to reach running state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polling_config</strong> (<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.PollingConfig" title="runloop_api_client.sdk._types.PollingConfig"><em>PollingConfig</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Optional polling behavior overrides, defaults to None</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Devbox state info after it reaches running status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">await_suspended</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.await_suspended"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended" title="Link to this definition">¶</a></dt>
+<dd><p>Wait for the devbox to reach suspended state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polling_config</strong> (<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.PollingConfig" title="runloop_api_client.sdk._types.PollingConfig"><em>PollingConfig</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Optional polling behavior overrides, defaults to None</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Devbox state info after it reaches suspended status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown the devbox, terminating all processes and releasing resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Response confirming the keep-alive request</p>
+<dd class="field-even"><p>Final devbox state info</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.net">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">net</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">AsyncNetworkInterface</span></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.net" title="Link to this definition">¶</a></dt>
-<dd><p>Return the networking interface.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suspend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.suspend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend" title="Link to this definition">¶</a></dt>
+<dd><p>Suspend the devbox without destroying state.</p>
+<p>Returns immediately after issuing the suspend request. Call
+<a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended" title="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended"><code class="xref py py-meth docutils literal notranslate"><span class="pre">await_suspended()</span></code></a> if you need to wait for the devbox to reach the
+<code class="docutils literal notranslate"><span class="pre">suspended</span></code> state (contrast with the synchronous SDK, which blocks).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Helper for SSH keys and tunnels</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncNetworkInterface</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Suspended devbox state info</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -425,24 +390,26 @@ from being automatically shut down due to inactivity.</p>
 <dd class="field-even"><p>Resumed devbox state info</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxView" title="runloop_api_client.types.DevboxView">DevboxView</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown" title="Link to this definition">¶</a></dt>
-<dd><p>Shutdown the devbox, terminating all processes and releasing resources.</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keep_alive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.keep_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive" title="Link to this definition">¶</a></dt>
+<dd><p>Extend the devbox timeout, preventing automatic shutdown.</p>
+<p>Call this periodically for long-running workflows to prevent the devbox
+from being automatically shut down due to inactivity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Final devbox state info</p>
+<dd class="field-even"><p>Response confirming the keep-alive request</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -486,23 +453,289 @@ for completion. Use snapshot.await_completed() to wait for completion.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suspend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.suspend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend" title="Link to this definition">¶</a></dt>
-<dd><p>Suspend the devbox without destroying state.</p>
-<p>Returns immediately after issuing the suspend request. Call
-<a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended" title="runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended"><code class="xref py py-meth docutils literal notranslate"><span class="pre">await_suspended()</span></code></a> if you need to wait for the devbox to reach the
-<code class="docutils literal notranslate"><span class="pre">suspended</span></code> state (contrast with the synchronous SDK, which blocks).</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.close">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncDevbox.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.close" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown" title="runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code></a> to support common resource patterns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.cmd">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmd</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface" title="runloop_api_client.sdk.async_devbox.AsyncCommandInterface"><span class="pre">AsyncCommandInterface</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.cmd" title="Link to this definition">¶</a></dt>
+<dd><p>Return the command execution interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Helper for running shell commands</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface" title="runloop_api_client.sdk.async_devbox.AsyncCommandInterface">AsyncCommandInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.file">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface" title="runloop_api_client.sdk.async_devbox.AsyncFileInterface"><span class="pre">AsyncFileInterface</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.file" title="Link to this definition">¶</a></dt>
+<dd><p>Return the file operations interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Helper for reading/writing files</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface" title="runloop_api_client.sdk.async_devbox.AsyncFileInterface">AsyncFileInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.net">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">net</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface" title="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface"><span class="pre">AsyncNetworkInterface</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.net" title="Link to this definition">¶</a></dt>
+<dd><p>Return the networking interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Helper for SSH keys and tunnels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface" title="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface">AsyncNetworkInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncCommandInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_devbox.</span></span><span class="sig-name descname"><span class="pre">AsyncCommandInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncCommandInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Interface for executing commands on a devbox.</p>
+<p>Accessed via devbox.cmd property. Provides exec() for synchronous execution
+and exec_async() for asynchronous execution with process management.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncCommandInterface.exec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a command synchronously and wait for completion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Wrapper with exit status and output helpers</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="execution_result.html#runloop_api_client.sdk.async_execution_result.AsyncExecutionResult" title="runloop_api_client.sdk.async_execution_result.AsyncExecutionResult">AsyncExecutionResult</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s2">&quot;echo &#39;hello&#39;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exit code: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">exit_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec_async">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exec_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncCommandInterface.exec_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec_async" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a command asynchronously without waiting for completion.</p>
+<p>Starts command execution and returns immediately with an AsyncExecution object
+for process management. Use execution.result() to wait for completion or
+execution.kill() to terminate the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Handle for managing the running process</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="execution.html#runloop_api_client.sdk.async_execution.AsyncExecution" title="runloop_api_client.sdk.async_execution.AsyncExecution">AsyncExecution</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">execution</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec_async</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s2">&quot;sleep 10&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="k">await</span> <span class="n">execution</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Status: </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">await</span> <span class="n">execution</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>  <span class="c1"># Terminate early if needed</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncFileInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_devbox.</span></span><span class="sig-name descname"><span class="pre">AsyncFileInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncFileInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Interface for file operations on a devbox.</p>
+<p>Accessed via devbox.file property. Provides coroutines for reading, writing,
+uploading, and downloading files.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncFileInterface.read">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncFileInterface.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read a file from the devbox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams" title="runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxReadFileContentsParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams" title="runloop_api_client.sdk._types.SDKDevboxReadFileContentsParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxReadFileContentsParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>File contents</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/home/user/data.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncFileInterface.write">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncFileInterface.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write contents to a file in the devbox.</p>
+<p>Creates or overwrites the file at the specified path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams" title="runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxWriteFileContentsParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams" title="runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxWriteFileContentsParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Execution metadata for the write command</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxExecutionDetailView" title="runloop_api_client.types.DevboxExecutionDetailView">DevboxExecutionDetailView</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/home/user/config.json&quot;</span><span class="p">,</span> <span class="n">contents</span><span class="o">=</span><span class="s1">&#39;{&quot;key&quot;: &quot;value&quot;}&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncFileInterface.download">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncFileInterface.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from the devbox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxDownloadFileParams" title="runloop_api_client.sdk._types.SDKDevboxDownloadFileParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxDownloadFileParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxDownloadFileParams" title="runloop_api_client.sdk._types.SDKDevboxDownloadFileParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxDownloadFileParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Raw file contents</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/home/user/output.bin&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;local_output.bin&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncFileInterface.upload">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncFileInterface.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.upload" title="Link to this definition">¶</a></dt>
+<dd><p>Upload a file to the devbox.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxUploadFileParams" title="runloop_api_client.sdk._types.SDKDevboxUploadFileParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxUploadFileParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxUploadFileParams" title="runloop_api_client.sdk._types.SDKDevboxUploadFileParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxUploadFileParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>API response confirming the upload</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/home/user/data.csv&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;local_data.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_devbox.</span></span><span class="sig-name descname"><span class="pre">AsyncNetworkInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncNetworkInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Interface for networking operations on a devbox.</p>
+<p>Accessed via devbox.net property. Provides coroutines for SSH access and tunneling.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_ssh_key">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_ssh_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncNetworkInterface.create_ssh_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_ssh_key" title="Link to this definition">¶</a></dt>
+<dd><p>Create an SSH key for remote access to the devbox.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Suspended devbox state info</p>
+<dd class="field-even"><p>Response containing SSH connection info</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxView</p>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxCreateSSHKeyResponse" title="runloop_api_client.types.DevboxCreateSSHKeyResponse">DevboxCreateSSHKeyResponse</a></p>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ssh_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">create_ssh_key</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SSH URL: </span><span class="si">{</span><span class="n">ssh_key</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_tunnel">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncNetworkInterface.create_tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_tunnel" title="Link to this definition">¶</a></dt>
+<dd><p>Create a network tunnel to expose a devbox port publicly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams" title="runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateTunnelParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams" title="runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateTunnelParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Details about the public endpoint</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxTunnelView" title="runloop_api_client.types.DevboxTunnelView">DevboxTunnelView</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tunnel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">create_tunnel</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Public URL: </span><span class="si">{</span><span class="n">tunnel</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.remove_tunnel">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_tunnel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/async_devbox.html#AsyncNetworkInterface.remove_tunnel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.remove_tunnel" title="Link to this definition">¶</a></dt>
+<dd><p>Remove a network tunnel, disabling public access to the port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams" title="runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxRemoveTunnelParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams" title="runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxRemoveTunnelParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Response confirming the tunnel removal</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">await</span> <span class="n">devbox</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">remove_tunnel</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -566,20 +799,38 @@ for completion. Use snapshot.await_completed() to wait for completion.</p>
             <ul>
 <li><a class="reference internal" href="#">Devbox</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox</span></code></a><ul>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.id"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.id</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.get_info()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_running"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.await_running()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.await_suspended"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.await_suspended()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.suspend()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.resume"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.resume()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.keep_alive()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.snapshot_disk"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.snapshot_disk()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.snapshot_disk_async"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.snapshot_disk_async()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.close"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.close()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.cmd"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.cmd</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.file"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.file</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.get_info()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.id"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.id</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.keep_alive"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.keep_alive()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.net"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.net</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.resume"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.resume()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.shutdown()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.snapshot_disk"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.snapshot_disk()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.snapshot_disk_async"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.snapshot_disk_async()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.suspend"><code class="docutils literal notranslate"><span class="pre">AsyncDevbox.suspend()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface"><code class="docutils literal notranslate"><span class="pre">AsyncCommandInterface</span></code></a><ul>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec"><code class="docutils literal notranslate"><span class="pre">AsyncCommandInterface.exec()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec_async"><code class="docutils literal notranslate"><span class="pre">AsyncCommandInterface.exec_async()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface"><code class="docutils literal notranslate"><span class="pre">AsyncFileInterface</span></code></a><ul>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.read"><code class="docutils literal notranslate"><span class="pre">AsyncFileInterface.read()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.write"><code class="docutils literal notranslate"><span class="pre">AsyncFileInterface.write()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.download"><code class="docutils literal notranslate"><span class="pre">AsyncFileInterface.download()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncFileInterface.upload"><code class="docutils literal notranslate"><span class="pre">AsyncFileInterface.upload()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface"><code class="docutils literal notranslate"><span class="pre">AsyncNetworkInterface</span></code></a><ul>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_ssh_key"><code class="docutils literal notranslate"><span class="pre">AsyncNetworkInterface.create_ssh_key()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_tunnel"><code class="docutils literal notranslate"><span class="pre">AsyncNetworkInterface.create_tunnel()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.remove_tunnel"><code class="docutils literal notranslate"><span class="pre">AsyncNetworkInterface.remove_tunnel()</span></code></a></li>
 </ul>
 </li>
 </ul>

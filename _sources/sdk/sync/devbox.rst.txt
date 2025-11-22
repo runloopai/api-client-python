@@ -5,4 +5,3 @@ The ``Devbox`` class provides synchronous methods for managing and interacting w
 
 .. automodule:: runloop_api_client.sdk.devbox
    :members:
-

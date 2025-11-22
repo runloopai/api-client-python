@@ -263,7 +263,7 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LogCallback</span><span class="p">,</span>
-    <span class="n">RequestOptions</span><span class="p">,</span>
+    <span class="n">BaseRequestOptions</span><span class="p">,</span>
     <span class="n">LongRequestOptions</span><span class="p">,</span>
     <span class="n">PollingRequestOptions</span><span class="p">,</span>
     <span class="n">SDKDevboxExecuteParams</span><span class="p">,</span>
@@ -280,7 +280,6 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncRunloop</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">filter_params</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncFileInterface</span><span class="p">,</span> <span class="n">AsyncCommandInterface</span><span class="p">,</span> <span class="n">AsyncNetworkInterface</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._streaming</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncStream</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..lib.polling</span><span class="w"> </span><span class="kn">import</span> <span class="n">PollingConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.async_execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncExecution</span><span class="p">,</span> <span class="n">_AsyncStreamingGroup</span>
@@ -356,7 +355,7 @@
 <a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncDevbox.get_info">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">RequestOptions</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DevboxView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve current devbox status and metadata.</span>
 
@@ -539,7 +538,7 @@
 <span class="sd">        :return: Helper for running shell commands</span>
 <span class="sd">        :rtype: AsyncCommandInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_AsyncCommandInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AsyncCommandInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncFileInterface</span><span class="p">:</span>
@@ -548,7 +547,7 @@
 <span class="sd">        :return: Helper for reading/writing files</span>
 <span class="sd">        :rtype: AsyncFileInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_AsyncFileInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AsyncFileInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">net</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncNetworkInterface</span><span class="p">:</span>
@@ -557,7 +556,7 @@
 <span class="sd">        :return: Helper for SSH keys and tunnels</span>
 <span class="sd">        :rtype: AsyncNetworkInterface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_AsyncNetworkInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AsyncNetworkInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="c1"># ------------------------------------------------------------------ #</span>
     <span class="c1"># Internal helpers</span>
@@ -638,7 +637,9 @@
 
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_AsyncCommandInterface</span><span class="p">:</span>
+<div class="viewcode-block" id="AsyncCommandInterface">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncCommandInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AsyncCommandInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for executing commands on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.cmd property. Provides exec() for synchronous execution</span>
@@ -648,6 +649,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">AsyncDevbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="AsyncCommandInterface.exec">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exec</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteParams</span><span class="p">],</span>
@@ -699,8 +702,11 @@
 
         <span class="c1"># Streaming finishes asynchronously via the shared gather call; nothing more to do here.</span>
         <span class="n">command_value</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">DevboxAsyncExecutionDetailView</span><span class="p">,</span> <span class="n">command_result</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">AsyncExecutionResult</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">command_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AsyncExecutionResult</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">command_value</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AsyncCommandInterface.exec_async">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncCommandInterface.exec_async">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exec_async</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteAsyncParams</span><span class="p">],</span>
@@ -735,10 +741,14 @@
             <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">AsyncExecution</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">streaming_group</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AsyncExecution</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">streaming_group</span><span class="p">)</span></div>
+</div>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_AsyncFileInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="AsyncFileInterface">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncFileInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AsyncFileInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for file operations on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.file property. Provides coroutines for reading, writing,</span>
@@ -748,6 +758,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">AsyncDevbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="AsyncFileInterface.read">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncFileInterface.read">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxReadFileContentsParams</span><span class="p">],</span>
@@ -765,8 +777,11 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">read_file_contents</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AsyncFileInterface.write">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncFileInterface.write">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxWriteFileContentsParams</span><span class="p">],</span>
@@ -785,8 +800,11 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">write_file_contents</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AsyncFileInterface.download">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncFileInterface.download">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxDownloadFileParams</span><span class="p">],</span>
@@ -806,8 +824,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
 
+
+<div class="viewcode-block" id="AsyncFileInterface.upload">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncFileInterface.upload">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxUploadFileParams</span><span class="p">],</span>
@@ -825,10 +846,14 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">_AsyncNetworkInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="AsyncNetworkInterface">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AsyncNetworkInterface</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for networking operations on a devbox.</span>
 
 <span class="sd">    Accessed via devbox.net property. Provides coroutines for SSH access and tunneling.</span>
@@ -837,6 +862,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">AsyncDevbox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
 
+<div class="viewcode-block" id="AsyncNetworkInterface.create_ssh_key">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_ssh_key">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_ssh_key</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
@@ -854,8 +881,11 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">create_ssh_key</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AsyncNetworkInterface.create_tunnel">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.create_tunnel">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_tunnel</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxCreateTunnelParams</span><span class="p">],</span>
@@ -873,8 +903,11 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">create_tunnel</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AsyncNetworkInterface.remove_tunnel">
+<a class="viewcode-back" href="../../../sdk/async/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNetworkInterface.remove_tunnel">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">remove_tunnel</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxRemoveTunnelParams</span><span class="p">],</span>
@@ -891,7 +924,9 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">remove_tunnel</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
         </article>
       </div>

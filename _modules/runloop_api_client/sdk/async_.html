@@ -250,8 +250,12 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tarfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
@@ -629,22 +633,25 @@
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_file</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
-        <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">content_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncStorageObject</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and upload an object from a local file path.</span>
 
 <span class="sd">        :param file_path: Local filesystem path to read</span>
 <span class="sd">        :type file_path: str | Path</span>
-<span class="sd">        :param name: Optional object name; defaults to the file name, defaults to None</span>
-<span class="sd">        :type name: str | None, optional</span>
-<span class="sd">        :param content_type: Optional MIME type to apply to the object, defaults to None</span>
-<span class="sd">        :type content_type: ContentType | None, optional</span>
-<span class="sd">        :param metadata: Optional key-value metadata, defaults to None</span>
-<span class="sd">        :type metadata: Optional[Dict[str, str]], optional</span>
+<span class="sd">        :param name: Optional object name; defaults to the file name</span>
+<span class="sd">        :type name: Optional[str]</span>
+<span class="sd">        :param content_type: Optional MIME type to apply to the object</span>
+<span class="sd">        :type content_type: Optional[ContentType]</span>
+<span class="sd">        :param metadata: Optional key-value metadata</span>
+<span class="sd">        :type metadata: Optional[Dict[str, str]]</span>
+<span class="sd">        :param ttl: Optional Time-To-Live, after which the object is automatically deleted</span>
+<span class="sd">        :type ttl: Optional[timedelta]</span>
 <span class="sd">        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options</span>
 <span class="sd">        :return: Wrapper for the uploaded object</span>
 <span class="sd">        :rtype: AsyncStorageObject</span>
@@ -653,14 +660,62 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read file </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span>
         <span class="n">content_type</span> <span class="o">=</span> <span class="n">content_type</span> <span class="ow">or</span> <span class="n">detect_content_type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">ttl_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ttl</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">if</span> <span class="n">ttl</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">ttl_ms</span><span class="o">=</span><span class="n">ttl_ms</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">complete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<div class="viewcode-block" id="AsyncStorageObjectOps.upload_from_dir">
+<a class="viewcode-back" href="../../../sdk/async/index.html#runloop_api_client.sdk.async_.AsyncStorageObjectOps.upload_from_dir">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_dir</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncStorageObject</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and upload an object from a local directory.</span>
+
+<span class="sd">        The resulting object will be uploaded as a compressed tarball.</span>
+
+<span class="sd">        :param dir_path: Local filesystem directory path to tar</span>
+<span class="sd">        :type dir_path: str | Path</span>
+<span class="sd">        :param name: Optional object name; defaults to the directory name + &#39;.tar.gz&#39;</span>
+<span class="sd">        :type name: Optional[str]</span>
+<span class="sd">        :param metadata: Optional key-value metadata</span>
+<span class="sd">        :type metadata: Optional[Dict[str, str]]</span>
+<span class="sd">        :param ttl: Optional Time-To-Live, after which the object is automatically deleted</span>
+<span class="sd">        :type ttl: Optional[timedelta]</span>
+<span class="sd">        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options</span>
+<span class="sd">        :return: Wrapper for the uploaded object</span>
+<span class="sd">        :rtype: AsyncStorageObject</span>
+<span class="sd">        :raises OSError: If the local file cannot be read</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tar.gz&quot;</span>
+        <span class="n">ttl_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ttl</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">if</span> <span class="n">ttl</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">synchronous_io</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span> <span class="k">as</span> <span class="n">tar_buffer</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fileobj</span><span class="o">=</span><span class="n">tar_buffer</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w:gz&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
+                    <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">tar_buffer</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">tar_buffer</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">tar_bytes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">synchronous_io</span><span class="p">)</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;tgz&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">ttl_ms</span><span class="o">=</span><span class="n">ttl_ms</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="n">tar_bytes</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">complete</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">obj</span></div>
 
@@ -670,9 +725,10 @@
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_text</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncStorageObject</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and upload an object from a text payload.</span>
@@ -681,13 +737,16 @@
 <span class="sd">        :type text: str</span>
 <span class="sd">        :param name: Object display name</span>
 <span class="sd">        :type name: str</span>
-<span class="sd">        :param metadata: Optional key-value metadata, defaults to None</span>
-<span class="sd">        :type metadata: Optional[Dict[str, str]], optional</span>
+<span class="sd">        :param metadata: Optional key-value metadata</span>
+<span class="sd">        :type metadata: Optional[Dict[str, str]]</span>
+<span class="sd">        :param ttl: Optional Time-To-Live, after which the object is automatically deleted</span>
+<span class="sd">        :type ttl: Optional[timedelta]</span>
 <span class="sd">        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options</span>
 <span class="sd">        :return: Wrapper for the uploaded object</span>
 <span class="sd">        :rtype: AsyncStorageObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">ttl_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ttl</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">if</span> <span class="n">ttl</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">ttl_ms</span><span class="o">=</span><span class="n">ttl_ms</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">complete</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">obj</span></div>
@@ -698,10 +757,11 @@
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_from_bytes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">,</span>
         <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncStorageObject</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and upload an object from a bytes payload.</span>
@@ -712,13 +772,16 @@
 <span class="sd">        :type name: str</span>
 <span class="sd">        :param content_type: MIME type describing the payload</span>
 <span class="sd">        :type content_type: ContentType</span>
-<span class="sd">        :param metadata: Optional key-value metadata, defaults to None</span>
-<span class="sd">        :type metadata: Optional[Dict[str, str]], optional</span>
+<span class="sd">        :param metadata: Optional key-value metadata</span>
+<span class="sd">        :type metadata: Optional[Dict[str, str]]</span>
+<span class="sd">        :param ttl: Optional Time-To-Live, after which the object is automatically deleted</span>
+<span class="sd">        :type ttl: Optional[timedelta]</span>
 <span class="sd">        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options</span>
 <span class="sd">        :return: Wrapper for the uploaded object</span>
 <span class="sd">        :rtype: AsyncStorageObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">ttl_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ttl</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span> <span class="k">if</span> <span class="n">ttl</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">ttl_ms</span><span class="o">=</span><span class="n">ttl_ms</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">complete</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">obj</span></div>

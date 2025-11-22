@@ -262,19 +262,50 @@
 <dd><p>Synchronous wrapper around a blueprint resource.</p>
 <dl class="field-list simple">
 </dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.id" title="Link to this definition">¶</a></dt>
+<dd><p>Return the blueprint ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Unique blueprint ID</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.create_devbox">
-<span class="sig-name descname"><span class="pre">create_devbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.create_devbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.create_devbox" title="Link to this definition">¶</a></dt>
-<dd><p>Create a devbox derived from the blueprint.</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.get_info" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the latest blueprint details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.BaseRequestOptions" title="runloop_api_client.sdk._types.BaseRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRequestOptions</span></code></a>]</span>) – Optional request configuration</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Wrapper bound to the running devbox</p>
+<dd class="field-even"><p>API response describing the blueprint</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="devbox.html#runloop_api_client.sdk.devbox.Devbox" title="runloop_api_client.sdk.devbox.Devbox">Devbox</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.BlueprintView" title="runloop_api_client.types.BlueprintView">BlueprintView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.logs">
+<span class="sig-name descname"><span class="pre">logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.logs" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve build logs for the blueprint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.BaseRequestOptions" title="runloop_api_client.sdk._types.BaseRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRequestOptions</span></code></a>]</span>) – Optional request configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Log entries for the most recent build</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.BlueprintBuildLogsListView" title="runloop_api_client.types.BlueprintBuildLogsListView">BlueprintBuildLogsListView</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -297,49 +328,18 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.get_info">
-<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.get_info" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the latest blueprint details.</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.create_devbox">
+<span class="sig-name descname"><span class="pre">create_devbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.create_devbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.create_devbox" title="Link to this definition">¶</a></dt>
+<dd><p>Create a devbox derived from the blueprint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a>]</span>) – Optional request configuration</p>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>API response describing the blueprint</p>
+<dd class="field-even"><p>Wrapper bound to the running devbox</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>BlueprintView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.id" title="Link to this definition">¶</a></dt>
-<dd><p>Return the blueprint ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Unique blueprint ID</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.blueprint.Blueprint.logs">
-<span class="sig-name descname"><span class="pre">logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/blueprint.html#Blueprint.logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.blueprint.Blueprint.logs" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve build logs for the blueprint.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a>]</span>) – Optional request configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Log entries for the most recent build</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>BlueprintBuildLogsListView</p>
+<dd class="field-odd"><p><a class="reference internal" href="devbox.html#runloop_api_client.sdk.devbox.Devbox" title="runloop_api_client.sdk.devbox.Devbox">Devbox</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,11 +405,11 @@
             <ul>
 <li><a class="reference internal" href="#">Blueprint</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint"><code class="docutils literal notranslate"><span class="pre">Blueprint</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.create_devbox"><code class="docutils literal notranslate"><span class="pre">Blueprint.create_devbox()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.delete"><code class="docutils literal notranslate"><span class="pre">Blueprint.delete()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.get_info"><code class="docutils literal notranslate"><span class="pre">Blueprint.get_info()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.id"><code class="docutils literal notranslate"><span class="pre">Blueprint.id</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.get_info"><code class="docutils literal notranslate"><span class="pre">Blueprint.get_info()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.logs"><code class="docutils literal notranslate"><span class="pre">Blueprint.logs()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.delete"><code class="docutils literal notranslate"><span class="pre">Blueprint.delete()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.blueprint.Blueprint.create_devbox"><code class="docutils literal notranslate"><span class="pre">Blueprint.create_devbox()</span></code></a></li>
 </ul>
 </li>
 </ul>

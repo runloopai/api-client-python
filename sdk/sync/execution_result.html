@@ -306,6 +306,20 @@
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.success">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.success" title="Link to this definition">¶</a></dt>
+<dd><p>Whether the process exited successfully (exit code <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the exit code is <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.failed">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.failed" title="Link to this definition">¶</a></dt>
 <dd><p>Whether the process exited with a non-zero exit code.</p>
@@ -315,37 +329,6 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.result">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DevboxAsyncExecutionDetailView</span></em><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.result" title="Link to this definition">¶</a></dt>
-<dd><p>Get the raw execution result.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Raw execution result</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>DevboxAsyncExecutionDetailView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.stderr">
-<span class="sig-name descname"><span class="pre">stderr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution_result.html#ExecutionResult.stderr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stderr" title="Link to this definition">¶</a></dt>
-<dd><p>Return captured standard error, streaming full output if truncated.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>num_lines</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – Optional number of lines to return from the end (most recent), defaults to None</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Stderr content, optionally limited to the last <code class="docutils literal notranslate"><span class="pre">num_lines</span></code> lines</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -367,16 +350,33 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.stderr">
+<span class="sig-name descname"><span class="pre">stderr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/execution_result.html#ExecutionResult.stderr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stderr" title="Link to this definition">¶</a></dt>
+<dd><p>Return captured standard error, streaming full output if truncated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_lines</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – Optional number of lines to return from the end (most recent), defaults to None</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Stderr content, optionally limited to the last <code class="docutils literal notranslate"><span class="pre">num_lines</span></code> lines</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.success">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.success" title="Link to this definition">¶</a></dt>
-<dd><p>Whether the process exited successfully (exit code <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
+<dt class="sig sig-object py" id="runloop_api_client.sdk.execution_result.ExecutionResult.result">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxAsyncExecutionDetailView" title="runloop_api_client.types.devbox_async_execution_detail_view.DevboxAsyncExecutionDetailView"><span class="pre">DevboxAsyncExecutionDetailView</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.execution_result.ExecutionResult.result" title="Link to this definition">¶</a></dt>
+<dd><p>Get the raw execution result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the exit code is <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+<dd class="field-odd"><p>Raw execution result</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+<dd class="field-even"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxAsyncExecutionDetailView" title="runloop_api_client.types.DevboxAsyncExecutionDetailView">DevboxAsyncExecutionDetailView</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,11 +445,11 @@
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.devbox_id"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.devbox_id</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.execution_id"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.execution_id</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.exit_code"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.exit_code</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.failed"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.failed</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.result"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.result</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stderr"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.stderr()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stdout"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.stdout()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.success"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.success</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.failed"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.failed</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stdout"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.stdout()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.stderr"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.stderr()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.execution_result.ExecutionResult.result"><code class="docutils literal notranslate"><span class="pre">ExecutionResult.result</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -262,6 +262,71 @@
 <dd><p>Wrapper around synchronous snapshot operations.</p>
 <dl class="field-list simple">
 </dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.id" title="Link to this definition">¶</a></dt>
+<dd><p>Return the snapshot identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Unique snapshot ID</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.get_info" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the latest snapshot status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.BaseRequestOptions" title="runloop_api_client.sdk._types.BaseRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRequestOptions</span></code></a>]</span>) – Optional request configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Snapshot state payload</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DevboxSnapshotAsyncStatusView</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.update" title="Link to this definition">¶</a></dt>
+<dd><p>Update snapshot metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams" title="runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDiskSnapshotUpdateParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams" title="runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDiskSnapshotUpdateParams</span></code></a> for available parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated snapshot details</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../types.html#runloop_api_client.types.DevboxSnapshotView" title="runloop_api_client.types.DevboxSnapshotView">DevboxSnapshotView</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Delete the snapshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>API response acknowledging deletion</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.await_completed">
 <span class="sig-name descname"><span class="pre">await_completed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.await_completed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.await_completed" title="Link to this definition">¶</a></dt>
@@ -292,71 +357,6 @@
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="devbox.html#runloop_api_client.sdk.devbox.Devbox" title="runloop_api_client.sdk.devbox.Devbox">Devbox</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.delete">
-<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.delete" title="Link to this definition">¶</a></dt>
-<dd><p>Delete the snapshot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional long-running request configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>API response acknowledging deletion</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.get_info">
-<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.get_info" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the latest snapshot status.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.RequestOptions" title="runloop_api_client.sdk._types.RequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestOptions</span></code></a>]</span>) – Optional request configuration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Snapshot state payload</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxSnapshotAsyncStatusView</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.id" title="Link to this definition">¶</a></dt>
-<dd><p>Return the snapshot identifier.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Unique snapshot ID</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.snapshot.Snapshot.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/runloop_api_client/sdk/snapshot.html#Snapshot.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.snapshot.Snapshot.update" title="Link to this definition">¶</a></dt>
-<dd><p>Update snapshot metadata.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams" title="runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDiskSnapshotUpdateParams</span></code></a>]</span>) – See <a class="reference internal" href="../types.html#runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams" title="runloop_api_client.sdk._types.SDKDiskSnapshotUpdateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDiskSnapshotUpdateParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Updated snapshot details</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DevboxSnapshotView</p>
 </dd>
 </dl>
 </dd></dl>
@@ -422,12 +422,12 @@
             <ul>
 <li><a class="reference internal" href="#">Snapshot</a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot"><code class="docutils literal notranslate"><span class="pre">Snapshot</span></code></a><ul>
+<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.id"><code class="docutils literal notranslate"><span class="pre">Snapshot.id</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.get_info"><code class="docutils literal notranslate"><span class="pre">Snapshot.get_info()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.update"><code class="docutils literal notranslate"><span class="pre">Snapshot.update()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.delete"><code class="docutils literal notranslate"><span class="pre">Snapshot.delete()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.await_completed"><code class="docutils literal notranslate"><span class="pre">Snapshot.await_completed()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.create_devbox"><code class="docutils literal notranslate"><span class="pre">Snapshot.create_devbox()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.delete"><code class="docutils literal notranslate"><span class="pre">Snapshot.delete()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.get_info"><code class="docutils literal notranslate"><span class="pre">Snapshot.get_info()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.id"><code class="docutils literal notranslate"><span class="pre">Snapshot.id</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.snapshot.Snapshot.update"><code class="docutils literal notranslate"><span class="pre">Snapshot.update()</span></code></a></li>
 </ul>
 </li>
 </ul>

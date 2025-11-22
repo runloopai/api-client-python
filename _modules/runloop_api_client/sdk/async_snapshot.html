@@ -253,7 +253,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">override</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">RequestOptions</span><span class="p">,</span>
+    <span class="n">BaseRequestOptions</span><span class="p">,</span>
     <span class="n">LongRequestOptions</span><span class="p">,</span>
     <span class="n">PollingRequestOptions</span><span class="p">,</span>
     <span class="n">SDKDiskSnapshotUpdateParams</span><span class="p">,</span>
@@ -302,7 +302,7 @@
 <a class="viewcode-back" href="../../../sdk/async/snapshot.html#runloop_api_client.sdk.async_snapshot.AsyncSnapshot.get_info">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">RequestOptions</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DevboxSnapshotAsyncStatusView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the latest snapshot status.</span>
 
