@@ -159,7 +159,7 @@ class AsyncDevboxOps:
         page = await self._client.devboxes.list(
             **params,
         )
-        return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
+        return [AsyncDevbox(self._client, item.id, item) for item in page.devboxes]
 
 
 class AsyncSnapshotOps:

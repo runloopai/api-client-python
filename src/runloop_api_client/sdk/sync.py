@@ -599,7 +599,7 @@ class AgentOps:
         page = self._client.agents.list(
             **params,
         )
-        return [Agent(self._client, item.id) for item in page.agents]
+        return [Agent(self._client, item.id, item) for item in page.agents]
 
 
 class RunloopSDK:

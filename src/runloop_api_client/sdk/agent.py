@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Unpack, override
 
 from ._types import (
@@ -18,6 +19,7 @@ class Agent:
         self,
         client: Runloop,
         agent_id: str,
+        agent_view: Optional[AgentView] = None,
     ) -> None:
         """Initialize the wrapper.
 
@@ -28,6 +30,7 @@ class Agent:
         """
         self._client = client
         self._id = agent_id
+        self._agent_view = agent_view
 
     @override
     def __repr__(self) -> str:
@@ -52,7 +55,9 @@ class Agent:
         :return: Agent details
         :rtype: AgentView
         """
-        return self._client.agents.retrieve(
-            self._id,
-            **options,
-        )
+        if self._agent_view is None:
+            self._agent_view = self._client.agents.retrieve(
+                self._id,
+                **options,
+            )
+        return self._agent_view
