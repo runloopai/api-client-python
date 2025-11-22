@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.69.1 (2025-11-22)
+
+Full Changelog: [v0.69.0...v0.69.1](https://github.com/runloopai/api-client-python/compare/v0.69.0...v0.69.1)
+
+### Chores
+
+* hide build context APIs ([8210c3c](https://github.com/runloopai/api-client-python/commit/8210c3c930523cef82a7294e4334aefc60e48fee))
+
 ## 0.69.0 (2025-11-21)
 
 Full Changelog: [v0.68.0...v0.69.0](https://github.com/runloopai/api-client-python/compare/v0.68.0...v0.69.0)
