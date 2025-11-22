@@ -6,7 +6,7 @@ from typing import Optional
 from typing_extensions import Unpack, override
 
 from ._types import (
-    RequestOptions,
+    BaseRequestOptions,
 )
 from .._client import Runloop
 from ..types.agent_view import AgentView
@@ -47,7 +47,7 @@ class Agent:
 
     def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> AgentView:
         """Retrieve the latest agent information.
 
