@@ -150,5 +150,5 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
     pass
 
 
-class SDKAgentListParams(AgentListParams, RequestOptions):
+class SDKAgentListParams(AgentListParams, BaseRequestOptions):
     pass
