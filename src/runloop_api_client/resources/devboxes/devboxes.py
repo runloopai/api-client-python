@@ -777,47 +777,6 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
-    def keep_alive(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> object:
-        """
-        Send a 'Keep Alive' signal to a running Devbox that is configured to shutdown on
-        idle so the idle time resets.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/keep_alive",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=object,
-        )
-
     def list_disk_snapshots(
         self,
         *,
@@ -980,49 +939,6 @@ class DevboxesResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def resume(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxView:
-        """Resume a suspended Devbox with the disk state captured as suspend time.
-
-        Note
-        that any previously running processes or daemons will need to be restarted using
-        the Devbox shell tools.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/resume",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxView,
-        )
-
     def shutdown(
         self,
         id: str,
@@ -1183,48 +1099,6 @@ class DevboxesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxSnapshotView,
-        )
-
-    def suspend(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxView:
-        """
-        Suspend a running Devbox and create a disk snapshot to enable resuming the
-        Devbox later with the same disk. Note this will not snapshot memory state such
-        as running processes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/suspend",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxView,
         )
 
     def upload_file(
@@ -2085,47 +1959,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxExecutionDetailView,
         )
 
-    async def keep_alive(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> object:
-        """
-        Send a 'Keep Alive' signal to a running Devbox that is configured to shutdown on
-        idle so the idle time resets.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/keep_alive",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=object,
-        )
-
     def list_disk_snapshots(
         self,
         *,
@@ -2288,49 +2121,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def resume(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxView:
-        """Resume a suspended Devbox with the disk state captured as suspend time.
-
-        Note
-        that any previously running processes or daemons will need to be restarted using
-        the Devbox shell tools.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/resume",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxView,
-        )
-
     async def shutdown(
         self,
         id: str,
@@ -2491,48 +2281,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxSnapshotView,
-        )
-
-    async def suspend(
-        self,
-        id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxView:
-        """
-        Suspend a running Devbox and create a disk snapshot to enable resuming the
-        Devbox later with the same disk. Note this will not snapshot memory state such
-        as running processes.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/suspend",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxView,
         )
 
     async def upload_file(
@@ -2763,9 +2511,6 @@ class DevboxesResourceWithRawResponse:
                 devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
             )
         )
-        self.keep_alive = to_raw_response_wrapper(
-            devboxes.keep_alive,
-        )
         self.list_disk_snapshots = to_raw_response_wrapper(
             devboxes.list_disk_snapshots,
         )
@@ -2775,9 +2520,6 @@ class DevboxesResourceWithRawResponse:
         self.remove_tunnel = to_raw_response_wrapper(
             devboxes.remove_tunnel,
         )
-        self.resume = to_raw_response_wrapper(
-            devboxes.resume,
-        )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
         )
@@ -2786,9 +2528,6 @@ class DevboxesResourceWithRawResponse:
         )
         self.snapshot_disk_async = to_raw_response_wrapper(
             devboxes.snapshot_disk_async,
-        )
-        self.suspend = to_raw_response_wrapper(
-            devboxes.suspend,
         )
         self.upload_file = to_raw_response_wrapper(
             devboxes.upload_file,
@@ -2861,9 +2600,6 @@ class AsyncDevboxesResourceWithRawResponse:
                 devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
             )
         )
-        self.keep_alive = async_to_raw_response_wrapper(
-            devboxes.keep_alive,
-        )
         self.list_disk_snapshots = async_to_raw_response_wrapper(
             devboxes.list_disk_snapshots,
         )
@@ -2873,9 +2609,6 @@ class AsyncDevboxesResourceWithRawResponse:
         self.remove_tunnel = async_to_raw_response_wrapper(
             devboxes.remove_tunnel,
         )
-        self.resume = async_to_raw_response_wrapper(
-            devboxes.resume,
-        )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
         )
@@ -2884,9 +2617,6 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.snapshot_disk_async = async_to_raw_response_wrapper(
             devboxes.snapshot_disk_async,
-        )
-        self.suspend = async_to_raw_response_wrapper(
-            devboxes.suspend,
         )
         self.upload_file = async_to_raw_response_wrapper(
             devboxes.upload_file,
@@ -2959,9 +2689,6 @@ class DevboxesResourceWithStreamingResponse:
                 devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
             )
         )
-        self.keep_alive = to_streamed_response_wrapper(
-            devboxes.keep_alive,
-        )
         self.list_disk_snapshots = to_streamed_response_wrapper(
             devboxes.list_disk_snapshots,
         )
@@ -2971,9 +2698,6 @@ class DevboxesResourceWithStreamingResponse:
         self.remove_tunnel = to_streamed_response_wrapper(
             devboxes.remove_tunnel,
         )
-        self.resume = to_streamed_response_wrapper(
-            devboxes.resume,
-        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
@@ -2982,9 +2706,6 @@ class DevboxesResourceWithStreamingResponse:
         )
         self.snapshot_disk_async = to_streamed_response_wrapper(
             devboxes.snapshot_disk_async,
-        )
-        self.suspend = to_streamed_response_wrapper(
-            devboxes.suspend,
         )
         self.upload_file = to_streamed_response_wrapper(
             devboxes.upload_file,
@@ -3057,9 +2778,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
                 devboxes.execute_sync,  # pyright: ignore[reportDeprecated],
             )
         )
-        self.keep_alive = async_to_streamed_response_wrapper(
-            devboxes.keep_alive,
-        )
         self.list_disk_snapshots = async_to_streamed_response_wrapper(
             devboxes.list_disk_snapshots,
         )
@@ -3069,9 +2787,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.remove_tunnel = async_to_streamed_response_wrapper(
             devboxes.remove_tunnel,
         )
-        self.resume = async_to_streamed_response_wrapper(
-            devboxes.resume,
-        )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,
         )
@@ -3080,9 +2795,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.snapshot_disk_async = async_to_streamed_response_wrapper(
             devboxes.snapshot_disk_async,
-        )
-        self.suspend = async_to_streamed_response_wrapper(
-            devboxes.suspend,
         )
         self.upload_file = async_to_streamed_response_wrapper(
             devboxes.upload_file,
