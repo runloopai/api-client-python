@@ -14,8 +14,10 @@ import httpx
 
 from ._types import (
     LongRequestOptions,
+    SDKAgentListParams,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
     SDKBlueprintListParams,
@@ -26,6 +28,7 @@ from ._types import (
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
+from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
@@ -475,6 +478,67 @@ class AsyncStorageObjectOps:
         return obj
 
 
+class AsyncAgentOps:
+    """High-level async manager for creating and managing agents.
+
+    Accessed via ``runloop.agent`` from :class:`AsyncRunloopSDK`, provides
+    coroutines to create, retrieve, and list agents.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> agent = await runloop.agent.create(name="my-agent")
+        >>> agents = await runloop.agent.list(limit=10)
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize the manager.
+
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(
+        self,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> AsyncAgent:
+        """Create a new agent.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for available parameters
+        :return: Wrapper bound to the newly created agent
+        :rtype: AsyncAgent
+        """
+        agent_view = await self._client.agents.create(
+            **params,
+        )
+        return AsyncAgent(self._client, agent_view.id)
+
+    def from_id(self, agent_id: str) -> AsyncAgent:
+        """Attach to an existing agent by ID.
+
+        :param agent_id: Existing agent ID
+        :type agent_id: str
+        :return: Wrapper bound to the requested agent
+        :rtype: AsyncAgent
+        """
+        return AsyncAgent(self._client, agent_id)
+
+    async def list(
+        self,
+        **params: Unpack[SDKAgentListParams],
+    ) -> list[AsyncAgent]:
+        """List agents accessible to the caller.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
+        :return: Collection of agent wrappers
+        :rtype: list[AsyncAgent]
+        """
+        page = await self._client.agents.list(
+            **params,
+        )
+        return [AsyncAgent(self._client, item.id) for item in page.agents]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -484,6 +548,8 @@ class AsyncRunloopSDK:
 
     :ivar api: Direct access to the generated async REST API client
     :vartype api: AsyncRunloop
+    :ivar agent: High-level async interface for agent management
+    :vartype agent: AsyncAgentOps
     :ivar devbox: High-level async interface for devbox management
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
@@ -502,6 +568,7 @@ class AsyncRunloopSDK:
     """
 
     api: AsyncRunloop
+    agent: AsyncAgentOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
     snapshot: AsyncSnapshotOps
@@ -545,6 +612,7 @@ class AsyncRunloopSDK:
             http_client=http_client,
         )
 
+        self.agent = AsyncAgentOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
