@@ -87,6 +87,23 @@ These TypeDicts define options for timeouts, idempotency, polling, and other low
 
 .. autotypeddict:: runloop_api_client.sdk._types.LongRequestOptions
 
+.. autoclass:: runloop_api_client.sdk._types.PollingConfig
+   :members:
+   :undoc-members:
+
 .. autotypeddict:: runloop_api_client.sdk._types.PollingRequestOptions
 
 .. autotypeddict:: runloop_api_client.sdk._types.LongPollingRequestOptions
+
+Base API Type Reference
+-----------------------
+
+.. automodule:: runloop_api_client.types.shared_params
+   :members:
+   :undoc-members:
+   :imported-members:
+
+.. automodule:: runloop_api_client.types
+   :members:
+   :undoc-members:
+   :imported-members:
