@@ -102,8 +102,10 @@ Base API Type Reference
    :members:
    :undoc-members:
    :imported-members:
+   :member-order: groupwise
 
 .. automodule:: runloop_api_client.types
    :members:
    :undoc-members:
    :imported-members:
+   :member-order: groupwise

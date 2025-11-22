@@ -34,7 +34,6 @@ from ._types import (
 from .._client import Runloop
 from ._helpers import filter_params
 from .execution import Execution, _StreamingGroup
-from .protocols import FileInterface, CommandInterface, NetworkInterface
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
@@ -261,7 +260,7 @@ class Devbox:
         :return: Helper for running shell commands
         :rtype: CommandInterface
         """
-        return _CommandInterface(self)
+        return CommandInterface(self)
 
     @property
     def file(self) -> FileInterface:
@@ -270,7 +269,7 @@ class Devbox:
         :return: Helper for reading/writing files
         :rtype: FileInterface
         """
-        return _FileInterface(self)
+        return FileInterface(self)
 
     @property
     def net(self) -> NetworkInterface:
@@ -279,7 +278,7 @@ class Devbox:
         :return: Helper for SSH keys and tunnels
         :rtype: NetworkInterface
         """
-        return _NetworkInterface(self)
+        return NetworkInterface(self)
 
     # --------------------------------------------------------------------- #
     # Internal helpers
@@ -375,7 +374,7 @@ class Devbox:
         return thread
 
 
-class _CommandInterface:
+class CommandInterface:
     """Interface for executing commands on a devbox.
 
     Accessed via devbox.cmd property. Provides exec() for synchronous execution
@@ -465,7 +464,7 @@ class _CommandInterface:
         return Execution(client, devbox.id, execution, streaming_group)
 
 
-class _FileInterface:
+class FileInterface:
     """Interface for file operations on a devbox.
 
     Accessed via devbox.file property. Provides methods for reading, writing,
@@ -555,7 +554,7 @@ class _FileInterface:
         )
 
 
-class _NetworkInterface:
+class NetworkInterface:
     """Interface for network operations on a devbox.
 
     Accessed via devbox.net property. Provides methods for SSH access and tunneling.
