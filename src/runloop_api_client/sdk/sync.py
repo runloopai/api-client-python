@@ -574,7 +574,7 @@ class AgentOps:
         agent_view = self._client.agents.create(
             **params,
         )
-        return Agent(self._client, agent_view.id)
+        return Agent(self._client, agent_view.id, agent_view)
 
     def from_id(self, agent_id: str) -> Agent:
         """Attach to an existing agent by ID.

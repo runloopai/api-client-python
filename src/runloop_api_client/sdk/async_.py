@@ -159,7 +159,7 @@ class AsyncDevboxOps:
         page = await self._client.devboxes.list(
             **params,
         )
-        return [AsyncDevbox(self._client, item.id, item) for item in page.devboxes]
+        return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
 
 
 class AsyncSnapshotOps:
@@ -578,7 +578,7 @@ class AsyncAgentOps:
         agent_view = await self._client.agents.create(
             **params,
         )
-        return AsyncAgent(self._client, agent_view.id)
+        return AsyncAgent(self._client, agent_view.id, agent_view)
 
     def from_id(self, agent_id: str) -> AsyncAgent:
         """Attach to an existing agent by ID.
@@ -603,7 +603,7 @@ class AsyncAgentOps:
         page = await self._client.agents.list(
             **params,
         )
-        return [AsyncAgent(self._client, item.id) for item in page.agents]
+        return [AsyncAgent(self._client, item.id, item) for item in page.agents]
 
 
 class AsyncRunloopSDK:
