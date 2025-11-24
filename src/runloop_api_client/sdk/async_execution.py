@@ -7,7 +7,7 @@ import logging
 from typing import Optional, Awaitable, cast
 from typing_extensions import Unpack, override
 
-from ._types import RequestOptions, LongRequestOptions
+from ._types import BaseRequestOptions, LongRequestOptions
 from .._client import AsyncRunloop
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -119,7 +119,7 @@ class AsyncExecution:
         final = cast(DevboxAsyncExecutionDetailView, command_result)
         return AsyncExecutionResult(self._client, self._devbox_id, final)
 
-    async def get_state(self, **options: Unpack[RequestOptions]) -> DevboxAsyncExecutionDetailView:
+    async def get_state(self, **options: Unpack[BaseRequestOptions]) -> DevboxAsyncExecutionDetailView:
         """Fetch the latest execution state.
 
         :param options: Optional request configuration

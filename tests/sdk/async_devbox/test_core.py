@@ -15,9 +15,9 @@ from tests.sdk.conftest import MockDevboxView
 from runloop_api_client.sdk import AsyncDevbox
 from runloop_api_client.lib.polling import PollingConfig
 from runloop_api_client.sdk.async_devbox import (
-    _AsyncFileInterface,
-    _AsyncCommandInterface,
-    _AsyncNetworkInterface,
+    AsyncFileInterface,
+    AsyncCommandInterface,
+    AsyncNetworkInterface,
 )
 
 
@@ -276,19 +276,19 @@ class TestAsyncDevbox:
         """Test cmd property returns AsyncCommandInterface."""
         devbox = AsyncDevbox(mock_async_client, "dev_123")
         cmd = devbox.cmd
-        assert isinstance(cmd, _AsyncCommandInterface)
+        assert isinstance(cmd, AsyncCommandInterface)
         assert cmd._devbox is devbox
 
     def test_file_property(self, mock_async_client: AsyncMock) -> None:
         """Test file property returns AsyncFileInterface."""
         devbox = AsyncDevbox(mock_async_client, "dev_123")
         file_interface = devbox.file
-        assert isinstance(file_interface, _AsyncFileInterface)
+        assert isinstance(file_interface, AsyncFileInterface)
         assert file_interface._devbox is devbox
 
     def test_net_property(self, mock_async_client: AsyncMock) -> None:
         """Test net property returns AsyncNetworkInterface."""
         devbox = AsyncDevbox(mock_async_client, "dev_123")
         net = devbox.net
-        assert isinstance(net, _AsyncNetworkInterface)
+        assert isinstance(net, AsyncNetworkInterface)
         assert net._devbox is devbox

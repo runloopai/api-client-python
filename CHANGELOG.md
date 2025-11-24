@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.69.0 (2025-11-21)
+
+Full Changelog: [v0.68.0...v0.69.0](https://github.com/runloopai/api-client-python/compare/v0.68.0...v0.69.0)
+
+### Features
+
+* **blueprints:** blueprints create_and_await_build_complete now take in build_context and named_build_context arguments ([#681](https://github.com/runloopai/api-client-python/issues/681)) ([1febe28](https://github.com/runloopai/api-client-python/commit/1febe28e2cadb23eae0cc411922646ce7b8875d3))
+* **devbox:** unify api for devbox mounts ([01c7d14](https://github.com/runloopai/api-client-python/commit/01c7d14091961822d7fe706d6fa7528b6607f87a))
+* **docs:** add documentation for the object oriented sdk, rendered with sphinx ([#677](https://github.com/runloopai/api-client-python/issues/677)) ([e8d1053](https://github.com/runloopai/api-client-python/commit/e8d1053edd15c07f8e8099e9736f97e5fd72fcfb))
+* **storage-objects:** Add upload_from_dir helper method ([#680](https://github.com/runloopai/api-client-python/issues/680)) ([be5d99e](https://github.com/runloopai/api-client-python/commit/be5d99ef9983a64658c38ae5e0364122d11b86c4))
+
+
+### Documentation
+
+* restructured sync vs async sdk and resources, added support for more type references ([#679](https://github.com/runloopai/api-client-python/issues/679)) ([6af891e](https://github.com/runloopai/api-client-python/commit/6af891e0b87d038b5b61a683fdf410df94f495b6))
+
 ## 0.68.0 (2025-11-19)
 
 Full Changelog: [v0.67.0...v0.68.0](https://github.com/runloopai/api-client-python/compare/v0.67.0...v0.68.0)

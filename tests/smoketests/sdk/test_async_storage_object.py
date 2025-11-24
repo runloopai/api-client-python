@@ -98,7 +98,7 @@ class TestAsyncStorageObjectUploadMethods:
         text_content = "Hello from async upload_from_text!"
         obj = await async_sdk_client.storage_object.upload_from_text(
             text_content,
-            unique_name("sdk-async-text-upload"),
+            name=unique_name("sdk-async-text-upload"),
             metadata={"source": "upload_from_text"},
         )
 
@@ -117,7 +117,7 @@ class TestAsyncStorageObjectUploadMethods:
         bytes_content = b"Binary content from async SDK"
         obj = await async_sdk_client.storage_object.upload_from_bytes(
             bytes_content,
-            unique_name("sdk-async-bytes-upload"),
+            name=unique_name("sdk-async-bytes-upload"),
             content_type="text",
             metadata={"source": "upload_from_bytes"},
         )
@@ -142,7 +142,7 @@ class TestAsyncStorageObjectUploadMethods:
         try:
             obj = await async_sdk_client.storage_object.upload_from_file(
                 tmp_path,
-                unique_name("sdk-async-file-upload"),
+                name=unique_name("sdk-async-file-upload"),
                 metadata={"source": "upload_from_file"},
             )
 
@@ -157,6 +157,45 @@ class TestAsyncStorageObjectUploadMethods:
         finally:
             Path(tmp_path).unlink(missing_ok=True)
 
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_upload_from_dir(self, async_sdk_client: AsyncRunloopSDK) -> None:
+        """Test uploading from directory as tarball."""
+        # Create temporary directory with files
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            (tmp_path / "file1.txt").write_text("Async Content 1")
+            (tmp_path / "file2.txt").write_text("Async Content 2")
+            subdir = tmp_path / "subdir"
+            subdir.mkdir()
+            (subdir / "file3.txt").write_text("Async Content 3")
+
+            obj = await async_sdk_client.storage_object.upload_from_dir(
+                tmp_path,
+                name=unique_name("sdk-async-dir-upload"),
+                metadata={"source": "upload_from_dir"},
+            )
+
+            try:
+                assert obj.id is not None
+
+                # Verify it's a tarball
+                info = await obj.refresh()
+                assert info.content_type == "tgz"
+
+                # Download and verify tarball can be extracted
+                import io
+                import tarfile
+
+                tarball_bytes = await obj.download_as_bytes(duration_seconds=120)
+                with tarfile.open(fileobj=io.BytesIO(tarball_bytes), mode="r:gz") as tar:
+                    # Verify files exist in tarball
+                    names = tar.getnames()
+                    assert any("file1.txt" in name for name in names)
+                    assert any("file2.txt" in name for name in names)
+                    assert any("file3.txt" in name for name in names)
+            finally:
+                await obj.delete()
+
 
 class TestAsyncStorageObjectDownloadMethods:
     """Test async storage object download methods."""
@@ -167,7 +206,7 @@ class TestAsyncStorageObjectDownloadMethods:
         content = "Async text content to download"
         obj = await async_sdk_client.storage_object.upload_from_text(
             content,
-            unique_name("sdk-async-download-text"),
+            name=unique_name("sdk-async-download-text"),
         )
 
         try:
@@ -182,7 +221,7 @@ class TestAsyncStorageObjectDownloadMethods:
         content = b"Async bytes content to download"
         obj = await async_sdk_client.storage_object.upload_from_bytes(
             content,
-            unique_name("sdk-async-download-bytes"),
+            name=unique_name("sdk-async-download-bytes"),
             content_type="text",
         )
 
@@ -198,7 +237,7 @@ class TestAsyncStorageObjectDownloadMethods:
         """Test getting download URL."""
         obj = await async_sdk_client.storage_object.upload_from_text(
             "Content for async URL",
-            unique_name("sdk-async-download-url"),
+            name=unique_name("sdk-async-download-url"),
         )
 
         try:
@@ -227,7 +266,7 @@ class TestAsyncStorageObjectListing:
         # Create an object
         created = await async_sdk_client.storage_object.upload_from_text(
             "Content for async retrieval",
-            unique_name("sdk-async-storage-retrieve"),
+            name=unique_name("sdk-async-storage-retrieve"),
         )
 
         try:
@@ -247,7 +286,7 @@ class TestAsyncStorageObjectListing:
         # Create object with specific content type
         obj = await async_sdk_client.storage_object.upload_from_text(
             "Text content",
-            unique_name("sdk-async-storage-list-type"),
+            name=unique_name("sdk-async-storage-list-type"),
         )
 
         try:
@@ -271,7 +310,7 @@ class TestAsyncStorageObjectDevboxIntegration:
         # Create storage object with content
         obj = await async_sdk_client.storage_object.upload_from_text(
             "Async mounted content from SDK",
-            unique_name("sdk-async-mount-object"),
+            name=unique_name("sdk-async-mount-object"),
         )
 
         try:
@@ -303,7 +342,7 @@ class TestAsyncStorageObjectDevboxIntegration:
         # Create storage object
         obj = await async_sdk_client.storage_object.upload_from_text(
             "Async content to mount and access",
-            unique_name("sdk-async-mount-access"),
+            name=unique_name("sdk-async-mount-access"),
         )
 
         try:
@@ -346,7 +385,7 @@ class TestAsyncStorageObjectEdgeCases:
 
         obj = await async_sdk_client.storage_object.upload_from_text(
             large_content,
-            unique_name("sdk-async-storage-large"),
+            name=unique_name("sdk-async-storage-large"),
         )
 
         try:
@@ -365,7 +404,7 @@ class TestAsyncStorageObjectEdgeCases:
 
         obj = await async_sdk_client.storage_object.upload_from_bytes(
             binary_content,
-            unique_name("sdk-async-storage-binary"),
+            name=unique_name("sdk-async-storage-binary"),
             content_type="binary",
         )
 
@@ -381,7 +420,7 @@ class TestAsyncStorageObjectEdgeCases:
         """Test uploading empty content."""
         obj = await async_sdk_client.storage_object.upload_from_text(
             "",
-            unique_name("sdk-async-storage-empty"),
+            name=unique_name("sdk-async-storage-empty"),
         )
 
         try:

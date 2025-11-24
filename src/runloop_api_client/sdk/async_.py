@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import io
+import asyncio
+import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
+from datetime import timedelta
 from typing_extensions import Unpack
 
 import httpx
@@ -326,22 +330,25 @@ class AsyncStorageObjectOps:
     async def upload_from_file(
         self,
         file_path: str | Path,
-        name: str | None = None,
         *,
-        content_type: ContentType | None = None,
+        name: Optional[str] = None,
+        content_type: Optional[ContentType] = None,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local file path.
 
         :param file_path: Local filesystem path to read
         :type file_path: str | Path
-        :param name: Optional object name; defaults to the file name, defaults to None
-        :type name: str | None, optional
-        :param content_type: Optional MIME type to apply to the object, defaults to None
-        :type content_type: ContentType | None, optional
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param name: Optional object name; defaults to the file name
+        :type name: Optional[str]
+        :param content_type: Optional MIME type to apply to the object
+        :type content_type: Optional[ContentType]
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
@@ -350,23 +357,69 @@ class AsyncStorageObjectOps:
         path = Path(file_path)
 
         try:
-            content = path.read_bytes()
+            content = await asyncio.to_thread(lambda: path.read_bytes())
         except OSError as error:
             raise OSError(f"Failed to read file {path}: {error}") from error
 
         name = name or path.name
         content_type = content_type or detect_content_type(str(file_path))
-        obj = await self.create(name=name, content_type=content_type, metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = await self.create(name=name, content_type=content_type, metadata=metadata, ttl_ms=ttl_ms, **options)
         await obj.upload_content(content)
+        await obj.complete()
+        return obj
+
+    async def upload_from_dir(
+        self,
+        dir_path: str | Path,
+        *,
+        name: Optional[str] = None,
+        metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
+        **options: Unpack[LongRequestOptions],
+    ) -> AsyncStorageObject:
+        """Create and upload an object from a local directory.
+
+        The resulting object will be uploaded as a compressed tarball.
+
+        :param dir_path: Local filesystem directory path to tar
+        :type dir_path: str | Path
+        :param name: Optional object name; defaults to the directory name + '.tar.gz'
+        :type name: Optional[str]
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :return: Wrapper for the uploaded object
+        :rtype: AsyncStorageObject
+        :raises OSError: If the local file cannot be read
+        """
+        path = Path(dir_path)
+        name = name or f"{path.name}.tar.gz"
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+
+        def synchronous_io() -> bytes:
+            with io.BytesIO() as tar_buffer:
+                with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
+                    tar.add(path, arcname=".", recursive=True)
+                tar_buffer.seek(0)
+                return tar_buffer.read()
+
+        tar_bytes = await asyncio.to_thread(synchronous_io)
+
+        obj = await self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
+        await obj.upload_content(tar_bytes)
         await obj.complete()
         return obj
 
     async def upload_from_text(
         self,
         text: str,
-        name: str,
         *,
+        name: str,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a text payload.
@@ -375,13 +428,16 @@ class AsyncStorageObjectOps:
         :type text: str
         :param name: Object display name
         :type name: str
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
         """
-        obj = await self.create(name=name, content_type="text", metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = await self.create(name=name, content_type="text", metadata=metadata, ttl_ms=ttl_ms, **options)
         await obj.upload_content(text)
         await obj.complete()
         return obj
@@ -389,10 +445,11 @@ class AsyncStorageObjectOps:
     async def upload_from_bytes(
         self,
         data: bytes,
-        name: str,
         *,
+        name: str,
         content_type: ContentType,
         metadata: Optional[Dict[str, str]] = None,
+        ttl: Optional[timedelta] = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a bytes payload.
@@ -403,13 +460,16 @@ class AsyncStorageObjectOps:
         :type name: str
         :param content_type: MIME type describing the payload
         :type content_type: ContentType
-        :param metadata: Optional key-value metadata, defaults to None
-        :type metadata: Optional[Dict[str, str]], optional
+        :param metadata: Optional key-value metadata
+        :type metadata: Optional[Dict[str, str]]
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :type ttl: Optional[timedelta]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
         """
-        obj = await self.create(name=name, content_type=content_type, metadata=metadata, **options)
+        ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
+        obj = await self.create(name=name, content_type=content_type, metadata=metadata, ttl_ms=ttl_ms, **options)
         await obj.upload_content(data)
         await obj.complete()
         return obj
