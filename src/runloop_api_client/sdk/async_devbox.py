@@ -15,7 +15,7 @@ from ..types import (
 )
 from ._types import (
     LogCallback,
-    RequestOptions,
+    BaseRequestOptions,
     LongRequestOptions,
     PollingRequestOptions,
     SDKDevboxExecuteParams,
@@ -32,7 +32,6 @@ from ._types import (
 )
 from .._client import AsyncRunloop
 from ._helpers import filter_params
-from .protocols import AsyncFileInterface, AsyncCommandInterface, AsyncNetworkInterface
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
@@ -104,7 +103,7 @@ class AsyncDevbox:
 
     async def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
@@ -259,7 +258,7 @@ class AsyncDevbox:
         :return: Helper for running shell commands
         :rtype: AsyncCommandInterface
         """
-        return _AsyncCommandInterface(self)
+        return AsyncCommandInterface(self)
 
     @property
     def file(self) -> AsyncFileInterface:
@@ -268,7 +267,7 @@ class AsyncDevbox:
         :return: Helper for reading/writing files
         :rtype: AsyncFileInterface
         """
-        return _AsyncFileInterface(self)
+        return AsyncFileInterface(self)
 
     @property
     def net(self) -> AsyncNetworkInterface:
@@ -277,7 +276,7 @@ class AsyncDevbox:
         :return: Helper for SSH keys and tunnels
         :rtype: AsyncNetworkInterface
         """
-        return _AsyncNetworkInterface(self)
+        return AsyncNetworkInterface(self)
 
     # ------------------------------------------------------------------ #
     # Internal helpers
@@ -357,7 +356,7 @@ class AsyncDevbox:
             logger.exception("error streaming %s logs for devbox %s", name, self._id)
 
 
-class _AsyncCommandInterface:
+class AsyncCommandInterface:
     """Interface for executing commands on a devbox.
 
     Accessed via devbox.cmd property. Provides exec() for synchronous execution
@@ -457,7 +456,7 @@ class _AsyncCommandInterface:
         return AsyncExecution(client, devbox.id, execution, streaming_group)
 
 
-class _AsyncFileInterface:
+class AsyncFileInterface:
     """Interface for file operations on a devbox.
 
     Accessed via devbox.file property. Provides coroutines for reading, writing,
@@ -547,7 +546,7 @@ class _AsyncFileInterface:
         )
 
 
-class _AsyncNetworkInterface:
+class AsyncNetworkInterface:
     """Interface for networking operations on a devbox.
 
     Accessed via devbox.net property. Provides coroutines for SSH access and tunneling.

@@ -15,7 +15,7 @@ from ..types import (
 )
 from ._types import (
     LogCallback,
-    RequestOptions,
+    BaseRequestOptions,
     LongRequestOptions,
     PollingRequestOptions,
     SDKDevboxExecuteParams,
@@ -34,7 +34,6 @@ from ._types import (
 from .._client import Runloop
 from ._helpers import filter_params
 from .execution import Execution, _StreamingGroup
-from .protocols import FileInterface, CommandInterface, NetworkInterface
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from .execution_result import ExecutionResult
@@ -103,13 +102,13 @@ class Devbox:
 
     def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> DevboxView:
         """Retrieve current devbox status and metadata.
 
         :param options: Optional request configuration
         :return: Current devbox state info
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         return self._client.devboxes.retrieve(
             self._id,
@@ -124,7 +123,7 @@ class Devbox:
         :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None
         :type polling_config: PollingConfig | None, optional
         :return: Devbox state info after it reaches running status
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         return self._client.devboxes.await_running(self._id, polling_config=polling_config)
 
@@ -136,7 +135,7 @@ class Devbox:
         :param polling_config: Optional configuration for polling behavior (timeout, interval), defaults to None
         :type polling_config: PollingConfig | None, optional
         :return: Devbox state info after it reaches suspended status
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         return self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
 
@@ -148,7 +147,7 @@ class Devbox:
 
         :param options: Long-running request configuration (timeouts, retries, etc.)
         :return: Final devbox state info
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         return self._client.devboxes.shutdown(
             self._id,
@@ -166,7 +165,7 @@ class Devbox:
 
         :param options: Optional long-running request and polling configuration
         :return: Suspended devbox state info
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         self._client.devboxes.suspend(
             self._id,
@@ -184,7 +183,7 @@ class Devbox:
 
         :param options: Optional long-running request and polling configuration
         :return: Resumed devbox state info
-        :rtype: DevboxView
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
         self._client.devboxes.resume(
             self._id,
@@ -261,7 +260,7 @@ class Devbox:
         :return: Helper for running shell commands
         :rtype: CommandInterface
         """
-        return _CommandInterface(self)
+        return CommandInterface(self)
 
     @property
     def file(self) -> FileInterface:
@@ -270,7 +269,7 @@ class Devbox:
         :return: Helper for reading/writing files
         :rtype: FileInterface
         """
-        return _FileInterface(self)
+        return FileInterface(self)
 
     @property
     def net(self) -> NetworkInterface:
@@ -279,7 +278,7 @@ class Devbox:
         :return: Helper for SSH keys and tunnels
         :rtype: NetworkInterface
         """
-        return _NetworkInterface(self)
+        return NetworkInterface(self)
 
     # --------------------------------------------------------------------- #
     # Internal helpers
@@ -375,7 +374,7 @@ class Devbox:
         return thread
 
 
-class _CommandInterface:
+class CommandInterface:
     """Interface for executing commands on a devbox.
 
     Accessed via devbox.cmd property. Provides exec() for synchronous execution
@@ -465,7 +464,7 @@ class _CommandInterface:
         return Execution(client, devbox.id, execution, streaming_group)
 
 
-class _FileInterface:
+class FileInterface:
     """Interface for file operations on a devbox.
 
     Accessed via devbox.file property. Provides methods for reading, writing,
@@ -504,7 +503,7 @@ class _FileInterface:
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxWriteFileContentsParams` for available parameters
         :return: Execution metadata for the write command
-        :rtype: DevboxExecutionDetailView
+        :rtype: :class:`~runloop_api_client.types.devbox_execution_detail_view.DevboxExecutionDetailView`
 
         Example:
             >>> devbox.file.write(file_path="/home/user/config.json", contents='{"key": "value"}')
@@ -555,7 +554,7 @@ class _FileInterface:
         )
 
 
-class _NetworkInterface:
+class NetworkInterface:
     """Interface for network operations on a devbox.
 
     Accessed via devbox.net property. Provides methods for SSH access and tunneling.
@@ -572,7 +571,7 @@ class _NetworkInterface:
 
         :param options: Optional long-running request configuration
         :return: Response containing SSH connection info
-        :rtype: DevboxCreateSSHKeyResponse
+        :rtype: :class:`~runloop_api_client.types.devbox_create_ssh_key_response.DevboxCreateSSHKeyResponse`
 
         Example:
             >>> ssh_key = devbox.net.create_ssh_key()
@@ -591,7 +590,7 @@ class _NetworkInterface:
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
         :return: Details about the public endpoint
-        :rtype: DevboxTunnelView
+        :rtype: :class:`~runloop_api_client.types.devbox_tunnel_view.DevboxTunnelView`
 
         Example:
             >>> tunnel = devbox.net.create_tunnel(port=8080)

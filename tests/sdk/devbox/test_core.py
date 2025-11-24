@@ -17,9 +17,9 @@ from tests.sdk.conftest import (
 from runloop_api_client.sdk import Devbox
 from runloop_api_client._types import omit
 from runloop_api_client.sdk.devbox import (
-    _FileInterface,
-    _CommandInterface,
-    _NetworkInterface,
+    FileInterface,
+    CommandInterface,
+    NetworkInterface,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -280,19 +280,19 @@ class TestDevbox:
         """Test cmd property returns CommandInterface."""
         devbox = Devbox(mock_client, "dev_123")
         cmd = devbox.cmd
-        assert isinstance(cmd, _CommandInterface)
+        assert isinstance(cmd, CommandInterface)
         assert cmd._devbox is devbox
 
     def test_file_property(self, mock_client: Mock) -> None:
         """Test file property returns FileInterface."""
         devbox = Devbox(mock_client, "dev_123")
         file_interface = devbox.file
-        assert isinstance(file_interface, _FileInterface)
+        assert isinstance(file_interface, FileInterface)
         assert file_interface._devbox is devbox
 
     def test_net_property(self, mock_client: Mock) -> None:
         """Test net property returns NetworkInterface."""
         devbox = Devbox(mock_client, "dev_123")
         net = devbox.net
-        assert isinstance(net, _NetworkInterface)
+        assert isinstance(net, NetworkInterface)
         assert net._devbox is devbox

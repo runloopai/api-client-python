@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing_extensions import Unpack, override
 
 from ..types import BlueprintView
-from ._types import RequestOptions, LongRequestOptions, SDKDevboxCreateFromImageParams
+from ._types import BaseRequestOptions, LongRequestOptions, SDKDevboxCreateFromImageParams
 from .._client import AsyncRunloop
 from .async_devbox import AsyncDevbox
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
@@ -44,7 +44,7 @@ class AsyncBlueprint:
 
     async def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> BlueprintView:
         """Retrieve the latest blueprint details.
 
@@ -59,7 +59,7 @@ class AsyncBlueprint:
 
     async def logs(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> BlueprintBuildLogsListView:
         """Retrieve build logs for the blueprint.
 

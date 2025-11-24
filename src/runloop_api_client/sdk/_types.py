@@ -36,7 +36,7 @@ class ExecuteStreamingCallbacks(TypedDict, total=False):
     """Callback invoked for all log lines (both stdout and stderr)"""
 
 
-class RequestOptions(TypedDict, total=False):
+class BaseRequestOptions(TypedDict, total=False):
     extra_headers: Optional[Headers]
     """Send extra headers"""
 
@@ -50,12 +50,12 @@ class RequestOptions(TypedDict, total=False):
     """Override the client-level default timeout for this request, in seconds"""
 
 
-class LongRequestOptions(RequestOptions, total=False):
+class LongRequestOptions(BaseRequestOptions, total=False):
     idempotency_key: Optional[str]
     """Specify a custom idempotency key for this request"""
 
 
-class PollingRequestOptions(RequestOptions, total=False):
+class PollingRequestOptions(BaseRequestOptions, total=False):
     polling_config: Optional[PollingConfig]
     """Configuration for polling behavior"""
 
@@ -80,7 +80,7 @@ class SDKDevboxExecuteAsyncParams(DevboxExecuteAsyncParams, ExecuteStreamingCall
     pass
 
 
-class SDKDevboxListParams(DevboxListParams, RequestOptions):
+class SDKDevboxListParams(DevboxListParams, BaseRequestOptions):
     pass
 
 
@@ -116,7 +116,7 @@ class SDKDevboxSnapshotDiskParams(DevboxSnapshotDiskParams, LongPollingRequestOp
     pass
 
 
-class SDKDiskSnapshotListParams(DiskSnapshotListParams, RequestOptions):
+class SDKDiskSnapshotListParams(DiskSnapshotListParams, BaseRequestOptions):
     pass
 
 
@@ -128,11 +128,11 @@ class SDKBlueprintCreateParams(BlueprintCreateParams, LongPollingRequestOptions)
     pass
 
 
-class SDKBlueprintListParams(BlueprintListParams, RequestOptions):
+class SDKBlueprintListParams(BlueprintListParams, BaseRequestOptions):
     pass
 
 
-class SDKObjectListParams(ObjectListParams, RequestOptions):
+class SDKObjectListParams(ObjectListParams, BaseRequestOptions):
     pass
 
 
@@ -140,5 +140,5 @@ class SDKObjectCreateParams(ObjectCreateParams, LongRequestOptions):
     pass
 
 
-class SDKObjectDownloadParams(ObjectDownloadParams, RequestOptions):
+class SDKObjectDownloadParams(ObjectDownloadParams, BaseRequestOptions):
     pass

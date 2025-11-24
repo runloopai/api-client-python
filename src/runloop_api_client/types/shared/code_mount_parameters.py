@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Optional
+from typing_extensions import Literal
 
 from ..._models import BaseModel
 
@@ -16,6 +17,8 @@ class CodeMountParameters(BaseModel):
 
     repo_owner: str
     """The owner of the repo."""
+
+    type: Literal["code_mount"]
 
     token: Optional[str] = None
     """The authentication token necessary to pull repo."""

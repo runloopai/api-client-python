@@ -42,6 +42,7 @@ html_static_path = ["_static"]
 # Autodoc settings
 autodoc_default_options = {
     "members": None,
+    "member-order": "bysource",
 }
 
 autodoc_typehints = "description"

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing_extensions import Unpack, override
 
 from ._types import (
-    RequestOptions,
+    BaseRequestOptions,
     LongRequestOptions,
     PollingRequestOptions,
     SDKDiskSnapshotUpdateParams,
@@ -50,7 +50,7 @@ class Snapshot:
 
     def get_info(
         self,
-        **options: Unpack[RequestOptions],
+        **options: Unpack[BaseRequestOptions],
     ) -> DevboxSnapshotAsyncStatusView:
         """Retrieve the latest snapshot status.
 
