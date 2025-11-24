@@ -680,9 +680,32 @@ class TestAgentClient:
         assert isinstance(agent, Agent)
         assert agent.id == "agent_123"
 
-    def test_list(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+    def test_list(self, mock_client: Mock) -> None:
         """Test list method."""
-        page = SimpleNamespace(agents=[agent_view])
+        # Create three agent views with different data
+        agent_view_1 = MockAgentView(
+            id="agent_001",
+            name="first-agent",
+            create_time_ms=1234567890000,
+            is_public=False,
+            source=None,
+        )
+        agent_view_2 = MockAgentView(
+            id="agent_002",
+            name="second-agent",
+            create_time_ms=1234567891000,
+            is_public=True,
+            source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
+        )
+        agent_view_3 = MockAgentView(
+            id="agent_003",
+            name="third-agent",
+            create_time_ms=1234567892000,
+            is_public=False,
+            source={"type": "npm", "npm": {"package_name": "example-package"}},
+        )
+
+        page = SimpleNamespace(agents=[agent_view_1, agent_view_2, agent_view_3])
         mock_client.agents.list.return_value = page
 
         client = AgentOps(mock_client)
@@ -691,9 +714,42 @@ class TestAgentClient:
             starting_after="agent_000",
         )
 
-        assert len(agents) == 1
-        assert isinstance(agents[0], Agent)
-        assert agents[0].id == "agent_123"
+        # Verify we got three agents
+        assert len(agents) == 3
+        assert all(isinstance(agent, Agent) for agent in agents)
+
+        # Verify the agent IDs
+        assert agents[0].id == "agent_001"
+        assert agents[1].id == "agent_002"
+        assert agents[2].id == "agent_003"
+
+        # Test that get_info() retrieves the cached AgentView for the first agent
+        info = agents[0].get_info()
+        assert info.id == "agent_001"
+        assert info.name == "first-agent"
+        assert info.create_time_ms == 1234567890000
+        assert info.is_public is False
+        assert info.source is None
+
+        # Test that get_info() retrieves the cached AgentView for the second agent
+        info = agents[1].get_info()
+        assert info.id == "agent_002"
+        assert info.name == "second-agent"
+        assert info.create_time_ms == 1234567891000
+        assert info.is_public is True
+        assert info.source == {"type": "git", "git": {"repository": "https://github.com/example/repo"}}
+
+        # Test that get_info() retrieves the cached AgentView for the third agent
+        info = agents[2].get_info()
+        assert info.id == "agent_003"
+        assert info.name == "third-agent"
+        assert info.create_time_ms == 1234567892000
+        assert info.is_public is False
+        assert info.source == {"type": "npm", "npm": {"package_name": "example-package"}}
+
+        # Verify that agents.retrieve was NOT called (because we're using cached data)
+        mock_client.agents.retrieve.assert_not_called()
+
         mock_client.agents.list.assert_called_once()
 
 

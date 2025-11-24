@@ -103,6 +103,9 @@ class MockAgentView:
 
     id: str = "agent_123"
     name: str = "test-agent"
+    create_time_ms: int = 1234567890000
+    is_public: bool = False
+    source: Any = None
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
