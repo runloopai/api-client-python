@@ -1,10 +1,9 @@
 from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
-from runloop_api_client.types.devboxes import DiskSnapshotUpdateParams
-
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
+from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
@@ -20,7 +19,6 @@ from ..types.devbox_remove_tunnel_params import DevboxRemoveTunnelParams
 from ..types.devbox_snapshot_disk_params import DevboxSnapshotDiskParams
 from ..types.devbox_read_file_contents_params import DevboxReadFileContentsParams
 from ..types.devbox_write_file_contents_params import DevboxWriteFileContentsParams
-from ..types.devboxes.disk_snapshot_list_params import DiskSnapshotListParams
 
 LogCallback = Callable[[str], None]
 

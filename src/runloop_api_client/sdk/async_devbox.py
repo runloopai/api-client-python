@@ -34,10 +34,10 @@ from .._client import AsyncRunloop
 from ._helpers import filter_params
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
+from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
-from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 StreamFactory = Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]

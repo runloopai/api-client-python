@@ -13,8 +13,8 @@ from ._types import (
 )
 from .._client import AsyncRunloop
 from .async_devbox import AsyncDevbox
+from ..types.devboxes import DevboxSnapshotAsyncStatusView
 from ..types.devbox_snapshot_view import DevboxSnapshotView
-from ..types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
 
 class AsyncSnapshot:

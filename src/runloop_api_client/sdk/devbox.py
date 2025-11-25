@@ -36,9 +36,9 @@ from ._helpers import filter_params
 from .execution import Execution, _StreamingGroup
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
+from ..types.devboxes import ExecutionUpdateChunk
 from .execution_result import ExecutionResult
 from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
-from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 if TYPE_CHECKING:
