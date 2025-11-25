@@ -30,7 +30,7 @@ from .scorers import (
     ScorersResourceWithStreamingResponse,
     AsyncScorersResourceWithStreamingResponse,
 )
-from ..._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -457,17 +457,17 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        benchmark_run_id: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | Omit = omit,
         polling_config: PollingConfig | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioRunView:
         """Start a new ScenarioRun and wait for its environment to be ready.
@@ -913,11 +913,16 @@ class AsyncScenariosResource(AsyncAPIResource):
     async def start_run_and_await_env_ready(
         self,
         scenario_id: str,
-        benchmark_run_id: Optional[str] | NotGiven = NOT_GIVEN,
-        metadata: Optional[Dict[str, str]] | NotGiven = NOT_GIVEN,
-        run_name: Optional[str] | NotGiven = NOT_GIVEN,
-        run_profile: Optional[scenario_start_run_params.RunProfile] | NotGiven = NOT_GIVEN,
+        benchmark_run_id: Optional[str] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        run_name: Optional[str] | Omit = omit,
+        run_profile: Optional[scenario_start_run_params.RunProfile] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
     ) -> ScenarioRunView:
         """Start a new ScenarioRun and wait for its environment to be ready.
 
@@ -941,6 +946,11 @@ class AsyncScenariosResource(AsyncAPIResource):
             metadata=metadata,
             run_name=run_name,
             run_profile=run_profile,
+            extra_headers=extra_headers,
+            extra_query=extra_query,
+            extra_body=extra_body,
+            timeout=timeout,
+            idempotency_key=idempotency_key,
         )
 
         await self._client.devboxes.await_running(
