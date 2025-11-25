@@ -29,7 +29,7 @@ class DevboxCreateParams(TypedDict, total=False):
     """
 
     code_mounts: Optional[Iterable[CodeMountParameters]]
-    """A list of code mounts to be included in the Devbox."""
+    """A list of code mounts to be included in the Devbox. Use mounts instead."""
 
     entrypoint: Optional[str]
     """
@@ -42,7 +42,7 @@ class DevboxCreateParams(TypedDict, total=False):
     """(Optional) Environment variables used to configure your Devbox."""
 
     file_mounts: Optional[Dict[str, str]]
-    """(Optional) Map of paths and file contents to write before setup.."""
+    """Map of paths and file contents to write before setup. Use mounts instead."""
 
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure the resources and launch time behavior of the Devbox."""

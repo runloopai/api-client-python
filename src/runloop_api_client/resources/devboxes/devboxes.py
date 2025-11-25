@@ -186,7 +186,7 @@ class DevboxesResource(SyncAPIResource):
               successfully built Blueprint with the given name. Only one of (Snapshot ID,
               Blueprint ID, Blueprint name) should be specified.
 
-          code_mounts: A list of code mounts to be included in the Devbox.
+          code_mounts: A list of code mounts to be included in the Devbox. Use mounts instead.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -194,7 +194,7 @@ class DevboxesResource(SyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
@@ -1494,7 +1494,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
               successfully built Blueprint with the given name. Only one of (Snapshot ID,
               Blueprint ID, Blueprint name) should be specified.
 
-          code_mounts: A list of code mounts to be included in the Devbox.
+          code_mounts: A list of code mounts to be included in the Devbox. Use mounts instead.
 
           entrypoint: (Optional) When specified, the Devbox will run this script as its main
               executable. The devbox lifecycle will be bound to entrypoint, shutting down when
@@ -1502,7 +1502,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           environment_variables: (Optional) Environment variables used to configure your Devbox.
 
-          file_mounts: (Optional) Map of paths and file contents to write before setup..
+          file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
