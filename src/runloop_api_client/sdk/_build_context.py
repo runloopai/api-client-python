@@ -13,6 +13,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing_extensions import Protocol
 
+from ..lib._ignore import IgnoreMatcher
 from ..lib.context_loader import build_docker_context_tar
 from ..types.object_create_params import ContentType
 
@@ -47,7 +48,7 @@ class BuildContextStrategy(Protocol):
         context_root: Path,
         *,
         name: str | None = None,
-        ignore: str | Path | tuple[str, ...] | list[str] | None = None,
+        ignore: IgnoreMatcher | None = None,
     ) -> BuildContextArtifact:
         """Package the given directory into a tarball.
 
@@ -67,7 +68,7 @@ def default_build_context_strategy(
     context_root: Path,
     *,
     name: str | None = None,
-    ignore: str | Path | tuple[str, ...] | list[str] | None = None,
+    ignore: IgnoreMatcher | None = None,
 ) -> BuildContextArtifact:
     """Default implementation that wraps ``build_docker_context_tar``.
 

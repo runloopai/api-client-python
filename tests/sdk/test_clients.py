@@ -25,6 +25,7 @@ from runloop_api_client.sdk.sync import (
     BlueprintOps,
     StorageObjectOps,
 )
+from runloop_api_client.lib._ignore import DockerIgnoreMatcher
 from runloop_api_client.lib.polling import PollingConfig
 
 
@@ -545,7 +546,8 @@ class TestStorageObjectClient:
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
-        obj = client.upload_from_dir(test_dir, ignore=extra_ignore)
+        matcher = DockerIgnoreMatcher(extra_ignorefile=extra_ignore)
+        obj = client.upload_from_dir(test_dir, ignore=matcher)
 
         assert isinstance(obj, StorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]
@@ -577,7 +579,8 @@ class TestStorageObjectClient:
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
-        obj = client.upload_from_dir(test_dir, ignore=["*.log", "build/"])
+        matcher = DockerIgnoreMatcher(patterns=["*.log", "build/"])
+        obj = client.upload_from_dir(test_dir, ignore=matcher)
 
         assert isinstance(obj, StorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]

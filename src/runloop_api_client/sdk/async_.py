@@ -24,6 +24,7 @@ from ._types import (
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
+from ..lib._ignore import IgnoreMatcher
 from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
@@ -375,7 +376,7 @@ class AsyncStorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
-        ignore: str | Path | Sequence[str] | None = None,
+        ignore: IgnoreMatcher | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local directory.
@@ -390,12 +391,11 @@ class AsyncStorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param ignore: Optional ignore configuration. If a string or :class:`Path`
-            is provided it is treated as the path to an additional ignorefile.
-            If a sequence of strings is provided, they are interpreted as inline
-            ignore patterns appended after patterns loaded from
-            ``.dockerignore`` under ``dir_path``.
-        :type ignore: Optional[str | Path | Sequence[str]]
+        :param ignore: Optional ignore matcher. When provided it controls which
+            files under ``dir_path`` are included in the archived build
+            context. When omitted, a default Docker-style matcher that honors
+            ``.dockerignore`` under ``dir_path`` is used.
+        :type ignore: Optional[IgnoreMatcher]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
             for available options
         :return: Wrapper for the uploaded object

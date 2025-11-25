@@ -25,6 +25,7 @@ from runloop_api_client.sdk.async_ import (
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
 )
+from runloop_api_client.lib._ignore import DockerIgnoreMatcher
 from runloop_api_client.lib.polling import PollingConfig
 
 
@@ -461,7 +462,8 @@ class TestAsyncStorageObjectClient:
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_dir(test_dir, ignore=["*.log", "build/"])
+        matcher = DockerIgnoreMatcher(patterns=["*.log", "build/"])
+        obj = await client.upload_from_dir(test_dir, ignore=matcher)
 
         assert isinstance(obj, AsyncStorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]

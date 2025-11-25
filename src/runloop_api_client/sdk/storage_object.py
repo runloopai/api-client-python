@@ -8,6 +8,7 @@ from typing_extensions import Unpack, override
 from ._types import BaseRequestOptions, LongRequestOptions, SDKObjectDownloadParams
 from .._client import Runloop
 from ..types.object_view import ObjectView
+from ..types.blueprint_create_params import BuildContext
 from ..types.object_download_url_view import ObjectDownloadURLView
 
 
@@ -159,10 +160,10 @@ class StorageObject:
         response = self._client._client.put(url, content=content)
         response.raise_for_status()
 
-    def as_build_context(self) -> dict[str, str]:
+    def as_build_context(self) -> BuildContext:
         """Return this object in the shape expected for a Blueprint build context.
 
-        The returned dict can be passed directly to ``build_context`` or
+        The returned mapping can be passed directly to ``build_context`` or
         ``named_build_contexts`` when creating a blueprint.
         """
         return {

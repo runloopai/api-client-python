@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import os
+from abc import ABC, abstractmethod
 from typing import Iterable, Optional, Sequence
 from pathlib import Path, PurePosixPath
 from dataclasses import dataclass
 
 __all__ = [
     "IgnorePattern",
+    "IgnoreMatcher",
+    "DockerIgnoreMatcher",
     "read_ignorefile",
     "compile_ignore",
     "path_match",
@@ -281,3 +284,61 @@ def iter_included_files(
             if is_ignored(rel_file, is_dir=False, patterns=patterns):
                 continue
             yield file_path
+
+
+class IgnoreMatcher(ABC):
+    """Abstract interface for ignore matchers like .dockerignore and .gitignore.
+
+    There is considerable variation for each ignore file format, so this interface
+    provides a minimal contract for supporting each format. Implementations are
+    responsible for interpreting any underlying ignore configuration (files, inline
+    patterns, etc.) and returning all files that should be included under a given
+    root directory.
+    """
+
+    @abstractmethod
+    def iter_paths(self, root: Path) -> Iterable[Path]:
+        """Yield filesystem paths to include under ``root``."""
+
+
+@dataclass(frozen=True)
+class DockerIgnoreMatcher(IgnoreMatcher):
+    """Ignore matcher that mirrors Docker's .dockerignore semantics.
+
+    This matcher:
+    - Closely follows Docker's .dockerignore semantics.
+    - Always loads patterns from ``.dockerignore`` in the provided context
+      root, if present.
+    - Optionally loads additional patterns from an extra ignorefile.
+    - Optionally appends inline pattern strings.
+
+    Note: Patterns follow Docker-style semantics (``!`` negation, ``**`` support).
+    """
+
+    extra_ignorefile: str | Path | None = None
+    patterns: Sequence[str] | None = None
+
+    def iter_paths(self, root: Path) -> Iterable[Path]:
+        """Yield non-ignored files under ``root`` honoring Docker-style patterns."""
+
+        root = root.resolve()
+
+        all_patterns: list[str] = []
+
+        # 1) Always consider .dockerignore under the context root, if present.
+        default_ignorefile = root / ".dockerignore"
+        all_patterns.extend(read_ignorefile(default_ignorefile))
+
+        # 2) Optional additional ignorefile.
+        if self.extra_ignorefile is not None:
+            ignore_path = Path(self.extra_ignorefile)
+            if not ignore_path.exists():
+                raise FileNotFoundError(f"Ignore file does not exist: {ignore_path}")
+            all_patterns.extend(read_ignorefile(ignore_path))
+
+        # 3) Optional inline patterns appended last.
+        if self.patterns:
+            all_patterns.extend(self.patterns)
+
+        compiled: list[IgnorePattern] = compile_ignore(all_patterns)
+        return iter_included_files(root, patterns=compiled)
