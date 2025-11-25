@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Union
+from typing import Union
 from typing_extensions import Literal, Annotated, TypeAlias
 
 from ..._utils import PropertyInfo
@@ -13,12 +13,11 @@ __all__ = ["Mount", "FileMountParameters"]
 
 
 class FileMountParameters(BaseModel):
-    files: Dict[str, str]
-    """Map of file paths to file contents to be written before setup.
+    content: str
+    """Content of the file to mount."""
 
-    Keys are absolute paths where files should be created, values are the file
-    contents.
-    """
+    target: str
+    """Target path where the file should be mounted."""
 
     type: Literal["file_mount"]
 

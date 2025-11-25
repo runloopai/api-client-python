@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Union
+from typing import Union
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .code_mount_parameters import CodeMountParameters
@@ -13,12 +13,11 @@ __all__ = ["Mount", "FileMountParameters"]
 
 
 class FileMountParameters(TypedDict, total=False):
-    files: Required[Dict[str, str]]
-    """Map of file paths to file contents to be written before setup.
+    content: Required[str]
+    """Content of the file to mount."""
 
-    Keys are absolute paths where files should be created, values are the file
-    contents.
-    """
+    target: Required[str]
+    """Target path where the file should be mounted."""
 
     type: Required[Literal["file_mount"]]
 

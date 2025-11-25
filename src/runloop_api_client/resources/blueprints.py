@@ -130,6 +130,7 @@ class BlueprintsResource(SyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
+        build_context: Optional[blueprint_create_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -165,6 +166,8 @@ class BlueprintsResource(SyncAPIResource):
               be specified.
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -209,6 +212,7 @@ class BlueprintsResource(SyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -641,6 +645,7 @@ class BlueprintsResource(SyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
+        build_context: Optional[blueprint_preview_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -674,6 +679,8 @@ class BlueprintsResource(SyncAPIResource):
               be specified.
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -714,6 +721,7 @@ class BlueprintsResource(SyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -763,6 +771,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
+        build_context: Optional[blueprint_create_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -798,6 +807,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               be specified.
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -842,6 +853,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
@@ -1274,6 +1286,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         base_blueprint_id: Optional[str] | Omit = omit,
         base_blueprint_name: Optional[str] | Omit = omit,
         build_args: Optional[Dict[str, str]] | Omit = omit,
+        build_context: Optional[blueprint_preview_params.BuildContext] | Omit = omit,
         code_mounts: Optional[Iterable[CodeMountParameters]] | Omit = omit,
         dockerfile: Optional[str] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
@@ -1307,6 +1320,8 @@ class AsyncBlueprintsResource(AsyncAPIResource):
               be specified.
 
           build_args: (Optional) Arbitrary Docker build args to pass during build.
+
+          build_context: A build context backed by an Object.
 
           code_mounts: A list of code mounts to be included in the Blueprint.
 
@@ -1347,6 +1362,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "base_blueprint_id": base_blueprint_id,
                     "base_blueprint_name": base_blueprint_name,
                     "build_args": build_args,
+                    "build_context": build_context,
                     "code_mounts": code_mounts,
                     "dockerfile": dockerfile,
                     "file_mounts": file_mounts,
