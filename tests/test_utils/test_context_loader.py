@@ -75,17 +75,16 @@ def test_iter_build_context_files_respects_dockerignore(tmp_path: Path):
     assert "build/ignored.txt" not in files
 
 
-def test_is_ignored_folder_exclusion_cannot_be_reincluded() -> None:
-    """Folder exclusion followed by file inclusion should still exclude.
-
-    Mirrors Docker behavior exercised in moby's TestPatternMatchesFolderExclusions
-    style tests: a directory excluded by a pattern like ``docs`` cannot have
-    children re-included by a later ``!docs/README.md`` pattern.
-    """
+def test_is_ignored_directory_pattern_affects_directory_entry_only() -> None:
+    """Directory patterns apply directly to directory entries, not to children."""
 
     patterns = compile_ignore(["docs", "!docs/README.md"])
-    # The file under docs remains ignored overall.
-    assert is_ignored("docs/README.md", is_dir=False, patterns=patterns)
+
+    # The directory itself is ignored.
+    assert is_ignored("docs", is_dir=True, patterns=patterns)
+    # The child file is not ignored by the pattern set alone; directory pruning
+    # in ``iter_included_files`` is responsible for excluding its contents.
+    assert not is_ignored("docs/README.md", is_dir=False, patterns=patterns)
 
 
 def test_compile_ignore_directory_only_and_files() -> None:
@@ -99,8 +98,10 @@ def test_compile_ignore_directory_only_and_files() -> None:
     assert not path_match(build_pat, "build", is_dir=False)
     assert path_match(build_pat, "build", is_dir=True)
 
-    # But files under the directory are ignored via ancestor directory match.
-    assert is_ignored("build/output.bin", is_dir=False, patterns=patterns)
+    # Files under the directory are not ignored purely by the directory-only
+    # pattern; directory pruning in ``iter_included_files`` is responsible
+    # for skipping their traversal.
+    assert not is_ignored("build/output.bin", is_dir=False, patterns=patterns)
     # Log files are ignored everywhere.
     assert is_ignored("app.log", is_dir=False, patterns=patterns)
     assert is_ignored("subdir/app.log", is_dir=False, patterns=patterns)

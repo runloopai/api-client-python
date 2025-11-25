@@ -27,6 +27,7 @@ from ._helpers import detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .storage_object import StorageObject
+from ..lib.context_loader import build_docker_context_tar
 from ..types.object_create_params import ContentType
 
 

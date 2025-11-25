@@ -27,6 +27,7 @@ from ._helpers import detect_content_type
 from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
+from ..lib.context_loader import build_docker_context_tar
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
 
