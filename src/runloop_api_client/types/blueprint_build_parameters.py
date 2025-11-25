@@ -1,12 +1,20 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 from .shared.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintBuildParameters", "Service", "ServiceCredentials"]
+__all__ = ["BlueprintBuildParameters", "BuildContext", "Service", "ServiceCredentials"]
+
+
+class BuildContext(BaseModel):
+    object_id: str
+    """The ID of an object, whose contents are to be used as a build context."""
+
+    type: Literal["object"]
 
 
 class ServiceCredentials(BaseModel):
@@ -60,6 +68,9 @@ class BlueprintBuildParameters(BaseModel):
 
     build_args: Optional[Dict[str, str]] = None
     """(Optional) Arbitrary Docker build args to pass during build."""
+
+    build_context: Optional[BuildContext] = None
+    """A build context backed by an Object."""
 
     code_mounts: Optional[List[CodeMountParameters]] = None
     """A list of code mounts to be included in the Blueprint."""

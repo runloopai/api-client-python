@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from typing import Dict, Iterable, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .._types import SequenceNotStr
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintCreateParams", "Service", "ServiceCredentials"]
+__all__ = ["BlueprintCreateParams", "BuildContext", "Service", "ServiceCredentials"]
 
 
 class BlueprintCreateParams(TypedDict, total=False):
@@ -32,6 +32,9 @@ class BlueprintCreateParams(TypedDict, total=False):
 
     build_args: Optional[Dict[str, str]]
     """(Optional) Arbitrary Docker build args to pass during build."""
+
+    build_context: Optional[BuildContext]
+    """A build context backed by an Object."""
 
     code_mounts: Optional[Iterable[CodeMountParameters]]
     """A list of code mounts to be included in the Blueprint."""
@@ -65,6 +68,13 @@ class BlueprintCreateParams(TypedDict, total=False):
 
     system_setup_commands: Optional[SequenceNotStr[str]]
     """A list of commands to run to set up your system."""
+
+
+class BuildContext(TypedDict, total=False):
+    object_id: Required[str]
+    """The ID of an object, whose contents are to be used as a build context."""
+
+    type: Required[Literal["object"]]
 
 
 class ServiceCredentials(TypedDict, total=False):
