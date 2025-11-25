@@ -585,6 +585,44 @@ class TestDevboxes:
                 )
 
     @parametrize
+    def test_method_keep_alive(self, client: Runloop) -> None:
+        devbox = client.devboxes.keep_alive(
+            "id",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_keep_alive(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.keep_alive(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_keep_alive(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.keep_alive(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(object, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_keep_alive(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.keep_alive(
+                "",
+            )
+
+    @parametrize
     def test_method_list_disk_snapshots(self, client: Runloop) -> None:
         devbox = client.devboxes.list_disk_snapshots()
         assert_matches_type(SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
@@ -703,6 +741,44 @@ class TestDevboxes:
             client.devboxes.with_raw_response.remove_tunnel(
                 id="",
                 port=0,
+            )
+
+    @parametrize
+    def test_method_resume(self, client: Runloop) -> None:
+        devbox = client.devboxes.resume(
+            "id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_resume(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.resume(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_resume(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.resume(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_resume(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.resume(
+                "",
             )
 
     @parametrize
@@ -837,6 +913,44 @@ class TestDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.snapshot_disk_async(
                 id="",
+            )
+
+    @parametrize
+    def test_method_suspend(self, client: Runloop) -> None:
+        devbox = client.devboxes.suspend(
+            "id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_suspend(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.suspend(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_suspend(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.suspend(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_suspend(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.suspend(
+                "",
             )
 
     @parametrize
@@ -2020,6 +2134,44 @@ class TestAsyncDevboxes:
                 )
 
     @parametrize
+    async def test_method_keep_alive(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.keep_alive(
+            "id",
+        )
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_keep_alive(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.keep_alive(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(object, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_keep_alive(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.keep_alive(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(object, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_keep_alive(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.keep_alive(
+                "",
+            )
+
+    @parametrize
     async def test_method_list_disk_snapshots(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list_disk_snapshots()
         assert_matches_type(AsyncDiskSnapshotsCursorIDPage[DevboxSnapshotView], devbox, path=["response"])
@@ -2138,6 +2290,44 @@ class TestAsyncDevboxes:
             await async_client.devboxes.with_raw_response.remove_tunnel(
                 id="",
                 port=0,
+            )
+
+    @parametrize
+    async def test_method_resume(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.resume(
+            "id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_resume(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.resume(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_resume(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.resume(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_resume(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.resume(
+                "",
             )
 
     @parametrize
@@ -2272,6 +2462,44 @@ class TestAsyncDevboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.snapshot_disk_async(
                 id="",
+            )
+
+    @parametrize
+    async def test_method_suspend(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.suspend(
+            "id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_suspend(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.suspend(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_suspend(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.suspend(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxView, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_suspend(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.suspend(
+                "",
             )
 
     @parametrize
