@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import io
+import tarfile
 from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import Mock
@@ -366,9 +368,9 @@ class TestStorageObjectClient:
         http_client.put.assert_called_once()
         call_args = http_client.put.call_args
         assert call_args[0][0] == object_view.upload_url
-        # Verify it's a BytesIO object
         uploaded_content = call_args[1]["content"]
-        assert hasattr(uploaded_content, "read")
+        # Verify it is bytes representing a gzipped tar archive
+        assert isinstance(uploaded_content, (bytes, bytearray))
         mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_dir_default_name(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
@@ -479,6 +481,113 @@ class TestStorageObjectClient:
         )
         http_client.put.assert_called_once()
         mock_client.objects.complete.assert_called_once()
+
+    def test_upload_from_dir_respects_dockerignore(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect .dockerignore patterns by default."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        dockerignore = test_dir / ".dockerignore"
+        dockerignore.write_text("*.log\nbuild/\n", encoding="utf-8")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir)
+
+        assert isinstance(obj, StorageObject)
+        http_client.put.assert_called_once()
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
+
+    def test_upload_from_dir_with_extra_ignore_file(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should merge .dockerignore and an extra ignore file."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        # Only ignore logs in .dockerignore
+        dockerignore = test_dir / ".dockerignore"
+        dockerignore.write_text("*.log\n", encoding="utf-8")
+
+        extra_ignore = tmp_path / "extra.ignore"
+        extra_ignore.write_text("build/\n", encoding="utf-8")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir, ignore=extra_ignore)
+
+        assert isinstance(obj, StorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
+
+    def test_upload_from_dir_with_inline_ignore_patterns(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect inline ignore patterns."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+        obj = client.upload_from_dir(test_dir, ignore=["*.log", "build/"])
+
+        assert isinstance(obj, StorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
 
 
 class TestRunloopSDK:

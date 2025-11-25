@@ -42,12 +42,12 @@ class BuildContextStrategy(Protocol):
     validation, but must return a fully materialised tarball in memory.
     """
 
-    def __call__(
+    def __call__(  # pragma: no cover - interface only
         self,
         context_root: Path,
         *,
         name: str | None = None,
-        dockerignore: Path | None = None,
+        ignore: str | Path | tuple[str, ...] | list[str] | None = None,
     ) -> BuildContextArtifact:
         """Package the given directory into a tarball.
 
@@ -55,9 +55,11 @@ class BuildContextStrategy(Protocol):
             context_root: Filesystem path to the Docker build context root.
             name: Optional logical name for the context; may be used to
                 derive a filename.
-            dockerignore: Optional explicit path to a .dockerignore file.
-                When omitted, the default implementation will look for
-                ``.dockerignore`` under ``context_root``.
+            ignore: Optional ignore configuration. If a string or :class:`pathlib.Path`
+                is provided it is treated as the path to an additional
+                ignorefile. If a sequence of strings is provided, they are
+                interpreted as inline ignore patterns appended after patterns
+                loaded from ``.dockerignore`` under ``context_root``.
         """
 
 
@@ -65,7 +67,7 @@ def default_build_context_strategy(
     context_root: Path,
     *,
     name: str | None = None,
-    dockerignore: Path | None = None,
+    ignore: str | Path | tuple[str, ...] | list[str] | None = None,
 ) -> BuildContextArtifact:
     """Default implementation that wraps ``build_docker_context_tar``.
 
@@ -73,10 +75,7 @@ def default_build_context_strategy(
     returned as a :class:`BuildContextArtifact` with ``content_type=\"tgz\"``.
     """
 
-    tar_bytes = build_docker_context_tar(
-        context_root,
-        dockerignore=dockerignore,
-    )
+    tar_bytes = build_docker_context_tar(context_root, ignore=ignore)
 
     if name is None:
         base = context_root.name or "context"

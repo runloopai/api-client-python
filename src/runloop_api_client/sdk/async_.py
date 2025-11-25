@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import io
 import asyncio
-import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
@@ -376,6 +374,7 @@ class AsyncStorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
+        ignore: str | Path | Sequence[str] | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local directory.
@@ -390,21 +389,27 @@ class AsyncStorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :param ignore: Optional ignore configuration. If a string or :class:`Path`
+            is provided it is treated as the path to an additional ignorefile.
+            If a sequence of strings is provided, they are interpreted as inline
+            ignore patterns appended after patterns loaded from
+            ``.dockerignore`` under ``dir_path``.
+        :type ignore: Optional[str | Path | Sequence[str]]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
+            for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
         :raises OSError: If the local file cannot be read
         """
         path = Path(dir_path)
+        if not path.is_dir():
+            raise ValueError(f"dir_path must be a directory, got: {path}")
+
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
         def synchronous_io() -> bytes:
-            with io.BytesIO() as tar_buffer:
-                with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-                    tar.add(path, arcname=".", recursive=True)
-                tar_buffer.seek(0)
-                return tar_buffer.read()
+            return build_docker_context_tar(path, ignore=ignore)
 
         tar_bytes = await asyncio.to_thread(synchronous_io)
 

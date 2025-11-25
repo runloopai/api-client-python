@@ -403,6 +403,77 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
+    async def test_upload_from_dir_respects_dockerignore(
+        self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect .dockerignore patterns by default."""
+        mock_async_client.objects.create = AsyncMock(return_value=object_view)
+        mock_async_client.objects.complete = AsyncMock(return_value=object_view)
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        dockerignore = test_dir / ".dockerignore"
+        dockerignore.write_text("*.log\nbuild/\n", encoding="utf-8")
+
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
+
+        client = AsyncStorageObjectOps(mock_async_client)
+        obj = await client.upload_from_dir(test_dir)
+
+        assert isinstance(obj, AsyncStorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
+
+    @pytest.mark.asyncio
+    async def test_upload_from_dir_with_inline_ignore_patterns(
+        self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect inline ignore patterns."""
+        mock_async_client.objects.create = AsyncMock(return_value=object_view)
+        mock_async_client.objects.complete = AsyncMock(return_value=object_view)
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
+
+        client = AsyncStorageObjectOps(mock_async_client)
+        obj = await client.upload_from_dir(test_dir, ignore=["*.log", "build/"])
+
+        assert isinstance(obj, AsyncStorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
+
+    @pytest.mark.asyncio
     async def test_upload_from_dir_default_name(
         self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
     ) -> None:

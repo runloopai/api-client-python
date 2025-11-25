@@ -1,0 +1,283 @@
+from __future__ import annotations
+
+import os
+from typing import Iterable, Optional, Sequence
+from pathlib import Path, PurePosixPath
+from dataclasses import dataclass
+
+__all__ = [
+    "IgnorePattern",
+    "read_ignorefile",
+    "compile_ignore",
+    "path_match",
+    "is_ignored",
+]
+
+
+@dataclass(frozen=True)
+class IgnorePattern:
+    """Single parsed ignore pattern.
+
+    Follows Docker-style .dockerignore semantics, supports other ignore use cases following same approach.
+
+    Details:
+    - ``pattern``: The normalized pattern text with leading/trailing ``/`` removed.
+      Always uses POSIX ``'/'`` separators.
+    - ``negated``: True if this is a negation pattern starting with ``!``.
+    - ``directory_only``: True if the original pattern ended with ``/`` and should
+      apply only to directories and their descendants.
+    - ``anchored``: True if the pattern contains a path separator and should be
+      matched relative to the root path rather than at any depth.
+    """
+
+    pattern: str
+    negated: bool
+    directory_only: bool
+    anchored: bool
+
+
+def _normalize_pattern_line(raw: bytes, *, is_first_line: bool) -> Optional[str]:
+    """Normalize a single ignorefile line, mirroring moby's ignorefile.ReadAll.
+
+    Behavior is based on:
+    https://github.com/moby/patternmatcher/blob/main/ignorefile/ignorefile.go
+    """
+
+    # Strip UTF-8 BOM from the first line if present
+    if is_first_line and raw.startswith(b"\xef\xbb\xbf"):
+        raw = raw[len(b"\xef\xbb\xbf") :]
+
+    # Decode as UTF-8; we are strict here to surface bad encodings
+    text = raw.decode("utf-8", errors="strict")
+    text = text.rstrip("\r\n")
+
+    # Lines starting with '#' are comments and are ignored before processing,
+    # i.e. we do *not* treat leading spaces as part of the comment detection.
+    if text.startswith("#"):
+        return None
+
+    # Trim leading and trailing whitespace
+    pattern = text.strip()
+    if not pattern:
+        return None
+
+    # Normalize absolute paths to paths relative to the context (taking care of '!' prefix)
+    invert = pattern[0] == "!"
+    if invert:
+        pattern = pattern[1:].strip()
+
+    if pattern:
+        # filepath.Clean equivalent
+        pattern = os.path.normpath(pattern)
+        # filepath.ToSlash equivalent
+        pattern = pattern.replace(os.sep, "/")
+        # Leading forward-slashes are removed so "/some/path" and "some/path"
+        # are considered equivalent.
+        if len(pattern) > 1 and pattern[0] == "/":
+            pattern = pattern[1:]
+
+    if invert:
+        pattern = "!" + pattern
+
+    return pattern
+
+
+def read_ignorefile(path: Optional[Path]) -> list[str]:
+    """Read an ignore file and return a list of normalized pattern strings.
+
+    This mirrors the behavior of moby's ``ignorefile.ReadAll``:
+
+    - UTF-8 BOM on the first line is stripped.
+    - Lines starting with ``#`` are treated as comments and skipped.
+    - Remaining lines are trimmed, optionally negated with ``!``, cleaned,
+      have path separators normalized to ``/``, and leading ``/`` removed.
+    """
+
+    if path is None:
+        return []
+
+    if not path.exists():
+        return []
+
+    patterns: list[str] = []
+    with path.open("rb") as f:
+        first = True
+        for raw in f:
+            normalized = _normalize_pattern_line(raw, is_first_line=first)
+            first = False
+            if normalized is None:
+                continue
+            patterns.append(normalized)
+
+    return patterns
+
+
+def compile_ignore(patterns: Sequence[str]) -> list[IgnorePattern]:
+    """Compile raw pattern strings into :class:`IgnorePattern` objects."""
+
+    compiled: list[IgnorePattern] = []
+
+    for raw in patterns:
+        if not raw:
+            continue
+
+        negated = raw[0] == "!"
+        pattern_text = raw[1:] if negated else raw
+
+        if not pattern_text:
+            # Bare "!" is ignored, matching Docker / moby behavior.
+            continue
+
+        directory_only = pattern_text.endswith("/")
+        if directory_only:
+            pattern_text = pattern_text.rstrip("/")
+
+        if not pattern_text:
+            continue
+
+        # Treat patterns containing a path separator as anchored to the root
+        anchored = "/" in pattern_text
+
+        compiled.append(
+            IgnorePattern(
+                pattern=PurePosixPath(pattern_text).as_posix(),
+                negated=negated,
+                directory_only=directory_only,
+                anchored=anchored,
+            )
+        )
+
+    return compiled
+
+
+def _segment_match(pattern_segment: str, path_segment: str) -> bool:
+    """Match a single path segment against a glob pattern segment.
+
+    Supports:
+    - ``*``: any sequence of characters except ``/``.
+    - ``?``: any single character except ``/``.
+    - ``[]``: character classes, excluding ``/``.
+    """
+
+    import re
+
+    escaped = ""
+    i = 0
+    while i < len(pattern_segment):
+        ch = pattern_segment[i]
+        if ch == "*":
+            escaped += "[^/]*"
+        elif ch == "?":
+            escaped += "[^/]"
+        elif ch == "[":
+            # Copy character class as-is until closing ']'.
+            j = i + 1
+            while j < len(pattern_segment) and pattern_segment[j] != "]":
+                j += 1
+            if j < len(pattern_segment):
+                escaped += pattern_segment[i : j + 1]
+                i = j
+            else:
+                # Unterminated '['; treat it literally.
+                escaped += re.escape(ch)
+        else:
+            escaped += re.escape(ch)
+        i += 1
+
+    regex = re.compile(rf"^{escaped}$")
+    return regex.match(path_segment) is not None
+
+
+def _match_parts_recursive(pattern_parts: list[str], path_parts: list[str]) -> bool:
+    """Recursive helper implementing ``**`` segment semantics."""
+
+    if not pattern_parts:
+        return not path_parts
+
+    if pattern_parts[0] == "**":
+        # '**' matches zero or more segments.
+        for i in range(len(path_parts) + 1):
+            if _match_parts_recursive(pattern_parts[1:], path_parts[i:]):
+                return True
+        return False
+
+    if not path_parts:
+        return False
+
+    if not _segment_match(pattern_parts[0], path_parts[0]):
+        return False
+
+    return _match_parts_recursive(pattern_parts[1:], path_parts[1:])
+
+
+def path_match(pattern: IgnorePattern, relpath: str, *, is_dir: bool) -> bool:
+    """Return True if ``relpath`` matches a compiled ignore pattern."""
+
+    relpath_posix = PurePosixPath(relpath).as_posix()
+    path_parts = PurePosixPath(relpath_posix).parts
+    pattern_parts = PurePosixPath(pattern.pattern).parts
+
+    # Directory-only patterns never directly match files here; the effect on
+    # descendants is enforced by directory pruning in the traversal.
+    if pattern.directory_only and not is_dir:
+        return False
+
+    if pattern.anchored:
+        return _match_parts_recursive(list(pattern_parts), list(path_parts))
+
+    for start in range(len(path_parts)):
+        if _match_parts_recursive(list(pattern_parts), list(path_parts[start:])):
+            return True
+    return False
+
+
+def is_ignored(relpath: str, *, is_dir: bool, patterns: Sequence[IgnorePattern]) -> bool:
+    """Apply ignore patterns with 'last match wins' semantics.
+
+    Examples::
+
+        *.log
+        !important.log
+
+    excludes all ``.log`` files except ``important.log``. Patterns are applied
+    in order, and the last matching pattern determines inclusion.
+    """
+
+    included = True  # include by default
+    for pat in patterns:
+        if path_match(pat, relpath, is_dir=is_dir):
+            included = pat.negated
+    return not included
+
+
+def iter_included_files(
+    root: Path,
+    *,
+    patterns: Sequence[IgnorePattern],
+) -> Iterable[Path]:
+    """Yield all files under ``root`` that are not ignored.
+
+    This performs directory pruning so that ignored directories are never
+    traversed, mirroring Docker's behavior for .dockerignore.
+    """
+
+    if not root.is_dir():
+        raise ValueError(f"root must be a directory, got: {root}")
+
+    for dirpath, dirs, files in os.walk(root):
+        dir_path = Path(dirpath)
+
+        # Prune ignored directories
+        for name in list(dirs):
+            subdir = dir_path / name
+            rel_dir = subdir.relative_to(root).as_posix()
+            if is_ignored(rel_dir, is_dir=True, patterns=patterns):
+                dirs.remove(name)
+
+        # Yield non-ignored files
+        for name in files:
+            file_path = dir_path / name
+            rel_file = file_path.relative_to(root).as_posix()
+            if is_ignored(rel_file, is_dir=False, patterns=patterns):
+                continue
+            yield file_path

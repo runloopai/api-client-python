@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import io
-import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
@@ -375,6 +373,7 @@ class StorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
+        ignore: str | Path | Sequence[str] | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a local directory.
@@ -389,22 +388,29 @@ class StorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :param ignore: Optional ignore configuration. If a string or :class:`pathlib.Path`
+            is provided it is treated as the path to an additional ignorefile.
+            If a sequence of strings is provided, they are interpreted as inline
+            ignore patterns appended after patterns loaded from
+            ``.dockerignore`` under ``dir_path``.
+        :type ignore: Optional[str | Path | Sequence[str]]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
+            for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         :raises OSError: If the local file cannot be read
         """
         path = Path(dir_path)
+        if not path.is_dir():
+            raise ValueError(f"dir_path must be a directory, got: {path}")
+
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
-        tar_buffer = io.BytesIO()
-        with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-            tar.add(path, arcname=".", recursive=True)
-        tar_buffer.seek(0)
+        tar_bytes = build_docker_context_tar(path, ignore=ignore)
 
         obj = self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
-        obj.upload_content(tar_buffer)
+        obj.upload_content(tar_bytes)
         obj.complete()
         return obj
 
