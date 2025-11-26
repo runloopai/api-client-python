@@ -19,7 +19,7 @@ class TestAsyncAgentLifecycle:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_agent_create_basic(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a basic agent."""
-        name = unique_name("sdk-async-agent-basic")
+        name = unique_name("sdk-async-agent-test-basic")
         agent = await async_sdk_client.agent.create(
             name=name,
             source={
@@ -48,7 +48,7 @@ class TestAsyncAgentLifecycle:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_agent_get_info(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test retrieving agent information."""
-        name = unique_name("sdk-async-agent-info")
+        name = unique_name("sdk-async-agent-test-info")
         agent = await async_sdk_client.agent.create(
             name=name,
             source={
@@ -88,7 +88,7 @@ class TestAsyncAgentListing:
         """Test retrieving agent by ID."""
         # Create an agent
         created = await async_sdk_client.agent.create(
-            name=unique_name("sdk-async-agent-retrieve"),
+            name=unique_name("sdk-async-agent-test-retrieve"),
             source={
                 "type": "npm",
                 "npm": {
@@ -120,9 +120,9 @@ class TestAsyncAgentListing:
         }
 
         # Create multiple agents
-        agent1 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-list-1"), source=source_config)
-        agent2 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-list-2"), source=source_config)
-        agent3 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-list-3"), source=source_config)
+        agent1 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-1"), source=source_config)
+        agent2 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-2"), source=source_config)
+        agent3 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-3"), source=source_config)
 
         try:
             # List agents
@@ -148,7 +148,7 @@ class TestAsyncAgentCreationVariations:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_agent_with_source_npm(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating an agent with npm source."""
-        name = unique_name("sdk-async-agent-npm")
+        name = unique_name("sdk-async-agent-test-npm")
 
         agent = await async_sdk_client.agent.create(
             name=name,
@@ -173,7 +173,7 @@ class TestAsyncAgentCreationVariations:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_agent_with_source_git(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating an agent with git source."""
-        name = unique_name("sdk-async-agent-git")
+        name = unique_name("sdk-async-agent-test-git")
 
         agent = await async_sdk_client.agent.create(
             name=name,

@@ -19,7 +19,7 @@ class TestAgentLifecycle:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_agent_create_basic(self, sdk_client: RunloopSDK) -> None:
         """Test creating a basic agent."""
-        name = unique_name("sdk-agent-basic")
+        name = unique_name("sdk-agent-test-basic")
         agent = sdk_client.agent.create(
             name=name,
             source={
@@ -48,7 +48,7 @@ class TestAgentLifecycle:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_agent_get_info(self, sdk_client: RunloopSDK) -> None:
         """Test retrieving agent information."""
-        name = unique_name("sdk-agent-info")
+        name = unique_name("sdk-agent-test-info")
         agent = sdk_client.agent.create(
             name=name,
             source={
@@ -88,7 +88,7 @@ class TestAgentListing:
         """Test retrieving agent by ID."""
         # Create an agent
         created = sdk_client.agent.create(
-            name=unique_name("sdk-agent-retrieve"),
+            name=unique_name("sdk-agent-test-retrieve"),
             source={
                 "type": "npm",
                 "npm": {
@@ -120,9 +120,9 @@ class TestAgentListing:
         }
 
         # Create multiple agents
-        agent1 = sdk_client.agent.create(name=unique_name("sdk-agent-list-1"), source=source_config)
-        agent2 = sdk_client.agent.create(name=unique_name("sdk-agent-list-2"), source=source_config)
-        agent3 = sdk_client.agent.create(name=unique_name("sdk-agent-list-3"), source=source_config)
+        agent1 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-1"), source=source_config)
+        agent2 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-2"), source=source_config)
+        agent3 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-3"), source=source_config)
 
         try:
             # List agents
@@ -148,7 +148,7 @@ class TestAgentCreationVariations:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_agent_with_source_npm(self, sdk_client: RunloopSDK) -> None:
         """Test creating an agent with npm source."""
-        name = unique_name("sdk-agent-npm")
+        name = unique_name("sdk-agent-test-npm")
 
         agent = sdk_client.agent.create(
             name=name,
@@ -173,7 +173,7 @@ class TestAgentCreationVariations:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_agent_with_source_git(self, sdk_client: RunloopSDK) -> None:
         """Test creating an agent with git source."""
-        name = unique_name("sdk-agent-git")
+        name = unique_name("sdk-agent-test-git")
 
         agent = sdk_client.agent.create(
             name=name,
