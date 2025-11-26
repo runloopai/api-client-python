@@ -16,9 +16,10 @@ from tests.sdk.conftest import (
     MockScorerView,
     MockSnapshotView,
     MockBlueprintView,
+    MockAgentView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import AsyncDevbox, AsyncScorer, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
+from runloop_api_client.sdk import AsyncAgent, AsyncDevbox, AsyncScorer, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
 from runloop_api_client.sdk.async_ import (
     AsyncDevboxOps,
     AsyncScorerOps,
@@ -26,6 +27,7 @@ from runloop_api_client.sdk.async_ import (
     AsyncSnapshotOps,
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
+    AsyncAgentOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -721,6 +723,118 @@ class TestAsyncScorerOps:
         assert scorers[1].id == "scorer_002"
         mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
+        
+class TestAsyncAgentClient:
+    """Tests for AsyncAgentClient class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
+        """Test create method."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create(
+            name="test-agent",
+            metadata={"key": "value"},
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_called_once()
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        client = AsyncAgentOps(mock_async_client)
+        agent = client.from_id("agent_123")
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+
+    @pytest.mark.asyncio
+    async def test_list(self, mock_async_client: AsyncMock) -> None:
+        """Test list method."""
+        # Create three agent views with different data
+        agent_view_1 = MockAgentView(
+            id="agent_001",
+            name="first-agent",
+            create_time_ms=1234567890000,
+            is_public=False,
+            source=None,
+        )
+        agent_view_2 = MockAgentView(
+            id="agent_002",
+            name="second-agent",
+            create_time_ms=1234567891000,
+            is_public=True,
+            source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
+        )
+        agent_view_3 = MockAgentView(
+            id="agent_003",
+            name="third-agent",
+            create_time_ms=1234567892000,
+            is_public=False,
+            source={"type": "npm", "npm": {"package_name": "example-package"}},
+        )
+
+        page = SimpleNamespace(agents=[agent_view_1, agent_view_2, agent_view_3])
+        mock_async_client.agents.list = AsyncMock(return_value=page)
+
+        # Mock retrieve to return the corresponding agent_view when called
+        async def mock_retrieve(agent_id, **kwargs):
+            if agent_id == "agent_001":
+                return agent_view_1
+            elif agent_id == "agent_002":
+                return agent_view_2
+            elif agent_id == "agent_003":
+                return agent_view_3
+            return None
+
+        mock_async_client.agents.retrieve = AsyncMock(side_effect=mock_retrieve)
+
+        client = AsyncAgentOps(mock_async_client)
+        agents = await client.list(
+            limit=10,
+            starting_after="agent_000",
+        )
+
+        # Verify we got three agents
+        assert len(agents) == 3
+        assert all(isinstance(agent, AsyncAgent) for agent in agents)
+
+        # Verify the agent IDs
+        assert agents[0].id == "agent_001"
+        assert agents[1].id == "agent_002"
+        assert agents[2].id == "agent_003"
+
+        # Test that get_info() retrieves the AgentView for the first agent
+        info = await agents[0].get_info()
+        assert info.id == "agent_001"
+        assert info.name == "first-agent"
+        assert info.create_time_ms == 1234567890000
+        assert info.is_public is False
+        assert info.source is None
+
+        # Test that get_info() retrieves the AgentView for the second agent
+        info = await agents[1].get_info()
+        assert info.id == "agent_002"
+        assert info.name == "second-agent"
+        assert info.create_time_ms == 1234567891000
+        assert info.is_public is True
+        assert info.source == {"type": "git", "git": {"repository": "https://github.com/example/repo"}}
+
+        # Test that get_info() retrieves the AgentView for the third agent
+        info = await agents[2].get_info()
+        assert info.id == "agent_003"
+        assert info.name == "third-agent"
+        assert info.create_time_ms == 1234567892000
+        assert info.is_public is False
+        assert info.source == {"type": "npm", "npm": {"package_name": "example-package"}}
+
+        # Verify that agents.retrieve was called three times (once for each get_info)
+        assert mock_async_client.agents.retrieve.call_count == 3
+
+        mock_async_client.agents.list.assert_called_once()
+
 
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
@@ -729,6 +843,7 @@ class TestAsyncRunloopSDK:
         """Test AsyncRunloopSDK initialization."""
         sdk = AsyncRunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
+        assert isinstance(sdk.agent, AsyncAgentOps)
         assert isinstance(sdk.devbox, AsyncDevboxOps)
         assert isinstance(sdk.scorer, AsyncScorerOps)
         assert isinstance(sdk.snapshot, AsyncSnapshotOps)
