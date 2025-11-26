@@ -136,7 +136,6 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
-        named_build_contexts: Optional[Dict[str, blueprint_create_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -180,11 +179,6 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
-          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
-              the keys are the name used when referencing the contexts in a Dockerfile. See
-              Docker buildx additional contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -224,7 +218,6 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
-                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -658,7 +651,6 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
-        named_build_contexts: Optional[Dict[str, blueprint_preview_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -700,11 +692,6 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
-          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
-              the keys are the name used when referencing the contexts in a Dockerfile. See
-              Docker buildx additional contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -740,7 +727,6 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
-                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -791,7 +777,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
-        named_build_contexts: Optional[Dict[str, blueprint_create_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -835,11 +820,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
-          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
-              the keys are the name used when referencing the contexts in a Dockerfile. See
-              Docker buildx additional contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -879,7 +859,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
-                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -1313,7 +1292,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
-        named_build_contexts: Optional[Dict[str, blueprint_preview_params.NamedBuildContexts]] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -1355,11 +1333,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
-          named_build_contexts: (Optional) Map of named build contexts to attach to the Blueprint build, where
-              the keys are the name used when referencing the contexts in a Dockerfile. See
-              Docker buildx additional contexts for details:
-              https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -1395,7 +1368,6 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
-                    "named_build_contexts": named_build_contexts,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,

@@ -13,7 +13,7 @@ __all__ = ["LaunchParameters", "UserParameters"]
 
 class UserParameters(TypedDict, total=False):
     uid: Required[int]
-    """User ID (UID) for the Linux user. Must be a positive integer."""
+    """User ID (UID) for the Linux user. Must be a non-negative integer."""
 
     username: Required[str]
     """Username for the Linux user."""

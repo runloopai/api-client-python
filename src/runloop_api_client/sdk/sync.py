@@ -215,6 +215,23 @@ class BlueprintOps:
         ...     name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update"
         ... )
         >>> blueprints = runloop.blueprint.list()
+
+    To use a local directory as a build context, use an object.
+
+    Example:
+        >>> from datetime import timedelta
+        >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
+        >>> 
+        >>> runloop = RunloopSDK()
+        >>> obj = runloop.object_storage.upload_from_dir(
+        ...     "./",
+        ...     ttl=timedelta(hours=1),    
+        ... )
+        >>> blueprint = runloop.blueprint.create(
+        ...     name="my-blueprint",
+        ...     dockerfile="FROM ubuntu:22.04\\nCOPY . .\\n",
+        ...     build_context=BuildContext(type="object", object_id=obj.id),
+        ... )
     """
 
     def __init__(self, client: Runloop) -> None:

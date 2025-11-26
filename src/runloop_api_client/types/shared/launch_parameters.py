@@ -11,7 +11,7 @@ __all__ = ["LaunchParameters", "UserParameters"]
 
 class UserParameters(BaseModel):
     uid: int
-    """User ID (UID) for the Linux user. Must be a positive integer."""
+    """User ID (UID) for the Linux user. Must be a non-negative integer."""
 
     username: str
     """Username for the Linux user."""

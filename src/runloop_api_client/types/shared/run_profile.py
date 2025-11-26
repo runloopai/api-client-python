@@ -1,9 +1,10 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from pydantic import Field as FieldInfo
 
+from .mount import Mount
 from ..._models import BaseModel
 from .launch_parameters import LaunchParameters
 
@@ -20,6 +21,9 @@ class RunProfile(BaseModel):
 
     launch_parameters: Optional[LaunchParameters] = FieldInfo(alias="launchParameters", default=None)
     """Additional runtime LaunchParameters to apply after the devbox starts."""
+
+    mounts: Optional[List[Mount]] = None
+    """A list of mounts to be included in the scenario run."""
 
     purpose: Optional[str] = None
     """Purpose of the run."""

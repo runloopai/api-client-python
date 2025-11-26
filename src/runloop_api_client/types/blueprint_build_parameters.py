@@ -7,17 +7,10 @@ from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 from .shared.code_mount_parameters import CodeMountParameters
 
-__all__ = ["BlueprintBuildParameters", "BuildContext", "NamedBuildContexts", "Service", "ServiceCredentials"]
+__all__ = ["BlueprintBuildParameters", "BuildContext", "Service", "ServiceCredentials"]
 
 
 class BuildContext(BaseModel):
-    object_id: str
-    """The ID of an object, whose contents are to be used as a build context."""
-
-    type: Literal["object"]
-
-
-class NamedBuildContexts(BaseModel):
     object_id: str
     """The ID of an object, whose contents are to be used as a build context."""
 
@@ -93,14 +86,6 @@ class BlueprintBuildParameters(BaseModel):
 
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""
-
-    named_build_contexts: Optional[Dict[str, NamedBuildContexts]] = None
-    """
-    (Optional) Map of named build contexts to attach to the Blueprint build, where
-    the keys are the name used when referencing the contexts in a Dockerfile. See
-    Docker buildx additional contexts for details:
-    https://docs.docker.com/reference/cli/docker/buildx/build/#build-context
-    """
 
     secrets: Optional[Dict[str, str]] = None
     """(Optional) Map of mount IDs/environment variable names to secret names.

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Dict, Iterable, Optional
 from typing_extensions import Annotated, TypedDict
 
+from .mount import Mount
 from ..._utils import PropertyInfo
 from .launch_parameters import LaunchParameters
 
@@ -21,6 +22,9 @@ class RunProfile(TypedDict, total=False):
 
     launch_parameters: Annotated[Optional[LaunchParameters], PropertyInfo(alias="launchParameters")]
     """Additional runtime LaunchParameters to apply after the devbox starts."""
+
+    mounts: Optional[Iterable[Mount]]
+    """A list of mounts to be included in the scenario run."""
 
     purpose: Optional[str]
     """Purpose of the run."""

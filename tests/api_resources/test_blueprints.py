@@ -71,12 +71,6 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
-            named_build_contexts={
-                "foo": {
-                    "object_id": "object_id",
-                    "type": "object",
-                }
-            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -440,12 +434,6 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
-            named_build_contexts={
-                "foo": {
-                    "object_id": "object_id",
-                    "type": "object",
-                }
-            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -543,12 +531,6 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
-            named_build_contexts={
-                "foo": {
-                    "object_id": "object_id",
-                    "type": "object",
-                }
-            },
             secrets={"foo": "string"},
             services=[
                 {
@@ -912,12 +894,6 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
-            named_build_contexts={
-                "foo": {
-                    "object_id": "object_id",
-                    "type": "object",
-                }
-            },
             secrets={"foo": "string"},
             services=[
                 {
