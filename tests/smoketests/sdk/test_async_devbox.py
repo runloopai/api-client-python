@@ -682,3 +682,321 @@ class TestAsyncDevboxExecutionPagination:
     # Currently there's an inconsistency where _count_non_empty_lines counts non-empty
     # lines but _get_last_n_lines returns N lines (including empty ones). This affects
     # both Python and TypeScript SDKs and needs to be fixed together.
+
+
+class TestAsyncDevboxNamedShell:
+    """Test named shell functionality for stateful command execution."""
+
+    @pytest.fixture(scope="class")
+    async def devbox(self, async_sdk_client: AsyncRunloopSDK) -> AsyncIterator[AsyncDevbox]:
+        """Create a devbox for shell tests."""
+        devbox = await async_sdk_client.devbox.create(
+            name=unique_name("sdk-async-devbox-named-shell"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+        )
+        try:
+            yield devbox
+        finally:
+            try:
+                await devbox.shutdown()
+            except Exception:
+                pass
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_basic(self, devbox: AsyncDevbox) -> None:
+        """Test basic shell execution."""
+        shell = devbox.shell("test-shell-1")
+        result = await shell.exec('echo "Hello from named shell!"')
+        assert result.exit_code == 0
+        output = await result.stdout()
+        assert "Hello from named shell!" in output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_cwd_persistence(self, devbox: AsyncDevbox) -> None:
+        """Test that CWD persists across commands."""
+        shell = devbox.shell("test-shell-2")
+
+        # Create a directory and change to it
+        await shell.exec("mkdir -p /tmp/test-shell-dir")
+        await shell.exec("cd /tmp/test-shell-dir")
+
+        # Verify we're in the new directory
+        pwd_result = await shell.exec("pwd")
+        pwd = (await pwd_result.stdout()).strip()
+        assert pwd == "/tmp/test-shell-dir"
+
+        # Create a file in the current directory
+        await shell.exec('echo "test content" > testfile.txt')
+
+        # Verify the file exists and has the correct content in the current directory
+        cat_result = await shell.exec("cat testfile.txt")
+        assert cat_result.exit_code == 0
+        cat_output = await cat_result.stdout()
+        assert "test content" in cat_output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_env_persistence(self, devbox: AsyncDevbox) -> None:
+        """Test that environment variables persist across commands."""
+        shell = devbox.shell("test-shell-3")
+
+        # Set an environment variable
+        await shell.exec('export TEST_VAR="test-value-123"')
+
+        # Verify the variable persists in the next command
+        echo_result = await shell.exec("echo $TEST_VAR")
+        output = (await echo_result.stdout()).strip()
+        assert output == "test-value-123"
+
+        # Set another variable and verify both persist
+        await shell.exec('export ANOTHER_VAR="another-value"')
+        both_result = await shell.exec('echo "$TEST_VAR:$ANOTHER_VAR"')
+        both_output = (await both_result.stdout()).strip()
+        assert both_output == "test-value-123:another-value"
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_combined_cwd_and_env(self, devbox: AsyncDevbox) -> None:
+        """Test combined CWD and environment persistence."""
+        shell = devbox.shell("test-shell-4")
+
+        # Set environment and change directory
+        await shell.exec('export PROJECT_DIR="/tmp/my-project"')
+        await shell.exec("mkdir -p $PROJECT_DIR")
+        await shell.exec("cd $PROJECT_DIR")
+
+        # Verify both persist
+        pwd_result = await shell.exec("pwd")
+        pwd = (await pwd_result.stdout()).strip()
+        assert pwd == "/tmp/my-project"
+
+        # Create a file using the environment variable
+        await shell.exec('echo "project file" > $PROJECT_DIR/file.txt')
+
+        # Verify file exists
+        ls_result = await shell.exec("ls file.txt")
+        assert ls_result.exit_code == 0
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_basic(self, devbox: AsyncDevbox) -> None:
+        """Test basic async shell execution."""
+        shell = devbox.shell("test-shell-5")
+        execution = await shell.exec_async('sleep 1 && echo "Async command completed"')
+        assert execution is not None
+        assert execution.execution_id is not None
+
+        # Wait for completion
+        result = await execution.result()
+        assert result.exit_code == 0
+        output = await result.stdout()
+        assert "Async command completed" in output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_stateful(self, devbox: AsyncDevbox) -> None:
+        """Test stateful async execution."""
+        shell = devbox.shell("test-shell-6")
+
+        # Set state in first command
+        await shell.exec('export ASYNC_VAR="async-value"')
+        await shell.exec("cd /tmp")
+
+        # Start async command that uses the state
+        execution = await shell.exec_async('echo "CWD: $(pwd), VAR: $ASYNC_VAR"')
+        result = await execution.result()
+
+        assert result.exit_code == 0
+        output = await result.stdout()
+        assert "CWD: /tmp" in output
+        assert "VAR: async-value" in output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_sequential(self, devbox: AsyncDevbox) -> None:
+        """Test sequential execution (queuing)."""
+        shell = devbox.shell("test-shell-7")
+
+        # Start multiple commands - they should execute sequentially
+        import time
+
+        start_time = time.time()
+        await shell.exec('sleep 1 && echo "first"')
+        await shell.exec('sleep 1 && echo "second"')
+        await shell.exec('sleep 1 && echo "third"')
+        end_time = time.time()
+
+        # Verify they took at least 3 seconds (sequential execution)
+        duration = end_time - start_time
+        assert duration >= 2.9  # Allow some margin for overhead
+
+        # Verify all commands executed in order
+        final_result = await shell.exec('echo "done"')
+        output = await final_result.stdout()
+        assert "done" in output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_sequential(self, devbox: AsyncDevbox) -> None:
+        """Test sequential async execution with queuing."""
+        shell = devbox.shell("test-shell-8")
+
+        # Start multiple async commands - they should queue and execute sequentially
+        exec1 = shell.exec_async('sleep 1 && echo "async-first"')
+        exec2 = shell.exec_async('sleep 1 && echo "async-second"')
+        exec3 = shell.exec_async('sleep 1 && echo "async-third"')
+
+        # Wait for all to complete
+        result1 = await (await exec1).result()
+        result2 = await (await exec2).result()
+        result3 = await (await exec3).result()
+
+        # Verify all completed successfully
+        assert result1.exit_code == 0
+        assert result2.exit_code == 0
+        assert result3.exit_code == 0
+
+        # Verify outputs
+        assert "async-first" in await result1.stdout()
+        assert "async-second" in await result2.stdout()
+        assert "async-third" in await result3.stdout()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_with_streaming(self, devbox: AsyncDevbox) -> None:
+        """Test shell exec with streaming callbacks."""
+        shell = devbox.shell("test-shell-9")
+        stdout_lines: list[str] = []
+
+        result = await shell.exec(
+            'echo "line1" && echo "line2" && echo "line3"', stdout=lambda line: stdout_lines.append(line)
+        )
+
+        assert result.success is True
+        assert result.exit_code == 0
+        assert len(stdout_lines) > 0
+        stdout_combined = "".join(stdout_lines)
+        assert "line1" in stdout_combined
+        assert "line2" in stdout_combined
+        assert "line3" in stdout_combined
+        # Verify streaming captured same data as result
+        assert stdout_combined == await result.stdout()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_with_streaming(self, devbox: AsyncDevbox) -> None:
+        """Test shell exec_async with streaming callbacks."""
+        shell = devbox.shell("test-shell-10")
+        stdout_lines: list[str] = []
+
+        execution = await shell.exec_async(
+            'echo "async-line1" && sleep 0.5 && echo "async-line2"', stdout=lambda line: stdout_lines.append(line)
+        )
+
+        result = await execution.result()
+        assert result.success is True
+        assert result.exit_code == 0
+
+        stdout_combined = "".join(stdout_lines)
+        assert "async-line1" in stdout_combined
+        assert "async-line2" in stdout_combined
+        # Verify streaming captured same data as result
+        assert stdout_combined == await result.stdout()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_multiple_named_shells_independent(self, devbox: AsyncDevbox) -> None:
+        """Test that multiple named shells maintain independent state."""
+        shell1 = devbox.shell("independent-shell-1")
+        shell2 = devbox.shell("independent-shell-2")
+
+        # Set different state in each shell
+        await shell1.exec('export VAR="shell1-value"')
+        await shell1.exec("cd /tmp")
+        await shell2.exec('export VAR="shell2-value"')
+        await shell2.exec("cd /home")
+
+        # Verify each shell maintains its own state
+        result1 = await shell1.exec('echo "$VAR:$(pwd)"')
+        output1 = (await result1.stdout()).strip()
+        assert "shell1-value" in output1
+        assert "/tmp" in output1
+
+        result2 = await shell2.exec('echo "$VAR:$(pwd)"')
+        output2 = (await result2.stdout()).strip()
+        assert "shell2-value" in output2
+        assert "/home" in output2
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_auto_generated_name(self, devbox: AsyncDevbox) -> None:
+        """Test auto-generated shell name."""
+        # Create shell without providing a name - should auto-generate UUID
+        shell = devbox.shell()
+        assert shell is not None
+
+        result = await shell.exec('echo "test"')
+        assert result.exit_code == 0
+        output = await result.stdout()
+        assert "test" in output
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_with_additional_params(self, devbox: AsyncDevbox) -> None:
+        """Test that additional params are passed through correctly."""
+        shell = devbox.shell("test-shell-params")
+
+        # Test that additional params (like working_dir) are passed through correctly
+        # Note: shell_name should override any shell_name in params
+        result = await shell.exec("pwd", working_dir="/tmp")
+
+        assert result.exit_code == 0
+        output = (await result.stdout()).strip()
+        # Should be in /tmp due to working_dir param
+        assert output == "/tmp"
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_with_additional_params(self, devbox: AsyncDevbox) -> None:
+        """Test that additional params are passed through correctly in exec_async."""
+        shell = devbox.shell("test-shell-async-params")
+
+        # Test that additional params are passed through correctly
+        execution = await shell.exec_async("pwd", working_dir="/home")
+
+        result = await execution.result()
+        assert result.exit_code == 0
+        output = (await result.stdout()).strip()
+        # Should be in /home due to working_dir param
+        assert output == "/home"
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_with_stderr_streaming(self, devbox: AsyncDevbox) -> None:
+        """Test shell exec with stderr streaming callback."""
+        shell = devbox.shell("test-shell-stderr")
+        stderr_lines: list[str] = []
+
+        result = await shell.exec('echo "error output" >&2', stderr=lambda line: stderr_lines.append(line))
+
+        assert result.success is True
+        assert result.exit_code == 0
+        assert len(stderr_lines) > 0
+        stderr_combined = "".join(stderr_lines)
+        assert "error output" in stderr_combined
+        # Verify streaming captured same data as result
+        assert stderr_combined == await result.stderr()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_shell_exec_async_with_both_streams(self, devbox: AsyncDevbox) -> None:
+        """Test shell exec_async with both stdout and stderr streaming callbacks."""
+        shell = devbox.shell("test-shell-both-streams")
+        stdout_lines: list[str] = []
+        stderr_lines: list[str] = []
+
+        execution = await shell.exec_async(
+            'echo "to stdout" && echo "to stderr" >&2',
+            stdout=lambda line: stdout_lines.append(line),
+            stderr=lambda line: stderr_lines.append(line),
+        )
+
+        result = await execution.result()
+        assert result.success is True
+        assert result.exit_code == 0
+
+        stdout_combined = "".join(stdout_lines)
+        stderr_combined = "".join(stderr_lines)
+
+        assert "to stdout" in stdout_combined
+        assert "to stderr" in stderr_combined
+
+        # Verify streaming captured same data as result
+        assert stdout_combined == await result.stdout()
+        assert stderr_combined == await result.stderr()

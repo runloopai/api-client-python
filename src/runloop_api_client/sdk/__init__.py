@@ -13,11 +13,11 @@ from .async_ import (
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
 )
-from .devbox import Devbox
+from .devbox import Devbox, NamedShell
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .execution import Execution
-from .async_devbox import AsyncDevbox
+from .async_devbox import AsyncDevbox, AsyncNamedShell
 from .async_snapshot import AsyncSnapshot
 from .storage_object import StorageObject
 from .async_blueprint import AsyncBlueprint
@@ -52,4 +52,6 @@ __all__ = [
     "AsyncSnapshot",
     "StorageObject",
     "AsyncStorageObject",
+    "NamedShell",
+    "AsyncNamedShell",
 ]
