@@ -861,7 +861,9 @@ class TestAsyncDevboxNamedShell:
         shell = devbox.shell("test-shell-9")
         stdout_lines: list[str] = []
 
-        result = await shell.exec('echo "line1" && echo "line2" && echo "line3"', stdout=lambda line: stdout_lines.append(line))
+        result = await shell.exec(
+            'echo "line1" && echo "line2" && echo "line3"', stdout=lambda line: stdout_lines.append(line)
+        )
 
         assert result.success is True
         assert result.exit_code == 0
@@ -879,7 +881,9 @@ class TestAsyncDevboxNamedShell:
         shell = devbox.shell("test-shell-10")
         stdout_lines: list[str] = []
 
-        execution = await shell.exec_async('echo "async-line1" && sleep 0.5 && echo "async-line2"', stdout=lambda line: stdout_lines.append(line))
+        execution = await shell.exec_async(
+            'echo "async-line1" && sleep 0.5 && echo "async-line2"', stdout=lambda line: stdout_lines.append(line)
+        )
 
         result = await execution.result()
         assert result.success is True
@@ -977,7 +981,11 @@ class TestAsyncDevboxNamedShell:
         stdout_lines: list[str] = []
         stderr_lines: list[str] = []
 
-        execution = await shell.exec_async('echo "to stdout" && echo "to stderr" >&2', stdout=lambda line: stdout_lines.append(line), stderr=lambda line: stderr_lines.append(line))
+        execution = await shell.exec_async(
+            'echo "to stdout" && echo "to stderr" >&2',
+            stdout=lambda line: stdout_lines.append(line),
+            stderr=lambda line: stderr_lines.append(line),
+        )
 
         result = await execution.result()
         assert result.success is True

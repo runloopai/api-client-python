@@ -297,14 +297,14 @@ class Devbox:
 
         Example:
             >>> # Create a named shell with a custom name
-            >>> shell = devbox.shell('my-session')
+            >>> shell = devbox.shell("my-session")
             >>> # Create a named shell with an auto-generated UUID name
             >>> shell2 = devbox.shell()
             >>> # Commands execute sequentially and share state
-            >>> shell.exec('cd /app')
-            >>> shell.exec('export MY_VAR=value')
-            >>> result = shell.exec('echo $MY_VAR')  # Will output 'value'
-            >>> result = shell.exec('pwd')  # Will output '/app'
+            >>> shell.exec("cd /app")
+            >>> shell.exec("export MY_VAR=value")
+            >>> result = shell.exec("echo $MY_VAR")  # Will output 'value'
+            >>> result = shell.exec("pwd")  # Will output '/app'
         """
         if shell_name is None:
             # uuid_utils is not typed
@@ -604,11 +604,11 @@ class NamedShell:
     name, it will re-attach to the existing named shell, preserving its state.
 
     Example:
-        >>> shell = devbox.shell('my-session')
-        >>> shell.exec('cd /app')
-        >>> shell.exec('export MY_VAR=value')
-        >>> result = shell.exec('echo $MY_VAR')  # Will output 'value'
-        >>> result = shell.exec('pwd')  # Will output '/app'
+        >>> shell = devbox.shell("my-session")
+        >>> shell.exec("cd /app")
+        >>> shell.exec("export MY_VAR=value")
+        >>> result = shell.exec("echo $MY_VAR")  # Will output 'value'
+        >>> result = shell.exec("pwd")  # Will output '/app'
     """
 
     def __init__(self, devbox: Devbox, shell_name: str) -> None:
@@ -644,11 +644,11 @@ class NamedShell:
         :rtype: ExecutionResult
 
         Example:
-            >>> shell = devbox.shell('my-session')
-            >>> result = shell.exec('ls -la')
+            >>> shell = devbox.shell("my-session")
+            >>> result = shell.exec("ls -la")
             >>> print(result.stdout())
             >>> # With streaming callbacks
-            >>> result = shell.exec('npm install', stdout=lambda line: print(f"[LOG] {line}"))
+            >>> result = shell.exec("npm install", stdout=lambda line: print(f"[LOG] {line}"))
         """
         # Ensure shell_name is set and cannot be overridden by user params
         params = dict(params)
@@ -677,12 +677,12 @@ class NamedShell:
         :rtype: Execution
 
         Example:
-            >>> shell = devbox.shell('my-session')
-            >>> execution = shell.exec_async('long-running-task.sh', stdout=lambda line: print(f"[LOG] {line}"))
+            >>> shell = devbox.shell("my-session")
+            >>> execution = shell.exec_async("long-running-task.sh", stdout=lambda line: print(f"[LOG] {line}"))
             >>> # Do other work while command runs...
             >>> result = execution.result()
             >>> if result.success:
-            ...     print('Task completed successfully!')
+            ...     print("Task completed successfully!")
         """
         # Ensure shell_name is set and cannot be overridden by user params
         params = dict(params)

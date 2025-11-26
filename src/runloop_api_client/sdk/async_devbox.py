@@ -295,14 +295,14 @@ class AsyncDevbox:
 
         Example:
             >>> # Create a named shell with a custom name
-            >>> shell = await devbox.shell('my-session')
+            >>> shell = await devbox.shell("my-session")
             >>> # Create a named shell with an auto-generated UUID name
             >>> shell2 = await devbox.shell()
             >>> # Commands execute sequentially and share state
-            >>> await shell.exec('cd /app')
-            >>> await shell.exec('export MY_VAR=value')
-            >>> result = await shell.exec('echo $MY_VAR')  # Will output 'value'
-            >>> result = await shell.exec('pwd')  # Will output '/app'
+            >>> await shell.exec("cd /app")
+            >>> await shell.exec("export MY_VAR=value")
+            >>> result = await shell.exec("echo $MY_VAR")  # Will output 'value'
+            >>> result = await shell.exec("pwd")  # Will output '/app'
         """
         if shell_name is None:
             # uuid_utils is not typed
@@ -596,11 +596,11 @@ class AsyncNamedShell:
     shell name, it will re-attach to the existing named shell, preserving its state.
 
     Example:
-        >>> shell = await devbox.shell('my-session')
-        >>> await shell.exec('cd /app')
-        >>> await shell.exec('export MY_VAR=value')
-        >>> result = await shell.exec('echo $MY_VAR')  # Will output 'value'
-        >>> result = await shell.exec('pwd')  # Will output '/app'
+        >>> shell = await devbox.shell("my-session")
+        >>> await shell.exec("cd /app")
+        >>> await shell.exec("export MY_VAR=value")
+        >>> result = await shell.exec("echo $MY_VAR")  # Will output 'value'
+        >>> result = await shell.exec("pwd")  # Will output '/app'
     """
 
     def __init__(self, devbox: AsyncDevbox, shell_name: str) -> None:
@@ -636,11 +636,11 @@ class AsyncNamedShell:
         :rtype: AsyncExecutionResult
 
         Example:
-            >>> shell = await devbox.shell('my-session')
-            >>> result = await shell.exec('ls -la')
+            >>> shell = await devbox.shell("my-session")
+            >>> result = await shell.exec("ls -la")
             >>> print(await result.stdout())
             >>> # With streaming callbacks
-            >>> result = await shell.exec('npm install', stdout=lambda line: print(f"[LOG] {line}"))
+            >>> result = await shell.exec("npm install", stdout=lambda line: print(f"[LOG] {line}"))
         """
         # Ensure shell_name is set and cannot be overridden by user params
         params = dict(params)
@@ -669,12 +669,12 @@ class AsyncNamedShell:
         :rtype: AsyncExecution
 
         Example:
-            >>> shell = await devbox.shell('my-session')
-            >>> execution = await shell.exec_async('long-running-task.sh', stdout=lambda line: print(f"[LOG] {line}"))
+            >>> shell = await devbox.shell("my-session")
+            >>> execution = await shell.exec_async("long-running-task.sh", stdout=lambda line: print(f"[LOG] {line}"))
             >>> # Do other work while command runs...
             >>> result = await execution.result()
             >>> if result.success:
-            ...     print('Task completed successfully!')
+            ...     print("Task completed successfully!")
         """
         # Ensure shell_name is set and cannot be overridden by user params
         params = dict(params)
