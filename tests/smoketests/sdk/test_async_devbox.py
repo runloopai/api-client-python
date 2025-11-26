@@ -106,7 +106,7 @@ class TestAsyncDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_simple_command(self, shared_devbox: AsyncDevbox) -> None:
         """Test executing a simple command asynchronously."""
-        result = await shared_devbox.cmd.exec(command="echo 'Hello from async SDK!'")
+        result = await shared_devbox.cmd.exec("echo 'Hello from async SDK!'")
 
         assert result is not None
         assert result.exit_code == 0
@@ -118,7 +118,7 @@ class TestAsyncDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_with_exit_code(self, shared_devbox: AsyncDevbox) -> None:
         """Test command execution captures exit codes correctly."""
-        result = await shared_devbox.cmd.exec(command="exit 42")
+        result = await shared_devbox.cmd.exec("exit 42")
 
         assert result.exit_code == 42
         assert result.success is False
@@ -127,7 +127,7 @@ class TestAsyncDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_async_command(self, shared_devbox: AsyncDevbox) -> None:
         """Test executing a command asynchronously with exec_async."""
-        execution = await shared_devbox.cmd.exec_async(command="echo 'Async command' && sleep 1")
+        execution = await shared_devbox.cmd.exec_async("echo 'Async command' && sleep 1")
 
         assert execution is not None
         assert execution.execution_id is not None
@@ -149,7 +149,7 @@ class TestAsyncDevboxCommandExecution:
             stdout_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            command='echo "line1" && echo "line2" && echo "line3"',
+            'echo "line1" && echo "line2" && echo "line3"',
             stdout=stdout_callback,
         )
 
@@ -175,7 +175,7 @@ class TestAsyncDevboxCommandExecution:
             stderr_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            command='echo "error1" >&2 && echo "error2" >&2',
+            'echo "error1" >&2 && echo "error2" >&2',
             stderr=stderr_callback,
         )
 
@@ -195,7 +195,7 @@ class TestAsyncDevboxCommandExecution:
     async def test_exec_with_large_stdout(self, shared_devbox: AsyncDevbox) -> None:
         """Ensure we capture all stdout lines (similar to TS last_n coverage)."""
         result = await shared_devbox.cmd.exec(
-            command="; ".join([f"echo line {i}" for i in range(1, 7)]),
+            "; ".join([f"echo line {i}" for i in range(1, 7)]),
         )
 
         assert result.exit_code == 0
@@ -214,7 +214,7 @@ class TestAsyncDevboxCommandExecution:
             output_lines.append(line)
 
         result = await shared_devbox.cmd.exec(
-            command='echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
+            'echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
             output=output_callback,
         )
 
@@ -238,7 +238,7 @@ class TestAsyncDevboxCommandExecution:
             stdout_lines.append(line)
 
         execution = await shared_devbox.cmd.exec_async(
-            command='echo "async output"',
+            'echo "async output"',
             stdout=stdout_callback,
         )
 
@@ -624,7 +624,7 @@ class TestAsyncDevboxExecutionPagination:
         """Test that large stdout output is fully captured via streaming when truncated."""
         # Generate 1000 lines of output
         result = await shared_devbox.cmd.exec(
-            command='for i in $(seq 1 1000); do echo "Line $i with some content to make it realistic"; done',
+            'for i in $(seq 1 1000); do echo "Line $i with some content to make it realistic"; done',
         )
 
         assert result.exit_code == 0
@@ -643,7 +643,7 @@ class TestAsyncDevboxExecutionPagination:
         """Test that large stderr output is fully captured via streaming when truncated."""
         # Generate 1000 lines of stderr output
         result = await shared_devbox.cmd.exec(
-            command='for i in $(seq 1 1000); do echo "Error line $i" >&2; done',
+            'for i in $(seq 1 1000); do echo "Error line $i" >&2; done',
         )
 
         assert result.exit_code == 0
@@ -662,7 +662,7 @@ class TestAsyncDevboxExecutionPagination:
         """Test num_lines parameter works correctly with potentially truncated output."""
         # Generate 2000 lines of output
         result = await shared_devbox.cmd.exec(
-            command='for i in $(seq 1 2000); do echo "Line $i"; done',
+            'for i in $(seq 1 2000); do echo "Line $i"; done',
         )
 
         assert result.exit_code == 0

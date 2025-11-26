@@ -28,7 +28,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=execution_view)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.cmd.exec(command="echo hello")
+        result = await devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
         assert await result.stdout(num_lines=10) == "output"
@@ -62,7 +62,7 @@ class TestAsyncCommandInterface:
         stdout_calls: list[str] = []
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = await devbox.cmd.exec(command="echo hello", stdout=stdout_calls.append)
+        result = await devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
         mock_async_client.devboxes.execute_async.assert_called_once()
@@ -82,7 +82,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
         devbox = AsyncDevbox(mock_async_client, "dev_123")
-        execution = await devbox.cmd.exec_async(command="long-running command")
+        execution = await devbox.cmd.exec_async("long-running command")
 
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"

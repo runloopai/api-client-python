@@ -14,7 +14,7 @@ from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.devbox_upload_file_params import DevboxUploadFileParams
 from ..types.devbox_create_tunnel_params import DevboxCreateTunnelParams
 from ..types.devbox_download_file_params import DevboxDownloadFileParams
-from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
+from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devbox_remove_tunnel_params import DevboxRemoveTunnelParams
 from ..types.devbox_snapshot_disk_params import DevboxSnapshotDiskParams
 from ..types.devbox_read_file_contents_params import DevboxReadFileContentsParams
@@ -70,11 +70,11 @@ class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestO
     pass
 
 
-class SDKDevboxExecuteParams(DevboxExecuteAsyncParams, ExecuteStreamingCallbacks, LongPollingRequestOptions):
+class SDKDevboxExecuteParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongPollingRequestOptions):
     pass
 
 
-class SDKDevboxExecuteAsyncParams(DevboxExecuteAsyncParams, ExecuteStreamingCallbacks, LongRequestOptions):
+class SDKDevboxExecuteAsyncParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongRequestOptions):
     pass
 
 

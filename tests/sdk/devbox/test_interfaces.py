@@ -25,7 +25,7 @@ class TestCommandInterface:
         mock_client.devboxes.executions.await_completed.return_value = execution_view
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec(command="echo hello")
+        result = devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
         assert result.stdout(num_lines=10) == "output"
@@ -58,7 +58,7 @@ class TestCommandInterface:
         stdout_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec(command="echo hello", stdout=stdout_calls.append)
+        result = devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -87,7 +87,7 @@ class TestCommandInterface:
         stderr_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec(command="echo hello", stderr=stderr_calls.append)
+        result = devbox.cmd.exec("echo hello", stderr=stderr_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -116,7 +116,7 @@ class TestCommandInterface:
         output_calls: list[str] = []
 
         devbox = Devbox(mock_client, "dev_123")
-        result = devbox.cmd.exec(command="echo hello", output=output_calls.append)
+        result = devbox.cmd.exec("echo hello", output=output_calls.append)
 
         assert result.exit_code == 0
         mock_client.devboxes.execute_async.assert_called_once()
@@ -148,7 +148,7 @@ class TestCommandInterface:
 
         devbox = Devbox(mock_client, "dev_123")
         result = devbox.cmd.exec(
-            command="echo hello",
+            "echo hello",
             stdout=stdout_calls.append,
             stderr=stderr_calls.append,
             output=output_calls.append,
@@ -169,7 +169,7 @@ class TestCommandInterface:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
         devbox = Devbox(mock_client, "dev_123")
-        execution = devbox.cmd.exec_async(command="long-running command")
+        execution = devbox.cmd.exec_async("long-running command")
 
         assert execution.execution_id == "exec_123"
         assert execution.devbox_id == "dev_123"

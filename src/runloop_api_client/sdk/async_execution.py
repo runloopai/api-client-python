@@ -43,7 +43,7 @@ class AsyncExecution:
     terminate the running process. Created by ``await devbox.cmd.exec_async()``.
 
     Example:
-        >>> execution = await devbox.cmd.exec_async(command="python train.py")
+        >>> execution = await devbox.cmd.exec_async("python train.py")
         >>> state = await execution.get_state()
         >>> if state.status == "running":
         ...     await execution.kill()

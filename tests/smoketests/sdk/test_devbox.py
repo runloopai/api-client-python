@@ -107,7 +107,7 @@ class TestDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_simple_command(self, shared_devbox: Devbox) -> None:
         """Test executing a simple command synchronously."""
-        result = shared_devbox.cmd.exec(command="echo 'Hello from SDK!'")
+        result = shared_devbox.cmd.exec("echo 'Hello from SDK!'")
 
         assert result is not None
         assert result.exit_code == 0
@@ -119,7 +119,7 @@ class TestDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_with_exit_code(self, shared_devbox: Devbox) -> None:
         """Test command execution captures exit codes correctly."""
-        result = shared_devbox.cmd.exec(command="exit 42")
+        result = shared_devbox.cmd.exec("exit 42")
 
         assert result.exit_code == 42
         assert result.success is False
@@ -128,7 +128,7 @@ class TestDevboxCommandExecution:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_exec_async_command(self, shared_devbox: Devbox) -> None:
         """Test executing a command asynchronously."""
-        execution = shared_devbox.cmd.exec_async(command="echo 'Async command' && sleep 1")
+        execution = shared_devbox.cmd.exec_async("echo 'Async command' && sleep 1")
 
         assert execution is not None
         assert execution.execution_id is not None
@@ -150,7 +150,7 @@ class TestDevboxCommandExecution:
             stdout_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            command='echo "line1" && echo "line2" && echo "line3"',
+            'echo "line1" && echo "line2" && echo "line3"',
             stdout=stdout_callback,
         )
 
@@ -176,7 +176,7 @@ class TestDevboxCommandExecution:
             stderr_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            command='echo "error1" >&2 && echo "error2" >&2',
+            'echo "error1" >&2 && echo "error2" >&2',
             stderr=stderr_callback,
         )
 
@@ -196,7 +196,7 @@ class TestDevboxCommandExecution:
     def test_exec_with_large_stdout(self, shared_devbox: Devbox) -> None:
         """Ensure we capture all stdout lines (similar to TS last_n coverage)."""
         result = shared_devbox.cmd.exec(
-            command="; ".join([f"echo line {i}" for i in range(1, 7)]),
+            "; ".join([f"echo line {i}" for i in range(1, 7)]),
         )
 
         assert result.exit_code == 0
@@ -215,7 +215,7 @@ class TestDevboxCommandExecution:
             output_lines.append(line)
 
         result = shared_devbox.cmd.exec(
-            command='echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
+            'echo "stdout1" && echo "stderr1" >&2 && echo "stdout2"',
             output=output_callback,
         )
 
@@ -239,7 +239,7 @@ class TestDevboxCommandExecution:
             stdout_lines.append(line)
 
         execution = shared_devbox.cmd.exec_async(
-            command='echo "async output"',
+            'echo "async output"',
             stdout=stdout_callback,
         )
 
@@ -619,7 +619,7 @@ class TestDevboxExecutionPagination:
         """Test that large stdout output is fully captured via streaming when truncated."""
         # Generate 1000 lines of output
         result = shared_devbox.cmd.exec(
-            command='for i in $(seq 1 1000); do echo "Line $i with some content to make it realistic"; done',
+            'for i in $(seq 1 1000); do echo "Line $i with some content to make it realistic"; done',
         )
 
         assert result.exit_code == 0
@@ -638,7 +638,7 @@ class TestDevboxExecutionPagination:
         """Test that large stderr output is fully captured via streaming when truncated."""
         # Generate 1000 lines of stderr output
         result = shared_devbox.cmd.exec(
-            command='for i in $(seq 1 1000); do echo "Error line $i" >&2; done',
+            'for i in $(seq 1 1000); do echo "Error line $i" >&2; done',
         )
 
         assert result.exit_code == 0
@@ -657,7 +657,7 @@ class TestDevboxExecutionPagination:
         """Test num_lines parameter works correctly with potentially truncated output."""
         # Generate 2000 lines of output
         result = shared_devbox.cmd.exec(
-            command='for i in $(seq 1 2000); do echo "Line $i"; done',
+            'for i in $(seq 1 2000); do echo "Line $i"; done',
         )
 
         assert result.exit_code == 0

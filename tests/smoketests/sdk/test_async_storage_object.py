@@ -365,7 +365,7 @@ class TestAsyncStorageObjectDevboxIntegration:
                 assert content == "Async content to mount and access"
 
                 # Verify file exists via command
-                result = await devbox.cmd.exec(command="test -f /home/user/async-mounted-file && echo 'exists'")
+                result = await devbox.cmd.exec("test -f /home/user/async-mounted-file && echo 'exists'")
                 stdout = await result.stdout(num_lines=1)
                 assert "exists" in stdout
             finally:
@@ -497,7 +497,7 @@ class TestAsyncStorageObjectWorkflows:
                 assert content == "Async initial content"
 
                 # Verify we can work with the file
-                result = await devbox.cmd.exec(command="cat /home/user/async-workflow-data")
+                result = await devbox.cmd.exec("cat /home/user/async-workflow-data")
                 stdout = await result.stdout(num_lines=1)
                 assert "Async initial content" in stdout
             finally:

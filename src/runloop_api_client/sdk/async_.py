@@ -496,7 +496,7 @@ class AsyncRunloopSDK:
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
         >>> devbox = await runloop.devbox.create(name="my-devbox")
-        >>> result = await devbox.cmd.exec(command="echo 'hello'")
+        >>> result = await devbox.cmd.exec("echo 'hello'")
         >>> print(await result.stdout())
         >>> await devbox.shutdown()
     """
