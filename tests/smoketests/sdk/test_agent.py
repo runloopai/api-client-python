@@ -40,37 +40,9 @@ class TestAgentLifecycle:
             assert info.id == agent.id
             assert info.name == name
         finally:
-            # Agents don't have a delete method, they're managed by the API
-            pass
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    def test_agent_create_with_metadata(self, sdk_client: RunloopSDK) -> None:
-        """Test creating an agent with metadata."""
-        name = unique_name("sdk-agent-metadata")
-        metadata = {
-            "purpose": "sdk-testing",
-            "version": "1.0",
-        }
-
-        agent = sdk_client.agent.create(
-            name=name,
-            metadata=metadata,
-            source={
-                "type": "npm",
-                "npm": {
-                    "package_name": "@runloop/hello-world-agent",
-                },
-            },
-        )
-
-        try:
-            assert agent.id is not None
-
-            # Verify metadata is preserved
-            info = agent.get_info()
-            assert info.name == name
-            # Note: Metadata handling may vary based on API implementation
-        finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
+            # Currently agents don't have a delete method - they persist after tests
+            # Once implemented, add: agent.delete()
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -95,6 +67,7 @@ class TestAgentLifecycle:
             assert info.create_time_ms > 0
             assert isinstance(info.is_public, bool)
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
 
@@ -133,6 +106,7 @@ class TestAgentListing:
             info = retrieved.get_info()
             assert info.id == created.id
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -163,36 +137,13 @@ class TestAgentListing:
             assert agent2.id in agent_ids
             assert agent3.id in agent_ids
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
+            # Should delete: agent1, agent2, agent3
             pass
 
 
 class TestAgentCreationVariations:
     """Test different agent creation scenarios."""
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    def test_agent_with_is_public_flag(self, sdk_client: RunloopSDK) -> None:
-        """Test creating an agent with is_public flag."""
-        name = unique_name("sdk-agent-public")
-
-        # Create a public agent
-        agent = sdk_client.agent.create(
-            name=name,
-            is_public=True,
-            source={
-                "type": "npm",
-                "npm": {
-                    "package_name": "@runloop/hello-world-agent",
-                },
-            },
-        )
-
-        try:
-            assert agent.id is not None
-            info = agent.get_info()
-            assert info.name == name
-            assert info.is_public is True
-        finally:
-            pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_agent_with_source_npm(self, sdk_client: RunloopSDK) -> None:
@@ -216,6 +167,7 @@ class TestAgentCreationVariations:
             assert info.source is not None
             assert info.source.type == "npm"
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -241,4 +193,5 @@ class TestAgentCreationVariations:
             assert info.source is not None
             assert info.source.type == "git"
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass

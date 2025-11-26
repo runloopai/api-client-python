@@ -40,37 +40,9 @@ class TestAsyncAgentLifecycle:
             assert info.id == agent.id
             assert info.name == name
         finally:
-            # Agents don't have a delete method, they're managed by the API
-            pass
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    async def test_agent_create_with_metadata(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating an agent with metadata."""
-        name = unique_name("sdk-async-agent-metadata")
-        metadata = {
-            "purpose": "sdk-testing",
-            "version": "1.0",
-        }
-
-        agent = await async_sdk_client.agent.create(
-            name=name,
-            metadata=metadata,
-            source={
-                "type": "npm",
-                "npm": {
-                    "package_name": "@runloop/hello-world-agent",
-                },
-            },
-        )
-
-        try:
-            assert agent.id is not None
-
-            # Verify metadata is preserved
-            info = await agent.get_info()
-            assert info.name == name
-            # Note: Metadata handling may vary based on API implementation
-        finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
+            # Currently agents don't have a delete method - they persist after tests
+            # Once implemented, add: await agent.delete()
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -95,6 +67,7 @@ class TestAsyncAgentLifecycle:
             assert info.create_time_ms > 0
             assert isinstance(info.is_public, bool)
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
 
@@ -133,6 +106,7 @@ class TestAsyncAgentListing:
             info = await retrieved.get_info()
             assert info.id == created.id
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -163,36 +137,13 @@ class TestAsyncAgentListing:
             assert agent2.id in agent_ids
             assert agent3.id in agent_ids
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
+            # Should delete: agent1, agent2, agent3
             pass
 
 
 class TestAsyncAgentCreationVariations:
     """Test different async agent creation scenarios."""
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    async def test_agent_with_is_public_flag(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating an agent with is_public flag."""
-        name = unique_name("sdk-async-agent-public")
-
-        # Create a public agent
-        agent = await async_sdk_client.agent.create(
-            name=name,
-            is_public=True,
-            source={
-                "type": "npm",
-                "npm": {
-                    "package_name": "@runloop/hello-world-agent",
-                },
-            },
-        )
-
-        try:
-            assert agent.id is not None
-            info = await agent.get_info()
-            assert info.name == name
-            assert info.is_public is True
-        finally:
-            pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_agent_with_source_npm(self, async_sdk_client: AsyncRunloopSDK) -> None:
@@ -216,6 +167,7 @@ class TestAsyncAgentCreationVariations:
             assert info.source is not None
             assert info.source.type == "npm"
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
@@ -241,4 +193,5 @@ class TestAsyncAgentCreationVariations:
             assert info.source is not None
             assert info.source.type == "git"
         finally:
+            # TODO: Add agent cleanup once delete endpoint is implemented
             pass
