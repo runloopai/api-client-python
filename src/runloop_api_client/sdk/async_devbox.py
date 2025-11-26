@@ -278,6 +278,39 @@ class AsyncDevbox:
         """
         return AsyncNetworkInterface(self)
 
+    def shell(self, shell_name: str | None = None) -> AsyncNamedShell:
+        """Create a named shell instance for stateful command execution.
+
+        Named shells are stateful and maintain environment variables and the current working
+        directory (CWD) across commands, just like a real shell on your local computer.
+        Commands executed through the same named shell instance will execute sequentially -
+        the shell can only run one command at a time with automatic queuing. This ensures
+        that environment changes and directory changes from one command are preserved for
+        the next command.
+
+        :param shell_name: The name of the persistent shell session. If not provided, a UUID will be generated automatically.
+        :type shell_name: str | None, optional
+        :return: An AsyncNamedShell instance for executing commands in the named shell
+        :rtype: AsyncNamedShell
+
+        Example:
+            >>> # Create a named shell with a custom name
+            >>> shell = await devbox.shell('my-session')
+            >>> # Create a named shell with an auto-generated UUID name
+            >>> shell2 = await devbox.shell()
+            >>> # Commands execute sequentially and share state
+            >>> await shell.exec('cd /app')
+            >>> await shell.exec('export MY_VAR=value')
+            >>> result = await shell.exec('echo $MY_VAR')  # Will output 'value'
+            >>> result = await shell.exec('pwd')  # Will output '/app'
+        """
+        if shell_name is None:
+            # uuid_utils is not typed
+            from uuid_utils import uuid7  # type: ignore
+
+            shell_name = str(uuid7())
+        return AsyncNamedShell(self, shell_name)
+
     # ------------------------------------------------------------------ #
     # Internal helpers
     # ------------------------------------------------------------------ #
@@ -548,6 +581,105 @@ class AsyncFileInterface:
             self._devbox.id,
             **params,
         )
+
+
+class AsyncNamedShell:
+    """Interface for executing commands in a persistent, stateful shell session.
+
+    Named shells are stateful and maintain environment variables and the current working
+    directory (CWD) across commands. Commands executed through the same named shell
+    instance will execute sequentially - the shell can only run one command at a time
+    with automatic queuing. This ensures that environment changes and directory changes
+    from one command are preserved for the next command.
+
+    Use :meth:`AsyncDevbox.shell` to create a named shell instance. If you use the same
+    shell name, it will re-attach to the existing named shell, preserving its state.
+
+    Example:
+        >>> shell = await devbox.shell('my-session')
+        >>> await shell.exec('cd /app')
+        >>> await shell.exec('export MY_VAR=value')
+        >>> result = await shell.exec('echo $MY_VAR')  # Will output 'value'
+        >>> result = await shell.exec('pwd')  # Will output '/app'
+    """
+
+    def __init__(self, devbox: AsyncDevbox, shell_name: str) -> None:
+        """Initialize the named shell.
+
+        :param devbox: The async devbox instance to execute commands on
+        :type devbox: AsyncDevbox
+        :param shell_name: The name of the persistent shell session
+        :type shell_name: str
+        """
+        self._devbox = devbox
+        self._shell_name = shell_name
+
+    async def exec(
+        self,
+        command: str,
+        **params: Unpack[SDKDevboxExecuteParams],
+    ) -> AsyncExecutionResult:
+        """Execute a command in the named shell and wait for it to complete.
+
+        The command will execute in the persistent shell session, maintaining environment
+        variables and the current working directory from previous commands. Commands are
+        queued and execute sequentially - only one command runs at a time in the named shell.
+
+        Optionally provide callbacks to stream logs in real-time. When callbacks are provided,
+        this method waits for both the command to complete AND all streaming data to be
+        processed before returning.
+
+        :param command: The command to execute
+        :type command: str
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteParams` for available parameters
+        :return: Wrapper with exit status and output helpers
+        :rtype: AsyncExecutionResult
+
+        Example:
+            >>> shell = await devbox.shell('my-session')
+            >>> result = await shell.exec('ls -la')
+            >>> print(await result.stdout())
+            >>> # With streaming callbacks
+            >>> result = await shell.exec('npm install', stdout=lambda line: print(f"[LOG] {line}"))
+        """
+        # Ensure shell_name is set and cannot be overridden by user params
+        params = dict(params)
+        params["shell_name"] = self._shell_name
+        return await self._devbox.cmd.exec(command, **params)
+
+    async def exec_async(
+        self,
+        command: str,
+        **params: Unpack[SDKDevboxExecuteAsyncParams],
+    ) -> AsyncExecution:
+        """Execute a command in the named shell asynchronously without waiting for completion.
+
+        The command will execute in the persistent shell session, maintaining environment
+        variables and the current working directory from previous commands. Commands are
+        queued and execute sequentially - only one command runs at a time in the named shell.
+
+        Optionally provide callbacks to stream logs in real-time as they are produced.
+        Callbacks fire in real-time as logs arrive. When you call execution.result(),
+        it will wait for both the command to complete and all streaming to finish.
+
+        :param command: The command to execute
+        :type command: str
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams` for available parameters
+        :return: Handle for managing the running process
+        :rtype: AsyncExecution
+
+        Example:
+            >>> shell = await devbox.shell('my-session')
+            >>> execution = await shell.exec_async('long-running-task.sh', stdout=lambda line: print(f"[LOG] {line}"))
+            >>> # Do other work while command runs...
+            >>> result = await execution.result()
+            >>> if result.success:
+            ...     print('Task completed successfully!')
+        """
+        # Ensure shell_name is set and cannot be overridden by user params
+        params = dict(params)
+        params["shell_name"] = self._shell_name
+        return await self._devbox.cmd.exec_async(command, **params)
 
 
 class AsyncNetworkInterface:
