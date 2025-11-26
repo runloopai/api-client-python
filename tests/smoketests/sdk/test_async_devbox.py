@@ -728,11 +728,11 @@ class TestAsyncDevboxNamedShell:
         # Create a file in the current directory
         await shell.exec('echo "test content" > testfile.txt')
 
-        # Verify the file exists in the current directory
-        ls_result = await shell.exec("ls testfile.txt")
-        assert ls_result.exit_code == 0
-        ls_output = await ls_result.stdout()
-        assert "testfile.txt" in ls_output
+        # Verify the file exists and has the correct content in the current directory
+        cat_result = await shell.exec("cat testfile.txt")
+        assert cat_result.exit_code == 0
+        cat_output = await cat_result.stdout()
+        assert "test content" in cat_output
 
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     async def test_shell_exec_env_persistence(self, devbox: AsyncDevbox) -> None:
