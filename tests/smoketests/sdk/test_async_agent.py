@@ -23,9 +23,9 @@ class TestAsyncAgentLifecycle:
         agent = await async_sdk_client.agent.create(
             name=name,
             source={
-                "type": "object",
-                "object": {
-                    "object_id": "obj_placeholder",
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/hello-world-agent",
                 },
             },
         )
@@ -56,9 +56,9 @@ class TestAsyncAgentLifecycle:
             name=name,
             metadata=metadata,
             source={
-                "type": "object",
-                "object": {
-                    "object_id": "obj_placeholder",
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/hello-world-agent",
                 },
             },
         )
@@ -80,9 +80,9 @@ class TestAsyncAgentLifecycle:
         agent = await async_sdk_client.agent.create(
             name=name,
             source={
-                "type": "object",
-                "object": {
-                    "object_id": "obj_placeholder",
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/hello-world-agent",
                 },
             },
         )
@@ -117,9 +117,9 @@ class TestAsyncAgentListing:
         created = await async_sdk_client.agent.create(
             name=unique_name("sdk-async-agent-retrieve"),
             source={
-                "type": "object",
-                "object": {
-                    "object_id": "obj_placeholder",
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/hello-world-agent",
                 },
             },
         )
@@ -139,9 +139,9 @@ class TestAsyncAgentListing:
     async def test_list_multiple_agents(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test listing multiple agents after creation."""
         source_config = {
-            "type": "object",
-            "object": {
-                "object_id": "obj_placeholder",
+            "type": "npm",
+            "npm": {
+                "package_name": "@runloop/hello-world-agent",
             },
         }
 
@@ -179,9 +179,9 @@ class TestAsyncAgentCreationVariations:
             name=name,
             is_public=True,
             source={
-                "type": "object",
-                "object": {
-                    "object_id": "obj_placeholder",
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/hello-world-agent",
                 },
             },
         )
