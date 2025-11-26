@@ -7,7 +7,7 @@ from pathlib import Path
 
 from ._ignore import IgnoreMatcher, IgnorePattern, DockerIgnoreMatcher, iter_included_files
 
-TarFilter = Callable[[tarfile.TarInfo], tarfile.TarInfo | None]
+TarFilter = Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]
 
 
 def build_docker_context_tar(
