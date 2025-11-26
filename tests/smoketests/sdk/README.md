@@ -1,12 +1,12 @@
 # SDK End-to-End Smoke Tests
 
-Comprehensive end-to-end tests for the object-oriented Python SDK (`runloop_api_client.sdk`). These tests run against the real Runloop API to validate critical workflows including devboxes, blueprints, snapshots, and storage objects.
+Comprehensive end-to-end tests for the object-oriented Python SDK (`runloop_api_client.sdk`). These tests run against the real Runloop API to validate critical workflows including agents, devboxes, blueprints, snapshots, and storage objects.
 
 ## Overview
 
 The Python SDK provides both synchronous and asynchronous interfaces:
-- **Synchronous SDK**: `RunloopSDK` with `Devbox`, `Blueprint`, `Snapshot`, `StorageObject`
-- **Asynchronous SDK**: `AsyncRunloopSDK` with `AsyncDevbox`, `AsyncBlueprint`, `AsyncSnapshot`, `AsyncStorageObject`
+- **Synchronous SDK**: `RunloopSDK` with `Agent`, `Devbox`, `Blueprint`, `Snapshot`, `StorageObject`
+- **Asynchronous SDK**: `AsyncRunloopSDK` with `AsyncAgent`, `AsyncDevbox`, `AsyncBlueprint`, `AsyncSnapshot`, `AsyncStorageObject`
 
 These tests ensure both interfaces work correctly in real-world scenarios.
 
@@ -14,6 +14,17 @@ These tests ensure both interfaces work correctly in real-world scenarios.
 
 ### Infrastructure
 - `conftest.py` - Pytest fixtures for SDK client instances
+
+### Agent Tests
+- `test_agent.py` - Synchronous agent operations
+- `test_async_agent.py` - Asynchronous agent operations
+
+**Test Coverage:**
+- Agent lifecycle (create, get_info)
+- Agent listing and retrieval
+- Agent creation with metadata
+- Agent creation with different source types (npm, git)
+- Public/private agent configuration
 
 ### Devbox Tests
 - `test_devbox.py` - Synchronous devbox operations
@@ -74,23 +85,30 @@ export RUNLOOP_API_KEY=your_api_key_here
 
 ### Run All SDK Smoke Tests
 ```bash
-RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest tests/smoketests/sdk/
+RUN_SMOKETESTS=1 uv run pytest -q -vv -n 20 -m smoketest tests/smoketests/sdk/
 ```
 
 ### Run Specific Test File
 ```bash
-RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest tests/smoketests/sdk/test_devbox.py
+RUN_SMOKETESTS=1 uv run pytest -q -vv -n 20 -m smoketest tests/smoketests/sdk/test_devbox.py
 ```
 
 ### Run Specific Test
 ```bash
-RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest -k "test_devbox_lifecycle" tests/smoketests/sdk/
+# match a test from anywhere in the directory
+RUN_SMOKETESTS=1 uv run pytest -q -vv-m smoketest -k "test_devbox_lifecycle" tests/smoketests/sdk/
+
+# specify the exact test
+RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest tests/smoketests/sdk/test_devbox.py::TestDevboxLifecycle::test_devbox_create
+
+# match a test from one file
+RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest -k "test_devbox_create" tests/smoketests/sdk/test_devbox.py
 ```
 
 ### Run Only Sync or Async Tests
 ```bash
 # Sync tests only (files without 'async' prefix)
-RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest tests/smoketests/sdk/test_devbox.py tests/smoketests/sdk/test_blueprint.py tests/smoketests/sdk/test_snapshot.py tests/smoketests/sdk/test_storage_object.py
+RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest $(ls tests/smoketests/sdk/*.py | grep -v async)
 
 # Async tests only (files with 'async' prefix)
 RUN_SMOKETESTS=1 uv run pytest -q -vv -m smoketest tests/smoketests/sdk/test_async_*.py

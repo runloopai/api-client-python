@@ -20,6 +20,7 @@ TEST_IDS = {
     "snapshot": "snap_123",
     "blueprint": "bp_123",
     "object": "obj_123",
+    "agent": "agent_123",
 }
 
 # Test URL constants
@@ -84,6 +85,17 @@ class MockObjectView:
     id: str = "obj_123"
     upload_url: str = "https://upload.example.com/obj_123"
     name: str = "test-object"
+
+
+@dataclass
+class MockAgentView:
+    """Mock AgentView for testing."""
+
+    id: str = "agent_123"
+    name: str = "test-agent"
+    create_time_ms: int = 1234567890000
+    is_public: bool = False
+    source: Any = None
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
@@ -168,6 +180,12 @@ def blueprint_view() -> MockBlueprintView:
 def object_view() -> MockObjectView:
     """Create a mock ObjectView."""
     return MockObjectView()
+
+
+@pytest.fixture
+def agent_view() -> MockAgentView:
+    """Create a mock AgentView."""
+    return MockAgentView()
 
 
 @pytest.fixture
