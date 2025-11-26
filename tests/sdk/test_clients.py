@@ -25,7 +25,6 @@ from runloop_api_client.sdk.sync import (
     BlueprintOps,
     StorageObjectOps,
 )
-from runloop_api_client.lib._ignore import DockerIgnoreMatcher
 from runloop_api_client.lib.polling import PollingConfig
 
 
@@ -483,86 +482,10 @@ class TestStorageObjectClient:
         http_client.put.assert_called_once()
         mock_client.objects.complete.assert_called_once()
 
-    def test_upload_from_dir_respects_dockerignore(
+    def test_upload_from_dir_respects_filter(
         self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
     ) -> None:
-        """upload_from_dir should respect .dockerignore patterns by default."""
-        mock_client.objects.create.return_value = object_view
-
-        test_dir = tmp_path / "ctx"
-        test_dir.mkdir()
-        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
-        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
-        build_dir = test_dir / "build"
-        build_dir.mkdir()
-        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
-
-        dockerignore = test_dir / ".dockerignore"
-        dockerignore.write_text("*.log\nbuild/\n", encoding="utf-8")
-
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        client = StorageObjectOps(mock_client)
-        obj = client.upload_from_dir(test_dir)
-
-        assert isinstance(obj, StorageObject)
-        http_client.put.assert_called_once()
-        uploaded_content = http_client.put.call_args[1]["content"]
-
-        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
-            names = {m.name for m in tar.getmembers()}
-
-        assert "keep.txt" in names
-        assert "ignore.log" not in names
-        assert not any(name.startswith("build/") for name in names)
-
-    def test_upload_from_dir_with_extra_ignore_file(
-        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
-    ) -> None:
-        """upload_from_dir should merge .dockerignore and an extra ignore file."""
-        mock_client.objects.create.return_value = object_view
-
-        test_dir = tmp_path / "ctx"
-        test_dir.mkdir()
-        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
-        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
-        build_dir = test_dir / "build"
-        build_dir.mkdir()
-        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
-
-        # Only ignore logs in .dockerignore
-        dockerignore = test_dir / ".dockerignore"
-        dockerignore.write_text("*.log\n", encoding="utf-8")
-
-        extra_ignore = tmp_path / "extra.ignore"
-        extra_ignore.write_text("build/\n", encoding="utf-8")
-
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        client = StorageObjectOps(mock_client)
-        matcher = DockerIgnoreMatcher(extra_ignorefile=extra_ignore)
-        obj = client.upload_from_dir(test_dir, ignore=matcher)
-
-        assert isinstance(obj, StorageObject)
-        uploaded_content = http_client.put.call_args[1]["content"]
-
-        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
-            names = {m.name for m in tar.getmembers()}
-
-        assert "keep.txt" in names
-        assert "ignore.log" not in names
-        assert not any(name.startswith("build/") for name in names)
-
-    def test_upload_from_dir_with_inline_ignore_patterns(
-        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
-    ) -> None:
-        """upload_from_dir should respect inline ignore patterns."""
+        """upload_from_dir should respect a tar filter when provided."""
         mock_client.objects.create.return_value = object_view
 
         test_dir = tmp_path / "ctx"
@@ -579,8 +502,14 @@ class TestStorageObjectClient:
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
-        matcher = DockerIgnoreMatcher(patterns=["*.log", "build/"])
-        obj = client.upload_from_dir(test_dir, ignore=matcher)
+
+        # Tar filter: drop logs and anything under build/
+        def ignore_logs_and_build(ti: tarfile.TarInfo) -> tarfile.TarInfo | None:
+            if ti.name.endswith(".log") or ti.name.startswith("build/"):
+                return None
+            return ti
+
+        obj = client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
 
         assert isinstance(obj, StorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]

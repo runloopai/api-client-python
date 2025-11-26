@@ -24,11 +24,10 @@ from ._types import (
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
-from ..lib._ignore import IgnoreMatcher
 from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
-from ..lib.context_loader import build_docker_context_tar
+from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
 
@@ -376,7 +375,7 @@ class AsyncStorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
-        ignore: IgnoreMatcher | None = None,
+        ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local directory.
@@ -391,11 +390,10 @@ class AsyncStorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param ignore: Optional ignore matcher. When provided it controls which
-            files under ``dir_path`` are included in the archived build
-            context. When omitted, a default Docker-style matcher that honors
-            ``.dockerignore`` under ``dir_path`` is used.
-        :type ignore: Optional[IgnoreMatcher]
+        :param ignore: Optional tar filter function compatible with
+            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
+            member to allow modification or exclusion (by returning ``None``).
+        :type ignore: Optional[TarFilter]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
             for available options
         :return: Wrapper for the uploaded object
@@ -410,7 +408,7 @@ class AsyncStorageObjectOps:
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
         def synchronous_io() -> bytes:
-            return build_docker_context_tar(path, ignore=ignore)
+            return build_directory_tar(path, tar_filter=ignore)
 
         tar_bytes = await asyncio.to_thread(synchronous_io)
 

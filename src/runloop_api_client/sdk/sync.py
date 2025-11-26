@@ -26,9 +26,8 @@ from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
-from ..lib._ignore import IgnoreMatcher
 from .storage_object import StorageObject
-from ..lib.context_loader import build_docker_context_tar
+from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 
 
@@ -375,7 +374,7 @@ class StorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
-        ignore: IgnoreMatcher | None = None,
+        ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a local directory.
@@ -390,11 +389,10 @@ class StorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param ignore: Optional ignore matcher. When provided it controls which
-            files under ``dir_path`` are included in the archived build
-            context. When omitted, a default Docker-style matcher that honors
-            ``.dockerignore`` under ``dir_path`` is used.
-        :type ignore: Optional[IgnoreMatcher]
+        :param ignore: Optional tar filter function compatible with
+            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
+            member to allow modification or exclusion (by returning ``None``).
+        :type ignore: Optional[TarFilter]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
             for available options
         :return: Wrapper for the uploaded object
@@ -408,7 +406,7 @@ class StorageObjectOps:
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
-        tar_bytes = build_docker_context_tar(path, ignore=ignore)
+        tar_bytes = build_directory_tar(path, tar_filter=ignore)
 
         obj = self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
         obj.upload_content(tar_bytes)
