@@ -234,7 +234,7 @@ class TestBlueprintDevboxIntegration:
                 assert info.status == "running"
 
                 # Verify the blueprint's software is installed
-                result = devbox.cmd.exec(command="which python3")
+                result = devbox.cmd.exec("which python3")
                 assert result.exit_code == 0
                 assert result.success is True
                 assert "python" in result.stdout(num_lines=1)

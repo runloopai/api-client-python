@@ -491,7 +491,7 @@ class RunloopSDK:
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
         >>> devbox = runloop.devbox.create(name="my-devbox")
-        >>> result = devbox.cmd.exec(command="echo 'hello'")
+        >>> result = devbox.cmd.exec("echo 'hello'")
         >>> print(result.stdout())
         >>> devbox.shutdown()
     """

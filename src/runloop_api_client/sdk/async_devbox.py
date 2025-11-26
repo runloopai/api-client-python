@@ -37,7 +37,7 @@ from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
 from .async_execution_result import AsyncExecutionResult
-from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
+from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 StreamFactory = Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]
@@ -56,7 +56,7 @@ class AsyncDevbox:
     Example:
         >>> devbox = await sdk.devbox.create(name="my-devbox")
         >>> async with devbox:
-        ...     result = await devbox.cmd.exec(command="echo 'hello'")
+        ...     result = await devbox.cmd.exec("echo 'hello'")
         ...     print(await result.stdout())
         # Devbox is automatically shut down on exit
     """
@@ -368,6 +368,7 @@ class AsyncCommandInterface:
 
     async def exec(
         self,
+        command: str,
         **params: Unpack[SDKDevboxExecuteParams],
     ) -> AsyncExecutionResult:
         """Execute a command synchronously and wait for completion.
@@ -377,7 +378,7 @@ class AsyncCommandInterface:
         :rtype: AsyncExecutionResult
 
         Example:
-            >>> result = await devbox.cmd.exec(command="echo 'hello'")
+            >>> result = await devbox.cmd.exec("echo 'hello'")
             >>> print(await result.stdout())
             >>> print(f"Exit code: {result.exit_code}")
         """
@@ -386,7 +387,8 @@ class AsyncCommandInterface:
 
         execution: DevboxAsyncExecutionDetailView = await client.devboxes.execute_async(
             devbox.id,
-            **filter_params(params, DevboxExecuteAsyncParams),
+            command=command,
+            **filter_params(params, DevboxNiceExecuteAsyncParams),
             **filter_params(params, LongRequestOptions),
         )
         streaming_group = devbox._start_streaming(
@@ -421,6 +423,7 @@ class AsyncCommandInterface:
 
     async def exec_async(
         self,
+        command: str,
         **params: Unpack[SDKDevboxExecuteAsyncParams],
     ) -> AsyncExecution:
         """Execute a command asynchronously without waiting for completion.
@@ -434,7 +437,7 @@ class AsyncCommandInterface:
         :rtype: AsyncExecution
 
         Example:
-            >>> execution = await devbox.cmd.exec_async(command="sleep 10")
+            >>> execution = await devbox.cmd.exec_async("sleep 10")
             >>> state = await execution.get_state()
             >>> print(f"Status: {state.status}")
             >>> await execution.kill()  # Terminate early if needed
@@ -444,7 +447,8 @@ class AsyncCommandInterface:
 
         execution: DevboxAsyncExecutionDetailView = await client.devboxes.execute_async(
             devbox.id,
-            **filter_params(params, DevboxExecuteAsyncParams),
+            command=command,
+            **filter_params(params, DevboxNiceExecuteAsyncParams),
             **filter_params(params, LongRequestOptions),
         )
 

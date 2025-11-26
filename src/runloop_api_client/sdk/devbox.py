@@ -38,7 +38,7 @@ from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .execution_result import ExecutionResult
-from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
+from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 if TYPE_CHECKING:
@@ -386,6 +386,7 @@ class CommandInterface:
 
     def exec(
         self,
+        command: str,
         **params: Unpack[SDKDevboxExecuteParams],
     ) -> ExecutionResult:
         """Execute a command synchronously and wait for completion.
@@ -395,7 +396,7 @@ class CommandInterface:
         :rtype: ExecutionResult
 
         Example:
-            >>> result = devbox.cmd.exec(command="ls -la")
+            >>> result = devbox.cmd.exec("ls -la")
             >>> print(result.stdout())
             >>> print(f"Exit code: {result.exit_code}")
         """
@@ -404,7 +405,8 @@ class CommandInterface:
 
         execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
-            **filter_params(params, DevboxExecuteAsyncParams),
+            command=command,
+            **filter_params(params, DevboxNiceExecuteAsyncParams),
             **filter_params(params, LongRequestOptions),
         )
         streaming_group = devbox._start_streaming(
@@ -429,6 +431,7 @@ class CommandInterface:
 
     def exec_async(
         self,
+        command: str,
         **params: Unpack[SDKDevboxExecuteAsyncParams],
     ) -> Execution:
         """Execute a command asynchronously without waiting for completion.
@@ -442,7 +445,7 @@ class CommandInterface:
         :rtype: Execution
 
         Example:
-            >>> execution = devbox.cmd.exec_async(command="sleep 10")
+            >>> execution = devbox.cmd.exec_async("sleep 10")
             >>> state = execution.get_state()
             >>> print(f"Status: {state.status}")
             >>> execution.kill()  # Terminate early if needed
@@ -452,7 +455,8 @@ class CommandInterface:
 
         execution: DevboxAsyncExecutionDetailView = client.devboxes.execute_async(
             devbox.id,
-            **filter_params(params, DevboxExecuteAsyncParams),
+            command=command,
+            **filter_params(params, DevboxNiceExecuteAsyncParams),
             **filter_params(params, LongRequestOptions),
         )
 
