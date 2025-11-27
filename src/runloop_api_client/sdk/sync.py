@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import io
-import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
@@ -29,6 +27,7 @@ from ._helpers import detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .storage_object import StorageObject
+from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 
 
@@ -375,6 +374,7 @@ class StorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
+        ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a local directory.
@@ -389,22 +389,27 @@ class StorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :param ignore: Optional tar filter function compatible with
+            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
+            member to allow modification or exclusion (by returning ``None``).
+        :type ignore: Optional[TarFilter]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
+            for available options
         :return: Wrapper for the uploaded object
         :rtype: StorageObject
         :raises OSError: If the local file cannot be read
         """
         path = Path(dir_path)
+        if not path.is_dir():
+            raise ValueError(f"dir_path must be a directory, got: {path}")
+
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
-        tar_buffer = io.BytesIO()
-        with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-            tar.add(path, arcname=".", recursive=True)
-        tar_buffer.seek(0)
+        tar_bytes = build_directory_tar(path, tar_filter=ignore)
 
         obj = self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
-        obj.upload_content(tar_buffer)
+        obj.upload_content(tar_bytes)
         obj.complete()
         return obj
 
