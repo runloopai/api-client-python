@@ -835,6 +835,230 @@ class TestAsyncAgentClient:
 
         mock_async_client.agents.list.assert_called_once()
 
+    @pytest.mark.asyncio
+    async def test_create_from_npm(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
+        """Test create_from_npm factory method."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_npm(
+            name="test-agent",
+            package_name="@runloop/example-agent",
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/example-agent",
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_npm_with_all_options(
+        self, mock_async_client: AsyncMock, agent_view: MockAgentView
+    ) -> None:
+        """Test create_from_npm factory method with all optional parameters."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_npm(
+            name="test-agent",
+            package_name="@runloop/example-agent",
+            npm_version="1.2.3",
+            registry_url="https://registry.example.com",
+            agent_setup=["npm install", "npm run setup"],
+            extra_headers={"X-Custom": "header"},
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/example-agent",
+                    "npm_version": "1.2.3",
+                    "registry_url": "https://registry.example.com",
+                    "agent_setup": ["npm install", "npm run setup"],
+                },
+            },
+            name="test-agent",
+            extra_headers={"X-Custom": "header"},
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_npm_raises_when_source_provided(self, mock_async_client: AsyncMock) -> None:
+        """Test create_from_npm raises ValueError when source is provided in params."""
+        client = AsyncAgentOps(mock_async_client)
+
+        with pytest.raises(ValueError, match="Cannot specify 'source' when using create_from_npm"):
+            await client.create_from_npm(
+                name="test-agent",
+                package_name="@runloop/example-agent",
+                source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
+            )
+
+    @pytest.mark.asyncio
+    async def test_create_from_pip(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
+        """Test create_from_pip factory method."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_pip(
+            name="test-agent",
+            package_name="runloop-example-agent",
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "pip",
+                "pip": {
+                    "package_name": "runloop-example-agent",
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_pip_with_all_options(
+        self, mock_async_client: AsyncMock, agent_view: MockAgentView
+    ) -> None:
+        """Test create_from_pip factory method with all optional parameters."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_pip(
+            name="test-agent",
+            package_name="runloop-example-agent",
+            pip_version="1.2.3",
+            registry_url="https://pypi.example.com",
+            agent_setup=["pip install extra-deps"],
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "pip",
+                "pip": {
+                    "package_name": "runloop-example-agent",
+                    "pip_version": "1.2.3",
+                    "registry_url": "https://pypi.example.com",
+                    "agent_setup": ["pip install extra-deps"],
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_git(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
+        """Test create_from_git factory method."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_git(
+            name="test-agent",
+            repository="https://github.com/example/agent-repo",
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "git",
+                "git": {
+                    "repository": "https://github.com/example/agent-repo",
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_git_with_all_options(
+        self, mock_async_client: AsyncMock, agent_view: MockAgentView
+    ) -> None:
+        """Test create_from_git factory method with all optional parameters."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_git(
+            name="test-agent",
+            repository="https://github.com/example/agent-repo",
+            ref="develop",
+            agent_setup=["npm install", "npm run build"],
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "git",
+                "git": {
+                    "repository": "https://github.com/example/agent-repo",
+                    "ref": "develop",
+                    "agent_setup": ["npm install", "npm run build"],
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_object(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
+        """Test create_from_object factory method."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_object(
+            name="test-agent",
+            object_id="obj_123",
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "object",
+                "object": {
+                    "object_id": "obj_123",
+                },
+            },
+            name="test-agent",
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_from_object_with_agent_setup(
+        self, mock_async_client: AsyncMock, agent_view: MockAgentView
+    ) -> None:
+        """Test create_from_object factory method with agent_setup."""
+        mock_async_client.agents.create = AsyncMock(return_value=agent_view)
+
+        client = AsyncAgentOps(mock_async_client)
+        agent = await client.create_from_object(
+            name="test-agent",
+            object_id="obj_123",
+            agent_setup=["chmod +x setup.sh", "./setup.sh"],
+        )
+
+        assert isinstance(agent, AsyncAgent)
+        assert agent.id == "agent_123"
+        mock_async_client.agents.create.assert_awaited_once_with(
+            source={
+                "type": "object",
+                "object": {
+                    "object_id": "obj_123",
+                    "agent_setup": ["chmod +x setup.sh", "./setup.sh"],
+                },
+            },
+            name="test-agent",
+        )
+
 
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
