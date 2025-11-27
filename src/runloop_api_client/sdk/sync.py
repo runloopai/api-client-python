@@ -576,6 +576,151 @@ class AgentOps:
         )
         return Agent(self._client, agent_view.id, agent_view)
 
+    def create_from_npm(
+        self,
+        *,
+        package_name: str,
+        npm_version: Optional[str] = None,
+        registry_url: Optional[str] = None,
+        agent_setup: Optional[list[str]] = None,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> Agent:
+        """Create an agent from an NPM package.
+
+        :param package_name: NPM package name
+        :type package_name: str
+        :param npm_version: NPM version constraint, defaults to None
+        :type npm_version: Optional[str], optional
+        :param registry_url: NPM registry URL, defaults to None
+        :type registry_url: Optional[str], optional
+        :param agent_setup: Setup commands to run after installation, defaults to None
+        :type agent_setup: Optional[list[str]], optional
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
+        :return: Wrapper bound to the newly created agent
+        :rtype: Agent
+        :raises ValueError: If 'source' is provided in params
+        """
+        if "source" in params:
+            raise ValueError("Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration")
+
+        npm_config: dict = {"package_name": package_name}
+        if npm_version is not None:
+            npm_config["npm_version"] = npm_version
+        if registry_url is not None:
+            npm_config["registry_url"] = registry_url
+        if agent_setup is not None:
+            npm_config["agent_setup"] = agent_setup
+
+        return self.create(
+            source={"type": "npm", "npm": npm_config},
+            **params,
+        )
+
+    def create_from_pip(
+        self,
+        *,
+        package_name: str,
+        pip_version: Optional[str] = None,
+        registry_url: Optional[str] = None,
+        agent_setup: Optional[list[str]] = None,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> Agent:
+        """Create an agent from a Pip package.
+
+        :param package_name: Pip package name
+        :type package_name: str
+        :param pip_version: Pip version constraint, defaults to None
+        :type pip_version: Optional[str], optional
+        :param registry_url: Pip registry URL, defaults to None
+        :type registry_url: Optional[str], optional
+        :param agent_setup: Setup commands to run after installation, defaults to None
+        :type agent_setup: Optional[list[str]], optional
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
+        :return: Wrapper bound to the newly created agent
+        :rtype: Agent
+        :raises ValueError: If 'source' is provided in params
+        """
+        if "source" in params:
+            raise ValueError("Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration")
+
+        pip_config: dict = {"package_name": package_name}
+        if pip_version is not None:
+            pip_config["pip_version"] = pip_version
+        if registry_url is not None:
+            pip_config["registry_url"] = registry_url
+        if agent_setup is not None:
+            pip_config["agent_setup"] = agent_setup
+
+        return self.create(
+            source={"type": "pip", "pip": pip_config},
+            **params,
+        )
+
+    def create_from_git(
+        self,
+        *,
+        repository: str,
+        ref: Optional[str] = None,
+        agent_setup: Optional[list[str]] = None,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> Agent:
+        """Create an agent from a Git repository.
+
+        :param repository: Git repository URL
+        :type repository: str
+        :param ref: Optional Git ref (branch/tag/commit), defaults to main/HEAD
+        :type ref: Optional[str], optional
+        :param agent_setup: Setup commands to run after cloning, defaults to None
+        :type agent_setup: Optional[list[str]], optional
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
+        :return: Wrapper bound to the newly created agent
+        :rtype: Agent
+        :raises ValueError: If 'source' is provided in params
+        """
+        if "source" in params:
+            raise ValueError("Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration")
+
+        git_config: dict = {"repository": repository}
+        if ref is not None:
+            git_config["ref"] = ref
+        if agent_setup is not None:
+            git_config["agent_setup"] = agent_setup
+
+        return self.create(
+            source={"type": "git", "git": git_config},
+            **params,
+        )
+
+    def create_from_object(
+        self,
+        *,
+        object_id: str,
+        agent_setup: Optional[list[str]] = None,
+        **params: Unpack[SDKAgentCreateParams],
+    ) -> Agent:
+        """Create an agent from a storage object.
+
+        :param object_id: Storage object ID
+        :type object_id: str
+        :param agent_setup: Setup commands to run after unpacking, defaults to None
+        :type agent_setup: Optional[list[str]], optional
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
+        :return: Wrapper bound to the newly created agent
+        :rtype: Agent
+        :raises ValueError: If 'source' is provided in params
+        """
+        if "source" in params:
+            raise ValueError("Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration")
+
+        object_config: dict = {"object_id": object_id}
+        if agent_setup is not None:
+            object_config["agent_setup"] = agent_setup
+
+        return self.create(
+            source={"type": "object", "object": object_config},
+            **params,
+        )
+
     def from_id(self, agent_id: str) -> Agent:
         """Attach to an existing agent by ID.
 
