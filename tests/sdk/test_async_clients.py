@@ -38,8 +38,8 @@ class TestAsyncDevboxClient:
         """Test create method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxOps(mock_async_client)
-        devbox = await client.create(
+        ops = AsyncDevboxOps(mock_async_client)
+        devbox = await ops.create(
             name="test-devbox",
             metadata={"key": "value"},
             polling_config=PollingConfig(timeout_seconds=60.0),
@@ -54,8 +54,8 @@ class TestAsyncDevboxClient:
         """Test create_from_blueprint_id method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxOps(mock_async_client)
-        devbox = await client.create_from_blueprint_id(
+        ops = AsyncDevboxOps(mock_async_client)
+        devbox = await ops.create_from_blueprint_id(
             "bp_123",
             name="test-devbox",
         )
@@ -69,8 +69,8 @@ class TestAsyncDevboxClient:
         """Test create_from_blueprint_name method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxOps(mock_async_client)
-        devbox = await client.create_from_blueprint_name(
+        ops = AsyncDevboxOps(mock_async_client)
+        devbox = await ops.create_from_blueprint_name(
             "my-blueprint",
             name="test-devbox",
         )
@@ -84,8 +84,8 @@ class TestAsyncDevboxClient:
         """Test create_from_snapshot method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        client = AsyncDevboxOps(mock_async_client)
-        devbox = await client.create_from_snapshot(
+        ops = AsyncDevboxOps(mock_async_client)
+        devbox = await ops.create_from_snapshot(
             "snap_123",
             name="test-devbox",
         )
@@ -96,8 +96,8 @@ class TestAsyncDevboxClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncDevboxOps(mock_async_client)
-        devbox = client.from_id("dev_123")
+        ops = AsyncDevboxOps(mock_async_client)
+        devbox = ops.from_id("dev_123")
 
         assert isinstance(devbox, AsyncDevbox)
         assert devbox.id == "dev_123"
@@ -111,8 +111,8 @@ class TestAsyncDevboxClient:
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_async_client.devboxes.list = AsyncMock(return_value=page)
 
-        client = AsyncDevboxOps(mock_async_client)
-        devboxes = await client.list(
+        ops = AsyncDevboxOps(mock_async_client)
+        devboxes = await ops.list(
             limit=10,
             status="running",
             starting_after="dev_000",
@@ -133,8 +133,8 @@ class TestAsyncSnapshotClient:
         page = SimpleNamespace(snapshots=[snapshot_view])
         mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
 
-        client = AsyncSnapshotOps(mock_async_client)
-        snapshots = await client.list(
+        ops = AsyncSnapshotOps(mock_async_client)
+        snapshots = await ops.list(
             devbox_id="dev_123",
             limit=10,
             starting_after="snap_000",
@@ -147,8 +147,8 @@ class TestAsyncSnapshotClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncSnapshotOps(mock_async_client)
-        snapshot = client.from_id("snap_123")
+        ops = AsyncSnapshotOps(mock_async_client)
+        snapshot = ops.from_id("snap_123")
 
         assert isinstance(snapshot, AsyncSnapshot)
         assert snapshot.id == "snap_123"
@@ -162,8 +162,8 @@ class TestAsyncBlueprintClient:
         """Test create method."""
         mock_async_client.blueprints.create_and_await_build_complete = AsyncMock(return_value=blueprint_view)
 
-        client = AsyncBlueprintOps(mock_async_client)
-        blueprint = await client.create(
+        ops = AsyncBlueprintOps(mock_async_client)
+        blueprint = await ops.create(
             name="test-blueprint",
             polling_config=PollingConfig(timeout_seconds=60.0),
         )
@@ -174,8 +174,8 @@ class TestAsyncBlueprintClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncBlueprintOps(mock_async_client)
-        blueprint = client.from_id("bp_123")
+        ops = AsyncBlueprintOps(mock_async_client)
+        blueprint = ops.from_id("bp_123")
 
         assert isinstance(blueprint, AsyncBlueprint)
         assert blueprint.id == "bp_123"
@@ -186,8 +186,8 @@ class TestAsyncBlueprintClient:
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_async_client.blueprints.list = AsyncMock(return_value=page)
 
-        client = AsyncBlueprintOps(mock_async_client)
-        blueprints = await client.list(
+        ops = AsyncBlueprintOps(mock_async_client)
+        blueprints = await ops.list(
             limit=10,
             name="test",
             starting_after="bp_000",
@@ -207,8 +207,8 @@ class TestAsyncStorageObjectClient:
         """Test create method."""
         mock_async_client.objects.create = AsyncMock(return_value=object_view)
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.create(name="test.txt", content_type="text", metadata={"key": "value"})
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.create(name="test.txt", content_type="text", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -221,8 +221,8 @@ class TestAsyncStorageObjectClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = client.from_id("obj_123")
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = ops.from_id("obj_123")
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -234,8 +234,8 @@ class TestAsyncStorageObjectClient:
         page = SimpleNamespace(objects=[object_view])
         mock_async_client.objects.list = AsyncMock(return_value=page)
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        objects = await client.list(
+        ops = AsyncStorageObjectOps(mock_async_client)
+        objects = await ops.list(
             content_type="text",
             limit=10,
             name="test",
@@ -272,8 +272,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_file(temp_file, name="test.txt")
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_file(temp_file, name="test.txt")
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -297,8 +297,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -322,8 +322,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -339,11 +339,11 @@ class TestAsyncStorageObjectClient:
     @pytest.mark.asyncio
     async def test_upload_from_file_missing_path(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
         """upload_from_file should raise when file cannot be read."""
-        client = AsyncStorageObjectOps(mock_async_client)
+        ops = AsyncStorageObjectOps(mock_async_client)
         missing_file = tmp_path / "missing.txt"
 
         with pytest.raises(OSError, match="Failed to read file"):
-            await client.upload_from_file(missing_file)
+            await ops.upload_from_file(missing_file)
 
     @pytest.mark.asyncio
     async def test_upload_from_dir(
@@ -367,8 +367,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_dir(test_dir, name="archive.tar.gz", metadata={"key": "value"})
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_dir(test_dir, name="archive.tar.gz", metadata={"key": "value"})
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -412,8 +412,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_dir(test_dir)
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_dir(test_dir)
 
         assert isinstance(obj, AsyncStorageObject)
         # Name should be directory name + .tar.gz
@@ -443,8 +443,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_dir(test_dir, ttl=timedelta(hours=2))
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_dir(test_dir, ttl=timedelta(hours=2))
 
         assert isinstance(obj, AsyncStorageObject)
         mock_async_client.objects.create.assert_awaited_once_with(
@@ -470,8 +470,8 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
-        obj = await client.upload_from_dir(test_dir)
+        ops = AsyncStorageObjectOps(mock_async_client)
+        obj = await ops.upload_from_dir(test_dir)
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -501,9 +501,9 @@ class TestAsyncStorageObjectClient:
         http_client.put = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
-        client = AsyncStorageObjectOps(mock_async_client)
+        ops = AsyncStorageObjectOps(mock_async_client)
         # Pass string path instead of Path object
-        obj = await client.upload_from_dir(str(test_dir))
+        obj = await ops.upload_from_dir(str(test_dir))
 
         assert isinstance(obj, AsyncStorageObject)
         assert obj.id == "obj_123"
@@ -525,8 +525,8 @@ class TestAsyncScorerClient:
         """Test create method."""
         mock_async_client.scenarios.scorers.create = AsyncMock(return_value=scorer_view)
 
-        client = AsyncScorerOps(mock_async_client)
-        scorer = await client.create(
+        ops = AsyncScorerOps(mock_async_client)
+        scorer = await ops.create(
             bash_script="echo 'score=1.0'",
             type="test_scorer",
         )
@@ -537,8 +537,8 @@ class TestAsyncScorerClient:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        client = AsyncScorerOps(mock_async_client)
-        scorer = client.from_id("scorer_123")
+        ops = AsyncScorerOps(mock_async_client)
+        scorer = ops.from_id("scorer_123")
 
         assert isinstance(scorer, AsyncScorer)
         assert scorer.id == "scorer_123"
@@ -552,8 +552,8 @@ class TestAsyncScorerClient:
 
         mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
 
-        client = AsyncScorerOps(mock_async_client)
-        scorers = await client.list(
+        ops = AsyncScorerOps(mock_async_client)
+        scorers = await ops.list(
             limit=10,
             starting_after="scorer_000",
         )
