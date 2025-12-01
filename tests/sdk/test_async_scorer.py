@@ -35,12 +35,7 @@ class TestAsyncScorer:
         mock_async_client.scenarios.scorers.retrieve = AsyncMock(return_value=scorer_view)
 
         scorer = AsyncScorer(mock_async_client, "scorer_123")
-        result = await scorer.get_info(
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-        )
+        result = await scorer.get_info()
 
         assert result == scorer_view
         mock_async_client.scenarios.scorers.retrieve.assert_called_once()
@@ -55,10 +50,6 @@ class TestAsyncScorer:
         result = await scorer.update(
             type="updated_scorer",
             bash_script="echo 'score=1.0'",
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
 
         assert result == update_response
@@ -77,10 +68,6 @@ class TestAsyncScorer:
         scorer = AsyncScorer(mock_async_client, "scorer_123")
         result = await scorer.validate(
             scoring_context={"test": "context"},
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
 
         assert result == validate_response

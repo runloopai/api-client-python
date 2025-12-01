@@ -32,21 +32,10 @@ class TestScorer:
         mock_client.scenarios.scorers.retrieve.return_value = scorer_view
 
         scorer = Scorer(mock_client, "scorer_123")
-        result = scorer.get_info(
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-        )
+        result = scorer.get_info()
 
         assert result == scorer_view
-        mock_client.scenarios.scorers.retrieve.assert_called_once_with(
-            "scorer_123",
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-        )
+        mock_client.scenarios.scorers.retrieve.assert_called_once_with("scorer_123")
 
     def test_update(self, mock_client: Mock) -> None:
         """Test update method."""
@@ -57,10 +46,6 @@ class TestScorer:
         result = scorer.update(
             type="updated_scorer",
             bash_script="echo 'score=1.0'",
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
 
         assert result == update_response
@@ -68,10 +53,6 @@ class TestScorer:
             "scorer_123",
             type="updated_scorer",
             bash_script="echo 'score=1.0'",
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
 
     def test_validate(self, mock_client: Mock) -> None:
@@ -86,18 +67,10 @@ class TestScorer:
         scorer = Scorer(mock_client, "scorer_123")
         result = scorer.validate(
             scoring_context={"test": "context"},
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
 
         assert result == validate_response
         mock_client.scenarios.scorers.validate.assert_called_once_with(
             "scorer_123",
             scoring_context={"test": "context"},
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
         )
