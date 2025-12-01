@@ -6,8 +6,6 @@ from typing_extensions import Unpack, override
 
 from ._types import (
     BaseRequestOptions,
-    SDKScorerListParams,
-    SDKScorerCreateParams,
     SDKScorerUpdateParams,
     SDKScorerValidateParams,
 )
@@ -45,44 +43,6 @@ class Scorer:
         :rtype: str
         """
         return self._id
-
-    # TODO: replace static method once we have a proper client
-    @staticmethod
-    def create(
-        client: Runloop,
-        **params: Unpack[SDKScorerCreateParams],
-    ) -> "Scorer":
-        """Create a new scenario scorer.
-
-        :param client: Generated Runloop client
-        :type client: Runloop
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
-        :return: Wrapper bound to the newly created scorer
-        :rtype: Scorer
-        """
-        response = client.scenarios.scorers.create(
-            **params,
-        )
-        return Scorer(client, response.id)
-
-    # TODO: replace static method once we have a proper client
-    @staticmethod
-    def list(
-        client: Runloop,
-        **params: Unpack[SDKScorerListParams],
-    ) -> list["Scorer"]:
-        """List all scenario scorers.
-
-        :param client: Generated Runloop client
-        :type client: Runloop
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
-        :return: List of scorer wrappers
-        :rtype: list[Scorer]
-        """
-        page = client.scenarios.scorers.list(
-            **params,
-        )
-        return [Scorer(client, item.id) for item in page]
 
     def get_info(
         self,

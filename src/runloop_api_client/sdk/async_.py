@@ -16,8 +16,10 @@ from ._types import (
     LongRequestOptions,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKScorerListParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
@@ -27,6 +29,7 @@ from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
 from .async_devbox import AsyncDevbox
+from .async_scorer import AsyncScorer
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from .async_storage_object import AsyncStorageObject
@@ -475,6 +478,67 @@ class AsyncStorageObjectOps:
         return obj
 
 
+class AsyncScorerOps:
+    """High-level async manager for creating and managing scenario scorers.
+
+    Accessed via ``runloop.scorer`` from :class:`AsyncRunloopSDK`, provides
+    coroutines to create, list, and access scorers.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> scorer = await runloop.scorer.create(name="my-scorer", scorer_type="llm_judge")
+        >>> scorers = await runloop.scorer.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize the manager.
+
+        :param client: Generated AsyncRunloop client to wrap
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(
+        self,
+        **params: Unpack[SDKScorerCreateParams],
+    ) -> AsyncScorer:
+        """Create a new scenario scorer.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
+        :return: Wrapper bound to the newly created scorer
+        :rtype: AsyncScorer
+        """
+        response = await self._client.scenarios.scorers.create(
+            **params,
+        )
+        return AsyncScorer(self._client, response.id)
+
+    def from_id(self, scorer_id: str) -> AsyncScorer:
+        """Return a scorer wrapper for the given ID.
+
+        :param scorer_id: Scorer ID to wrap
+        :type scorer_id: str
+        :return: Wrapper for the scorer resource
+        :rtype: AsyncScorer
+        """
+        return AsyncScorer(self._client, scorer_id)
+
+    async def list(
+        self,
+        **params: Unpack[SDKScorerListParams],
+    ) -> list[AsyncScorer]:
+        """List all scenario scorers.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
+        :return: List of scorer wrappers
+        :rtype: list[AsyncScorer]
+        """
+        page = await self._client.scenarios.scorers.list(
+            **params,
+        )
+        return [AsyncScorer(self._client, item.id) async for item in page]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -488,6 +552,8 @@ class AsyncRunloopSDK:
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
     :vartype blueprint: AsyncBlueprintOps
+    :ivar scorer: High-level async interface for scorer management
+    :vartype scorer: AsyncScorerOps
     :ivar snapshot: High-level async interface for snapshot management
     :vartype snapshot: AsyncSnapshotOps
     :ivar storage_object: High-level async interface for storage object management
@@ -504,6 +570,7 @@ class AsyncRunloopSDK:
     api: AsyncRunloop
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    scorer: AsyncScorerOps
     snapshot: AsyncSnapshotOps
     storage_object: AsyncStorageObjectOps
 
@@ -547,6 +614,7 @@ class AsyncRunloopSDK:
 
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
         self.storage_object = AsyncStorageObjectOps(self.api)
 

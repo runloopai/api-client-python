@@ -6,8 +6,6 @@ from typing_extensions import Unpack, override
 
 from ._types import (
     BaseRequestOptions,
-    SDKScorerListParams,
-    SDKScorerCreateParams,
     SDKScorerUpdateParams,
     SDKScorerValidateParams,
 )
@@ -45,44 +43,6 @@ class AsyncScorer:
         :rtype: str
         """
         return self._id
-
-    # TODO: replace static method once we have a proper client
-    @staticmethod
-    async def create(
-        client: AsyncRunloop,
-        **params: Unpack[SDKScorerCreateParams],
-    ) -> "AsyncScorer":
-        """Create a new scenario scorer.
-
-        :param client: Generated AsyncRunloop client
-        :type client: AsyncRunloop
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
-        :return: Wrapper bound to the newly created scorer
-        :rtype: AsyncScorer
-        """
-        response = await client.scenarios.scorers.create(
-            **params,
-        )
-        return AsyncScorer(client, response.id)
-
-    # TODO: replace static method once we have a proper client
-    @staticmethod
-    async def list(
-        client: AsyncRunloop,
-        **params: Unpack[SDKScorerListParams],
-    ) -> list["AsyncScorer"]:
-        """List all scenario scorers.
-
-        :param client: Generated AsyncRunloop client
-        :type client: AsyncRunloop
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
-        :return: List of scorer wrappers
-        :rtype: list[AsyncScorer]
-        """
-        page = await client.scenarios.scorers.list(
-            **params,
-        )
-        return [AsyncScorer(client, item.id) async for item in page]
 
     async def get_info(
         self,

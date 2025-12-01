@@ -15,14 +15,17 @@ from ._types import (
     LongRequestOptions,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKScorerListParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
     SDKDevboxCreateFromImageParams,
 )
 from .devbox import Devbox
+from .scorer import Scorer
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
@@ -470,6 +473,67 @@ class StorageObjectOps:
         return obj
 
 
+class ScorerOps:
+    """High-level manager for creating and managing scenario scorers.
+
+    Accessed via ``runloop.scorer`` from :class:`RunloopSDK`, provides methods
+    to create, list, and access scorers.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> scorer = runloop.scorer.create(name="my-scorer", scorer_type="llm_judge")
+        >>> scorers = runloop.scorer.list()
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize the manager.
+
+        :param client: Generated Runloop client to wrap
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(
+        self,
+        **params: Unpack[SDKScorerCreateParams],
+    ) -> Scorer:
+        """Create a new scenario scorer.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
+        :return: Wrapper bound to the newly created scorer
+        :rtype: Scorer
+        """
+        response = self._client.scenarios.scorers.create(
+            **params,
+        )
+        return Scorer(self._client, response.id)
+
+    def from_id(self, scorer_id: str) -> Scorer:
+        """Return a scorer wrapper for the given ID.
+
+        :param scorer_id: Scorer ID to wrap
+        :type scorer_id: str
+        :return: Wrapper for the scorer resource
+        :rtype: Scorer
+        """
+        return Scorer(self._client, scorer_id)
+
+    def list(
+        self,
+        **params: Unpack[SDKScorerListParams],
+    ) -> list[Scorer]:
+        """List all scenario scorers.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
+        :return: List of scorer wrappers
+        :rtype: list[Scorer]
+        """
+        page = self._client.scenarios.scorers.list(
+            **params,
+        )
+        return [Scorer(self._client, item.id) for item in page]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -483,6 +547,8 @@ class RunloopSDK:
     :vartype devbox: DevboxOps
     :ivar blueprint: High-level interface for blueprint management
     :vartype blueprint: BlueprintOps
+    :ivar scorer: High-level interface for scorer management
+    :vartype scorer: ScorerOps
     :ivar snapshot: High-level interface for snapshot management
     :vartype snapshot: SnapshotOps
     :ivar storage_object: High-level interface for storage object management
@@ -499,6 +565,7 @@ class RunloopSDK:
     api: Runloop
     devbox: DevboxOps
     blueprint: BlueprintOps
+    scorer: ScorerOps
     snapshot: SnapshotOps
     storage_object: StorageObjectOps
 
@@ -542,6 +609,7 @@ class RunloopSDK:
 
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
+        self.scorer = ScorerOps(self.api)
         self.snapshot = SnapshotOps(self.api)
         self.storage_object = StorageObjectOps(self.api)
 
