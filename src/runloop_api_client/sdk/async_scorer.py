@@ -14,18 +14,23 @@ from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse, Scor
 
 
 class AsyncScorer:
-    """Asynchronous wrapper around a scenario scorer resource."""
+    """A custom scorer for evaluating scenario outputs (async).
 
-    def __init__(
-        self,
-        client: AsyncRunloop,
-        scorer_id: str,
-    ) -> None:
-        """Initialize the wrapper.
+    Scorers define bash scripts that produce a score (0.0-1.0) for scenario runs.
+    Obtain instances via ``runloop.scorer.create()`` or ``runloop.scorer.from_id()``.
 
-        :param client: Generated AsyncRunloop client
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> scorer = await runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
+        >>> await scorer.validate(scoring_context={"output": "test"})
+    """
+
+    def __init__(self, client: AsyncRunloop, scorer_id: str) -> None:
+        """Create an AsyncScorer instance.
+
+        :param client: AsyncRunloop client instance
         :type client: AsyncRunloop
-        :param scorer_id: Scorer ID returned by the API
+        :param scorer_id: ID of the scorer
         :type scorer_id: str
         """
         self._client = client
@@ -37,54 +42,36 @@ class AsyncScorer:
 
     @property
     def id(self) -> str:
-        """Return the scorer ID.
+        """The scorer's unique identifier.
 
-        :return: Unique scorer ID
+        :return: Scorer ID
         :rtype: str
         """
         return self._id
 
-    async def get_info(
-        self,
-        **options: Unpack[BaseRequestOptions],
-    ) -> ScorerRetrieveResponse:
-        """Retrieve the latest scorer details.
+    async def get_info(self, **options: Unpack[BaseRequestOptions]) -> ScorerRetrieveResponse:
+        """Fetch current scorer details from the API.
 
-        :param options: Optional request configuration
-        :return: API response describing the scorer
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.BaseRequestOptions` for available options
+        :return: Current scorer details
         :rtype: ScorerRetrieveResponse
         """
-        return await self._client.scenarios.scorers.retrieve(
-            self._id,
-            **options,
-        )
+        return await self._client.scenarios.scorers.retrieve(self._id, **options)
 
-    async def update(
-        self,
-        **params: Unpack[SDKScorerUpdateParams],
-    ) -> ScorerUpdateResponse:
-        """Update the scorer.
+    async def update(self, **params: Unpack[SDKScorerUpdateParams]) -> ScorerUpdateResponse:
+        """Update the scorer's type or bash script.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerUpdateParams` for available parameters
-        :return: API response with updated scorer details
+        :return: Updated scorer details
         :rtype: ScorerUpdateResponse
         """
-        return await self._client.scenarios.scorers.update(
-            self._id,
-            **params,
-        )
+        return await self._client.scenarios.scorers.update(self._id, **params)
 
-    async def validate(
-        self,
-        **params: Unpack[SDKScorerValidateParams],
-    ) -> ScorerValidateResponse:
-        """Validate the scorer with a given context.
+    async def validate(self, **params: Unpack[SDKScorerValidateParams]) -> ScorerValidateResponse:
+        """Run the scorer against the provided context and return the result.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerValidateParams` for available parameters
-        :return: API response with validation results
+        :return: Validation result with score
         :rtype: ScorerValidateResponse
         """
-        return await self._client.scenarios.scorers.validate(
-            self._id,
-            **params,
-        )
+        return await self._client.scenarios.scorers.validate(self._id, **params)

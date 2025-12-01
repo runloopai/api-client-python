@@ -479,63 +479,50 @@ class AsyncStorageObjectOps:
 
 
 class AsyncScorerOps:
-    """High-level async manager for creating and managing scenario scorers.
-
-    Accessed via ``runloop.scorer`` from :class:`AsyncRunloopSDK`, provides
-    coroutines to create, list, and access scorers.
+    """Create and manage custom scorers (async). Access via ``runloop.scorer``.
 
     Example:
         >>> runloop = AsyncRunloopSDK()
         >>> scorer = await runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
-        >>> scorers = await runloop.scorer.list()
+        >>> all_scorers = await runloop.scorer.list()
     """
 
     def __init__(self, client: AsyncRunloop) -> None:
-        """Initialize the manager.
+        """Initialize AsyncScorerOps.
 
-        :param client: Generated AsyncRunloop client to wrap
+        :param client: AsyncRunloop client instance
         :type client: AsyncRunloop
         """
         self._client = client
 
-    async def create(
-        self,
-        **params: Unpack[SDKScorerCreateParams],
-    ) -> AsyncScorer:
-        """Create a new scenario scorer.
+    async def create(self, **params: Unpack[SDKScorerCreateParams]) -> AsyncScorer:
+        """Create a new scorer with the given type and bash script.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
-        :return: Wrapper bound to the newly created scorer
+        :return: The newly created scorer
         :rtype: AsyncScorer
         """
-        response = await self._client.scenarios.scorers.create(
-            **params,
-        )
+        response = await self._client.scenarios.scorers.create(**params)
         return AsyncScorer(self._client, response.id)
 
     def from_id(self, scorer_id: str) -> AsyncScorer:
-        """Return a scorer wrapper for the given ID.
+        """Get an AsyncScorer instance for an existing scorer ID.
 
-        :param scorer_id: Scorer ID to wrap
+        :param scorer_id: ID of the scorer
         :type scorer_id: str
-        :return: Wrapper for the scorer resource
+        :return: AsyncScorer instance for the given ID
         :rtype: AsyncScorer
         """
         return AsyncScorer(self._client, scorer_id)
 
-    async def list(
-        self,
-        **params: Unpack[SDKScorerListParams],
-    ) -> list[AsyncScorer]:
-        """List all scenario scorers.
+    async def list(self, **params: Unpack[SDKScorerListParams]) -> list[AsyncScorer]:
+        """List all scorers, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
-        :return: List of scorer wrappers
+        :return: List of scorers
         :rtype: list[AsyncScorer]
         """
-        page = await self._client.scenarios.scorers.list(
-            **params,
-        )
+        page = await self._client.scenarios.scorers.list(**params)
         return [AsyncScorer(self._client, item.id) async for item in page]
 
 

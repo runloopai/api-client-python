@@ -474,63 +474,50 @@ class StorageObjectOps:
 
 
 class ScorerOps:
-    """High-level manager for creating and managing scenario scorers.
-
-    Accessed via ``runloop.scorer`` from :class:`RunloopSDK`, provides methods
-    to create, list, and access scorers.
+    """Create and manage custom scorers. Access via ``runloop.scorer``.
 
     Example:
         >>> runloop = RunloopSDK()
         >>> scorer = runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
-        >>> scorers = runloop.scorer.list()
+        >>> all_scorers = runloop.scorer.list()
     """
 
     def __init__(self, client: Runloop) -> None:
-        """Initialize the manager.
+        """Initialize ScorerOps.
 
-        :param client: Generated Runloop client to wrap
+        :param client: Runloop client instance
         :type client: Runloop
         """
         self._client = client
 
-    def create(
-        self,
-        **params: Unpack[SDKScorerCreateParams],
-    ) -> Scorer:
-        """Create a new scenario scorer.
+    def create(self, **params: Unpack[SDKScorerCreateParams]) -> Scorer:
+        """Create a new scorer with the given type and bash script.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
-        :return: Wrapper bound to the newly created scorer
+        :return: The newly created scorer
         :rtype: Scorer
         """
-        response = self._client.scenarios.scorers.create(
-            **params,
-        )
+        response = self._client.scenarios.scorers.create(**params)
         return Scorer(self._client, response.id)
 
     def from_id(self, scorer_id: str) -> Scorer:
-        """Return a scorer wrapper for the given ID.
+        """Get a Scorer instance for an existing scorer ID.
 
-        :param scorer_id: Scorer ID to wrap
+        :param scorer_id: ID of the scorer
         :type scorer_id: str
-        :return: Wrapper for the scorer resource
+        :return: Scorer instance for the given ID
         :rtype: Scorer
         """
         return Scorer(self._client, scorer_id)
 
-    def list(
-        self,
-        **params: Unpack[SDKScorerListParams],
-    ) -> list[Scorer]:
-        """List all scenario scorers.
+    def list(self, **params: Unpack[SDKScorerListParams]) -> list[Scorer]:
+        """List all scorers, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
-        :return: List of scorer wrappers
+        :return: List of scorers
         :rtype: list[Scorer]
         """
-        page = self._client.scenarios.scorers.list(
-            **params,
-        )
+        page = self._client.scenarios.scorers.list(**params)
         return [Scorer(self._client, item.id) for item in page]
 
 
