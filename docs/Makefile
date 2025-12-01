@@ -1,5 +1,11 @@
 # Minimal makefile for Sphinx documentation
 #
+# To rebuild the html docs, first make sure you've got the right deps installed via
+#    uv sync --group docs
+# then from the docs directory (this dir) rebuild with
+#    uv run make html
+# Look for generated docs under _build/html.
+
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
