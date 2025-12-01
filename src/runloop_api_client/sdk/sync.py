@@ -481,7 +481,7 @@ class ScorerOps:
 
     Example:
         >>> runloop = RunloopSDK()
-        >>> scorer = runloop.scorer.create(name="my-scorer", scorer_type="llm_judge")
+        >>> scorer = runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
         >>> scorers = runloop.scorer.list()
     """
 

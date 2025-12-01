@@ -486,7 +486,7 @@ class AsyncScorerOps:
 
     Example:
         >>> runloop = AsyncRunloopSDK()
-        >>> scorer = await runloop.scorer.create(name="my-scorer", scorer_type="llm_judge")
+        >>> scorer = await runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
         >>> scorers = await runloop.scorer.list()
     """
 
