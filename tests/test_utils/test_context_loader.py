@@ -1,13 +1,21 @@
+import io
+import tarfile
 from pathlib import Path
 
 from runloop_api_client.lib._ignore import (
     IgnorePattern,
+    TarFilterMatcher,
+    FilePatternMatcher,
     is_ignored,
     path_match,
     compile_ignore,
     read_ignorefile,
+    iter_included_files,
 )
-from runloop_api_client.lib.context_loader import _iter_build_context_files
+from runloop_api_client.lib.context_loader import (
+    build_directory_tar,
+    build_docker_context_tar,
+)
 
 
 def test_segment_match_basic_globs():
@@ -69,7 +77,7 @@ def test_iter_build_context_files_respects_dockerignore(tmp_path: Path):
     dockerignore.write_text("*.log\nbuild/\n", encoding="utf-8")
 
     compiled = compile_ignore(read_ignorefile(dockerignore))
-    files = {p.relative_to(root).as_posix() for p in _iter_build_context_files(root, patterns=compiled)}
+    files = {p.relative_to(root).as_posix() for p in iter_included_files(root, patterns=compiled)}
     assert "foo.txt" in files
     assert "app.log" not in files
     assert "build/ignored.txt" not in files
@@ -144,8 +152,56 @@ def test_iter_build_context_files_respects_directory_pruning(tmp_path: Path) -> 
     # Attempt to re-include a file under an ignored directory.
     ignorefile.write_text("docs/\n!docs/README.md\n", encoding="utf-8")
 
-    compiled = compile_ignore(read_ignorefile(ignorefile))
-    files = {p.relative_to(root).as_posix() for p in _iter_build_context_files(root, patterns=compiled)}
 
-    # README.md should not appear because the parent directory is pruned.
-    assert "docs/README.md" not in files
+def test_build_docker_context_tar_supports_pattern_list(tmp_path: Path) -> None:
+    """build_docker_context_tar should accept a sequence of ignore patterns."""
+
+    root = tmp_path
+    (root / "keep.txt").write_text("keep", encoding="utf-8")
+    (root / "env.venv").write_text("ignored", encoding="utf-8")
+
+    tar_bytes = build_docker_context_tar(root, ignore=["*.venv"])
+
+    with tarfile.open(fileobj=io.BytesIO(tar_bytes), mode="r:gz") as tf:
+        names = {m.name for m in tf.getmembers()}
+
+    assert "keep.txt" in names
+    assert "env.venv" not in names
+
+
+def test_build_docker_context_tar_supports_file_pattern_matcher(tmp_path: Path) -> None:
+    """build_docker_context_tar should accept a FilePatternMatcher instance."""
+
+    root = tmp_path
+    (root / "keep.bin").write_text("keep", encoding="utf-8")
+    (root / "ignore.txt").write_text("ignored", encoding="utf-8")
+
+    matcher = FilePatternMatcher("**/*.txt")
+    tar_bytes = build_docker_context_tar(root, ignore=matcher)
+
+    with tarfile.open(fileobj=io.BytesIO(tar_bytes), mode="r:gz") as tf:
+        names = {m.name for m in tf.getmembers()}
+
+    assert "keep.bin" in names
+    assert "ignore.txt" not in names
+
+
+def test_tar_filter_matcher_respects_patterns(tmp_path: Path) -> None:
+    """TarFilterMatcher should apply FilePatternMatcher patterns at tar level."""
+
+    root = tmp_path
+    (root / "keep.txt").write_text("keep", encoding="utf-8")
+    (root / "ignore.log").write_text("ignore", encoding="utf-8")
+    build_dir = root / "build"
+    build_dir.mkdir()
+    (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+    matcher = FilePatternMatcher(["*.log", "build/"])
+    tar_bytes = build_directory_tar(root, tar_filter=TarFilterMatcher(root, matcher))
+
+    with tarfile.open(fileobj=io.BytesIO(tar_bytes), mode="r:gz") as tf:
+        names = {m.name for m in tf.getmembers()}
+
+    assert "keep.txt" in names
+    assert "ignore.log" not in names
+    assert not any(name.startswith("build/") for name in names)

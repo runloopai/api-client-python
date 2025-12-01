@@ -25,6 +25,7 @@ from runloop_api_client.sdk.sync import (
     BlueprintOps,
     StorageObjectOps,
 )
+from runloop_api_client.lib._ignore import FilePatternMatcher
 from runloop_api_client.lib.polling import PollingConfig
 
 
@@ -485,7 +486,7 @@ class TestStorageObjectClient:
     def test_upload_from_dir_respects_filter(
         self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
     ) -> None:
-        """upload_from_dir should respect a tar filter when provided."""
+        """upload_from_dir should respect ignore patterns when provided."""
         mock_client.objects.create.return_value = object_view
 
         test_dir = tmp_path / "ctx"
@@ -503,13 +504,10 @@ class TestStorageObjectClient:
 
         client = StorageObjectOps(mock_client)
 
-        # Tar filter: drop logs and anything under build/
-        def ignore_logs_and_build(ti: tarfile.TarInfo) -> tarfile.TarInfo | None:
-            if ti.name.endswith(".log") or ti.name.startswith("build/"):
-                return None
-            return ti
+        # Ignore patterns: drop logs and anything under build/
+        matcher = FilePatternMatcher(["*.log", "build/"])
 
-        obj = client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
+        obj = client.upload_from_dir(test_dir, ignore=matcher)
 
         assert isinstance(obj, StorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]

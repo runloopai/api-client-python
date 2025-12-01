@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
+import tarfile
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, Sequence
+from typing import Callable, Iterable, Optional, Sequence
 from pathlib import Path, PurePosixPath
 from dataclasses import dataclass
 
@@ -10,10 +11,13 @@ __all__ = [
     "IgnorePattern",
     "IgnoreMatcher",
     "DockerIgnoreMatcher",
+    "FilePatternMatcher",
+    "TarFilterMatcher",
     "read_ignorefile",
     "compile_ignore",
     "path_match",
     "is_ignored",
+    "iter_included_files",
 ]
 
 
@@ -286,6 +290,74 @@ def iter_included_files(
             yield file_path
 
 
+TarFilter = Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]
+
+
+def _compute_included_dirs_from_files(included_files: set[str]) -> set[str]:
+    """Return all directory ancestors (plus ``'.'``) for a set of file paths."""
+
+    included_dirs: set[str] = {"."}
+    for rel in included_files:
+        parent = PurePosixPath(rel).parent
+        while True:
+            as_posix = parent.as_posix() or "."
+            included_dirs.add(as_posix)
+            if as_posix == ".":
+                break
+            parent = parent.parent
+    return included_dirs
+
+
+class TarFilterMatcher:
+    """Adapt an :class:`IgnoreMatcher` to a :class:`TarFilter`-compatible callable.
+
+    This helper precomputes the set of included files under ``root`` using the
+    provided :class:`IgnoreMatcher` and converts that into a simple tar filter:
+
+    - Only files returned by ``matcher.iter_paths(root)`` are included.
+    - Directory entries are included only when they are ancestors of at least
+      one included file (plus the root ``'.'`` entry).
+
+    Member names passed to ``__call__`` are expected to be relative to
+    ``root`` and to use POSIX ``'/'`` separators, matching the behaviour of
+    ``build_directory_tar`` in :mod:`runloop_api_client.lib.context_loader`.
+    """
+
+    def __init__(self, root: Path, matcher: IgnoreMatcher) -> None:
+        self._root = root.resolve()
+
+        # Compute the set of included files as relative POSIX paths.
+        # Note: the majority of the work being performed here is simply to deal with the path to the root.
+        included_files: set[str] = set()
+        for path in matcher.iter_paths(self._root):
+            rel = path.resolve().relative_to(self._root)
+            rel_posix = PurePosixPath(rel).as_posix()
+            included_files.add(rel_posix)
+
+        included_dirs = _compute_included_dirs_from_files(included_files)
+
+        self._included_files = included_files
+        self._included_dirs = included_dirs
+
+    def __call__(self, ti: tarfile.TarInfo) -> Optional[tarfile.TarInfo]:
+        name = ti.name
+
+        # The root of the archive is always kept.
+        if name == ".":
+            return ti
+
+        if ti.isdir():
+            if name in self._included_dirs:
+                return ti
+            return None
+
+        # Non-directory entries (files, symlinks, etc.) are kept only if their
+        # relative path is in the included file set.
+        if name in self._included_files:
+            return ti
+        return None
+
+
 class IgnoreMatcher(ABC):
     """Abstract interface for ignore matchers like .dockerignore and .gitignore.
 
@@ -341,4 +413,31 @@ class DockerIgnoreMatcher(IgnoreMatcher):
             all_patterns.extend(self.patterns)
 
         compiled: list[IgnorePattern] = compile_ignore(all_patterns)
+        return iter_included_files(root, patterns=compiled)
+
+
+@dataclass(frozen=True)
+class FilePatternMatcher(IgnoreMatcher):
+    """Ignore matcher that applies only inline patterns, without .dockerignore.
+
+    Patterns follow the same semantics as :func:`compile_ignore` / Docker-style
+    ignore files and are treated as *ignore* rules (``!`` negation for
+    re-inclusion, ``**`` support, etc.).
+
+    The constructor accepts either a single pattern string or a sequence of
+    pattern strings; a single string is automatically wrapped into a list.
+    """
+
+    patterns: Sequence[str] | str
+
+    def __post_init__(self) -> None:
+        # Normalise a single pattern string into a list for downstream helpers.
+        if isinstance(self.patterns, str):
+            object.__setattr__(self, "patterns", [self.patterns])
+
+    def iter_paths(self, root: Path) -> Iterable[Path]:
+        """Yield non-ignored files under ``root`` based only on ``patterns``."""
+
+        root = root.resolve()
+        compiled: list[IgnorePattern] = compile_ignore(self.patterns)  # type: ignore[arg-type]
         return iter_included_files(root, patterns=compiled)

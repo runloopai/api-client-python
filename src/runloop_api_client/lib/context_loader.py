@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import io
 import tarfile
-from typing import Callable, Iterable, Optional, Sequence
+from typing import Callable, Optional, Sequence
 from pathlib import Path
 
-from ._ignore import IgnoreMatcher, IgnorePattern, DockerIgnoreMatcher, iter_included_files
+from ._ignore import IgnoreMatcher, DockerIgnoreMatcher
 
 TarFilter = Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]
 
@@ -13,7 +13,7 @@ TarFilter = Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]
 def build_docker_context_tar(
     context_root: Path,
     *,
-    ignore: Optional[IgnoreMatcher] = None,
+    ignore: IgnoreMatcher | Sequence[str] | None = None,
 ) -> bytes:
     """Create a .tar.gz of the build context, honoring Docker-style ignore patterns.
 
@@ -25,7 +25,15 @@ def build_docker_context_tar(
 
     context_root = context_root.resolve()
 
-    matcher: IgnoreMatcher = ignore or DockerIgnoreMatcher()
+    if ignore is None:
+        matcher: IgnoreMatcher = DockerIgnoreMatcher()
+    elif isinstance(ignore, IgnoreMatcher):
+        matcher = ignore
+    else:
+        # Treat sequences of pattern strings as additional inline patterns
+        # appended after ``.dockerignore`` (if present), mirroring
+        # :class:`DockerIgnoreMatcher` semantics.
+        matcher = DockerIgnoreMatcher(patterns=list(ignore))
 
     buf = io.BytesIO()
 
@@ -50,20 +58,21 @@ def build_directory_tar(
 
     root = root.resolve()
     buf = io.BytesIO()
+
+    def _wrapped_filter(ti: tarfile.TarInfo) -> Optional[tarfile.TarInfo]:
+        # Normalise member names so callers see paths relative to ``root``
+        # without a leading ``./``, preserving existing TarFilter semantics and
+        # archive layout. This applies to both files and directories.
+        if ti.name.startswith("./"):
+            ti.name = ti.name[2:]
+
+        if tar_filter is not None:
+            return tar_filter(ti)
+        return ti
+
     with tarfile.open(mode="w:gz", fileobj=buf) as tf:
-        for file_path in root.rglob("*"):
-            if not file_path.is_file():
-                continue
-            rel = file_path.relative_to(root)
-            tf.add(file_path, arcname=rel.as_posix(), filter=tar_filter)
+        # Add the root directory recursively in one call, delegating member
+        # handling to the wrapped filter above.
+        tf.add(root, arcname=".", filter=_wrapped_filter)
+
     return buf.getvalue()
-
-
-def _iter_build_context_files(
-    context_root: Path,
-    *,
-    patterns: Sequence[IgnorePattern],
-) -> Iterable[Path]:
-    """Yield files to include in the build context, honoring ignore patterns."""
-
-    return iter_included_files(context_root, patterns=patterns)

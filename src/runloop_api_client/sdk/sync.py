@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Optional
+from typing import Dict, Mapping, Optional, Sequence
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -26,8 +26,9 @@ from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
 from .snapshot import Snapshot
 from .blueprint import Blueprint
+from ..lib._ignore import IgnoreMatcher, TarFilterMatcher, FilePatternMatcher
 from .storage_object import StorageObject
-from ..lib.context_loader import TarFilter, build_directory_tar
+from ..lib.context_loader import build_directory_tar
 from ..types.object_create_params import ContentType
 
 
@@ -374,7 +375,7 @@ class StorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
-        ignore: TarFilter | None = None,
+        ignore: IgnoreMatcher | Sequence[str] | str | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> StorageObject:
         """Create and upload an object from a local directory.
@@ -389,10 +390,17 @@ class StorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param ignore: Optional tar filter function compatible with
-            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
-            member to allow modification or exclusion (by returning ``None``).
-        :type ignore: Optional[TarFilter]
+        :param ignore: Optional ignore configuration controlling which files from
+            ``dir_path`` are included in the uploaded tarball. This may be:
+
+            - An :class:`~runloop_api_client.lib._ignore.IgnoreMatcher`
+              implementation such as :class:`~runloop_api_client.lib._ignore.DockerIgnoreMatcher`
+              or :class:`~runloop_api_client.lib._ignore.FilePatternMatcher`.
+            - A single pattern string.
+            - A sequence of pattern strings.
+
+            Patterns follow Docker-style semantics (``!`` negation, ``**`` support).
+        :type ignore: Optional[IgnoreMatcher | Sequence[str] | str]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
             for available options
         :return: Wrapper for the uploaded object
@@ -406,7 +414,19 @@ class StorageObjectOps:
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
-        tar_bytes = build_directory_tar(path, tar_filter=ignore)
+        # Pick the right matcher
+        matcher: IgnoreMatcher | None
+        if ignore is None:
+            matcher = None
+        elif isinstance(ignore, IgnoreMatcher):
+            matcher = ignore
+        else:
+            matcher = FilePatternMatcher(ignore)  # type: ignore[arg-type]
+
+        if matcher is None:
+            tar_bytes = build_directory_tar(path)
+        else:
+            tar_bytes = build_directory_tar(path, tar_filter=TarFilterMatcher(path, matcher))
 
         obj = self.create(name=name, content_type="tgz", metadata=metadata, ttl_ms=ttl_ms, **options)
         obj.upload_content(tar_bytes)
