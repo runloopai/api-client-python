@@ -13,13 +13,15 @@ import pytest
 from tests.sdk.conftest import (
     MockDevboxView,
     MockObjectView,
+    MockScorerView,
     MockSnapshotView,
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import AsyncDevbox, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
+from runloop_api_client.sdk import AsyncDevbox, AsyncScorer, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
 from runloop_api_client.sdk.async_ import (
     AsyncDevboxOps,
+    AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
@@ -515,6 +517,53 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.complete.assert_awaited_once()
 
 
+class TestAsyncScorerClient:
+    """Tests for AsyncScorerClient class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
+        """Test create method."""
+        mock_async_client.scenarios.scorers.create = AsyncMock(return_value=scorer_view)
+
+        client = AsyncScorerOps(mock_async_client)
+        scorer = await client.create(
+            bash_script="echo 'score=1.0'",
+            type="test_scorer",
+        )
+
+        assert isinstance(scorer, AsyncScorer)
+        assert scorer.id == "scorer_123"
+        mock_async_client.scenarios.scorers.create.assert_called_once()
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        client = AsyncScorerOps(mock_async_client)
+        scorer = client.from_id("scorer_123")
+
+        assert isinstance(scorer, AsyncScorer)
+        assert scorer.id == "scorer_123"
+
+    @pytest.mark.asyncio
+    async def test_list(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
+        """Test list method."""
+
+        async def async_iter():
+            yield scorer_view
+
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+
+        client = AsyncScorerOps(mock_async_client)
+        scorers = await client.list(
+            limit=10,
+            starting_after="scorer_000",
+        )
+
+        assert len(scorers) == 1
+        assert isinstance(scorers[0], AsyncScorer)
+        assert scorers[0].id == "scorer_123"
+        mock_async_client.scenarios.scorers.list.assert_called_once()
+
+
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
 
@@ -523,6 +572,7 @@ class TestAsyncRunloopSDK:
         sdk = AsyncRunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
         assert isinstance(sdk.devbox, AsyncDevboxOps)
+        assert isinstance(sdk.scorer, AsyncScorerOps)
         assert isinstance(sdk.snapshot, AsyncSnapshotOps)
         assert isinstance(sdk.blueprint, AsyncBlueprintOps)
         assert isinstance(sdk.storage_object, AsyncStorageObjectOps)

@@ -1,0 +1,89 @@
+"""Comprehensive tests for async AsyncScorer class."""
+
+from __future__ import annotations
+
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
+
+import pytest
+
+from tests.sdk.conftest import MockScorerView
+from runloop_api_client.sdk import AsyncScorer
+
+
+class TestAsyncScorer:
+    """Tests for AsyncScorer class."""
+
+    def test_init(self, mock_async_client: AsyncMock) -> None:
+        """Test AsyncScorer initialization."""
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        assert scorer.id == "scorer_123"
+
+    def test_repr(self, mock_async_client: AsyncMock) -> None:
+        """Test AsyncScorer string representation."""
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        assert repr(scorer) == "<AsyncScorer id='scorer_123'>"
+
+    def test_id_property(self, mock_async_client: AsyncMock) -> None:
+        """Test id property returns the scorer ID."""
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        assert scorer.id == "scorer_123"
+
+    @pytest.mark.asyncio
+    async def test_get_info(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
+        """Test get_info method."""
+        mock_async_client.scenarios.scorers.retrieve = AsyncMock(return_value=scorer_view)
+
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        result = await scorer.get_info(
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+        )
+
+        assert result == scorer_view
+        mock_async_client.scenarios.scorers.retrieve.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update(self, mock_async_client: AsyncMock) -> None:
+        """Test update method."""
+        update_response = SimpleNamespace(id="scorer_123", name="updated-scorer")
+        mock_async_client.scenarios.scorers.update = AsyncMock(return_value=update_response)
+
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        result = await scorer.update(
+            name="updated-scorer",
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+        )
+
+        assert result == update_response
+        mock_async_client.scenarios.scorers.update.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_validate(self, mock_async_client: AsyncMock) -> None:
+        """Test validate method."""
+        validate_response = SimpleNamespace(
+            is_valid=True,
+            score=0.95,
+            reasoning="The output matches expected criteria.",
+        )
+        mock_async_client.scenarios.scorers.validate = AsyncMock(return_value=validate_response)
+
+        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        result = await scorer.validate(
+            bash_command_output="test output",
+            expected_output="test output",
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+        )
+
+        assert result == validate_response
+        assert result.is_valid is True
+        assert result.score == 0.95
+        mock_async_client.scenarios.scorers.validate.assert_called_once()

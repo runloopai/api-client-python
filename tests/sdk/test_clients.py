@@ -11,13 +11,15 @@ import pytest
 from tests.sdk.conftest import (
     MockDevboxView,
     MockObjectView,
+    MockScorerView,
     MockSnapshotView,
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Devbox, Snapshot, Blueprint, StorageObject
+from runloop_api_client.sdk import Devbox, Scorer, Snapshot, Blueprint, StorageObject
 from runloop_api_client.sdk.sync import (
     DevboxOps,
+    ScorerOps,
     RunloopSDK,
     SnapshotOps,
     BlueprintOps,
@@ -472,6 +474,47 @@ class TestStorageObjectClient:
         mock_client.objects.complete.assert_called_once()
 
 
+class TestScorerClient:
+    """Tests for ScorerClient class."""
+
+    def test_create(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
+        """Test create method."""
+        mock_client.scenarios.scorers.create.return_value = scorer_view
+
+        client = ScorerOps(mock_client)
+        scorer = client.create(
+            bash_script="echo 'score=1.0'",
+            type="test_scorer",
+        )
+
+        assert isinstance(scorer, Scorer)
+        assert scorer.id == "scorer_123"
+        mock_client.scenarios.scorers.create.assert_called_once()
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        client = ScorerOps(mock_client)
+        scorer = client.from_id("scorer_123")
+
+        assert isinstance(scorer, Scorer)
+        assert scorer.id == "scorer_123"
+
+    def test_list(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
+        """Test list method."""
+        mock_client.scenarios.scorers.list.return_value = [scorer_view]
+
+        client = ScorerOps(mock_client)
+        scorers = client.list(
+            limit=10,
+            starting_after="scorer_000",
+        )
+
+        assert len(scorers) == 1
+        assert isinstance(scorers[0], Scorer)
+        assert scorers[0].id == "scorer_123"
+        mock_client.scenarios.scorers.list.assert_called_once()
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -480,6 +523,7 @@ class TestRunloopSDK:
         sdk = RunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
         assert isinstance(sdk.devbox, DevboxOps)
+        assert isinstance(sdk.scorer, ScorerOps)
         assert isinstance(sdk.snapshot, SnapshotOps)
         assert isinstance(sdk.blueprint, BlueprintOps)
         assert isinstance(sdk.storage_object, StorageObjectOps)
