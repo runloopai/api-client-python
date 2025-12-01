@@ -425,8 +425,13 @@ class TestAsyncStorageObjectClient:
 
         client = AsyncStorageObjectOps(mock_async_client)
 
-        # Inline patterns: drop logs and anything under build/
-        obj = await client.upload_from_dir(test_dir, ignore=["*.log", "build/"])
+        # Tar filter: drop logs and anything under build/
+        def ignore_logs_and_build(ti: tarfile.TarInfo) -> tarfile.TarInfo | None:
+            if ti.name.endswith(".log") or ti.name.startswith("build/"):
+                return None
+            return ti
+
+        obj = await client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
 
         assert isinstance(obj, AsyncStorageObject)
         uploaded_content = http_client.put.call_args[1]["content"]

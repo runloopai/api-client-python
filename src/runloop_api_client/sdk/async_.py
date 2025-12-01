@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict, Mapping, Optional, Sequence
+from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -24,11 +24,10 @@ from ._types import (
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
-from ..lib._ignore import IgnoreMatcher, TarFilterMatcher, FilePatternMatcher
 from .async_devbox import AsyncDevbox
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
-from ..lib.context_loader import build_directory_tar
+from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
 
@@ -376,7 +375,7 @@ class AsyncStorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
-        ignore: IgnoreMatcher | Sequence[str] | str | None = None,
+        ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local directory.
@@ -391,17 +390,10 @@ class AsyncStorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param ignore: Optional ignore configuration controlling which files from
-            ``dir_path`` are included in the uploaded tarball. This may be:
-
-            - An :class:`~runloop_api_client.lib._ignore.IgnoreMatcher`
-              implementation such as :class:`~runloop_api_client.lib._ignore.DockerIgnoreMatcher`
-              or :class:`~runloop_api_client.lib._ignore.FilePatternMatcher`.
-            - A single pattern string.
-            - A sequence of pattern strings.
-
-            Patterns follow Docker-style semantics (``!`` negation, ``**`` support).
-        :type ignore: Optional[IgnoreMatcher | Sequence[str] | str]
+        :param ignore: Optional tar filter function compatible with
+            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
+            member to allow modification or exclusion (by returning ``None``).
+        :type ignore: Optional[TarFilter]
         :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
             for available options
         :return: Wrapper for the uploaded object
@@ -416,17 +408,7 @@ class AsyncStorageObjectOps:
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
         def synchronous_io() -> bytes:
-            matcher: IgnoreMatcher | None
-            if ignore is None:
-                matcher = None
-            elif isinstance(ignore, IgnoreMatcher):
-                matcher = ignore
-            else:
-                matcher = FilePatternMatcher(ignore)  # type: ignore[arg-type]
-
-            if matcher is None:
-                return build_directory_tar(path)
-            return build_directory_tar(path, tar_filter=TarFilterMatcher(path, matcher))
+            return build_directory_tar(path, tar_filter=ignore)
 
         tar_bytes = await asyncio.to_thread(synchronous_io)
 

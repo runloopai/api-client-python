@@ -4,7 +4,6 @@ from pathlib import Path
 
 from runloop_api_client.lib._ignore import (
     IgnorePattern,
-    TarFilterMatcher,
     FilePatternMatcher,
     is_ignored,
     path_match,
@@ -12,10 +11,7 @@ from runloop_api_client.lib._ignore import (
     read_ignorefile,
     iter_included_files,
 )
-from runloop_api_client.lib.context_loader import (
-    build_directory_tar,
-    build_docker_context_tar,
-)
+from runloop_api_client.lib.context_loader import build_docker_context_tar
 
 
 def test_segment_match_basic_globs():
@@ -184,24 +180,3 @@ def test_build_docker_context_tar_supports_file_pattern_matcher(tmp_path: Path) 
 
     assert "keep.bin" in names
     assert "ignore.txt" not in names
-
-
-def test_tar_filter_matcher_respects_patterns(tmp_path: Path) -> None:
-    """TarFilterMatcher should apply FilePatternMatcher patterns at tar level."""
-
-    root = tmp_path
-    (root / "keep.txt").write_text("keep", encoding="utf-8")
-    (root / "ignore.log").write_text("ignore", encoding="utf-8")
-    build_dir = root / "build"
-    build_dir.mkdir()
-    (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
-
-    matcher = FilePatternMatcher(["*.log", "build/"])
-    tar_bytes = build_directory_tar(root, tar_filter=TarFilterMatcher(root, matcher))
-
-    with tarfile.open(fileobj=io.BytesIO(tar_bytes), mode="r:gz") as tf:
-        names = {m.name for m in tf.getmembers()}
-
-    assert "keep.txt" in names
-    assert "ignore.log" not in names
-    assert not any(name.startswith("build/") for name in names)
