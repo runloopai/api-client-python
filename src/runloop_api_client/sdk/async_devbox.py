@@ -643,7 +643,6 @@ class AsyncNamedShell:
             >>> result = await shell.exec("npm install", stdout=lambda line: print(f"[LOG] {line}"))
         """
         # Ensure shell_name is set and cannot be overridden by user params
-        params = dict(params)
         params["shell_name"] = self._shell_name
         return await self._devbox.cmd.exec(command, **params)
 
@@ -677,7 +676,6 @@ class AsyncNamedShell:
             ...     print("Task completed successfully!")
         """
         # Ensure shell_name is set and cannot be overridden by user params
-        params = dict(params)
         params["shell_name"] = self._shell_name
         return await self._devbox.cmd.exec_async(command, **params)
 
