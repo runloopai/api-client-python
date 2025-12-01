@@ -48,12 +48,13 @@ class TestAsyncScorer:
     @pytest.mark.asyncio
     async def test_update(self, mock_async_client: AsyncMock) -> None:
         """Test update method."""
-        update_response = SimpleNamespace(id="scorer_123", name="updated-scorer")
+        update_response = SimpleNamespace(id="scorer_123", type="updated_scorer", bash_script="echo 'score=1.0'")
         mock_async_client.scenarios.scorers.update = AsyncMock(return_value=update_response)
 
         scorer = AsyncScorer(mock_async_client, "scorer_123")
         result = await scorer.update(
-            name="updated-scorer",
+            type="updated_scorer",
+            bash_script="echo 'score=1.0'",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -67,16 +68,15 @@ class TestAsyncScorer:
     async def test_validate(self, mock_async_client: AsyncMock) -> None:
         """Test validate method."""
         validate_response = SimpleNamespace(
-            is_valid=True,
-            score=0.95,
-            reasoning="The output matches expected criteria.",
+            name="test_scorer",
+            scoring_context={},
+            scoring_result=SimpleNamespace(score=0.95),
         )
         mock_async_client.scenarios.scorers.validate = AsyncMock(return_value=validate_response)
 
         scorer = AsyncScorer(mock_async_client, "scorer_123")
         result = await scorer.validate(
-            bash_command_output="test output",
-            expected_output="test output",
+            scoring_context={"test": "context"},
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -84,6 +84,4 @@ class TestAsyncScorer:
         )
 
         assert result == validate_response
-        assert result.is_valid is True
-        assert result.score == 0.95
         mock_async_client.scenarios.scorers.validate.assert_called_once()

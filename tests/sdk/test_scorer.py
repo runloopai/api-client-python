@@ -50,12 +50,13 @@ class TestScorer:
 
     def test_update(self, mock_client: Mock) -> None:
         """Test update method."""
-        update_response = SimpleNamespace(id="scorer_123", name="updated-scorer")
+        update_response = SimpleNamespace(id="scorer_123", type="updated_scorer", bash_script="echo 'score=1.0'")
         mock_client.scenarios.scorers.update.return_value = update_response
 
         scorer = Scorer(mock_client, "scorer_123")
         result = scorer.update(
-            name="updated-scorer",
+            type="updated_scorer",
+            bash_script="echo 'score=1.0'",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -65,7 +66,8 @@ class TestScorer:
         assert result == update_response
         mock_client.scenarios.scorers.update.assert_called_once_with(
             "scorer_123",
-            name="updated-scorer",
+            type="updated_scorer",
+            bash_script="echo 'score=1.0'",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -75,16 +77,15 @@ class TestScorer:
     def test_validate(self, mock_client: Mock) -> None:
         """Test validate method."""
         validate_response = SimpleNamespace(
-            is_valid=True,
-            score=0.95,
-            reasoning="The output matches expected criteria.",
+            name="test_scorer",
+            scoring_context={},
+            scoring_result=SimpleNamespace(score=0.95),
         )
         mock_client.scenarios.scorers.validate.return_value = validate_response
 
         scorer = Scorer(mock_client, "scorer_123")
         result = scorer.validate(
-            bash_command_output="test output",
-            expected_output="test output",
+            scoring_context={"test": "context"},
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -92,12 +93,9 @@ class TestScorer:
         )
 
         assert result == validate_response
-        assert result.is_valid is True
-        assert result.score == 0.95
         mock_client.scenarios.scorers.validate.assert_called_once_with(
             "scorer_123",
-            bash_command_output="test output",
-            expected_output="test output",
+            scoring_context={"test": "context"},
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
