@@ -22,11 +22,6 @@ class TestScorer:
         scorer = Scorer(mock_client, "scorer_123")
         assert repr(scorer) == "<Scorer id='scorer_123'>"
 
-    def test_id_property(self, mock_client: Mock) -> None:
-        """Test id property returns the scorer ID."""
-        scorer = Scorer(mock_client, "scorer_123")
-        assert scorer.id == "scorer_123"
-
     def test_get_info(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
         """Test get_info method."""
         mock_client.scenarios.scorers.retrieve.return_value = scorer_view

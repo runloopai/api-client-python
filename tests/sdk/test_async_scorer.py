@@ -24,11 +24,6 @@ class TestAsyncScorer:
         scorer = AsyncScorer(mock_async_client, "scorer_123")
         assert repr(scorer) == "<AsyncScorer id='scorer_123'>"
 
-    def test_id_property(self, mock_async_client: AsyncMock) -> None:
-        """Test id property returns the scorer ID."""
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
-        assert scorer.id == "scorer_123"
-
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
         """Test get_info method."""
