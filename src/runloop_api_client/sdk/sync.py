@@ -227,11 +227,10 @@ class BlueprintOps:
     Example:
         >>> from datetime import timedelta
         >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
-        >>> 
         >>> runloop = RunloopSDK()
         >>> obj = runloop.object_storage.upload_from_dir(
         ...     "./",
-        ...     ttl=timedelta(hours=1),    
+        ...     ttl=timedelta(hours=1),
         ... )
         >>> blueprint = runloop.blueprint.create(
         ...     name="my-blueprint",

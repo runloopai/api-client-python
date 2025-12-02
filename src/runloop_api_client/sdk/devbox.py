@@ -651,7 +651,6 @@ class NamedShell:
             >>> result = shell.exec("npm install", stdout=lambda line: print(f"[LOG] {line}"))
         """
         # Ensure shell_name is set and cannot be overridden by user params
-        params = dict(params)
         params["shell_name"] = self._shell_name
         return self._devbox.cmd.exec(command, **params)
 
@@ -685,7 +684,6 @@ class NamedShell:
             ...     print("Task completed successfully!")
         """
         # Ensure shell_name is set and cannot be overridden by user params
-        params = dict(params)
         params["shell_name"] = self._shell_name
         return self._devbox.cmd.exec_async(command, **params)
 
