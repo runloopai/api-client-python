@@ -28,8 +28,8 @@ from runloop_api_client.sdk.sync import (
 from runloop_api_client.lib.polling import PollingConfig
 
 
-class TestDevboxClient:
-    """Tests for DevboxClient class."""
+class TestDevboxOps:
+    """Tests for DevboxOps class."""
 
     def test_create(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test create method."""
@@ -101,8 +101,19 @@ class TestDevboxClient:
         assert devbox.id == "dev_123"
         mock_client.devboxes.await_running.assert_called_once_with("dev_123")
 
-    def test_list(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
-        """Test list method."""
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(devboxes=[])
+        mock_client.devboxes.list.return_value = page
+
+        ops = DevboxOps(mock_client)
+        devboxes = ops.list(limit=10, status="running")
+
+        assert len(devboxes) == 0
+        mock_client.devboxes.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_client.devboxes.list.return_value = page
 
@@ -118,12 +129,40 @@ class TestDevboxClient:
         assert devboxes[0].id == "dev_123"
         mock_client.devboxes.list.assert_called_once()
 
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        devbox_view1 = MockDevboxView(id="dev_001", name="devbox-1")
+        devbox_view2 = MockDevboxView(id="dev_002", name="devbox-2")
+        page = SimpleNamespace(devboxes=[devbox_view1, devbox_view2])
+        mock_client.devboxes.list.return_value = page
 
-class TestSnapshotClient:
-    """Tests for SnapshotClient class."""
+        ops = DevboxOps(mock_client)
+        devboxes = ops.list(limit=10, status="running")
 
-    def test_list(self, mock_client: Mock, snapshot_view: MockSnapshotView) -> None:
-        """Test list method."""
+        assert len(devboxes) == 2
+        assert isinstance(devboxes[0], Devbox)
+        assert isinstance(devboxes[1], Devbox)
+        assert devboxes[0].id == "dev_001"
+        assert devboxes[1].id == "dev_002"
+        mock_client.devboxes.list.assert_called_once()
+
+
+class TestSnapshotOps:
+    """Tests for SnapshotOps class."""
+
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(snapshots=[])
+        mock_client.devboxes.disk_snapshots.list.return_value = page
+
+        ops = SnapshotOps(mock_client)
+        snapshots = ops.list(devbox_id="dev_123", limit=10)
+
+        assert len(snapshots) == 0
+        mock_client.devboxes.disk_snapshots.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, snapshot_view: MockSnapshotView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(snapshots=[snapshot_view])
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
@@ -139,6 +178,23 @@ class TestSnapshotClient:
         assert snapshots[0].id == "snap_123"
         mock_client.devboxes.disk_snapshots.list.assert_called_once()
 
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        snapshot_view1 = MockSnapshotView(id="snap_001", name="snapshot-1")
+        snapshot_view2 = MockSnapshotView(id="snap_002", name="snapshot-2")
+        page = SimpleNamespace(snapshots=[snapshot_view1, snapshot_view2])
+        mock_client.devboxes.disk_snapshots.list.return_value = page
+
+        ops = SnapshotOps(mock_client)
+        snapshots = ops.list(devbox_id="dev_123", limit=10)
+
+        assert len(snapshots) == 2
+        assert isinstance(snapshots[0], Snapshot)
+        assert isinstance(snapshots[1], Snapshot)
+        assert snapshots[0].id == "snap_001"
+        assert snapshots[1].id == "snap_002"
+        mock_client.devboxes.disk_snapshots.list.assert_called_once()
+
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = SnapshotOps(mock_client)
@@ -148,8 +204,8 @@ class TestSnapshotClient:
         assert snapshot.id == "snap_123"
 
 
-class TestBlueprintClient:
-    """Tests for BlueprintClient class."""
+class TestBlueprintOps:
+    """Tests for BlueprintOps class."""
 
     def test_create(self, mock_client: Mock, blueprint_view: MockBlueprintView) -> None:
         """Test create method."""
@@ -173,8 +229,19 @@ class TestBlueprintClient:
         assert isinstance(blueprint, Blueprint)
         assert blueprint.id == "bp_123"
 
-    def test_list(self, mock_client: Mock, blueprint_view: MockBlueprintView) -> None:
-        """Test list method."""
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(blueprints=[])
+        mock_client.blueprints.list.return_value = page
+
+        ops = BlueprintOps(mock_client)
+        blueprints = ops.list(limit=10)
+
+        assert len(blueprints) == 0
+        mock_client.blueprints.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, blueprint_view: MockBlueprintView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_client.blueprints.list.return_value = page
 
@@ -190,9 +257,26 @@ class TestBlueprintClient:
         assert blueprints[0].id == "bp_123"
         mock_client.blueprints.list.assert_called_once()
 
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        blueprint_view1 = MockBlueprintView(id="bp_001", name="blueprint-1")
+        blueprint_view2 = MockBlueprintView(id="bp_002", name="blueprint-2")
+        page = SimpleNamespace(blueprints=[blueprint_view1, blueprint_view2])
+        mock_client.blueprints.list.return_value = page
 
-class TestStorageObjectClient:
-    """Tests for StorageObjectClient class."""
+        ops = BlueprintOps(mock_client)
+        blueprints = ops.list(limit=10)
+
+        assert len(blueprints) == 2
+        assert isinstance(blueprints[0], Blueprint)
+        assert isinstance(blueprints[1], Blueprint)
+        assert blueprints[0].id == "bp_001"
+        assert blueprints[1].id == "bp_002"
+        mock_client.blueprints.list.assert_called_once()
+
+
+class TestStorageObjectOps:
+    """Tests for StorageObjectOps class."""
 
     def test_create(self, mock_client: Mock, object_view: MockObjectView) -> None:
         """Test create method."""
@@ -219,8 +303,19 @@ class TestStorageObjectClient:
         assert obj.id == "obj_123"
         assert obj.upload_url is None
 
-    def test_list(self, mock_client: Mock, object_view: MockObjectView) -> None:
-        """Test list method."""
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(objects=[])
+        mock_client.objects.list.return_value = page
+
+        ops = StorageObjectOps(mock_client)
+        objects = ops.list(limit=10)
+
+        assert len(objects) == 0
+        mock_client.objects.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, object_view: MockObjectView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(objects=[object_view])
         mock_client.objects.list.return_value = page
 
@@ -245,6 +340,23 @@ class TestStorageObjectClient:
             starting_after="obj_000",
             state="READ_ONLY",
         )
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        object_view1 = MockObjectView(id="obj_001", name="object-1")
+        object_view2 = MockObjectView(id="obj_002", name="object-2")
+        page = SimpleNamespace(objects=[object_view1, object_view2])
+        mock_client.objects.list.return_value = page
+
+        ops = StorageObjectOps(mock_client)
+        objects = ops.list(limit=10)
+
+        assert len(objects) == 2
+        assert isinstance(objects[0], StorageObject)
+        assert isinstance(objects[1], StorageObject)
+        assert objects[0].id == "obj_001"
+        assert objects[1].id == "obj_002"
+        mock_client.objects.list.assert_called_once()
 
     def test_upload_from_file(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
         """Test upload_from_file method."""
@@ -474,8 +586,8 @@ class TestStorageObjectClient:
         mock_client.objects.complete.assert_called_once()
 
 
-class TestScorerClient:
-    """Tests for ScorerClient class."""
+class TestScorerOps:
+    """Tests for ScorerOps class."""
 
     def test_create(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
         """Test create method."""
@@ -499,8 +611,18 @@ class TestScorerClient:
         assert isinstance(scorer, Scorer)
         assert scorer.id == "scorer_123"
 
-    def test_list(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
-        """Test list method."""
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        mock_client.scenarios.scorers.list.return_value = []
+
+        ops = ScorerOps(mock_client)
+        scorers = ops.list(limit=10)
+
+        assert len(scorers) == 0
+        mock_client.scenarios.scorers.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
+        """Test list method with single result."""
         mock_client.scenarios.scorers.list.return_value = [scorer_view]
 
         ops = ScorerOps(mock_client)
@@ -512,6 +634,22 @@ class TestScorerClient:
         assert len(scorers) == 1
         assert isinstance(scorers[0], Scorer)
         assert scorers[0].id == "scorer_123"
+        mock_client.scenarios.scorers.list.assert_called_once()
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        scorer_view1 = MockScorerView(id="scorer_001", type="scorer-1")
+        scorer_view2 = MockScorerView(id="scorer_002", type="scorer-2")
+        mock_client.scenarios.scorers.list.return_value = [scorer_view1, scorer_view2]
+
+        ops = ScorerOps(mock_client)
+        scorers = ops.list(limit=10)
+
+        assert len(scorers) == 2
+        assert isinstance(scorers[0], Scorer)
+        assert isinstance(scorers[1], Scorer)
+        assert scorers[0].id == "scorer_001"
+        assert scorers[1].id == "scorer_002"
         mock_client.scenarios.scorers.list.assert_called_once()
 
 

@@ -30,8 +30,8 @@ from runloop_api_client.sdk.async_ import (
 from runloop_api_client.lib.polling import PollingConfig
 
 
-class TestAsyncDevboxClient:
-    """Tests for AsyncDevboxClient class."""
+class TestAsyncDevboxOps:
+    """Tests for AsyncDevboxOps class."""
 
     @pytest.mark.asyncio
     async def test_create(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -106,8 +106,20 @@ class TestAsyncDevboxClient:
             assert not mock_async_client.devboxes.await_running.called
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
-        """Test list method."""
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(devboxes=[])
+        mock_async_client.devboxes.list = AsyncMock(return_value=page)
+
+        ops = AsyncDevboxOps(mock_async_client)
+        devboxes = await ops.list(limit=10, status="running")
+
+        assert len(devboxes) == 0
+        mock_async_client.devboxes.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(devboxes=[devbox_view])
         mock_async_client.devboxes.list = AsyncMock(return_value=page)
 
@@ -123,13 +135,43 @@ class TestAsyncDevboxClient:
         assert devboxes[0].id == "dev_123"
         mock_async_client.devboxes.list.assert_called_once()
 
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        devbox_view1 = MockDevboxView(id="dev_001", name="devbox-1")
+        devbox_view2 = MockDevboxView(id="dev_002", name="devbox-2")
+        page = SimpleNamespace(devboxes=[devbox_view1, devbox_view2])
+        mock_async_client.devboxes.list = AsyncMock(return_value=page)
 
-class TestAsyncSnapshotClient:
-    """Tests for AsyncSnapshotClient class."""
+        ops = AsyncDevboxOps(mock_async_client)
+        devboxes = await ops.list(limit=10, status="running")
+
+        assert len(devboxes) == 2
+        assert isinstance(devboxes[0], AsyncDevbox)
+        assert isinstance(devboxes[1], AsyncDevbox)
+        assert devboxes[0].id == "dev_001"
+        assert devboxes[1].id == "dev_002"
+        mock_async_client.devboxes.list.assert_called_once()
+
+
+class TestAsyncSnapshotOps:
+    """Tests for AsyncSnapshotOps class."""
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
-        """Test list method."""
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(snapshots=[])
+        mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
+
+        ops = AsyncSnapshotOps(mock_async_client)
+        snapshots = await ops.list(devbox_id="dev_123", limit=10)
+
+        assert len(snapshots) == 0
+        mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(snapshots=[snapshot_view])
         mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
 
@@ -145,6 +187,24 @@ class TestAsyncSnapshotClient:
         assert snapshots[0].id == "snap_123"
         mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
 
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        snapshot_view1 = MockSnapshotView(id="snap_001", name="snapshot-1")
+        snapshot_view2 = MockSnapshotView(id="snap_002", name="snapshot-2")
+        page = SimpleNamespace(snapshots=[snapshot_view1, snapshot_view2])
+        mock_async_client.devboxes.disk_snapshots.list = AsyncMock(return_value=page)
+
+        ops = AsyncSnapshotOps(mock_async_client)
+        snapshots = await ops.list(devbox_id="dev_123", limit=10)
+
+        assert len(snapshots) == 2
+        assert isinstance(snapshots[0], AsyncSnapshot)
+        assert isinstance(snapshots[1], AsyncSnapshot)
+        assert snapshots[0].id == "snap_001"
+        assert snapshots[1].id == "snap_002"
+        mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
+
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
         ops = AsyncSnapshotOps(mock_async_client)
@@ -154,8 +214,8 @@ class TestAsyncSnapshotClient:
         assert snapshot.id == "snap_123"
 
 
-class TestAsyncBlueprintClient:
-    """Tests for AsyncBlueprintClient class."""
+class TestAsyncBlueprintOps:
+    """Tests for AsyncBlueprintOps class."""
 
     @pytest.mark.asyncio
     async def test_create(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
@@ -181,8 +241,20 @@ class TestAsyncBlueprintClient:
         assert blueprint.id == "bp_123"
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
-        """Test list method."""
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(blueprints=[])
+        mock_async_client.blueprints.list = AsyncMock(return_value=page)
+
+        ops = AsyncBlueprintOps(mock_async_client)
+        blueprints = await ops.list(limit=10)
+
+        assert len(blueprints) == 0
+        mock_async_client.blueprints.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(blueprints=[blueprint_view])
         mock_async_client.blueprints.list = AsyncMock(return_value=page)
 
@@ -198,9 +270,27 @@ class TestAsyncBlueprintClient:
         assert blueprints[0].id == "bp_123"
         mock_async_client.blueprints.list.assert_called_once()
 
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        blueprint_view1 = MockBlueprintView(id="bp_001", name="blueprint-1")
+        blueprint_view2 = MockBlueprintView(id="bp_002", name="blueprint-2")
+        page = SimpleNamespace(blueprints=[blueprint_view1, blueprint_view2])
+        mock_async_client.blueprints.list = AsyncMock(return_value=page)
 
-class TestAsyncStorageObjectClient:
-    """Tests for AsyncStorageObjectClient class."""
+        ops = AsyncBlueprintOps(mock_async_client)
+        blueprints = await ops.list(limit=10)
+
+        assert len(blueprints) == 2
+        assert isinstance(blueprints[0], AsyncBlueprint)
+        assert isinstance(blueprints[1], AsyncBlueprint)
+        assert blueprints[0].id == "bp_001"
+        assert blueprints[1].id == "bp_002"
+        mock_async_client.blueprints.list.assert_called_once()
+
+
+class TestAsyncStorageObjectOps:
+    """Tests for AsyncStorageObjectOps class."""
 
     @pytest.mark.asyncio
     async def test_create(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -229,8 +319,20 @@ class TestAsyncStorageObjectClient:
         assert obj.upload_url is None
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
-        """Test list method."""
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(objects=[])
+        mock_async_client.objects.list = AsyncMock(return_value=page)
+
+        ops = AsyncStorageObjectOps(mock_async_client)
+        objects = await ops.list(limit=10)
+
+        assert len(objects) == 0
+        mock_async_client.objects.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
+        """Test list method with single result."""
         page = SimpleNamespace(objects=[object_view])
         mock_async_client.objects.list = AsyncMock(return_value=page)
 
@@ -255,6 +357,24 @@ class TestAsyncStorageObjectClient:
             starting_after="obj_000",
             state="READ_ONLY",
         )
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        object_view1 = MockObjectView(id="obj_001", name="object-1")
+        object_view2 = MockObjectView(id="obj_002", name="object-2")
+        page = SimpleNamespace(objects=[object_view1, object_view2])
+        mock_async_client.objects.list = AsyncMock(return_value=page)
+
+        ops = AsyncStorageObjectOps(mock_async_client)
+        objects = await ops.list(limit=10)
+
+        assert len(objects) == 2
+        assert isinstance(objects[0], AsyncStorageObject)
+        assert isinstance(objects[1], AsyncStorageObject)
+        assert objects[0].id == "obj_001"
+        assert objects[1].id == "obj_002"
+        mock_async_client.objects.list.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_upload_from_file(
@@ -517,8 +637,8 @@ class TestAsyncStorageObjectClient:
         mock_async_client.objects.complete.assert_awaited_once()
 
 
-class TestAsyncScorerClient:
-    """Tests for AsyncScorerClient class."""
+class TestAsyncScorerOps:
+    """Tests for AsyncScorerOps class."""
 
     @pytest.mark.asyncio
     async def test_create(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
@@ -544,8 +664,24 @@ class TestAsyncScorerClient:
         assert scorer.id == "scorer_123"
 
     @pytest.mark.asyncio
-    async def test_list(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
-        """Test list method."""
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+
+        async def async_iter():
+            return
+            yield  # Make this a generator
+
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+
+        ops = AsyncScorerOps(mock_async_client)
+        scorers = await ops.list(limit=10)
+
+        assert len(scorers) == 0
+        mock_async_client.scenarios.scorers.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
+        """Test list method with single result."""
 
         async def async_iter():
             yield scorer_view
@@ -561,6 +697,28 @@ class TestAsyncScorerClient:
         assert len(scorers) == 1
         assert isinstance(scorers[0], AsyncScorer)
         assert scorers[0].id == "scorer_123"
+        mock_async_client.scenarios.scorers.list.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        scorer_view1 = MockScorerView(id="scorer_001", type="scorer-1")
+        scorer_view2 = MockScorerView(id="scorer_002", type="scorer-2")
+
+        async def async_iter():
+            yield scorer_view1
+            yield scorer_view2
+
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+
+        ops = AsyncScorerOps(mock_async_client)
+        scorers = await ops.list(limit=10)
+
+        assert len(scorers) == 2
+        assert isinstance(scorers[0], AsyncScorer)
+        assert isinstance(scorers[1], AsyncScorer)
+        assert scorers[0].id == "scorer_001"
+        assert scorers[1].id == "scorer_002"
         mock_async_client.scenarios.scorers.list.assert_called_once()
 
 
