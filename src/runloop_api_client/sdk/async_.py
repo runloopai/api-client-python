@@ -221,17 +221,16 @@ class AsyncBlueprintOps:
         ...     dockerfile="FROM ubuntu:22.04\\nRUN apt-get update",
         ... )
         >>> blueprints = await runloop.blueprint.list()
-    
+
     To use a local directory as a build context, use an object.
 
     Example:
         >>> from datetime import timedelta
         >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
-        >>> 
         >>> runloop = AsyncRunloopSDK()
         >>> obj = await runloop.object_storage.upload_from_dir(
         ...     "./",
-        ...     ttl=timedelta(hours=1),    
+        ...     ttl=timedelta(hours=1),
         ... )
         >>> blueprint = await runloop.blueprint.create(
         ...     name="my-blueprint",

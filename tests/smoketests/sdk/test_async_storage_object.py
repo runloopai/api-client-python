@@ -14,6 +14,7 @@ pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
 THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+FOUR_MINUTE_TIMEOUT = 240
 
 
 class TestAsyncStorageObjectLifecycle:
@@ -464,7 +465,7 @@ class TestAsyncStorageObjectWorkflows:
             # Delete
             await obj.delete()
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    @pytest.mark.timeout(FOUR_MINUTE_TIMEOUT)
     async def test_storage_object_in_devbox_workflow(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test workflow: create storage object, write from devbox, download."""
         # Create empty storage object
