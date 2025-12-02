@@ -21,6 +21,7 @@ from ._types import (
     SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScenarioListParams,
     SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
@@ -33,6 +34,7 @@ from ._helpers import detect_content_type
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
+from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from .async_storage_object import AsyncStorageObject
@@ -761,6 +763,45 @@ class AsyncAgentOps:
         return [AsyncAgent(self._client, item.id, item) for item in page.agents]
 
 
+class AsyncScenarioOps:
+    """Manage scenarios (async). Access via ``runloop.scenario``.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> scenario = runloop.scenario.from_id("scn-xxx")
+        >>> run = await scenario.run()
+        >>> scenarios = await runloop.scenario.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncScenarioOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    def from_id(self, scenario_id: str) -> AsyncScenario:
+        """Get an AsyncScenario instance for an existing scenario ID.
+
+        :param scenario_id: ID of the scenario
+        :type scenario_id: str
+        :return: AsyncScenario instance for the given ID
+        :rtype: AsyncScenario
+        """
+        return AsyncScenario(self._client, scenario_id)
+
+    async def list(self, **params: Unpack[SDKScenarioListParams]) -> list[AsyncScenario]:
+        """List all scenarios, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters
+        :return: List of scenarios
+        :rtype: list[AsyncScenario]
+        """
+        page = await self._client.scenarios.list(**params)
+        return [AsyncScenario(self._client, item.id) async for item in page]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -776,6 +817,8 @@ class AsyncRunloopSDK:
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
     :vartype blueprint: AsyncBlueprintOps
+    :ivar scenario: High-level async interface for scenario management
+    :vartype scenario: AsyncScenarioOps
     :ivar scorer: High-level async interface for scorer management
     :vartype scorer: AsyncScorerOps
     :ivar snapshot: High-level async interface for snapshot management
@@ -795,6 +838,7 @@ class AsyncRunloopSDK:
     agent: AsyncAgentOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
     snapshot: AsyncSnapshotOps
     storage_object: AsyncStorageObjectOps
@@ -840,6 +884,7 @@ class AsyncRunloopSDK:
         self.agent = AsyncAgentOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
         self.storage_object = AsyncStorageObjectOps(self.api)

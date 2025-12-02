@@ -108,6 +108,35 @@ class MockAgentView:
     source: Any = None
 
 
+@dataclass
+class MockScenarioView:
+    """Mock ScenarioView for testing."""
+
+    id: str = "scn_123"
+    name: str = "test-scenario"
+    metadata: dict = None
+
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+
+
+@dataclass
+class MockScenarioRunView:
+    """Mock ScenarioRunView for testing."""
+
+    id: str = "run_123"
+    devbox_id: str = "dev_123"
+    scenario_id: str = "scn_123"
+    state: str = "running"
+    metadata: dict = None
+    scoring_contract_result: object = None
+
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+
+
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
     """
     Create a mock httpx.AsyncClient with proper context manager setup.
@@ -202,6 +231,18 @@ def scorer_view() -> MockScorerView:
 def agent_view() -> MockAgentView:
     """Create a mock AgentView."""
     return MockAgentView()
+
+
+@pytest.fixture
+def scenario_view() -> MockScenarioView:
+    """Create a mock ScenarioView."""
+    return MockScenarioView()
+
+
+@pytest.fixture
+def scenario_run_view() -> MockScenarioRunView:
+    """Create a mock ScenarioRunView."""
+    return MockScenarioRunView()
 
 
 @pytest.fixture

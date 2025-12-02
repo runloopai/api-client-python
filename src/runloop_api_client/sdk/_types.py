@@ -11,6 +11,7 @@ from ..types.object_list_params import ObjectListParams
 from ..types.agent_create_params import AgentCreateParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
 from ..types.object_create_params import ObjectCreateParams
+from ..types.scenario_list_params import ScenarioListParams
 from ..types.blueprint_list_params import BlueprintListParams
 from ..types.object_download_params import ObjectDownloadParams
 from ..types.blueprint_create_params import BlueprintCreateParams
@@ -167,3 +168,23 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
 
 class SDKAgentListParams(AgentListParams, BaseRequestOptions):
     pass
+
+
+class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScenarioRunParams(TypedDict, total=False):
+    """Parameters for starting a scenario run (excludes scenario_id which is set automatically)."""
+
+    benchmark_run_id: Optional[str]
+    """Benchmark to associate the run."""
+
+    metadata: Optional[dict[str, str]]
+    """User defined metadata to attach to the run for organization."""
+
+    run_name: Optional[str]
+    """Display name of the run."""
+
+    polling_config: Optional[PollingConfig]
+    """Configuration for polling behavior (used by run_and_await_env_ready)."""
