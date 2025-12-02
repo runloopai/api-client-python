@@ -38,7 +38,7 @@ class TestAsyncBlueprint:
         )
 
         assert result == blueprint_view
-        mock_async_client.blueprints.retrieve.assert_called_once()
+        mock_async_client.blueprints.retrieve.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_logs(self, mock_async_client: AsyncMock) -> None:
@@ -55,7 +55,7 @@ class TestAsyncBlueprint:
         )
 
         assert result == logs_view
-        mock_async_client.blueprints.logs.assert_called_once()
+        mock_async_client.blueprints.logs.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_delete(self, mock_async_client: AsyncMock) -> None:
@@ -71,7 +71,7 @@ class TestAsyncBlueprint:
         )
 
         assert result is not None  # Verify return value is propagated
-        mock_async_client.blueprints.delete.assert_called_once()
+        mock_async_client.blueprints.delete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_create_devbox(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -87,4 +87,4 @@ class TestAsyncBlueprint:
         )
 
         assert devbox.id == "dev_123"
-        mock_async_client.devboxes.create_and_await_running.assert_called_once()
+        mock_async_client.devboxes.create_and_await_running.assert_awaited_once()

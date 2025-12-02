@@ -45,7 +45,7 @@ class TestAsyncStorageObject:
         )
 
         assert result == object_view
-        mock_async_client.objects.retrieve.assert_called_once()
+        mock_async_client.objects.retrieve.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_complete(self, mock_async_client: AsyncMock) -> None:
@@ -66,7 +66,7 @@ class TestAsyncStorageObject:
 
         assert result == completed_view
         assert obj.upload_url is None
-        mock_async_client.objects.complete.assert_called_once()
+        mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_get_download_url_without_duration(self, mock_async_client: AsyncMock) -> None:
@@ -83,7 +83,7 @@ class TestAsyncStorageObject:
         )
 
         assert result == download_url_view
-        mock_async_client.objects.download.assert_called_once()
+        mock_async_client.objects.download.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_get_download_url_with_duration(self, mock_async_client: AsyncMock) -> None:
@@ -101,7 +101,7 @@ class TestAsyncStorageObject:
         )
 
         assert result == download_url_view
-        mock_async_client.objects.download.assert_called_once()
+        mock_async_client.objects.download.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_download_as_bytes(self, mock_async_client: AsyncMock) -> None:
@@ -160,7 +160,7 @@ class TestAsyncStorageObject:
         )
 
         assert result == object_view
-        mock_async_client.objects.delete.assert_called_once()
+        mock_async_client.objects.delete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_upload_content_string(self, mock_async_client: AsyncMock) -> None:
