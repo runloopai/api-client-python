@@ -54,7 +54,7 @@ class Devbox:
     The Devbox class supports context manager protocol for automatic cleanup.
 
     Example:
-        >>> with sdk.devbox.create(name="my-devbox") as devbox:
+        >>> with runloop.devbox.create(name="my-devbox") as devbox:
         ...     result = devbox.cmd.exec("echo 'hello'")
         ...     print(result.stdout())
         # Devbox is automatically shutdown on exit

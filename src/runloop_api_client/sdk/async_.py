@@ -549,11 +549,22 @@ class AsyncAgentOps:
     """High-level async manager for creating and managing agents.
 
     Accessed via ``runloop.agent`` from :class:`AsyncRunloopSDK`, provides
-    coroutines to create, retrieve, and list agents.
+    coroutines to create, retrieve, and list agents from various sources (npm, pip, git, object storage).
 
     Example:
         >>> runloop = AsyncRunloopSDK()
-        >>> agent = await runloop.agent.create(name="my-agent")
+        >>> # Create agent from NPM package
+        >>> agent = await runloop.agent.create_from_npm(
+        ...     name="my-agent",
+        ...     package_name="@runloop/example-agent"
+        ... )
+        >>> # Create agent from Git repository
+        >>> agent = await runloop.agent.create_from_git(
+        ...     name="git-agent",
+        ...     repository="https://github.com/user/agent-repo",
+        ...     ref="main"
+        ... )
+        >>> # List all agents
         >>> agents = await runloop.agent.list(limit=10)
     """
 

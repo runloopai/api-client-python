@@ -13,7 +13,19 @@ from ..types.agent_view import AgentView
 
 
 class AsyncAgent:
-    """Async wrapper around agent operations."""
+    """Async wrapper around agent operations.
+
+    This class provides an asynchronous interface for interacting with agents,
+    including retrieving agent information.
+
+    Example:
+        >>> agent = await runloop.agent.create_from_npm(
+        ...     name="my-agent",
+        ...     package_name="@runloop/example-agent"
+        ... )
+        >>> info = await agent.get_info()
+        >>> print(info.name)
+    """
 
     def __init__(
         self,

@@ -13,7 +13,19 @@ from ..types.agent_view import AgentView
 
 
 class Agent:
-    """Wrapper around synchronous agent operations."""
+    """Wrapper around synchronous agent operations.
+
+    This class provides a Pythonic interface for interacting with agents,
+    including retrieving agent information.
+
+    Example:
+        >>> agent = runloop.agent.create_from_npm(
+        ...     name="my-agent",
+        ...     package_name="@runloop/example-agent"
+        ... )
+        >>> info = agent.get_info()
+        >>> print(info.name)
+    """
 
     def __init__(
         self,

@@ -545,11 +545,22 @@ class AgentOps:
     """High-level manager for creating and managing agents.
 
     Accessed via ``runloop.agent`` from :class:`RunloopSDK`, provides methods to
-    create, retrieve, and list agents.
+    create, retrieve, and list agents from various sources (npm, pip, git, object storage).
 
     Example:
         >>> runloop = RunloopSDK()
-        >>> agent = runloop.agent.create(name="my-agent")
+        >>> # Create agent from NPM package
+        >>> agent = runloop.agent.create_from_npm(
+        ...     name="my-agent",
+        ...     package_name="@runloop/example-agent"
+        ... )
+        >>> # Create agent from Git repository
+        >>> agent = runloop.agent.create_from_git(
+        ...     name="git-agent",
+        ...     repository="https://github.com/user/agent-repo",
+        ...     ref="main"
+        ... )
+        >>> # List all agents
         >>> agents = runloop.agent.list(limit=10)
     """
 
@@ -586,6 +597,13 @@ class AgentOps:
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from an NPM package.
+
+        Example:
+            >>> agent = runloop.agent.create_from_npm(
+            ...     name="my-npm-agent",
+            ...     package_name="@runloop/example-agent",
+            ...     npm_version="^1.0.0"
+            ... )
 
         :param package_name: NPM package name
         :type package_name: str
@@ -627,6 +645,13 @@ class AgentOps:
     ) -> Agent:
         """Create an agent from a Pip package.
 
+        Example:
+            >>> agent = runloop.agent.create_from_pip(
+            ...     name="my-pip-agent",
+            ...     package_name="runloop-example-agent",
+            ...     pip_version=">=1.0.0"
+            ... )
+
         :param package_name: Pip package name
         :type package_name: str
         :param pip_version: Pip version constraint, defaults to None
@@ -666,6 +691,14 @@ class AgentOps:
     ) -> Agent:
         """Create an agent from a Git repository.
 
+        Example:
+            >>> agent = runloop.agent.create_from_git(
+            ...     name="my-git-agent",
+            ...     repository="https://github.com/user/agent-repo",
+            ...     ref="main",
+            ...     agent_setup=["npm install", "npm run build"]
+            ... )
+
         :param repository: Git repository URL
         :type repository: str
         :param ref: Optional Git ref (branch/tag/commit), defaults to main/HEAD
@@ -699,6 +732,16 @@ class AgentOps:
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from a storage object.
+
+        Example:
+            >>> # First upload agent code as an object
+            >>> obj = runloop.storage_object.upload_from_dir("./my-agent")
+            >>> # Then create agent from the object
+            >>> agent = runloop.agent.create_from_object(
+            ...     name="my-object-agent",
+            ...     object_id=obj.id,
+            ...     agent_setup=["chmod +x setup.sh", "./setup.sh"]
+            ... )
 
         :param object_id: Storage object ID
         :type object_id: str
