@@ -4,6 +4,7 @@ from typing_extensions import TypedDict
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
+from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
@@ -139,4 +140,20 @@ class SDKObjectCreateParams(ObjectCreateParams, LongRequestOptions):
 
 
 class SDKObjectDownloadParams(ObjectDownloadParams, BaseRequestOptions):
+    pass
+
+
+class SDKScorerCreateParams(ScorerCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKScorerListParams(ScorerListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScorerUpdateParams(ScorerUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKScorerValidateParams(ScorerValidateParams, LongRequestOptions):
     pass

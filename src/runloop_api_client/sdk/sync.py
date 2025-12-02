@@ -15,14 +15,17 @@ from ._types import (
     LongRequestOptions,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKScorerListParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
     SDKDevboxCreateFromImageParams,
 )
 from .devbox import Devbox
+from .scorer import Scorer
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
@@ -215,6 +218,23 @@ class BlueprintOps:
         ...     name="my-blueprint", dockerfile="FROM ubuntu:22.04\\nRUN apt-get update"
         ... )
         >>> blueprints = runloop.blueprint.list()
+
+    To use a local directory as a build context, use an object.
+
+    Example:
+        >>> from datetime import timedelta
+        >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
+        >>> 
+        >>> runloop = RunloopSDK()
+        >>> obj = runloop.object_storage.upload_from_dir(
+        ...     "./",
+        ...     ttl=timedelta(hours=1),    
+        ... )
+        >>> blueprint = runloop.blueprint.create(
+        ...     name="my-blueprint",
+        ...     dockerfile="FROM ubuntu:22.04\\nCOPY . .\\n",
+        ...     build_context=BuildContext(type="object", object_id=obj.id),
+        ... )
     """
 
     def __init__(self, client: Runloop) -> None:
@@ -470,6 +490,54 @@ class StorageObjectOps:
         return obj
 
 
+class ScorerOps:
+    """Create and manage custom scorers. Access via ``runloop.scorer``.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> scorer = runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
+        >>> all_scorers = runloop.scorer.list()
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize ScorerOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, **params: Unpack[SDKScorerCreateParams]) -> Scorer:
+        """Create a new scorer with the given type and bash script.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
+        :return: The newly created scorer
+        :rtype: Scorer
+        """
+        response = self._client.scenarios.scorers.create(**params)
+        return Scorer(self._client, response.id)
+
+    def from_id(self, scorer_id: str) -> Scorer:
+        """Get a Scorer instance for an existing scorer ID.
+
+        :param scorer_id: ID of the scorer
+        :type scorer_id: str
+        :return: Scorer instance for the given ID
+        :rtype: Scorer
+        """
+        return Scorer(self._client, scorer_id)
+
+    def list(self, **params: Unpack[SDKScorerListParams]) -> list[Scorer]:
+        """List all scorers, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
+        :return: List of scorers
+        :rtype: list[Scorer]
+        """
+        page = self._client.scenarios.scorers.list(**params)
+        return [Scorer(self._client, item.id) for item in page]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -483,6 +551,8 @@ class RunloopSDK:
     :vartype devbox: DevboxOps
     :ivar blueprint: High-level interface for blueprint management
     :vartype blueprint: BlueprintOps
+    :ivar scorer: High-level interface for scorer management
+    :vartype scorer: ScorerOps
     :ivar snapshot: High-level interface for snapshot management
     :vartype snapshot: SnapshotOps
     :ivar storage_object: High-level interface for storage object management
@@ -499,6 +569,7 @@ class RunloopSDK:
     api: Runloop
     devbox: DevboxOps
     blueprint: BlueprintOps
+    scorer: ScorerOps
     snapshot: SnapshotOps
     storage_object: StorageObjectOps
 
@@ -542,6 +613,7 @@ class RunloopSDK:
 
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
+        self.scorer = ScorerOps(self.api)
         self.snapshot = SnapshotOps(self.api)
         self.storage_object = StorageObjectOps(self.api)
 
