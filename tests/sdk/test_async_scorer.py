@@ -38,7 +38,7 @@ class TestAsyncScorer:
         result = await scorer.get_info()
 
         assert result == scorer_view
-        mock_async_client.scenarios.scorers.retrieve.assert_called_once()
+        mock_async_client.scenarios.scorers.retrieve.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_update(self, mock_async_client: AsyncMock) -> None:
@@ -53,7 +53,7 @@ class TestAsyncScorer:
         )
 
         assert result == update_response
-        mock_async_client.scenarios.scorers.update.assert_called_once()
+        mock_async_client.scenarios.scorers.update.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_validate(self, mock_async_client: AsyncMock) -> None:
@@ -71,4 +71,4 @@ class TestAsyncScorer:
         )
 
         assert result == validate_response
-        mock_async_client.scenarios.scorers.validate.assert_called_once()
+        mock_async_client.scenarios.scorers.validate.assert_awaited_once()

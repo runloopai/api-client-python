@@ -47,7 +47,7 @@ class TestAsyncDevboxOps:
 
         assert isinstance(devbox, AsyncDevbox)
         assert devbox.id == "dev_123"
-        mock_async_client.devboxes.create_and_await_running.assert_called_once()
+        mock_async_client.devboxes.create_and_await_running.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_create_from_blueprint_id(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -115,7 +115,7 @@ class TestAsyncDevboxOps:
         devboxes = await ops.list(limit=10, status="running")
 
         assert len(devboxes) == 0
-        mock_async_client.devboxes.list.assert_called_once()
+        mock_async_client.devboxes.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -133,7 +133,7 @@ class TestAsyncDevboxOps:
         assert len(devboxes) == 1
         assert isinstance(devboxes[0], AsyncDevbox)
         assert devboxes[0].id == "dev_123"
-        mock_async_client.devboxes.list.assert_called_once()
+        mock_async_client.devboxes.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
@@ -151,7 +151,7 @@ class TestAsyncDevboxOps:
         assert isinstance(devboxes[1], AsyncDevbox)
         assert devboxes[0].id == "dev_001"
         assert devboxes[1].id == "dev_002"
-        mock_async_client.devboxes.list.assert_called_once()
+        mock_async_client.devboxes.list.assert_awaited_once()
 
 
 class TestAsyncSnapshotOps:
@@ -167,7 +167,7 @@ class TestAsyncSnapshotOps:
         snapshots = await ops.list(devbox_id="dev_123", limit=10)
 
         assert len(snapshots) == 0
-        mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
@@ -185,7 +185,7 @@ class TestAsyncSnapshotOps:
         assert len(snapshots) == 1
         assert isinstance(snapshots[0], AsyncSnapshot)
         assert snapshots[0].id == "snap_123"
-        mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
@@ -203,7 +203,7 @@ class TestAsyncSnapshotOps:
         assert isinstance(snapshots[1], AsyncSnapshot)
         assert snapshots[0].id == "snap_001"
         assert snapshots[1].id == "snap_002"
-        mock_async_client.devboxes.disk_snapshots.list.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.list.assert_awaited_once()
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
@@ -230,7 +230,7 @@ class TestAsyncBlueprintOps:
 
         assert isinstance(blueprint, AsyncBlueprint)
         assert blueprint.id == "bp_123"
-        mock_async_client.blueprints.create_and_await_build_complete.assert_called_once()
+        mock_async_client.blueprints.create_and_await_build_complete.assert_awaited_once()
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
@@ -250,7 +250,7 @@ class TestAsyncBlueprintOps:
         blueprints = await ops.list(limit=10)
 
         assert len(blueprints) == 0
-        mock_async_client.blueprints.list.assert_called_once()
+        mock_async_client.blueprints.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
@@ -268,7 +268,7 @@ class TestAsyncBlueprintOps:
         assert len(blueprints) == 1
         assert isinstance(blueprints[0], AsyncBlueprint)
         assert blueprints[0].id == "bp_123"
-        mock_async_client.blueprints.list.assert_called_once()
+        mock_async_client.blueprints.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
@@ -286,7 +286,7 @@ class TestAsyncBlueprintOps:
         assert isinstance(blueprints[1], AsyncBlueprint)
         assert blueprints[0].id == "bp_001"
         assert blueprints[1].id == "bp_002"
-        mock_async_client.blueprints.list.assert_called_once()
+        mock_async_client.blueprints.list.assert_awaited_once()
 
 
 class TestAsyncStorageObjectOps:
@@ -328,7 +328,7 @@ class TestAsyncStorageObjectOps:
         objects = await ops.list(limit=10)
 
         assert len(objects) == 0
-        mock_async_client.objects.list.assert_called_once()
+        mock_async_client.objects.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
@@ -374,7 +374,7 @@ class TestAsyncStorageObjectOps:
         assert isinstance(objects[1], AsyncStorageObject)
         assert objects[0].id == "obj_001"
         assert objects[1].id == "obj_002"
-        mock_async_client.objects.list.assert_called_once()
+        mock_async_client.objects.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_upload_from_file(
@@ -653,7 +653,7 @@ class TestAsyncScorerOps:
 
         assert isinstance(scorer, AsyncScorer)
         assert scorer.id == "scorer_123"
-        mock_async_client.scenarios.scorers.create.assert_called_once()
+        mock_async_client.scenarios.scorers.create.assert_awaited_once()
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
@@ -677,7 +677,7 @@ class TestAsyncScorerOps:
         scorers = await ops.list(limit=10)
 
         assert len(scorers) == 0
-        mock_async_client.scenarios.scorers.list.assert_called_once()
+        mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
@@ -697,7 +697,7 @@ class TestAsyncScorerOps:
         assert len(scorers) == 1
         assert isinstance(scorers[0], AsyncScorer)
         assert scorers[0].id == "scorer_123"
-        mock_async_client.scenarios.scorers.list.assert_called_once()
+        mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
@@ -719,7 +719,7 @@ class TestAsyncScorerOps:
         assert isinstance(scorers[1], AsyncScorer)
         assert scorers[0].id == "scorer_001"
         assert scorers[1].id == "scorer_002"
-        mock_async_client.scenarios.scorers.list.assert_called_once()
+        mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
 
 class TestAsyncRunloopSDK:
