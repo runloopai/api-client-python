@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.0.0 (2025-12-02)
+
+Full Changelog: [v0.69.0...v1.0.0](https://github.com/runloopai/api-client-python/compare/v0.69.0...v1.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **devbox:** made command positional arg in exec and exec_async ([#695](https://github.com/runloopai/api-client-python/issues/695))
+
+### Features
+
+* **blueprints:** Add build context to the OpenAPI spec ([#6494](https://github.com/runloopai/api-client-python/issues/6494)) ([d202b94](https://github.com/runloopai/api-client-python/commit/d202b942c07614ca954a8bbe3a9a6302e9a04216))
+* **devbox:** added devbox.shell(shellName) command and stateful shell class to SDK ([#696](https://github.com/runloopai/api-client-python/issues/696)) ([c1e8f09](https://github.com/runloopai/api-client-python/commit/c1e8f0965a419ff53d830ba3c43a1c9a29dae5c7))
+* **devbox:** made command positional arg in exec and exec_async ([#695](https://github.com/runloopai/api-client-python/issues/695)) ([6cc8c2f](https://github.com/runloopai/api-client-python/commit/6cc8c2fd4f904e8cc4386d81558157ca6fb69bfa))
+* **sdk:** added scorer classes to sdk ([#698](https://github.com/runloopai/api-client-python/issues/698)) ([85f798f](https://github.com/runloopai/api-client-python/commit/85f798f2d8a7727b783e01a260ff0a52bdf01d78))
+
+
+### Bug Fixes
+
+* **api:** don't ignore devbox keep_alive, suspend and resume in api ([fe3589f](https://github.com/runloopai/api-client-python/commit/fe3589f5fbb36a5b79f1d4a25e86f88676556fdb))
+* **devbox:** launch parameter typo ([1c9c346](https://github.com/runloopai/api-client-python/commit/1c9c346e475b64fc389928fee0f7140e532c4f9c))
+* **scenarios:** update parameters for manually maintained start_run_and_await_env_ready methods ([#692](https://github.com/runloopai/api-client-python/issues/692)) ([8000495](https://github.com/runloopai/api-client-python/commit/8000495f70b2e6f4f12742fb8a6d641dbbc088ca))
+* **scorer:** fixed RL_TEST_CONTEXT to RL_SCORER_CONTEXT ([df43a42](https://github.com/runloopai/api-client-python/commit/df43a42a45b9ce67aba27835a41c9a0ebfc6a407))
+
+
+### Chores
+
+* **blueprints:** Add build context examples ([#694](https://github.com/runloopai/api-client-python/issues/694)) ([6e63928](https://github.com/runloopai/api-client-python/commit/6e6392864b3cde20dfea5d173fed9a156b960ccd))
+* hide build context APIs ([159a38f](https://github.com/runloopai/api-client-python/commit/159a38f0980c00430a1b949541076b0d63df2df2))
+* **mounts:** Update documentation for deprecated fields to direct the user to the replacement API ([4936844](https://github.com/runloopai/api-client-python/commit/4936844989ec7a0d37c835dd37b8007e8caba944))
+
 ## 0.69.0 (2025-11-21)
 
 Full Changelog: [v0.68.0...v0.69.0](https://github.com/runloopai/api-client-python/compare/v0.68.0...v0.69.0)

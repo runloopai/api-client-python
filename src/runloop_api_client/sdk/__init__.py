@@ -5,19 +5,22 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 
 from __future__ import annotations
 
-from .sync import DevboxOps, RunloopSDK, SnapshotOps, BlueprintOps, StorageObjectOps
+from .sync import DevboxOps, ScorerOps, RunloopSDK, SnapshotOps, BlueprintOps, StorageObjectOps
 from .async_ import (
     AsyncDevboxOps,
+    AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
 )
-from .devbox import Devbox
+from .devbox import Devbox, NamedShell
+from .scorer import Scorer
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .execution import Execution
-from .async_devbox import AsyncDevbox
+from .async_devbox import AsyncDevbox, AsyncNamedShell
+from .async_scorer import AsyncScorer
 from .async_snapshot import AsyncSnapshot
 from .storage_object import StorageObject
 from .async_blueprint import AsyncBlueprint
@@ -35,6 +38,8 @@ __all__ = [
     "AsyncDevboxOps",
     "BlueprintOps",
     "AsyncBlueprintOps",
+    "ScorerOps",
+    "AsyncScorerOps",
     "SnapshotOps",
     "AsyncSnapshotOps",
     "StorageObjectOps",
@@ -48,8 +53,12 @@ __all__ = [
     "AsyncExecutionResult",
     "Blueprint",
     "AsyncBlueprint",
+    "Scorer",
+    "AsyncScorer",
     "Snapshot",
     "AsyncSnapshot",
     "StorageObject",
     "AsyncStorageObject",
+    "NamedShell",
+    "AsyncNamedShell",
 ]

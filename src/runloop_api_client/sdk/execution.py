@@ -42,7 +42,7 @@ class Execution:
     the running process. Created by ``devbox.cmd.exec_async()``.
 
     Example:
-        >>> execution = devbox.cmd.exec_async(command="python train.py")
+        >>> execution = devbox.cmd.exec_async("python train.py")
         >>> state = execution.get_state()
         >>> if state.status == "running":
         ...     execution.kill()

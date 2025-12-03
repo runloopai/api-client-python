@@ -8,15 +8,7 @@ from typing_extensions import Required, TypedDict
 __all__ = ["DevboxExecuteAsyncParams"]
 
 
-class DevboxExecuteAsyncParams(TypedDict, total=False):
-    command: Required[str]
-    """The command to execute via the Devbox shell.
-
-    By default, commands are run from the user home directory unless shell_name is
-    specified. If shell_name is specified the command is run from the directory
-    based on the recent state of the persistent shell.
-    """
-
+class DevboxNiceExecuteAsyncParams(TypedDict, total=False):
     attach_stdin: Optional[bool]
     """Whether to attach stdin streaming for async commands.
 
@@ -28,4 +20,14 @@ class DevboxExecuteAsyncParams(TypedDict, total=False):
 
     When using a persistent shell, the command will run from the directory at the
     end of the previous command and environment variables will be preserved.
+    """
+
+
+class DevboxExecuteAsyncParams(DevboxNiceExecuteAsyncParams, total=False):
+    command: Required[str]
+    """The command to execute via the Devbox shell.
+
+    By default, commands are run from the user home directory unless shell_name is
+    specified. If shell_name is specified the command is run from the directory
+    based on the recent state of the persistent shell.
     """

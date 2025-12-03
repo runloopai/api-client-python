@@ -7,7 +7,7 @@ from typing_extensions import override
 
 from .._client import AsyncRunloop
 from .._streaming import AsyncStream
-from ..types.devboxes.execution_update_chunk import ExecutionUpdateChunk
+from ..types.devboxes import ExecutionUpdateChunk
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 

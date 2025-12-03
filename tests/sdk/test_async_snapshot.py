@@ -39,7 +39,7 @@ class TestAsyncSnapshot:
         )
 
         assert result == snapshot_view
-        mock_async_client.devboxes.disk_snapshots.query_status.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.query_status.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_update(self, mock_async_client: AsyncMock) -> None:
@@ -60,7 +60,7 @@ class TestAsyncSnapshot:
         )
 
         assert result == updated_snapshot
-        mock_async_client.devboxes.disk_snapshots.update.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.update.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_delete(self, mock_async_client: AsyncMock) -> None:
@@ -77,7 +77,7 @@ class TestAsyncSnapshot:
         )
 
         assert result is not None  # Verify return value is propagated
-        mock_async_client.devboxes.disk_snapshots.delete.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.delete.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_await_completed(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
@@ -95,7 +95,7 @@ class TestAsyncSnapshot:
         )
 
         assert result == snapshot_view
-        mock_async_client.devboxes.disk_snapshots.await_completed.assert_called_once()
+        mock_async_client.devboxes.disk_snapshots.await_completed.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_create_devbox(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
@@ -111,4 +111,4 @@ class TestAsyncSnapshot:
         )
 
         assert devbox.id == "dev_123"
-        mock_async_client.devboxes.create_and_await_running.assert_called_once()
+        mock_async_client.devboxes.create_and_await_running.assert_awaited_once()

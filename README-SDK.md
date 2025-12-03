@@ -38,12 +38,12 @@ runloop = RunloopSDK()
 
 # Create a ready-to-use devbox
 with runloop.devbox.create(name="my-devbox") as devbox:
-    result = devbox.cmd.exec(command="echo 'Hello from Runloop!'")
+    result = devbox.cmd.exec("echo 'Hello from Runloop!'")
     print(result.stdout())
 
     # Stream stdout in real time
     devbox.cmd.exec(
-        command="ls -la",
+        "ls -la",
         stdout=lambda line: print("stdout:", line),
     )
 
@@ -68,13 +68,13 @@ from runloop_api_client import AsyncRunloopSDK
 async def main():
     runloop = AsyncRunloopSDK()
     async with await runloop.devbox.create(name="async-devbox") as devbox:
-        result = await devbox.cmd.exec(command="pwd")
+        result = await devbox.cmd.exec("pwd")
         print(await result.stdout())
 
         def capture(line: str) -> None:
             print(">>", line)
 
-        await devbox.cmd.exec(command="ls", stdout=capture)
+        await devbox.cmd.exec("ls", stdout=capture)
 
 asyncio.run(main())
 ```
@@ -147,13 +147,13 @@ Execute commands synchronously or asynchronously:
 
 ```python
 # Synchronous command execution (waits for completion)
-result = devbox.cmd.exec(command="ls -la")
+result = devbox.cmd.exec("ls -la")
 print("Output:", result.stdout())
 print("Exit code:", result.exit_code)
 print("Success:", result.success)
 
 # Asynchronous command execution (returns immediately)
-execution = devbox.cmd.exec_async(command="npm run dev")
+execution = devbox.cmd.exec_async("npm run dev")
 
 # Check execution status
 state = execution.get_state()
@@ -173,7 +173,7 @@ The `Execution` object provides fine-grained control over asynchronous command e
 
 ```python
 # Start a long-running process
-execution = devbox.cmd.exec_async(command="python train_model.py")
+execution = devbox.cmd.exec_async("python train_model.py")
 
 # Get the execution ID
 print("Execution ID:", execution.execution_id)
@@ -208,10 +208,10 @@ The `ExecutionResult` object contains the output and exit status of a completed 
 
 ```python
 # From synchronous execution
-result = devbox.cmd.exec(command="ls -la /tmp")
+result = devbox.cmd.exec("ls -la /tmp")
 
 # Or from asynchronous execution
-execution = devbox.cmd.exec_async(command="echo 'test'")
+execution = devbox.cmd.exec_async("echo 'test'")
 result = execution.result()
 
 # Access execution results
@@ -250,7 +250,7 @@ def handle_output(line: str) -> None:
     print("LOG:", line)
 
 result = devbox.cmd.exec(
-    command="python train.py",
+    "python train.py",
     stdout=handle_output,
     stderr=lambda line: print("ERR:", line),
     output=lambda line: print("ANY:", line),
@@ -267,7 +267,7 @@ def capture(line: str) -> None:
     log_queue.put_nowait(line)
 
 await devbox.cmd.exec(
-    command="tail -f /var/log/app.log",
+    "tail -f /var/log/app.log",
     stdout=capture,
 )
 ```
@@ -365,13 +365,13 @@ Devboxes support context managers for automatic cleanup:
 ```python
 # Synchronous
 with runloop.devbox.create(name="temp-devbox") as devbox:
-    result = devbox.cmd.exec(command="echo 'Hello'")
+    result = devbox.cmd.exec("echo 'Hello'")
     print(result.stdout())
 # devbox is automatically shutdown when exiting the context
 
 # Asynchronous
 async with await runloop.devbox.create(name="temp-devbox") as devbox:
-    result = await devbox.cmd.exec(command="echo 'Hello'")
+    result = await devbox.cmd.exec("echo 'Hello'")
     print(await result.stdout())
 # devbox is automatically shutdown when exiting the context
 ```
@@ -586,7 +586,7 @@ devbox = runloop.devbox.create(
 )
 
 # The storage object is now accessible at /home/user/data.txt in the devbox
-result = devbox.cmd.exec(command="cat /home/user/data.txt")
+result = devbox.cmd.exec("cat /home/user/data.txt")
 print(result.stdout())  # "Hello, World!"
 
 # Mount archived objects (tar, tgz, gzip) - they get extracted to a directory
@@ -607,7 +607,7 @@ devbox_with_archive = runloop.devbox.create(
 )
 
 # Access extracted archive contents
-result = devbox_with_archive.cmd.exec(command="ls -la /home/user/project/")
+result = devbox_with_archive.cmd.exec("ls -la /home/user/project/")
 print(result.stdout())
 ```
 
@@ -634,7 +634,7 @@ runloop = RunloopSDK()
 
 try:
     devbox = runloop.devbox.create(name="example-devbox")
-    result = devbox.cmd.exec(command="invalid-command")
+    result = devbox.cmd.exec("invalid-command")
 except runloop_api_client.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -694,14 +694,14 @@ async def main():
     
     # All the same operations, but with await
     async with await runloop.devbox.create(name="async-devbox") as devbox:
-        result = await devbox.cmd.exec(command="pwd")
+        result = await devbox.cmd.exec("pwd")
         print(await result.stdout())
         
         # Streaming (note: callbacks must be synchronous)
         def capture(line: str) -> None:
             print(">>", line)
         
-        await devbox.cmd.exec(command="ls", stdout=capture)
+        await devbox.cmd.exec("ls", stdout=capture)
         
         # Async file operations
         await devbox.file.write(path="/tmp/test.txt", contents="Hello")

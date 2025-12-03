@@ -15,7 +15,7 @@ from tests.sdk.conftest import THREAD_STARTUP_DELAY
 from runloop_api_client.sdk import Devbox
 from runloop_api_client._streaming import Stream
 from runloop_api_client.sdk.execution import _StreamingGroup
-from runloop_api_client.types.devboxes.execution_update_chunk import ExecutionUpdateChunk
+from runloop_api_client.types.devboxes import ExecutionUpdateChunk
 
 # Legacy alias for backward compatibility
 SHORT_SLEEP = THREAD_STARTUP_DELAY
