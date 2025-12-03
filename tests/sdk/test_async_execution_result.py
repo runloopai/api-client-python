@@ -190,7 +190,7 @@ class TestAsyncExecutionResult:
         # Should stream full output
         output = await result.stdout()
         assert output == "line1\nline2\nline3\n"
-        mock_async_client.devboxes.executions.stream_stdout_updates.assert_called_once_with(
+        mock_async_client.devboxes.executions.stream_stdout_updates.assert_awaited_once_with(
             "exec_123", devbox_id="dev_123"
         )
 
@@ -226,7 +226,7 @@ class TestAsyncExecutionResult:
         # Should stream full output
         output = await result.stderr()
         assert output == "error1\nerror2\n"
-        mock_async_client.devboxes.executions.stream_stderr_updates.assert_called_once_with(
+        mock_async_client.devboxes.executions.stream_stderr_updates.assert_awaited_once_with(
             "exec_123", devbox_id="dev_123"
         )
 

@@ -34,7 +34,7 @@ Synchronous Example
 
    # Create a ready-to-use devbox
    with runloop.devbox.create(name="my-devbox") as devbox:
-       result = devbox.cmd.exec(command="echo 'Hello from Runloop!'")
+       result = devbox.cmd.exec("echo 'Hello from Runloop!'")
        print(result.stdout())
 
 Asynchronous Example
@@ -49,7 +49,7 @@ Asynchronous Example
        runloop = AsyncRunloopSDK()
        
        async with await runloop.devbox.create(name="my-devbox") as devbox:
-           result = await devbox.cmd.exec(command="echo 'Hello from Runloop!'")
+           result = await devbox.cmd.exec("echo 'Hello from Runloop!'")
            print(await result.stdout())
 
    asyncio.run(main())

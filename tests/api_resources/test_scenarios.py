@@ -383,6 +383,13 @@ class TestScenarios:
                         "username": "username",
                     },
                 },
+                "mounts": [
+                    {
+                        "object_id": "object_id",
+                        "object_path": "object_path",
+                        "type": "object_mount",
+                    }
+                ],
                 "purpose": "purpose",
                 "secrets": {"foo": "string"},
             },
@@ -781,6 +788,13 @@ class TestAsyncScenarios:
                         "username": "username",
                     },
                 },
+                "mounts": [
+                    {
+                        "object_id": "object_id",
+                        "object_path": "object_path",
+                        "type": "object_mount",
+                    }
+                ],
                 "purpose": "purpose",
                 "secrets": {"foo": "string"},
             },

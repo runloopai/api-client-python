@@ -14,8 +14,10 @@ from ._types import (
     LongRequestOptions,
     SDKDevboxListParams,
     SDKObjectListParams,
+    SDKScorerListParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
@@ -25,6 +27,7 @@ from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
 from .async_devbox import AsyncDevbox
+from .async_scorer import AsyncScorer
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
@@ -215,6 +218,23 @@ class AsyncBlueprintOps:
         ...     dockerfile="FROM ubuntu:22.04\\nRUN apt-get update",
         ... )
         >>> blueprints = await runloop.blueprint.list()
+    
+    To use a local directory as a build context, use an object.
+
+    Example:
+        >>> from datetime import timedelta
+        >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
+        >>> 
+        >>> runloop = AsyncRunloopSDK()
+        >>> obj = await runloop.object_storage.upload_from_dir(
+        ...     "./",
+        ...     ttl=timedelta(hours=1),    
+        ... )
+        >>> blueprint = await runloop.blueprint.create(
+        ...     name="my-blueprint",
+        ...     dockerfile="FROM ubuntu:22.04\\nCOPY . .\\n",
+        ...     build_context=BuildContext(type="object", object_id=obj.id),
+        ... )
     """
 
     def __init__(self, client: AsyncRunloop) -> None:
@@ -479,6 +499,54 @@ class AsyncStorageObjectOps:
         return obj
 
 
+class AsyncScorerOps:
+    """Create and manage custom scorers (async). Access via ``runloop.scorer``.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> scorer = await runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
+        >>> all_scorers = await runloop.scorer.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncScorerOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKScorerCreateParams]) -> AsyncScorer:
+        """Create a new scorer with the given type and bash script.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters
+        :return: The newly created scorer
+        :rtype: AsyncScorer
+        """
+        response = await self._client.scenarios.scorers.create(**params)
+        return AsyncScorer(self._client, response.id)
+
+    def from_id(self, scorer_id: str) -> AsyncScorer:
+        """Get an AsyncScorer instance for an existing scorer ID.
+
+        :param scorer_id: ID of the scorer
+        :type scorer_id: str
+        :return: AsyncScorer instance for the given ID
+        :rtype: AsyncScorer
+        """
+        return AsyncScorer(self._client, scorer_id)
+
+    async def list(self, **params: Unpack[SDKScorerListParams]) -> list[AsyncScorer]:
+        """List all scorers, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
+        :return: List of scorers
+        :rtype: list[AsyncScorer]
+        """
+        page = await self._client.scenarios.scorers.list(**params)
+        return [AsyncScorer(self._client, item.id) async for item in page]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -492,6 +560,8 @@ class AsyncRunloopSDK:
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
     :vartype blueprint: AsyncBlueprintOps
+    :ivar scorer: High-level async interface for scorer management
+    :vartype scorer: AsyncScorerOps
     :ivar snapshot: High-level async interface for snapshot management
     :vartype snapshot: AsyncSnapshotOps
     :ivar storage_object: High-level async interface for storage object management
@@ -500,7 +570,7 @@ class AsyncRunloopSDK:
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
         >>> devbox = await runloop.devbox.create(name="my-devbox")
-        >>> result = await devbox.cmd.exec(command="echo 'hello'")
+        >>> result = await devbox.cmd.exec("echo 'hello'")
         >>> print(await result.stdout())
         >>> await devbox.shutdown()
     """
@@ -508,6 +578,7 @@ class AsyncRunloopSDK:
     api: AsyncRunloop
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    scorer: AsyncScorerOps
     snapshot: AsyncSnapshotOps
     storage_object: AsyncStorageObjectOps
 
@@ -551,6 +622,7 @@ class AsyncRunloopSDK:
 
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
         self.storage_object = AsyncStorageObjectOps(self.api)
 

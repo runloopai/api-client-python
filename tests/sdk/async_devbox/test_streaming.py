@@ -16,8 +16,8 @@ import pytest
 from tests.sdk.conftest import TASK_COMPLETION_SHORT
 from runloop_api_client.sdk import AsyncDevbox
 from runloop_api_client._streaming import AsyncStream
+from runloop_api_client.types.devboxes import ExecutionUpdateChunk
 from runloop_api_client.sdk.async_execution import _AsyncStreamingGroup
-from runloop_api_client.types.devboxes.execution_update_chunk import ExecutionUpdateChunk
 
 
 class TestAsyncDevboxStreaming:

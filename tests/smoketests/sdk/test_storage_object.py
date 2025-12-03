@@ -365,7 +365,7 @@ class TestStorageObjectDevboxIntegration:
                 assert content == "Content to mount and access"
 
                 # Verify file exists via command
-                result = devbox.cmd.exec(command="test -f /home/user/mounted-file && echo 'exists'")
+                result = devbox.cmd.exec("test -f /home/user/mounted-file && echo 'exists'")
                 assert "exists" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()
@@ -496,7 +496,7 @@ class TestStorageObjectWorkflows:
                 assert content == "Initial content"
 
                 # Verify we can work with the file
-                result = devbox.cmd.exec(command="cat /home/user/workflow-data")
+                result = devbox.cmd.exec("cat /home/user/workflow-data")
                 assert "Initial content" in result.stdout(num_lines=1)
             finally:
                 devbox.shutdown()

@@ -1,10 +1,10 @@
 from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
-from runloop_api_client.types.devboxes import DiskSnapshotUpdateParams
-
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
+from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
+from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
@@ -15,12 +15,11 @@ from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.devbox_upload_file_params import DevboxUploadFileParams
 from ..types.devbox_create_tunnel_params import DevboxCreateTunnelParams
 from ..types.devbox_download_file_params import DevboxDownloadFileParams
-from ..types.devbox_execute_async_params import DevboxExecuteAsyncParams
+from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devbox_remove_tunnel_params import DevboxRemoveTunnelParams
 from ..types.devbox_snapshot_disk_params import DevboxSnapshotDiskParams
 from ..types.devbox_read_file_contents_params import DevboxReadFileContentsParams
 from ..types.devbox_write_file_contents_params import DevboxWriteFileContentsParams
-from ..types.devboxes.disk_snapshot_list_params import DiskSnapshotListParams
 
 LogCallback = Callable[[str], None]
 
@@ -72,11 +71,11 @@ class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestO
     pass
 
 
-class SDKDevboxExecuteParams(DevboxExecuteAsyncParams, ExecuteStreamingCallbacks, LongPollingRequestOptions):
+class SDKDevboxExecuteParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongPollingRequestOptions):
     pass
 
 
-class SDKDevboxExecuteAsyncParams(DevboxExecuteAsyncParams, ExecuteStreamingCallbacks, LongRequestOptions):
+class SDKDevboxExecuteAsyncParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongRequestOptions):
     pass
 
 
@@ -141,4 +140,20 @@ class SDKObjectCreateParams(ObjectCreateParams, LongRequestOptions):
 
 
 class SDKObjectDownloadParams(ObjectDownloadParams, BaseRequestOptions):
+    pass
+
+
+class SDKScorerCreateParams(ScorerCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKScorerListParams(ScorerListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScorerUpdateParams(ScorerUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKScorerValidateParams(ScorerValidateParams, LongRequestOptions):
     pass

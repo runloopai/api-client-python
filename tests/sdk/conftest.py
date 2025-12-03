@@ -20,6 +20,7 @@ TEST_IDS = {
     "snapshot": "snap_123",
     "blueprint": "bp_123",
     "object": "obj_123",
+    "scorer": "scorer_123",
 }
 
 # Test URL constants
@@ -84,6 +85,15 @@ class MockObjectView:
     id: str = "obj_123"
     upload_url: str = "https://upload.example.com/obj_123"
     name: str = "test-object"
+
+
+@dataclass
+class MockScorerView:
+    """Mock ScorerView for testing."""
+
+    id: str = "scorer_123"
+    bash_script: str = "echo 'score=1.0'"
+    type: str = "test_scorer"
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
@@ -168,6 +178,12 @@ def blueprint_view() -> MockBlueprintView:
 def object_view() -> MockObjectView:
     """Create a mock ObjectView."""
     return MockObjectView()
+
+
+@pytest.fixture
+def scorer_view() -> MockScorerView:
+    """Create a mock ScorerView."""
+    return MockScorerView()
 
 
 @pytest.fixture
