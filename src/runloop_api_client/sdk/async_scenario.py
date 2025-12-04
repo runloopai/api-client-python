@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional
 from typing_extensions import Unpack, override
 
 from ..types import ScenarioView
-from ._types import BaseRequestOptions, LongRequestOptions, SDKScenarioRunAsyncParams, SDKScenarioRunParams
+from ._types import BaseRequestOptions, SDKScenarioRunParams, SDKScenarioUpdateParams, SDKScenarioRunAsyncParams
 from .._client import AsyncRunloop
 from .async_scenario_run import AsyncScenarioRun
 
@@ -65,28 +64,19 @@ class AsyncScenario:
 
     async def update(
         self,
-        *,
-        name: Optional[str] = None,
-        metadata: Optional[Dict[str, str]] = None,
-        **options: Unpack[LongRequestOptions],
+        **params: Unpack[SDKScenarioUpdateParams],
     ) -> ScenarioView:
         """Update the scenario.
 
         Only provided fields will be updated.
 
-        :param name: New name for the scenario
-        :type name: Optional[str]
-        :param metadata: New metadata for the scenario
-        :type metadata: Optional[Dict[str, str]]
-        :param options: Optional long-running request configuration
+        :param params: See SDKScenarioUpdateParams for available parameters
         :return: Updated scenario info
         :rtype: ScenarioView
         """
         return await self._client.scenarios.update(
             self._id,
-            name=name,
-            metadata=metadata,
-            **options,
+            **params,
         )
 
     async def run_async(

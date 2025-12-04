@@ -14,6 +14,7 @@ from ..types.object_create_params import ObjectCreateParams
 from ..types.scenario_list_params import ScenarioListParams
 from ..types.blueprint_list_params import BlueprintListParams
 from ..types.object_download_params import ObjectDownloadParams
+from ..types.scenario_update_params import ScenarioUpdateParams
 from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.devbox_upload_file_params import DevboxUploadFileParams
 from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
@@ -172,6 +173,10 @@ class SDKAgentListParams(AgentListParams, BaseRequestOptions):
 
 
 class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScenarioUpdateParams(ScenarioUpdateParams, LongRequestOptions):
     pass
 
 
