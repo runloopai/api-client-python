@@ -6,7 +6,7 @@ from typing import Dict, Optional
 from typing_extensions import Unpack, override
 
 from ..types import ScenarioView
-from ._types import BaseRequestOptions, LongRequestOptions, SDKScenarioRunParams
+from ._types import BaseRequestOptions, LongRequestOptions, SDKScenarioRunAsyncParams, SDKScenarioRunParams
 from .._client import Runloop
 from .scenario_run import ScenarioRun
 
@@ -89,9 +89,9 @@ class Scenario:
             **options,
         )
 
-    def run(
+    def run_async(
         self,
-        **params: Unpack[SDKScenarioRunParams],
+        **params: Unpack[SDKScenarioRunAsyncParams],
     ) -> ScenarioRun:
         """Start a new scenario run.
 
@@ -109,7 +109,7 @@ class Scenario:
         )
         return ScenarioRun(self._client, run_view.id, run_view.devbox_id)
 
-    def run_and_await_env_ready(
+    def run(
         self,
         **params: Unpack[SDKScenarioRunParams],
     ) -> ScenarioRun:

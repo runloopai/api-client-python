@@ -175,5 +175,9 @@ class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
     pass
 
 
-class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongRequestOptions):
+class SDKScenarioRunAsyncParams(ScenarioStartRunBaseParams, LongRequestOptions):
+    pass
+
+
+class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongPollingRequestOptions):
     pass

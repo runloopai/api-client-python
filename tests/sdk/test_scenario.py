@@ -50,7 +50,7 @@ class TestScenario:
         mock_client.scenarios.start_run.return_value = scenario_run_view
 
         scenario = Scenario(mock_client, "scn_123")
-        run = scenario.run(run_name="test-run")
+        run = scenario.run_async(run_name="test-run")
 
         assert run.id == "run_123"
         assert run.devbox_id == "dev_123"
@@ -64,7 +64,7 @@ class TestScenario:
         mock_client.scenarios.start_run_and_await_env_ready.return_value = scenario_run_view
 
         scenario = Scenario(mock_client, "scn_123")
-        run = scenario.run_and_await_env_ready(run_name="test-run")
+        run = scenario.run(run_name="test-run")
 
         assert run.id == "run_123"
         assert run.devbox_id == "dev_123"

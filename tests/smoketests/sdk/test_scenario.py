@@ -85,7 +85,7 @@ class TestScenarioRun:
         scenario = scenarios[0]
 
         # Start a run
-        run = scenario.run(run_name="sdk-smoketest-run")
+        run = scenario.run_async(run_name="sdk-smoketest-run")
 
         try:
             assert run.id is not None
@@ -121,7 +121,7 @@ class TestScenarioRun:
         scenario = scenarios[0]
 
         # Start a run and wait for environment in one call
-        run = scenario.run_and_await_env_ready(run_name="sdk-smoketest-await")
+        run = scenario.run(run_name="sdk-smoketest-await")
 
         try:
             assert run.id is not None
