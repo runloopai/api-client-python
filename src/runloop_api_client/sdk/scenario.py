@@ -126,4 +126,3 @@ class Scenario:
             **params,
         )
         return ScenarioRun(self._client, run_view.id, run_view.devbox_id)
-

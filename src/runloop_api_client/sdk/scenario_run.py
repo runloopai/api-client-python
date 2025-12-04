@@ -220,4 +220,3 @@ class ScenarioRun:
         """
         info = self.get_info(**options)
         return info.scoring_contract_result
-

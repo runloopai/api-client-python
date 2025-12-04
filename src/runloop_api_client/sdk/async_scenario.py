@@ -126,4 +126,3 @@ class AsyncScenario:
             **params,
         )
         return AsyncScenarioRun(self._client, run_view.id, run_view.devbox_id)
-
