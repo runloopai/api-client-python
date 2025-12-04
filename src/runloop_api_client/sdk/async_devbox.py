@@ -54,7 +54,7 @@ class AsyncDevbox:
     management.
 
     Example:
-        >>> devbox = await sdk.devbox.create(name="my-devbox")
+        >>> devbox = await runloop.devbox.create(name="my-devbox")
         >>> async with devbox:
         ...     result = await devbox.cmd.exec("echo 'hello'")
         ...     print(await result.stdout())

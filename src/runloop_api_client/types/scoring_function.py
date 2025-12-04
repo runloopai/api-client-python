@@ -120,7 +120,7 @@ Scorer: TypeAlias = Annotated[
 
 class ScoringFunction(BaseModel):
     name: str
-    """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
+    """Name of scoring function. Names must only contain ``[a-zA-Z0-9_-]``."""
 
     scorer: Scorer
     """The scoring function to use for evaluating this scenario.

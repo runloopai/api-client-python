@@ -89,12 +89,48 @@ Most tests require you to [set up a mock server](https://github.com/stoplightio/
 
 ```sh
 # you will need npm installed
-$ npx prism mock path/to/your/openapi.yml
+npx prism mock path/to/your/openapi.yml
 ```
 
 ```sh
-$ ./scripts/test
+# run all tests
+./scripts/test
+
+# pass in pytest args, eg to show info on skipped tests:
+./scripts/test -rs
+
+# Run tests for only one python version
+UV_PYTHON=3.13 ./scripts/test
 ```
+
+### Running pytets
+
+Assuming you have a uv virtual env set up in .venv, the following are helpful for more granular test running:
+
+```sh
+# Run all tests pytests
+.venv/bin/pytest tests/
+
+# Run all SDK tests with verbose info
+.venv/bin/pytest tests/sdk/ -v
+
+# Run specific test class
+.venv/bin/pytest tests/sdk/test_clients.py::TestAgentClient -v
+
+# Run specific test method
+.venv/bin/pytest tests/sdk/test_clients.py::TestAgentClient::test_create_from_npm -v
+
+# Run agent smoketests (requires RUNLOOP_API_KEY)
+export RUNLOOP_API_KEY=your_key_here
+.venv/bin/pytest tests/smoketests/sdk/test_agent.py -v
+
+# Run tests matching a pattern
+.venv/bin/pytest tests/sdk/ -k "agent" -v
+
+# Run with coverage
+.venv/bin/pytest tests/sdk/ --cov=src/runloop_api_client/sdk --cov-report=html
+```
+
 
 ## Linting and formatting
 

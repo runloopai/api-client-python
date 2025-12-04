@@ -27,4 +27,4 @@ Asynchronous resource classes for working with devboxes, blueprints, snapshots, 
    snapshot
    storage_object
    scorer
-
+   agent
