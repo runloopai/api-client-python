@@ -541,7 +541,7 @@ class ScorerOps:
         page = self._client.scenarios.scorers.list(**params)
         return [Scorer(self._client, item.id) for item in page]
 
-    
+
 class AgentOps:
     """High-level manager for creating and managing agents.
 
@@ -551,15 +551,10 @@ class AgentOps:
     Example:
         >>> runloop = RunloopSDK()
         >>> # Create agent from NPM package
-        >>> agent = runloop.agent.create_from_npm(
-        ...     name="my-agent",
-        ...     package_name="@runloop/example-agent"
-        ... )
+        >>> agent = runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
         >>> # Create agent from Git repository
         >>> agent = runloop.agent.create_from_git(
-        ...     name="git-agent",
-        ...     repository="https://github.com/user/agent-repo",
-        ...     ref="main"
+        ...     name="git-agent", repository="https://github.com/user/agent-repo", ref="main"
         ... )
         >>> # List all agents
         >>> agents = runloop.agent.list(limit=10)
@@ -601,9 +596,7 @@ class AgentOps:
 
         Example:
             >>> agent = runloop.agent.create_from_npm(
-            ...     name="my-npm-agent",
-            ...     package_name="@runloop/example-agent",
-            ...     npm_version="^1.0.0"
+            ...     name="my-npm-agent", package_name="@runloop/example-agent", npm_version="^1.0.0"
             ... )
 
         :param package_name: NPM package name
@@ -620,7 +613,9 @@ class AgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
+            )
 
         npm_config: dict = {"package_name": package_name}
         if npm_version is not None:
@@ -648,9 +643,7 @@ class AgentOps:
 
         Example:
             >>> agent = runloop.agent.create_from_pip(
-            ...     name="my-pip-agent",
-            ...     package_name="runloop-example-agent",
-            ...     pip_version=">=1.0.0"
+            ...     name="my-pip-agent", package_name="runloop-example-agent", pip_version=">=1.0.0"
             ... )
 
         :param package_name: Pip package name
@@ -667,7 +660,9 @@ class AgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
+            )
 
         pip_config: dict = {"package_name": package_name}
         if pip_version is not None:
@@ -697,7 +692,7 @@ class AgentOps:
             ...     name="my-git-agent",
             ...     repository="https://github.com/user/agent-repo",
             ...     ref="main",
-            ...     agent_setup=["npm install", "npm run build"]
+            ...     agent_setup=["npm install", "npm run build"],
             ... )
 
         :param repository: Git repository URL
@@ -712,7 +707,9 @@ class AgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
+            )
 
         git_config: dict = {"repository": repository}
         if ref is not None:
@@ -739,9 +736,7 @@ class AgentOps:
             >>> obj = runloop.storage_object.upload_from_dir("./my-agent")
             >>> # Then create agent from the object
             >>> agent = runloop.agent.create_from_object(
-            ...     name="my-object-agent",
-            ...     object_id=obj.id,
-            ...     agent_setup=["chmod +x setup.sh", "./setup.sh"]
+            ...     name="my-object-agent", object_id=obj.id, agent_setup=["chmod +x setup.sh", "./setup.sh"]
             ... )
 
         :param object_id: Storage object ID
@@ -754,7 +749,9 @@ class AgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
+            )
 
         object_config: dict = {"object_id": object_id}
         if agent_setup is not None:

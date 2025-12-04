@@ -19,10 +19,7 @@ class AsyncAgent:
     including retrieving agent information.
 
     Example:
-        >>> agent = await runloop.agent.create_from_npm(
-        ...     name="my-agent",
-        ...     package_name="@runloop/example-agent"
-        ... )
+        >>> agent = await runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
         >>> info = await agent.get_info()
         >>> print(info.name)
     """

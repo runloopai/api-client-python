@@ -730,7 +730,7 @@ class TestAsyncScorerOps:
         assert scorers[1].id == "scorer_002"
         mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
-        
+
 class TestAsyncAgentClient:
     """Tests for AsyncAgentClient class."""
 

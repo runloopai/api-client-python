@@ -545,7 +545,8 @@ class AsyncScorerOps:
         """
         page = await self._client.scenarios.scorers.list(**params)
         return [AsyncScorer(self._client, item.id) async for item in page]
-        
+
+
 class AsyncAgentOps:
     """High-level async manager for creating and managing agents.
 
@@ -555,15 +556,10 @@ class AsyncAgentOps:
     Example:
         >>> runloop = AsyncRunloopSDK()
         >>> # Create agent from NPM package
-        >>> agent = await runloop.agent.create_from_npm(
-        ...     name="my-agent",
-        ...     package_name="@runloop/example-agent"
-        ... )
+        >>> agent = await runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
         >>> # Create agent from Git repository
         >>> agent = await runloop.agent.create_from_git(
-        ...     name="git-agent",
-        ...     repository="https://github.com/user/agent-repo",
-        ...     ref="main"
+        ...     name="git-agent", repository="https://github.com/user/agent-repo", ref="main"
         ... )
         >>> # List all agents
         >>> agents = await runloop.agent.list(limit=10)
@@ -617,7 +613,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
+            )
 
         npm_config: dict = {"package_name": package_name}
         if npm_version is not None:
@@ -657,7 +655,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
+            )
 
         pip_config: dict = {"package_name": package_name}
         if pip_version is not None:
@@ -694,7 +694,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
+            )
 
         git_config: dict = {"repository": repository}
         if ref is not None:
@@ -726,7 +728,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
+            )
 
         object_config: dict = {"object_id": object_id}
         if agent_setup is not None:

@@ -19,10 +19,7 @@ class Agent:
     including retrieving agent information.
 
     Example:
-        >>> agent = runloop.agent.create_from_npm(
-        ...     name="my-agent",
-        ...     package_name="@runloop/example-agent"
-        ... )
+        >>> agent = runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
         >>> info = agent.get_info()
         >>> print(info.name)
     """
