@@ -16,6 +16,7 @@ from ..types.blueprint_list_params import BlueprintListParams
 from ..types.object_download_params import ObjectDownloadParams
 from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.devbox_upload_file_params import DevboxUploadFileParams
+from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
 from ..types.devbox_create_tunnel_params import DevboxCreateTunnelParams
 from ..types.devbox_download_file_params import DevboxDownloadFileParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
@@ -174,17 +175,5 @@ class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
     pass
 
 
-class SDKScenarioRunParams(TypedDict, total=False):
-    """Parameters for starting a scenario run (excludes scenario_id which is set automatically)."""
-
-    benchmark_run_id: Optional[str]
-    """Benchmark to associate the run."""
-
-    metadata: Optional[dict[str, str]]
-    """User defined metadata to attach to the run for organization."""
-
-    run_name: Optional[str]
-    """Display name of the run."""
-
-    polling_config: Optional[PollingConfig]
-    """Configuration for polling behavior (used by run_and_await_env_ready)."""
+class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongRequestOptions):
+    pass
