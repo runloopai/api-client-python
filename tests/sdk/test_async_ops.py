@@ -11,23 +11,30 @@ from unittest.mock import AsyncMock
 import pytest
 
 from tests.sdk.conftest import (
+    MockAgentView,
     MockDevboxView,
     MockObjectView,
     MockScorerView,
     MockSnapshotView,
     MockBlueprintView,
-    MockAgentView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import AsyncAgent, AsyncDevbox, AsyncScorer, AsyncSnapshot, AsyncBlueprint, AsyncStorageObject
+from runloop_api_client.sdk import (
+    AsyncAgent,
+    AsyncDevbox,
+    AsyncScorer,
+    AsyncSnapshot,
+    AsyncBlueprint,
+    AsyncStorageObject,
+)
 from runloop_api_client.sdk.async_ import (
+    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
-    AsyncAgentOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -780,7 +787,7 @@ class TestAsyncAgentClient:
         mock_async_client.agents.list = AsyncMock(return_value=page)
 
         # Mock retrieve to return the corresponding agent_view when called
-        async def mock_retrieve(agent_id, **kwargs):
+        async def mock_retrieve(agent_id, **_unused_kwargs):
             if agent_id == "agent_001":
                 return agent_view_1
             elif agent_id == "agent_002":

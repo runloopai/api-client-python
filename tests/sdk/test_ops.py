@@ -9,23 +9,23 @@ from unittest.mock import Mock
 import pytest
 
 from tests.sdk.conftest import (
+    MockAgentView,
     MockDevboxView,
     MockObjectView,
     MockScorerView,
     MockSnapshotView,
     MockBlueprintView,
-    MockAgentView,
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import Agent, Devbox, Scorer, Snapshot, Blueprint, StorageObject
 from runloop_api_client.sdk.sync import (
+    AgentOps,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
     SnapshotOps,
     BlueprintOps,
     StorageObjectOps,
-    AgentOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 

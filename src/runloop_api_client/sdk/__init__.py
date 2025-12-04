@@ -16,7 +16,6 @@ from .async_ import (
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
 )
-from .agent import Agent
 from .devbox import Devbox, NamedShell
 from .scorer import Scorer
 from .snapshot import Snapshot
