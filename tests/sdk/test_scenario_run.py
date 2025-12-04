@@ -3,56 +3,10 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from dataclasses import dataclass
 from unittest.mock import Mock
 
-import pytest
-
+from tests.sdk.conftest import MockDevboxView, MockScenarioRunView
 from runloop_api_client.sdk import ScenarioRun
-
-
-@dataclass
-class MockScenarioRunView:
-    """Mock ScenarioRunView for testing."""
-
-    id: str = "run_123"
-    devbox_id: str = "dev_123"
-    scenario_id: str = "scn_123"
-    state: str = "running"
-    metadata: dict = None
-    scoring_contract_result: object = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
-
-
-@dataclass
-class MockDevboxView:
-    """Mock DevboxView for testing."""
-
-    id: str = "dev_123"
-    status: str = "running"
-
-
-@pytest.fixture
-def mock_client() -> Mock:
-    """Create a mock Runloop client."""
-    from runloop_api_client import Runloop
-
-    return Mock(spec=Runloop)
-
-
-@pytest.fixture
-def scenario_run_view() -> MockScenarioRunView:
-    """Create a mock ScenarioRunView."""
-    return MockScenarioRunView()
-
-
-@pytest.fixture
-def devbox_view() -> MockDevboxView:
-    """Create a mock DevboxView."""
-    return MockDevboxView()
 
 
 class TestScenarioRun:
@@ -164,7 +118,6 @@ class TestScenarioRun:
         result = run.get_score()
 
         assert result == scoring_result
-        assert result.score == 0.95
 
     def test_get_score_when_not_scored(self, mock_client: Mock) -> None:
         """Test get_score returns None when not scored."""
@@ -175,4 +128,3 @@ class TestScenarioRun:
         result = run.get_score()
 
         assert result is None
-

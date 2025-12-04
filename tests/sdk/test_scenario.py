@@ -2,60 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from unittest.mock import Mock
 
-import pytest
-
+from tests.sdk.conftest import MockScenarioView, MockScenarioRunView
 from runloop_api_client.sdk import Scenario
-
-
-@dataclass
-class MockScenarioView:
-    """Mock ScenarioView for testing."""
-
-    id: str = "scn_123"
-    name: str = "test-scenario"
-    metadata: dict = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
-
-
-@dataclass
-class MockScenarioRunView:
-    """Mock ScenarioRunView for testing."""
-
-    id: str = "run_123"
-    devbox_id: str = "dev_123"
-    scenario_id: str = "scn_123"
-    state: str = "running"
-    metadata: dict = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
-
-
-@pytest.fixture
-def mock_client() -> Mock:
-    """Create a mock Runloop client."""
-    from runloop_api_client import Runloop
-
-    return Mock(spec=Runloop)
-
-
-@pytest.fixture
-def scenario_view() -> MockScenarioView:
-    """Create a mock ScenarioView."""
-    return MockScenarioView()
-
-
-@pytest.fixture
-def scenario_run_view() -> MockScenarioRunView:
-    """Create a mock ScenarioRunView."""
-    return MockScenarioRunView()
 
 
 class TestScenario:
@@ -122,4 +72,3 @@ class TestScenario:
             scenario_id="scn_123",
             run_name="test-run",
         )
-

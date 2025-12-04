@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import threading
-from typing import Any
-from dataclasses import dataclass
+from typing import Any, Dict
+from dataclasses import field, dataclass
 from unittest.mock import Mock, AsyncMock
 
 import httpx
@@ -114,11 +114,7 @@ class MockScenarioView:
 
     id: str = "scn_123"
     name: str = "test-scenario"
-    metadata: dict = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
+    metadata: Dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -129,12 +125,8 @@ class MockScenarioRunView:
     devbox_id: str = "dev_123"
     scenario_id: str = "scn_123"
     state: str = "running"
-    metadata: dict = None
+    metadata: Dict[str, str] = field(default_factory=dict)
     scoring_contract_result: object = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
