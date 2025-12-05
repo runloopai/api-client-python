@@ -36,17 +36,64 @@ class TestScenario:
         mock_client.scenarios.update.return_value = scenario_view
 
         scenario = Scenario(mock_client, "scn_123")
-        result = scenario.update(name="new-name", metadata={"key": "value"})
+        result = scenario.update(
+            name="updated-scenario",
+            metadata={"env": "test"},
+            environment_parameters={
+                "blueprint_id": "bp_456",
+            },
+            input_context={
+                "problem_statement": "Updated problem statement",
+            },
+            reference_output="--- a/main.py\n+++ b/main.py\n@@ -1 +1 @@\n-old\n+new",
+            required_environment_variables=["API_KEY", "DEBUG"],
+            required_secret_names=["DB_PASSWORD", "JWT_SECRET"],
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "test-scorer",
+                        "scorer": {
+                            "type": "command_scorer",
+                            "command": "echo 'score=1.0'",
+                        },
+                        "weight": 1.0,
+                    }
+                ],
+            },
+            validation_type="FORWARD",
+        )
 
         assert result == scenario_view
         mock_client.scenarios.update.assert_called_once_with(
             "scn_123",
-            name="new-name",
-            metadata={"key": "value"},
+            name="updated-scenario",
+            metadata={"env": "test"},
+            environment_parameters={
+                "blueprint_id": "bp_456",
+            },
+            input_context={
+                "problem_statement": "Updated problem statement",
+            },
+            reference_output="--- a/main.py\n+++ b/main.py\n@@ -1 +1 @@\n-old\n+new",
+            required_environment_variables=["API_KEY", "DEBUG"],
+            required_secret_names=["DB_PASSWORD", "JWT_SECRET"],
+            scoring_contract={
+                "scoring_function_parameters": [
+                    {
+                        "name": "test-scorer",
+                        "scorer": {
+                            "type": "command_scorer",
+                            "command": "echo 'score=1.0'",
+                        },
+                        "weight": 1.0,
+                    }
+                ],
+            },
+            validation_type="FORWARD",
         )
 
-    def test_run(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
-        """Test run method returns ScenarioRun wrapper."""
+    def test_run_async(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
+        """Test run_async method returns ScenarioRun wrapper."""
         mock_client.scenarios.start_run.return_value = scenario_run_view
 
         scenario = Scenario(mock_client, "scn_123")
@@ -59,8 +106,8 @@ class TestScenario:
             run_name="test-run",
         )
 
-    def test_run_and_await_env_ready(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
-        """Test run_and_await_env_ready method."""
+    def test_run(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
+        """Test run method."""
         mock_client.scenarios.start_run_and_await_env_ready.return_value = scenario_run_view
 
         scenario = Scenario(mock_client, "scn_123")
