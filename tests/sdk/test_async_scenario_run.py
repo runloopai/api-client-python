@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
+from pathlib import Path
 from unittest.mock import AsyncMock
 
 from tests.sdk.conftest import MockDevboxView, MockScenarioRunView
@@ -76,7 +77,7 @@ class TestAsyncScenarioRun:
         result = await run.await_scored()
 
         assert result == scenario_run_view
-        mock_async_client.scenarios.runs.await_scored.assert_awaited_once_with("run_123", polling_config=None)
+        mock_async_client.scenarios.runs.await_scored.assert_awaited_once_with("run_123")
 
     async def test_score_and_await(self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView) -> None:
         """Test score_and_await method."""
@@ -87,7 +88,20 @@ class TestAsyncScenarioRun:
         result = await run.score_and_await()
 
         assert result == scenario_run_view
-        mock_async_client.scenarios.runs.score_and_await.assert_awaited_once_with("run_123", polling_config=None)
+        mock_async_client.scenarios.runs.score_and_await.assert_awaited_once_with("run_123")
+
+    async def test_score_and_complete(
+        self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView
+    ) -> None:
+        """Test score_and_complete method."""
+        scenario_run_view.state = "completed"
+        mock_async_client.scenarios.runs.score_and_complete = AsyncMock(return_value=scenario_run_view)
+
+        run = AsyncScenarioRun(mock_async_client, "run_123", "dev_123")
+        result = await run.score_and_complete()
+
+        assert result == scenario_run_view
+        mock_async_client.scenarios.runs.score_and_complete.assert_awaited_once_with("run_123")
 
     async def test_complete(self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView) -> None:
         """Test complete method."""
@@ -111,6 +125,19 @@ class TestAsyncScenarioRun:
         assert result == scenario_run_view
         mock_async_client.scenarios.runs.cancel.assert_awaited_once_with("run_123")
 
+    async def test_download_logs(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
+        """Test download_logs method writes to file."""
+        mock_response = AsyncMock()
+        mock_response.write_to_file = AsyncMock()
+        mock_async_client.scenarios.runs.download_logs = AsyncMock(return_value=mock_response)
+
+        run = AsyncScenarioRun(mock_async_client, "run_123", "dev_123")
+        output_path = tmp_path / "logs.zip"
+        await run.download_logs(output_path)
+
+        mock_async_client.scenarios.runs.download_logs.assert_awaited_once_with("run_123")
+        mock_response.write_to_file.assert_awaited_once_with(output_path)
+
     async def test_get_score_when_scored(self, mock_async_client: AsyncMock) -> None:
         """Test get_score returns scoring result when scored."""
         scoring_result = SimpleNamespace(score=0.95, scoring_function_results=[])
@@ -121,6 +148,7 @@ class TestAsyncScenarioRun:
         result = await run.get_score()
 
         assert result == scoring_result
+        mock_async_client.scenarios.runs.retrieve.assert_awaited_once_with("run_123")
 
     async def test_get_score_when_not_scored(self, mock_async_client: AsyncMock) -> None:
         """Test get_score returns None when not scored."""
@@ -131,3 +159,4 @@ class TestAsyncScenarioRun:
         result = await run.get_score()
 
         assert result is None
+        mock_async_client.scenarios.runs.retrieve.assert_awaited_once_with("run_123")

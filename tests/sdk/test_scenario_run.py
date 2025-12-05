@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
+from pathlib import Path
 from unittest.mock import Mock
 
 from tests.sdk.conftest import MockDevboxView, MockScenarioRunView
@@ -73,7 +74,7 @@ class TestScenarioRun:
         result = run.await_scored()
 
         assert result == scenario_run_view
-        mock_client.scenarios.runs.await_scored.assert_called_once_with("run_123", polling_config=None)
+        mock_client.scenarios.runs.await_scored.assert_called_once_with("run_123")
 
     def test_score_and_await(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
         """Test score_and_await method."""
@@ -84,7 +85,18 @@ class TestScenarioRun:
         result = run.score_and_await()
 
         assert result == scenario_run_view
-        mock_client.scenarios.runs.score_and_await.assert_called_once_with("run_123", polling_config=None)
+        mock_client.scenarios.runs.score_and_await.assert_called_once_with("run_123")
+
+    def test_score_and_complete(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
+        """Test score_and_complete method."""
+        scenario_run_view.state = "completed"
+        mock_client.scenarios.runs.score_and_complete.return_value = scenario_run_view
+
+        run = ScenarioRun(mock_client, "run_123", "dev_123")
+        result = run.score_and_complete()
+
+        assert result == scenario_run_view
+        mock_client.scenarios.runs.score_and_complete.assert_called_once_with("run_123")
 
     def test_complete(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
         """Test complete method."""
@@ -108,6 +120,19 @@ class TestScenarioRun:
         assert result == scenario_run_view
         mock_client.scenarios.runs.cancel.assert_called_once_with("run_123")
 
+    def test_download_logs(self, mock_client: Mock, tmp_path: Path) -> None:
+        """Test download_logs method writes to file."""
+        mock_response = Mock()
+        mock_response.write_to_file = Mock()
+        mock_client.scenarios.runs.download_logs.return_value = mock_response
+
+        run = ScenarioRun(mock_client, "run_123", "dev_123")
+        output_path = tmp_path / "logs.zip"
+        run.download_logs(output_path)
+
+        mock_client.scenarios.runs.download_logs.assert_called_once_with("run_123")
+        mock_response.write_to_file.assert_called_once_with(output_path)
+
     def test_get_score_when_scored(self, mock_client: Mock) -> None:
         """Test get_score returns scoring result when scored."""
         scoring_result = SimpleNamespace(score=0.95, scoring_function_results=[])
@@ -118,6 +143,7 @@ class TestScenarioRun:
         result = run.get_score()
 
         assert result == scoring_result
+        mock_client.scenarios.runs.retrieve.assert_called_once_with("run_123")
 
     def test_get_score_when_not_scored(self, mock_client: Mock) -> None:
         """Test get_score returns None when not scored."""
@@ -128,3 +154,4 @@ class TestScenarioRun:
         result = run.get_score()
 
         assert result is None
+        mock_client.scenarios.runs.retrieve.assert_called_once_with("run_123")
