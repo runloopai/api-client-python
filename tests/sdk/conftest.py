@@ -273,9 +273,8 @@ def mock_async_stream() -> AsyncMock:
     """
 
     async def async_iter():
-        # Empty async iterator
-        if False:
-            yield
+        return
+        yield  # Make this a generator
 
     stream = AsyncMock()
     stream.__aiter__ = Mock(return_value=async_iter())
