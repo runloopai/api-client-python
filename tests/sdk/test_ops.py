@@ -9,6 +9,7 @@ from unittest.mock import Mock
 import pytest
 
 from tests.sdk.conftest import (
+    MockAgentView,
     MockDevboxView,
     MockObjectView,
     MockScorerView,
@@ -16,8 +17,9 @@ from tests.sdk.conftest import (
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Devbox, Scorer, Snapshot, Blueprint, StorageObject
+from runloop_api_client.sdk import Agent, Devbox, Scorer, Snapshot, Blueprint, StorageObject
 from runloop_api_client.sdk.sync import (
+    AgentOps,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
@@ -653,6 +655,311 @@ class TestScorerOps:
         mock_client.scenarios.scorers.list.assert_called_once()
 
 
+class TestAgentClient:
+    """Tests for AgentClient class."""
+
+    def test_create(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create(
+            name="test-agent",
+            metadata={"key": "value"},
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once()
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        client = AgentOps(mock_client)
+        agent = client.from_id("agent_123")
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+
+    def test_list(self, mock_client: Mock) -> None:
+        """Test list method."""
+        # Create three agent views with different data
+        agent_view_1 = MockAgentView(
+            id="agent_001",
+            name="first-agent",
+            create_time_ms=1234567890000,
+            is_public=False,
+            source=None,
+        )
+        agent_view_2 = MockAgentView(
+            id="agent_002",
+            name="second-agent",
+            create_time_ms=1234567891000,
+            is_public=True,
+            source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
+        )
+        agent_view_3 = MockAgentView(
+            id="agent_003",
+            name="third-agent",
+            create_time_ms=1234567892000,
+            is_public=False,
+            source={"type": "npm", "npm": {"package_name": "example-package"}},
+        )
+
+        page = SimpleNamespace(agents=[agent_view_1, agent_view_2, agent_view_3])
+        mock_client.agents.list.return_value = page
+
+        client = AgentOps(mock_client)
+        agents = client.list(
+            limit=10,
+            starting_after="agent_000",
+        )
+
+        # Verify we got three agents
+        assert len(agents) == 3
+        assert all(isinstance(agent, Agent) for agent in agents)
+
+        # Verify the agent IDs
+        assert agents[0].id == "agent_001"
+        assert agents[1].id == "agent_002"
+        assert agents[2].id == "agent_003"
+
+        # Test that get_info() retrieves the cached AgentView for the first agent
+        info = agents[0].get_info()
+        assert info.id == "agent_001"
+        assert info.name == "first-agent"
+        assert info.create_time_ms == 1234567890000
+        assert info.is_public is False
+        assert info.source is None
+
+        # Test that get_info() retrieves the cached AgentView for the second agent
+        info = agents[1].get_info()
+        assert info.id == "agent_002"
+        assert info.name == "second-agent"
+        assert info.create_time_ms == 1234567891000
+        assert info.is_public is True
+        assert info.source == {"type": "git", "git": {"repository": "https://github.com/example/repo"}}
+
+        # Test that get_info() retrieves the cached AgentView for the third agent
+        info = agents[2].get_info()
+        assert info.id == "agent_003"
+        assert info.name == "third-agent"
+        assert info.create_time_ms == 1234567892000
+        assert info.is_public is False
+        assert info.source == {"type": "npm", "npm": {"package_name": "example-package"}}
+
+        # Verify that agents.retrieve was NOT called (because we're using cached data)
+        mock_client.agents.retrieve.assert_not_called()
+
+        mock_client.agents.list.assert_called_once()
+
+    def test_create_from_npm(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_npm factory method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_npm(
+            name="test-agent",
+            package_name="@runloop/example-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/example-agent",
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_npm_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_npm factory method with all optional parameters."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_npm(
+            package_name="@runloop/example-agent",
+            npm_version="1.2.3",
+            registry_url="https://registry.example.com",
+            agent_setup=["npm install", "npm run setup"],
+            name="test-agent",
+            extra_headers={"X-Custom": "header"},
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "npm",
+                "npm": {
+                    "package_name": "@runloop/example-agent",
+                    "npm_version": "1.2.3",
+                    "registry_url": "https://registry.example.com",
+                    "agent_setup": ["npm install", "npm run setup"],
+                },
+            },
+            name="test-agent",
+            extra_headers={"X-Custom": "header"},
+        )
+
+    def test_create_from_npm_raises_when_source_provided(self, mock_client: Mock) -> None:
+        """Test create_from_npm raises ValueError when source is provided in params."""
+        client = AgentOps(mock_client)
+
+        with pytest.raises(ValueError, match="Cannot specify 'source' when using create_from_npm"):
+            client.create_from_npm(
+                package_name="@runloop/example-agent",
+                name="test-agent",
+                source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
+            )
+
+    def test_create_from_pip(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_pip factory method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_pip(
+            package_name="runloop-example-agent",
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "pip",
+                "pip": {
+                    "package_name": "runloop-example-agent",
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_pip_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_pip factory method with all optional parameters."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_pip(
+            package_name="runloop-example-agent",
+            pip_version="1.2.3",
+            registry_url="https://pypi.example.com",
+            agent_setup=["pip install extra-deps"],
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "pip",
+                "pip": {
+                    "package_name": "runloop-example-agent",
+                    "pip_version": "1.2.3",
+                    "registry_url": "https://pypi.example.com",
+                    "agent_setup": ["pip install extra-deps"],
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_git(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_git factory method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_git(
+            repository="https://github.com/example/agent-repo",
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "git",
+                "git": {
+                    "repository": "https://github.com/example/agent-repo",
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_git_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_git factory method with all optional parameters."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_git(
+            repository="https://github.com/example/agent-repo",
+            ref="develop",
+            agent_setup=["npm install", "npm run build"],
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "git",
+                "git": {
+                    "repository": "https://github.com/example/agent-repo",
+                    "ref": "develop",
+                    "agent_setup": ["npm install", "npm run build"],
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_object(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_object factory method."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_object(
+            object_id="obj_123",
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "object",
+                "object": {
+                    "object_id": "obj_123",
+                },
+            },
+            name="test-agent",
+        )
+
+    def test_create_from_object_with_agent_setup(self, mock_client: Mock, agent_view: MockAgentView) -> None:
+        """Test create_from_object factory method with agent_setup."""
+        mock_client.agents.create.return_value = agent_view
+
+        client = AgentOps(mock_client)
+        agent = client.create_from_object(
+            object_id="obj_123",
+            agent_setup=["chmod +x setup.sh", "./setup.sh"],
+            name="test-agent",
+        )
+
+        assert isinstance(agent, Agent)
+        assert agent.id == "agent_123"
+        mock_client.agents.create.assert_called_once_with(
+            source={
+                "type": "object",
+                "object": {
+                    "object_id": "obj_123",
+                    "agent_setup": ["chmod +x setup.sh", "./setup.sh"],
+                },
+            },
+            name="test-agent",
+        )
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -660,6 +967,7 @@ class TestRunloopSDK:
         """Test RunloopSDK initialization."""
         sdk = RunloopSDK(bearer_token="test-token")
         assert sdk.api is not None
+        assert isinstance(sdk.agent, AgentOps)
         assert isinstance(sdk.devbox, DevboxOps)
         assert isinstance(sdk.scorer, ScorerOps)
         assert isinstance(sdk.snapshot, SnapshotOps)
