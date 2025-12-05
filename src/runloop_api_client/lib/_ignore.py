@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Iterable, Optional, Sequence
 from pathlib import Path, PurePosixPath
 from dataclasses import dataclass
+from typing_extensions import override
 
 __all__ = [
     "IgnorePattern",
@@ -320,6 +321,7 @@ class DockerIgnoreMatcher(IgnoreMatcher):
     extra_ignorefile: str | Path | None = None
     patterns: Sequence[str] | None = None
 
+    @override
     def iter_paths(self, root: Path) -> Iterable[Path]:
         """Yield non-ignored files under ``root`` honoring Docker-style patterns."""
         root = root.resolve()
@@ -380,6 +382,7 @@ class FilePatternMatcher(IgnoreMatcher):
         if isinstance(self.patterns, str):
             object.__setattr__(self, "patterns", [self.patterns])
 
+    @override
     def iter_paths(self, root: Path) -> Iterable[Path]:
         """Yield non-ignored files under ``root`` based only on ``patterns``."""
 

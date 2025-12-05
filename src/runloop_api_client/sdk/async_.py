@@ -421,7 +421,8 @@ class AsyncStorageObjectOps:
             for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
-        :raises OSError: If the local file cannot be read
+        :raises OSError: If the local directory cannot be read
+        :raises ValueError: If ``dir_path`` does not point to a directory
         """
         path = Path(dir_path)
         if not path.is_dir():

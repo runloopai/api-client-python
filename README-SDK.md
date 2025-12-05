@@ -4,36 +4,34 @@ The `RunloopSDK` builds on top of the underlying REST client and provides a Pyth
 
 ## Table of Contents
 
-- [Runloop SDK – Python Object-Oriented Client](#runloop-sdk--python-object-oriented-client)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Quickstart (synchronous)](#quickstart-synchronous)
-  - [Quickstart (asynchronous)](#quickstart-asynchronous)
-  - [Core Concepts](#core-concepts)
-    - [RunloopSDK](#runloopsdk)
-    - [Available Resources](#available-resources)
-    - [Devbox](#devbox)
-      - [Command Execution](#command-execution)
-      - [Execution Management](#execution-management)
-      - [Execution Results](#execution-results)
-      - [Streaming Command Output](#streaming-command-output)
-      - [File Operations](#file-operations)
-      - [Network Operations](#network-operations)
-      - [Snapshot Operations](#snapshot-operations)
-      - [Devbox Lifecycle Management](#devbox-lifecycle-management)
-      - [Context Manager Support](#context-manager-support)
-    - [Blueprint](#blueprint)
-    - [Snapshot](#snapshot)
-    - [StorageObject](#storageobject)
-      - [Storage Object Upload Helpers](#storage-object-upload-helpers)
-    - [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
-  - [Accessing the Underlying REST Client](#accessing-the-underlying-rest-client)
-  - [Error Handling](#error-handling)
-  - [Advanced Configuration](#advanced-configuration)
-  - [Async Usage](#async-usage)
-  - [Polling Configuration](#polling-configuration)
-  - [Complete API Reference](#complete-api-reference)
-  - [Feedback](#feedback)
+- [Installation](#installation)
+- [Quickstart (synchronous)](#quickstart-synchronous)
+- [Quickstart (asynchronous)](#quickstart-asynchronous)
+- [Core Concepts](#core-concepts)
+  - [RunloopSDK](#runloopsdk)
+  - [Available Resources](#available-resources)
+  - [Devbox](#devbox)
+    - [Command Execution](#command-execution)
+    - [Execution Management](#execution-management)
+    - [Execution Results](#execution-results)
+    - [Streaming Command Output](#streaming-command-output)
+    - [File Operations](#file-operations)
+    - [Network Operations](#network-operations)
+    - [Snapshot Operations](#snapshot-operations)
+    - [Devbox Lifecycle Management](#devbox-lifecycle-management)
+    - [Context Manager Support](#context-manager-support)
+  - [Blueprint](#blueprint)
+  - [Snapshot](#snapshot)
+  - [StorageObject](#storageobject)
+    - [Storage Object Upload Helpers](#storage-object-upload-helpers)
+  - [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
+- [Accessing the Underlying REST Client](#accessing-the-underlying-rest-client)
+- [Error Handling](#error-handling)
+- [Advanced Configuration](#advanced-configuration)
+- [Async Usage](#async-usage)
+- [Polling Configuration](#polling-configuration)
+- [Complete API Reference](#complete-api-reference)
+- [Feedback](#feedback)
 
 ## Installation
 
@@ -447,7 +445,7 @@ shared_ctx_obj = runloop.storage_object.upload_from_bytes(
 
 blueprint_with_context = runloop.blueprint.create(
     name="my-blueprint-with-context",
-    dockerfile=\"\"\"\
+    dockerfile="""\
 FROM node:22
 WORKDIR /usr/src/app
 
@@ -460,7 +458,7 @@ COPY --from=shared / ./libs
 
 RUN npm install --only=production
 CMD ["node", "src/app.js"]
-\"\"\",
+""",
     # Primary build context
     build_context=build_ctx_obj.as_build_context(),
     # Additional named build contexts (for Docker buildx-style usage)

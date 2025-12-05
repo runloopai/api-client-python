@@ -151,8 +151,10 @@ class StorageObject:
     def upload_content(self, content: str | bytes | Iterable[bytes]) -> None:
         """Upload content to the object's pre-signed URL.
 
-        :param content: Bytes or text payload to upload
-        :type content: str | bytes
+        :param content: Bytes payload, text payload, or an iterable streaming bytes
+        :type content: str | bytes | Iterable[bytes]
+        :return: None
+        :rtype: None
         :raises RuntimeError: If no upload URL is available
         :raises httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails
         """
@@ -165,6 +167,9 @@ class StorageObject:
 
         The returned mapping can be passed directly to ``build_context`` or
         ``named_build_contexts`` when creating a blueprint.
+
+        :return: Mapping suitable for use as a blueprint build context
+        :rtype: BuildContext
         """
         return {
             "object_id": self._id,
