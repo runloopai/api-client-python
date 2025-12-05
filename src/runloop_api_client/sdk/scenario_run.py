@@ -2,42 +2,42 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
+import os
+from typing import Union, Optional
+from functools import cached_property
 from typing_extensions import Unpack, override
 
 from ..types import ScenarioRunView
-from ._types import BaseRequestOptions, LongRequestOptions
+from ._types import BaseRequestOptions, LongRequestOptions, PollingRequestOptions
+from .devbox import Devbox
 from .._client import Runloop
-from ..lib.polling import PollingConfig
+from ._helpers import filter_params
 from ..types.scoring_contract_result_view import ScoringContractResultView
-
-if TYPE_CHECKING:
-    from .devbox import Devbox
 
 
 class ScenarioRun:
-    """Wrapper around a running scenario with devbox access.
+    """A running scenario with devbox access.
 
     Provides methods for managing the scenario run lifecycle, accessing
-    the underlying devbox, and retrieving scoring results.
+    the devbox, and retrieving scoring results. Obtain instances via
+    ``scenario.run()`` or ``scenario.run_async()``.
 
     Example:
-        >>> scenario = sdk.scenario.from_id("scn-xxx")
-        >>> run = scenario.run()
+        >>> scenario = runloop.scenario.from_id("scn-xxx")
+        >>> run = scenario.run_async()
         >>> run.await_env_ready()
         >>> devbox = run.devbox
         >>> # ... agent does work on the devbox ...
-        >>> run.score()
-        >>> run.await_scored()
-        >>> result = run.get_score()
+        >>> run.score_and_await()
+        >>> score = run.get_score()
     """
 
     def __init__(self, client: Runloop, run_id: str, devbox_id: str) -> None:
-        """Initialize the wrapper.
+        """Create a ScenarioRun instance.
 
-        :param client: Generated Runloop client
+        :param client: Runloop client instance
         :type client: Runloop
-        :param run_id: ScenarioRun ID returned by the API
+        :param run_id: Scenario run ID
         :type run_id: str
         :param devbox_id: Devbox ID associated with this run
         :type devbox_id: str
@@ -68,17 +68,15 @@ class ScenarioRun:
         """
         return self._devbox_id
 
-    @property
-    def devbox(self) -> "Devbox":
-        """Return a Devbox wrapper for the underlying devbox.
+    @cached_property
+    def devbox(self) -> Devbox:
+        """The devbox instance for this scenario run.
 
         Use this to interact with the devbox environment during the scenario run.
 
-        :return: Devbox wrapper instance
+        :return: Devbox instance
         :rtype: Devbox
         """
-        from .devbox import Devbox
-
         return Devbox(self._client, self._devbox_id)
 
     def get_info(
@@ -87,7 +85,7 @@ class ScenarioRun:
     ) -> ScenarioRunView:
         """Retrieve current scenario run status and metadata.
 
-        :param options: Optional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.BaseRequestOptions` for available options
         :return: Current scenario run state info
         :rtype: ScenarioRunView
         """
@@ -98,22 +96,18 @@ class ScenarioRun:
 
     def await_env_ready(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        **options: Unpack[BaseRequestOptions],
+        **options: Unpack[PollingRequestOptions],
     ) -> ScenarioRunView:
         """Wait for the scenario environment (devbox) to be ready.
 
         Blocks until the devbox reaches running state.
 
-        :param polling_config: Optional polling configuration
-        :type polling_config: PollingConfig | None
-        :param options: Optional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.PollingRequestOptions` for available options
         :return: Scenario run state after environment is ready
         :rtype: ScenarioRunView
         """
-        self._client.devboxes.await_running(self._devbox_id, polling_config=polling_config)
-        return self.get_info(**options)
+        self._client.devboxes.await_running(self._devbox_id, polling_config=options.get("polling_config"))
+        return self.get_info(**filter_params(options, PollingRequestOptions))
 
     def score(
         self,
@@ -123,7 +117,7 @@ class ScenarioRun:
 
         This triggers the scoring process using the scenario's scoring contract.
 
-        :param options: Optional long-running request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Updated scenario run state
         :rtype: ScenarioRunView
         """
@@ -134,45 +128,53 @@ class ScenarioRun:
 
     def await_scored(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        **options: Unpack[BaseRequestOptions],
+        **options: Unpack[PollingRequestOptions],
     ) -> ScenarioRunView:
         """Wait for the scenario run to be scored.
 
         Blocks until scoring is complete.
 
-        :param polling_config: Optional polling configuration
-        :type polling_config: PollingConfig | None
-        :param options: Optional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.PollingRequestOptions` for available options
         :return: Scored scenario run state
         :rtype: ScenarioRunView
         """
         return self._client.scenarios.runs.await_scored(
             self._id,
-            polling_config=polling_config,
             **options,
         )
 
     def score_and_await(
         self,
-        *,
-        polling_config: PollingConfig | None = None,
-        **options: Unpack[BaseRequestOptions],
+        **options: Unpack[PollingRequestOptions],
     ) -> ScenarioRunView:
         """Submit for scoring and wait for completion.
 
         Convenience method that calls score() then await_scored().
 
-        :param polling_config: Optional polling configuration
-        :type polling_config: PollingConfig | None
-        :param options: Optional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.PollingRequestOptions` for available options
         :return: Scored scenario run state
         :rtype: ScenarioRunView
         """
         return self._client.scenarios.runs.score_and_await(
             self._id,
-            polling_config=polling_config,
+            **options,
+        )
+
+    def score_and_complete(
+        self,
+        **options: Unpack[PollingRequestOptions],
+    ) -> ScenarioRunView:
+        """Score the run, wait for scoring, then complete and shutdown.
+
+        Convenience method that scores the scenario run, waits for scoring to
+        finish, then completes the run and shuts down the devbox.
+
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.PollingRequestOptions` for available options
+        :return: Completed scenario run state with scoring results
+        :rtype: ScenarioRunView
+        """
+        return self._client.scenarios.runs.score_and_complete(
+            self._id,
             **options,
         )
 
@@ -182,7 +184,7 @@ class ScenarioRun:
     ) -> ScenarioRunView:
         """Complete the scenario run and shutdown the devbox.
 
-        :param options: Optional long-running request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Final scenario run state
         :rtype: ScenarioRunView
         """
@@ -197,7 +199,7 @@ class ScenarioRun:
     ) -> ScenarioRunView:
         """Cancel the scenario run and shutdown the devbox.
 
-        :param options: Optional long-running request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
         :return: Cancelled scenario run state
         :rtype: ScenarioRunView
         """
@@ -206,16 +208,34 @@ class ScenarioRun:
             **options,
         )
 
+    def download_logs(
+        self,
+        file: Union[str, os.PathLike[str]],
+        **options: Unpack[LongRequestOptions],
+    ) -> None:
+        """Download all logs for this scenario run to a zip file.
+
+        Downloads a zip archive containing all logs from the scenario run's
+        associated devbox.
+
+        :param file: Path where the zip file will be written
+        :type file: str | os.PathLike[str]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        """
+        response = self._client.scenarios.runs.download_logs(self._id, **options)
+        response.write_to_file(file)
+
     def get_score(
         self,
         **options: Unpack[BaseRequestOptions],
     ) -> Optional[ScoringContractResultView]:
         """Get the scoring result for this run.
 
-        Returns None if the run has not been scored yet.
+        Returns None if the run has not been scored yet. Always makes an API
+        call to retrieve the current scoring result.
 
-        :param options: Optional request configuration
-        :return: Scoring result or None
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.BaseRequestOptions` for available options
+        :return: Scoring result or None if not yet scored
         :rtype: Optional[ScoringContractResultView]
         """
         info = self.get_info(**options)

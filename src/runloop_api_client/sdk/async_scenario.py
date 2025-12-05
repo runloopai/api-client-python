@@ -11,24 +11,24 @@ from .async_scenario_run import AsyncScenarioRun
 
 
 class AsyncScenario:
-    """Async wrapper around a scenario resource.
+    """A scenario for evaluating agent performance (async).
 
     Provides async methods for retrieving scenario details, updating the scenario,
-    and starting scenario runs.
+    and starting scenario runs. Obtain instances via ``runloop.scenario.from_id()``
+    or ``runloop.scenario.list()``.
 
     Example:
-        >>> scenario = sdk.scenario.from_id("scn-xxx")
+        >>> scenario = runloop.scenario.from_id("scn-xxx")
         >>> info = await scenario.get_info()
         >>> run = await scenario.run(run_name="test-run")
-        >>> devbox = run.devbox
     """
 
     def __init__(self, client: AsyncRunloop, scenario_id: str) -> None:
-        """Initialize the wrapper.
+        """Create an AsyncScenario instance.
 
-        :param client: Generated AsyncRunloop client
+        :param client: AsyncRunloop client instance
         :type client: AsyncRunloop
-        :param scenario_id: Scenario ID returned by the API
+        :param scenario_id: Scenario ID
         :type scenario_id: str
         """
         self._client = client
@@ -53,7 +53,7 @@ class AsyncScenario:
     ) -> ScenarioView:
         """Retrieve current scenario details.
 
-        :param options: Optional request configuration
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.BaseRequestOptions` for available options
         :return: Current scenario info
         :rtype: ScenarioView
         """
@@ -70,7 +70,7 @@ class AsyncScenario:
 
         Only provided fields will be updated.
 
-        :param params: See SDKScenarioUpdateParams for available parameters
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioUpdateParams` for available parameters
         :return: Updated scenario info
         :rtype: ScenarioView
         """
@@ -83,14 +83,14 @@ class AsyncScenario:
         self,
         **params: Unpack[SDKScenarioRunAsyncParams],
     ) -> AsyncScenarioRun:
-        """Start a new scenario run.
+        """Start a new scenario run without waiting for the devbox.
 
-        Creates a new scenario run and returns a wrapper for managing it.
-        The underlying devbox may still be starting; call await_env_ready()
-        on the returned AsyncScenarioRun to wait for it to be ready.
+        Creates a new scenario run and returns immediately. The devbox may still
+        be starting; call ``await_env_ready()`` on the returned AsyncScenarioRun
+        to wait for it to be ready.
 
-        :param params: See SDKScenarioRunParams for available parameters
-        :return: Wrapper for the new scenario run
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioRunAsyncParams` for available parameters
+        :return: AsyncScenarioRun instance for managing the run
         :rtype: AsyncScenarioRun
         """
         run_view = await self._client.scenarios.start_run(
@@ -103,12 +103,12 @@ class AsyncScenario:
         self,
         **params: Unpack[SDKScenarioRunParams],
     ) -> AsyncScenarioRun:
-        """Start a new scenario run and wait for environment to be ready.
+        """Start a new scenario run and wait for the devbox to be ready.
 
         Convenience method that starts a run and waits for the devbox to be ready.
 
-        :param params: See SDKScenarioRunParams for available parameters
-        :return: Wrapper for the scenario run with ready environment
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioRunParams` for available parameters
+        :return: AsyncScenarioRun instance with ready devbox
         :rtype: AsyncScenarioRun
         """
         run_view = await self._client.scenarios.start_run_and_await_env_ready(
