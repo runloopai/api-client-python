@@ -120,9 +120,15 @@ class TestAsyncAgentListing:
         }
 
         # Create multiple agents
-        agent1 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-1"), source=source_config)
-        agent2 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-2"), source=source_config)
-        agent3 = await async_sdk_client.agent.create(name=unique_name("sdk-async-agent-test-list-3"), source=source_config)
+        agent1 = await async_sdk_client.agent.create(
+            name=unique_name("sdk-async-agent-test-list-1"), source=source_config
+        )
+        agent2 = await async_sdk_client.agent.create(
+            name=unique_name("sdk-async-agent-test-list-2"), source=source_config
+        )
+        agent3 = await async_sdk_client.agent.create(
+            name=unique_name("sdk-async-agent-test-list-3"), source=source_config
+        )
 
         try:
             # List agents

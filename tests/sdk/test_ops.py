@@ -15,6 +15,7 @@ from tests.sdk.conftest import (
     MockDevboxView,
     MockObjectView,
     MockScorerView,
+    MockScenarioView,
     MockSnapshotView,
     MockBlueprintView,
     create_mock_httpx_response,
@@ -1008,6 +1009,67 @@ class TestAgentClient:
             },
             name="test-agent",
         )
+
+
+class TestScenarioOps:
+    """Tests for ScenarioOps class."""
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        from runloop_api_client.sdk import Scenario
+        from runloop_api_client.sdk.sync import ScenarioOps
+
+        ops = ScenarioOps(mock_client)
+        scenario = ops.from_id("scn_123")
+
+        assert isinstance(scenario, Scenario)
+        assert scenario.id == "scn_123"
+
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        from runloop_api_client.sdk.sync import ScenarioOps
+
+        mock_client.scenarios.list.return_value = []
+
+        ops = ScenarioOps(mock_client)
+        scenarios = ops.list(limit=10)
+
+        assert len(scenarios) == 0
+        mock_client.scenarios.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, scenario_view: MockScenarioView) -> None:
+        """Test list method with single result."""
+        from runloop_api_client.sdk import Scenario
+        from runloop_api_client.sdk.sync import ScenarioOps
+
+        mock_client.scenarios.list.return_value = [scenario_view]
+
+        ops = ScenarioOps(mock_client)
+        scenarios = ops.list(limit=10)
+
+        assert len(scenarios) == 1
+        assert isinstance(scenarios[0], Scenario)
+        assert scenarios[0].id == "scn_123"
+        mock_client.scenarios.list.assert_called_once()
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        from runloop_api_client.sdk import Scenario
+        from runloop_api_client.sdk.sync import ScenarioOps
+
+        scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
+        scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
+        mock_client.scenarios.list.return_value = [scenario_view1, scenario_view2]
+
+        ops = ScenarioOps(mock_client)
+        scenarios = ops.list(limit=10)
+
+        assert len(scenarios) == 2
+        assert isinstance(scenarios[0], Scenario)
+        assert isinstance(scenarios[1], Scenario)
+        assert scenarios[0].id == "scn_001"
+        assert scenarios[1].id == "scn_002"
+        mock_client.scenarios.list.assert_called_once()
 
 
 class TestRunloopSDK:
