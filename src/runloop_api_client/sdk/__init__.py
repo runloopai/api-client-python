@@ -5,8 +5,10 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 
 from __future__ import annotations
 
-from .sync import DevboxOps, ScorerOps, RunloopSDK, SnapshotOps, BlueprintOps, StorageObjectOps
+from .sync import AgentOps, DevboxOps, ScorerOps, RunloopSDK, SnapshotOps, BlueprintOps, StorageObjectOps
+from .agent import Agent
 from .async_ import (
+    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
@@ -19,6 +21,7 @@ from .scorer import Scorer
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .execution import Execution
+from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
 from .async_scorer import AsyncScorer
 from .async_snapshot import AsyncSnapshot
@@ -34,6 +37,8 @@ __all__ = [
     "RunloopSDK",
     "AsyncRunloopSDK",
     # Management interfaces
+    "AgentOps",
+    "AsyncAgentOps",
     "DevboxOps",
     "AsyncDevboxOps",
     "BlueprintOps",
@@ -45,6 +50,8 @@ __all__ = [
     "StorageObjectOps",
     "AsyncStorageObjectOps",
     # Resource classes
+    "Agent",
+    "AsyncAgent",
     "Devbox",
     "AsyncDevbox",
     "Execution",

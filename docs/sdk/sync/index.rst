@@ -27,4 +27,5 @@ Synchronous resource classes for working with devboxes, blueprints, snapshots, a
    snapshot
    storage_object
    scorer
+   agent
 
