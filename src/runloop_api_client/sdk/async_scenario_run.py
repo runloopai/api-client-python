@@ -107,7 +107,7 @@ class AsyncScenarioRun:
         :rtype: ScenarioRunView
         """
         await self._client.devboxes.await_running(self._devbox_id, polling_config=options.get("polling_config"))
-        return await self.get_info(**filter_params(options, PollingRequestOptions))
+        return await self.get_info(**filter_params(options, BaseRequestOptions))
 
     async def score(
         self,

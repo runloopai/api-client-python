@@ -107,7 +107,7 @@ class ScenarioRun:
         :rtype: ScenarioRunView
         """
         self._client.devboxes.await_running(self._devbox_id, polling_config=options.get("polling_config"))
-        return self.get_info(**filter_params(options, PollingRequestOptions))
+        return self.get_info(**filter_params(options, BaseRequestOptions))
 
     def score(
         self,
