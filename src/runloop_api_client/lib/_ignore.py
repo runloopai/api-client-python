@@ -322,7 +322,6 @@ class DockerIgnoreMatcher(IgnoreMatcher):
 
     def iter_paths(self, root: Path) -> Iterable[Path]:
         """Yield non-ignored files under ``root`` honoring Docker-style patterns."""
-
         root = root.resolve()
 
         all_patterns: list[str] = []
@@ -338,9 +337,25 @@ class DockerIgnoreMatcher(IgnoreMatcher):
                 raise FileNotFoundError(f"Ignore file does not exist: {ignore_path}")
             all_patterns.extend(read_ignorefile(ignore_path))
 
-        # 3) Optional inline patterns appended last.
+        # 3) Optional inline patterns appended last using same rules as .dockerignore
+        # Some extra handling here for trailing slashes that is different from .gitignore.
         if self.patterns:
-            all_patterns.extend(self.patterns)
+            for raw in self.patterns:
+                if not raw:
+                    continue
+
+                invert = raw[0] == "!"
+                pattern = raw[1:].strip() if invert else raw.strip()
+
+                if pattern:
+                    pattern = os.path.normpath(pattern)
+                    pattern = pattern.replace(os.sep, "/")
+                    if len(pattern) > 1 and pattern[0] == "/":
+                        pattern = pattern[1:]
+
+                normalized = f"!{pattern}" if invert else pattern
+                if normalized:
+                    all_patterns.append(normalized)
 
         compiled: list[IgnorePattern] = compile_ignore(all_patterns)
         return iter_included_files(root, patterns=compiled)

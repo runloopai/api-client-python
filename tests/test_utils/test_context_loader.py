@@ -79,6 +79,31 @@ def test_iter_build_context_files_respects_dockerignore(tmp_path: Path):
     assert "build/ignored.txt" not in files
 
 
+def test_optional_patterns_trailing_slash_matches_file_in_context(tmp_path: Path) -> None:
+    """Inline ignore patterns should mirror .dockerignore trailing-slash behavior.
+
+    Patterns like '/foo/bar/' provided via the optional ``ignore=`` parameter
+    should exclude a file at 'foo/bar' in the build context, matching Docker's
+    patternmatcher semantics where trailing slashes are not directory-only.
+    """
+
+    root = tmp_path
+    foo = root / "foo"
+    foo.mkdir()
+    (foo / "bar").write_text("ignored", encoding="utf-8")
+    (root / "keep.txt").write_text("keep", encoding="utf-8")
+
+    # Use build_docker_context_tar with an inline pattern that includes a
+    # trailing slash; this should still exclude the file at 'foo/bar'.
+    tar_bytes = build_docker_context_tar(root, ignore=["/foo/bar/"])
+
+    with tarfile.open(fileobj=io.BytesIO(tar_bytes), mode="r:gz") as tf:
+        names = {m.name for m in tf.getmembers()}
+
+    assert "keep.txt" in names
+    assert "foo/bar" not in names
+
+
 def test_is_ignored_directory_pattern_affects_directory_entry_only() -> None:
     """Directory patterns apply directly to directory entries, not to children."""
 
