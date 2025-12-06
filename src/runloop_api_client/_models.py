@@ -499,7 +499,7 @@ def construct_type(*, value: object, type_: object, metadata: Optional[List[Any]
 
     if is_union(origin):
         try:
-            return validate_type(type_=cast("type[object]", original_type or type_), value=value)
+            return validate_type(type_=original_type or type_, value=value)
         except Exception:
             pass
 

@@ -298,7 +298,6 @@ exclude = [
 [tool.ty.rules]
 invalid-assignment = "ignore"
 call-non-callable = "ignore"
-redundant-cast = "ignore"
 invalid-argument-type = "ignore"
 unresolved-attribute = "ignore"
 not-iterable = "ignore"

@@ -149,14 +149,11 @@ def model_dump(
             # warnings are not supported in Pydantic v1
             warnings=True if PYDANTIC_V1 else warnings,
         )
-    return cast(
-        "dict[str, Any]",
-        model.dict(  # pyright: ignore[reportDeprecated, reportUnnecessaryCast]
+    return model.dict(  # pyright: ignore[reportDeprecated, reportUnnecessaryCast]
             exclude=exclude,
             exclude_unset=exclude_unset,
             exclude_defaults=exclude_defaults,
-        ),
-    )
+        )
 
 
 def model_parse(model: type[_ModelT], data: Any) -> _ModelT:

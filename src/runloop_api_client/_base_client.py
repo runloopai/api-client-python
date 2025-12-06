@@ -303,10 +303,7 @@ class AsyncPaginator(Generic[_T, AsyncPageT]):
 
     async def __aiter__(self) -> AsyncIterator[_T]:
         # https://github.com/microsoft/pyright/issues/3464
-        page = cast(
-            AsyncPageT,
-            await self,  # type: ignore
-        )
+        page = await self
         async for item in page:
             yield item
 
