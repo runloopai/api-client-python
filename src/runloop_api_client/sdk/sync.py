@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -149,7 +149,7 @@ class DevboxOps:
     def list(
         self,
         **params: Unpack[SDKDevboxListParams],
-    ) -> list[Devbox]:
+    ) -> List[Devbox]:
         """List devboxes accessible to the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxListParams` for available parameters
@@ -185,7 +185,7 @@ class SnapshotOps:
     def list(
         self,
         **params: Unpack[SDKDiskSnapshotListParams],
-    ) -> list[Snapshot]:
+    ) -> List[Snapshot]:
         """List snapshots created from devboxes.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDiskSnapshotListParams` for available parameters
@@ -275,7 +275,7 @@ class BlueprintOps:
     def list(
         self,
         **params: Unpack[SDKBlueprintListParams],
-    ) -> list[Blueprint]:
+    ) -> List[Blueprint]:
         """List available blueprints.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintListParams` for available parameters
@@ -336,7 +336,7 @@ class StorageObjectOps:
     def list(
         self,
         **params: Unpack[SDKObjectListParams],
-    ) -> list[StorageObject]:
+    ) -> List[StorageObject]:
         """List storage objects owned by the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectListParams` for available parameters
@@ -536,7 +536,7 @@ class ScorerOps:
         """
         return Scorer(self._client, scorer_id)
 
-    def list(self, **params: Unpack[SDKScorerListParams]) -> list[Scorer]:
+    def list(self, **params: Unpack[SDKScorerListParams]) -> List[Scorer]:
         """List all scorers, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
@@ -594,7 +594,7 @@ class AgentOps:
         package_name: str,
         npm_version: Optional[str] = None,
         registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from an NPM package.
@@ -641,7 +641,7 @@ class AgentOps:
         package_name: str,
         pip_version: Optional[str] = None,
         registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from a Pip package.
@@ -687,7 +687,7 @@ class AgentOps:
         *,
         repository: str,
         ref: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from a Git repository.
@@ -731,7 +731,7 @@ class AgentOps:
         self,
         *,
         object_id: str,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> Agent:
         """Create an agent from a storage object.
@@ -780,7 +780,7 @@ class AgentOps:
     def list(
         self,
         **params: Unpack[SDKAgentListParams],
-    ) -> list[Agent]:
+    ) -> List[Agent]:
         """List agents accessible to the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
@@ -821,7 +821,7 @@ class ScenarioOps:
         """
         return Scenario(self._client, scenario_id)
 
-    def list(self, **params: Unpack[SDKScenarioListParams]) -> list[Scenario]:
+    def list(self, **params: Unpack[SDKScenarioListParams]) -> List[Scenario]:
         """List all scenarios, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters

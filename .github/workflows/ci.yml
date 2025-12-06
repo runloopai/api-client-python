@@ -32,6 +32,9 @@ jobs:
       - name: Run lints
         run: ./scripts/lint
 
+      - name: Run type checking
+        run: uv run ty check
+
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     timeout-minutes: 10
