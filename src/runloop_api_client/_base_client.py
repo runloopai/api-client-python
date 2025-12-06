@@ -587,7 +587,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             return cast_to
 
         # make a copy of the headers so we don't mutate user-input
-        headers = dict(options.headers)
+        headers = dict(options.headers)  # type: ignore[no-matching-overload]
 
         # we internally support defining a temporary header to override the
         # default `cast_to` type for use with `.with_raw_response` and `.with_streaming_response`
