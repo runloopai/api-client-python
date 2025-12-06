@@ -33,9 +33,11 @@ from .storage_object import StorageObject
 from .async_blueprint import AsyncBlueprint
 from .async_execution import AsyncExecution
 from .execution_result import ExecutionResult
+from .scenario_builder import ScenarioBuilder
 from .async_scenario_run import AsyncScenarioRun
 from .async_storage_object import AsyncStorageObject
 from .async_execution_result import AsyncExecutionResult
+from .async_scenario_builder import AsyncScenarioBuilder
 
 __all__ = [
     # Main SDK entry points
@@ -71,6 +73,8 @@ __all__ = [
     "AsyncScenario",
     "ScenarioRun",
     "AsyncScenarioRun",
+    "ScenarioBuilder",
+    "AsyncScenarioBuilder",
     "Scorer",
     "AsyncScorer",
     "Snapshot",

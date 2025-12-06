@@ -37,6 +37,7 @@ from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
+from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
@@ -773,6 +774,13 @@ class AsyncScenarioOps:
         >>> scenario = runloop.scenario.from_id("scn-xxx")
         >>> run = await scenario.run()
         >>> scenarios = await runloop.scenario.list()
+
+    Example using builder:
+        >>> builder = runloop.scenario.builder("my-scenario")
+        >>> builder.from_blueprint_id("bp-xxx")
+        >>> builder.with_problem_statement("Fix the bug")
+        >>> builder.add_test_scorer("tests", test_command="pytest")
+        >>> scenario = await builder.push()
     """
 
     def __init__(self, client: AsyncRunloop) -> None:
@@ -782,6 +790,16 @@ class AsyncScenarioOps:
         :type client: AsyncRunloop
         """
         self._client = client
+
+    def builder(self, name: str) -> AsyncScenarioBuilder:
+        """Create a new scenario builder.
+
+        :param name: Name for the scenario
+        :type name: str
+        :return: A new AsyncScenarioBuilder instance
+        :rtype: AsyncScenarioBuilder
+        """
+        return AsyncScenarioBuilder(self._client, name)
 
     def from_id(self, scenario_id: str) -> AsyncScenario:
         """Get an AsyncScenario instance for an existing scenario ID.
