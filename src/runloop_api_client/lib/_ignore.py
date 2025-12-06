@@ -24,22 +24,67 @@ __all__ = [
 class IgnorePattern:
     """Single parsed ignore pattern.
 
-    Follows Docker-style .dockerignore semantics, supports other ignore use cases following same approach.
-
-    Details:
-    - ``pattern``: The normalized pattern text with leading/trailing ``/`` removed.
-      Always uses POSIX ``'/'`` separators.
-    - ``negated``: True if this is a negation pattern starting with ``!``.
-    - ``directory_only``: True if the original pattern ended with ``/`` and should
-      apply only to directories and their descendants.
-    - ``anchored``: True if the pattern contains a path separator and should be
-      matched relative to the root path rather than at any depth.
+    Follows Docker-style ``.dockerignore`` semantics and supports other ignore
+    use cases following the same approach.
     """
 
     pattern: str
+    """The normalized pattern text with leading and trailing ``/`` removed.
+
+    Always uses POSIX ``'/'`` separators.
+    """
+
     negated: bool
+    """Whether this is a negation pattern starting with ``!``."""
+
     directory_only: bool
+    """Whether the original pattern ended with ``/`` and should apply only to
+    directories and their descendants.
+    """
+
     anchored: bool
+    """Whether the pattern contains a path separator and should be matched
+    relative to the root path rather than at any depth.
+    """
+
+
+def _normalize_pattern_string(raw: str) -> str:
+    """Normalize a single ignore pattern string.
+
+    Shared helper for patterns coming from both ignorefiles and inline pattern
+    lists. Handles:
+
+    - Optional leading ``!`` negation marker (with surrounding whitespace
+      trimmed).
+    - ``os.path.normpath`` cleanup.
+    - Normalising path separators to POSIX ``'/'``.
+    - Stripping a single leading ``/`` so absolute-style patterns behave like
+      relative ones.
+
+    Comment / blank-line handling is deliberately *not* included here; callers
+    are responsible for that.
+    """
+
+    if not raw:
+        return raw
+
+    invert = raw[0] == "!"
+    pattern = raw[1:].strip() if invert else raw.strip()
+
+    if pattern:
+        # filepath.Clean equivalent
+        pattern = os.path.normpath(pattern)
+        # filepath.ToSlash equivalent
+        pattern = pattern.replace(os.sep, "/")
+        # Leading forward-slashes are removed so "/some/path" and "some/path"
+        # are considered equivalent.
+        if len(pattern) > 1 and pattern[0] == "/":
+            pattern = pattern[1:]
+
+    if invert:
+        pattern = "!" + pattern
+
+    return pattern
 
 
 def _normalize_pattern_line(raw: bytes, *, is_first_line: bool) -> Optional[str]:
@@ -47,6 +92,16 @@ def _normalize_pattern_line(raw: bytes, *, is_first_line: bool) -> Optional[str]
 
     Behavior is based on:
     https://github.com/moby/patternmatcher/blob/main/ignorefile/ignorefile.go
+
+    :param raw: Raw line bytes from the ignore file, including any newline
+        characters.
+    :type raw: bytes
+    :param is_first_line: Whether this is the first line in the file (used to
+        detect and strip a UTF-8 BOM).
+    :type is_first_line: bool
+    :return: Normalized pattern string, or ``None`` if the line should be
+        ignored (empty or comment).
+    :rtype: Optional[str]
     """
 
     # Strip UTF-8 BOM from the first line if present
@@ -67,28 +122,11 @@ def _normalize_pattern_line(raw: bytes, *, is_first_line: bool) -> Optional[str]
     if not pattern:
         return None
 
-    # Normalize absolute paths to paths relative to the context (taking care of '!' prefix)
-    invert = pattern[0] == "!"
-    if invert:
-        pattern = pattern[1:].strip()
-
-    if pattern:
-        # filepath.Clean equivalent
-        pattern = os.path.normpath(pattern)
-        # filepath.ToSlash equivalent
-        pattern = pattern.replace(os.sep, "/")
-        # Leading forward-slashes are removed so "/some/path" and "some/path"
-        # are considered equivalent.
-        if len(pattern) > 1 and pattern[0] == "/":
-            pattern = pattern[1:]
-
-    if invert:
-        pattern = "!" + pattern
-
-    return pattern
+    normalized = _normalize_pattern_string(pattern)
+    return normalized or None
 
 
-def read_ignorefile(path: Optional[Path]) -> list[str]:
+def read_ignorefile(path: Path) -> list[str]:
     """Read an ignore file and return a list of normalized pattern strings.
 
     This mirrors the behavior of moby's ``ignorefile.ReadAll``:
@@ -96,11 +134,14 @@ def read_ignorefile(path: Optional[Path]) -> list[str]:
     - UTF-8 BOM on the first line is stripped.
     - Lines starting with ``#`` are treated as comments and skipped.
     - Remaining lines are trimmed, optionally negated with ``!``, cleaned,
-      have path separators normalized to ``/``, and leading ``/`` removed.
-    """
+      have path separators normalized to ``/``, and leading and trailing ``/`` removed.
 
-    if path is None:
-        return []
+    :param path: Filesystem path to the ignore file to read.
+    :type path: Path
+    :return: List of normalized pattern strings in the order they appear in
+        the ignore file.
+    :rtype: list[str]
+    """
 
     if not path.exists():
         return []
@@ -119,7 +160,13 @@ def read_ignorefile(path: Optional[Path]) -> list[str]:
 
 
 def compile_ignore(patterns: Sequence[str]) -> list[IgnorePattern]:
-    """Compile raw pattern strings into :class:`IgnorePattern` objects."""
+    """Compile raw pattern strings into :class:`IgnorePattern` objects.
+
+    :param patterns: Raw pattern strings following Docker-style semantics.
+    :type patterns: Sequence[str]
+    :return: Compiled ignore patterns.
+    :rtype: list[IgnorePattern]
+    """
 
     compiled: list[IgnorePattern] = []
 
@@ -160,9 +207,17 @@ def _segment_match(pattern_segment: str, path_segment: str) -> bool:
     """Match a single path segment against a glob pattern segment.
 
     Supports:
+
     - ``*``: any sequence of characters except ``/``.
     - ``?``: any single character except ``/``.
     - ``[]``: character classes, excluding ``/``.
+
+    :param pattern_segment: Glob-style pattern segment.
+    :type pattern_segment: str
+    :param path_segment: Path segment (no ``/``) to match against.
+    :type path_segment: str
+    :return: ``True`` if the path segment matches the pattern segment.
+    :rtype: bool
     """
 
     import re
@@ -195,7 +250,15 @@ def _segment_match(pattern_segment: str, path_segment: str) -> bool:
 
 
 def _match_parts_recursive(pattern_parts: list[str], path_parts: list[str]) -> bool:
-    """Recursive helper implementing ``**`` segment semantics."""
+    """Recursive helper implementing ``**`` segment semantics.
+
+    :param pattern_parts: Pattern split into POSIX path segments.
+    :type pattern_parts: list[str]
+    :param path_parts: Path split into POSIX path segments.
+    :type path_parts: list[str]
+    :return: ``True`` if the pattern parts match the path parts.
+    :rtype: bool
+    """
 
     if not pattern_parts:
         return not path_parts
@@ -217,7 +280,17 @@ def _match_parts_recursive(pattern_parts: list[str], path_parts: list[str]) -> b
 
 
 def path_match(pattern: IgnorePattern, relpath: str, *, is_dir: bool) -> bool:
-    """Return True if ``relpath`` matches a compiled ignore pattern."""
+    """Return ``True`` if ``relpath`` matches a compiled ignore pattern.
+
+    :param pattern: Compiled ignore pattern to test.
+    :type pattern: IgnorePattern
+    :param relpath: Path to test, relative to the ignore root.
+    :type relpath: str
+    :param is_dir: Whether ``relpath`` refers to a directory.
+    :type is_dir: bool
+    :return: ``True`` if the path is matched by the pattern.
+    :rtype: bool
+    """
 
     relpath_posix = PurePosixPath(relpath).as_posix()
     path_parts = PurePosixPath(relpath_posix).parts
@@ -247,6 +320,15 @@ def is_ignored(relpath: str, *, is_dir: bool, patterns: Sequence[IgnorePattern])
 
     excludes all ``.log`` files except ``important.log``. Patterns are applied
     in order, and the last matching pattern determines inclusion.
+
+    :param relpath: Path to evaluate, relative to the ignore root.
+    :type relpath: str
+    :param is_dir: Whether ``relpath`` refers to a directory.
+    :type is_dir: bool
+    :param patterns: Compiled ignore patterns to apply in order.
+    :type patterns: Sequence[IgnorePattern]
+    :return: ``True`` if the path should be treated as ignored.
+    :rtype: bool
     """
 
     included = True  # include by default
@@ -264,7 +346,15 @@ def iter_included_files(
     """Yield all files under ``root`` that are not ignored.
 
     This performs directory pruning so that ignored directories are never
-    traversed, mirroring Docker's behavior for .dockerignore.
+    traversed, mirroring Docker's behavior for ``.dockerignore``.
+
+    :param root: Root directory to walk.
+    :type root: Path
+    :param patterns: Compiled ignore patterns controlling which files and
+        directories are included.
+    :type patterns: Sequence[IgnorePattern]
+    :return: Iterator over non-ignored file paths under ``root``.
+    :rtype: Iterable[Path]
     """
 
     if not root.is_dir():
@@ -301,7 +391,13 @@ class IgnoreMatcher(ABC):
 
     @abstractmethod
     def iter_paths(self, root: Path) -> Iterable[Path]:
-        """Yield filesystem paths to include under ``root``."""
+        """Yield filesystem paths to include under ``root``.
+
+        :param root: Root directory to scan for files.
+        :type root: Path
+        :return: Iterator over filesystem paths that should be included.
+        :rtype: Iterable[Path]
+        """
 
 
 @dataclass(frozen=True)
@@ -309,7 +405,8 @@ class DockerIgnoreMatcher(IgnoreMatcher):
     """Ignore matcher that mirrors Docker's .dockerignore semantics.
 
     This matcher:
-    - Closely follows Docker's .dockerignore semantics.
+
+    - Closely follows Docker's ``.dockerignore`` semantics.
     - Always loads patterns from ``.dockerignore`` in the provided context
       root, if present.
     - Optionally loads additional patterns from an extra ignorefile.
@@ -319,11 +416,22 @@ class DockerIgnoreMatcher(IgnoreMatcher):
     """
 
     extra_ignorefile: str | Path | None = None
+    """Optional path to an additional ignorefile whose patterns are appended
+    after the default ``.dockerignore``.
+    """
+
     patterns: Sequence[str] | None = None
+    """Optional inline pattern strings appended after any ignorefiles."""
 
     @override
     def iter_paths(self, root: Path) -> Iterable[Path]:
-        """Yield non-ignored files under ``root`` honoring Docker-style patterns."""
+        """Yield non-ignored files under ``root`` honoring Docker-style patterns.
+
+        :param root: Context directory whose contents should be filtered.
+        :type root: Path
+        :return: Iterator over non-ignored file paths under ``root``.
+        :rtype: Iterable[Path]
+        """
         root = root.resolve()
 
         all_patterns: list[str] = []
@@ -345,17 +453,7 @@ class DockerIgnoreMatcher(IgnoreMatcher):
             for raw in self.patterns:
                 if not raw:
                     continue
-
-                invert = raw[0] == "!"
-                pattern = raw[1:].strip() if invert else raw.strip()
-
-                if pattern:
-                    pattern = os.path.normpath(pattern)
-                    pattern = pattern.replace(os.sep, "/")
-                    if len(pattern) > 1 and pattern[0] == "/":
-                        pattern = pattern[1:]
-
-                normalized = f"!{pattern}" if invert else pattern
+                normalized = _normalize_pattern_string(raw)
                 if normalized:
                     all_patterns.append(normalized)
 
@@ -376,6 +474,7 @@ class FilePatternMatcher(IgnoreMatcher):
     """
 
     patterns: Sequence[str] | str
+    """Pattern or patterns to apply as ignore rules when matching files."""
 
     def __post_init__(self) -> None:
         # Normalise a single pattern string into a list for downstream helpers.
@@ -384,7 +483,13 @@ class FilePatternMatcher(IgnoreMatcher):
 
     @override
     def iter_paths(self, root: Path) -> Iterable[Path]:
-        """Yield non-ignored files under ``root`` based only on ``patterns``."""
+        """Yield non-ignored files under ``root`` based only on ``patterns``.
+
+        :param root: Root directory whose contents should be filtered.
+        :type root: Path
+        :return: Iterator over non-ignored file paths under ``root``.
+        :rtype: Iterable[Path]
+        """
 
         root = root.resolve()
         compiled: list[IgnorePattern] = compile_ignore(self.patterns)  # type: ignore[arg-type]
