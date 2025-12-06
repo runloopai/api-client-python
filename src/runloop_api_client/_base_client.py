@@ -257,7 +257,7 @@ class BaseSyncPage(BasePage[_T], Generic[_T]):
         while True:
             yield page
             if page.has_next_page():
-                page = page.get_next_page()
+                page = page.get_next_page()  # type: ignore
             else:
                 return
 
@@ -303,10 +303,7 @@ class AsyncPaginator(Generic[_T, AsyncPageT]):
 
     async def __aiter__(self) -> AsyncIterator[_T]:
         # https://github.com/microsoft/pyright/issues/3464
-        page = cast(
-            AsyncPageT,
-            await self,  # type: ignore
-        )
+        page = await self
         async for item in page:
             yield item
 
@@ -486,7 +483,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             if json_data is None:
                 json_data = cast(Body, options.extra_json)
             elif is_mapping(json_data):
-                json_data = _merge_mappings(json_data, options.extra_json)
+                json_data = _merge_mappings(json_data, options.extra_json)  # type: ignore
             else:
                 raise RuntimeError(f"Unexpected JSON data type, {type(json_data)}, cannot merge with `extra_body`")
 
@@ -513,7 +510,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
                     raise TypeError(
                         f"Expected query input to be a dictionary for multipart requests but got {type(json_data)} instead."
                     )
-                kwargs["data"] = self._serialize_multipartform(json_data)
+                kwargs["data"] = self._serialize_multipartform(json_data)  # type: ignore
 
             # httpx determines whether or not to send a "multipart/form-data"
             # request based on the truthiness of the "files" argument.
@@ -590,7 +587,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             return cast_to
 
         # make a copy of the headers so we don't mutate user-input
-        headers = dict(options.headers)
+        headers = dict(options.headers)  # type: ignore[no-matching-overload]
 
         # we internally support defining a temporary header to override the
         # default `cast_to` type for use with `.with_raw_response` and `.with_streaming_response`

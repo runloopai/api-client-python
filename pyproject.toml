@@ -63,6 +63,7 @@ dev = [
     "pytest-xdist>=3.6.1",
     "uuid-utils>=0.11.0",
     "pytest-cov>=7.0.0",
+    "ty>=0.0.1a32",
 ]
 docs = [
     "furo>=2025.9.25",
@@ -285,3 +286,23 @@ known-first-party = ["runloop_api_client", "tests"]
 "scripts/**.py" = ["T201", "T203"]
 "tests/**.py" = ["T201", "T203"]
 "examples/**.py" = ["T201", "T203"]
+
+[tool.ty.src]
+# External libraries with known stub issues
+exclude = [
+    "tests",
+    "src/runloop_api_client/resources",
+    "src/runloop_api_client/_utils",
+]
+
+[tool.ty.rules]
+invalid-assignment = "ignore"
+call-non-callable = "ignore"
+invalid-argument-type = "ignore"
+unresolved-attribute = "ignore"
+not-iterable = "ignore"
+non-subscriptable = "ignore"
+invalid-return-type = "ignore"
+unresolved-import = "ignore"
+possibly-missing-attribute = "ignore"
+invalid-parameter-default = "ignore"
