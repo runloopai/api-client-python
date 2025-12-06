@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 (2025-12-06)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/runloopai/api-client-python/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* **scenarios:** added scenario class to sdk ([#701](https://github.com/runloopai/api-client-python/issues/701)) ([121f0fc](https://github.com/runloopai/api-client-python/commit/121f0fc6efa779979f664a75e91d60c068358e21))
+* **SDK:** Build context helpers for the python clients and SDKs ([#684](https://github.com/runloopai/api-client-python/issues/684)) ([42849d6](https://github.com/runloopai/api-client-python/commit/42849d6834098d00234e5ab345ed0d91bac00435))
+
+
+### Chores
+
+* **smoketests:** fixed smoketests and cleaned up typing/formatting ([#699](https://github.com/runloopai/api-client-python/issues/699)) ([f57aae7](https://github.com/runloopai/api-client-python/commit/f57aae71be8eb801214c012b2ec66b9414f0365e))
+
 ## 1.0.0 (2025-12-02)
 
 Full Changelog: [v0.69.0...v1.0.0](https://github.com/runloopai/api-client-python/compare/v0.69.0...v1.0.0)
