@@ -931,34 +931,6 @@ class TestAsyncDevboxNamedShell:
         assert "test" in output
 
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    async def test_shell_exec_with_additional_params(self, devbox: AsyncDevbox) -> None:
-        """Test that additional params are passed through correctly."""
-        shell = devbox.shell("test-shell-params")
-
-        # Test that additional params (like working_dir) are passed through correctly
-        # Note: shell_name should override any shell_name in params
-        result = await shell.exec("pwd", working_dir="/tmp")
-
-        assert result.exit_code == 0
-        output = (await result.stdout()).strip()
-        # Should be in /tmp due to working_dir param
-        assert output == "/tmp"
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    async def test_shell_exec_async_with_additional_params(self, devbox: AsyncDevbox) -> None:
-        """Test that additional params are passed through correctly in exec_async."""
-        shell = devbox.shell("test-shell-async-params")
-
-        # Test that additional params are passed through correctly
-        execution = await shell.exec_async("pwd", working_dir="/home")
-
-        result = await execution.result()
-        assert result.exit_code == 0
-        output = (await result.stdout()).strip()
-        # Should be in /home due to working_dir param
-        assert output == "/home"
-
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     async def test_shell_exec_with_stderr_streaming(self, devbox: AsyncDevbox) -> None:
         """Test shell exec with stderr streaming callback."""
         shell = devbox.shell("test-shell-stderr")

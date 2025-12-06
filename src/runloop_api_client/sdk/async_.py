@@ -19,6 +19,7 @@ from ._types import (
     SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScenarioListParams,
     SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
@@ -31,6 +32,7 @@ from ._helpers import detect_content_type
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
+from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
@@ -221,17 +223,16 @@ class AsyncBlueprintOps:
         ...     dockerfile="FROM ubuntu:22.04\\nRUN apt-get update",
         ... )
         >>> blueprints = await runloop.blueprint.list()
-    
+
     To use a local directory as a build context, use an object.
 
     Example:
         >>> from datetime import timedelta
         >>> from runloop_api_client.types.blueprint_build_parameters import BuildContext
-        >>> 
         >>> runloop = AsyncRunloopSDK()
         >>> obj = await runloop.object_storage.upload_from_dir(
         ...     "./",
-        ...     ttl=timedelta(hours=1),    
+        ...     ttl=timedelta(hours=1),
         ... )
         >>> blueprint = await runloop.blueprint.create(
         ...     name="my-blueprint",
@@ -549,7 +550,8 @@ class AsyncScorerOps:
         """
         page = await self._client.scenarios.scorers.list(**params)
         return [AsyncScorer(self._client, item.id) async for item in page]
-        
+
+
 class AsyncAgentOps:
     """High-level async manager for creating and managing agents.
 
@@ -559,15 +561,10 @@ class AsyncAgentOps:
     Example:
         >>> runloop = AsyncRunloopSDK()
         >>> # Create agent from NPM package
-        >>> agent = await runloop.agent.create_from_npm(
-        ...     name="my-agent",
-        ...     package_name="@runloop/example-agent"
-        ... )
+        >>> agent = await runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
         >>> # Create agent from Git repository
         >>> agent = await runloop.agent.create_from_git(
-        ...     name="git-agent",
-        ...     repository="https://github.com/user/agent-repo",
-        ...     ref="main"
+        ...     name="git-agent", repository="https://github.com/user/agent-repo", ref="main"
         ... )
         >>> # List all agents
         >>> agents = await runloop.agent.list(limit=10)
@@ -621,7 +618,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
+            )
 
         npm_config: dict = {"package_name": package_name}
         if npm_version is not None:
@@ -661,7 +660,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
+            )
 
         pip_config: dict = {"package_name": package_name}
         if pip_version is not None:
@@ -698,7 +699,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
+            )
 
         git_config: dict = {"repository": repository}
         if ref is not None:
@@ -730,7 +733,9 @@ class AsyncAgentOps:
         :raises ValueError: If 'source' is provided in params
         """
         if "source" in params:
-            raise ValueError("Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration")
+            raise ValueError(
+                "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
+            )
 
         object_config: dict = {"object_id": object_id}
         if agent_setup is not None:
@@ -767,6 +772,45 @@ class AsyncAgentOps:
         return [AsyncAgent(self._client, item.id, item) for item in page.agents]
 
 
+class AsyncScenarioOps:
+    """Manage scenarios (async). Access via ``runloop.scenario``.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> scenario = runloop.scenario.from_id("scn-xxx")
+        >>> run = await scenario.run()
+        >>> scenarios = await runloop.scenario.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncScenarioOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    def from_id(self, scenario_id: str) -> AsyncScenario:
+        """Get an AsyncScenario instance for an existing scenario ID.
+
+        :param scenario_id: ID of the scenario
+        :type scenario_id: str
+        :return: AsyncScenario instance for the given ID
+        :rtype: AsyncScenario
+        """
+        return AsyncScenario(self._client, scenario_id)
+
+    async def list(self, **params: Unpack[SDKScenarioListParams]) -> list[AsyncScenario]:
+        """List all scenarios, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters
+        :return: List of scenarios
+        :rtype: list[AsyncScenario]
+        """
+        page = await self._client.scenarios.list(**params)
+        return [AsyncScenario(self._client, item.id) async for item in page]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -782,6 +826,8 @@ class AsyncRunloopSDK:
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
     :vartype blueprint: AsyncBlueprintOps
+    :ivar scenario: High-level async interface for scenario management
+    :vartype scenario: AsyncScenarioOps
     :ivar scorer: High-level async interface for scorer management
     :vartype scorer: AsyncScorerOps
     :ivar snapshot: High-level async interface for snapshot management
@@ -801,6 +847,7 @@ class AsyncRunloopSDK:
     agent: AsyncAgentOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
     snapshot: AsyncSnapshotOps
     storage_object: AsyncStorageObjectOps
@@ -846,6 +893,7 @@ class AsyncRunloopSDK:
         self.agent = AsyncAgentOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
         self.storage_object = AsyncStorageObjectOps(self.api)

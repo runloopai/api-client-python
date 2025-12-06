@@ -11,10 +11,13 @@ from ..types.object_list_params import ObjectListParams
 from ..types.agent_create_params import AgentCreateParams
 from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
 from ..types.object_create_params import ObjectCreateParams
+from ..types.scenario_list_params import ScenarioListParams
 from ..types.blueprint_list_params import BlueprintListParams
 from ..types.object_download_params import ObjectDownloadParams
+from ..types.scenario_update_params import ScenarioUpdateParams
 from ..types.blueprint_create_params import BlueprintCreateParams
 from ..types.devbox_upload_file_params import DevboxUploadFileParams
+from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
 from ..types.devbox_create_tunnel_params import DevboxCreateTunnelParams
 from ..types.devbox_download_file_params import DevboxDownloadFileParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
@@ -166,4 +169,20 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
 
 
 class SDKAgentListParams(AgentListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
+    pass
+
+
+class SDKScenarioUpdateParams(ScenarioUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKScenarioRunAsyncParams(ScenarioStartRunBaseParams, LongRequestOptions):
+    pass
+
+
+class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongPollingRequestOptions):
     pass

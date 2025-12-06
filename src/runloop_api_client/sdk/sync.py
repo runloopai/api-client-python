@@ -19,6 +19,7 @@ from ._types import (
     SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
+    SDKScenarioListParams,
     SDKScorerCreateParams,
     SDKBlueprintListParams,
     SDKBlueprintCreateParams,
@@ -30,6 +31,7 @@ from .scorer import Scorer
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
+from .scenario import Scenario
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .storage_object import StorageObject
@@ -791,6 +793,45 @@ class AgentOps:
         return [Agent(self._client, item.id, item) for item in page.agents]
 
 
+class ScenarioOps:
+    """Manage scenarios. Access via ``runloop.scenario``.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> scenario = runloop.scenario.from_id("scn-xxx")
+        >>> run = scenario.run()
+        >>> scenarios = runloop.scenario.list()
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize ScenarioOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def from_id(self, scenario_id: str) -> Scenario:
+        """Get a Scenario instance for an existing scenario ID.
+
+        :param scenario_id: ID of the scenario
+        :type scenario_id: str
+        :return: Scenario instance for the given ID
+        :rtype: Scenario
+        """
+        return Scenario(self._client, scenario_id)
+
+    def list(self, **params: Unpack[SDKScenarioListParams]) -> list[Scenario]:
+        """List all scenarios, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters
+        :return: List of scenarios
+        :rtype: list[Scenario]
+        """
+        page = self._client.scenarios.list(**params)
+        return [Scenario(self._client, item.id) for item in page]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -806,6 +847,8 @@ class RunloopSDK:
     :vartype devbox: DevboxOps
     :ivar blueprint: High-level interface for blueprint management
     :vartype blueprint: BlueprintOps
+    :ivar scenario: High-level interface for scenario management
+    :vartype scenario: ScenarioOps
     :ivar scorer: High-level interface for scorer management
     :vartype scorer: ScorerOps
     :ivar snapshot: High-level interface for snapshot management
@@ -825,6 +868,7 @@ class RunloopSDK:
     agent: AgentOps
     devbox: DevboxOps
     blueprint: BlueprintOps
+    scenario: ScenarioOps
     scorer: ScorerOps
     snapshot: SnapshotOps
     storage_object: StorageObjectOps
@@ -870,6 +914,7 @@ class RunloopSDK:
         self.agent = AgentOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
+        self.scenario = ScenarioOps(self.api)
         self.scorer = ScorerOps(self.api)
         self.snapshot = SnapshotOps(self.api)
         self.storage_object = StorageObjectOps(self.api)

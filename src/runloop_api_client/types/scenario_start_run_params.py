@@ -11,10 +11,7 @@ from .shared_params.run_profile import RunProfile
 __all__ = ["ScenarioStartRunParams"]
 
 
-class ScenarioStartRunParams(TypedDict, total=False):
-    scenario_id: Required[str]
-    """ID of the Scenario to run."""
-
+class ScenarioStartRunBaseParams(TypedDict, total=False):
     benchmark_run_id: Optional[str]
     """Benchmark to associate the run."""
 
@@ -26,3 +23,8 @@ class ScenarioStartRunParams(TypedDict, total=False):
 
     run_profile: Annotated[Optional[RunProfile], PropertyInfo(alias="runProfile")]
     """Runtime configuration to use for this benchmark run"""
+
+
+class ScenarioStartRunParams(ScenarioStartRunBaseParams):
+    scenario_id: Required[str]
+    """ID of the Scenario to run."""

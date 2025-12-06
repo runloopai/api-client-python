@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import threading
-from typing import Any
-from dataclasses import dataclass
+from typing import Any, Dict
+from dataclasses import field, dataclass
 from unittest.mock import Mock, AsyncMock
 
 import httpx
@@ -108,6 +108,27 @@ class MockAgentView:
     source: Any = None
 
 
+@dataclass
+class MockScenarioView:
+    """Mock ScenarioView for testing."""
+
+    id: str = "scn_123"
+    name: str = "test-scenario"
+    metadata: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class MockScenarioRunView:
+    """Mock ScenarioRunView for testing."""
+
+    id: str = "run_123"
+    devbox_id: str = "dev_123"
+    scenario_id: str = "scn_123"
+    state: str = "running"
+    metadata: Dict[str, str] = field(default_factory=dict)
+    scoring_contract_result: object = None
+
+
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
     """
     Create a mock httpx.AsyncClient with proper context manager setup.
@@ -205,6 +226,18 @@ def agent_view() -> MockAgentView:
 
 
 @pytest.fixture
+def scenario_view() -> MockScenarioView:
+    """Create a mock ScenarioView."""
+    return MockScenarioView()
+
+
+@pytest.fixture
+def scenario_run_view() -> MockScenarioRunView:
+    """Create a mock ScenarioRunView."""
+    return MockScenarioRunView()
+
+
+@pytest.fixture
 def mock_httpx_response() -> Mock:
     """Create a mock httpx.Response."""
     response = Mock(spec=httpx.Response)
@@ -240,9 +273,8 @@ def mock_async_stream() -> AsyncMock:
     """
 
     async def async_iter():
-        # Empty async iterator
-        if False:
-            yield
+        return
+        yield  # Make this a generator
 
     stream = AsyncMock()
     stream.__aiter__ = Mock(return_value=async_iter())

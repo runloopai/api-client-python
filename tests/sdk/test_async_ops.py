@@ -15,6 +15,7 @@ from tests.sdk.conftest import (
     MockDevboxView,
     MockObjectView,
     MockScorerView,
+    MockScenarioView,
     MockSnapshotView,
     MockBlueprintView,
     create_mock_httpx_response,
@@ -780,7 +781,7 @@ class TestAsyncScorerOps:
         assert scorers[1].id == "scorer_002"
         mock_async_client.scenarios.scorers.list.assert_awaited_once()
 
-        
+
 class TestAsyncAgentClient:
     """Tests for AsyncAgentClient class."""
 
@@ -1115,6 +1116,82 @@ class TestAsyncAgentClient:
             },
             name="test-agent",
         )
+
+
+class TestAsyncScenarioOps:
+    """Tests for AsyncScenarioOps class."""
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        from runloop_api_client.sdk import AsyncScenario
+        from runloop_api_client.sdk.async_ import AsyncScenarioOps
+
+        ops = AsyncScenarioOps(mock_async_client)
+        scenario = ops.from_id("scn_123")
+
+        assert isinstance(scenario, AsyncScenario)
+        assert scenario.id == "scn_123"
+
+    @pytest.mark.asyncio
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        from runloop_api_client.sdk.async_ import AsyncScenarioOps
+
+        async def async_iter():
+            return
+            yield  # Make this a generator
+
+        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+
+        ops = AsyncScenarioOps(mock_async_client)
+        scenarios = await ops.list(limit=10)
+
+        assert len(scenarios) == 0
+        mock_async_client.scenarios.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, scenario_view: MockScenarioView) -> None:
+        """Test list method with single result."""
+        from runloop_api_client.sdk import AsyncScenario
+        from runloop_api_client.sdk.async_ import AsyncScenarioOps
+
+        async def async_iter():
+            yield scenario_view
+
+        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+
+        ops = AsyncScenarioOps(mock_async_client)
+        scenarios = await ops.list(limit=10)
+
+        assert len(scenarios) == 1
+        assert isinstance(scenarios[0], AsyncScenario)
+        assert scenarios[0].id == "scn_123"
+        mock_async_client.scenarios.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        from runloop_api_client.sdk import AsyncScenario
+        from runloop_api_client.sdk.async_ import AsyncScenarioOps
+
+        scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
+        scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
+
+        async def async_iter():
+            yield scenario_view1
+            yield scenario_view2
+
+        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+
+        ops = AsyncScenarioOps(mock_async_client)
+        scenarios = await ops.list(limit=10)
+
+        assert len(scenarios) == 2
+        assert isinstance(scenarios[0], AsyncScenario)
+        assert isinstance(scenarios[1], AsyncScenario)
+        assert scenarios[0].id == "scn_001"
+        assert scenarios[1].id == "scn_002"
+        mock_async_client.scenarios.list.assert_awaited_once()
 
 
 class TestAsyncRunloopSDK:
