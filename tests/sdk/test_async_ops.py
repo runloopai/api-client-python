@@ -474,6 +474,15 @@ class TestAsyncStorageObjectOps:
         with pytest.raises(OSError, match="Failed to read file"):
             await ops.upload_from_file(missing_file)
 
+    def test_as_build_context(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
+        """as_build_context should return the correct dict shape."""
+        obj = AsyncStorageObject(mock_async_client, object_view.id, upload_url=None)
+
+        assert obj.as_build_context() == {
+            "object_id": object_view.id,
+            "type": "object",
+        }
+
     @pytest.mark.asyncio
     async def test_upload_from_dir(
         self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
@@ -523,6 +532,47 @@ class TestAsyncStorageObjectOps:
             assert any("file3.txt" in name for name in member_names)
 
         mock_async_client.objects.complete.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_upload_from_dir_with_inline_ignore_patterns(
+        self, mock_async_client: AsyncMock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect inline ignore patterns."""
+        mock_async_client.objects.create = AsyncMock(return_value=object_view)
+        mock_async_client.objects.complete = AsyncMock(return_value=object_view)
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        http_client = AsyncMock()
+        mock_response = create_mock_httpx_response()
+        http_client.put = AsyncMock(return_value=mock_response)
+        mock_async_client._client = http_client
+
+        client = AsyncStorageObjectOps(mock_async_client)
+
+        # Tar filter: drop logs and anything under build/
+        def ignore_logs_and_build(ti: tarfile.TarInfo) -> tarfile.TarInfo | None:
+            if ti.name.endswith(".log") or ti.name.startswith("build/"):
+                return None
+            return ti
+
+        obj = await client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
+
+        assert isinstance(obj, AsyncStorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
 
     @pytest.mark.asyncio
     async def test_upload_from_dir_default_name(

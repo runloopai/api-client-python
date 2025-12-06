@@ -8,6 +8,7 @@ from typing_extensions import Unpack, override
 from ._types import BaseRequestOptions, LongRequestOptions, SDKObjectDownloadParams
 from .._client import AsyncRunloop
 from ..types.object_view import ObjectView
+from ..types.blueprint_create_params import BuildContext
 from ..types.object_download_url_view import ObjectDownloadURLView
 
 
@@ -150,14 +151,30 @@ class AsyncStorageObject:
     async def upload_content(self, content: str | bytes | Iterable[bytes]) -> None:
         """Upload content to the object's pre-signed URL.
 
-        :param content: Bytes or text payload to upload
-        :type content: str | bytes
+        :param content: Bytes payload, text payload, or an iterable streaming bytes
+        :type content: str | bytes | Iterable[bytes]
+        :return: None
+        :rtype: None
         :raises RuntimeError: If no upload URL is available
         :raises httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails
         """
         url = self._ensure_upload_url()
         response = await self._client._client.put(url, content=content)
         response.raise_for_status()
+
+    def as_build_context(self) -> BuildContext:
+        """Return this object in the shape expected for a Blueprint build context.
+
+        The returned mapping can be passed directly to ``build_context`` or
+        ``named_build_contexts`` when creating a blueprint.
+
+        :return: Mapping suitable for use as a blueprint build context
+        :rtype: BuildContext
+        """
+        return {
+            "object_id": self._id,
+            "type": "object",
+        }
 
     def _ensure_upload_url(self) -> str:
         """Return the upload URL, ensuring it exists.

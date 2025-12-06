@@ -8,11 +8,23 @@ The `RunloopSDK` builds on top of the underlying REST client and provides a Pyth
 - [Quickstart (synchronous)](#quickstart-synchronous)
 - [Quickstart (asynchronous)](#quickstart-asynchronous)
 - [Core Concepts](#core-concepts)
-- [Devbox](#devbox)
-- [Blueprint](#blueprint)
-- [Snapshot](#snapshot)
-- [StorageObject](#storageobject)
-- [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
+  - [RunloopSDK](#runloopsdk)
+  - [Available Resources](#available-resources)
+  - [Devbox](#devbox)
+    - [Command Execution](#command-execution)
+    - [Execution Management](#execution-management)
+    - [Execution Results](#execution-results)
+    - [Streaming Command Output](#streaming-command-output)
+    - [File Operations](#file-operations)
+    - [Network Operations](#network-operations)
+    - [Snapshot Operations](#snapshot-operations)
+    - [Devbox Lifecycle Management](#devbox-lifecycle-management)
+    - [Context Manager Support](#context-manager-support)
+  - [Blueprint](#blueprint)
+  - [Snapshot](#snapshot)
+  - [StorageObject](#storageobject)
+    - [Storage Object Upload Helpers](#storage-object-upload-helpers)
+  - [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
 - [Accessing the Underlying REST Client](#accessing-the-underlying-rest-client)
 - [Error Handling](#error-handling)
 - [Advanced Configuration](#advanced-configuration)
@@ -407,6 +419,52 @@ blueprint = runloop.blueprint.create(
     name="my-blueprint",
     dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y python3\n",
     system_setup_commands=["pip install numpy pandas"],
+)
+
+# Or create a blueprint with a Docker build context from a local directory
+from pathlib import Path
+from runloop_api_client.lib.context_loader import build_docker_context_tar
+
+context_root = Path("./my-app")
+tar_bytes = build_docker_context_tar(context_root)
+
+build_ctx_obj = runloop.storage_object.upload_from_bytes(
+    data=tar_bytes,
+    name="my-app-context.tar.gz",
+    content_type="tgz",
+)
+
+shared_root = Path("./shared-lib")
+shared_tar = build_docker_context_tar(shared_root)
+
+shared_ctx_obj = runloop.storage_object.upload_from_bytes(
+    data=shared_tar,
+    name="shared-lib-context.tar.gz",
+    content_type="tgz",
+)
+
+blueprint_with_context = runloop.blueprint.create(
+    name="my-blueprint-with-context",
+    dockerfile="""\
+FROM node:22
+WORKDIR /usr/src/app
+
+# copy using the build context from the object
+COPY package.json package.json
+COPY src src
+
+# copy from named context
+COPY --from=shared / ./libs
+
+RUN npm install --only=production
+CMD ["node", "src/app.js"]
+""",
+    # Primary build context
+    build_context=build_ctx_obj.as_build_context(),
+    # Additional named build contexts (for Docker buildx-style usage)
+    named_build_contexts={
+        "shared": shared_ctx_obj.as_build_context(),
+    },
 )
 
 # Or get an existing one

@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import io
 import asyncio
-import tarfile
 from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
@@ -35,6 +33,7 @@ from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
 from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
+from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
 
@@ -399,6 +398,7 @@ class AsyncStorageObjectOps:
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
         ttl: Optional[timedelta] = None,
+        ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
         """Create and upload an object from a local directory.
@@ -413,21 +413,26 @@ class AsyncStorageObjectOps:
         :type metadata: Optional[Dict[str, str]]
         :param ttl: Optional Time-To-Live, after which the object is automatically deleted
         :type ttl: Optional[timedelta]
-        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions` for available options
+        :param ignore: Optional tar filter function compatible with
+            :meth:`tarfile.TarFile.add`. If provided, it will be called for each
+            member to allow modification or exclusion (by returning ``None``).
+        :type ignore: Optional[TarFilter]
+        :param options: See :typeddict:`~runloop_api_client.sdk._types.LongRequestOptions`
+            for available options
         :return: Wrapper for the uploaded object
         :rtype: AsyncStorageObject
-        :raises OSError: If the local file cannot be read
+        :raises OSError: If the local directory cannot be read
+        :raises ValueError: If ``dir_path`` does not point to a directory
         """
         path = Path(dir_path)
+        if not path.is_dir():
+            raise ValueError(f"dir_path must be a directory, got: {path}")
+
         name = name or f"{path.name}.tar.gz"
         ttl_ms = int(ttl.total_seconds()) * 1000 if ttl else None
 
         def synchronous_io() -> bytes:
-            with io.BytesIO() as tar_buffer:
-                with tarfile.open(fileobj=tar_buffer, mode="w:gz") as tar:
-                    tar.add(path, arcname=".", recursive=True)
-                tar_buffer.seek(0)
-                return tar_buffer.read()
+            return build_directory_tar(path, tar_filter=ignore)
 
         tar_bytes = await asyncio.to_thread(synchronous_io)
 

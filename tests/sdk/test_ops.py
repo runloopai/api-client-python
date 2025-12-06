@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import io
+import tarfile
 from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import Mock
@@ -440,6 +442,15 @@ class TestStorageObjectOps:
         with pytest.raises(OSError, match="Failed to read file"):
             ops.upload_from_file(missing_file)
 
+    def test_as_build_context(self, mock_client: Mock, object_view: MockObjectView) -> None:
+        """as_build_context should return the correct dict shape."""
+        obj = StorageObject(mock_client, object_view.id, upload_url=None)
+
+        assert obj.as_build_context() == {
+            "object_id": object_view.id,
+            "type": "object",
+        }
+
     def test_upload_from_dir(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
         """Test upload_from_dir method."""
         mock_client.objects.create.return_value = object_view
@@ -473,9 +484,9 @@ class TestStorageObjectOps:
         http_client.put.assert_called_once()
         call_args = http_client.put.call_args
         assert call_args[0][0] == object_view.upload_url
-        # Verify it's a BytesIO object
         uploaded_content = call_args[1]["content"]
-        assert hasattr(uploaded_content, "read")
+        # Verify it is bytes representing a gzipped tar archive
+        assert isinstance(uploaded_content, (bytes, bytearray))
         mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_dir_default_name(self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path) -> None:
@@ -586,6 +597,45 @@ class TestStorageObjectOps:
         )
         http_client.put.assert_called_once()
         mock_client.objects.complete.assert_called_once()
+
+    def test_upload_from_dir_respects_filter(
+        self, mock_client: Mock, object_view: MockObjectView, tmp_path: Path
+    ) -> None:
+        """upload_from_dir should respect a tar filter when provided."""
+        mock_client.objects.create.return_value = object_view
+
+        test_dir = tmp_path / "ctx"
+        test_dir.mkdir()
+        (test_dir / "keep.txt").write_text("keep", encoding="utf-8")
+        (test_dir / "ignore.log").write_text("ignore", encoding="utf-8")
+        build_dir = test_dir / "build"
+        build_dir.mkdir()
+        (build_dir / "ignored.txt").write_text("ignored", encoding="utf-8")
+
+        http_client = Mock()
+        mock_response = create_mock_httpx_response()
+        http_client.put.return_value = mock_response
+        mock_client._client = http_client
+
+        client = StorageObjectOps(mock_client)
+
+        # Tar filter: drop logs and anything under build/
+        def ignore_logs_and_build(ti: tarfile.TarInfo) -> tarfile.TarInfo | None:
+            if ti.name.endswith(".log") or ti.name.startswith("build/"):
+                return None
+            return ti
+
+        obj = client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
+
+        assert isinstance(obj, StorageObject)
+        uploaded_content = http_client.put.call_args[1]["content"]
+
+        with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
+            names = {m.name for m in tar.getmembers()}
+
+        assert "keep.txt" in names
+        assert "ignore.log" not in names
+        assert not any(name.startswith("build/") for name in names)
 
 
 class TestScorerOps:
