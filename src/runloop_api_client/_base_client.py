@@ -257,7 +257,7 @@ class BaseSyncPage(BasePage[_T], Generic[_T]):
         while True:
             yield page
             if page.has_next_page():
-                page = page.get_next_page()  # type: ignore
+                page = page.get_next_page()
             else:
                 return
 
@@ -483,7 +483,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             if json_data is None:
                 json_data = cast(Body, options.extra_json)
             elif is_mapping(json_data):
-                json_data = _merge_mappings(json_data, options.extra_json)  # type: ignore
+                json_data = _merge_mappings(json_data, options.extra_json)
             else:
                 raise RuntimeError(f"Unexpected JSON data type, {type(json_data)}, cannot merge with `extra_body`")
 
@@ -510,7 +510,7 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
                     raise TypeError(
                         f"Expected query input to be a dictionary for multipart requests but got {type(json_data)} instead."
                     )
-                kwargs["data"] = self._serialize_multipartform(json_data)  # type: ignore
+                kwargs["data"] = self._serialize_multipartform(json_data)
 
             # httpx determines whether or not to send a "multipart/form-data"
             # request based on the truthiness of the "files" argument.
