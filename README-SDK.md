@@ -434,15 +434,6 @@ build_ctx_obj = runloop.storage_object.upload_from_bytes(
     content_type="tgz",
 )
 
-shared_root = Path("./shared-lib")
-shared_tar = build_docker_context_tar(shared_root)
-
-shared_ctx_obj = runloop.storage_object.upload_from_bytes(
-    data=shared_tar,
-    name="shared-lib-context.tar.gz",
-    content_type="tgz",
-)
-
 blueprint_with_context = runloop.blueprint.create(
     name="my-blueprint-with-context",
     dockerfile="""\
@@ -453,18 +444,11 @@ WORKDIR /usr/src/app
 COPY package.json package.json
 COPY src src
 
-# copy from named context
-COPY --from=shared / ./libs
-
 RUN npm install --only=production
 CMD ["node", "src/app.js"]
 """,
-    # Primary build context
+    # Build context
     build_context=build_ctx_obj.as_build_context(),
-    # Additional named build contexts (for Docker buildx-style usage)
-    named_build_contexts={
-        "shared": shared_ctx_obj.as_build_context(),
-    },
 )
 
 # Or get an existing one

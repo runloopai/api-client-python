@@ -165,8 +165,8 @@ class AsyncStorageObject:
     def as_build_context(self) -> BuildContext:
         """Return this object in the shape expected for a Blueprint build context.
 
-        The returned mapping can be passed directly to ``build_context`` or
-        ``named_build_contexts`` when creating a blueprint.
+        The returned mapping can be passed directly to ``build_context``
+        when creating a blueprint.
 
         :return: Mapping suitable for use as a blueprint build context
         :rtype: BuildContext
