@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict, Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -151,7 +151,7 @@ class AsyncDevboxOps:
     async def list(
         self,
         **params: Unpack[SDKDevboxListParams],
-    ) -> list[AsyncDevbox]:
+    ) -> List[AsyncDevbox]:
         """List devboxes accessible to the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxListParams` for available parameters
@@ -187,7 +187,7 @@ class AsyncSnapshotOps:
     async def list(
         self,
         **params: Unpack[SDKDiskSnapshotListParams],
-    ) -> list[AsyncSnapshot]:
+    ) -> List[AsyncSnapshot]:
         """List snapshots created from devboxes.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDiskSnapshotListParams` for available parameters
@@ -278,7 +278,7 @@ class AsyncBlueprintOps:
     async def list(
         self,
         **params: Unpack[SDKBlueprintListParams],
-    ) -> list[AsyncBlueprint]:
+    ) -> List[AsyncBlueprint]:
         """List available blueprints.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBlueprintListParams` for available parameters
@@ -339,7 +339,7 @@ class AsyncStorageObjectOps:
     async def list(
         self,
         **params: Unpack[SDKObjectListParams],
-    ) -> list[AsyncStorageObject]:
+    ) -> List[AsyncStorageObject]:
         """List storage objects owned by the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKObjectListParams` for available parameters
@@ -542,12 +542,12 @@ class AsyncScorerOps:
         """
         return AsyncScorer(self._client, scorer_id)
 
-    async def list(self, **params: Unpack[SDKScorerListParams]) -> list[AsyncScorer]:
+    async def list(self, **params: Unpack[SDKScorerListParams]) -> List[AsyncScorer]:
         """List all scorers, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters
         :return: List of scorers
-        :rtype: list[AsyncScorer]
+        :rtype: List[AsyncScorer]
         """
         page = await self._client.scenarios.scorers.list(**params)
         return [AsyncScorer(self._client, item.id) async for item in page]
@@ -600,7 +600,7 @@ class AsyncAgentOps:
         package_name: str,
         npm_version: Optional[str] = None,
         registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> AsyncAgent:
         """Create an agent from an NPM package.
@@ -640,7 +640,7 @@ class AsyncAgentOps:
         package_name: str,
         pip_version: Optional[str] = None,
         registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> AsyncAgent:
         """Create an agent from a Pip package.
@@ -679,7 +679,7 @@ class AsyncAgentOps:
         *,
         repository: str,
         ref: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> AsyncAgent:
         """Create an agent from a Git repository.
@@ -713,7 +713,7 @@ class AsyncAgentOps:
         self,
         *,
         object_id: str,
-        agent_setup: Optional[list[str]] = None,
+        agent_setup: Optional[List[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
     ) -> AsyncAgent:
         """Create an agent from a storage object.
@@ -752,7 +752,7 @@ class AsyncAgentOps:
     async def list(
         self,
         **params: Unpack[SDKAgentListParams],
-    ) -> list[AsyncAgent]:
+    ) -> List[AsyncAgent]:
         """List agents accessible to the caller.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
@@ -793,7 +793,7 @@ class AsyncScenarioOps:
         """
         return AsyncScenario(self._client, scenario_id)
 
-    async def list(self, **params: Unpack[SDKScenarioListParams]) -> list[AsyncScenario]:
+    async def list(self, **params: Unpack[SDKScenarioListParams]) -> List[AsyncScenario]:
         """List all scenarios, optionally filtered by parameters.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters

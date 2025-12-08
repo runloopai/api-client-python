@@ -679,7 +679,7 @@ def async_to_streamed_response_wrapper(
 
         make_request = func(*args, **kwargs)
 
-        return AsyncResponseContextManager(cast(Awaitable[AsyncAPIResponse[R]], make_request))
+        return AsyncResponseContextManager(make_request)
 
     return wrapped
 
@@ -729,7 +729,7 @@ def async_to_custom_streamed_response_wrapper(
 
         make_request = func(*args, **kwargs)
 
-        return AsyncResponseContextManager(cast(Awaitable[_AsyncAPIResponseT], make_request))
+        return AsyncResponseContextManager(make_request)
 
     return wrapped
 
@@ -809,7 +809,7 @@ def async_to_custom_raw_response_wrapper(
 
         kwargs["extra_headers"] = extra_headers
 
-        return cast(Awaitable[_AsyncAPIResponseT], func(*args, **kwargs))
+        return func(*args, **kwargs)
 
     return wrapped
 
