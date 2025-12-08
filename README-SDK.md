@@ -77,6 +77,7 @@ print(obj.download_as_text())
 import asyncio
 from runloop_api_client import AsyncRunloopSDK
 
+
 async def main():
     runloop = AsyncRunloopSDK()
     async with await runloop.devbox.create(name="async-devbox") as devbox:
@@ -87,6 +88,7 @@ async def main():
             print(">>", line)
 
         await devbox.cmd.exec("ls", stdout=capture)
+
 
 asyncio.run(main())
 ```
@@ -194,7 +196,7 @@ print("Devbox ID:", execution.devbox_id)
 # Poll for current state
 state = execution.get_state()
 print("Status:", state.status)  # "running", "completed", etc.
-print("Exit code:", state.exit_status) # only set when execution has completed
+print("Exit code:", state.exit_status)  # only set when execution has completed
 
 # Wait for completion and get results
 result = execution.result()
@@ -229,7 +231,7 @@ result = execution.result()
 # Access execution results
 print("Exit code:", result.exit_code)
 print("Success:", result.success)  # True if exit code is 0
-print("Failed:", result.failed)    # True if exit code is non-zero
+print("Failed:", result.failed)  # True if exit code is non-zero
 
 # Get output streams
 stdout = result.stdout()
@@ -261,6 +263,7 @@ Pass callbacks into `cmd.exec` / `cmd.exec_async` to process logs in real time:
 def handle_output(line: str) -> None:
     print("LOG:", line)
 
+
 result = devbox.cmd.exec(
     "python train.py",
     stdout=handle_output,
@@ -277,6 +280,7 @@ def capture(line: str) -> None:
     # Callbacks must be synchronous
     # Use thread-safe data structures if needed
     log_queue.put_nowait(line)
+
 
 await devbox.cmd.exec(
     "tail -f /var/log/app.log",
@@ -299,6 +303,7 @@ print(content)
 
 # Upload files
 from pathlib import Path
+
 devbox.file.upload(
     path="/home/user/upload.txt",
     file=Path("local_file.txt"),
@@ -535,6 +540,7 @@ storage_object.complete()
 
 # Upload from file
 from pathlib import Path
+
 uploaded = runloop.storage_object.upload_from_file(
     Path("/path/to/file.txt"),
     name="my-file.txt",
@@ -584,7 +590,7 @@ obj = runloop.storage_object.create(
     name="data.bin",
     content_type="binary",
 )
-obj.upload_content(b"\xDE\xAD\xBE\xEF")
+obj.upload_content(b"\xde\xad\xbe\xef")
 obj.complete()
 ```
 
@@ -731,27 +737,29 @@ The async SDK has the same interface as the synchronous version, but all I/O ope
 import asyncio
 from runloop_api_client import AsyncRunloopSDK
 
+
 async def main():
     runloop = AsyncRunloopSDK()
-    
+
     # All the same operations, but with await
     async with await runloop.devbox.create(name="async-devbox") as devbox:
         result = await devbox.cmd.exec("pwd")
         print(await result.stdout())
-        
+
         # Streaming (note: callbacks must be synchronous)
         def capture(line: str) -> None:
             print(">>", line)
-        
+
         await devbox.cmd.exec("ls", stdout=capture)
-        
+
         # Async file operations
         await devbox.file.write(path="/tmp/test.txt", contents="Hello")
         content = await devbox.file.read(path="/tmp/test.txt")
-        
+
         # Async network operations
         tunnel = await devbox.net.create_tunnel(port=8080)
         print("Tunnel URL:", tunnel.url)
+
 
 asyncio.run(main())
 ```
@@ -768,7 +776,7 @@ devbox = runloop.devbox.create(
     name="my-devbox",
     polling_config=PollingConfig(
         timeout_seconds=300.0,  # Wait up to 5 minutes
-        interval_seconds=2.0,   # Poll every 2 seconds
+        interval_seconds=2.0,  # Poll every 2 seconds
     ),
 )
 
@@ -776,7 +784,7 @@ devbox = runloop.devbox.create(
 snapshot.await_completed(
     polling_config=PollingConfig(
         timeout_seconds=600.0,  # Wait up to 10 minutes
-        interval_seconds=5.0,   # Poll every 5 seconds
+        interval_seconds=5.0,  # Poll every 5 seconds
     ),
 )
 ```
