@@ -716,7 +716,6 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create(
             name="test-agent",
-            metadata={"key": "value"},
         )
 
         assert isinstance(agent, Agent)

@@ -793,7 +793,6 @@ class TestAsyncAgentClient:
         client = AsyncAgentOps(mock_async_client)
         agent = await client.create(
             name="test-agent",
-            metadata={"key": "value"},
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -838,7 +837,7 @@ class TestAsyncAgentClient:
         mock_async_client.agents.list = AsyncMock(return_value=page)
 
         # Mock retrieve to return the corresponding agent_view when called
-        async def mock_retrieve(agent_id, **_unused_kwargs):
+        async def mock_retrieve(agent_id: str):
             if agent_id == "agent_001":
                 return agent_view_1
             elif agent_id == "agent_002":
