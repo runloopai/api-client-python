@@ -3,12 +3,10 @@
 ```python
 from runloop_api_client.types import (
     AfterIdle,
-    AgentMountParameters,
     AgentSource,
     CodeMountParameters,
     LaunchParameters,
     Mount,
-    ObjectMountParameters,
     RunProfile,
 )
 ```
