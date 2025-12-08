@@ -38,6 +38,7 @@ from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
+from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
 
 class AsyncDevboxOps:
@@ -622,7 +623,7 @@ class AsyncAgentOps:
                 "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
             )
 
-        npm_config: dict = {"package_name": package_name}
+        npm_config: Npm = {"package_name": package_name}
         if npm_version is not None:
             npm_config["npm_version"] = npm_version
         if registry_url is not None:
@@ -630,10 +631,8 @@ class AsyncAgentOps:
         if agent_setup is not None:
             npm_config["agent_setup"] = agent_setup
 
-        return await self.create(
-            source={"type": "npm", "npm": npm_config},
-            **params,
-        )
+        params["source"] = {"type": "npm", "npm": npm_config}
+        return await self.create(**params)
 
     async def create_from_pip(
         self,
@@ -664,7 +663,7 @@ class AsyncAgentOps:
                 "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
             )
 
-        pip_config: dict = {"package_name": package_name}
+        pip_config: Pip = {"package_name": package_name}
         if pip_version is not None:
             pip_config["pip_version"] = pip_version
         if registry_url is not None:
@@ -672,10 +671,8 @@ class AsyncAgentOps:
         if agent_setup is not None:
             pip_config["agent_setup"] = agent_setup
 
-        return await self.create(
-            source={"type": "pip", "pip": pip_config},
-            **params,
-        )
+        params["source"] = {"type": "pip", "pip": pip_config}
+        return await self.create(**params)
 
     async def create_from_git(
         self,
@@ -703,16 +700,14 @@ class AsyncAgentOps:
                 "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
             )
 
-        git_config: dict = {"repository": repository}
+        git_config: Git = {"repository": repository}
         if ref is not None:
             git_config["ref"] = ref
         if agent_setup is not None:
             git_config["agent_setup"] = agent_setup
 
-        return await self.create(
-            source={"type": "git", "git": git_config},
-            **params,
-        )
+        params["source"] = {"type": "git", "git": git_config}
+        return await self.create(**params)
 
     async def create_from_object(
         self,
@@ -737,14 +732,12 @@ class AsyncAgentOps:
                 "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
             )
 
-        object_config: dict = {"object_id": object_id}
+        object_config: Object = {"object_id": object_id}
         if agent_setup is not None:
             object_config["agent_setup"] = agent_setup
 
-        return await self.create(
-            source={"type": "object", "object": object_config},
-            **params,
-        )
+        params["source"] = {"type": "object", "object": object_config}
+        return await self.create(**params)
 
     def from_id(self, agent_id: str) -> AsyncAgent:
         """Attach to an existing agent by ID.
