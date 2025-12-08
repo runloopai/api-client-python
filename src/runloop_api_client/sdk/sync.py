@@ -35,8 +35,8 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .storage_object import StorageObject
-from ..lib.context_loader import TarFilter, build_directory_tar
 from .scenario_builder import ScenarioBuilder
+from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
