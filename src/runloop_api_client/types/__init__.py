@@ -9,8 +9,6 @@ from .shared import (
     AgentSource as AgentSource,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,
-    AgentMountParameters as AgentMountParameters,
-    ObjectMountParameters as ObjectMountParameters,
 )
 from .agent_view import AgentView as AgentView
 from .devbox_view import DevboxView as DevboxView
