@@ -11,6 +11,8 @@ __all__ = ["BlueprintBuildParameters", "BuildContext", "Service", "ServiceCreden
 
 
 class BuildContext(BaseModel):
+    """A build context backed by an Object."""
+
     object_id: str
     """The ID of an object, whose contents are to be used as a build context."""
 
@@ -18,6 +20,8 @@ class BuildContext(BaseModel):
 
 
 class ServiceCredentials(BaseModel):
+    """The credentials of the container service."""
+
     password: str
     """The password of the container service."""
 

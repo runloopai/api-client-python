@@ -9,6 +9,8 @@ __all__ = ["SecretListView"]
 
 
 class SecretListView(BaseModel):
+    """A paginated list of Secrets."""
+
     has_more: bool
     """True if there are more results available beyond this page."""
 

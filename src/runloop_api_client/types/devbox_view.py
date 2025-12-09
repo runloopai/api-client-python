@@ -31,6 +31,11 @@ class StateTransition(BaseModel):
 
 
 class DevboxView(BaseModel):
+    """A Devbox represents a virtual development environment.
+
+    It is an isolated sandbox that can be given to agents and used to run arbitrary code such as AI generated code.
+    """
+
     id: str
     """The ID of the Devbox."""
 

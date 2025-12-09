@@ -23,6 +23,11 @@ class ComputerMouseInteractionParams(TypedDict, total=False):
 
 
 class Coordinate(TypedDict, total=False):
+    """
+    The x (pixels from the left) and y (pixels from the top) coordinates for the mouse to move or click-drag.  Required only by
+            `action=mouse_move` or `action=left_click_drag`
+    """
+
     x: Required[int]
     """The x coordinate (pixels from the left) for the mouse to move or click-drag."""
 

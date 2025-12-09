@@ -9,6 +9,8 @@ __all__ = ["InspectionSourceParam"]
 
 
 class InspectionSourceParam(TypedDict, total=False):
+    """Use a RepositoryInspection a source of a Blueprint build."""
+
     inspection_id: Required[str]
     """The ID of a repository inspection."""
 
