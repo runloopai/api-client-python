@@ -6,6 +6,8 @@ __all__ = ["ScorerRetrieveResponse"]
 
 
 class ScorerRetrieveResponse(BaseModel):
+    """A ScenarioScorerView represents a custom scoring function for a Scenario."""
+
     id: str
     """ID for the scenario scorer."""
 

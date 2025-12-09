@@ -11,6 +11,10 @@ __all__ = ["ScenarioEnvironmentParam"]
 
 
 class ScenarioEnvironmentParam(TypedDict, total=False):
+    """
+    ScenarioEnvironmentParameters specify the environment in which a Scenario will be run.
+    """
+
     blueprint_id: Optional[str]
     """Use the blueprint with matching ID."""
 

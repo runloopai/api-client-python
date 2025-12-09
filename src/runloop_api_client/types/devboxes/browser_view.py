@@ -7,6 +7,10 @@ __all__ = ["BrowserView"]
 
 
 class BrowserView(BaseModel):
+    """
+    A Browser represents a managed implementation of a browser like Chromiumon top of Devboxes. It includes the tunnel to the live screen and the underlying DevboxView.
+    """
+
     connection_url: str
     """
     The url to enable remote connection from browser automation tools like

@@ -6,6 +6,10 @@ __all__ = ["SecretView"]
 
 
 class SecretView(BaseModel):
+    """
+    A Secret represents a key-value pair that can be securely stored and used in Devboxes as environment variables.
+    """
+
     id: str
     """The unique identifier of the Secret."""
 

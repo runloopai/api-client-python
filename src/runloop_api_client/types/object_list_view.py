@@ -9,6 +9,8 @@ __all__ = ["ObjectListView"]
 
 
 class ObjectListView(BaseModel):
+    """A paginated list of Objects."""
+
     has_more: bool
     """True if there are more results available beyond this page."""
 

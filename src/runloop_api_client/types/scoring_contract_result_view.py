@@ -9,6 +9,10 @@ __all__ = ["ScoringContractResultView"]
 
 
 class ScoringContractResultView(BaseModel):
+    """
+    A ScoringContractResultView represents the result of running all scoring functions on a given input context.
+    """
+
     score: float
     """Total score for all scoring contracts. This will be a value between 0 and 1."""
 

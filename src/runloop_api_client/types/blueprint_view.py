@@ -10,6 +10,8 @@ __all__ = ["BlueprintView", "ContainerizedService", "ContainerizedServiceCredent
 
 
 class ContainerizedServiceCredentials(BaseModel):
+    """The credentials of the container service."""
+
     password: str
     """The password of the container service."""
 
@@ -41,6 +43,11 @@ class ContainerizedService(BaseModel):
 
 
 class BlueprintView(BaseModel):
+    """Blueprints are ways to create customized starting points for Devboxes.
+
+    They allow you to define custom starting points for Devboxes such that environment set up can be cached to improve Devbox boot times.
+    """
+
     id: str
     """The id of the Blueprint."""
 
