@@ -24,6 +24,7 @@ from runloop_api_client.sdk import (
     AsyncAgent,
     AsyncDevbox,
     AsyncScorer,
+    AsyncScenario,
     AsyncSnapshot,
     AsyncBlueprint,
     AsyncStorageObject,
@@ -33,6 +34,7 @@ from runloop_api_client.sdk.async_ import (
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
+    AsyncScenarioOps,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
     AsyncStorageObjectOps,
@@ -1122,8 +1124,6 @@ class TestAsyncScenarioOps:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         ops = AsyncScenarioOps(mock_async_client)
         scenario = ops.from_id("scn_123")
@@ -1134,7 +1134,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
         """Test list method with empty results."""
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         async def async_iter():
             return
@@ -1151,8 +1150,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         async def async_iter():
             yield scenario_view
@@ -1170,8 +1167,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list method with multiple results."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")

@@ -20,12 +20,13 @@ from tests.sdk.conftest import (
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Agent, Devbox, Scorer, Snapshot, Blueprint, StorageObject
+from runloop_api_client.sdk import Agent, Devbox, Scorer, Scenario, Snapshot, Blueprint, StorageObject
 from runloop_api_client.sdk.sync import (
     AgentOps,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
+    ScenarioOps,
     SnapshotOps,
     BlueprintOps,
     StorageObjectOps,
@@ -1015,8 +1016,6 @@ class TestScenarioOps:
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         ops = ScenarioOps(mock_client)
         scenario = ops.from_id("scn_123")
@@ -1026,7 +1025,6 @@ class TestScenarioOps:
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         mock_client.scenarios.list.return_value = []
 
@@ -1038,8 +1036,6 @@ class TestScenarioOps:
 
     def test_list_single(self, mock_client: Mock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         mock_client.scenarios.list.return_value = [scenario_view]
 
@@ -1053,8 +1049,6 @@ class TestScenarioOps:
 
     def test_list_multiple(self, mock_client: Mock) -> None:
         """Test list method with multiple results."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
