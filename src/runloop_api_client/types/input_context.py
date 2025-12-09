@@ -8,6 +8,10 @@ __all__ = ["InputContext"]
 
 
 class InputContext(BaseModel):
+    """
+    InputContextView specifies the problem statement along with all additional context for a Scenario.
+    """
+
     problem_statement: str
     """The problem statement for the Scenario."""
 

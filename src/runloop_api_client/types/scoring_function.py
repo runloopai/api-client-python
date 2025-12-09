@@ -20,6 +20,8 @@ __all__ = [
 
 
 class ScorerAstGrepScoringFunction(BaseModel):
+    """AstGrepScoringFunction utilizes structured coach search for scoring."""
+
     pattern: str
     """AST pattern to match.
 
@@ -37,6 +39,10 @@ class ScorerAstGrepScoringFunction(BaseModel):
 
 
 class ScorerBashScriptScoringFunction(BaseModel):
+    """
+    BashScriptScoringFunction is a scoring function specified by a bash script that will be run in the context of your environment.
+    """
+
     type: Literal["bash_script_scorer"]
 
     bash_script: Optional[str] = None
@@ -48,6 +54,10 @@ class ScorerBashScriptScoringFunction(BaseModel):
 
 
 class ScorerCommandScoringFunction(BaseModel):
+    """
+    CommandScoringFunction executes a single command and checks the result.The output of the command will be printed. Scoring will passed if the command returns status code 0, otherwise it will be failed.
+    """
+
     type: Literal["command_scorer"]
 
     command: Optional[str] = None
@@ -55,6 +65,8 @@ class ScorerCommandScoringFunction(BaseModel):
 
 
 class ScorerCustomScoringFunction(BaseModel):
+    """CustomScoringFunction is a custom, user defined scoring function."""
+
     custom_scorer_type: str
     """Type of the scoring function, previously registered with Runloop."""
 
@@ -65,6 +77,10 @@ class ScorerCustomScoringFunction(BaseModel):
 
 
 class ScorerPythonScriptScoringFunction(BaseModel):
+    """
+    PythonScriptScoringFunction will run a python script in the context of your environment as a ScoringFunction.
+    """
+
     python_script: str
     """Python script to be run.
 
@@ -96,6 +112,10 @@ class ScorerTestBasedScoringFunctionTestFile(BaseModel):
 
 
 class ScorerTestBasedScoringFunction(BaseModel):
+    """
+    TestBasedScoringFunction writes test files to disk and executes a test command to verify the solution.
+    """
+
     type: Literal["test_based_scorer"]
 
     test_command: Optional[str] = None
@@ -119,6 +139,8 @@ Scorer: TypeAlias = Annotated[
 
 
 class ScoringFunction(BaseModel):
+    """ScoringFunction specifies a method of scoring a Scenario."""
+
     name: str
     """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 

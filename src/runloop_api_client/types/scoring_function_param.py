@@ -19,6 +19,8 @@ __all__ = [
 
 
 class ScorerAstGrepScoringFunction(TypedDict, total=False):
+    """AstGrepScoringFunction utilizes structured coach search for scoring."""
+
     pattern: Required[str]
     """AST pattern to match.
 
@@ -36,6 +38,10 @@ class ScorerAstGrepScoringFunction(TypedDict, total=False):
 
 
 class ScorerBashScriptScoringFunction(TypedDict, total=False):
+    """
+    BashScriptScoringFunction is a scoring function specified by a bash script that will be run in the context of your environment.
+    """
+
     type: Required[Literal["bash_script_scorer"]]
 
     bash_script: str
@@ -47,6 +53,10 @@ class ScorerBashScriptScoringFunction(TypedDict, total=False):
 
 
 class ScorerCommandScoringFunction(TypedDict, total=False):
+    """
+    CommandScoringFunction executes a single command and checks the result.The output of the command will be printed. Scoring will passed if the command returns status code 0, otherwise it will be failed.
+    """
+
     type: Required[Literal["command_scorer"]]
 
     command: str
@@ -54,6 +64,8 @@ class ScorerCommandScoringFunction(TypedDict, total=False):
 
 
 class ScorerCustomScoringFunction(TypedDict, total=False):
+    """CustomScoringFunction is a custom, user defined scoring function."""
+
     custom_scorer_type: Required[str]
     """Type of the scoring function, previously registered with Runloop."""
 
@@ -64,6 +76,10 @@ class ScorerCustomScoringFunction(TypedDict, total=False):
 
 
 class ScorerPythonScriptScoringFunction(TypedDict, total=False):
+    """
+    PythonScriptScoringFunction will run a python script in the context of your environment as a ScoringFunction.
+    """
+
     python_script: Required[str]
     """Python script to be run.
 
@@ -95,6 +111,10 @@ class ScorerTestBasedScoringFunctionTestFile(TypedDict, total=False):
 
 
 class ScorerTestBasedScoringFunction(TypedDict, total=False):
+    """
+    TestBasedScoringFunction writes test files to disk and executes a test command to verify the solution.
+    """
+
     type: Required[Literal["test_based_scorer"]]
 
     test_command: str
@@ -115,6 +135,8 @@ Scorer: TypeAlias = Union[
 
 
 class ScoringFunctionParam(TypedDict, total=False):
+    """ScoringFunction specifies a method of scoring a Scenario."""
+
     name: Required[str]
     """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 

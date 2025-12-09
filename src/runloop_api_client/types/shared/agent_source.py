@@ -8,6 +8,8 @@ __all__ = ["AgentSource", "Git", "Npm", "Object", "Pip"]
 
 
 class Git(BaseModel):
+    """Git source configuration"""
+
     repository: str
     """Git repository URL"""
 
@@ -19,6 +21,8 @@ class Git(BaseModel):
 
 
 class Npm(BaseModel):
+    """NPM source configuration"""
+
     package_name: str
     """NPM package name"""
 
@@ -33,6 +37,8 @@ class Npm(BaseModel):
 
 
 class Object(BaseModel):
+    """Object store source configuration"""
+
     object_id: str
     """Object ID"""
 
@@ -41,6 +47,8 @@ class Object(BaseModel):
 
 
 class Pip(BaseModel):
+    """Pip source configuration"""
+
     package_name: str
     """Pip package name"""
 
@@ -55,6 +63,8 @@ class Pip(BaseModel):
 
 
 class AgentSource(BaseModel):
+    """Agent source configuration."""
+
     type: str
     """Source type: npm, pip, object, or git"""
 

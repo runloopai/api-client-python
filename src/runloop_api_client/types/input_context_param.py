@@ -9,6 +9,10 @@ __all__ = ["InputContextParam"]
 
 
 class InputContextParam(TypedDict, total=False):
+    """
+    InputContextView specifies the problem statement along with all additional context for a Scenario.
+    """
+
     problem_statement: Required[str]
     """The problem statement for the Scenario."""
 
