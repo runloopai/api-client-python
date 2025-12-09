@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.2.0 (2025-12-09)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/runloopai/api-client-python/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **devbox:** default to x86 arch ([501de0b](https://github.com/runloopai/api-client-python/commit/501de0bb1d76c836ff9f448513a16155641345ae))
+* **devbox:** return user for createSshKey ([f094bf7](https://github.com/runloopai/api-client-python/commit/f094bf7443a0ca5bab6d47a53b7b14bade3cecd0))
+
+
+### Bug Fixes
+
+* ensure streams are always closed ([d01aae2](https://github.com/runloopai/api-client-python/commit/d01aae204d8c57ac76646df0e0e1078e64ad9891))
+
+
+### Chores
+
+* bump required `uv` version ([8ad519f](https://github.com/runloopai/api-client-python/commit/8ad519fd26d389628d157a413a0b0f1f5d435e9e))
+* **deps:** mypy 1.18.1 has a regression, pin to 1.17 ([e56582a](https://github.com/runloopai/api-client-python/commit/e56582a93590445d8e545b6123be0f14db39a8f5))
+* **docs:** use environment variables for authentication in code snippets ([55cf613](https://github.com/runloopai/api-client-python/commit/55cf6131edb8d38144761c5dbbbcf9389093ed7b))
+* **internal:** version bump ([2fa85c6](https://github.com/runloopai/api-client-python/commit/2fa85c6694dc468280eedb28136aadcda4f11801))
+* remove some unnecessary changes to reduce diff from Stainless ([#705](https://github.com/runloopai/api-client-python/issues/705)) ([715c9d0](https://github.com/runloopai/api-client-python/commit/715c9d09f4e874032ee1d4d6c81d80ab6a72ec45))
+* update lockfile ([7e0136d](https://github.com/runloopai/api-client-python/commit/7e0136dfcd62a2843138ae382bd6fedfd881e1b3))
+* update requirements-dev.lock ([#707](https://github.com/runloopai/api-client-python/issues/707)) ([a2d5326](https://github.com/runloopai/api-client-python/commit/a2d5326634cad5afe6c74252d26b01916ed41bcb))
+* update uv.lock ([b9e0729](https://github.com/runloopai/api-client-python/commit/b9e07291745291d16f122dbca5ef513ed134c5dd))
+
 ## 1.1.0 (2025-12-06)
 
 Full Changelog: [v1.0.0...v1.1.0](https://github.com/runloopai/api-client-python/compare/v1.0.0...v1.1.0)
