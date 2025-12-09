@@ -9,6 +9,8 @@ __all__ = ["AgentView"]
 
 
 class AgentView(BaseModel):
+    """An Agent represents a registered AI agent entity."""
+
     id: str
     """The unique identifier of the Agent."""
 

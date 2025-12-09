@@ -6,6 +6,8 @@ __all__ = ["RepositoryConnectionView"]
 
 
 class RepositoryConnectionView(BaseModel):
+    """The ID of the Repository."""
+
     id: str
     """The ID of the Repository."""
 

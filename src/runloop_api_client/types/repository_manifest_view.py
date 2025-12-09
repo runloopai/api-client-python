@@ -17,6 +17,8 @@ __all__ = [
 
 
 class ContainerConfig(BaseModel):
+    """Container configuration specifying the base image and setup commands."""
+
     base_image_name: str
     """The name of the base image.
 
@@ -41,6 +43,10 @@ class Language(BaseModel):
 
 
 class WorkspaceDevCommands(BaseModel):
+    """
+    Extracted common commands important to the developer life cycle like linting, testing, building, etc.
+    """
+
     build: Optional[List[str]] = None
     """Build command (e.g. npm run build)."""
 
@@ -58,6 +64,10 @@ class WorkspaceDevCommands(BaseModel):
 
 
 class Workspace(BaseModel):
+    """
+    A workspace is a buildable unit of code within a repository and often represents a deployable unit of code like a backend service or a frontend app.
+    """
+
     build_tool: List[str]
     """Name of the build tool used (e.g. pip, npm)."""
 
@@ -96,6 +106,8 @@ class Workspace(BaseModel):
 
 
 class ContainerizedServiceCredentials(BaseModel):
+    """The credentials of the container service."""
+
     password: str
     """The password of the container service."""
 
@@ -127,6 +139,10 @@ class ContainerizedService(BaseModel):
 
 
 class RepositoryManifestView(BaseModel):
+    """
+    The repository manifest contains container configuration and workspace definitions for a repository.
+    """
+
     container_config: ContainerConfig
     """Container configuration specifying the base image and setup commands."""
 

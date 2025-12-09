@@ -9,6 +9,8 @@ __all__ = ["ObjectView"]
 
 
 class ObjectView(BaseModel):
+    """An Object represents a stored data entity with metadata."""
+
     id: str
     """The unique identifier of the Object."""
 

@@ -71,6 +71,8 @@ class BlueprintCreateParams(TypedDict, total=False):
 
 
 class BuildContext(TypedDict, total=False):
+    """A build context backed by an Object."""
+
     object_id: Required[str]
     """The ID of an object, whose contents are to be used as a build context."""
 
@@ -78,6 +80,8 @@ class BuildContext(TypedDict, total=False):
 
 
 class ServiceCredentials(TypedDict, total=False):
+    """The credentials of the container service."""
+
     password: Required[str]
     """The password of the container service."""
 
