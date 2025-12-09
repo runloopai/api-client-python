@@ -49,21 +49,26 @@ class TestAsyncScenarioBuilder:
         """Test builder __repr__."""
         assert repr(builder) == "<AsyncScenarioBuilder name='test-scenario'>"
 
-    def test_from_blueprint_returns_self(self, builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint) -> None:
-        """Test from_blueprint returns self for chaining."""
+    def test_from_blueprint_and_snapshot(
+        self, builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint, mock_snapshot: AsyncSnapshot
+    ) -> None:
+        """Test blueprint/snapshot setting returns self and are mutually exclusive."""
+        # from_blueprint returns self and sets blueprint
         result = builder.from_blueprint(mock_blueprint)
-
         assert result is builder
         assert builder._blueprint is mock_blueprint
         assert builder._snapshot is None
 
-    def test_from_snapshot_returns_self(self, builder: AsyncScenarioBuilder, mock_snapshot: AsyncSnapshot) -> None:
-        """Test from_snapshot returns self for chaining."""
+        # from_snapshot returns self, sets snapshot, and clears blueprint
         result = builder.from_snapshot(mock_snapshot)
-
         assert result is builder
         assert builder._snapshot is mock_snapshot
         assert builder._blueprint is None
+
+        # from_blueprint clears snapshot
+        builder.from_blueprint(mock_blueprint)
+        assert builder._blueprint is mock_blueprint
+        assert builder._snapshot is None
 
     def test_with_working_directory_returns_self(self, builder: AsyncScenarioBuilder) -> None:
         """Test with_working_directory returns self for chaining."""

@@ -48,41 +48,26 @@ class TestScenarioBuilder:
         """Test builder __repr__."""
         assert repr(builder) == "<ScenarioBuilder name='test-scenario'>"
 
-    def test_from_blueprint_returns_self(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
-        """Test from_blueprint returns self for chaining."""
+    def test_from_blueprint_and_snapshot(
+        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
+    ) -> None:
+        """Test blueprint/snapshot setting returns self and are mutually exclusive."""
+        # from_blueprint returns self and sets blueprint
         result = builder.from_blueprint(mock_blueprint)
-
         assert result is builder
         assert builder._blueprint is mock_blueprint
         assert builder._snapshot is None
 
-    def test_from_snapshot_returns_self(self, builder: ScenarioBuilder, mock_snapshot: Snapshot) -> None:
-        """Test from_snapshot returns self for chaining."""
+        # from_snapshot returns self, sets snapshot, and clears blueprint
         result = builder.from_snapshot(mock_snapshot)
-
         assert result is builder
         assert builder._snapshot is mock_snapshot
         assert builder._blueprint is None
 
-    def test_from_blueprint_clears_snapshot(
-        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
-    ) -> None:
-        """Test that setting blueprint clears snapshot."""
-        builder.from_snapshot(mock_snapshot)
+        # from_blueprint clears snapshot
         builder.from_blueprint(mock_blueprint)
-
         assert builder._blueprint is mock_blueprint
         assert builder._snapshot is None
-
-    def test_from_snapshot_clears_blueprint(
-        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
-    ) -> None:
-        """Test that setting snapshot clears blueprint."""
-        builder.from_blueprint(mock_blueprint)
-        builder.from_snapshot(mock_snapshot)
-
-        assert builder._snapshot is mock_snapshot
-        assert builder._blueprint is None
 
     def test_with_working_directory_returns_self(self, builder: ScenarioBuilder) -> None:
         """Test with_working_directory returns self for chaining."""
