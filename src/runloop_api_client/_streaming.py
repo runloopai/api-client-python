@@ -73,22 +73,22 @@ class Stream(Generic[_T]):
         process_data = self._client._process_response_data
         iterator = self._iter_events()
 
-        for sse in iterator:
-            # Surface server-sent error events as API errors to allow callers to handle/retry
-            if sse.event == "error":
-                try:
-                    error_obj = json.loads(sse.data)
-                    status_code = int(error_obj.get("code", 500))
-                    # Build a synthetic response to mirror normal error handling
-                    fake_resp = httpx.Response(status_code, request=response.request, content=sse.data)
-                except Exception:
-                    fake_resp = httpx.Response(500, request=response.request, content=sse.data)
-                raise self._client._make_status_error_from_response(fake_resp)
+        try:
+            for sse in iterator:
+                # Surface server-sent error events as API errors to allow callers to handle/retry
+                if sse.event == "error":
+                    try:
+                        error_obj = json.loads(sse.data)
+                        status_code = int(error_obj.get("code", 500))
+                        fake_resp = httpx.Response(status_code, request=response.request, content=sse.data)
+                    except Exception:
+                        fake_resp = httpx.Response(500, request=response.request, content=sse.data)
+                    raise self._client._make_status_error_from_response(fake_resp)
 
-            yield process_data(data=sse.json(), cast_to=cast_to, response=response)
-
-        # As we might not fully consume the response stream, we need to close it explicitly
-        response.close()
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+        finally:
+            # Ensure the response is closed even if the consumer doesn't read all data
+            response.close()
 
     def __enter__(self) -> Self:
         return self
@@ -147,22 +147,22 @@ class AsyncStream(Generic[_T]):
         process_data = self._client._process_response_data
         iterator = self._iter_events()
 
-        async for sse in iterator:
-            # Surface server-sent error events as API errors to allow callers to handle/retry
-            if sse.event == "error":
-                try:
-                    error_obj = json.loads(sse.data)
-                    status_code = int(error_obj.get("code", 500))
-                    # Build a synthetic response to mirror normal error handling
-                    fake_resp = httpx.Response(status_code, request=response.request, content=sse.data)
-                except Exception:
-                    fake_resp = httpx.Response(500, request=response.request, content=sse.data)
-                raise self._client._make_status_error_from_response(fake_resp)
+        try:
+            async for sse in iterator:
+                # Surface server-sent error events as API errors to allow callers to handle/retry
+                if sse.event == "error":
+                    try:
+                        error_obj = json.loads(sse.data)
+                        status_code = int(error_obj.get("code", 500))
+                        fake_resp = httpx.Response(status_code, request=response.request, content=sse.data)
+                    except Exception:
+                        fake_resp = httpx.Response(500, request=response.request, content=sse.data)
+                    raise self._client._make_status_error_from_response(fake_resp)
 
-            yield process_data(data=sse.json(), cast_to=cast_to, response=response)
-
-        # As we might not fully consume the response stream, we need to close it explicitly
-        await response.aclose()
+                yield process_data(data=sse.json(), cast_to=cast_to, response=response)
+        finally:
+            # Ensure the response is closed even if the consumer doesn't read all data
+            await response.aclose()
 
     async def __aenter__(self) -> Self:
         return self
