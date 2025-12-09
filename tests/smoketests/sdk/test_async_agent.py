@@ -6,6 +6,7 @@ import pytest
 
 from runloop_api_client.sdk import AsyncRunloopSDK
 from tests.smoketests.utils import unique_name
+from runloop_api_client.types.shared_params import AgentSource
 
 pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
@@ -112,7 +113,7 @@ class TestAsyncAgentListing:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_list_multiple_agents(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test listing multiple agents after creation."""
-        source_config = {
+        source_config: AgentSource = {
             "type": "npm",
             "npm": {
                 "package_name": "@runloop/hello-world-agent",
