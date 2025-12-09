@@ -25,7 +25,7 @@ class LaunchParameters(BaseModel):
     """
 
     architecture: Optional[Literal["x86_64", "arm64"]] = None
-    """The target architecture for the Devbox. If unset, defaults to arm64."""
+    """The target architecture for the Devbox. If unset, defaults to x86_64."""
 
     available_ports: Optional[List[int]] = None
     """A list of ports to make available on the Devbox.
