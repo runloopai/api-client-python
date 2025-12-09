@@ -7,6 +7,8 @@ from typing_extensions import Self, Literal, override
 
 from .._client import AsyncRunloop
 from .async_scenario import AsyncScenario
+from .async_snapshot import AsyncSnapshot
+from .async_blueprint import AsyncBlueprint
 from ..types.scoring_function_param import (
     Scorer,
     ScoringFunctionParam,
@@ -28,7 +30,7 @@ class AsyncScenarioBuilder:
 
     Example:
         >>> builder = sdk.scenario.builder("my-scenario")
-        >>> builder.from_blueprint_id("bp-xxx")
+        >>> builder.from_blueprint(blueprint)
         >>> builder.with_working_directory("/app")
         >>> builder.with_problem_statement("Fix the bug in main.py")
         >>> builder.add_test_scorer("tests", test_command="pytest")
@@ -47,8 +49,8 @@ class AsyncScenarioBuilder:
         self._name = name
 
         # Environment configuration
-        self._blueprint_id: Optional[str] = None
-        self._snapshot_id: Optional[str] = None
+        self._blueprint: Optional[AsyncBlueprint] = None
+        self._snapshot: Optional[AsyncSnapshot] = None
         self._working_directory: Optional[str] = None
 
         # Input context
@@ -78,28 +80,28 @@ class AsyncScenarioBuilder:
         """
         return self._name
 
-    def from_blueprint_id(self, blueprint_id: str) -> Self:
-        """Set the blueprint ID for the scenario environment.
+    def from_blueprint(self, blueprint: AsyncBlueprint) -> Self:
+        """Set the blueprint for the scenario environment.
 
-        :param blueprint_id: Blueprint ID to use
-        :type blueprint_id: str
+        :param blueprint: Blueprint to use
+        :type blueprint: AsyncBlueprint
         :return: Self for method chaining
         :rtype: Self
         """
-        self._blueprint_id = blueprint_id
-        self._snapshot_id = None  # Clear snapshot if blueprint is set
+        self._blueprint = blueprint
+        self._snapshot = None  # Clear snapshot if blueprint is set
         return self
 
-    def from_snapshot_id(self, snapshot_id: str) -> Self:
-        """Set the snapshot ID for the scenario environment.
+    def from_snapshot(self, snapshot: AsyncSnapshot) -> Self:
+        """Set the snapshot for the scenario environment.
 
-        :param snapshot_id: Snapshot ID to use
-        :type snapshot_id: str
+        :param snapshot: Snapshot to use
+        :type snapshot: AsyncSnapshot
         :return: Self for method chaining
         :rtype: Self
         """
-        self._snapshot_id = snapshot_id
-        self._blueprint_id = None  # Clear blueprint if snapshot is set
+        self._snapshot = snapshot
+        self._blueprint = None  # Clear blueprint if snapshot is set
         return self
 
     def with_working_directory(self, directory: str) -> Self:
@@ -415,10 +417,10 @@ class AsyncScenarioBuilder:
 
         # Build environment parameters if any are set
         env_params: Dict[str, Any] = {}
-        if self._blueprint_id:
-            env_params["blueprint_id"] = self._blueprint_id
-        if self._snapshot_id:
-            env_params["snapshot_id"] = self._snapshot_id
+        if self._blueprint:
+            env_params["blueprint_id"] = self._blueprint.id
+        if self._snapshot:
+            env_params["snapshot_id"] = self._snapshot.id
         if self._working_directory:
             env_params["working_directory"] = self._working_directory
 

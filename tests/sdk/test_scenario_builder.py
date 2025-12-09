@@ -6,6 +6,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from runloop_api_client.sdk.snapshot import Snapshot
+from runloop_api_client.sdk.blueprint import Blueprint
 from runloop_api_client.sdk.scenario_builder import ScenarioBuilder
 from runloop_api_client.types.scoring_function_param import ScorerTestBasedScoringFunctionTestFile
 
@@ -18,6 +20,16 @@ class TestScenarioBuilder:
         """Create a mock Runloop client."""
         client = MagicMock()
         return client
+
+    @pytest.fixture
+    def mock_blueprint(self, mock_client: MagicMock) -> Blueprint:
+        """Create a mock Blueprint object."""
+        return Blueprint(mock_client, "bp-123")
+
+    @pytest.fixture
+    def mock_snapshot(self, mock_client: MagicMock) -> Snapshot:
+        """Create a mock Snapshot object."""
+        return Snapshot(mock_client, "snap-123")
 
     @pytest.fixture
     def builder(self, mock_client: MagicMock) -> ScenarioBuilder:
@@ -36,37 +48,41 @@ class TestScenarioBuilder:
         """Test builder __repr__."""
         assert repr(builder) == "<ScenarioBuilder name='test-scenario'>"
 
-    def test_from_blueprint_id_returns_self(self, builder: ScenarioBuilder) -> None:
-        """Test from_blueprint_id returns self for chaining."""
-        result = builder.from_blueprint_id("bp-123")
+    def test_from_blueprint_returns_self(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
+        """Test from_blueprint returns self for chaining."""
+        result = builder.from_blueprint(mock_blueprint)
 
         assert result is builder
-        assert builder._blueprint_id == "bp-123"
-        assert builder._snapshot_id is None
+        assert builder._blueprint is mock_blueprint
+        assert builder._snapshot is None
 
-    def test_from_snapshot_id_returns_self(self, builder: ScenarioBuilder) -> None:
-        """Test from_snapshot_id returns self for chaining."""
-        result = builder.from_snapshot_id("snap-123")
+    def test_from_snapshot_returns_self(self, builder: ScenarioBuilder, mock_snapshot: Snapshot) -> None:
+        """Test from_snapshot returns self for chaining."""
+        result = builder.from_snapshot(mock_snapshot)
 
         assert result is builder
-        assert builder._snapshot_id == "snap-123"
-        assert builder._blueprint_id is None
+        assert builder._snapshot is mock_snapshot
+        assert builder._blueprint is None
 
-    def test_from_blueprint_clears_snapshot(self, builder: ScenarioBuilder) -> None:
+    def test_from_blueprint_clears_snapshot(
+        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
+    ) -> None:
         """Test that setting blueprint clears snapshot."""
-        builder.from_snapshot_id("snap-123")
-        builder.from_blueprint_id("bp-123")
+        builder.from_snapshot(mock_snapshot)
+        builder.from_blueprint(mock_blueprint)
 
-        assert builder._blueprint_id == "bp-123"
-        assert builder._snapshot_id is None
+        assert builder._blueprint is mock_blueprint
+        assert builder._snapshot is None
 
-    def test_from_snapshot_clears_blueprint(self, builder: ScenarioBuilder) -> None:
+    def test_from_snapshot_clears_blueprint(
+        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
+    ) -> None:
         """Test that setting snapshot clears blueprint."""
-        builder.from_blueprint_id("bp-123")
-        builder.from_snapshot_id("snap-123")
+        builder.from_blueprint(mock_blueprint)
+        builder.from_snapshot(mock_snapshot)
 
-        assert builder._snapshot_id == "snap-123"
-        assert builder._blueprint_id is None
+        assert builder._snapshot is mock_snapshot
+        assert builder._blueprint is None
 
     def test_with_working_directory_returns_self(self, builder: ScenarioBuilder) -> None:
         """Test with_working_directory returns self for chaining."""
@@ -269,11 +285,11 @@ class TestScenarioBuilder:
         assert params["input_context"]["problem_statement"] == "Fix the bug"
         assert len(params["scoring_contract"]["scoring_function_parameters"]) == 1
 
-    def test_build_params_with_environment(self, builder: ScenarioBuilder) -> None:
+    def test_build_params_with_environment(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
         """Test _build_params includes environment parameters."""
         builder.with_problem_statement("Fix the bug")
         builder.add_test_scorer("tests", test_command="pytest")
-        builder.from_blueprint_id("bp-123")
+        builder.from_blueprint(mock_blueprint)
         builder.with_working_directory("/app")
 
         params = builder._build_params()
@@ -281,12 +297,12 @@ class TestScenarioBuilder:
         assert params["environment_parameters"]["blueprint_id"] == "bp-123"
         assert params["environment_parameters"]["working_directory"] == "/app"
 
-    def test_build_params_with_all_options(self, builder: ScenarioBuilder) -> None:
+    def test_build_params_with_all_options(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
         """Test _build_params with all optional fields set."""
         builder.with_problem_statement("Fix the bug")
         builder.with_additional_context({"hint": "line 42"})
         builder.add_test_scorer("tests", test_command="pytest")
-        builder.from_blueprint_id("bp-123")
+        builder.from_blueprint(mock_blueprint)
         builder.with_working_directory("/app")
         builder.with_metadata({"team": "infra"})
         builder.with_reference_output("diff content")
@@ -343,10 +359,10 @@ class TestScenarioBuilder:
 
         assert scenario.id == "scn-new-123"
 
-    def test_fluent_chaining(self, builder: ScenarioBuilder) -> None:
+    def test_fluent_chaining(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
         """Test that all builder methods can be chained fluently."""
         result = (
-            builder.from_blueprint_id("bp-123")
+            builder.from_blueprint(mock_blueprint)
             .with_working_directory("/app")
             .with_problem_statement("Fix the bug")
             .with_additional_context({"hint": "check main.py"})
@@ -359,7 +375,7 @@ class TestScenarioBuilder:
         )
 
         assert result is builder
-        assert builder._blueprint_id == "bp-123"
+        assert builder._blueprint is mock_blueprint
         assert builder._working_directory == "/app"
         assert builder._problem_statement == "Fix the bug"
         assert len(builder._scorers) == 1

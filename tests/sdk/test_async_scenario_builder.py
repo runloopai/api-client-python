@@ -6,6 +6,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
+from runloop_api_client.sdk.async_snapshot import AsyncSnapshot
+from runloop_api_client.sdk.async_blueprint import AsyncBlueprint
 from runloop_api_client.sdk.async_scenario_builder import AsyncScenarioBuilder
 
 
@@ -19,6 +21,16 @@ class TestAsyncScenarioBuilder:
         client.scenarios = MagicMock()
         client.scenarios.create = AsyncMock()
         return client
+
+    @pytest.fixture
+    def mock_blueprint(self, mock_async_client: MagicMock) -> AsyncBlueprint:
+        """Create a mock AsyncBlueprint object."""
+        return AsyncBlueprint(mock_async_client, "bp-123")
+
+    @pytest.fixture
+    def mock_snapshot(self, mock_async_client: MagicMock) -> AsyncSnapshot:
+        """Create a mock AsyncSnapshot object."""
+        return AsyncSnapshot(mock_async_client, "snap-123")
 
     @pytest.fixture
     def builder(self, mock_async_client: MagicMock) -> AsyncScenarioBuilder:
@@ -37,21 +49,21 @@ class TestAsyncScenarioBuilder:
         """Test builder __repr__."""
         assert repr(builder) == "<AsyncScenarioBuilder name='test-scenario'>"
 
-    def test_from_blueprint_id_returns_self(self, builder: AsyncScenarioBuilder) -> None:
-        """Test from_blueprint_id returns self for chaining."""
-        result = builder.from_blueprint_id("bp-123")
+    def test_from_blueprint_returns_self(self, builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint) -> None:
+        """Test from_blueprint returns self for chaining."""
+        result = builder.from_blueprint(mock_blueprint)
 
         assert result is builder
-        assert builder._blueprint_id == "bp-123"
-        assert builder._snapshot_id is None
+        assert builder._blueprint is mock_blueprint
+        assert builder._snapshot is None
 
-    def test_from_snapshot_id_returns_self(self, builder: AsyncScenarioBuilder) -> None:
-        """Test from_snapshot_id returns self for chaining."""
-        result = builder.from_snapshot_id("snap-123")
+    def test_from_snapshot_returns_self(self, builder: AsyncScenarioBuilder, mock_snapshot: AsyncSnapshot) -> None:
+        """Test from_snapshot returns self for chaining."""
+        result = builder.from_snapshot(mock_snapshot)
 
         assert result is builder
-        assert builder._snapshot_id == "snap-123"
-        assert builder._blueprint_id is None
+        assert builder._snapshot is mock_snapshot
+        assert builder._blueprint is None
 
     def test_with_working_directory_returns_self(self, builder: AsyncScenarioBuilder) -> None:
         """Test with_working_directory returns self for chaining."""
@@ -125,11 +137,11 @@ class TestAsyncScenarioBuilder:
         assert params["input_context"]["problem_statement"] == "Fix the bug"
         assert len(params["scoring_contract"]["scoring_function_parameters"]) == 1
 
-    def test_build_params_with_environment(self, builder: AsyncScenarioBuilder) -> None:
+    def test_build_params_with_environment(self, builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint) -> None:
         """Test _build_params includes environment parameters."""
         builder.with_problem_statement("Fix the bug")
         builder.add_test_scorer("tests", test_command="pytest")
-        builder.from_blueprint_id("bp-123")
+        builder.from_blueprint(mock_blueprint)
         builder.with_working_directory("/app")
 
         params = builder._build_params()
@@ -156,10 +168,10 @@ class TestAsyncScenarioBuilder:
 
         assert scenario.id == "scn-new-123"
 
-    def test_fluent_chaining(self, builder: AsyncScenarioBuilder) -> None:
+    def test_fluent_chaining(self, builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint) -> None:
         """Test that all builder methods can be chained fluently."""
         result = (
-            builder.from_blueprint_id("bp-123")
+            builder.from_blueprint(mock_blueprint)
             .with_working_directory("/app")
             .with_problem_statement("Fix the bug")
             .with_additional_context({"hint": "check main.py"})
@@ -172,7 +184,7 @@ class TestAsyncScenarioBuilder:
         )
 
         assert result is builder
-        assert builder._blueprint_id == "bp-123"
+        assert builder._blueprint is mock_blueprint
         assert builder._working_directory == "/app"
         assert builder._problem_statement == "Fix the bug"
         assert len(builder._scorers) == 1
