@@ -34,11 +34,11 @@ class TestScenarioBuilder:
     @pytest.fixture
     def builder(self, mock_client: MagicMock) -> ScenarioBuilder:
         """Create a ScenarioBuilder instance with mock client."""
-        return ScenarioBuilder(mock_client, "test-scenario")
+        return ScenarioBuilder("test-scenario", mock_client)
 
     def test_instantiation(self, mock_client: MagicMock) -> None:
         """Test builder initialization and repr."""
-        builder = ScenarioBuilder(mock_client, "my-scenario")
+        builder = ScenarioBuilder("my-scenario", mock_client)
 
         assert builder._client is mock_client
         assert builder._name == "my-scenario"
@@ -134,7 +134,7 @@ class TestScenarioBuilder:
             builder._build_params()
 
         # Missing scorer (new builder)
-        builder2 = ScenarioBuilder(builder._client, "test2")
+        builder2 = ScenarioBuilder("test2", builder._client)
         builder2.with_problem_statement("Fix the bug")
         with pytest.raises(ValueError, match="At least one scorer is required"):
             builder2._build_params()

@@ -41,13 +41,13 @@ class AsyncScenarioBuilder:
         >>> scenario = await builder.push()
     """
 
-    def __init__(self, client: AsyncRunloop, name: str) -> None:
+    def __init__(self, name: str, client: AsyncRunloop) -> None:
         """Initialize the builder.
 
-        :param client: AsyncRunloop client instance
-        :type client: AsyncRunloop
         :param name: Name for the scenario
         :type name: str
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
         """
         self._client = client
         self._name = name

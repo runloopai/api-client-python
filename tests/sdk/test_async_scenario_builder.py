@@ -36,11 +36,11 @@ class TestAsyncScenarioBuilder:
     @pytest.fixture
     def builder(self, mock_async_client: MagicMock) -> AsyncScenarioBuilder:
         """Create an AsyncScenarioBuilder instance with mock client."""
-        return AsyncScenarioBuilder(mock_async_client, "test-scenario")
+        return AsyncScenarioBuilder("test-scenario", mock_async_client)
 
     def test_instantiation(self, mock_async_client: MagicMock) -> None:
         """Test builder initialization and repr."""
-        builder = AsyncScenarioBuilder(mock_async_client, "my-scenario")
+        builder = AsyncScenarioBuilder("my-scenario", mock_async_client)
 
         assert builder._client is mock_async_client
         assert builder._name == "my-scenario"
@@ -136,7 +136,7 @@ class TestAsyncScenarioBuilder:
             builder._build_params()
 
         # Missing scorer (new builder)
-        builder2 = AsyncScenarioBuilder(builder._client, "test2")
+        builder2 = AsyncScenarioBuilder("test2", builder._client)
         builder2.with_problem_statement("Fix the bug")
         with pytest.raises(ValueError, match="At least one scorer is required"):
             builder2._build_params()

@@ -801,7 +801,7 @@ class AsyncScenarioOps:
         :return: A new AsyncScenarioBuilder instance
         :rtype: AsyncScenarioBuilder
         """
-        return AsyncScenarioBuilder(self._client, name)
+        return AsyncScenarioBuilder(name, self._client)
 
     def from_id(self, scenario_id: str) -> AsyncScenario:
         """Get an AsyncScenario instance for an existing scenario ID.

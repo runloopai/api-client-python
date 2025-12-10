@@ -822,7 +822,7 @@ class ScenarioOps:
         :return: A new ScenarioBuilder instance
         :rtype: ScenarioBuilder
         """
-        return ScenarioBuilder(self._client, name)
+        return ScenarioBuilder(name, self._client)
 
     def from_id(self, scenario_id: str) -> Scenario:
         """Get a Scenario instance for an existing scenario ID.

@@ -41,13 +41,13 @@ class ScenarioBuilder:
         >>> scenario = builder.push()
     """
 
-    def __init__(self, client: Runloop, name: str) -> None:
+    def __init__(self, name: str, client: Runloop) -> None:
         """Initialize the builder.
 
-        :param client: Runloop client instance
-        :type client: Runloop
         :param name: Name for the scenario
         :type name: str
+        :param client: Runloop client instance
+        :type client: Runloop
         """
         self._client = client
         self._name = name
