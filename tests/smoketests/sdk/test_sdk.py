@@ -16,12 +16,15 @@ class TestRunloopSDKInitialization:
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_sdk_instance_creation(self, sdk_client: RunloopSDK) -> None:
-        """Test that SDK instance is created successfully with all client properties."""
+        """Test that SDK instance is created successfully with all operations."""
         assert sdk_client is not None
         assert sdk_client.devbox is not None
         assert sdk_client.blueprint is not None
         assert sdk_client.snapshot is not None
         assert sdk_client.storage_object is not None
+        assert sdk_client.scorer is not None
+        assert sdk_client.agent is not None
+        assert sdk_client.scenario is not None
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_legacy_api_access(self, sdk_client: RunloopSDK) -> None:
