@@ -16,7 +16,7 @@ from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse, Scor
 class Scorer:
     """A custom scorer for evaluating scenario outputs.
 
-    Scorers define bash scripts that produce a score (0.0-1.0) for scenario runs.
+    Scorers define bash scripts that produce a score in the range [0.0, 1.0] for scenario runs.
     Obtain instances via ``runloop.scorer.create()`` or ``runloop.scorer.from_id()``.
 
     Example:

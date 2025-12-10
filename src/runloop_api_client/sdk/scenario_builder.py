@@ -213,7 +213,7 @@ class ScenarioBuilder:
     ) -> Self:
         """Add a bash script scorer.
 
-        The script should output "score=X.X" where X.X is a float between 0.0 and 1.0.
+        The script should output "score=X.X" where X.X is a float between 0.0 and 1.0, inclusive.
 
         :param name: Name of the scoring function
         :type name: str
@@ -241,7 +241,7 @@ class ScenarioBuilder:
     ) -> Self:
         """Add a Python script scorer.
 
-        The script should print the score (0.0-1.0) to stdout.
+        The script should print the score in the range [0.0, 1.0] to stdout.
 
         :param name: Name of the scoring function
         :type name: str
