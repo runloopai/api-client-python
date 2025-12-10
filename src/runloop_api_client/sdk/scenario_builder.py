@@ -85,7 +85,7 @@ class ScenarioBuilder:
         return self._name
 
     def from_blueprint(self, blueprint: Blueprint) -> Self:
-        """Set the blueprint for the scenario environment.
+        """Set a blueprint to define the baseline environment for the scenario.
 
         :param blueprint: Blueprint to use
         :type blueprint: Blueprint
@@ -97,7 +97,7 @@ class ScenarioBuilder:
         return self
 
     def from_snapshot(self, snapshot: Snapshot) -> Self:
-        """Set the snapshot for the scenario environment.
+        """Set a snapshot to define the baseline environment for the scenario.
 
         :param snapshot: Snapshot to use
         :type snapshot: Snapshot
