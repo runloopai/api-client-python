@@ -401,8 +401,7 @@ class ScenarioBuilder:
 
         # Normalize weights to sum to 1.0
         total_weight = sum(s["weight"] for s in self._scorers)
-        for s in self._scorers:
-            s["weight"] = s["weight"] / total_weight
+        normalized_scorers: List[ScoringFunctionParam] = [{**s, "weight": s["weight"] / total_weight} for s in self._scorers]
 
         params: ScenarioCreateParams = {
             "name": self._name,
@@ -410,7 +409,7 @@ class ScenarioBuilder:
                 "problem_statement": self._problem_statement,
             },
             "scoring_contract": {
-                "scoring_function_parameters": self._scorers,
+                "scoring_function_parameters": normalized_scorers,
             },
         }
 
