@@ -240,7 +240,7 @@ class AsyncScenarioBuilder:
         requirements_contents: Optional[str] = None,
     ) -> Self:
         """Add a standalone Python script scorer.
-        
+
         The script is run in an isolated uv environment, and the dependencies are declared in the
         `uv script header <https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies>`__.
 
