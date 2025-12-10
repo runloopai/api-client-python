@@ -797,10 +797,12 @@ class ScenarioOps:
         >>> scenarios = runloop.scenario.list()
 
     Example using builder:
-        >>> builder = runloop.scenario.builder("my-scenario")
-        >>> builder.from_blueprint_id("bp-xxx")
-        >>> builder.with_problem_statement("Fix the bug")
-        >>> builder.add_test_scorer("tests", test_command="pytest")
+        >>> builder = (
+        ...     runloop.scenario.builder("my-scenario")
+        ...     .from_blueprint(blueprint)
+        ...     .with_problem_statement("Fix the bug")
+        ...     .add_test_scorer("tests", test_command="pytest")
+        ... )
         >>> scenario = builder.push()
     """
 

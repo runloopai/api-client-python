@@ -24,16 +24,16 @@ def sdk_client() -> Iterator[RunloopSDK]:
     if not bearer_token:
         pytest.skip("RUNLOOP_API_KEY environment variable not set")
 
-    client = RunloopSDK(
+    runloop = RunloopSDK(
         bearer_token=bearer_token,
         base_url=base_url,
     )
 
     try:
-        yield client
+        yield runloop
     finally:
         try:
-            client.close()
+            runloop.close()
         except Exception:
             pass
 
@@ -52,17 +52,17 @@ async def async_sdk_client() -> AsyncIterator[AsyncRunloopSDK]:
     if not bearer_token:
         pytest.skip("RUNLOOP_API_KEY environment variable not set")
 
-    client = AsyncRunloopSDK(
+    runloop = AsyncRunloopSDK(
         bearer_token=bearer_token,
         base_url=base_url,
     )
 
     try:
-        async with client:
-            yield client
+        async with runloop:
+            yield runloop
     except Exception:
         # If context manager fails, try manual cleanup
         try:
-            await client.aclose()
+            await runloop.aclose()
         except Exception:
             pass

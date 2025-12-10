@@ -31,11 +31,13 @@ class AsyncScenarioBuilder:
     before pushing it to the platform.
 
     Example:
-        >>> builder = sdk.scenario.builder("my-scenario")
-        >>> builder.from_blueprint(blueprint)
-        >>> builder.with_working_directory("/app")
-        >>> builder.with_problem_statement("Fix the bug in main.py")
-        >>> builder.add_test_scorer("tests", test_command="pytest")
+        >>> builder = (
+        ...     runloop.scenario.builder("my-scenario")
+        ...     .from_blueprint(blueprint)
+        ...     .with_working_directory("/app")
+        ...     .with_problem_statement("Fix the bug in main.py")
+        ...     .add_test_scorer("tests", test_command="pytest")
+        ... )
         >>> scenario = await builder.push()
     """
 
