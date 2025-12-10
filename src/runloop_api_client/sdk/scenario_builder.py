@@ -343,9 +343,10 @@ class ScenarioBuilder:
         return self
 
     def with_reference_output(self, output: str) -> Self:
-        """Set the reference output/solution for validation.
+        """Set the reference solution or gold patch for validation.
+        After application, the scorer is expected to return a score of 1.0.
 
-        :param output: Reference output (e.g., git diff)
+        :param output: Reference solution or gold patch (e.g., git diff)
         :type output: str
         :return: Self for method chaining
         :rtype: Self
@@ -376,7 +377,7 @@ class ScenarioBuilder:
         return self
 
     def with_validation_type(self, validation_type: Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]) -> Self:
-        """Set the validation strategy.
+        """Set the validation strategy to specify how the reference solution or gold patch is applied to the scenario.
 
         :param validation_type: Validation type
         :type validation_type: Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]
