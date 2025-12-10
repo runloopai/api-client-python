@@ -780,7 +780,7 @@ class AsyncScenarioOps:
         ...     runloop.scenario.builder("my-scenario")
         ...     .from_blueprint(blueprint)
         ...     .with_problem_statement("Fix the bug")
-        ...     .add_test_scorer("tests", test_command="pytest")
+        ...     .add_test_command_scorer("tests", test_command="pytest")
         ... )
         >>> scenario = await builder.push()
     """

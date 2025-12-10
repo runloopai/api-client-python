@@ -36,7 +36,7 @@ class ScenarioBuilder:
         ...     .from_blueprint(blueprint)
         ...     .with_working_directory("/app")
         ...     .with_problem_statement("Fix the bug in main.py")
-        ...     .add_test_scorer("tests", test_command="pytest")
+        ...     .add_test_command_scorer("tests", test_command="pytest")
         ... )
         >>> scenario = builder.push()
     """
@@ -398,7 +398,7 @@ class ScenarioBuilder:
         if not self._scorers:
             raise ValueError(
                 "At least one scorer is required. "
-                "Call add_test_scorer(), add_bash_scorer(), or another scorer method first."
+                "Call add_test_command_scorer(), add_bash_script_scorer(), or another scorer method first."
             )
 
         # Normalize weights to sum to 1.0
