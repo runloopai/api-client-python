@@ -204,8 +204,7 @@ class TestAsyncScenarioBuilder:
 
     @pytest.mark.timeout(FIVE_MINUTE_TIMEOUT)
     async def test_scenario_builder_with_blueprint(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating/updating a scenario from a blueprint.
-        """
+        """Test creating/updating a scenario from a blueprint."""
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-async-scenario-bp"),
             dockerfile="FROM ubuntu:20.04",
@@ -230,8 +229,7 @@ class TestAsyncScenarioBuilder:
 
     @pytest.mark.timeout(TEN_MINUTE_TIMEOUT)
     async def test_scenario_builder_with_snapshot(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating/updating a scenario from a snapshot.
-        """
+        """Test creating/updating a scenario from a snapshot."""
         # Create blueprint -> devbox -> snapshot chain
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-async-scenario-snap-bp"),

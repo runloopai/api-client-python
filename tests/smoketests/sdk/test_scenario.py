@@ -203,8 +203,7 @@ class TestScenarioBuilder:
 
     @pytest.mark.timeout(FIVE_MINUTE_TIMEOUT)
     def test_scenario_builder_with_blueprint(self, sdk_client: RunloopSDK) -> None:
-        """Test creating/updating a scenario from a blueprint.
-        """
+        """Test creating/updating a scenario from a blueprint."""
         blueprint = sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-scenario-bp"),
             dockerfile="FROM ubuntu:20.04",
@@ -229,8 +228,7 @@ class TestScenarioBuilder:
 
     @pytest.mark.timeout(TEN_MINUTE_TIMEOUT)
     def test_scenario_builder_with_snapshot(self, sdk_client: RunloopSDK) -> None:
-        """Test creating/updating a scenario from a snapshot.
-        """
+        """Test creating/updating a scenario from a snapshot."""
         # Create blueprint -> devbox -> snapshot chain
         blueprint = sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-scenario-snap-bp"),
