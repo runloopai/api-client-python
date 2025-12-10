@@ -72,7 +72,9 @@ class TestScenarioBuilder:
         test_files: list[ScorerTestBasedScoringFunctionTestFile] = [
             {"file_path": "test_main.py", "file_contents": "def test_foo(): pass"}
         ]
-        result = builder.add_test_command_scorer("test-scorer", test_command="pytest", weight=2.0, test_files=test_files)
+        result = builder.add_test_command_scorer(
+            "test-scorer", test_command="pytest", weight=2.0, test_files=test_files
+        )
         assert result is builder
         assert builder._scorers[0]["name"] == "test-scorer"
         assert builder._scorers[0]["weight"] == 2.0
