@@ -211,7 +211,7 @@ class AsyncScenarioBuilder:
         bash_script: str,
         weight: float = 1.0,
     ) -> Self:
-        """Add a bash script scorer.
+        """Add a standalone bash script scorer.
 
         The script should output "score=X.X" where X.X is a float between 0.0 and 1.0, inclusive.
 
@@ -239,7 +239,10 @@ class AsyncScenarioBuilder:
         python_version_constraint: Optional[str] = None,
         requirements_contents: Optional[str] = None,
     ) -> Self:
-        """Add a Python script scorer.
+        """Add a standalone Python script scorer.
+        
+        The script is run in an isolated uv environment, and the dependencies are declared in the
+        `uv script header <https://docs.astral.sh/uv/guides/scripts/#declaring-script-dependencies>`__.
 
         The script should print the score in the range [0.0, 1.0] to stdout.
 
