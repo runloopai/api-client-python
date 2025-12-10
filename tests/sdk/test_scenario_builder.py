@@ -156,14 +156,16 @@ class TestScenarioBuilder:
 
         assert params["name"] == "test-scenario"
         assert params["input_context"]["problem_statement"] == "Fix the bug"
-        assert params["input_context"]["additional_context"] == {"hint": "line 42"}
-        assert params["environment_parameters"]["blueprint_id"] == "bp-123"
-        assert params["environment_parameters"]["working_directory"] == "/app"
-        assert params["metadata"] == {"team": "infra"}
-        assert params["reference_output"] == "diff content"
-        assert params["required_environment_variables"] == ["API_KEY"]
-        assert params["required_secret_names"] == ["db_pass"]
-        assert params["validation_type"] == "FORWARD"
+        assert params["input_context"].get("additional_context") == {"hint": "line 42"}
+        env_params = params.get("environment_parameters")
+        assert env_params is not None
+        assert env_params.get("blueprint_id") == "bp-123"
+        assert env_params.get("working_directory") == "/app"
+        assert params.get("metadata") == {"team": "infra"}
+        assert params.get("reference_output") == "diff content"
+        assert params.get("required_environment_variables") == ["API_KEY"]
+        assert params.get("required_secret_names") == ["db_pass"]
+        assert params.get("validation_type") == "FORWARD"
 
     def test_build_params_normalizes_weights(self, builder: ScenarioBuilder) -> None:
         """Test that _build_params normalizes scorer weights to sum to 1.0."""
@@ -173,7 +175,7 @@ class TestScenarioBuilder:
         builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
 
         params = builder._build_params()
-        scorers = params["scoring_contract"]["scoring_function_parameters"]
+        scorers = list(params["scoring_contract"]["scoring_function_parameters"])
 
         # Weights 1, 2, 3 should normalize to 1/6, 2/6, 3/6
         assert len(scorers) == 3
