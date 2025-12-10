@@ -191,7 +191,7 @@ class TestScenarioBuilder:
             sdk_client.scenario.builder("sdk-smoketest-builder-minimal")
             .with_problem_statement("Minimal test problem statement")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("minimal-scorer", command="echo 1.0")
+            .add_shell_command_scorer("minimal-scorer", command="echo 1.0")
         )
 
         info = push_or_update_scenario(sdk_client, builder)
@@ -215,7 +215,7 @@ class TestScenarioBuilder:
             .with_working_directory("/home/user")
             .with_problem_statement("Blueprint test problem")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("blueprint-scorer", command="echo 1.0")
+            .add_shell_command_scorer("blueprint-scorer", command="echo 1.0")
         )
 
         info = push_or_update_scenario(sdk_client, builder)
@@ -248,7 +248,7 @@ class TestScenarioBuilder:
             .from_snapshot(snapshot)
             .with_problem_statement("Snapshot test problem")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("snapshot-scorer", command="echo 1.0")
+            .add_shell_command_scorer("snapshot-scorer", command="echo 1.0")
         )
 
         info = push_or_update_scenario(sdk_client, builder)

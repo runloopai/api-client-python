@@ -151,7 +151,7 @@ class AsyncScenarioBuilder:
         self._scorers.append({"name": name, "weight": weight, "scorer": scorer})
         return self
 
-    def add_test_scorer(
+    def add_test_command_scorer(
         self,
         name: str,
         *,
@@ -180,7 +180,7 @@ class AsyncScenarioBuilder:
             scorer["test_files"] = test_files
         return self._add_scorer(name, weight, scorer)
 
-    def add_command_scorer(
+    def add_shell_command_scorer(
         self,
         name: str,
         *,
@@ -204,7 +204,7 @@ class AsyncScenarioBuilder:
         }
         return self._add_scorer(name, weight, scorer)
 
-    def add_bash_scorer(
+    def add_bash_script_scorer(
         self,
         name: str,
         *,
@@ -230,7 +230,7 @@ class AsyncScenarioBuilder:
         }
         return self._add_scorer(name, weight, scorer)
 
-    def add_python_scorer(
+    def add_python_script_scorer(
         self,
         name: str,
         *,

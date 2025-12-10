@@ -74,7 +74,7 @@ class TestAsyncScenarioBuilder:
         test_files: list[ScorerTestBasedScoringFunctionTestFile] = [
             {"file_path": "test_main.py", "file_contents": "def test_foo(): pass"}
         ]
-        result = builder.add_test_scorer("test-scorer", test_command="pytest", weight=2.0, test_files=test_files)
+        result = builder.add_test_command_scorer("test-scorer", test_command="pytest", weight=2.0, test_files=test_files)
         assert result is builder
         assert builder._scorers[0]["name"] == "test-scorer"
         assert builder._scorers[0]["weight"] == 2.0
@@ -83,17 +83,17 @@ class TestAsyncScenarioBuilder:
         assert builder._scorers[0]["scorer"].get("test_files") == test_files
 
         # Command scorer
-        builder.add_command_scorer("cmd-scorer", command="./check.sh")
+        builder.add_shell_command_scorer("cmd-scorer", command="./check.sh")
         assert builder._scorers[1]["scorer"]["type"] == "command_scorer"
         assert builder._scorers[1]["scorer"].get("command") == "./check.sh"
 
         # Bash scorer
-        builder.add_bash_scorer("bash-scorer", bash_script="echo 'score=1.0'")
+        builder.add_bash_script_scorer("bash-scorer", bash_script="echo 'score=1.0'")
         assert builder._scorers[2]["scorer"]["type"] == "bash_script_scorer"
         assert builder._scorers[2]["scorer"].get("bash_script") == "echo 'score=1.0'"
 
         # Python scorer with optional params
-        builder.add_python_scorer(
+        builder.add_python_script_scorer(
             "python-scorer",
             python_script="print('1.0')",
             python_version_constraint=">=3.10",
@@ -121,15 +121,15 @@ class TestAsyncScenarioBuilder:
     def test_add_scorer_rejects_invalid_weight(self, builder: AsyncScenarioBuilder) -> None:
         """Test that adding a scorer with zero or negative weight raises ValueError."""
         with pytest.raises(ValueError, match="Scorer weight must be positive"):
-            builder.add_bash_scorer("bad", bash_script="echo 1", weight=0.0)
+            builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=0.0)
 
         with pytest.raises(ValueError, match="Scorer weight must be positive"):
-            builder.add_bash_scorer("bad", bash_script="echo 1", weight=-1.0)
+            builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=-1.0)
 
     def test_build_params_validation(self, builder: AsyncScenarioBuilder) -> None:
         """Test _build_params raises for missing required fields."""
         # Missing problem statement
-        builder.add_test_scorer("test", test_command="pytest")
+        builder.add_test_command_scorer("test", test_command="pytest")
         with pytest.raises(ValueError, match="Problem statement is required"):
             builder._build_params()
 
@@ -143,7 +143,7 @@ class TestAsyncScenarioBuilder:
         """Test _build_params with all optional fields set."""
         builder.with_problem_statement("Fix the bug")
         builder.with_additional_context({"hint": "line 42"})
-        builder.add_test_scorer("tests", test_command="pytest")
+        builder.add_test_command_scorer("tests", test_command="pytest")
         builder.from_blueprint(mock_blueprint)
         builder.with_working_directory("/app")
         builder.with_metadata({"team": "infra"})
@@ -168,9 +168,9 @@ class TestAsyncScenarioBuilder:
     def test_build_params_normalizes_weights(self, builder: AsyncScenarioBuilder) -> None:
         """Test that _build_params normalizes scorer weights to sum to 1.0."""
         builder.with_problem_statement("Fix the bug")
-        builder.add_bash_scorer("scorer1", bash_script="echo 1", weight=1.0)
-        builder.add_bash_scorer("scorer2", bash_script="echo 2", weight=2.0)
-        builder.add_bash_scorer("scorer3", bash_script="echo 3", weight=3.0)
+        builder.add_bash_script_scorer("scorer1", bash_script="echo 1", weight=1.0)
+        builder.add_bash_script_scorer("scorer2", bash_script="echo 2", weight=2.0)
+        builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
 
         params = builder._build_params()
         scorers = params["scoring_contract"]["scoring_function_parameters"]
@@ -193,7 +193,7 @@ class TestAsyncScenarioBuilder:
         mock_async_client.scenarios.create.return_value.id = "scn-new-123"
 
         builder.with_problem_statement("Fix the bug")
-        builder.add_test_scorer("tests", test_command="pytest")
+        builder.add_test_command_scorer("tests", test_command="pytest")
 
         scenario = await builder.push()
 
@@ -211,7 +211,7 @@ class TestAsyncScenarioBuilder:
             .with_working_directory("/app")
             .with_problem_statement("Fix the bug")
             .with_additional_context({"hint": "check main.py"})
-            .add_test_scorer("tests", test_command="pytest")
+            .add_test_command_scorer("tests", test_command="pytest")
             .with_metadata({"team": "infra"})
             .with_reference_output("diff content")
             .with_required_env_vars(["API_KEY"])

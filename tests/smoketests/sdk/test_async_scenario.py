@@ -192,7 +192,7 @@ class TestAsyncScenarioBuilder:
             async_sdk_client.scenario.builder("sdk-smoketest-async-builder-minimal")
             .with_problem_statement("Async minimal test problem statement")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("async-minimal-scorer", command="echo 1.0")
+            .add_shell_command_scorer("async-minimal-scorer", command="echo 1.0")
         )
 
         info = await push_or_update_scenario(async_sdk_client, builder)
@@ -216,7 +216,7 @@ class TestAsyncScenarioBuilder:
             .with_working_directory("/home/user")
             .with_problem_statement("Async blueprint test problem")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("async-blueprint-scorer", command="echo 1.0")
+            .add_shell_command_scorer("async-blueprint-scorer", command="echo 1.0")
         )
 
         info = await push_or_update_scenario(async_sdk_client, builder)
@@ -249,7 +249,7 @@ class TestAsyncScenarioBuilder:
             .from_snapshot(snapshot)
             .with_problem_statement("Async snapshot test problem")
             .with_metadata(SMOKETEST_METADATA)
-            .add_command_scorer("async-snapshot-scorer", command="echo 1.0")
+            .add_shell_command_scorer("async-snapshot-scorer", command="echo 1.0")
         )
 
         info = await push_or_update_scenario(async_sdk_client, builder)
