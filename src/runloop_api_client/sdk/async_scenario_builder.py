@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional
 from typing_extensions import Self, Literal, override
 
+from ..types import ScenarioCreateParams, ScenarioEnvironmentParam
 from .._client import AsyncRunloop
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
@@ -379,14 +380,14 @@ class AsyncScenarioBuilder:
         self._validation_type = validation_type
         return self
 
-    def _build_params(self) -> Dict[str, Any]:
+    def _build_params(self) -> ScenarioCreateParams:
         """Build the scenario creation parameters.
 
         Weights are automatically normalized to sum to 1.0.
 
         :raises ValueError: If required fields are missing
         :return: Parameters for scenario creation
-        :rtype: Dict[str, Any]
+        :rtype: ScenarioCreateParams
         """
         if not self._problem_statement:
             raise ValueError("Problem statement is required. Call with_problem_statement() first.")
@@ -399,15 +400,16 @@ class AsyncScenarioBuilder:
 
         # Normalize weights to sum to 1.0
         total_weight = sum(s["weight"] for s in self._scorers)
-        normalized_scorers = [{**s, "weight": s["weight"] / total_weight} for s in self._scorers]
+        for s in self._scorers:
+            s["weight"] = s["weight"] / total_weight
 
-        params: Dict[str, Any] = {
+        params: ScenarioCreateParams = {
             "name": self._name,
             "input_context": {
                 "problem_statement": self._problem_statement,
             },
             "scoring_contract": {
-                "scoring_function_parameters": normalized_scorers,
+                "scoring_function_parameters": self._scorers,
             },
         }
 
@@ -416,7 +418,7 @@ class AsyncScenarioBuilder:
             params["input_context"]["additional_context"] = self._additional_context
 
         # Build environment parameters if any are set
-        env_params: Dict[str, Any] = {}
+        env_params: ScenarioEnvironmentParam = {}
         if self._blueprint:
             env_params["blueprint_id"] = self._blueprint.id
         if self._snapshot:
