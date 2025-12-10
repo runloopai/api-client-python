@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from typing import Dict, List, Iterable, Optional
-from typing_extensions import Self, Literal, override
+from typing_extensions import Self, Unpack, Literal, override
 
 from ..types import ScenarioCreateParams, ScenarioEnvironmentParam
+from ._types import LongRequestOptions
 from .._client import Runloop
 from .scenario import Scenario
 from .snapshot import Snapshot
@@ -443,13 +444,14 @@ class ScenarioBuilder:
 
         return params
 
-    def push(self) -> Scenario:
+    def push(self, **options: Unpack[LongRequestOptions]) -> Scenario:
         """Create the scenario on the platform.
 
+        :param options: Optional long-running request configuration
         :raises ValueError: If required fields are missing
         :return: Created scenario wrapper
         :rtype: Scenario
         """
         params = self._build_params()
-        scenario_view = self._client.scenarios.create(**params)
+        scenario_view = self._client.scenarios.create(**params, **options)
         return Scenario(self._client, scenario_view.id)

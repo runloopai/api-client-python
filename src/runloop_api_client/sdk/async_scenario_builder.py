@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from typing import Dict, List, Iterable, Optional
-from typing_extensions import Self, Literal, override
+from typing_extensions import Self, Unpack, Literal, override
 
 from ..types import ScenarioCreateParams, ScenarioEnvironmentParam
+from ._types import LongRequestOptions
 from .._client import AsyncRunloop
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
@@ -443,13 +444,14 @@ class AsyncScenarioBuilder:
 
         return params
 
-    async def push(self) -> AsyncScenario:
+    async def push(self, **options: Unpack[LongRequestOptions]) -> AsyncScenario:
         """Create the scenario on the platform.
 
+        :param options: Optional long-running request configuration
         :raises ValueError: If required fields are missing
         :return: Created scenario wrapper
         :rtype: AsyncScenario
         """
         params = self._build_params()
-        scenario_view = await self._client.scenarios.create(**params)
+        scenario_view = await self._client.scenarios.create(**params, **options)
         return AsyncScenario(self._client, scenario_view.id)
