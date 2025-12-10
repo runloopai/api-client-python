@@ -14,7 +14,8 @@ from tests.sdk.conftest import (
     TASK_COMPLETION_SHORT,
     MockExecutionView,
 )
-from runloop_api_client.sdk.async_execution import AsyncExecution, _AsyncStreamingGroup
+from runloop_api_client.sdk import AsyncExecution
+from runloop_api_client.sdk.async_execution import _AsyncStreamingGroup
 
 # Legacy aliases for backward compatibility
 SHORT_SLEEP = TASK_COMPLETION_SHORT

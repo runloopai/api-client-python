@@ -6,9 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from runloop_api_client.sdk.snapshot import Snapshot
-from runloop_api_client.sdk.blueprint import Blueprint
-from runloop_api_client.sdk.scenario_builder import ScenarioBuilder
+from runloop_api_client.sdk import Snapshot, Blueprint, ScenarioBuilder
 from runloop_api_client.types.scoring_function_param import ScorerTestBasedScoringFunctionTestFile
 
 
@@ -32,7 +30,7 @@ class TestScenarioBuilder:
         return Snapshot(mock_client, "snap-123")
 
     @pytest.fixture
-    def builder(self, mock_client: MagicMock) -> ScenarioBuilder:
+    def mock_builder(self, mock_client: MagicMock) -> ScenarioBuilder:
         """Create a ScenarioBuilder instance with mock client."""
         return ScenarioBuilder("test-scenario", mock_client)
 
@@ -46,113 +44,115 @@ class TestScenarioBuilder:
         assert repr(builder) == "<ScenarioBuilder name='my-scenario'>"
 
     def test_from_blueprint_and_snapshot(
-        self, builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
+        self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint, mock_snapshot: Snapshot
     ) -> None:
         """Test blueprint/snapshot setting returns self and are mutually exclusive."""
         # from_blueprint returns self and sets blueprint
-        result = builder.from_blueprint(mock_blueprint)
-        assert result is builder
-        assert builder._blueprint is mock_blueprint
-        assert builder._snapshot is None
+        result = mock_builder.from_blueprint(mock_blueprint)
+        assert result is mock_builder
+        assert mock_builder._blueprint is mock_blueprint
+        assert mock_builder._snapshot is None
 
         # from_snapshot returns self, sets snapshot, and clears blueprint
-        result = builder.from_snapshot(mock_snapshot)
-        assert result is builder
-        assert builder._snapshot is mock_snapshot
-        assert builder._blueprint is None
+        result = mock_builder.from_snapshot(mock_snapshot)
+        assert result is mock_builder
+        assert mock_builder._snapshot is mock_snapshot
+        assert mock_builder._blueprint is None
 
         # from_blueprint clears snapshot
-        builder.from_blueprint(mock_blueprint)
-        assert builder._blueprint is mock_blueprint
-        assert builder._snapshot is None
+        mock_builder.from_blueprint(mock_blueprint)
+        assert mock_builder._blueprint is mock_blueprint
+        assert mock_builder._snapshot is None
 
-    def test_scorers(self, builder: ScenarioBuilder) -> None:
+    def test_scorers(self, mock_builder: ScenarioBuilder) -> None:
         """Test all scorer types, optional params, and multiple scorers."""
         # Test scorer with test files
         test_files: list[ScorerTestBasedScoringFunctionTestFile] = [
             {"file_path": "test_main.py", "file_contents": "def test_foo(): pass"}
         ]
-        result = builder.add_test_command_scorer(
+        result = mock_builder.add_test_command_scorer(
             "test-scorer", test_command="pytest", weight=2.0, test_files=test_files
         )
-        assert result is builder
-        assert builder._scorers[0]["name"] == "test-scorer"
-        assert builder._scorers[0]["weight"] == 2.0
-        assert builder._scorers[0]["scorer"]["type"] == "test_based_scorer"
-        assert builder._scorers[0]["scorer"].get("test_command") == "pytest"
-        assert builder._scorers[0]["scorer"].get("test_files") == test_files
+        assert result is mock_builder
+        assert mock_builder._scorers[0]["name"] == "test-scorer"
+        assert mock_builder._scorers[0]["weight"] == 2.0
+        assert mock_builder._scorers[0]["scorer"]["type"] == "test_based_scorer"
+        assert mock_builder._scorers[0]["scorer"].get("test_command") == "pytest"
+        assert mock_builder._scorers[0]["scorer"].get("test_files") == test_files
 
         # Command scorer
-        builder.add_shell_command_scorer("cmd-scorer", command="./check.sh")
-        assert builder._scorers[1]["scorer"]["type"] == "command_scorer"
-        assert builder._scorers[1]["scorer"].get("command") == "./check.sh"
+        mock_builder.add_shell_command_scorer("cmd-scorer", command="./check.sh")
+        assert mock_builder._scorers[1]["scorer"]["type"] == "command_scorer"
+        assert mock_builder._scorers[1]["scorer"].get("command") == "./check.sh"
 
         # Bash scorer
-        builder.add_bash_script_scorer("bash-scorer", bash_script="echo 'score=1.0'")
-        assert builder._scorers[2]["scorer"]["type"] == "bash_script_scorer"
-        assert builder._scorers[2]["scorer"].get("bash_script") == "echo 'score=1.0'"
+        mock_builder.add_bash_script_scorer("bash-scorer", bash_script="echo 'score=1.0'")
+        assert mock_builder._scorers[2]["scorer"]["type"] == "bash_script_scorer"
+        assert mock_builder._scorers[2]["scorer"].get("bash_script") == "echo 'score=1.0'"
 
         # Python scorer with optional params
-        builder.add_python_script_scorer(
+        mock_builder.add_python_script_scorer(
             "python-scorer",
             python_script="print('1.0')",
             python_version_constraint=">=3.10",
             requirements_contents="numpy",
         )
-        assert builder._scorers[3]["scorer"]["type"] == "python_script_scorer"
-        assert builder._scorers[3]["scorer"].get("python_version_constraint") == ">=3.10"
-        assert builder._scorers[3]["scorer"].get("requirements_contents") == "numpy"
+        assert mock_builder._scorers[3]["scorer"]["type"] == "python_script_scorer"
+        assert mock_builder._scorers[3]["scorer"].get("python_version_constraint") == ">=3.10"
+        assert mock_builder._scorers[3]["scorer"].get("requirements_contents") == "numpy"
 
         # AST grep scorer with optional lang
-        builder.add_ast_grep_scorer("ast-scorer", pattern="$A.foo()", search_directory="/src", lang="python")
-        assert builder._scorers[4]["scorer"]["type"] == "ast_grep_scorer"
-        assert builder._scorers[4]["scorer"].get("pattern") == "$A.foo()"
-        assert builder._scorers[4]["scorer"].get("lang") == "python"
+        mock_builder.add_ast_grep_scorer("ast-scorer", pattern="$A.foo()", search_directory="/src", lang="python")
+        assert mock_builder._scorers[4]["scorer"]["type"] == "ast_grep_scorer"
+        assert mock_builder._scorers[4]["scorer"].get("pattern") == "$A.foo()"
+        assert mock_builder._scorers[4]["scorer"].get("lang") == "python"
 
         # Custom scorer with optional params
-        builder.add_custom_scorer("custom-scorer", custom_scorer_type="my_scorer", scorer_params={"threshold": 0.5})
-        assert builder._scorers[5]["scorer"]["type"] == "custom_scorer"
-        assert builder._scorers[5]["scorer"].get("custom_scorer_type") == "my_scorer"
-        assert builder._scorers[5]["scorer"].get("scorer_params") == {"threshold": 0.5}
+        mock_builder.add_custom_scorer(
+            "custom-scorer", custom_scorer_type="my_scorer", scorer_params={"threshold": 0.5}
+        )
+        assert mock_builder._scorers[5]["scorer"]["type"] == "custom_scorer"
+        assert mock_builder._scorers[5]["scorer"].get("custom_scorer_type") == "my_scorer"
+        assert mock_builder._scorers[5]["scorer"].get("scorer_params") == {"threshold": 0.5}
 
         # Verify multiple scorers accumulated
-        assert len(builder._scorers) == 6
+        assert len(mock_builder._scorers) == 6
 
-    def test_add_scorer_rejects_invalid_weight(self, builder: ScenarioBuilder) -> None:
+    def test_add_scorer_rejects_invalid_weight(self, mock_builder: ScenarioBuilder) -> None:
         """Test that adding a scorer with zero or negative weight raises ValueError."""
         with pytest.raises(ValueError, match="Scorer weight must be positive"):
-            builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=0.0)
+            mock_builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=0.0)
 
         with pytest.raises(ValueError, match="Scorer weight must be positive"):
-            builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=-1.0)
+            mock_builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=-1.0)
 
-    def test_build_params_validation(self, builder: ScenarioBuilder) -> None:
+    def test_build_params_validation(self, mock_builder: ScenarioBuilder) -> None:
         """Test _build_params raises for missing required fields."""
         # Missing problem statement
-        builder.add_test_command_scorer("test", test_command="pytest")
+        mock_builder.add_test_command_scorer("test", test_command="pytest")
         with pytest.raises(ValueError, match="Problem statement is required"):
-            builder._build_params()
+            mock_builder._build_params()
 
         # Missing scorer (new builder)
-        builder2 = ScenarioBuilder("test2", builder._client)
+        builder2 = ScenarioBuilder("test2", mock_builder._client)
         builder2.with_problem_statement("Fix the bug")
         with pytest.raises(ValueError, match="At least one scorer is required"):
             builder2._build_params()
 
-    def test_build_params_with_all_options(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
+    def test_build_params_with_all_options(self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
         """Test _build_params with all optional fields set."""
-        builder.with_problem_statement("Fix the bug")
-        builder.with_additional_context({"hint": "line 42"})
-        builder.add_test_command_scorer("tests", test_command="pytest")
-        builder.from_blueprint(mock_blueprint)
-        builder.with_working_directory("/app")
-        builder.with_metadata({"team": "infra"})
-        builder.with_reference_output("diff content")
-        builder.with_required_env_vars(["API_KEY"])
-        builder.with_required_secrets(["db_pass"])
-        builder.with_validation_type("FORWARD")
+        mock_builder.with_problem_statement("Fix the bug")
+        mock_builder.with_additional_context({"hint": "line 42"})
+        mock_builder.add_test_command_scorer("tests", test_command="pytest")
+        mock_builder.from_blueprint(mock_blueprint)
+        mock_builder.with_working_directory("/app")
+        mock_builder.with_metadata({"team": "infra"})
+        mock_builder.with_reference_output("diff content")
+        mock_builder.with_required_env_vars(["API_KEY"])
+        mock_builder.with_required_secrets(["db_pass"])
+        mock_builder.with_validation_type("FORWARD")
 
-        params = builder._build_params()
+        params = mock_builder._build_params()
 
         assert params["name"] == "test-scenario"
         assert params["input_context"]["problem_statement"] == "Fix the bug"
@@ -167,14 +167,14 @@ class TestScenarioBuilder:
         assert params.get("required_secret_names") == ["db_pass"]
         assert params.get("validation_type") == "FORWARD"
 
-    def test_build_params_normalizes_weights(self, builder: ScenarioBuilder) -> None:
+    def test_build_params_normalizes_weights(self, mock_builder: ScenarioBuilder) -> None:
         """Test that _build_params normalizes scorer weights to sum to 1.0."""
-        builder.with_problem_statement("Fix the bug")
-        builder.add_bash_script_scorer("scorer1", bash_script="echo 1", weight=1.0)
-        builder.add_bash_script_scorer("scorer2", bash_script="echo 2", weight=2.0)
-        builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
+        mock_builder.with_problem_statement("Fix the bug")
+        mock_builder.add_bash_script_scorer("scorer1", bash_script="echo 1", weight=1.0)
+        mock_builder.add_bash_script_scorer("scorer2", bash_script="echo 2", weight=2.0)
+        mock_builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
 
-        params = builder._build_params()
+        params = mock_builder._build_params()
         scorers = list(params["scoring_contract"]["scoring_function_parameters"])
 
         # Weights 1, 2, 3 should normalize to 1/6, 2/6, 3/6
@@ -187,14 +187,14 @@ class TestScenarioBuilder:
         total = sum(s["weight"] for s in scorers)
         assert abs(total - 1.0) < 0.0001
 
-    def test_push_calls_api_and_returns_scenario(self, builder: ScenarioBuilder, mock_client: MagicMock) -> None:
+    def test_push_calls_api_and_returns_scenario(self, mock_builder: ScenarioBuilder, mock_client: MagicMock) -> None:
         """Test push() calls API with correct params and returns Scenario."""
         mock_client.scenarios.create.return_value.id = "scn-new-123"
 
-        builder.with_problem_statement("Fix the bug")
-        builder.add_test_command_scorer("tests", test_command="pytest")
+        mock_builder.with_problem_statement("Fix the bug")
+        mock_builder.add_test_command_scorer("tests", test_command="pytest")
 
-        scenario = builder.push()
+        scenario = mock_builder.push()
 
         mock_client.scenarios.create.assert_called_once()
         call_kwargs = mock_client.scenarios.create.call_args.kwargs
@@ -203,10 +203,10 @@ class TestScenarioBuilder:
 
         assert scenario.id == "scn-new-123"
 
-    def test_fluent_chaining(self, builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
+    def test_fluent_chaining(self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
         """Test that all builder methods can be chained fluently."""
         result = (
-            builder.from_blueprint(mock_blueprint)
+            mock_builder.from_blueprint(mock_blueprint)
             .with_working_directory("/app")
             .with_problem_statement("Fix the bug")
             .with_additional_context({"hint": "check main.py"})
@@ -218,8 +218,8 @@ class TestScenarioBuilder:
             .with_validation_type("FORWARD")
         )
 
-        assert result is builder
-        assert builder._blueprint is mock_blueprint
-        assert builder._working_directory == "/app"
-        assert builder._problem_statement == "Fix the bug"
-        assert len(builder._scorers) == 1
+        assert result is mock_builder
+        assert mock_builder._blueprint is mock_blueprint
+        assert mock_builder._working_directory == "/app"
+        assert mock_builder._problem_statement == "Fix the bug"
+        assert len(mock_builder._scorers) == 1

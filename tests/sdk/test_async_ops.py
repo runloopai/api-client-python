@@ -24,19 +24,17 @@ from runloop_api_client.sdk import (
     AsyncAgent,
     AsyncDevbox,
     AsyncScorer,
+    AsyncAgentOps,
     AsyncScenario,
     AsyncSnapshot,
     AsyncBlueprint,
-    AsyncStorageObject,
-)
-from runloop_api_client.sdk.async_ import (
-    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncScenarioOps,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
+    AsyncStorageObject,
     AsyncStorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig

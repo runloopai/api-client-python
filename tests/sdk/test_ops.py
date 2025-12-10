@@ -20,15 +20,21 @@ from tests.sdk.conftest import (
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Agent, Devbox, Scorer, Scenario, Snapshot, Blueprint, StorageObject
-from runloop_api_client.sdk.sync import (
+from runloop_api_client.sdk import (
+    Agent,
+    Devbox,
+    Scorer,
     AgentOps,
+    Scenario,
+    Snapshot,
+    Blueprint,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
     ScenarioOps,
     SnapshotOps,
     BlueprintOps,
+    StorageObject,
     StorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
