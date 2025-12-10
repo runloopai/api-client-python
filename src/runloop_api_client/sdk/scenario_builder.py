@@ -6,7 +6,7 @@ from typing import Dict, List, Iterable, Optional
 from typing_extensions import Self, Unpack, Literal, override
 
 from ..types import ScenarioCreateParams, ScenarioEnvironmentParam
-from ._types import LongRequestOptions
+from ._types import ScenarioPreview, LongRequestOptions
 from .._client import Runloop
 from .scenario import Scenario
 from .snapshot import Snapshot
@@ -387,6 +387,22 @@ class ScenarioBuilder:
         self._validation_type = validation_type
         return self
 
+    def _build_normalized_scorers(self) -> List[ScoringFunctionParam]:
+        """Build normalized scorers list."""
+        total_weight = sum(s["weight"] for s in self._scorers)
+        return [{**s, "weight": s["weight"] / total_weight} for s in self._scorers]
+
+    def _build_environment_params(self) -> ScenarioEnvironmentParam:
+        """Build environment parameters"""
+        env_params: ScenarioEnvironmentParam = {}
+        if self._blueprint:
+            env_params["blueprint_id"] = self._blueprint.id
+        if self._snapshot:
+            env_params["snapshot_id"] = self._snapshot.id
+        if self._working_directory:
+            env_params["working_directory"] = self._working_directory
+        return env_params
+
     def _build_params(self) -> ScenarioCreateParams:
         """Build the scenario creation parameters.
 
@@ -405,51 +421,50 @@ class ScenarioBuilder:
                 "Call add_test_command_scorer(), add_bash_script_scorer(), or another scorer method first."
             )
 
-        # Normalize weights to sum to 1.0
-        total_weight = sum(s["weight"] for s in self._scorers)
-        normalized_scorers: List[ScoringFunctionParam] = [
-            {**s, "weight": s["weight"] / total_weight} for s in self._scorers
-        ]
-
-        params: ScenarioCreateParams = {
+        return {
             "name": self._name,
             "input_context": {
                 "problem_statement": self._problem_statement,
+                "additional_context": self._additional_context,
             },
             "scoring_contract": {
-                "scoring_function_parameters": normalized_scorers,
+                "scoring_function_parameters": self._build_normalized_scorers(),
             },
+            "environment_parameters": self._build_environment_params(),
+            "metadata": self._metadata,
+            "reference_output": self._reference_output,
+            "required_environment_variables": self._required_env_vars,
+            "required_secret_names": self._required_secrets,
+            "validation_type": self._validation_type,
         }
 
-        # Add additional context if set
-        if self._additional_context is not None:
-            params["input_context"]["additional_context"] = self._additional_context
+    def preview(self) -> ScenarioPreview:
+        """Preview the scenario configuration without pushing to the platform.
 
-        # Build environment parameters if any are set
-        env_params: ScenarioEnvironmentParam = {}
-        if self._blueprint:
-            env_params["blueprint_id"] = self._blueprint.id
-        if self._snapshot:
-            env_params["snapshot_id"] = self._snapshot.id
-        if self._working_directory:
-            env_params["working_directory"] = self._working_directory
+        Returns the current configuration state as a ScenarioPreview object.
+        Does not validate or raise errors for missing required fields.
 
-        if env_params:
-            params["environment_parameters"] = env_params
-
-        # Add optional fields
-        if self._metadata:
-            params["metadata"] = self._metadata
-        if self._reference_output:
-            params["reference_output"] = self._reference_output
-        if self._required_env_vars:
-            params["required_environment_variables"] = self._required_env_vars
-        if self._required_secrets:
-            params["required_secret_names"] = self._required_secrets
-        if self._validation_type:
-            params["validation_type"] = self._validation_type
-
-        return params
+        :return: Preview of the scenario configuration
+        :rtype: ScenarioPreview
+        """
+        return ScenarioPreview.model_validate(
+            {
+                "name": self._name,
+                "input_context": {
+                    "problem_statement": self._problem_statement,
+                    "additional_context": self._additional_context,
+                },
+                "scoring_contract": {
+                    "scoring_function_parameters": self._build_normalized_scorers(),
+                },
+                "environment": self._build_environment_params(),
+                "metadata": self._metadata,
+                "reference_output": self._reference_output,
+                "required_environment_variables": self._required_env_vars,
+                "required_secret_names": self._required_secrets,
+                "validation_type": self._validation_type,
+            }
+        )
 
     def push(self, **options: Unpack[LongRequestOptions]) -> Scenario:
         """Create the scenario on the platform.

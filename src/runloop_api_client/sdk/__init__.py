@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from .sync import AgentOps, DevboxOps, ScorerOps, RunloopSDK, ScenarioOps, SnapshotOps, BlueprintOps, StorageObjectOps
 from .agent import Agent
+from ._types import ScenarioPreview
 from .async_ import (
     AsyncAgentOps,
     AsyncDevboxOps,
@@ -75,6 +76,7 @@ __all__ = [
     "AsyncScenarioRun",
     "ScenarioBuilder",
     "AsyncScenarioBuilder",
+    "ScenarioPreview",
     "Scorer",
     "AsyncScorer",
     "Snapshot",
