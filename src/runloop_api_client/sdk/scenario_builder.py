@@ -121,7 +121,7 @@ class ScenarioBuilder:
         return self
 
     def with_problem_statement(self, statement: str) -> Self:
-        """Set the problem statement for the scenario.
+        """Set the problem statement for the scenario; this will be provided as input context to the agent.
 
         :param statement: Problem statement text
         :type statement: str
@@ -133,6 +133,7 @@ class ScenarioBuilder:
 
     def with_additional_context(self, context: object) -> Self:
         """Set additional structured context for the scenario.
+        This can be used to provide additional information to the agent, such as hints, examples, or other relevant information.
 
         :param context: Additional context (JSON-serializable)
         :type context: object
