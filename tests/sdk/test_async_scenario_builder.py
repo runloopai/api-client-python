@@ -141,9 +141,7 @@ class TestAsyncScenarioBuilder:
         with pytest.raises(ValueError, match="At least one scorer is required"):
             builder2.build()
 
-    def test_build_with_all_options(
-        self, mock_builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint
-    ) -> None:
+    def test_build_with_all_options(self, mock_builder: AsyncScenarioBuilder, mock_blueprint: AsyncBlueprint) -> None:
         """Test build with all optional fields set."""
         mock_builder.with_problem_statement("Fix the bug")
         mock_builder.with_additional_context({"hint": "line 42"})
