@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from runloop_api_client.sdk import Snapshot, Blueprint, ScenarioBuilder
+from runloop_api_client.sdk import Snapshot, Blueprint, ScenarioBuilder, ScenarioPreview
 from runloop_api_client.types.scoring_function_param import ScorerTestBasedScoringFunctionTestFile
 
 
@@ -223,3 +223,65 @@ class TestScenarioBuilder:
         assert mock_builder._working_directory == "/app"
         assert mock_builder._problem_statement == "Fix the bug"
         assert len(mock_builder._scorers) == 1
+
+    def test_preview_with_no_config(self, mock_builder: ScenarioBuilder) -> None:
+        """Test preview() works with no configuration (only name from constructor)."""
+        preview = mock_builder.preview()
+
+        assert isinstance(preview, ScenarioPreview)
+        assert preview.name == "test-scenario"
+        assert preview.input_context is not None
+        assert preview.input_context.problem_statement is None
+        assert preview.input_context.additional_context is None
+        assert preview.scoring_contract is not None
+        assert len(preview.scoring_contract.scoring_function_parameters) == 0
+        assert preview.environment is None
+        assert len(preview.metadata) == 0
+        assert preview.reference_output is None
+        assert preview.required_environment_variables is None
+        assert preview.required_secret_names is None
+        assert preview.validation_type is None
+
+    def test_preview_with_full_config(self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
+        """Test preview() with all fields configured, including weight normalization."""
+        mock_builder.with_problem_statement("Fix the bug")
+        mock_builder.with_additional_context({"hint": "line 42"})
+        mock_builder.from_blueprint(mock_blueprint)
+        mock_builder.with_working_directory("/app")
+        mock_builder.with_metadata({"team": "infra"})
+        mock_builder.with_reference_output("diff content")
+        mock_builder.with_required_env_vars(["API_KEY"])
+        mock_builder.with_required_secrets(["db_pass"])
+        mock_builder.with_validation_type("FORWARD")
+        # Add multiple scorers with different weights to test normalization
+        mock_builder.add_bash_script_scorer("scorer1", bash_script="echo 1", weight=1.0)
+        mock_builder.add_bash_script_scorer("scorer2", bash_script="echo 2", weight=2.0)
+        mock_builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
+
+        preview = mock_builder.preview()
+
+        # Verify it returns ScenarioPreview
+        assert isinstance(preview, ScenarioPreview)
+
+        # Verify all fields are populated
+        assert preview.name == "test-scenario"
+        assert preview.input_context is not None
+        assert preview.input_context.problem_statement == "Fix the bug"
+        assert preview.input_context.additional_context == {"hint": "line 42"}
+        assert preview.environment is not None
+        assert preview.environment.blueprint_id == "bp-123"
+        assert preview.environment.working_directory == "/app"
+        assert preview.metadata == {"team": "infra"}
+        assert preview.reference_output == "diff content"
+        assert preview.required_environment_variables == ["API_KEY"]
+        assert preview.required_secret_names == ["db_pass"]
+        assert preview.validation_type == "FORWARD"
+
+        # Verify weights are normalized (1, 2, 3 -> 1/6, 2/6, 3/6)
+        assert preview.scoring_contract is not None
+        scorers = preview.scoring_contract.scoring_function_parameters
+        assert len(scorers) == 3
+        assert abs(scorers[0].weight - 1 / 6) < 0.0001
+        assert abs(scorers[1].weight - 2 / 6) < 0.0001
+        assert abs(scorers[2].weight - 3 / 6) < 0.0001
+        assert abs(sum(s.weight for s in scorers) - 1.0) < 0.0001

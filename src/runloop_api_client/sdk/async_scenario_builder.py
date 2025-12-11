@@ -65,7 +65,7 @@ class AsyncScenarioBuilder:
         self._scorers: List[ScoringFunctionParam] = []
 
         # Metadata and other options
-        self._metadata: Optional[Dict[str, str]] = None
+        self._metadata: Dict[str, str] = {}
         self._reference_output: Optional[str] = None
         self._required_env_vars: Optional[List[str]] = None
         self._required_secrets: Optional[List[str]] = None
@@ -392,16 +392,15 @@ class AsyncScenarioBuilder:
         total_weight = sum(s["weight"] for s in self._scorers)
         return [{**s, "weight": s["weight"] / total_weight} for s in self._scorers]
 
-    def _build_environment_params(self) -> ScenarioEnvironmentParam:
+    def _build_environment_params(self) -> Optional[ScenarioEnvironmentParam]:
         """Build environment parameters."""
-        env_params: ScenarioEnvironmentParam = {}
-        if self._blueprint:
-            env_params["blueprint_id"] = self._blueprint.id
-        if self._snapshot:
-            env_params["snapshot_id"] = self._snapshot.id
-        if self._working_directory:
-            env_params["working_directory"] = self._working_directory
-        return env_params
+        if not self._blueprint and not self._snapshot and not self._working_directory:
+            return None
+        return {
+            "blueprint_id": self._blueprint.id if self._blueprint else None,
+            "snapshot_id": self._snapshot.id if self._snapshot else None,
+            "working_directory": self._working_directory if self._working_directory else None,
+        }
 
     def _build_params(self) -> ScenarioCreateParams:
         """Build the scenario creation parameters.

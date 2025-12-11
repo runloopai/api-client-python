@@ -1,4 +1,4 @@
-from typing import Dict, Union, Callable, Optional
+from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
 from .._types import Body, Query, Headers, Timeout, NotGiven
@@ -7,7 +7,6 @@ from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
 from ..types.input_context import InputContext
 from ..types.scenario_view import ScenarioView
-from ..types.scoring_contract import ScoringContract
 from ..types.agent_list_params import AgentListParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
@@ -202,14 +201,5 @@ class ScenarioPreview(ScenarioView):
     id: Optional[str] = None  # type: ignore[assignment]
     """The ID of the Scenario."""
 
-    input_context: Optional[InputContextPreview] = None  # type: ignore[assignment]
+    input_context: InputContextPreview  # type: ignore[assignment]
     """The input context for the Scenario."""
-
-    metadata: Optional[Dict[str, str]] = None  # type: ignore[assignment]
-    """User defined metadata to attach to the scenario for organization."""
-
-    name: Optional[str] = None  # type: ignore[assignment]
-    """The name of the Scenario."""
-
-    scoring_contract: Optional[ScoringContract] = None  # type: ignore[assignment]
-    """The scoring contract for the Scenario."""
