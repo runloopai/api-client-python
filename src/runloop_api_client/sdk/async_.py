@@ -783,7 +783,7 @@ class AsyncScenarioOps:
         ...     .add_test_command_scorer("tests", test_command="pytest")
         ... )
         >>> params = builder.build()
-        >>> scenario = await runloop.scenario.create(**params) # equivalent to builder.push()
+        >>> scenario = await runloop.scenario.create(**params)  # equivalent to builder.push()
     """
 
     def __init__(self, client: AsyncRunloop) -> None:

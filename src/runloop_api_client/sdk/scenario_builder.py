@@ -39,7 +39,7 @@ class ScenarioBuilder:
         ...     .add_test_command_scorer("tests", test_command="pytest")
         ... )
         >>> params = builder.build()
-        >>> scenario = runloop.scenario.create(**params) # equivalent to builder.push()
+        >>> scenario = runloop.scenario.create(**params)  # equivalent to builder.push()
     """
 
     def __init__(self, name: str, client: Runloop) -> None:

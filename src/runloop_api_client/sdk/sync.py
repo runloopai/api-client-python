@@ -804,7 +804,7 @@ class ScenarioOps:
         ...     .add_test_command_scorer("tests", test_command="pytest")
         ... )
         >>> params = builder.build()
-        >>> scenario = runloop.scenario.create(**params) # equivalent to builder.push()
+        >>> scenario = runloop.scenario.create(**params)  # equivalent to builder.push()
     """
 
     def __init__(self, client: Runloop) -> None:
