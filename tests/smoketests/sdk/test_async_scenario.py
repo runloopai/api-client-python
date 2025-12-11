@@ -46,7 +46,7 @@ async def push_or_update_scenario(sdk_client: AsyncRunloopSDK, builder: AsyncSce
         new_snapshot_id = builder._snapshot.id if builder._snapshot else None
 
         # Update existing scenario with builder's params
-        params = builder._build_params()
+        params = builder.build()
         result = await scenario.update(**filter_params(params, SDKScenarioUpdateParams))
 
         # Delete OLD blueprint/snapshot if they're being replaced

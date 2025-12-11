@@ -126,21 +126,21 @@ class TestScenarioBuilder:
         with pytest.raises(ValueError, match="Scorer weight must be positive"):
             mock_builder.add_bash_script_scorer("bad", bash_script="echo 1", weight=-1.0)
 
-    def test_build_params_validation(self, mock_builder: ScenarioBuilder) -> None:
-        """Test _build_params raises for missing required fields."""
+    def test_build_validation(self, mock_builder: ScenarioBuilder) -> None:
+        """Test build raises for missing required fields."""
         # Missing problem statement
         mock_builder.add_test_command_scorer("test", test_command="pytest")
         with pytest.raises(ValueError, match="Problem statement is required"):
-            mock_builder._build_params()
+            mock_builder.build()
 
         # Missing scorer (new builder)
         builder2 = ScenarioBuilder("test2", mock_builder._client)
         builder2.with_problem_statement("Fix the bug")
         with pytest.raises(ValueError, match="At least one scorer is required"):
-            builder2._build_params()
+            builder2.build()
 
-    def test_build_params_with_all_options(self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
-        """Test _build_params with all optional fields set."""
+    def test_build_with_all_options(self, mock_builder: ScenarioBuilder, mock_blueprint: Blueprint) -> None:
+        """Test build with all optional fields set."""
         mock_builder.with_problem_statement("Fix the bug")
         mock_builder.with_additional_context({"hint": "line 42"})
         mock_builder.add_test_command_scorer("tests", test_command="pytest")
@@ -152,7 +152,7 @@ class TestScenarioBuilder:
         mock_builder.with_required_secrets(["db_pass"])
         mock_builder.with_validation_type("FORWARD")
 
-        params = mock_builder._build_params()
+        params = mock_builder.build()
 
         assert params["name"] == "test-scenario"
         assert params["input_context"]["problem_statement"] == "Fix the bug"
@@ -167,14 +167,14 @@ class TestScenarioBuilder:
         assert params.get("required_secret_names") == ["db_pass"]
         assert params.get("validation_type") == "FORWARD"
 
-    def test_build_params_normalizes_weights(self, mock_builder: ScenarioBuilder) -> None:
-        """Test that _build_params normalizes scorer weights to sum to 1.0."""
+    def test_build_normalizes_weights(self, mock_builder: ScenarioBuilder) -> None:
+        """Test that build normalizes scorer weights to sum to 1.0."""
         mock_builder.with_problem_statement("Fix the bug")
         mock_builder.add_bash_script_scorer("scorer1", bash_script="echo 1", weight=1.0)
         mock_builder.add_bash_script_scorer("scorer2", bash_script="echo 2", weight=2.0)
         mock_builder.add_bash_script_scorer("scorer3", bash_script="echo 3", weight=3.0)
 
-        params = mock_builder._build_params()
+        params = mock_builder.build()
         scorers = list(params["scoring_contract"]["scoring_function_parameters"])
 
         # Weights 1, 2, 3 should normalize to 1/6, 2/6, 3/6

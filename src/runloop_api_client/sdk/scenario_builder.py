@@ -402,7 +402,7 @@ class ScenarioBuilder:
             "working_directory": self._working_directory if self._working_directory else None,
         }
 
-    def _build_params(self) -> ScenarioCreateParams:
+    def build(self) -> ScenarioCreateParams:
         """Build the scenario creation parameters.
 
         Weights are automatically normalized to sum to 1.0.
@@ -473,6 +473,6 @@ class ScenarioBuilder:
         :return: Created scenario wrapper
         :rtype: Scenario
         """
-        params = self._build_params()
+        params = self.build()
         scenario_view = self._client.scenarios.create(**params, **options)
         return Scenario(self._client, scenario_view.id)

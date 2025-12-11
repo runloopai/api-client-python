@@ -402,7 +402,7 @@ class AsyncScenarioBuilder:
             "working_directory": self._working_directory if self._working_directory else None,
         }
 
-    def _build_params(self) -> ScenarioCreateParams:
+    def build(self) -> ScenarioCreateParams:
         """Build the scenario creation parameters.
 
         Weights are automatically normalized to sum to 1.0.
@@ -473,6 +473,6 @@ class AsyncScenarioBuilder:
         :return: Created scenario wrapper
         :rtype: AsyncScenario
         """
-        params = self._build_params()
+        params = self.build()
         scenario_view = await self._client.scenarios.create(**params, **options)
         return AsyncScenario(self._client, scenario_view.id)
