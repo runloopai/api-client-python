@@ -6,7 +6,7 @@ from types import SimpleNamespace
 from unittest.mock import Mock
 
 from tests.sdk.conftest import MockExecutionView
-from runloop_api_client.sdk.execution_result import ExecutionResult
+from runloop_api_client.sdk import ExecutionResult
 
 
 class TestExecutionResult:

@@ -8,7 +8,7 @@ from unittest.mock import Mock, AsyncMock
 import pytest
 
 from tests.sdk.conftest import MockExecutionView
-from runloop_api_client.sdk.async_execution_result import AsyncExecutionResult
+from runloop_api_client.sdk import AsyncExecutionResult
 
 
 class TestAsyncExecutionResult:

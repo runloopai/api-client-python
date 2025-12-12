@@ -24,17 +24,17 @@ from runloop_api_client.sdk import (
     AsyncAgent,
     AsyncDevbox,
     AsyncScorer,
+    AsyncAgentOps,
+    AsyncScenario,
     AsyncSnapshot,
     AsyncBlueprint,
-    AsyncStorageObject,
-)
-from runloop_api_client.sdk.async_ import (
-    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
+    AsyncScenarioOps,
     AsyncSnapshotOps,
     AsyncBlueprintOps,
+    AsyncStorageObject,
     AsyncStorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
@@ -1122,8 +1122,6 @@ class TestAsyncScenarioOps:
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         ops = AsyncScenarioOps(mock_async_client)
         scenario = ops.from_id("scn_123")
@@ -1134,7 +1132,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
         """Test list method with empty results."""
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         async def async_iter():
             return
@@ -1151,8 +1148,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         async def async_iter():
             yield scenario_view
@@ -1170,8 +1165,6 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list method with multiple results."""
-        from runloop_api_client.sdk import AsyncScenario
-        from runloop_api_client.sdk.async_ import AsyncScenarioOps
 
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
@@ -1198,33 +1191,33 @@ class TestAsyncRunloopSDK:
 
     def test_init(self) -> None:
         """Test AsyncRunloopSDK initialization."""
-        sdk = AsyncRunloopSDK(bearer_token="test-token")
-        assert sdk.api is not None
-        assert isinstance(sdk.agent, AsyncAgentOps)
-        assert isinstance(sdk.devbox, AsyncDevboxOps)
-        assert isinstance(sdk.scorer, AsyncScorerOps)
-        assert isinstance(sdk.snapshot, AsyncSnapshotOps)
-        assert isinstance(sdk.blueprint, AsyncBlueprintOps)
-        assert isinstance(sdk.storage_object, AsyncStorageObjectOps)
+        runloop = AsyncRunloopSDK(bearer_token="test-token")
+        assert runloop.api is not None
+        assert isinstance(runloop.agent, AsyncAgentOps)
+        assert isinstance(runloop.devbox, AsyncDevboxOps)
+        assert isinstance(runloop.scorer, AsyncScorerOps)
+        assert isinstance(runloop.snapshot, AsyncSnapshotOps)
+        assert isinstance(runloop.blueprint, AsyncBlueprintOps)
+        assert isinstance(runloop.storage_object, AsyncStorageObjectOps)
 
     @pytest.mark.asyncio
     async def test_aclose(self) -> None:
         """Test aclose method."""
-        sdk = AsyncRunloopSDK(bearer_token="test-token")
+        runloop = AsyncRunloopSDK(bearer_token="test-token")
         # Verify aclose doesn't raise
-        await sdk.aclose()
+        await runloop.aclose()
 
     @pytest.mark.asyncio
     async def test_context_manager(self) -> None:
         """Test context manager behavior."""
-        async with AsyncRunloopSDK(bearer_token="test-token") as sdk:
-            assert sdk.api is not None
+        async with AsyncRunloopSDK(bearer_token="test-token") as runloop:
+            assert runloop.api is not None
         # Verify context manager properly closes (implementation detail of context manager protocol)
 
     def test_api_property(self) -> None:
         """Test api property access."""
-        sdk = AsyncRunloopSDK(bearer_token="test-token")
-        assert sdk.api is not None
-        assert hasattr(sdk.api, "devboxes")
-        assert hasattr(sdk.api, "blueprints")
-        assert hasattr(sdk.api, "objects")
+        runloop = AsyncRunloopSDK(bearer_token="test-token")
+        assert runloop.api is not None
+        assert hasattr(runloop.api, "devboxes")
+        assert hasattr(runloop.api, "blueprints")
+        assert hasattr(runloop.api, "objects")

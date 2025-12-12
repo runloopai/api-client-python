@@ -12,7 +12,8 @@ from tests.sdk.conftest import (
     TASK_COMPLETION_SHORT,
     MockExecutionView,
 )
-from runloop_api_client.sdk.execution import Execution, _StreamingGroup
+from runloop_api_client.sdk import Execution
+from runloop_api_client.sdk.execution import _StreamingGroup
 
 # Legacy aliases for backward compatibility during transition
 SHORT_SLEEP = THREAD_STARTUP_DELAY

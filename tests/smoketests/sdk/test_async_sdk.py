@@ -16,12 +16,15 @@ class TestAsyncRunloopSDKInitialization:
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_sdk_instance_creation(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test that async SDK instance is created successfully with all client properties."""
+        """Test that async SDK instance is created successfully with all operations."""
         assert async_sdk_client is not None
         assert async_sdk_client.devbox is not None
         assert async_sdk_client.blueprint is not None
         assert async_sdk_client.snapshot is not None
         assert async_sdk_client.storage_object is not None
+        assert async_sdk_client.scorer is not None
+        assert async_sdk_client.agent is not None
+        assert async_sdk_client.scenario is not None
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_legacy_api_access(self, async_sdk_client: AsyncRunloopSDK) -> None:

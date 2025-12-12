@@ -5,6 +5,8 @@ from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
+from ..types.input_context import InputContext
+from ..types.scenario_view import ScenarioView
 from ..types.agent_list_params import AgentListParams
 from ..types.devbox_list_params import DevboxListParams
 from ..types.object_list_params import ObjectListParams
@@ -186,3 +188,18 @@ class SDKScenarioRunAsyncParams(ScenarioStartRunBaseParams, LongRequestOptions):
 
 class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongPollingRequestOptions):
     pass
+
+
+class InputContextPreview(InputContext):
+    problem_statement: Optional[str] = None  # type: ignore[assignment]
+    """The problem statement for the Scenario."""
+
+
+class ScenarioPreview(ScenarioView):
+    """Preview of scenario configuration with all fields optional."""
+
+    id: Optional[str] = None  # type: ignore[assignment]
+    """The ID of the Scenario."""
+
+    input_context: InputContextPreview  # type: ignore[assignment]
+    """The input context for the Scenario."""

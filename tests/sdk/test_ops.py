@@ -20,14 +20,21 @@ from tests.sdk.conftest import (
     MockBlueprintView,
     create_mock_httpx_response,
 )
-from runloop_api_client.sdk import Agent, Devbox, Scorer, Snapshot, Blueprint, StorageObject
-from runloop_api_client.sdk.sync import (
+from runloop_api_client.sdk import (
+    Agent,
+    Devbox,
+    Scorer,
     AgentOps,
+    Scenario,
+    Snapshot,
+    Blueprint,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
+    ScenarioOps,
     SnapshotOps,
     BlueprintOps,
+    StorageObject,
     StorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
@@ -1015,8 +1022,6 @@ class TestScenarioOps:
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         ops = ScenarioOps(mock_client)
         scenario = ops.from_id("scn_123")
@@ -1026,7 +1031,6 @@ class TestScenarioOps:
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         mock_client.scenarios.list.return_value = []
 
@@ -1038,8 +1042,6 @@ class TestScenarioOps:
 
     def test_list_single(self, mock_client: Mock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         mock_client.scenarios.list.return_value = [scenario_view]
 
@@ -1053,8 +1055,6 @@ class TestScenarioOps:
 
     def test_list_multiple(self, mock_client: Mock) -> None:
         """Test list method with multiple results."""
-        from runloop_api_client.sdk import Scenario
-        from runloop_api_client.sdk.sync import ScenarioOps
 
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
@@ -1076,36 +1076,36 @@ class TestRunloopSDK:
 
     def test_init(self) -> None:
         """Test RunloopSDK initialization."""
-        sdk = RunloopSDK(bearer_token="test-token")
-        assert sdk.api is not None
-        assert isinstance(sdk.agent, AgentOps)
-        assert isinstance(sdk.devbox, DevboxOps)
-        assert isinstance(sdk.scorer, ScorerOps)
-        assert isinstance(sdk.snapshot, SnapshotOps)
-        assert isinstance(sdk.blueprint, BlueprintOps)
-        assert isinstance(sdk.storage_object, StorageObjectOps)
+        runloop = RunloopSDK(bearer_token="test-token")
+        assert runloop.api is not None
+        assert isinstance(runloop.agent, AgentOps)
+        assert isinstance(runloop.devbox, DevboxOps)
+        assert isinstance(runloop.scorer, ScorerOps)
+        assert isinstance(runloop.snapshot, SnapshotOps)
+        assert isinstance(runloop.blueprint, BlueprintOps)
+        assert isinstance(runloop.storage_object, StorageObjectOps)
 
     def test_init_with_max_retries(self) -> None:
         """Test RunloopSDK initialization with max_retries."""
-        sdk = RunloopSDK(bearer_token="test-token", max_retries=3)
-        assert sdk.api is not None
+        runloop = RunloopSDK(bearer_token="test-token", max_retries=3)
+        assert runloop.api is not None
 
     def test_close(self) -> None:
         """Test close method."""
-        sdk = RunloopSDK(bearer_token="test-token")
+        runloop = RunloopSDK(bearer_token="test-token")
         # Verify close doesn't raise
-        sdk.close()
+        runloop.close()
 
     def test_context_manager(self) -> None:
         """Test context manager behavior."""
-        with RunloopSDK(bearer_token="test-token") as sdk:
-            assert sdk.api is not None
+        with RunloopSDK(bearer_token="test-token") as runloop:
+            assert runloop.api is not None
         # Verify context manager properly closes (implementation detail of context manager protocol)
 
     def test_api_property(self) -> None:
         """Test api property access."""
-        sdk = RunloopSDK(bearer_token="test-token")
-        assert sdk.api is not None
-        assert hasattr(sdk.api, "devboxes")
-        assert hasattr(sdk.api, "blueprints")
-        assert hasattr(sdk.api, "objects")
+        runloop = RunloopSDK(bearer_token="test-token")
+        assert runloop.api is not None
+        assert hasattr(runloop.api, "devboxes")
+        assert hasattr(runloop.api, "blueprints")
+        assert hasattr(runloop.api, "objects")

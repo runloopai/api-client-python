@@ -35,6 +35,7 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .storage_object import StorageObject
+from .scenario_builder import ScenarioBuilder
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
@@ -794,6 +795,16 @@ class ScenarioOps:
         >>> scenario = runloop.scenario.from_id("scn-xxx")
         >>> run = scenario.run()
         >>> scenarios = runloop.scenario.list()
+
+    Example using builder:
+        >>> builder = (
+        ...     runloop.scenario.builder("my-scenario")
+        ...     .from_blueprint(blueprint)
+        ...     .with_problem_statement("Fix the bug")
+        ...     .add_test_command_scorer("tests", test_command="pytest")
+        ... )
+        >>> params = builder.build()
+        >>> scenario = runloop.scenario.create(**params)  # equivalent to builder.push()
     """
 
     def __init__(self, client: Runloop) -> None:
@@ -803,6 +814,16 @@ class ScenarioOps:
         :type client: Runloop
         """
         self._client = client
+
+    def builder(self, name: str) -> ScenarioBuilder:
+        """Create a new scenario builder.
+
+        :param name: Name for the scenario
+        :type name: str
+        :return: A new ScenarioBuilder instance
+        :rtype: ScenarioBuilder
+        """
+        return ScenarioBuilder(name, self._client)
 
     def from_id(self, scenario_id: str) -> Scenario:
         """Get a Scenario instance for an existing scenario ID.
