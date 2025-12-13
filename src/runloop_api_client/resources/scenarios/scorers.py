@@ -201,7 +201,7 @@ class ScorersResource(SyncAPIResource):
         List all Scenario Scorers matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -460,7 +460,7 @@ class AsyncScorersResource(AsyncAPIResource):
         List all Scenario Scorers matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 

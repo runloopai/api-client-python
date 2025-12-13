@@ -83,6 +83,7 @@ class RunsResource(SyncAPIResource):
         *,
         benchmark_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -97,7 +98,9 @@ class RunsResource(SyncAPIResource):
         Args:
           benchmark_id: The Benchmark ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -121,6 +124,7 @@ class RunsResource(SyncAPIResource):
                     {
                         "benchmark_id": benchmark_id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     run_list_params.RunListParams,
@@ -227,7 +231,7 @@ class RunsResource(SyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -322,6 +326,7 @@ class AsyncRunsResource(AsyncAPIResource):
         *,
         benchmark_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -336,7 +341,9 @@ class AsyncRunsResource(AsyncAPIResource):
         Args:
           benchmark_id: The Benchmark ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -360,6 +367,7 @@ class AsyncRunsResource(AsyncAPIResource):
                     {
                         "benchmark_id": benchmark_id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     run_list_params.RunListParams,
@@ -466,7 +474,7 @@ class AsyncRunsResource(AsyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
