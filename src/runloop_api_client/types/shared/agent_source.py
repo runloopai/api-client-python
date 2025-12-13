@@ -29,9 +29,6 @@ class Npm(BaseModel):
     agent_setup: Optional[List[str]] = None
     """Setup commands to run after installation"""
 
-    npm_version: Optional[str] = None
-    """NPM version constraint"""
-
     registry_url: Optional[str] = None
     """NPM registry URL"""
 
@@ -54,9 +51,6 @@ class Pip(BaseModel):
 
     agent_setup: Optional[List[str]] = None
     """Setup commands to run after installation"""
-
-    pip_version: Optional[str] = None
-    """Pip version constraint"""
 
     registry_url: Optional[str] = None
     """Pip registry URL"""

@@ -169,6 +169,7 @@ class TestBenchmarks:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list(
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -497,6 +498,7 @@ class TestAsyncBenchmarks:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list(
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])

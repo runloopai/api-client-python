@@ -32,9 +32,6 @@ class Npm(TypedDict, total=False):
     agent_setup: Optional[SequenceNotStr[str]]
     """Setup commands to run after installation"""
 
-    npm_version: Optional[str]
-    """NPM version constraint"""
-
     registry_url: Optional[str]
     """NPM registry URL"""
 
@@ -57,9 +54,6 @@ class Pip(TypedDict, total=False):
 
     agent_setup: Optional[SequenceNotStr[str]]
     """Setup commands to run after installation"""
-
-    pip_version: Optional[str]
-    """Pip version constraint"""
 
     registry_url: Optional[str]
     """Pip registry URL"""

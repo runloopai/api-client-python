@@ -14,7 +14,7 @@ class DiskSnapshotListParams(TypedDict, total=False):
     """Devbox ID to filter by."""
 
     limit: int
-    """The limit of items to return. Default is 20."""
+    """The limit of items to return. Default is 20. Max is 5000."""
 
     metadata_key: Annotated[str, PropertyInfo(alias="metadata[key]")]
     """Filter snapshots by metadata key-value pair.

@@ -291,6 +291,7 @@ class TestScenarios:
             limit=0,
             name="name",
             starting_after="starting_after",
+            validation_type="validation_type",
         )
         assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
 
@@ -696,6 +697,7 @@ class TestAsyncScenarios:
             limit=0,
             name="name",
             starting_after="starting_after",
+            validation_type="validation_type",
         )
         assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
 
