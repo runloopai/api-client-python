@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.0 (2025-12-13)
+
+Full Changelog: [v1.2.0...v2.0.0](https://github.com/runloopai/api-client-python/compare/v1.2.0...v2.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710))
+
+### Features
+
+* **devbox:** added stdin streaming endpoint ([0e8d2ee](https://github.com/runloopai/api-client-python/commit/0e8d2ee74b010541c87a8b98c809711084aeb699))
+* **scenarios:** add scenario builder to sdk ([#706](https://github.com/runloopai/api-client-python/issues/706)) ([2d41a15](https://github.com/runloopai/api-client-python/commit/2d41a15b4455ed8d7f6a8063cf19b82d51edeef8))
+
+
+### Bug Fixes
+
+* **types:** allow pyright to infer TypedDict types within SequenceNotStr ([7617e14](https://github.com/runloopai/api-client-python/commit/7617e14705282fdd21374ce810c5d54edd60d7f4))
+
+
+### Chores
+
+* add missing docstrings ([4574a56](https://github.com/runloopai/api-client-python/commit/4574a564e2f3f614ffce464c50bdfd812ed10f31))
+* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710)) ([fb3cc3d](https://github.com/runloopai/api-client-python/commit/fb3cc3d354d4279542cd20f44857f2ec28be7082))
+
 ## 1.2.0 (2025-12-09)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/runloopai/api-client-python/compare/v1.1.0...v1.2.0)
