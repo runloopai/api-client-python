@@ -163,7 +163,7 @@ class RepositoriesResource(SyncAPIResource):
         List all available repository connections.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
 
@@ -542,7 +542,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         List all available repository connections.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
 

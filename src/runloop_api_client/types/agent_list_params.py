@@ -12,7 +12,7 @@ class AgentListParams(TypedDict, total=False):
     """Filter agents by public visibility."""
 
     limit: int
-    """The limit of items to return. Default is 20."""
+    """The limit of items to return. Default is 20. Max is 5000."""
 
     name: str
     """Filter agents by name (partial match supported)."""
@@ -22,3 +22,6 @@ class AgentListParams(TypedDict, total=False):
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
+
+    version: str
+    """Filter by version. Use 'latest' to get the most recently created agent."""
