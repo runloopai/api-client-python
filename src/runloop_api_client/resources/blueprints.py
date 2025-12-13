@@ -201,6 +201,7 @@ class BlueprintsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -212,11 +213,13 @@ class BlueprintsResource(SyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -239,6 +242,7 @@ class BlueprintsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_params.BlueprintListParams,
                 ),
@@ -370,6 +374,7 @@ class BlueprintsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -381,11 +386,13 @@ class BlueprintsResource(SyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -408,6 +415,7 @@ class BlueprintsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_public_params.BlueprintListPublicParams,
                 ),
@@ -720,6 +728,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -731,11 +740,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -758,6 +769,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_params.BlueprintListParams,
                 ),
@@ -889,6 +901,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -900,11 +913,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -927,6 +942,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_public_params.BlueprintListPublicParams,
                 ),

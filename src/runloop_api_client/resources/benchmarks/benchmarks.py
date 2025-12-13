@@ -252,6 +252,7 @@ class BenchmarksResource(SyncAPIResource):
         self,
         *,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -264,7 +265,9 @@ class BenchmarksResource(SyncAPIResource):
         List all Benchmarks matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -287,6 +290,7 @@ class BenchmarksResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     benchmark_list_params.BenchmarkListParams,
@@ -312,7 +316,7 @@ class BenchmarksResource(SyncAPIResource):
         Get scenario definitions for a previously created Benchmark.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -360,7 +364,7 @@ class BenchmarksResource(SyncAPIResource):
         List all public benchmarks matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -660,6 +664,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         *,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -672,7 +677,9 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         List all Benchmarks matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -695,6 +702,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     benchmark_list_params.BenchmarkListParams,
@@ -720,7 +728,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Get scenario definitions for a previously created Benchmark.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -768,7 +776,7 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         List all public benchmarks matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 

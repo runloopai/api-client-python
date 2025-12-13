@@ -66,6 +66,7 @@ class TestRuns:
         run = client.benchmarks.runs.list(
             benchmark_id="benchmark_id",
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])
@@ -268,6 +269,7 @@ class TestAsyncRuns:
         run = await async_client.benchmarks.runs.list(
             benchmark_id="benchmark_id",
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], run, path=["response"])

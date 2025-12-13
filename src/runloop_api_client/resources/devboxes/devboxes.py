@@ -361,7 +361,7 @@ class DevboxesResource(SyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -841,7 +841,7 @@ class DevboxesResource(SyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.
@@ -1669,7 +1669,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -2149,7 +2149,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.

@@ -161,6 +161,7 @@ class TestBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -301,6 +302,7 @@ class TestBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -597,6 +599,7 @@ class TestAsyncBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -737,6 +740,7 @@ class TestAsyncBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 

@@ -86,9 +86,12 @@ class RunsResource(SyncAPIResource):
     def list(
         self,
         *,
+        benchmark_run_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         scenario_id: str | Omit = omit,
         starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,11 +103,17 @@ class RunsResource(SyncAPIResource):
         List all ScenarioRuns matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          benchmark_run_id: Filter by benchmark run ID
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           scenario_id: Filter runs associated to Scenario given ID
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by state
 
           extra_headers: Send extra headers
 
@@ -124,9 +133,12 @@ class RunsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "benchmark_run_id": benchmark_run_id,
                         "limit": limit,
+                        "name": name,
                         "scenario_id": scenario_id,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     run_list_params.RunListParams,
                 ),
@@ -357,9 +369,12 @@ class AsyncRunsResource(AsyncAPIResource):
     def list(
         self,
         *,
+        benchmark_run_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         scenario_id: str | Omit = omit,
         starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -371,11 +386,17 @@ class AsyncRunsResource(AsyncAPIResource):
         List all ScenarioRuns matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          benchmark_run_id: Filter by benchmark run ID
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           scenario_id: Filter runs associated to Scenario given ID
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by state
 
           extra_headers: Send extra headers
 
@@ -395,9 +416,12 @@ class AsyncRunsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "benchmark_run_id": benchmark_run_id,
                         "limit": limit,
+                        "name": name,
                         "scenario_id": scenario_id,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     run_list_params.RunListParams,
                 ),

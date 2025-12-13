@@ -162,7 +162,7 @@ class ObjectsResource(SyncAPIResource):
         Args:
           content_type: Filter storage objects by content type.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter storage objects by name (partial match supported).
 
@@ -352,7 +352,7 @@ class ObjectsResource(SyncAPIResource):
         Args:
           content_type: Filter storage objects by content type.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter storage objects by name (partial match supported).
 
@@ -530,7 +530,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         Args:
           content_type: Filter storage objects by content type.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter storage objects by name (partial match supported).
 
@@ -720,7 +720,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         Args:
           content_type: Filter storage objects by content type.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter storage objects by name (partial match supported).
 

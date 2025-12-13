@@ -127,7 +127,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.
@@ -346,7 +346,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.
