@@ -9,7 +9,7 @@ __all__ = ["ScenarioListPublicParams"]
 
 class ScenarioListPublicParams(TypedDict, total=False):
     limit: int
-    """The limit of items to return. Default is 20."""
+    """The limit of items to return. Default is 20. Max is 5000."""
 
     name: str
     """Query for Scenarios with a given name."""

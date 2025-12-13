@@ -11,5 +11,9 @@ __all__ = ["ScoringContractParam"]
 
 
 class ScoringContractParam(TypedDict, total=False):
+    """
+    InputContextView specifies the problem statement along with all additional context for a Scenario.
+    """
+
     scoring_function_parameters: Required[Iterable[ScoringFunctionParam]]
     """A list of scoring functions used to evaluate the Scenario."""

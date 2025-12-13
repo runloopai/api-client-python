@@ -9,6 +9,8 @@ __all__ = ["AgentView"]
 
 
 class AgentView(BaseModel):
+    """An Agent represents a registered AI agent entity."""
+
     id: str
     """The unique identifier of the Agent."""
 
@@ -20,6 +22,9 @@ class AgentView(BaseModel):
 
     name: str
     """The name of the Agent."""
+
+    version: str
+    """The version of the Agent. A semver string (e.g., '2.0.65') or a SHA."""
 
     source: Optional[AgentSource] = None
     """The source configuration for the Agent."""

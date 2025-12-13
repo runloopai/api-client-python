@@ -9,6 +9,10 @@ __all__ = ["BenchmarkRunView"]
 
 
 class BenchmarkRunView(BaseModel):
+    """
+    A BenchmarkRunView represents a run of a complete set of Scenarios, organized under a Benchmark.
+    """
+
     id: str
     """The ID of the BenchmarkRun."""
 
