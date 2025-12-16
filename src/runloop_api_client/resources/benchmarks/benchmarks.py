@@ -21,6 +21,7 @@ from ...types import (
     benchmark_start_run_params,
     benchmark_definitions_params,
     benchmark_list_public_params,
+    benchmark_update_scenarios_params,
 )
 from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
@@ -453,6 +454,59 @@ class BenchmarksResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    def update_scenarios(
+        self,
+        id: str,
+        *,
+        scenarios_to_add: Optional[SequenceNotStr[str]] | Omit = omit,
+        scenarios_to_remove: Optional[SequenceNotStr[str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BenchmarkView:
+        """
+        Add and/or remove Scenario IDs from an existing Benchmark.
+
+        Args:
+          scenarios_to_add: Scenario IDs to add to the Benchmark.
+
+          scenarios_to_remove: Scenario IDs to remove from the Benchmark.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/benchmarks/{id}/scenarios",
+            body=maybe_transform(
+                {
+                    "scenarios_to_add": scenarios_to_add,
+                    "scenarios_to_remove": scenarios_to_remove,
+                },
+                benchmark_update_scenarios_params.BenchmarkUpdateScenariosParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BenchmarkView,
+        )
+
 
 class AsyncBenchmarksResource(AsyncAPIResource):
     @cached_property
@@ -865,6 +919,59 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    async def update_scenarios(
+        self,
+        id: str,
+        *,
+        scenarios_to_add: Optional[SequenceNotStr[str]] | Omit = omit,
+        scenarios_to_remove: Optional[SequenceNotStr[str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BenchmarkView:
+        """
+        Add and/or remove Scenario IDs from an existing Benchmark.
+
+        Args:
+          scenarios_to_add: Scenario IDs to add to the Benchmark.
+
+          scenarios_to_remove: Scenario IDs to remove from the Benchmark.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/benchmarks/{id}/scenarios",
+            body=await async_maybe_transform(
+                {
+                    "scenarios_to_add": scenarios_to_add,
+                    "scenarios_to_remove": scenarios_to_remove,
+                },
+                benchmark_update_scenarios_params.BenchmarkUpdateScenariosParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BenchmarkView,
+        )
+
 
 class BenchmarksResourceWithRawResponse:
     def __init__(self, benchmarks: BenchmarksResource) -> None:
@@ -890,6 +997,9 @@ class BenchmarksResourceWithRawResponse:
         )
         self.start_run = to_raw_response_wrapper(
             benchmarks.start_run,
+        )
+        self.update_scenarios = to_raw_response_wrapper(
+            benchmarks.update_scenarios,
         )
 
     @cached_property
@@ -922,6 +1032,9 @@ class AsyncBenchmarksResourceWithRawResponse:
         self.start_run = async_to_raw_response_wrapper(
             benchmarks.start_run,
         )
+        self.update_scenarios = async_to_raw_response_wrapper(
+            benchmarks.update_scenarios,
+        )
 
     @cached_property
     def runs(self) -> AsyncRunsResourceWithRawResponse:
@@ -953,6 +1066,9 @@ class BenchmarksResourceWithStreamingResponse:
         self.start_run = to_streamed_response_wrapper(
             benchmarks.start_run,
         )
+        self.update_scenarios = to_streamed_response_wrapper(
+            benchmarks.update_scenarios,
+        )
 
     @cached_property
     def runs(self) -> RunsResourceWithStreamingResponse:
@@ -983,6 +1099,9 @@ class AsyncBenchmarksResourceWithStreamingResponse:
         )
         self.start_run = async_to_streamed_response_wrapper(
             benchmarks.start_run,
+        )
+        self.update_scenarios = async_to_streamed_response_wrapper(
+            benchmarks.update_scenarios,
         )
 
     @cached_property
