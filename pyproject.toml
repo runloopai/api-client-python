@@ -40,6 +40,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/runloopai/api-client-python"
 Repository = "https://github.com/runloopai/api-client-python"
+Documentation = "https://runloopai.github.io/api-client-python/"
 
 [project.optional-dependencies]
 aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.9"]
