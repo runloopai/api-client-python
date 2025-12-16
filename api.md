@@ -20,6 +20,7 @@ from runloop_api_client.types import (
     BenchmarkCreateParameters,
     BenchmarkRunListView,
     BenchmarkRunView,
+    BenchmarkScenarioUpdateParameters,
     BenchmarkView,
     ScenarioDefinitionListView,
     StartBenchmarkRunParameters,
@@ -35,6 +36,7 @@ Methods:
 - <code title="get /v1/benchmarks/{id}/definitions">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">definitions</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_definitions_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_definition_list_view.py">ScenarioDefinitionListView</a></code>
 - <code title="get /v1/benchmarks/list_public">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
 - <code title="post /v1/benchmarks/start_run">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/benchmark_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="post /v1/benchmarks/{id}/scenarios">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">update_scenarios</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_update_scenarios_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
 
 ## Runs
 
