@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
-from tests.sdk.conftest import AsyncIterableMock, MockScenarioRunView, MockBenchmarkRunView
+from tests.sdk.conftest import MockScenarioRunView, MockBenchmarkRunView
+from runloop_api_client.sdk.async_scenario_run import AsyncScenarioRun
 from runloop_api_client.sdk.async_benchmark_run import AsyncBenchmarkRun
 
 
@@ -56,39 +58,63 @@ class TestAsyncBenchmarkRun:
         assert result.state == "completed"
         mock_async_client.benchmarks.runs.complete.assert_awaited_once_with("bench_run_123")
 
-    async def test_list_scenario_runs(
+    async def test_list_scenario_runs_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list_scenario_runs method with empty results."""
+        page = SimpleNamespace(runs=[])
+        mock_async_client.benchmarks.runs.list_scenario_runs = AsyncMock(return_value=page)
+
+        run = AsyncBenchmarkRun(mock_async_client, "bench_run_123", "bench_123")
+        result = await run.list_scenario_runs()
+
+        assert len(result) == 0
+        mock_async_client.benchmarks.runs.list_scenario_runs.assert_awaited_once_with("bench_run_123")
+
+    async def test_list_scenario_runs_single(
         self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView
     ) -> None:
-        """Test list_scenario_runs method."""
-        mock_async_client.benchmarks.runs.list_scenario_runs.return_value = AsyncIterableMock([scenario_run_view])
+        """Test list_scenario_runs method with single result."""
+        page = SimpleNamespace(runs=[scenario_run_view])
+        mock_async_client.benchmarks.runs.list_scenario_runs = AsyncMock(return_value=page)
 
         run = AsyncBenchmarkRun(mock_async_client, "bench_run_123", "bench_123")
         result = await run.list_scenario_runs()
 
         assert len(result) == 1
-        assert result[0] == scenario_run_view
-        mock_async_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")
+        assert isinstance(result[0], AsyncScenarioRun)
+        assert result[0].id == scenario_run_view.id
+        assert result[0].devbox_id == scenario_run_view.devbox_id
+        mock_async_client.benchmarks.runs.list_scenario_runs.assert_awaited_once_with("bench_run_123")
+
+    async def test_list_scenario_runs_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list_scenario_runs method with multiple results."""
+        scenario_run_view1 = MockScenarioRunView(id="run_001", devbox_id="dev_001")
+        scenario_run_view2 = MockScenarioRunView(id="run_002", devbox_id="dev_002")
+        page = SimpleNamespace(runs=[scenario_run_view1, scenario_run_view2])
+        mock_async_client.benchmarks.runs.list_scenario_runs = AsyncMock(return_value=page)
+
+        run = AsyncBenchmarkRun(mock_async_client, "bench_run_123", "bench_123")
+        result = await run.list_scenario_runs()
+
+        assert len(result) == 2
+        assert isinstance(result[0], AsyncScenarioRun)
+        assert isinstance(result[1], AsyncScenarioRun)
+        assert result[0].id == "run_001"
+        assert result[1].id == "run_002"
+        mock_async_client.benchmarks.runs.list_scenario_runs.assert_awaited_once_with("bench_run_123")
 
     async def test_list_scenario_runs_with_params(
         self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView
     ) -> None:
         """Test list_scenario_runs method with filtering parameters."""
-        mock_async_client.benchmarks.runs.list_scenario_runs.return_value = AsyncIterableMock([scenario_run_view])
+        page = SimpleNamespace(runs=[scenario_run_view])
+        mock_async_client.benchmarks.runs.list_scenario_runs = AsyncMock(return_value=page)
 
         run = AsyncBenchmarkRun(mock_async_client, "bench_run_123", "bench_123")
         result = await run.list_scenario_runs(limit=10, state="completed")
 
         assert len(result) == 1
-        mock_async_client.benchmarks.runs.list_scenario_runs.assert_called_once_with(
+        assert isinstance(result[0], AsyncScenarioRun)
+        assert result[0].id == scenario_run_view.id
+        mock_async_client.benchmarks.runs.list_scenario_runs.assert_awaited_once_with(
             "bench_run_123", limit=10, state="completed"
         )
-
-    async def test_list_scenario_runs_empty(self, mock_async_client: AsyncMock) -> None:
-        """Test list_scenario_runs returns empty list when no scenario runs."""
-        mock_async_client.benchmarks.runs.list_scenario_runs.return_value = AsyncIterableMock([])
-
-        run = AsyncBenchmarkRun(mock_async_client, "bench_run_123", "bench_123")
-        result = await run.list_scenario_runs()
-
-        assert result == []
-        mock_async_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")

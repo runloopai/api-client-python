@@ -5,9 +5,10 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Unpack, override
 
-from ..types import ScenarioRunView, BenchmarkRunView
+from ..types import BenchmarkRunView
 from ._types import BaseRequestOptions, LongRequestOptions, SDKBenchmarkRunListScenarioRunsParams
 from .._client import Runloop
+from .scenario_run import ScenarioRun
 
 
 class BenchmarkRun:
@@ -112,15 +113,15 @@ class BenchmarkRun:
     def list_scenario_runs(
         self,
         **params: Unpack[SDKBenchmarkRunListScenarioRunsParams],
-    ) -> List[ScenarioRunView]:
+    ) -> List[ScenarioRun]:
         """List all scenario runs for this benchmark run.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkRunListScenarioRunsParams` for available parameters
-        :return: List of scenario run views
-        :rtype: List[ScenarioRunView]
+        :return: List of scenario run objects
+        :rtype: List[ScenarioRun]
         """
         page = self._client.benchmarks.runs.list_scenario_runs(
             self._id,
             **params,
         )
-        return list(page)
+        return [ScenarioRun(self._client, run.id, run.devbox_id) for run in page.runs]

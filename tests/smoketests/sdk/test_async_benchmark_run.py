@@ -10,6 +10,7 @@ from __future__ import annotations
 import pytest
 
 from runloop_api_client.sdk import AsyncRunloopSDK
+from runloop_api_client.sdk.async_scenario_run import AsyncScenarioRun
 from runloop_api_client.sdk.async_benchmark_run import AsyncBenchmarkRun
 
 pytestmark = [pytest.mark.smoketest]
@@ -30,8 +31,8 @@ class TestAsyncBenchmarkRunRetrieval:
         3. Validates get_info returns correct data
         """
         # List existing benchmark runs via raw API
-        runs_page = async_sdk_client.api.benchmarks.runs.list(limit=1)
-        runs = [run async for run in runs_page]
+        runs_page = await async_sdk_client.api.benchmarks.runs.list(limit=1)
+        runs = runs_page.runs
 
         if not runs:
             pytest.skip("No benchmark runs available to test")
@@ -62,8 +63,8 @@ class TestAsyncBenchmarkRunRetrieval:
         2. Lists its scenario runs
         """
         # List existing benchmark runs via raw API
-        runs_page = async_sdk_client.api.benchmarks.runs.list(limit=1)
-        runs = [run async for run in runs_page]
+        runs_page = await async_sdk_client.api.benchmarks.runs.list(limit=1)
+        runs = runs_page.runs
 
         if not runs:
             pytest.skip("No benchmark runs available to test")
@@ -81,6 +82,12 @@ class TestAsyncBenchmarkRunRetrieval:
         scenario_runs = await benchmark_run.list_scenario_runs()
         assert isinstance(scenario_runs, list)
 
+        # Verify returned items are AsyncScenarioRun objects
+        for scenario_run in scenario_runs:
+            assert isinstance(scenario_run, AsyncScenarioRun)
+            assert scenario_run.id is not None
+            assert scenario_run.devbox_id is not None
+
 
 class TestAsyncBenchmarkRunLifecycle:
     """Test AsyncBenchmarkRun lifecycle operations."""
@@ -96,8 +103,8 @@ class TestAsyncBenchmarkRunLifecycle:
         4. Cancels the run
         """
         # Find an existing benchmark via raw API
-        benchmarks_page = async_sdk_client.api.benchmarks.list(limit=1)
-        benchmarks = [b async for b in benchmarks_page]
+        benchmarks_page = await async_sdk_client.api.benchmarks.list(limit=1)
+        benchmarks = benchmarks_page.benchmarks
 
         if not benchmarks:
             pytest.skip("No benchmarks available to test")

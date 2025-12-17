@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from unittest.mock import Mock
 
 from tests.sdk.conftest import MockScenarioRunView, MockBenchmarkRunView
+from runloop_api_client.sdk.scenario_run import ScenarioRun
 from runloop_api_client.sdk.benchmark_run import BenchmarkRun
 
 
@@ -56,37 +58,59 @@ class TestBenchmarkRun:
         assert result.state == "completed"
         mock_client.benchmarks.runs.complete.assert_called_once_with("bench_run_123")
 
-    def test_list_scenario_runs(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
-        """Test list_scenario_runs method."""
-        mock_page = [scenario_run_view]
-        mock_client.benchmarks.runs.list_scenario_runs.return_value = mock_page
+    def test_list_scenario_runs_empty(self, mock_client: Mock) -> None:
+        """Test list_scenario_runs method with empty results."""
+        page = SimpleNamespace(runs=[])
+        mock_client.benchmarks.runs.list_scenario_runs.return_value = page
+
+        run = BenchmarkRun(mock_client, "bench_run_123", "bench_123")
+        result = run.list_scenario_runs()
+
+        assert len(result) == 0
+        mock_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")
+
+    def test_list_scenario_runs_single(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
+        """Test list_scenario_runs method with single result."""
+        page = SimpleNamespace(runs=[scenario_run_view])
+        mock_client.benchmarks.runs.list_scenario_runs.return_value = page
 
         run = BenchmarkRun(mock_client, "bench_run_123", "bench_123")
         result = run.list_scenario_runs()
 
         assert len(result) == 1
-        assert result[0] == scenario_run_view
+        assert isinstance(result[0], ScenarioRun)
+        assert result[0].id == scenario_run_view.id
+        assert result[0].devbox_id == scenario_run_view.devbox_id
+        mock_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")
+
+    def test_list_scenario_runs_multiple(self, mock_client: Mock) -> None:
+        """Test list_scenario_runs method with multiple results."""
+        scenario_run_view1 = MockScenarioRunView(id="run_001", devbox_id="dev_001")
+        scenario_run_view2 = MockScenarioRunView(id="run_002", devbox_id="dev_002")
+        page = SimpleNamespace(runs=[scenario_run_view1, scenario_run_view2])
+        mock_client.benchmarks.runs.list_scenario_runs.return_value = page
+
+        run = BenchmarkRun(mock_client, "bench_run_123", "bench_123")
+        result = run.list_scenario_runs()
+
+        assert len(result) == 2
+        assert isinstance(result[0], ScenarioRun)
+        assert isinstance(result[1], ScenarioRun)
+        assert result[0].id == "run_001"
+        assert result[1].id == "run_002"
         mock_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")
 
     def test_list_scenario_runs_with_params(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
         """Test list_scenario_runs method with filtering parameters."""
-        mock_page = [scenario_run_view]
-        mock_client.benchmarks.runs.list_scenario_runs.return_value = mock_page
+        page = SimpleNamespace(runs=[scenario_run_view])
+        mock_client.benchmarks.runs.list_scenario_runs.return_value = page
 
         run = BenchmarkRun(mock_client, "bench_run_123", "bench_123")
         result = run.list_scenario_runs(limit=10, state="completed")
 
         assert len(result) == 1
+        assert isinstance(result[0], ScenarioRun)
+        assert result[0].id == scenario_run_view.id
         mock_client.benchmarks.runs.list_scenario_runs.assert_called_once_with(
             "bench_run_123", limit=10, state="completed"
         )
-
-    def test_list_scenario_runs_empty(self, mock_client: Mock) -> None:
-        """Test list_scenario_runs returns empty list when no scenario runs."""
-        mock_client.benchmarks.runs.list_scenario_runs.return_value = []
-
-        run = BenchmarkRun(mock_client, "bench_run_123", "bench_123")
-        result = run.list_scenario_runs()
-
-        assert result == []
-        mock_client.benchmarks.runs.list_scenario_runs.assert_called_once_with("bench_run_123")

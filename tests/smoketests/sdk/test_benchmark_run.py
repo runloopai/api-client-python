@@ -10,6 +10,7 @@ from __future__ import annotations
 import pytest
 
 from runloop_api_client.sdk import RunloopSDK
+from runloop_api_client.sdk.scenario_run import ScenarioRun
 from runloop_api_client.sdk.benchmark_run import BenchmarkRun
 
 pytestmark = [pytest.mark.smoketest]
@@ -30,8 +31,7 @@ class TestBenchmarkRunRetrieval:
         3. Validates get_info returns correct data
         """
         # List existing benchmark runs via raw API
-        runs_page = sdk_client.api.benchmarks.runs.list(limit=1)
-        runs = list(runs_page)
+        runs = sdk_client.api.benchmarks.runs.list(limit=1).runs
 
         if not runs:
             pytest.skip("No benchmark runs available to test")
@@ -62,8 +62,7 @@ class TestBenchmarkRunRetrieval:
         2. Lists its scenario runs
         """
         # List existing benchmark runs via raw API
-        runs_page = sdk_client.api.benchmarks.runs.list(limit=1)
-        runs = list(runs_page)
+        runs = sdk_client.api.benchmarks.runs.list(limit=1).runs
 
         if not runs:
             pytest.skip("No benchmark runs available to test")
@@ -81,6 +80,12 @@ class TestBenchmarkRunRetrieval:
         scenario_runs = benchmark_run.list_scenario_runs()
         assert isinstance(scenario_runs, list)
 
+        # Verify returned items are ScenarioRun objects
+        for scenario_run in scenario_runs:
+            assert isinstance(scenario_run, ScenarioRun)
+            assert scenario_run.id is not None
+            assert scenario_run.devbox_id is not None
+
 
 class TestBenchmarkRunLifecycle:
     """Test BenchmarkRun lifecycle operations."""
@@ -96,8 +101,7 @@ class TestBenchmarkRunLifecycle:
         4. Cancels the run
         """
         # Find an existing benchmark via raw API
-        benchmarks_page = sdk_client.api.benchmarks.list(limit=1)
-        benchmarks = list(benchmarks_page)
+        benchmarks = sdk_client.api.benchmarks.list(limit=1).benchmarks
 
         if not benchmarks:
             pytest.skip("No benchmarks available to test")
