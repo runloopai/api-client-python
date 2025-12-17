@@ -601,7 +601,9 @@ class AgentOps:
         """Create an agent from an NPM package.
 
         Example:
-            >>> agent = runloop.agent.create_from_npm(name="my-npm-agent", package_name="@runloop/example-agent")
+            >>> agent = runloop.agent.create_from_npm(
+            ...     name="my-npm-agent", package_name="@runloop/example-agent", version="1.0.0"
+            ... )
 
         :param package_name: NPM package name
         :type package_name: str
@@ -639,7 +641,9 @@ class AgentOps:
         """Create an agent from a Pip package.
 
         Example:
-            >>> agent = runloop.agent.create_from_pip(name="my-pip-agent", package_name="runloop-example-agent")
+            >>> agent = runloop.agent.create_from_pip(
+            ...     name="my-pip-agent", package_name="runloop-example-agent", version="1.0.0"
+            ... )
 
         :param package_name: Pip package name
         :type package_name: str
@@ -682,6 +686,7 @@ class AgentOps:
             ...     repository="https://github.com/user/agent-repo",
             ...     ref="main",
             ...     agent_setup=["npm install", "npm run build"],
+            ...     version="1.0.0",
             ... )
 
         :param repository: Git repository URL
@@ -723,7 +728,10 @@ class AgentOps:
             >>> obj = runloop.storage_object.upload_from_dir("./my-agent")
             >>> # Then create agent from the object
             >>> agent = runloop.agent.create_from_object(
-            ...     name="my-object-agent", object_id=obj.id, agent_setup=["chmod +x setup.sh", "./setup.sh"]
+            ...     name="my-object-agent",
+            ...     object_id=obj.id,
+            ...     agent_setup=["chmod +x setup.sh", "./setup.sh"],
+            ...     version="1.0.0",
             ... )
 
         :param object_id: Storage object ID
