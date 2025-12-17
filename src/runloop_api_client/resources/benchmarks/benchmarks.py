@@ -89,16 +89,16 @@ class BenchmarksResource(SyncAPIResource):
         Create a Benchmark with a set of Scenarios.
 
         Args:
-          name: The name of the Benchmark. This must be unique.
+          name: The unique name of the Benchmark.
 
           attribution: Attribution information for the benchmark.
 
           description: Detailed description of the benchmark.
 
-          metadata: User defined metadata to attach to the benchmark for organization.
+          metadata: User defined metadata to attach to the benchmark.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
-              are not supplied, the benchmark will fail to start
+              are not supplied, the benchmark will fail to start.
 
           required_secret_names: Secrets required to run the benchmark with (environment variable name will be
               mapped to the your user secret by name). If any of these secrets are not
@@ -177,12 +177,12 @@ class BenchmarksResource(SyncAPIResource):
         self,
         id: str,
         *,
-        name: str,
         attribution: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
-        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
         scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -192,26 +192,30 @@ class BenchmarksResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
-        """
-        Update a Benchmark with a set of Scenarios.
+        """Update a Benchmark.
+
+        Fields that are null will preserve the existing value.
+        Fields that are provided (including empty values) will replace the existing
+        value entirely.
 
         Args:
-          name: The name of the Benchmark. This must be unique.
+          attribution: Attribution information for the benchmark. Pass in empty string to clear.
 
-          attribution: Attribution information for the benchmark.
+          description: Detailed description of the benchmark. Pass in empty string to clear.
 
-          description: Detailed description of the benchmark.
+          metadata: User defined metadata to attach to the benchmark. Pass in empty map to clear.
 
-          metadata: User defined metadata to attach to the benchmark for organization.
+          name: The unique name of the Benchmark. Cannot be blank.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
-              are not supplied, the benchmark will fail to start
+              are not supplied, the benchmark will fail to start. Pass in empty list to clear.
 
           required_secret_names: Secrets required to run the benchmark with (environment variable name will be
               mapped to the your user secret by name). If any of these secrets are not
-              provided or the mapping is incorrect, the benchmark will fail to start.
+              provided or the mapping is incorrect, the benchmark will fail to start. Pass in
+              empty list to clear.
 
-          scenario_ids: The Scenario IDs that make up the Benchmark.
+          scenario_ids: The Scenario IDs that make up the Benchmark. Pass in empty list to clear.
 
           extra_headers: Send extra headers
 
@@ -229,10 +233,10 @@ class BenchmarksResource(SyncAPIResource):
             f"/v1/benchmarks/{id}",
             body=maybe_transform(
                 {
-                    "name": name,
                     "attribution": attribution,
                     "description": description,
                     "metadata": metadata,
+                    "name": name,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,
@@ -554,16 +558,16 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         Create a Benchmark with a set of Scenarios.
 
         Args:
-          name: The name of the Benchmark. This must be unique.
+          name: The unique name of the Benchmark.
 
           attribution: Attribution information for the benchmark.
 
           description: Detailed description of the benchmark.
 
-          metadata: User defined metadata to attach to the benchmark for organization.
+          metadata: User defined metadata to attach to the benchmark.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
-              are not supplied, the benchmark will fail to start
+              are not supplied, the benchmark will fail to start.
 
           required_secret_names: Secrets required to run the benchmark with (environment variable name will be
               mapped to the your user secret by name). If any of these secrets are not
@@ -642,12 +646,12 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        name: str,
         attribution: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
-        required_secret_names: SequenceNotStr[str] | Omit = omit,
+        required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
         scenario_ids: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -657,26 +661,30 @@ class AsyncBenchmarksResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkView:
-        """
-        Update a Benchmark with a set of Scenarios.
+        """Update a Benchmark.
+
+        Fields that are null will preserve the existing value.
+        Fields that are provided (including empty values) will replace the existing
+        value entirely.
 
         Args:
-          name: The name of the Benchmark. This must be unique.
+          attribution: Attribution information for the benchmark. Pass in empty string to clear.
 
-          attribution: Attribution information for the benchmark.
+          description: Detailed description of the benchmark. Pass in empty string to clear.
 
-          description: Detailed description of the benchmark.
+          metadata: User defined metadata to attach to the benchmark. Pass in empty map to clear.
 
-          metadata: User defined metadata to attach to the benchmark for organization.
+          name: The unique name of the Benchmark. Cannot be blank.
 
           required_environment_variables: Environment variables required to run the benchmark. If any required variables
-              are not supplied, the benchmark will fail to start
+              are not supplied, the benchmark will fail to start. Pass in empty list to clear.
 
           required_secret_names: Secrets required to run the benchmark with (environment variable name will be
               mapped to the your user secret by name). If any of these secrets are not
-              provided or the mapping is incorrect, the benchmark will fail to start.
+              provided or the mapping is incorrect, the benchmark will fail to start. Pass in
+              empty list to clear.
 
-          scenario_ids: The Scenario IDs that make up the Benchmark.
+          scenario_ids: The Scenario IDs that make up the Benchmark. Pass in empty list to clear.
 
           extra_headers: Send extra headers
 
@@ -694,10 +702,10 @@ class AsyncBenchmarksResource(AsyncAPIResource):
             f"/v1/benchmarks/{id}",
             body=await async_maybe_transform(
                 {
-                    "name": name,
                     "attribution": attribution,
                     "description": description,
                     "metadata": metadata,
+                    "name": name,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
                     "scenario_ids": scenario_ids,

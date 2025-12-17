@@ -221,31 +221,32 @@ class ScenariosResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
-        """
-        Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria. Only provided
-        fields will be updated.
+        """Update a Scenario.
+
+        Fields that are null will preserve the existing value. Fields
+        that are provided (including empty values) will replace the existing value
+        entirely.
 
         Args:
           environment_parameters: The Environment in which the Scenario will run.
 
           input_context: The input context for the Scenario.
 
-          metadata: User defined metadata to attach to the scenario for organization.
+          metadata: User defined metadata to attach to the scenario. Pass in empty map to clear.
 
-          name: Name of the scenario.
+          name: Name of the scenario. Cannot be blank.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
-              environment.
+              environment. Pass in empty string to clear.
 
-          required_environment_variables: Environment variables required to run the scenario.
+          required_environment_variables: Environment variables required to run the scenario. Pass in empty list to clear.
 
-          required_secret_names: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
           scoring_contract: The scoring contract for the Scenario.
 
-          validation_type: Validation strategy.
+          validation_type: Validation strategy. Pass in empty string to clear.
 
           extra_headers: Send extra headers
 
@@ -682,31 +683,32 @@ class AsyncScenariosResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
-        """
-        Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria. Only provided
-        fields will be updated.
+        """Update a Scenario.
+
+        Fields that are null will preserve the existing value. Fields
+        that are provided (including empty values) will replace the existing value
+        entirely.
 
         Args:
           environment_parameters: The Environment in which the Scenario will run.
 
           input_context: The input context for the Scenario.
 
-          metadata: User defined metadata to attach to the scenario for organization.
+          metadata: User defined metadata to attach to the scenario. Pass in empty map to clear.
 
-          name: Name of the scenario.
+          name: Name of the scenario. Cannot be blank.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
-              environment.
+              environment. Pass in empty string to clear.
 
-          required_environment_variables: Environment variables required to run the scenario.
+          required_environment_variables: Environment variables required to run the scenario. Pass in empty list to clear.
 
-          required_secret_names: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
           scoring_contract: The scoring contract for the Scenario.
 
-          validation_type: Validation strategy.
+          validation_type: Validation strategy. Pass in empty string to clear.
 
           extra_headers: Send extra headers
 
