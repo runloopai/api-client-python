@@ -5,6 +5,7 @@ from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
+from ..types.benchmarks import RunListScenarioRunsParams
 from ..types.input_context import InputContext
 from ..types.scenario_view import ScenarioView
 from ..types.agent_list_params import AgentListParams
@@ -203,3 +204,8 @@ class ScenarioPreview(ScenarioView):
 
     input_context: InputContextPreview  # type: ignore[assignment]
     """The input context for the Scenario."""
+
+
+# Benchmark Run params
+class SDKBenchmarkRunListScenarioRunsParams(RunListScenarioRunsParams, BaseRequestOptions):
+    pass

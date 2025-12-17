@@ -129,6 +129,30 @@ class MockScenarioRunView:
     scoring_contract_result: object = None
 
 
+@dataclass
+class MockBenchmarkRunView:
+    """Mock BenchmarkRunView for testing."""
+
+    id: str = "bench_run_123"
+    benchmark_id: str = "bench_123"
+    state: str = "running"
+    metadata: Dict[str, str] = field(default_factory=dict)
+    start_time_ms: int = 1234567890000
+    duration_ms: int | None = None
+    score: float | None = None
+
+
+class AsyncIterableMock:
+    """A simple async iterable mock for testing paginated responses."""
+
+    def __init__(self, items: list[Any]) -> None:
+        self._items = items
+
+    async def __aiter__(self):
+        for item in self._items:
+            yield item
+
+
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
     """
     Create a mock httpx.AsyncClient with proper context manager setup.
@@ -235,6 +259,12 @@ def scenario_view() -> MockScenarioView:
 def scenario_run_view() -> MockScenarioRunView:
     """Create a mock ScenarioRunView."""
     return MockScenarioRunView()
+
+
+@pytest.fixture
+def benchmark_run_view() -> MockBenchmarkRunView:
+    """Create a mock BenchmarkRunView."""
+    return MockBenchmarkRunView()
 
 
 @pytest.fixture
