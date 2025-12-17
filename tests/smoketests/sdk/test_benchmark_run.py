@@ -106,8 +106,8 @@ class TestBenchmarkRunLifecycle:
 
         # Start a new benchmark run
         run_data = sdk_client.api.benchmarks.start_run(
-            benchmark.id,
-            name="sdk-smoketest-benchmark-run",
+            benchmark_id=benchmark.id,
+            run_name="sdk-smoketest-benchmark-run",
         )
 
         try:
@@ -123,7 +123,7 @@ class TestBenchmarkRunLifecycle:
             # Get info
             info = benchmark_run.get_info()
             assert info.id == run_data.id
-            assert info.state in ["queued", "running", "completed", "canceled"]
+            assert info.state in ["running", "completed", "canceled"]
 
             # Cancel the run
             result = benchmark_run.cancel()
