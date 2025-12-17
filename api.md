@@ -21,6 +21,7 @@ from runloop_api_client.types import (
     BenchmarkRunListView,
     BenchmarkRunView,
     BenchmarkScenarioUpdateParameters,
+    BenchmarkUpdateParameters,
     BenchmarkView,
     ScenarioDefinitionListView,
     StartBenchmarkRunParameters,
