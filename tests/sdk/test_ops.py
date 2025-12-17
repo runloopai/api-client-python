@@ -723,6 +723,7 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create(
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -817,6 +818,7 @@ class TestAgentClient:
         agent = client.create_from_npm(
             name="test-agent",
             package_name="@runloop/example-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -829,6 +831,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_npm_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -838,10 +841,10 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create_from_npm(
             package_name="@runloop/example-agent",
-            npm_version="1.2.3",
             registry_url="https://registry.example.com",
             agent_setup=["npm install", "npm run setup"],
             name="test-agent",
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
@@ -852,12 +855,12 @@ class TestAgentClient:
                 "type": "npm",
                 "npm": {
                     "package_name": "@runloop/example-agent",
-                    "npm_version": "1.2.3",
                     "registry_url": "https://registry.example.com",
                     "agent_setup": ["npm install", "npm run setup"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
@@ -869,6 +872,7 @@ class TestAgentClient:
             client.create_from_npm(
                 package_name="@runloop/example-agent",
                 name="test-agent",
+                version="1.2.3",
                 source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
             )
 
@@ -880,6 +884,7 @@ class TestAgentClient:
         agent = client.create_from_pip(
             package_name="runloop-example-agent",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -892,6 +897,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_pip_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -901,10 +907,10 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create_from_pip(
             package_name="runloop-example-agent",
-            pip_version="1.2.3",
             registry_url="https://pypi.example.com",
             agent_setup=["pip install extra-deps"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -914,12 +920,12 @@ class TestAgentClient:
                 "type": "pip",
                 "pip": {
                     "package_name": "runloop-example-agent",
-                    "pip_version": "1.2.3",
                     "registry_url": "https://pypi.example.com",
                     "agent_setup": ["pip install extra-deps"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_git(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -930,6 +936,7 @@ class TestAgentClient:
         agent = client.create_from_git(
             repository="https://github.com/example/agent-repo",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -942,6 +949,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_git_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -954,6 +962,7 @@ class TestAgentClient:
             ref="develop",
             agent_setup=["npm install", "npm run build"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -968,6 +977,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_object(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -978,6 +988,7 @@ class TestAgentClient:
         agent = client.create_from_object(
             object_id="obj_123",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -990,6 +1001,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_object_with_agent_setup(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -1001,6 +1013,7 @@ class TestAgentClient:
             object_id="obj_123",
             agent_setup=["chmod +x setup.sh", "./setup.sh"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
@@ -1014,6 +1027,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
 
