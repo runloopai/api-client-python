@@ -7,10 +7,7 @@ from typing_extensions import TypedDict
 __all__ = ["RunListParams"]
 
 
-class RunListParams(TypedDict, total=False):
-    benchmark_id: str
-    """The Benchmark ID to filter by."""
-
+class RunSelfListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""
 
@@ -19,3 +16,8 @@ class RunListParams(TypedDict, total=False):
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
+
+
+class RunListParams(RunSelfListParams, total=False):
+    benchmark_id: str
+    """The Benchmark ID to filter by."""

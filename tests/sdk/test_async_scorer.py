@@ -16,20 +16,20 @@ class TestAsyncScorer:
 
     def test_init(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncScorer initialization."""
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
-        assert scorer.id == "scorer_123"
+        scorer = AsyncScorer(mock_async_client, "sco_123")
+        assert scorer.id == "sco_123"
 
     def test_repr(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncScorer string representation."""
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
-        assert repr(scorer) == "<AsyncScorer id='scorer_123'>"
+        scorer = AsyncScorer(mock_async_client, "sco_123")
+        assert repr(scorer) == "<AsyncScorer id='sco_123'>"
 
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
         """Test get_info method."""
         mock_async_client.scenarios.scorers.retrieve = AsyncMock(return_value=scorer_view)
 
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        scorer = AsyncScorer(mock_async_client, "sco_123")
         result = await scorer.get_info()
 
         assert result == scorer_view
@@ -38,10 +38,10 @@ class TestAsyncScorer:
     @pytest.mark.asyncio
     async def test_update(self, mock_async_client: AsyncMock) -> None:
         """Test update method."""
-        update_response = SimpleNamespace(id="scorer_123", type="updated_scorer", bash_script="echo 'score=1.0'")
+        update_response = SimpleNamespace(id="sco_123", type="updated_scorer", bash_script="echo 'score=1.0'")
         mock_async_client.scenarios.scorers.update = AsyncMock(return_value=update_response)
 
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        scorer = AsyncScorer(mock_async_client, "sco_123")
         result = await scorer.update(
             type="updated_scorer",
             bash_script="echo 'score=1.0'",
@@ -60,7 +60,7 @@ class TestAsyncScorer:
         )
         mock_async_client.scenarios.scorers.validate = AsyncMock(return_value=validate_response)
 
-        scorer = AsyncScorer(mock_async_client, "scorer_123")
+        scorer = AsyncScorer(mock_async_client, "sco_123")
         result = await scorer.validate(
             scoring_context={"test": "context"},
         )

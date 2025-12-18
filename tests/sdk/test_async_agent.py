@@ -15,20 +15,20 @@ class TestAsyncAgent:
 
     def test_init(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncAgent initialization."""
-        agent = AsyncAgent(mock_async_client, "agent_123")
-        assert agent.id == "agent_123"
+        agent = AsyncAgent(mock_async_client, "agt_123")
+        assert agent.id == "agt_123"
 
     def test_repr(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncAgent string representation."""
-        agent = AsyncAgent(mock_async_client, "agent_123")
-        assert repr(agent) == "<AsyncAgent id='agent_123'>"
+        agent = AsyncAgent(mock_async_client, "agt_123")
+        assert repr(agent) == "<AsyncAgent id='agt_123'>"
 
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, agent_view: MockAgentView) -> None:
         """Test get_info method."""
         mock_async_client.agents.retrieve = AsyncMock(return_value=agent_view)
 
-        agent = AsyncAgent(mock_async_client, "agent_123")
+        agent = AsyncAgent(mock_async_client, "agt_123")
         result = await agent.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -38,7 +38,7 @@ class TestAsyncAgent:
 
         assert result == agent_view
         mock_async_client.agents.retrieve.assert_called_once_with(
-            "agent_123",
+            "agt_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},

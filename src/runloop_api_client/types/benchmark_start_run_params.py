@@ -11,10 +11,7 @@ from .shared_params.run_profile import RunProfile
 __all__ = ["BenchmarkStartRunParams"]
 
 
-class BenchmarkStartRunParams(TypedDict, total=False):
-    benchmark_id: Required[str]
-    """ID of the Benchmark to run."""
-
+class BenchmarkSelfStartRunParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the benchmark run for organization."""
 
@@ -23,3 +20,8 @@ class BenchmarkStartRunParams(TypedDict, total=False):
 
     run_profile: Annotated[Optional[RunProfile], PropertyInfo(alias="runProfile")]
     """Runtime configuration to use for this benchmark run"""
+
+
+class BenchmarkStartRunParams(BenchmarkSelfStartRunParams, total=False):
+    benchmark_id: Required[str]
+    """ID of the Benchmark to run."""

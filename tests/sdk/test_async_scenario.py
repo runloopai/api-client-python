@@ -99,8 +99,8 @@ class TestAsyncScenario:
         scenario = AsyncScenario(mock_async_client, "scn_123")
         run = await scenario.run_async(run_name="test-run")
 
-        assert run.id == "run_123"
-        assert run.devbox_id == "dev_123"
+        assert run.id == "scr_123"
+        assert run.devbox_id == "dbx_123"
         mock_async_client.scenarios.start_run.assert_awaited_once_with(
             scenario_id="scn_123",
             run_name="test-run",
@@ -113,8 +113,8 @@ class TestAsyncScenario:
         scenario = AsyncScenario(mock_async_client, "scn_123")
         run = await scenario.run(run_name="test-run")
 
-        assert run.id == "run_123"
-        assert run.devbox_id == "dev_123"
+        assert run.id == "scr_123"
+        assert run.devbox_id == "dbx_123"
         mock_async_client.scenarios.start_run_and_await_env_ready.assert_awaited_once_with(
             scenario_id="scn_123",
             run_name="test-run",
