@@ -594,7 +594,6 @@ class AgentOps:
         self,
         *,
         package_name: str,
-        npm_version: Optional[str] = None,
         registry_url: Optional[str] = None,
         agent_setup: Optional[list[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
@@ -603,13 +602,11 @@ class AgentOps:
 
         Example:
             >>> agent = runloop.agent.create_from_npm(
-            ...     name="my-npm-agent", package_name="@runloop/example-agent", npm_version="^1.0.0"
+            ...     name="my-npm-agent", package_name="@runloop/example-agent", version="1.0.0"
             ... )
 
         :param package_name: NPM package name
         :type package_name: str
-        :param npm_version: NPM version constraint, defaults to None
-        :type npm_version: Optional[str], optional
         :param registry_url: NPM registry URL, defaults to None
         :type registry_url: Optional[str], optional
         :param agent_setup: Setup commands to run after installation, defaults to None
@@ -625,8 +622,6 @@ class AgentOps:
             )
 
         npm_config: Npm = {"package_name": package_name}
-        if npm_version is not None:
-            npm_config["npm_version"] = npm_version
         if registry_url is not None:
             npm_config["registry_url"] = registry_url
         if agent_setup is not None:
@@ -639,7 +634,6 @@ class AgentOps:
         self,
         *,
         package_name: str,
-        pip_version: Optional[str] = None,
         registry_url: Optional[str] = None,
         agent_setup: Optional[list[str]] = None,
         **params: Unpack[SDKAgentCreateParams],
@@ -648,13 +642,11 @@ class AgentOps:
 
         Example:
             >>> agent = runloop.agent.create_from_pip(
-            ...     name="my-pip-agent", package_name="runloop-example-agent", pip_version=">=1.0.0"
+            ...     name="my-pip-agent", package_name="runloop-example-agent", version="1.0.0"
             ... )
 
         :param package_name: Pip package name
         :type package_name: str
-        :param pip_version: Pip version constraint, defaults to None
-        :type pip_version: Optional[str], optional
         :param registry_url: Pip registry URL, defaults to None
         :type registry_url: Optional[str], optional
         :param agent_setup: Setup commands to run after installation, defaults to None
@@ -670,8 +662,6 @@ class AgentOps:
             )
 
         pip_config: Pip = {"package_name": package_name}
-        if pip_version is not None:
-            pip_config["pip_version"] = pip_version
         if registry_url is not None:
             pip_config["registry_url"] = registry_url
         if agent_setup is not None:
@@ -696,6 +686,7 @@ class AgentOps:
             ...     repository="https://github.com/user/agent-repo",
             ...     ref="main",
             ...     agent_setup=["npm install", "npm run build"],
+            ...     version="1.0.0",
             ... )
 
         :param repository: Git repository URL
@@ -737,7 +728,10 @@ class AgentOps:
             >>> obj = runloop.storage_object.upload_from_dir("./my-agent")
             >>> # Then create agent from the object
             >>> agent = runloop.agent.create_from_object(
-            ...     name="my-object-agent", object_id=obj.id, agent_setup=["chmod +x setup.sh", "./setup.sh"]
+            ...     name="my-object-agent",
+            ...     object_id=obj.id,
+            ...     agent_setup=["chmod +x setup.sh", "./setup.sh"],
+            ...     version="1.0.0",
             ... )
 
         :param object_id: Storage object ID

@@ -12,6 +12,7 @@ pytestmark = [pytest.mark.smoketest]
 
 THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+AGENT_VERSION = "1.2.3"
 
 
 class TestAgentLifecycle:
@@ -23,6 +24,7 @@ class TestAgentLifecycle:
         name = unique_name("sdk-agent-test-basic")
         agent = sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -52,6 +54,7 @@ class TestAgentLifecycle:
         name = unique_name("sdk-agent-test-info")
         agent = sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -90,6 +93,7 @@ class TestAgentListing:
         # Create an agent
         created = sdk_client.agent.create(
             name=unique_name("sdk-agent-test-retrieve"),
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -121,9 +125,15 @@ class TestAgentListing:
         }
 
         # Create multiple agents
-        agent1 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-1"), source=source_config)
-        agent2 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-2"), source=source_config)
-        agent3 = sdk_client.agent.create(name=unique_name("sdk-agent-test-list-3"), source=source_config)
+        agent1 = sdk_client.agent.create(
+            name=unique_name("sdk-agent-test-list-1"), source=source_config, version=AGENT_VERSION
+        )
+        agent2 = sdk_client.agent.create(
+            name=unique_name("sdk-agent-test-list-2"), source=source_config, version=AGENT_VERSION
+        )
+        agent3 = sdk_client.agent.create(
+            name=unique_name("sdk-agent-test-list-3"), source=source_config, version=AGENT_VERSION
+        )
 
         try:
             # List agents
@@ -153,6 +163,7 @@ class TestAgentCreationVariations:
 
         agent = sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -178,6 +189,7 @@ class TestAgentCreationVariations:
 
         agent = sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "git",
                 "git": {

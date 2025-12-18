@@ -793,6 +793,7 @@ class TestAsyncAgentClient:
         client = AsyncAgentOps(mock_async_client)
         agent = await client.create(
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -901,6 +902,7 @@ class TestAsyncAgentClient:
         agent = await client.create_from_npm(
             name="test-agent",
             package_name="@runloop/example-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -913,6 +915,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -926,9 +929,9 @@ class TestAsyncAgentClient:
         agent = await client.create_from_npm(
             name="test-agent",
             package_name="@runloop/example-agent",
-            npm_version="1.2.3",
             registry_url="https://registry.example.com",
             agent_setup=["npm install", "npm run setup"],
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
@@ -939,12 +942,12 @@ class TestAsyncAgentClient:
                 "type": "npm",
                 "npm": {
                     "package_name": "@runloop/example-agent",
-                    "npm_version": "1.2.3",
                     "registry_url": "https://registry.example.com",
                     "agent_setup": ["npm install", "npm run setup"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
@@ -957,6 +960,7 @@ class TestAsyncAgentClient:
             await client.create_from_npm(
                 name="test-agent",
                 package_name="@runloop/example-agent",
+                version="1.2.3",
                 source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
             )
 
@@ -969,6 +973,7 @@ class TestAsyncAgentClient:
         agent = await client.create_from_pip(
             name="test-agent",
             package_name="runloop-example-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -981,6 +986,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -994,9 +1000,9 @@ class TestAsyncAgentClient:
         agent = await client.create_from_pip(
             name="test-agent",
             package_name="runloop-example-agent",
-            pip_version="1.2.3",
             registry_url="https://pypi.example.com",
             agent_setup=["pip install extra-deps"],
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -1006,12 +1012,12 @@ class TestAsyncAgentClient:
                 "type": "pip",
                 "pip": {
                     "package_name": "runloop-example-agent",
-                    "pip_version": "1.2.3",
                     "registry_url": "https://pypi.example.com",
                     "agent_setup": ["pip install extra-deps"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -1023,6 +1029,7 @@ class TestAsyncAgentClient:
         agent = await client.create_from_git(
             name="test-agent",
             repository="https://github.com/example/agent-repo",
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -1035,6 +1042,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -1050,6 +1058,7 @@ class TestAsyncAgentClient:
             repository="https://github.com/example/agent-repo",
             ref="develop",
             agent_setup=["npm install", "npm run build"],
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -1064,6 +1073,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -1075,6 +1085,7 @@ class TestAsyncAgentClient:
         agent = await client.create_from_object(
             name="test-agent",
             object_id="obj_123",
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -1087,6 +1098,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     @pytest.mark.asyncio
@@ -1101,6 +1113,7 @@ class TestAsyncAgentClient:
             name="test-agent",
             object_id="obj_123",
             agent_setup=["chmod +x setup.sh", "./setup.sh"],
+            version="1.2.3",
         )
 
         assert isinstance(agent, AsyncAgent)
@@ -1114,6 +1127,7 @@ class TestAsyncAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
 
