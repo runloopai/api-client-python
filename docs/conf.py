@@ -40,19 +40,6 @@ html_theme = "furo"
 # Furo theme options
 html_theme_options = {
     "navigation_with_keys": True,
-    "sidebar_hide_name": False,
-}
-
-# Show the global toctree in sidebar
-html_sidebars = {
-    "**": [
-        "sidebar/scroll-start.html",
-        "sidebar/brand.html",
-        "sidebar/search.html",
-        "sidebar/navigation.html",
-        "sidebar/ethical-ads.html",
-        "sidebar/scroll-end.html",
-    ]
 }
 
 # -- Extension configuration -------------------------------------------------
