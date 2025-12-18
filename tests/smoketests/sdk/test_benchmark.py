@@ -32,7 +32,7 @@ class TestBenchmarkRetrieval:
         benchmarks = sdk_client.api.benchmarks.list_public(limit=1).benchmarks
 
         if not benchmarks:
-            pytest.skip("No benchmarks available to test")
+            raise Exception("No benchmarks available to test")
 
         benchmark_data = benchmarks[0]
 
@@ -67,9 +67,11 @@ class TestBenchmarkRun:
         benchmarks = sdk_client.api.benchmarks.list_public(limit=1).benchmarks
 
         if not benchmarks:
-            pytest.skip("No benchmarks available to test")
+            raise Exception("No benchmarks available to test")
 
         benchmark_data = benchmarks[0]
+        if not benchmark_data.scenario_ids:
+            raise Exception("No scenarios available to test")
 
         # Create Benchmark wrapper
         benchmark = Benchmark(
@@ -79,12 +81,8 @@ class TestBenchmarkRun:
 
         # Start a run
         run = benchmark.run(run_name="sdk-smoketest-benchmark-run")
-
-        # If the benchmark has scenarios, run one
-        scenario_runs: list[ScenarioRun] = []
-        if benchmark_data.scenario_ids:
-            scenario = sdk_client.scenario.from_id(benchmark_data.scenario_ids[0])
-            scenario_runs.append(scenario.run(benchmark_run_id=run.id, run_name="sdk-smoketest-benchmark-run-scenario"))
+        scenario = sdk_client.scenario.from_id(benchmark_data.scenario_ids[0])
+        scenario_run = None
 
         try:
             assert isinstance(run, BenchmarkRun)
@@ -96,17 +94,18 @@ class TestBenchmarkRun:
             assert info.id == run.id
             assert info.state in ["running", "completed", "canceled"]
 
-            bench_scenario_runs = run.list_scenario_runs()
-            assert isinstance(bench_scenario_runs, list)
-            assert len(bench_scenario_runs) == len(scenario_runs)
-            for bench_scenario_run in bench_scenario_runs:
-                assert isinstance(bench_scenario_run, ScenarioRun)
-                assert bench_scenario_run.id == scenario_runs[0].id
-                assert bench_scenario_run.devbox_id == scenario_runs[0].devbox_id
+            # Start a scenario run
+            scenario_run = scenario.run(benchmark_run_id=run.id, run_name="sdk-smoketest-benchmark-run-scenario")
+            scenario_runs = run.list_scenario_runs()
+            assert isinstance(scenario_runs, list)
+            assert len(scenario_runs) == 1
+            assert isinstance(scenario_runs[0], ScenarioRun)
+            assert scenario_runs[0].id == scenario_run.id
+            assert scenario_runs[0].devbox_id == scenario_run.devbox_id
 
-                # Cancel the scenario run
-                scenario_result = bench_scenario_run.cancel()
-                assert scenario_result.state in ["canceled", "completed"]
+            # Cancel the scenario run
+            scenario_result = scenario_run.cancel()
+            assert scenario_result.state in ["canceled", "completed"]
 
             # Cancel the benchmark run
             result = run.cancel()
@@ -114,12 +113,9 @@ class TestBenchmarkRun:
 
         except Exception:
             # Ensure cleanup on any error
-            try:
-                for scenario_run in scenario_runs:
-                    sdk_client.api.scenarios.runs.cancel(scenario_run.id)
-                sdk_client.api.benchmarks.runs.cancel(run.id)
-            except Exception:
-                pass
+            if scenario_run:
+                sdk_client.api.scenarios.runs.cancel(scenario_run.id)
+            sdk_client.api.benchmarks.runs.cancel(run.id)
             raise
 
 
@@ -139,7 +135,7 @@ class TestBenchmarkListRuns:
         benchmarks = sdk_client.api.benchmarks.list(limit=1).benchmarks
 
         if not benchmarks:
-            pytest.skip("No benchmarks available to test")
+            raise Exception("No benchmarks available to test")
 
         benchmark_data = benchmarks[0]
 
