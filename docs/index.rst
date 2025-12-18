@@ -6,10 +6,12 @@ devboxes, blueprints, snapshots, and storage objects. The SDK offers both synchr
 and asynchronous variants to match your runtime requirements.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   sdk/index
+   sdk/async/index
+   sdk/sync/index
+   sdk/types
 
 Installation
 ------------
