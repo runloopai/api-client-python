@@ -345,7 +345,7 @@ class TestDevboxStateManagement:
             info = devbox.get_info()
             assert info.status == "suspended"
 
-            # Resume the devbox
+            # Resume the devbox - resume() automatically waits for running state
             resumed_info = devbox.resume(
                 polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0),
             )
@@ -354,6 +354,41 @@ class TestDevboxStateManagement:
             # Verify running state
             info = devbox.get_info()
             assert info.status == "running"
+        finally:
+            devbox.shutdown()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_resume_async(self, sdk_client: RunloopSDK) -> None:
+        """Test resuming a devbox asynchronously without waiting."""
+        devbox = sdk_client.devbox.create(
+            name=unique_name("sdk-devbox-resume-async"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+        )
+
+        try:
+            # Suspend the devbox
+            suspended_info = devbox.suspend(
+                polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0),
+            )
+            assert suspended_info.status == "suspended"
+
+            # Verify suspended state
+            info = devbox.get_info()
+            assert info.status == "suspended"
+
+            # Resume the devbox asynchronously - doesn't wait automatically
+            resume_response = devbox.resume_async()
+            assert resume_response is not None
+
+            # Status might still be suspended or transitioning
+            info_after_resume = devbox.get_info()
+            assert info_after_resume.status in ["suspended", "running", "starting"]
+
+            # Now wait for running state explicitly
+            running_info = devbox.await_running(
+                polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0)
+            )
+            assert running_info.status == "running"
         finally:
             devbox.shutdown()
 
