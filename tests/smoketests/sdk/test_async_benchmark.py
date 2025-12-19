@@ -38,6 +38,7 @@ class TestAsyncBenchmarkRetrieval:
         benchmark_data = benchmarks[0]
 
         # Create AsyncBenchmark wrapper
+        # TODO: use AsyncBenchmarkOps to create a benchmark once implemented
         benchmark = AsyncBenchmark(
             client=async_sdk_client.api,
             benchmark_id=benchmark_data.id,

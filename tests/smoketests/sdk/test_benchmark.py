@@ -37,6 +37,7 @@ class TestBenchmarkRetrieval:
         benchmark_data = benchmarks[0]
 
         # Create Benchmark wrapper
+        # TODO: use BenchmarkOps to create a benchmark once implemented
         benchmark = Benchmark(
             client=sdk_client.api,
             benchmark_id=benchmark_data.id,
