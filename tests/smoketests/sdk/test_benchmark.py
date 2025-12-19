@@ -133,7 +133,7 @@ class TestBenchmarkListRuns:
         3. Validates returned objects are BenchmarkRun instances
         """
         # Find an existing benchmark via raw API
-        benchmarks = sdk_client.api.benchmarks.list(limit=1).benchmarks
+        benchmarks = sdk_client.api.benchmarks.list_public(limit=1).benchmarks
 
         if not benchmarks:
             raise Exception("No benchmarks available to test")
@@ -146,9 +146,10 @@ class TestBenchmarkListRuns:
             benchmark_id=benchmark_data.id,
         )
 
-        # List runs (might be empty, that's okay)
         runs = benchmark.list_runs()
         assert isinstance(runs, list)
+        if not runs:
+            pytest.skip("No runs available to test")
 
         # Verify returned items are BenchmarkRun objects
         for run in runs:

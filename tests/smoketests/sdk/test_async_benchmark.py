@@ -137,7 +137,7 @@ class TestAsyncBenchmarkListRuns:
         3. Validates returned objects are AsyncBenchmarkRun instances
         """
         # Find an existing benchmark via raw API
-        benchmarks_page = await async_sdk_client.api.benchmarks.list(limit=1)
+        benchmarks_page = await async_sdk_client.api.benchmarks.list_public(limit=1)
         benchmarks = benchmarks_page.benchmarks
 
         if not benchmarks:
@@ -151,9 +151,10 @@ class TestAsyncBenchmarkListRuns:
             benchmark_id=benchmark_data.id,
         )
 
-        # List runs (might be empty, that's okay)
         runs = await benchmark.list_runs()
         assert isinstance(runs, list)
+        if not runs:
+            pytest.skip("No runs available to test")
 
         # Verify returned items are AsyncBenchmarkRun objects
         for run in runs:
