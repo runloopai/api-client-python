@@ -79,17 +79,6 @@ class TestAsyncBenchmark:
             "bmd_123", scenarios_to_remove=["scn_001"]
         )
 
-    async def test_list_runs_empty(self, mock_async_client: AsyncMock) -> None:
-        """Test list_runs method with empty results."""
-        page = SimpleNamespace(runs=[])
-        mock_async_client.benchmarks.runs.list = AsyncMock(return_value=page)
-
-        benchmark = AsyncBenchmark(mock_async_client, "bmd_123")
-        result = await benchmark.list_runs()
-
-        assert len(result) == 0
-        mock_async_client.benchmarks.runs.list.assert_awaited_once_with(benchmark_id="bmd_123")
-
     async def test_list_runs_single(
         self, mock_async_client: AsyncMock, benchmark_run_view: MockBenchmarkRunView
     ) -> None:

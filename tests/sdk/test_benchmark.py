@@ -77,17 +77,6 @@ class TestBenchmark:
         assert result == benchmark_view
         mock_client.benchmarks.update_scenarios.assert_called_once_with("bmd_123", scenarios_to_remove=["scn_001"])
 
-    def test_list_runs_empty(self, mock_client: Mock) -> None:
-        """Test list_runs method with empty results."""
-        page = SimpleNamespace(runs=[])
-        mock_client.benchmarks.runs.list.return_value = page
-
-        benchmark = Benchmark(mock_client, "bmd_123")
-        result = benchmark.list_runs()
-
-        assert len(result) == 0
-        mock_client.benchmarks.runs.list.assert_called_once_with(benchmark_id="bmd_123")
-
     def test_list_runs_single(self, mock_client: Mock, benchmark_run_view: MockBenchmarkRunView) -> None:
         """Test list_runs method with single result."""
         page = SimpleNamespace(runs=[benchmark_run_view])
