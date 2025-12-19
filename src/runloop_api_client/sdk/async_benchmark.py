@@ -29,6 +29,9 @@ class AsyncBenchmark:
         >>> benchmark = runloop.benchmark.from_id("bmd_xxx")
         >>> info = await benchmark.get_info()
         >>> run = await benchmark.start_run(run_name="evaluation-v1")
+        >>> for scenario_id in info.scenario_ids:
+        ...     scenario = await runloop.scenario.from_id(scenario_id)
+        ...     scenario_run = await scenario.run(benchmark_run_id=run.id, run_name="evaluation-v1")
     """
 
     def __init__(self, client: AsyncRunloop, benchmark_id: str) -> None:
