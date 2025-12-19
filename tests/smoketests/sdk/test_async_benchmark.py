@@ -82,7 +82,7 @@ class TestAsyncBenchmarkRun:
         )
 
         # Start a run
-        run = await benchmark.run(run_name="sdk-smoketest-async-benchmark-run")
+        run = await benchmark.start_run(run_name="sdk-smoketest-async-benchmark-run")
         scenario = async_sdk_client.scenario.from_id(benchmark_data.scenario_ids[0])
         scenario_run = None
 

@@ -28,7 +28,7 @@ class Benchmark:
     Example:
         >>> benchmark = runloop.benchmark.from_id("bmd_xxx")
         >>> info = benchmark.get_info()
-        >>> run = benchmark.run(run_name="evaluation-v1")
+        >>> run = benchmark.start_run(run_name="evaluation-v1")
     """
 
     def __init__(self, client: Runloop, benchmark_id: str) -> None:
@@ -87,7 +87,7 @@ class Benchmark:
             **params,
         )
 
-    def run(
+    def start_run(
         self,
         **params: Unpack[SDKBenchmarkStartRunParams],
     ) -> BenchmarkRun:

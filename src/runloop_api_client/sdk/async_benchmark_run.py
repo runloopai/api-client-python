@@ -16,11 +16,11 @@ class AsyncBenchmarkRun:
 
     Provides async methods for monitoring run status, managing the run lifecycle,
     and accessing scenario run results. Obtain instances via
-    ``benchmark.run()`` or ``benchmark.list_runs()``.
+    ``benchmark.start_run()`` or ``benchmark.list_runs()``.
 
     Example:
         >>> benchmark = runloop.benchmark.from_id("bench-xxx")
-        >>> run = await benchmark.run(run_name="evaluation-v1")
+        >>> run = await benchmark.start_run(run_name="evaluation-v1")
         >>> info = await run.get_info()
         >>> scenario_runs = await run.list_scenario_runs()
     """

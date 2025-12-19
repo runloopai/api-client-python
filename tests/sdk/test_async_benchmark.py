@@ -45,7 +45,7 @@ class TestAsyncBenchmark:
         mock_async_client.benchmarks.start_run = AsyncMock(return_value=benchmark_run_view)
 
         benchmark = AsyncBenchmark(mock_async_client, "bmd_123")
-        result = await benchmark.run(run_name="test-run", metadata={"key": "value"})
+        result = await benchmark.start_run(run_name="test-run", metadata={"key": "value"})
 
         assert isinstance(result, AsyncBenchmarkRun)
         assert result.id == benchmark_run_view.id

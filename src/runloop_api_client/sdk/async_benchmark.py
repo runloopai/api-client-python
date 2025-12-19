@@ -28,7 +28,7 @@ class AsyncBenchmark:
     Example:
         >>> benchmark = runloop.benchmark.from_id("bmd_xxx")
         >>> info = await benchmark.get_info()
-        >>> run = await benchmark.run(run_name="evaluation-v1")
+        >>> run = await benchmark.start_run(run_name="evaluation-v1")
     """
 
     def __init__(self, client: AsyncRunloop, benchmark_id: str) -> None:
@@ -87,7 +87,7 @@ class AsyncBenchmark:
             **params,
         )
 
-    async def run(
+    async def start_run(
         self,
         **params: Unpack[SDKBenchmarkStartRunParams],
     ) -> AsyncBenchmarkRun:

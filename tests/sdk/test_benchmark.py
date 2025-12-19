@@ -45,7 +45,7 @@ class TestBenchmark:
         mock_client.benchmarks.start_run.return_value = benchmark_run_view
 
         benchmark = Benchmark(mock_client, "bmd_123")
-        result = benchmark.run(run_name="test-run", metadata={"key": "value"})
+        result = benchmark.start_run(run_name="test-run", metadata={"key": "value"})
 
         assert isinstance(result, BenchmarkRun)
         assert result.id == benchmark_run_view.id

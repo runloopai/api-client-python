@@ -80,7 +80,7 @@ class TestBenchmarkRun:
         )
 
         # Start a run
-        run = benchmark.run(run_name="sdk-smoketest-benchmark-run")
+        run = benchmark.start_run(run_name="sdk-smoketest-benchmark-run")
         scenario = sdk_client.scenario.from_id(benchmark_data.scenario_ids[0])
         scenario_run = None
 
