@@ -7,6 +7,8 @@ from typing_extensions import TypedDict
 __all__ = ["RunListParams"]
 
 
+# Split into separate params so that OO SDK list_runs params can omit the benchmark_id
+# Neither of these params are exposed to the user, only the derived SDKBenchmarkListRunsParams
 class RunSelfListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""

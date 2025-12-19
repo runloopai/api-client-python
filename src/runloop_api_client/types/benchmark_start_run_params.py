@@ -11,6 +11,8 @@ from .shared_params.run_profile import RunProfile
 __all__ = ["BenchmarkStartRunParams"]
 
 
+# Split into separate params so that OO SDK start_run params can omit the benchmark_id
+# Neither of these params are exposed to the user, only the derived SDKBenchmarkStartRunParams
 class BenchmarkSelfStartRunParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the benchmark run for organization."""
