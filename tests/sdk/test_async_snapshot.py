@@ -17,20 +17,20 @@ class TestAsyncSnapshot:
 
     def test_init(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncSnapshot initialization."""
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
-        assert snapshot.id == "snap_123"
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
+        assert snapshot.id == "snp_123"
 
     def test_repr(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncSnapshot string representation."""
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
-        assert repr(snapshot) == "<AsyncSnapshot id='snap_123'>"
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
+        assert repr(snapshot) == "<AsyncSnapshot id='snp_123'>"
 
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, snapshot_view: MockSnapshotView) -> None:
         """Test get_info method."""
         mock_async_client.devboxes.disk_snapshots.query_status = AsyncMock(return_value=snapshot_view)
 
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
         result = await snapshot.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -44,10 +44,10 @@ class TestAsyncSnapshot:
     @pytest.mark.asyncio
     async def test_update(self, mock_async_client: AsyncMock) -> None:
         """Test update method."""
-        updated_snapshot = SimpleNamespace(id="snap_123", name="updated-name")
+        updated_snapshot = SimpleNamespace(id="snp_123", name="updated-name")
         mock_async_client.devboxes.disk_snapshots.update = AsyncMock(return_value=updated_snapshot)
 
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
         result = await snapshot.update(
             commit_message="Update message",
             metadata={"key": "value"},
@@ -67,7 +67,7 @@ class TestAsyncSnapshot:
         """Test delete method."""
         mock_async_client.devboxes.disk_snapshots.delete = AsyncMock(return_value=object())
 
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
         result = await snapshot.delete(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -85,7 +85,7 @@ class TestAsyncSnapshot:
         mock_async_client.devboxes.disk_snapshots.await_completed = AsyncMock(return_value=snapshot_view)
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
         result = await snapshot.await_completed(
             polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
@@ -102,7 +102,7 @@ class TestAsyncSnapshot:
         """Test create_devbox method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        snapshot = AsyncSnapshot(mock_async_client, "snap_123")
+        snapshot = AsyncSnapshot(mock_async_client, "snp_123")
         devbox = await snapshot.create_devbox(
             name="test-devbox",
             metadata={"key": "value"},
@@ -110,5 +110,5 @@ class TestAsyncSnapshot:
             extra_headers={"X-Custom": "value"},
         )
 
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         mock_async_client.devboxes.create_and_await_running.assert_awaited_once()

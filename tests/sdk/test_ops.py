@@ -55,7 +55,7 @@ class TestDevboxOps:
         )
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         mock_client.devboxes.create_and_await_running.assert_called_once()
 
     def test_create_from_blueprint_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
@@ -64,15 +64,15 @@ class TestDevboxOps:
 
         ops = DevboxOps(mock_client)
         devbox = ops.create_from_blueprint_id(
-            "bp_123",
+            "bpt_123",
             name="test-devbox",
             metadata={"key": "value"},
         )
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         call_kwargs = mock_client.devboxes.create_and_await_running.call_args[1]
-        assert call_kwargs["blueprint_id"] == "bp_123"
+        assert call_kwargs["blueprint_id"] == "bpt_123"
 
     def test_create_from_blueprint_name(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test create_from_blueprint_name method."""
@@ -94,24 +94,24 @@ class TestDevboxOps:
 
         ops = DevboxOps(mock_client)
         devbox = ops.create_from_snapshot(
-            "snap_123",
+            "snp_123",
             name="test-devbox",
         )
 
         assert isinstance(devbox, Devbox)
         call_kwargs = mock_client.devboxes.create_and_await_running.call_args[1]
-        assert call_kwargs["snapshot_id"] == "snap_123"
+        assert call_kwargs["snapshot_id"] == "snp_123"
 
     def test_from_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test from_id method waits for running."""
         mock_client.devboxes.await_running.return_value = devbox_view
 
         ops = DevboxOps(mock_client)
-        devbox = ops.from_id("dev_123")
+        devbox = ops.from_id("dbx_123")
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
-        mock_client.devboxes.await_running.assert_called_once_with("dev_123")
+        assert devbox.id == "dbx_123"
+        mock_client.devboxes.await_running.assert_called_once_with("dbx_123")
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -138,7 +138,7 @@ class TestDevboxOps:
 
         assert len(devboxes) == 1
         assert isinstance(devboxes[0], Devbox)
-        assert devboxes[0].id == "dev_123"
+        assert devboxes[0].id == "dbx_123"
         mock_client.devboxes.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -168,7 +168,7 @@ class TestSnapshotOps:
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
         ops = SnapshotOps(mock_client)
-        snapshots = ops.list(devbox_id="dev_123", limit=10)
+        snapshots = ops.list(devbox_id="dbx_123", limit=10)
 
         assert len(snapshots) == 0
         mock_client.devboxes.disk_snapshots.list.assert_called_once()
@@ -180,14 +180,14 @@ class TestSnapshotOps:
 
         ops = SnapshotOps(mock_client)
         snapshots = ops.list(
-            devbox_id="dev_123",
+            devbox_id="dbx_123",
             limit=10,
             starting_after="snap_000",
         )
 
         assert len(snapshots) == 1
         assert isinstance(snapshots[0], Snapshot)
-        assert snapshots[0].id == "snap_123"
+        assert snapshots[0].id == "snp_123"
         mock_client.devboxes.disk_snapshots.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -198,7 +198,7 @@ class TestSnapshotOps:
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
         ops = SnapshotOps(mock_client)
-        snapshots = ops.list(devbox_id="dev_123", limit=10)
+        snapshots = ops.list(devbox_id="dbx_123", limit=10)
 
         assert len(snapshots) == 2
         assert isinstance(snapshots[0], Snapshot)
@@ -210,10 +210,10 @@ class TestSnapshotOps:
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = SnapshotOps(mock_client)
-        snapshot = ops.from_id("snap_123")
+        snapshot = ops.from_id("snp_123")
 
         assert isinstance(snapshot, Snapshot)
-        assert snapshot.id == "snap_123"
+        assert snapshot.id == "snp_123"
 
 
 class TestBlueprintOps:
@@ -230,16 +230,16 @@ class TestBlueprintOps:
         )
 
         assert isinstance(blueprint, Blueprint)
-        assert blueprint.id == "bp_123"
+        assert blueprint.id == "bpt_123"
         mock_client.blueprints.create_and_await_build_complete.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = BlueprintOps(mock_client)
-        blueprint = ops.from_id("bp_123")
+        blueprint = ops.from_id("bpt_123")
 
         assert isinstance(blueprint, Blueprint)
-        assert blueprint.id == "bp_123"
+        assert blueprint.id == "bpt_123"
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -266,7 +266,7 @@ class TestBlueprintOps:
 
         assert len(blueprints) == 1
         assert isinstance(blueprints[0], Blueprint)
-        assert blueprints[0].id == "bp_123"
+        assert blueprints[0].id == "bpt_123"
         mock_client.blueprints.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -660,16 +660,16 @@ class TestScorerOps:
         )
 
         assert isinstance(scorer, Scorer)
-        assert scorer.id == "scorer_123"
+        assert scorer.id == "sco_123"
         mock_client.scenarios.scorers.create.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = ScorerOps(mock_client)
-        scorer = ops.from_id("scorer_123")
+        scorer = ops.from_id("sco_123")
 
         assert isinstance(scorer, Scorer)
-        assert scorer.id == "scorer_123"
+        assert scorer.id == "sco_123"
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -693,7 +693,7 @@ class TestScorerOps:
 
         assert len(scorers) == 1
         assert isinstance(scorers[0], Scorer)
-        assert scorers[0].id == "scorer_123"
+        assert scorers[0].id == "sco_123"
         mock_client.scenarios.scorers.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -727,16 +727,16 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         client = AgentOps(mock_client)
-        agent = client.from_id("agent_123")
+        agent = client.from_id("agt_123")
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
 
     def test_list(self, mock_client: Mock) -> None:
         """Test list method."""
@@ -822,7 +822,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "npm",
@@ -849,7 +849,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "npm",
@@ -888,7 +888,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "pip",
@@ -914,7 +914,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "pip",
@@ -940,7 +940,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "git",
@@ -966,7 +966,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "git",
@@ -992,7 +992,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "object",
@@ -1017,7 +1017,7 @@ class TestAgentClient:
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "object",

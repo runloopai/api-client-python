@@ -16,11 +16,11 @@ class BenchmarkRun:
 
     Provides methods for monitoring run status, managing the run lifecycle,
     and accessing scenario run results. Obtain instances via
-    ``benchmark.run()`` or ``benchmark.list_runs()``.
+    ``benchmark.start_run()`` or ``benchmark.list_runs()``.
 
     Example:
         >>> benchmark = runloop.benchmark.from_id("bench-xxx")
-        >>> run = benchmark.run(run_name="evaluation-v1")
+        >>> run = benchmark.start_run(run_name="evaluation-v1")
         >>> info = run.get_info()
         >>> scenario_runs = run.list_scenario_runs()
     """

@@ -31,7 +31,7 @@ class TestDevboxErrorHandling:
         """Test handling of network errors."""
         mock_client.devboxes.retrieve.side_effect = httpx.NetworkError("Connection failed")
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         with pytest.raises(httpx.NetworkError):
             devbox.get_info()
 
@@ -50,7 +50,7 @@ class TestDevboxErrorHandling:
 
         mock_client.devboxes.retrieve.side_effect = error
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         with pytest.raises(APIStatusError):
             devbox.get_info()
 
@@ -58,7 +58,7 @@ class TestDevboxErrorHandling:
         """Test handling of timeout errors."""
         mock_client.devboxes.retrieve.side_effect = httpx.TimeoutException("Request timed out")
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         with pytest.raises(httpx.TimeoutException):
             devbox.get_info(timeout=1.0)
 
@@ -68,19 +68,19 @@ class TestDevboxEdgeCases:
 
     def test_empty_responses(self, mock_client: Mock) -> None:
         """Test handling of empty responses."""
-        empty_view = SimpleNamespace(id="dev_123", status="", name="")
+        empty_view = SimpleNamespace(id="dbx_123", status="", name="")
         mock_client.devboxes.retrieve.return_value = empty_view
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.get_info()
         assert result == empty_view
 
     def test_none_values(self, mock_client: Mock) -> None:
         """Test handling of None values."""
-        view_with_none = SimpleNamespace(id="dev_123", status=None, name=None)
+        view_with_none = SimpleNamespace(id="dbx_123", status=None, name=None)
         mock_client.devboxes.retrieve.return_value = view_with_none
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.get_info()
         assert result.status is None
         assert result.name is None
@@ -89,9 +89,9 @@ class TestDevboxEdgeCases:
         self, mock_client: Mock, thread_cleanup: tuple[list[threading.Thread], list[threading.Event]]
     ) -> None:
         """Test concurrent operations."""
-        mock_client.devboxes.retrieve.return_value = SimpleNamespace(id="dev_123", status="running")
+        mock_client.devboxes.retrieve.return_value = SimpleNamespace(id="dbx_123", status="running")
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         results: list[DevboxView] = []
 
         def get_info() -> None:
@@ -118,13 +118,13 @@ class TestDevboxPythonSpecific:
         mock_client.devboxes.shutdown.return_value = devbox_view
 
         # Context manager approach (Pythonic)
-        with Devbox(mock_client, "dev_123"):
+        with Devbox(mock_client, "dbx_123"):
             pass
 
         mock_client.devboxes.shutdown.assert_called_once()
 
         # Manual cleanup (TypeScript-like)
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         devbox.shutdown()
         assert mock_client.devboxes.shutdown.call_count == 2
 
