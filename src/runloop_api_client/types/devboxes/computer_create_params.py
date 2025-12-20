@@ -17,6 +17,8 @@ class ComputerCreateParams(TypedDict, total=False):
 
 
 class DisplayDimensions(TypedDict, total=False):
+    """Customize the dimensions of the computer display."""
+
     display_height_px: Required[int]
     """The height of the display being controlled by the model in pixels."""
 

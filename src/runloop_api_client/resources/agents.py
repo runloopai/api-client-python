@@ -49,6 +49,7 @@ class AgentsResource(SyncAPIResource):
         self,
         *,
         name: str,
+        version: str,
         source: Optional[AgentSource] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -65,6 +66,8 @@ class AgentsResource(SyncAPIResource):
 
         Args:
           name: The name of the Agent.
+
+          version: The version of the Agent. Must be a semver string (e.g., '2.0.65') or a SHA.
 
           source: The source configuration for the Agent.
 
@@ -83,6 +86,7 @@ class AgentsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "version": version,
                     "source": source,
                 },
                 agent_create_params.AgentCreateParams,
@@ -138,6 +142,7 @@ class AgentsResource(SyncAPIResource):
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
+        version: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -151,13 +156,15 @@ class AgentsResource(SyncAPIResource):
         Args:
           is_public: Filter agents by public visibility.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter agents by name (partial match supported).
 
           search: Search by agent ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          version: Filter by version. Use 'latest' to get the most recently created agent.
 
           extra_headers: Send extra headers
 
@@ -182,6 +189,7 @@ class AgentsResource(SyncAPIResource):
                         "name": name,
                         "search": search,
                         "starting_after": starting_after,
+                        "version": version,
                     },
                     agent_list_params.AgentListParams,
                 ),
@@ -214,6 +222,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        version: str,
         source: Optional[AgentSource] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -230,6 +239,8 @@ class AsyncAgentsResource(AsyncAPIResource):
 
         Args:
           name: The name of the Agent.
+
+          version: The version of the Agent. Must be a semver string (e.g., '2.0.65') or a SHA.
 
           source: The source configuration for the Agent.
 
@@ -248,6 +259,7 @@ class AsyncAgentsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "version": version,
                     "source": source,
                 },
                 agent_create_params.AgentCreateParams,
@@ -303,6 +315,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
+        version: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -316,13 +329,15 @@ class AsyncAgentsResource(AsyncAPIResource):
         Args:
           is_public: Filter agents by public visibility.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter agents by name (partial match supported).
 
           search: Search by agent ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          version: Filter by version. Use 'latest' to get the most recently created agent.
 
           extra_headers: Send extra headers
 
@@ -347,6 +362,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                         "name": name,
                         "search": search,
                         "starting_after": starting_after,
+                        "version": version,
                     },
                     agent_list_params.AgentListParams,
                 ),

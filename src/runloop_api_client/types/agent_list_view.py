@@ -9,6 +9,8 @@ __all__ = ["AgentListView"]
 
 
 class AgentListView(BaseModel):
+    """A paginated list of Agents."""
+
     agents: List[AgentView]
     """The list of Agents."""
 

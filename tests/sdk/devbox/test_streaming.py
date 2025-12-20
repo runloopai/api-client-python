@@ -26,17 +26,17 @@ class TestDevboxStreaming:
 
     def test_start_streaming_no_callbacks(self, mock_client: Mock) -> None:
         """Test _start_streaming returns None when no callbacks."""
-        devbox = Devbox(mock_client, "dev_123")
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=None, output=None)
+        devbox = Devbox(mock_client, "dbx_123")
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=None)
         assert result is None
 
     def test_start_streaming_stdout_only(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test _start_streaming with stdout callback only."""
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         stdout_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=stdout_calls.append, stderr=None, output=None)
+        result = devbox._start_streaming("exn_123", stdout=stdout_calls.append, stderr=None, output=None)
 
         assert result is not None
         assert isinstance(result, _StreamingGroup)
@@ -47,9 +47,9 @@ class TestDevboxStreaming:
         """Test _start_streaming with stderr callback only."""
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         stderr_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=stderr_calls.append, output=None)
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=stderr_calls.append, output=None)
 
         assert result is not None
         assert isinstance(result, _StreamingGroup)
@@ -61,9 +61,9 @@ class TestDevboxStreaming:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         output_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=None, output=output_calls.append)
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=output_calls.append)
 
         assert result is not None
         assert isinstance(result, _StreamingGroup)
@@ -74,12 +74,12 @@ class TestDevboxStreaming:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         stdout_calls: list[str] = []
         stderr_calls: list[str] = []
         output_calls: list[str] = []
         result = devbox._start_streaming(
-            "exec_123",
+            "exn_123",
             stdout=stdout_calls.append,
             stderr=stderr_calls.append,
             output=output_calls.append,
@@ -104,7 +104,7 @@ class TestDevboxStreaming:
         mock_stream.__enter__ = Mock(return_value=mock_stream)
         mock_stream.__exit__ = Mock(return_value=None)
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         stop_event = threading.Event()
         calls: list[str] = []
 
@@ -147,7 +147,7 @@ class TestDevboxStreaming:
         mock_stream.__enter__ = Mock(return_value=mock_stream)
         mock_stream.__exit__ = Mock(return_value=None)
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         stop_event = threading.Event()
         calls: list[str] = []
 

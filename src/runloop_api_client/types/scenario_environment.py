@@ -9,6 +9,10 @@ __all__ = ["ScenarioEnvironment"]
 
 
 class ScenarioEnvironment(BaseModel):
+    """
+    ScenarioEnvironmentParameters specify the environment in which a Scenario will be run.
+    """
+
     blueprint_id: Optional[str] = None
     """Use the blueprint with matching ID."""
 

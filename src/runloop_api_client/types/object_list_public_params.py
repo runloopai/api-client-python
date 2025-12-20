@@ -12,7 +12,7 @@ class ObjectListPublicParams(TypedDict, total=False):
     """Filter storage objects by content type."""
 
     limit: int
-    """The limit of items to return. Default is 20."""
+    """The limit of items to return. Default is 20. Max is 5000."""
 
     name: str
     """Filter storage objects by name (partial match supported)."""

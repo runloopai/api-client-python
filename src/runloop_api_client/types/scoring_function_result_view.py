@@ -8,6 +8,10 @@ __all__ = ["ScoringFunctionResultView"]
 
 
 class ScoringFunctionResultView(BaseModel):
+    """
+    A ScoringFunctionResultView represents the result of running a single scoring function on a given input context.
+    """
+
     output: str
     """Log output of the scoring function."""
 

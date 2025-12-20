@@ -27,7 +27,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_view)
         mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=execution_view)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
@@ -42,13 +42,13 @@ class TestAsyncCommandInterface:
     async def test_exec_with_stdout_callback(self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock) -> None:
         """Test exec with stdout callback."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         execution_completed = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -61,7 +61,7 @@ class TestAsyncCommandInterface:
 
         stdout_calls: list[str] = []
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
@@ -73,19 +73,19 @@ class TestAsyncCommandInterface:
     ) -> None:
         """Test exec_async returns AsyncExecution object."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
 
         mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_async)
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         execution = await devbox.cmd.exec_async("long-running command")
 
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
         mock_async_client.devboxes.execute_async.assert_called_once()
 
 
@@ -97,7 +97,7 @@ class TestAsyncFileInterface:
         """Test file read."""
         mock_async_client.devboxes.read_file_contents = AsyncMock(return_value="file content")
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
@@ -109,7 +109,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -121,7 +121,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -134,7 +134,7 @@ class TestAsyncFileInterface:
         mock_response.read = AsyncMock(return_value=b"file content")
         mock_async_client.devboxes.download_file = AsyncMock(return_value=mock_response)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
@@ -146,7 +146,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.upload_file = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         # Create a temporary file for upload
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
@@ -166,7 +166,7 @@ class TestAsyncNetworkInterface:
         ssh_key_response = SimpleNamespace(public_key="ssh-rsa ...")
         mock_async_client.devboxes.create_ssh_key = AsyncMock(return_value=ssh_key_response)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.net.create_ssh_key(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -184,7 +184,7 @@ class TestAsyncNetworkInterface:
         tunnel_view = SimpleNamespace(tunnel_id="tunnel_123")
         mock_async_client.devboxes.create_tunnel = AsyncMock(return_value=tunnel_view)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.net.create_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},
@@ -202,7 +202,7 @@ class TestAsyncNetworkInterface:
         """Test remove tunnel."""
         mock_async_client.devboxes.remove_tunnel = AsyncMock(return_value=object())
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.net.remove_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},

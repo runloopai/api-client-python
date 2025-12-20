@@ -83,9 +83,9 @@ class TestExecution:
 
     def test_init(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test Execution initialization."""
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
         assert execution._initial_result == execution_view
 
     def test_init_with_streaming_group(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
@@ -94,46 +94,46 @@ class TestExecution:
         stop_event = threading.Event()
         streaming_group = _StreamingGroup(threads, stop_event)
 
-        execution = Execution(mock_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", execution_view, streaming_group)  # type: ignore[arg-type]
         assert execution._streaming_group is streaming_group
 
     def test_properties(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test Execution properties."""
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
 
     def test_repr(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test Execution repr formatting."""
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert repr(execution) == "<Execution id='exec_123'>"
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert repr(execution) == "<Execution id='exn_123'>"
 
     def test_result_already_completed(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test result delegates to wait_for_command when already completed."""
         mock_client.devboxes = Mock()
         mock_client.devboxes.wait_for_command.return_value = execution_view
 
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         result = execution.result()
 
         assert result.exit_code == 0
         assert result.stdout(num_lines=10) == "output"
         mock_client.devboxes.wait_for_command.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
         )
 
     def test_result_needs_polling(self, mock_client: Mock) -> None:
         """Test result when execution needs to poll for completion."""
         running_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         completed_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -145,27 +145,27 @@ class TestExecution:
         mock_client.devboxes = Mock()
         mock_client.devboxes.wait_for_command.return_value = completed_execution
 
-        execution = Execution(mock_client, "dev_123", running_execution)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", running_execution)  # type: ignore[arg-type]
         result = execution.result()
 
         assert result.exit_code == 0
         assert result.stdout(num_lines=10) == "output"
         mock_client.devboxes.wait_for_command.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
         )
 
     def test_result_with_streaming_group(self, mock_client: Mock) -> None:
         """Test result waits for streaming group to finish."""
         running_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         completed_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -180,7 +180,7 @@ class TestExecution:
         thread.start()
         streaming_group = _StreamingGroup([thread], stop_event)
 
-        execution = Execution(mock_client, "dev_123", running_execution, streaming_group)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", running_execution, streaming_group)  # type: ignore[arg-type]
         result = execution.result()
 
         assert result.exit_code == 0
@@ -190,8 +190,8 @@ class TestExecution:
     def test_result_passes_options(self, mock_client: Mock) -> None:
         """Ensure options are forwarded to wait_for_command."""
         execution_view = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -201,12 +201,12 @@ class TestExecution:
         mock_client.devboxes = Mock()
         mock_client.devboxes.wait_for_command.return_value = execution_view
 
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         execution.result(timeout=30.0, idempotency_key="abc123")
 
         mock_client.devboxes.wait_for_command.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
             timeout=30.0,
             idempotency_key="abc123",
@@ -215,31 +215,31 @@ class TestExecution:
     def test_get_state(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test get_state method."""
         updated_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         mock_client.devboxes.executions = Mock()
         mock_client.devboxes.executions.retrieve.return_value = updated_execution
 
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         result = execution.get_state()
 
         assert result == updated_execution
         assert execution._initial_result == execution_view
         mock_client.devboxes.executions.retrieve.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
         )
 
     def test_kill(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test kill method."""
         mock_client.devboxes.executions.kill.return_value = None
 
-        execution = Execution(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = Execution(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         execution.kill()
 
         mock_client.devboxes.executions.kill.assert_called_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
         )

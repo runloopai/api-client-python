@@ -31,7 +31,7 @@ _devbox_id = None
 _snapshot_id = None
 
 
-@pytest.mark.timeout(30)
+@pytest.mark.timeout(120)
 def test_snapshot_devbox(client: Runloop) -> None:
     global _devbox_id, _snapshot_id
     created = client.devboxes.create_and_await_running(

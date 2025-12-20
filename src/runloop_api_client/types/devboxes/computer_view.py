@@ -7,6 +7,10 @@ __all__ = ["ComputerView"]
 
 
 class ComputerView(BaseModel):
+    """
+    A Computer represents an implementation of Anthropic Computer usage on top of Devboxes. It includes the tunnel to the live screen and the underlying DevboxView.
+    """
+
     devbox: DevboxView
     """The underlying devbox the computer setup is running on."""
 

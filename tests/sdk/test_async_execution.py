@@ -91,9 +91,9 @@ class TestAsyncExecution:
 
     def test_init(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test AsyncExecution initialization."""
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
         assert execution._initial_result == execution_view
 
     @pytest.mark.asyncio
@@ -113,19 +113,19 @@ class TestAsyncExecution:
         async_task_cleanup.extend(tasks)
         streaming_group = _AsyncStreamingGroup(tasks)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view, streaming_group)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view, streaming_group)  # type: ignore[arg-type]
         assert execution._streaming_group is streaming_group
 
     def test_properties(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test AsyncExecution properties."""
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
 
     def test_repr(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test AsyncExecution repr formatting."""
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert repr(execution) == "<AsyncExecution id='exec_123'>"
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert repr(execution) == "<AsyncExecution id='exn_123'>"
 
     @pytest.mark.asyncio
     async def test_result_already_completed(
@@ -134,14 +134,14 @@ class TestAsyncExecution:
         """Test result when execution is already completed."""
         mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=execution_view)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         result = await execution.result()
 
         assert result.exit_code == 0
         assert await result.stdout(num_lines=10) == "output"
         mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
         )
 
@@ -149,13 +149,13 @@ class TestAsyncExecution:
     async def test_result_needs_polling(self, mock_async_client: AsyncMock) -> None:
         """Test result when execution needs polling."""
         running_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         completed_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -166,14 +166,14 @@ class TestAsyncExecution:
 
         mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=completed_execution)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", running_execution)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", running_execution)  # type: ignore[arg-type]
         result = await execution.result()
 
         assert result.exit_code == 0
         assert await result.stdout(num_lines=10) == "output"
         mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
         )
 
@@ -181,13 +181,13 @@ class TestAsyncExecution:
     async def test_result_with_streaming_group(self, mock_async_client: AsyncMock) -> None:
         """Test result with streaming group cleanup."""
         running_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         completed_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -202,7 +202,7 @@ class TestAsyncExecution:
         tasks = [asyncio.create_task(task())]
         streaming_group = _AsyncStreamingGroup(tasks)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", running_execution, streaming_group)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", running_execution, streaming_group)  # type: ignore[arg-type]
         result = await execution.result()
 
         assert result.exit_code == 0
@@ -213,8 +213,8 @@ class TestAsyncExecution:
     async def test_result_passes_options(self, mock_async_client: AsyncMock) -> None:
         """Ensure result forwards options to wait_for_command."""
         execution_view = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -223,12 +223,12 @@ class TestAsyncExecution:
 
         mock_async_client.devboxes.wait_for_command = AsyncMock(return_value=execution_view)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         await execution.result(timeout=30.0, idempotency_key="abc123")
 
         mock_async_client.devboxes.wait_for_command.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
             statuses=["completed"],
             timeout=30.0,
             idempotency_key="abc123",
@@ -238,20 +238,20 @@ class TestAsyncExecution:
     async def test_get_state(self, mock_async_client: AsyncMock, execution_view: MockExecutionView) -> None:
         """Test get_state method."""
         updated_execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         mock_async_client.devboxes.executions.retrieve = AsyncMock(return_value=updated_execution)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         result = await execution.get_state()
 
         assert result == updated_execution
         assert execution._initial_result == execution_view
         mock_async_client.devboxes.executions.retrieve.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
         )
 
     @pytest.mark.asyncio
@@ -259,10 +259,10 @@ class TestAsyncExecution:
         """Test kill method."""
         mock_async_client.devboxes.executions.kill = AsyncMock(return_value=None)
 
-        execution = AsyncExecution(mock_async_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        execution = AsyncExecution(mock_async_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         await execution.kill()
 
         mock_async_client.devboxes.executions.kill.assert_awaited_once_with(
-            "exec_123",
-            devbox_id="dev_123",
+            "exn_123",
+            devbox_id="dbx_123",
         )

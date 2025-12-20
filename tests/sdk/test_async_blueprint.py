@@ -16,20 +16,20 @@ class TestAsyncBlueprint:
 
     def test_init(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncBlueprint initialization."""
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
-        assert blueprint.id == "bp_123"
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
+        assert blueprint.id == "bpt_123"
 
     def test_repr(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncBlueprint string representation."""
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
-        assert repr(blueprint) == "<AsyncBlueprint id='bp_123'>"
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
+        assert repr(blueprint) == "<AsyncBlueprint id='bpt_123'>"
 
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, blueprint_view: MockBlueprintView) -> None:
         """Test get_info method."""
         mock_async_client.blueprints.retrieve = AsyncMock(return_value=blueprint_view)
 
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
         result = await blueprint.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -46,7 +46,7 @@ class TestAsyncBlueprint:
         logs_view = SimpleNamespace(logs=[])
         mock_async_client.blueprints.logs = AsyncMock(return_value=logs_view)
 
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
         result = await blueprint.logs(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -62,7 +62,7 @@ class TestAsyncBlueprint:
         """Test delete method."""
         mock_async_client.blueprints.delete = AsyncMock(return_value=object())
 
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
         result = await blueprint.delete(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -78,7 +78,7 @@ class TestAsyncBlueprint:
         """Test create_devbox method."""
         mock_async_client.devboxes.create_and_await_running = AsyncMock(return_value=devbox_view)
 
-        blueprint = AsyncBlueprint(mock_async_client, "bp_123")
+        blueprint = AsyncBlueprint(mock_async_client, "bpt_123")
         devbox = await blueprint.create_devbox(
             name="test-devbox",
             metadata={"key": "value"},
@@ -86,5 +86,5 @@ class TestAsyncBlueprint:
             extra_headers={"X-Custom": "value"},
         )
 
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         mock_async_client.devboxes.create_and_await_running.assert_awaited_once()

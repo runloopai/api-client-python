@@ -12,7 +12,7 @@ __all__ = ["BenchmarkCreateParams"]
 
 class BenchmarkCreateParams(TypedDict, total=False):
     name: Required[str]
-    """The name of the Benchmark. This must be unique."""
+    """The unique name of the Benchmark."""
 
     attribution: Optional[str]
     """Attribution information for the benchmark."""
@@ -21,12 +21,12 @@ class BenchmarkCreateParams(TypedDict, total=False):
     """Detailed description of the benchmark."""
 
     metadata: Optional[Dict[str, str]]
-    """User defined metadata to attach to the benchmark for organization."""
+    """User defined metadata to attach to the benchmark."""
 
     required_environment_variables: Optional[SequenceNotStr[str]]
     """Environment variables required to run the benchmark.
 
-    If any required variables are not supplied, the benchmark will fail to start
+    If any required variables are not supplied, the benchmark will fail to start.
     """
 
     required_secret_names: SequenceNotStr[str]

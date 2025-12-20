@@ -108,7 +108,6 @@ class TestBenchmarks:
     def test_method_update(self, client: Runloop) -> None:
         benchmark = client.benchmarks.update(
             id="id",
-            name="name",
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
@@ -116,10 +115,10 @@ class TestBenchmarks:
     def test_method_update_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.update(
             id="id",
-            name="name",
             attribution="attribution",
             description="description",
             metadata={"foo": "string"},
+            name="name",
             required_environment_variables=["string"],
             required_secret_names=["string"],
             scenario_ids=["string"],
@@ -130,7 +129,6 @@ class TestBenchmarks:
     def test_raw_response_update(self, client: Runloop) -> None:
         response = client.benchmarks.with_raw_response.update(
             id="id",
-            name="name",
         )
 
         assert response.is_closed is True
@@ -142,7 +140,6 @@ class TestBenchmarks:
     def test_streaming_response_update(self, client: Runloop) -> None:
         with client.benchmarks.with_streaming_response.update(
             id="id",
-            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -157,7 +154,6 @@ class TestBenchmarks:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.benchmarks.with_raw_response.update(
                 id="",
-                name="name",
             )
 
     @parametrize
@@ -169,6 +165,7 @@ class TestBenchmarks:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list(
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -344,6 +341,53 @@ class TestBenchmarks:
 
         assert cast(Any, response.is_closed) is True
 
+    @parametrize
+    def test_method_update_scenarios(self, client: Runloop) -> None:
+        benchmark = client.benchmarks.update_scenarios(
+            id="id",
+        )
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    def test_method_update_scenarios_with_all_params(self, client: Runloop) -> None:
+        benchmark = client.benchmarks.update_scenarios(
+            id="id",
+            scenarios_to_add=["string"],
+            scenarios_to_remove=["string"],
+        )
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    def test_raw_response_update_scenarios(self, client: Runloop) -> None:
+        response = client.benchmarks.with_raw_response.update_scenarios(
+            id="id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        benchmark = response.parse()
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    def test_streaming_response_update_scenarios(self, client: Runloop) -> None:
+        with client.benchmarks.with_streaming_response.update_scenarios(
+            id="id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            benchmark = response.parse()
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_update_scenarios(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.benchmarks.with_raw_response.update_scenarios(
+                id="",
+            )
+
 
 class TestAsyncBenchmarks:
     parametrize = pytest.mark.parametrize(
@@ -436,7 +480,6 @@ class TestAsyncBenchmarks:
     async def test_method_update(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.update(
             id="id",
-            name="name",
         )
         assert_matches_type(BenchmarkView, benchmark, path=["response"])
 
@@ -444,10 +487,10 @@ class TestAsyncBenchmarks:
     async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.update(
             id="id",
-            name="name",
             attribution="attribution",
             description="description",
             metadata={"foo": "string"},
+            name="name",
             required_environment_variables=["string"],
             required_secret_names=["string"],
             scenario_ids=["string"],
@@ -458,7 +501,6 @@ class TestAsyncBenchmarks:
     async def test_raw_response_update(self, async_client: AsyncRunloop) -> None:
         response = await async_client.benchmarks.with_raw_response.update(
             id="id",
-            name="name",
         )
 
         assert response.is_closed is True
@@ -470,7 +512,6 @@ class TestAsyncBenchmarks:
     async def test_streaming_response_update(self, async_client: AsyncRunloop) -> None:
         async with async_client.benchmarks.with_streaming_response.update(
             id="id",
-            name="name",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -485,7 +526,6 @@ class TestAsyncBenchmarks:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.benchmarks.with_raw_response.update(
                 id="",
-                name="name",
             )
 
     @parametrize
@@ -497,6 +537,7 @@ class TestAsyncBenchmarks:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list(
             limit=0,
+            name="name",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -671,3 +712,50 @@ class TestAsyncBenchmarks:
             assert_matches_type(BenchmarkRunView, benchmark, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_update_scenarios(self, async_client: AsyncRunloop) -> None:
+        benchmark = await async_client.benchmarks.update_scenarios(
+            id="id",
+        )
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    async def test_method_update_scenarios_with_all_params(self, async_client: AsyncRunloop) -> None:
+        benchmark = await async_client.benchmarks.update_scenarios(
+            id="id",
+            scenarios_to_add=["string"],
+            scenarios_to_remove=["string"],
+        )
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update_scenarios(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.benchmarks.with_raw_response.update_scenarios(
+            id="id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        benchmark = await response.parse()
+        assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_update_scenarios(self, async_client: AsyncRunloop) -> None:
+        async with async_client.benchmarks.with_streaming_response.update_scenarios(
+            id="id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            benchmark = await response.parse()
+            assert_matches_type(BenchmarkView, benchmark, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_update_scenarios(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.benchmarks.with_raw_response.update_scenarios(
+                id="",
+            )

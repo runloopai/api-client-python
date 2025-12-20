@@ -221,31 +221,32 @@ class ScenariosResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
-        """
-        Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria. Only provided
-        fields will be updated.
+        """Update a Scenario.
+
+        Fields that are null will preserve the existing value. Fields
+        that are provided (including empty values) will replace the existing value
+        entirely.
 
         Args:
           environment_parameters: The Environment in which the Scenario will run.
 
           input_context: The input context for the Scenario.
 
-          metadata: User defined metadata to attach to the scenario for organization.
+          metadata: User defined metadata to attach to the scenario. Pass in empty map to clear.
 
-          name: Name of the scenario.
+          name: Name of the scenario. Cannot be blank.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
-              environment.
+              environment. Pass in empty string to clear.
 
-          required_environment_variables: Environment variables required to run the scenario.
+          required_environment_variables: Environment variables required to run the scenario. Pass in empty list to clear.
 
-          required_secret_names: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
           scoring_contract: The scoring contract for the Scenario.
 
-          validation_type: Validation strategy.
+          validation_type: Validation strategy. Pass in empty string to clear.
 
           extra_headers: Send extra headers
 
@@ -292,6 +293,7 @@ class ScenariosResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        validation_type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -305,11 +307,13 @@ class ScenariosResource(SyncAPIResource):
         Args:
           benchmark_id: Filter scenarios by benchmark ID.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          validation_type: Filter by validation type
 
           extra_headers: Send extra headers
 
@@ -333,6 +337,7 @@ class ScenariosResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "validation_type": validation_type,
                     },
                     scenario_list_params.ScenarioListParams,
                 ),
@@ -357,7 +362,7 @@ class ScenariosResource(SyncAPIResource):
         List all public scenarios matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
 
@@ -678,31 +683,32 @@ class AsyncScenariosResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> ScenarioView:
-        """
-        Update a Scenario, a repeatable AI coding evaluation test that defines the
-        starting environment as well as evaluation success criteria. Only provided
-        fields will be updated.
+        """Update a Scenario.
+
+        Fields that are null will preserve the existing value. Fields
+        that are provided (including empty values) will replace the existing value
+        entirely.
 
         Args:
           environment_parameters: The Environment in which the Scenario will run.
 
           input_context: The input context for the Scenario.
 
-          metadata: User defined metadata to attach to the scenario for organization.
+          metadata: User defined metadata to attach to the scenario. Pass in empty map to clear.
 
-          name: Name of the scenario.
+          name: Name of the scenario. Cannot be blank.
 
           reference_output: A string representation of the reference output to solve the scenario. Commonly
               can be the result of a git diff or a sequence of command actions to apply to the
-              environment.
+              environment. Pass in empty string to clear.
 
-          required_environment_variables: Environment variables required to run the scenario.
+          required_environment_variables: Environment variables required to run the scenario. Pass in empty list to clear.
 
-          required_secret_names: Secrets required to run the scenario.
+          required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
           scoring_contract: The scoring contract for the Scenario.
 
-          validation_type: Validation strategy.
+          validation_type: Validation strategy. Pass in empty string to clear.
 
           extra_headers: Send extra headers
 
@@ -749,6 +755,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        validation_type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -762,11 +769,13 @@ class AsyncScenariosResource(AsyncAPIResource):
         Args:
           benchmark_id: Filter scenarios by benchmark ID.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          validation_type: Filter by validation type
 
           extra_headers: Send extra headers
 
@@ -790,6 +799,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "validation_type": validation_type,
                     },
                     scenario_list_params.ScenarioListParams,
                 ),
@@ -814,7 +824,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         List all public scenarios matching filter.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
 

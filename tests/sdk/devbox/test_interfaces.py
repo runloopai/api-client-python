@@ -24,7 +24,7 @@ class TestCommandInterface:
         mock_client.devboxes.execute_async.return_value = execution_view
         mock_client.devboxes.executions.await_completed.return_value = execution_view
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
@@ -38,13 +38,13 @@ class TestCommandInterface:
     def test_exec_with_stdout_callback(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with stdout callback."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         execution_completed = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -57,7 +57,7 @@ class TestCommandInterface:
 
         stdout_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
@@ -67,13 +67,13 @@ class TestCommandInterface:
     def test_exec_with_stderr_callback(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with stderr callback."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         execution_completed = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="",
@@ -86,7 +86,7 @@ class TestCommandInterface:
 
         stderr_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.cmd.exec("echo hello", stderr=stderr_calls.append)
 
         assert result.exit_code == 0
@@ -95,13 +95,13 @@ class TestCommandInterface:
     def test_exec_with_output_callback(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with output callback."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         execution_completed = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -115,7 +115,7 @@ class TestCommandInterface:
 
         output_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.cmd.exec("echo hello", output=output_calls.append)
 
         assert result.exit_code == 0
@@ -124,13 +124,13 @@ class TestCommandInterface:
     def test_exec_with_all_callbacks(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with all callbacks."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
         execution_completed = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="output",
@@ -146,7 +146,7 @@ class TestCommandInterface:
         stderr_calls: list[str] = []
         output_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.cmd.exec(
             "echo hello",
             stdout=stdout_calls.append,
@@ -160,19 +160,19 @@ class TestCommandInterface:
     def test_exec_async_returns_execution(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec_async returns Execution object."""
         execution_async = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
         )
 
         mock_client.devboxes.execute_async.return_value = execution_async
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         execution = devbox.cmd.exec_async("long-running command")
 
-        assert execution.execution_id == "exec_123"
-        assert execution.devbox_id == "dev_123"
+        assert execution.execution_id == "exn_123"
+        assert execution.devbox_id == "dbx_123"
         mock_client.devboxes.execute_async.assert_called_once()
 
 
@@ -183,7 +183,7 @@ class TestFileInterface:
         """Test file read."""
         mock_client.devboxes.read_file_contents.return_value = "file content"
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
@@ -196,7 +196,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -210,7 +210,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -225,7 +225,7 @@ class TestFileInterface:
         mock_response.read.return_value = b"file content"
         mock_client.devboxes.download_file.return_value = mock_response
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
@@ -238,7 +238,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.upload_file.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         # Create a temporary file for upload
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
@@ -260,7 +260,7 @@ class TestNetworkInterface:
         ssh_key_response = SimpleNamespace(public_key="ssh-rsa ...")
         mock_client.devboxes.create_ssh_key.return_value = ssh_key_response
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.net.create_ssh_key(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -271,7 +271,7 @@ class TestNetworkInterface:
 
         assert result == ssh_key_response
         mock_client.devboxes.create_ssh_key.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -284,7 +284,7 @@ class TestNetworkInterface:
         tunnel_view = SimpleNamespace(port=8080)
         mock_client.devboxes.create_tunnel.return_value = tunnel_view
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.net.create_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},
@@ -296,7 +296,7 @@ class TestNetworkInterface:
 
         assert result == tunnel_view
         mock_client.devboxes.create_tunnel.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             port=8080,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -309,7 +309,7 @@ class TestNetworkInterface:
         """Test remove tunnel."""
         mock_client.devboxes.remove_tunnel.return_value = object()
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.net.remove_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},
@@ -321,7 +321,7 @@ class TestNetworkInterface:
 
         assert result is not None  # Verify return value is propagated
         mock_client.devboxes.remove_tunnel.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             port=8080,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},

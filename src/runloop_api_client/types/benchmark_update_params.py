@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import TypedDict
 
 from .._types import SequenceNotStr
 
@@ -11,30 +11,32 @@ __all__ = ["BenchmarkUpdateParams"]
 
 
 class BenchmarkUpdateParams(TypedDict, total=False):
-    name: Required[str]
-    """The name of the Benchmark. This must be unique."""
-
     attribution: Optional[str]
-    """Attribution information for the benchmark."""
+    """Attribution information for the benchmark. Pass in empty string to clear."""
 
     description: Optional[str]
-    """Detailed description of the benchmark."""
+    """Detailed description of the benchmark. Pass in empty string to clear."""
 
     metadata: Optional[Dict[str, str]]
-    """User defined metadata to attach to the benchmark for organization."""
+    """User defined metadata to attach to the benchmark. Pass in empty map to clear."""
+
+    name: Optional[str]
+    """The unique name of the Benchmark. Cannot be blank."""
 
     required_environment_variables: Optional[SequenceNotStr[str]]
     """Environment variables required to run the benchmark.
 
-    If any required variables are not supplied, the benchmark will fail to start
+    If any required variables are not supplied, the benchmark will fail to start.
+    Pass in empty list to clear.
     """
 
-    required_secret_names: SequenceNotStr[str]
+    required_secret_names: Optional[SequenceNotStr[str]]
     """
     Secrets required to run the benchmark with (environment variable name will be
     mapped to the your user secret by name). If any of these secrets are not
-    provided or the mapping is incorrect, the benchmark will fail to start.
+    provided or the mapping is incorrect, the benchmark will fail to start. Pass in
+    empty list to clear.
     """
 
     scenario_ids: Optional[SequenceNotStr[str]]
-    """The Scenario IDs that make up the Benchmark."""
+    """The Scenario IDs that make up the Benchmark. Pass in empty list to clear."""

@@ -14,31 +14,31 @@ class TestExecutionResult:
 
     def test_init(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test ExecutionResult initialization."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         # Verify via public API
-        assert result.devbox_id == "dev_123"
-        assert result.execution_id == "exec_123"
+        assert result.devbox_id == "dbx_123"
+        assert result.execution_id == "exn_123"
 
     def test_devbox_id_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test devbox_id property."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert result.devbox_id == "dev_123"
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert result.devbox_id == "dbx_123"
 
     def test_execution_id_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test execution_id property."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
-        assert result.execution_id == "exec_123"
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
+        assert result.execution_id == "exn_123"
 
     def test_exit_code_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test exit_code property."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.exit_code == 0
 
     def test_exit_code_none(self, mock_client: Mock) -> None:
         """Test exit_code property when exit_status is None."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
             exit_status=None,
             stdout="",
@@ -46,19 +46,19 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.exit_code is None
 
     def test_success_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test success property."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.success is True
 
     def test_success_false(self, mock_client: Mock) -> None:
         """Test success property when exit code is non-zero."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=1,
             stdout="",
@@ -66,19 +66,19 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.success is False
 
     def test_failed_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test failed property when exit code is zero."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.failed is False
 
     def test_failed_true(self, mock_client: Mock) -> None:
         """Test failed property when exit code is non-zero."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=1,
             stdout="",
@@ -86,14 +86,14 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.failed is True
 
     def test_failed_none(self, mock_client: Mock) -> None:
         """Test failed property when exit_status is None."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="running",
             exit_status=None,
             stdout="",
@@ -101,20 +101,20 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.failed is False
 
     def test_stdout(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test stdout method."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.stdout() == "output"
         assert result.stdout(num_lines=10) == "output"
 
     def test_stdout_empty(self, mock_client: Mock) -> None:
         """Test stdout method when stdout is None."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout=None,
@@ -122,14 +122,14 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.stdout() == ""
 
     def test_stderr(self, mock_client: Mock) -> None:
         """Test stderr method."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=1,
             stdout="",
@@ -137,18 +137,18 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
         assert result.stderr() == "error message"
         assert result.stderr(num_lines=20) == "error message"
 
     def test_stderr_empty(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test stderr method when stderr is None."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.stderr() == ""
 
     def test_result_property(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test result property."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
         assert result.result == execution_view
 
     def test_stdout_with_truncation_and_streaming(self, mock_client: Mock, mock_stream: Mock) -> None:
@@ -165,8 +165,8 @@ class TestExecutionResult:
         mock_client.devboxes.executions.stream_stdout_updates = Mock(return_value=mock_stream)
 
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="partial",
@@ -174,12 +174,12 @@ class TestExecutionResult:
             stdout_truncated=True,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
 
         # Should stream full output
         output = result.stdout()
         assert output == "line1\nline2\nline3\n"
-        mock_client.devboxes.executions.stream_stdout_updates.assert_called_once_with("exec_123", devbox_id="dev_123")
+        mock_client.devboxes.executions.stream_stdout_updates.assert_called_once_with("exn_123", devbox_id="dbx_123")
 
     def test_stderr_with_truncation_and_streaming(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test stderr streams full output when truncated."""
@@ -194,8 +194,8 @@ class TestExecutionResult:
         mock_client.devboxes.executions.stream_stderr_updates = Mock(return_value=mock_stream)
 
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="",
@@ -203,12 +203,12 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=True,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
 
         # Should stream full output
         output = result.stderr()
         assert output == "error1\nerror2\n"
-        mock_client.devboxes.executions.stream_stderr_updates.assert_called_once_with("exec_123", devbox_id="dev_123")
+        mock_client.devboxes.executions.stream_stderr_updates.assert_called_once_with("exn_123", devbox_id="dbx_123")
 
     def test_stdout_with_num_lines_when_truncated(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test stdout with num_lines parameter when truncated."""
@@ -223,8 +223,8 @@ class TestExecutionResult:
         mock_client.devboxes.executions.stream_stdout_updates = Mock(return_value=mock_stream)
 
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="line1\n",
@@ -232,7 +232,7 @@ class TestExecutionResult:
             stdout_truncated=True,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
 
         # Should stream and return last 2 lines
         output = result.stdout(num_lines=2)
@@ -241,8 +241,8 @@ class TestExecutionResult:
     def test_stdout_no_streaming_when_not_truncated(self, mock_client: Mock) -> None:
         """Test stdout doesn't stream when not truncated."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="complete output",
@@ -250,7 +250,7 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
 
         # Should return existing output without streaming
         output = result.stdout()
@@ -259,8 +259,8 @@ class TestExecutionResult:
     def test_stdout_with_num_lines_no_truncation(self, mock_client: Mock) -> None:
         """Test stdout with num_lines when not truncated."""
         execution = SimpleNamespace(
-            execution_id="exec_123",
-            devbox_id="dev_123",
+            execution_id="exn_123",
+            devbox_id="dbx_123",
             status="completed",
             exit_status=0,
             stdout="line1\nline2\nline3\nline4\nline5",
@@ -268,7 +268,7 @@ class TestExecutionResult:
             stdout_truncated=False,
             stderr_truncated=False,
         )
-        result = ExecutionResult(mock_client, "dev_123", execution)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution)  # type: ignore[arg-type]
 
         # Should return last 2 lines without streaming
         output = result.stdout(num_lines=2)
@@ -276,7 +276,7 @@ class TestExecutionResult:
 
     def test_count_non_empty_lines(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test the _count_non_empty_lines helper method."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
 
         # Test various input strings
         assert result._count_non_empty_lines("") == 0
@@ -288,7 +288,7 @@ class TestExecutionResult:
 
     def test_get_last_n_lines(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
         """Test the _get_last_n_lines helper method."""
-        result = ExecutionResult(mock_client, "dev_123", execution_view)  # type: ignore[arg-type]
+        result = ExecutionResult(mock_client, "dbx_123", execution_view)  # type: ignore[arg-type]
 
         # Test various scenarios
         assert result._get_last_n_lines("", 5) == ""

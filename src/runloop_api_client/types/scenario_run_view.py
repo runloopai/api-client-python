@@ -10,6 +10,11 @@ __all__ = ["ScenarioRunView"]
 
 
 class ScenarioRunView(BaseModel):
+    """A ScenarioRunView represents a single run of a Scenario on a Devbox.
+
+    When completed, the ScenarioRun will contain the final score and output of the run.
+    """
+
     id: str
     """ID of the ScenarioRun."""
 

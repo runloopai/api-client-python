@@ -12,6 +12,10 @@ __all__ = ["ScenarioView"]
 
 
 class ScenarioView(BaseModel):
+    """
+    A ScenarioDefinitionView represents a repeatable AI coding evaluation test, complete with initial environment and scoring contract.
+    """
+
     id: str
     """The ID of the Scenario."""
 

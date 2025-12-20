@@ -21,26 +21,29 @@ class ScenarioUpdateParams(TypedDict, total=False):
     """The input context for the Scenario."""
 
     metadata: Optional[Dict[str, str]]
-    """User defined metadata to attach to the scenario for organization."""
+    """User defined metadata to attach to the scenario. Pass in empty map to clear."""
 
     name: Optional[str]
-    """Name of the scenario."""
+    """Name of the scenario. Cannot be blank."""
 
     reference_output: Optional[str]
     """A string representation of the reference output to solve the scenario.
 
     Commonly can be the result of a git diff or a sequence of command actions to
-    apply to the environment.
+    apply to the environment. Pass in empty string to clear.
     """
 
     required_environment_variables: Optional[SequenceNotStr[str]]
-    """Environment variables required to run the scenario."""
+    """Environment variables required to run the scenario.
+
+    Pass in empty list to clear.
+    """
 
     required_secret_names: Optional[SequenceNotStr[str]]
-    """Secrets required to run the scenario."""
+    """Secrets required to run the scenario. Pass in empty list to clear."""
 
     scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""
 
     validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]]
-    """Validation strategy."""
+    """Validation strategy. Pass in empty string to clear."""

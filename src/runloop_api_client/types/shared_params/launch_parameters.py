@@ -12,6 +12,11 @@ __all__ = ["LaunchParameters", "UserParameters"]
 
 
 class UserParameters(TypedDict, total=False):
+    """Specify the user for execution on Devbox.
+
+    If not set, default `user` will be used.
+    """
+
     uid: Required[int]
     """User ID (UID) for the Linux user. Must be a non-negative integer."""
 
@@ -20,6 +25,10 @@ class UserParameters(TypedDict, total=False):
 
 
 class LaunchParameters(TypedDict, total=False):
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox as well as the environment set up that should be completed before the Devbox is marked as 'running'.
+    """
+
     after_idle: Optional[AfterIdle]
     """Configure Devbox lifecycle based on idle activity.
 

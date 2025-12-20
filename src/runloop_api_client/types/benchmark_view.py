@@ -10,6 +10,10 @@ __all__ = ["BenchmarkView"]
 
 
 class BenchmarkView(BaseModel):
+    """
+    A BenchmarkDefinitionView represents a grouped set of Scenarios that together form a Benchmark.
+    """
+
     id: str
     """The ID of the Benchmark."""
 

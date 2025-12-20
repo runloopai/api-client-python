@@ -25,8 +25,8 @@ class TestAsyncDevboxStreaming:
 
     def test_start_streaming_no_callbacks(self, mock_async_client: AsyncMock) -> None:
         """Test _start_streaming returns None when no callbacks."""
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=None, output=None)
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=None)
         assert result is None
 
     @pytest.mark.asyncio
@@ -46,9 +46,9 @@ class TestAsyncDevboxStreaming:
 
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         stdout_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=stdout_calls.append, stderr=None, output=None)
+        result = devbox._start_streaming("exn_123", stdout=stdout_calls.append, stderr=None, output=None)
 
         assert result is not None
         assert isinstance(result, _AsyncStreamingGroup)
@@ -76,9 +76,9 @@ class TestAsyncDevboxStreaming:
 
         mock_async_client.devboxes.executions.stream_stderr_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         stderr_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=stderr_calls.append, output=None)
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=stderr_calls.append, output=None)
 
         assert result is not None
         assert isinstance(result, _AsyncStreamingGroup)
@@ -107,9 +107,9 @@ class TestAsyncDevboxStreaming:
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
         mock_async_client.devboxes.executions.stream_stderr_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         output_calls: list[str] = []
-        result = devbox._start_streaming("exec_123", stdout=None, stderr=None, output=output_calls.append)
+        result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=output_calls.append)
 
         assert result is not None
         assert isinstance(result, _AsyncStreamingGroup)
@@ -136,7 +136,7 @@ class TestAsyncDevboxStreaming:
         mock_async_stream.__aenter__ = AsyncMock(return_value=mock_async_stream)
         mock_async_stream.__aexit__ = AsyncMock(return_value=None)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         calls: list[str] = []
 
         async def stream_factory() -> AsyncStream[ExecutionUpdateChunk]:
@@ -166,7 +166,7 @@ class TestAsyncDevboxStreaming:
         mock_async_stream.__aenter__ = AsyncMock(return_value=mock_async_stream)
         mock_async_stream.__aexit__ = AsyncMock(return_value=None)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         calls: list[str] = []
 
         async def stream_factory() -> AsyncStream[ExecutionUpdateChunk]:

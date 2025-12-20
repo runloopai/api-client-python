@@ -12,6 +12,7 @@ pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
 THIRTY_SECOND_TIMEOUT = 30
 TWO_MINUTE_TIMEOUT = 120
+AGENT_VERSION = "1.2.3"
 
 
 class TestAsyncAgentLifecycle:
@@ -23,6 +24,7 @@ class TestAsyncAgentLifecycle:
         name = unique_name("sdk-async-agent-test-basic")
         agent = await async_sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -52,6 +54,7 @@ class TestAsyncAgentLifecycle:
         name = unique_name("sdk-async-agent-test-info")
         agent = await async_sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -90,6 +93,7 @@ class TestAsyncAgentListing:
         # Create an agent
         created = await async_sdk_client.agent.create(
             name=unique_name("sdk-async-agent-test-retrieve"),
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -122,13 +126,13 @@ class TestAsyncAgentListing:
 
         # Create multiple agents
         agent1 = await async_sdk_client.agent.create(
-            name=unique_name("sdk-async-agent-test-list-1"), source=source_config
+            name=unique_name("sdk-async-agent-test-list-1"), source=source_config, version=AGENT_VERSION
         )
         agent2 = await async_sdk_client.agent.create(
-            name=unique_name("sdk-async-agent-test-list-2"), source=source_config
+            name=unique_name("sdk-async-agent-test-list-2"), source=source_config, version=AGENT_VERSION
         )
         agent3 = await async_sdk_client.agent.create(
-            name=unique_name("sdk-async-agent-test-list-3"), source=source_config
+            name=unique_name("sdk-async-agent-test-list-3"), source=source_config, version=AGENT_VERSION
         )
 
         try:
@@ -159,6 +163,7 @@ class TestAsyncAgentCreationVariations:
 
         agent = await async_sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "npm",
                 "npm": {
@@ -184,6 +189,7 @@ class TestAsyncAgentCreationVariations:
 
         agent = await async_sdk_client.agent.create(
             name=name,
+            version=AGENT_VERSION,
             source={
                 "type": "git",
                 "git": {
