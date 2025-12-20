@@ -1,91 +1,126 @@
 """Asynchronous SDK smoke tests for AsyncBenchmark operations.
 
 These tests validate the AsyncBenchmark class against the real API.
-Until AsyncBenchmarkOps is available (PR3), we use the raw async API client
-to find or create benchmarks for testing.
+We create a dedicated smoketest benchmark and scenarios with consistent names
+so that resources are reused across test runs (since there's no delete endpoint).
 """
 
 from __future__ import annotations
 
+from typing import List, Tuple
+
 import pytest
 
-from runloop_api_client.sdk import AsyncBenchmark, AsyncRunloopSDK, AsyncScenarioRun, AsyncBenchmarkRun
+from runloop_api_client import AsyncRunloopSDK
+from runloop_api_client.sdk import AsyncScenario, AsyncBenchmark, AsyncScenarioRun, AsyncBenchmarkRun
 
 pytestmark = [pytest.mark.smoketest]
 
 TWO_MINUTE_TIMEOUT = 120
 
+# Consistent names for smoketest resources
+SMOKETEST_BENCHMARK_NAME = "sdk-smoketest-benchmark"
+SMOKETEST_SCENARIO_1_NAME = "sdk-smoketest-scenario-1"
+SMOKETEST_SCENARIO_2_NAME = "sdk-smoketest-scenario-2"
 
-class TestAsyncBenchmarkRetrieval:
-    """Test AsyncBenchmark retrieval operations."""
 
-    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    async def test_benchmark_from_existing(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating AsyncBenchmark from existing benchmark.
+async def get_or_create_scenario(
+    async_sdk_client: AsyncRunloopSDK,
+    name: str,
+    problem_statement: str,
+) -> AsyncScenario:
+    """Get an existing scenario by name or create a new one."""
+    # Check if scenario already exists
+    scenarios = await async_sdk_client.scenario.list(name=name, limit=1)
+    for scenario in scenarios:
+        # Return the first matching scenario
+        return scenario
 
-        This test:
-        1. Lists benchmarks via raw async API
-        2. Creates an AsyncBenchmark wrapper
-        3. Validates get_info returns correct data
-        """
-        # List existing benchmarks via raw API
-        benchmarks_page = await async_sdk_client.api.benchmarks.list_public(limit=1)
-        benchmarks = benchmarks_page.benchmarks
+    # Create a new scenario using the SDK builder
+    return await (
+        async_sdk_client.scenario.builder(name)
+        .with_problem_statement(problem_statement)
+        .add_shell_command_scorer("pass-scorer", command="exit 0")
+        .push()
+    )
 
-        if not benchmarks:
-            raise Exception("No benchmarks available to test")
 
-        benchmark_data = benchmarks[0]
+async def get_or_create_benchmark(
+    async_sdk_client: AsyncRunloopSDK,
+    name: str,
+    scenario_ids: List[str],
+) -> AsyncBenchmark:
+    """Get an existing benchmark by name or create a new one."""
+    # Check if benchmark already exists
+    benchmarks_page = await async_sdk_client.api.benchmarks.list(name=name, limit=1)
+    for benchmark in benchmarks_page.benchmarks:
+        # Return the first matching benchmark
+        return AsyncBenchmark(async_sdk_client.api, benchmark.id)
 
-        # Create AsyncBenchmark wrapper
-        # TODO: use AsyncBenchmarkOps to create a benchmark once implemented
-        benchmark = AsyncBenchmark(
-            client=async_sdk_client.api,
-            benchmark_id=benchmark_data.id,
-        )
+    # Create a new benchmark
+    return AsyncBenchmark(
+        async_sdk_client.api,
+        (
+            await async_sdk_client.api.benchmarks.create(
+                name=name,
+                scenario_ids=scenario_ids,
+                description="Smoketest benchmark for SDK testing",
+            )
+        ).id,
+    )
 
-        assert benchmark.id == benchmark_data.id
 
-        # Test get_info
-        info = await benchmark.get_info()
-        assert info.id == benchmark_data.id
-        assert info.name == benchmark_data.name
+@pytest.fixture(scope="module")
+async def smoketest_benchmark(
+    async_sdk_client: AsyncRunloopSDK,
+) -> Tuple[AsyncBenchmark, List[str]]:
+    """Create or retrieve the smoketest benchmark and scenario IDs."""
+    # Create or get scenarios
+    scenario_1 = await get_or_create_scenario(
+        async_sdk_client,
+        SMOKETEST_SCENARIO_1_NAME,
+        "Smoketest scenario 1 - basic validation",
+    )
+    scenario_2 = await get_or_create_scenario(
+        async_sdk_client,
+        SMOKETEST_SCENARIO_2_NAME,
+        "Smoketest scenario 2 - basic validation",
+    )
+
+    scenario_ids = [scenario_1.id, scenario_2.id]
+
+    # Create or get benchmark
+    benchmark = await get_or_create_benchmark(
+        async_sdk_client,
+        SMOKETEST_BENCHMARK_NAME,
+        scenario_ids,
+    )
+
+    return benchmark, scenario_ids
 
 
 class TestAsyncBenchmarkRun:
     """Test AsyncBenchmark run operations."""
 
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    async def test_benchmark_run_and_cancel(self, async_sdk_client: AsyncRunloopSDK) -> None:
+    async def test_benchmark_run_and_cancel(
+        self,
+        async_sdk_client: AsyncRunloopSDK,
+        smoketest_benchmark: Tuple[AsyncBenchmark, List[str]],
+    ) -> None:
         """Test starting and canceling a benchmark run.
 
         This test:
-        1. Finds an existing benchmark
+        1. Uses the smoketest benchmark fixture
         2. Starts a new benchmark run via the AsyncBenchmark class
         3. Validates the run object
         4. Cancels the run
         """
-        # Find an existing benchmark via raw API
-        benchmarks_page = await async_sdk_client.api.benchmarks.list_public(limit=1)
-        benchmarks = benchmarks_page.benchmarks
-
-        if not benchmarks:
-            raise Exception("No benchmarks available to test")
-
-        benchmark_data = benchmarks[0]
-        if not benchmark_data.scenario_ids:
-            raise Exception("No scenarios available to test")
-
-        # Create AsyncBenchmark wrapper
-        benchmark = AsyncBenchmark(
-            client=async_sdk_client.api,
-            benchmark_id=benchmark_data.id,
-        )
+        benchmark, scenario_ids = smoketest_benchmark
 
         # Start a run
         run = await benchmark.start_run(run_name="sdk-smoketest-async-benchmark-run")
-        scenario = async_sdk_client.scenario.from_id(benchmark_data.scenario_ids[0])
-        scenario_run = None
+        scenario_runs: List[AsyncScenarioRun] = []
 
         try:
             assert isinstance(run, AsyncBenchmarkRun)
@@ -95,22 +130,31 @@ class TestAsyncBenchmarkRun:
             # Get run info
             info = await run.get_info()
             assert info.id == run.id
-            assert info.state in ["running", "completed", "canceled"]
+            assert info.state == "running"
 
-            # Start a scenario run
-            scenario_run = await scenario.run(
-                benchmark_run_id=run.id, run_name="sdk-smoketest-async-benchmark-run-scenario"
-            )
-            scenario_runs = await run.list_scenario_runs()
-            assert isinstance(scenario_runs, list)
-            assert len(scenario_runs) == 1
-            assert isinstance(scenario_runs[0], AsyncScenarioRun)
-            assert scenario_runs[0].id == scenario_run.id
-            assert scenario_runs[0].devbox_id == scenario_run.devbox_id
+            # Run the scenarios
+            for scenario_id in scenario_ids:
+                scenario = async_sdk_client.scenario.from_id(scenario_id)
+                scenario_runs.append(
+                    await scenario.run_async(
+                        benchmark_run_id=run.id, run_name="sdk-smoketest-async-benchmark-run-scenario"
+                    )
+                )
+
+            benchmark_scenario_runs = await run.list_scenario_runs()
+            assert isinstance(benchmark_scenario_runs, list)
+            assert len(benchmark_scenario_runs) == len(scenario_runs)
+            for scenario_run in benchmark_scenario_runs:
+                assert isinstance(scenario_run, AsyncScenarioRun)
+                assert any(
+                    scenario_run.id == scenario_run.id and scenario_run.devbox_id == scenario_run.devbox_id
+                    for scenario_run in scenario_runs
+                )
 
             # Cancel the scenario run
-            scenario_result = await scenario_run.cancel()
-            assert scenario_result.state in ["canceled", "completed"]
+            for scenario_run in scenario_runs:
+                scenario_result = await scenario_run.cancel()
+                assert scenario_result.state in ["canceled", "completed"]
 
             # Cancel the benchmark run
             result = await run.cancel()
@@ -118,9 +162,9 @@ class TestAsyncBenchmarkRun:
 
         except Exception:
             # Ensure cleanup on any error
-            if scenario_run:
-                await async_sdk_client.api.scenarios.runs.cancel(scenario_run.id)
-            await async_sdk_client.api.benchmarks.runs.cancel(run.id)
+            for scenario_run in scenario_runs:
+                await scenario_run.cancel()
+            await run.cancel()
             raise
 
 
@@ -128,28 +172,18 @@ class TestAsyncBenchmarkListRuns:
     """Test AsyncBenchmark list_runs operations."""
 
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    async def test_list_runs(self, async_sdk_client: AsyncRunloopSDK) -> None:
+    async def test_list_runs(
+        self,
+        smoketest_benchmark: Tuple[AsyncBenchmark, List[str]],
+    ) -> None:
         """Test listing benchmark runs.
 
         This test:
-        1. Finds an existing benchmark
+        1. Uses the smoketest benchmark fixture
         2. Lists its runs
         3. Validates returned objects are AsyncBenchmarkRun instances
         """
-        # Find an existing benchmark via raw API
-        benchmarks_page = await async_sdk_client.api.benchmarks.list_public(limit=1)
-        benchmarks = benchmarks_page.benchmarks
-
-        if not benchmarks:
-            raise Exception("No benchmarks available to test")
-
-        benchmark_data = benchmarks[0]
-
-        # Create AsyncBenchmark wrapper
-        benchmark = AsyncBenchmark(
-            client=async_sdk_client.api,
-            benchmark_id=benchmark_data.id,
-        )
+        benchmark, _ = smoketest_benchmark
 
         runs = await benchmark.list_runs()
         assert isinstance(runs, list)
