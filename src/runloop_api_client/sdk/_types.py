@@ -11,9 +11,11 @@ from ..types import (
     DevboxCreateParams,
     ObjectCreateParams,
     ScenarioListParams,
+    BenchmarkListParams,
     BlueprintListParams,
     ObjectDownloadParams,
     ScenarioUpdateParams,
+    BenchmarkCreateParams,
     BenchmarkUpdateParams,
     BlueprintCreateParams,
     DevboxUploadFileParams,
@@ -210,6 +212,14 @@ class ScenarioPreview(ScenarioView):
 
     input_context: InputContextPreview  # type: ignore[assignment]
     """The input context for the Scenario."""
+
+
+class SDKBenchmarkCreateParams(BenchmarkCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKBenchmarkListParams(BenchmarkListParams, BaseRequestOptions):
+    pass
 
 
 class SDKBenchmarkUpdateParams(BenchmarkUpdateParams, LongRequestOptions):

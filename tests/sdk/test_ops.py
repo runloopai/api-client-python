@@ -17,6 +17,7 @@ from tests.sdk.conftest import (
     MockScorerView,
     MockScenarioView,
     MockSnapshotView,
+    MockBenchmarkView,
     MockBlueprintView,
     create_mock_httpx_response,
 )
@@ -27,12 +28,14 @@ from runloop_api_client.sdk import (
     AgentOps,
     Scenario,
     Snapshot,
+    Benchmark,
     Blueprint,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
     ScenarioOps,
     SnapshotOps,
+    BenchmarkOps,
     BlueprintOps,
     StorageObject,
     StorageObjectOps,
@@ -1085,6 +1088,59 @@ class TestScenarioOps:
         mock_client.scenarios.list.assert_called_once()
 
 
+class TestBenchmarkOps:
+    """Tests for BenchmarkOps class."""
+
+    def test_create(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
+        """Test create method."""
+        mock_client.benchmarks.create.return_value = benchmark_view
+
+        ops = BenchmarkOps(mock_client)
+        benchmark = ops.create(name="test-benchmark", scenario_ids=["scn_001", "scn_002"])
+
+        assert isinstance(benchmark, Benchmark)
+        assert benchmark.id == "bmd_123"
+        mock_client.benchmarks.create.assert_called_once_with(
+            name="test-benchmark", scenario_ids=["scn_001", "scn_002"]
+        )
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        ops = BenchmarkOps(mock_client)
+        benchmark = ops.from_id("bmd_123")
+
+        assert isinstance(benchmark, Benchmark)
+        assert benchmark.id == "bmd_123"
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        benchmark_view1 = MockBenchmarkView(id="bmd_001", name="benchmark-1")
+        benchmark_view2 = MockBenchmarkView(id="bmd_002", name="benchmark-2")
+        page = SimpleNamespace(benchmarks=[benchmark_view1, benchmark_view2])
+        mock_client.benchmarks.list.return_value = page
+
+        ops = BenchmarkOps(mock_client)
+        benchmarks = ops.list(limit=10)
+
+        assert len(benchmarks) == 2
+        assert isinstance(benchmarks[0], Benchmark)
+        assert isinstance(benchmarks[1], Benchmark)
+        assert benchmarks[0].id == "bmd_001"
+        assert benchmarks[1].id == "bmd_002"
+        mock_client.benchmarks.list.assert_called_once_with(limit=10)
+
+    def test_list_with_name_filter(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
+        """Test list method with name filter."""
+        page = SimpleNamespace(benchmarks=[benchmark_view])
+        mock_client.benchmarks.list.return_value = page
+
+        ops = BenchmarkOps(mock_client)
+        benchmarks = ops.list(name="test-benchmark", limit=10)
+
+        assert len(benchmarks) == 1
+        mock_client.benchmarks.list.assert_called_once_with(name="test-benchmark", limit=10)
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -1093,6 +1149,7 @@ class TestRunloopSDK:
         runloop = RunloopSDK(bearer_token="test-token")
         assert runloop.api is not None
         assert isinstance(runloop.agent, AgentOps)
+        assert isinstance(runloop.benchmark, BenchmarkOps)
         assert isinstance(runloop.devbox, DevboxOps)
         assert isinstance(runloop.scorer, ScorerOps)
         assert isinstance(runloop.snapshot, SnapshotOps)

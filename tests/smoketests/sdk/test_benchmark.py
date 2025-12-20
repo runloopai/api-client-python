@@ -52,19 +52,16 @@ def get_or_create_benchmark(
 ) -> Benchmark:
     """Get an existing benchmark by name or create a new one."""
     # Check if benchmark already exists
-    benchmarks_page = sdk_client.api.benchmarks.list(name=name, limit=1)
-    for benchmark in benchmarks_page.benchmarks:
+    benchmarks = sdk_client.benchmark.list(name=name, limit=1)
+    for benchmark in benchmarks:
         # Return the first matching benchmark
-        return Benchmark(sdk_client.api, benchmark.id)
+        return benchmark
 
     # Create a new benchmark
-    return Benchmark(
-        sdk_client.api,
-        sdk_client.api.benchmarks.create(
-            name=name,
-            scenario_ids=scenario_ids,
-            description="Smoketest benchmark for SDK testing",
-        ).id,
+    return sdk_client.benchmark.create(
+        name=name,
+        scenario_ids=scenario_ids,
+        description="Smoketest benchmark for SDK testing",
     )
 
 

@@ -52,21 +52,16 @@ async def get_or_create_benchmark(
 ) -> AsyncBenchmark:
     """Get an existing benchmark by name or create a new one."""
     # Check if benchmark already exists
-    benchmarks_page = await async_sdk_client.api.benchmarks.list(name=name, limit=1)
-    for benchmark in benchmarks_page.benchmarks:
+    benchmarks = await async_sdk_client.benchmark.list(name=name, limit=1)
+    for benchmark in benchmarks:
         # Return the first matching benchmark
-        return AsyncBenchmark(async_sdk_client.api, benchmark.id)
+        return benchmark
 
     # Create a new benchmark
-    return AsyncBenchmark(
-        async_sdk_client.api,
-        (
-            await async_sdk_client.api.benchmarks.create(
-                name=name,
-                scenario_ids=scenario_ids,
-                description="Smoketest benchmark for SDK testing",
-            )
-        ).id,
+    return await async_sdk_client.benchmark.create(
+        name=name,
+        scenario_ids=scenario_ids,
+        description="Smoketest benchmark for SDK testing",
     )
 
 
