@@ -17,6 +17,7 @@ from tests.sdk.conftest import (
     MockScorerView,
     MockScenarioView,
     MockSnapshotView,
+    MockBenchmarkView,
     MockBlueprintView,
     create_mock_httpx_response,
 )
@@ -27,12 +28,14 @@ from runloop_api_client.sdk import (
     AsyncAgentOps,
     AsyncScenario,
     AsyncSnapshot,
+    AsyncBenchmark,
     AsyncBlueprint,
     AsyncDevboxOps,
     AsyncScorerOps,
     AsyncRunloopSDK,
     AsyncScenarioOps,
     AsyncSnapshotOps,
+    AsyncBenchmarkOps,
     AsyncBlueprintOps,
     AsyncStorageObject,
     AsyncStorageObjectOps,
@@ -1200,6 +1203,62 @@ class TestAsyncScenarioOps:
         mock_async_client.scenarios.list.assert_awaited_once()
 
 
+class TestAsyncBenchmarkOps:
+    """Tests for AsyncBenchmarkOps class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, benchmark_view: MockBenchmarkView) -> None:
+        """Test create method."""
+        mock_async_client.benchmarks.create = AsyncMock(return_value=benchmark_view)
+
+        ops = AsyncBenchmarkOps(mock_async_client)
+        benchmark = await ops.create(name="test-benchmark", scenario_ids=["scn_001", "scn_002"])
+
+        assert isinstance(benchmark, AsyncBenchmark)
+        assert benchmark.id == "bmd_123"
+        mock_async_client.benchmarks.create.assert_awaited_once_with(
+            name="test-benchmark", scenario_ids=["scn_001", "scn_002"]
+        )
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        ops = AsyncBenchmarkOps(mock_async_client)
+        benchmark = ops.from_id("bmd_123")
+
+        assert isinstance(benchmark, AsyncBenchmark)
+        assert benchmark.id == "bmd_123"
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        benchmark_view1 = MockBenchmarkView(id="bmd_001", name="benchmark-1")
+        benchmark_view2 = MockBenchmarkView(id="bmd_002", name="benchmark-2")
+        page = SimpleNamespace(benchmarks=[benchmark_view1, benchmark_view2])
+        mock_async_client.benchmarks.list = AsyncMock(return_value=page)
+
+        ops = AsyncBenchmarkOps(mock_async_client)
+        benchmarks = await ops.list(limit=10)
+
+        assert len(benchmarks) == 2
+        assert isinstance(benchmarks[0], AsyncBenchmark)
+        assert isinstance(benchmarks[1], AsyncBenchmark)
+        assert benchmarks[0].id == "bmd_001"
+        assert benchmarks[1].id == "bmd_002"
+        mock_async_client.benchmarks.list.assert_awaited_once_with(limit=10)
+
+    @pytest.mark.asyncio
+    async def test_list_with_name_filter(self, mock_async_client: AsyncMock, benchmark_view: MockBenchmarkView) -> None:
+        """Test list method with name filter."""
+        page = SimpleNamespace(benchmarks=[benchmark_view])
+        mock_async_client.benchmarks.list = AsyncMock(return_value=page)
+
+        ops = AsyncBenchmarkOps(mock_async_client)
+        benchmarks = await ops.list(name="test-benchmark", limit=10)
+
+        assert len(benchmarks) == 1
+        mock_async_client.benchmarks.list.assert_awaited_once_with(name="test-benchmark", limit=10)
+
+
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
 
@@ -1208,6 +1267,7 @@ class TestAsyncRunloopSDK:
         runloop = AsyncRunloopSDK(bearer_token="test-token")
         assert runloop.api is not None
         assert isinstance(runloop.agent, AsyncAgentOps)
+        assert isinstance(runloop.benchmark, AsyncBenchmarkOps)
         assert isinstance(runloop.devbox, AsyncDevboxOps)
         assert isinstance(runloop.scorer, AsyncScorerOps)
         assert isinstance(runloop.snapshot, AsyncSnapshotOps)

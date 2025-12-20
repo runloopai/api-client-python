@@ -21,7 +21,9 @@ from ._types import (
     SDKObjectCreateParams,
     SDKScenarioListParams,
     SDKScorerCreateParams,
+    SDKBenchmarkListParams,
     SDKBlueprintListParams,
+    SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
     SDKDevboxCreateFromImageParams,
@@ -33,6 +35,7 @@ from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
 from .scenario import Scenario
 from .snapshot import Snapshot
+from .benchmark import Benchmark
 from .blueprint import Blueprint
 from .storage_object import StorageObject
 from .scenario_builder import ScenarioBuilder
@@ -840,6 +843,55 @@ class ScenarioOps:
         return [Scenario(self._client, item.id) for item in page]
 
 
+class BenchmarkOps:
+    """Manage benchmarks. Access via ``runloop.benchmark``.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> benchmarks = runloop.benchmark.list()
+        >>> benchmark = runloop.benchmark.from_id("bmd_xxx")
+        >>> run = benchmark.start_run(run_name="evaluation-v1")
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize BenchmarkOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, **params: Unpack[SDKBenchmarkCreateParams]) -> Benchmark:
+        """Create a new benchmark.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkCreateParams` for available parameters
+        :return: The newly created benchmark
+        :rtype: Benchmark
+        """
+        response = self._client.benchmarks.create(**params)
+        return Benchmark(self._client, response.id)
+
+    def from_id(self, benchmark_id: str) -> Benchmark:
+        """Get a Benchmark instance for an existing benchmark ID.
+
+        :param benchmark_id: ID of the benchmark
+        :type benchmark_id: str
+        :return: Benchmark instance for the given ID
+        :rtype: Benchmark
+        """
+        return Benchmark(self._client, benchmark_id)
+
+    def list(self, **params: Unpack[SDKBenchmarkListParams]) -> list[Benchmark]:
+        """List all benchmarks, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkListParams` for available parameters
+        :return: List of benchmarks
+        :rtype: list[Benchmark]
+        """
+        page = self._client.benchmarks.list(**params)
+        return [Benchmark(self._client, item.id) for item in page.benchmarks]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -851,6 +903,8 @@ class RunloopSDK:
     :vartype api: Runloop
     :ivar agent: High-level interface for agent management.
     :vartype agent: AgentOps
+    :ivar benchmark: High-level interface for benchmark management
+    :vartype benchmark: BenchmarkOps
     :ivar devbox: High-level interface for devbox management
     :vartype devbox: DevboxOps
     :ivar blueprint: High-level interface for blueprint management
@@ -874,6 +928,7 @@ class RunloopSDK:
 
     api: Runloop
     agent: AgentOps
+    benchmark: BenchmarkOps
     devbox: DevboxOps
     blueprint: BlueprintOps
     scenario: ScenarioOps
@@ -920,6 +975,7 @@ class RunloopSDK:
         )
 
         self.agent = AgentOps(self.api)
+        self.benchmark = BenchmarkOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
         self.scenario = ScenarioOps(self.api)

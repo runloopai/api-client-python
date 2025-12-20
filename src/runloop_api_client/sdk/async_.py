@@ -21,7 +21,9 @@ from ._types import (
     SDKObjectCreateParams,
     SDKScenarioListParams,
     SDKScorerCreateParams,
+    SDKBenchmarkListParams,
     SDKBlueprintListParams,
+    SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
     SDKDevboxCreateFromImageParams,
@@ -34,6 +36,7 @@ from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
+from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
@@ -815,6 +818,55 @@ class AsyncScenarioOps:
         return [AsyncScenario(self._client, item.id) async for item in page]
 
 
+class AsyncBenchmarkOps:
+    """Manage benchmarks (async). Access via ``runloop.benchmark``.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> benchmarks = await runloop.benchmark.list()
+        >>> benchmark = runloop.benchmark.from_id("bmd_xxx")
+        >>> run = await benchmark.start_run(run_name="evaluation-v1")
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncBenchmarkOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKBenchmarkCreateParams]) -> AsyncBenchmark:
+        """Create a new benchmark.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkCreateParams` for available parameters
+        :return: The newly created benchmark
+        :rtype: AsyncBenchmark
+        """
+        response = await self._client.benchmarks.create(**params)
+        return AsyncBenchmark(self._client, response.id)
+
+    def from_id(self, benchmark_id: str) -> AsyncBenchmark:
+        """Get an AsyncBenchmark instance for an existing benchmark ID.
+
+        :param benchmark_id: ID of the benchmark
+        :type benchmark_id: str
+        :return: AsyncBenchmark instance for the given ID
+        :rtype: AsyncBenchmark
+        """
+        return AsyncBenchmark(self._client, benchmark_id)
+
+    async def list(self, **params: Unpack[SDKBenchmarkListParams]) -> list[AsyncBenchmark]:
+        """List all benchmarks, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkListParams` for available parameters
+        :return: List of benchmarks
+        :rtype: list[AsyncBenchmark]
+        """
+        page = await self._client.benchmarks.list(**params)
+        return [AsyncBenchmark(self._client, item.id) for item in page.benchmarks]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -826,6 +878,8 @@ class AsyncRunloopSDK:
     :vartype api: AsyncRunloop
     :ivar agent: High-level async interface for agent management.
     :vartype agent: AsyncAgentOps
+    :ivar benchmark: High-level async interface for benchmark management
+    :vartype benchmark: AsyncBenchmarkOps
     :ivar devbox: High-level async interface for devbox management
     :vartype devbox: AsyncDevboxOps
     :ivar blueprint: High-level async interface for blueprint management
@@ -849,6 +903,7 @@ class AsyncRunloopSDK:
 
     api: AsyncRunloop
     agent: AsyncAgentOps
+    benchmark: AsyncBenchmarkOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
     scenario: AsyncScenarioOps
@@ -895,6 +950,7 @@ class AsyncRunloopSDK:
         )
 
         self.agent = AsyncAgentOps(self.api)
+        self.benchmark = AsyncBenchmarkOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
         self.scenario = AsyncScenarioOps(self.api)
