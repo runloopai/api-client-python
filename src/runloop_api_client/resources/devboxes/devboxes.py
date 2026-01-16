@@ -158,6 +158,7 @@ class DevboxesResource(SyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -204,6 +205,9 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
+          network_policy_id: (Optional) ID of the network policy to apply to this Devbox. If not specified,
+              the default network policy will be used.
+
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -238,6 +242,7 @@ class DevboxesResource(SyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
+                    "network_policy_id": network_policy_id,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -602,8 +607,8 @@ class DevboxesResource(SyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
-              is 600 seconds.
+          optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
+              25 seconds. Operation is not killed.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -1308,7 +1313,7 @@ class DevboxesResource(SyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Polls the asynchronous execution's status until it reaches one of the desired
-        statuses or times out. Defaults to 60 seconds.
+        statuses or times out. Max is 25 seconds.
 
         Args:
           statuses: The command execution statuses to wait for. At least one status must be
@@ -1317,8 +1322,8 @@ class DevboxesResource(SyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
-              to 60 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 25 seconds. Defaults
+              to 25 seconds.
 
           extra_headers: Send extra headers
 
@@ -1466,6 +1471,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -1512,6 +1518,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
+          network_policy_id: (Optional) ID of the network policy to apply to this Devbox. If not specified,
+              the default network policy will be used.
+
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -1546,6 +1555,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
+                    "network_policy_id": network_policy_id,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -1910,8 +1920,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
-              is 600 seconds.
+          optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
+              25 seconds. Operation is not killed.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -2616,7 +2626,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Polls the asynchronous execution's status until it reaches one of the desired
-        statuses or times out. Defaults to 60 seconds.
+        statuses or times out. Max is 25 seconds.
 
         Args:
           statuses: The command execution statuses to wait for. At least one status must be
@@ -2625,8 +2635,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
-              to 60 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 25 seconds. Defaults
+              to 25 seconds.
 
           extra_headers: Send extra headers
 

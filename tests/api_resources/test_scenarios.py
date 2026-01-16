@@ -78,6 +78,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -211,6 +212,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -377,6 +379,7 @@ class TestScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -484,6 +487,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -617,6 +621,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -783,6 +788,7 @@ class TestAsyncScenarios:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {

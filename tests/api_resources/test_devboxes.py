@@ -73,6 +73,7 @@ class TestDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -89,6 +90,7 @@ class TestDevboxes:
                 }
             ],
             name="name",
+            network_policy_id="network_policy_id",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
@@ -1148,6 +1150,7 @@ class TestAsyncDevboxes:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -1164,6 +1167,7 @@ class TestAsyncDevboxes:
                 }
             ],
             name="name",
+            network_policy_id="network_policy_id",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
