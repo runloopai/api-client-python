@@ -769,6 +769,17 @@ class TestAgentClient:
         page = SimpleNamespace(agents=[agent_view_1, agent_view_2, agent_view_3])
         mock_client.agents.list.return_value = page
 
+        # Mock retrieve to return the corresponding agent_view when called
+        def mock_retrieve(agent_id: str, **_kwargs: object) -> MockAgentView:
+            agent_views = {
+                "agent_001": agent_view_1,
+                "agent_002": agent_view_2,
+                "agent_003": agent_view_3,
+            }
+            return agent_views[agent_id]
+
+        mock_client.agents.retrieve.side_effect = mock_retrieve
+
         client = AgentOps(mock_client)
         agents = client.list(
             limit=10,
@@ -784,7 +795,7 @@ class TestAgentClient:
         assert agents[1].id == "agent_002"
         assert agents[2].id == "agent_003"
 
-        # Test that get_info() retrieves the cached AgentView for the first agent
+        # Test that get_info() retrieves the AgentView for the first agent
         info = agents[0].get_info()
         assert info.id == "agent_001"
         assert info.name == "first-agent"
@@ -792,7 +803,7 @@ class TestAgentClient:
         assert info.is_public is False
         assert info.source is None
 
-        # Test that get_info() retrieves the cached AgentView for the second agent
+        # Test that get_info() retrieves the AgentView for the second agent
         info = agents[1].get_info()
         assert info.id == "agent_002"
         assert info.name == "second-agent"
@@ -800,7 +811,7 @@ class TestAgentClient:
         assert info.is_public is True
         assert info.source == {"type": "git", "git": {"repository": "https://github.com/example/repo"}}
 
-        # Test that get_info() retrieves the cached AgentView for the third agent
+        # Test that get_info() retrieves the AgentView for the third agent
         info = agents[2].get_info()
         assert info.id == "agent_003"
         assert info.name == "third-agent"
@@ -808,8 +819,8 @@ class TestAgentClient:
         assert info.is_public is False
         assert info.source == {"type": "npm", "npm": {"package_name": "example-package"}}
 
-        # Verify that agents.retrieve was NOT called (because we're using cached data)
-        mock_client.agents.retrieve.assert_not_called()
+        # Verify that agents.retrieve was called for each agent
+        assert mock_client.agents.retrieve.call_count == 3
 
         mock_client.agents.list.assert_called_once()
 

@@ -75,7 +75,7 @@ class PollingRequestOptions(BaseRequestOptions, total=False):
     """Configuration for polling behavior"""
 
 
-class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):
+class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):  # type: ignore[misc]
     pass
 
 

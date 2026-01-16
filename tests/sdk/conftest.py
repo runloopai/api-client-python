@@ -1,4 +1,5 @@
 """Shared fixtures and utilities for SDK tests."""
+# pyright: reportUnknownVariableType=false
 
 from __future__ import annotations
 

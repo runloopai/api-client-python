@@ -446,10 +446,8 @@ class CommandInterface:
             execution.execution_id,
             **filter_params(params, ExecuteStreamingCallbacks),
         )
-        final = execution
-        if execution.status == "completed":
-            final: DevboxAsyncExecutionDetailView = execution
-        else:
+        final: DevboxAsyncExecutionDetailView = execution
+        if execution.status != "completed":
             final = client.devboxes.executions.await_completed(
                 execution.execution_id,
                 devbox_id=devbox.id,

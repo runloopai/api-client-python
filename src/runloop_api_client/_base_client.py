@@ -1303,7 +1303,7 @@ class _DefaultAsyncHttpxClient(httpx.AsyncClient):
 
 
 try:
-    import httpx_aiohttp
+    import httpx_aiohttp  # type: ignore[import-not-found]
 except ImportError:
 
     class _DefaultAioHttpClient(httpx.AsyncClient):
@@ -1311,13 +1311,13 @@ except ImportError:
             raise RuntimeError("To use the aiohttp client you must have installed the package with the `aiohttp` extra")
 else:
 
-    class _DefaultAioHttpClient(httpx_aiohttp.HttpxAiohttpClient):  # type: ignore
+    class _DefaultAioHttpClient(httpx_aiohttp.HttpxAiohttpClient):  # type: ignore[misc, no-redef]
         def __init__(self, **kwargs: Any) -> None:
             kwargs.setdefault("timeout", DEFAULT_TIMEOUT)
             kwargs.setdefault("limits", DEFAULT_CONNECTION_LIMITS)
             kwargs.setdefault("follow_redirects", True)
 
-            super().__init__(**kwargs)
+            super().__init__(**kwargs)  # type: ignore[unknown-call]
 
 
 if TYPE_CHECKING:
