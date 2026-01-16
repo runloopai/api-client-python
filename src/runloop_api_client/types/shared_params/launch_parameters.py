@@ -72,6 +72,13 @@ class LaunchParameters(TypedDict, total=False):
     launch_commands: Optional[SequenceNotStr[str]]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
+    network_policy_id: Optional[str]
+    """
+    (Optional) ID of the network policy to apply to Devboxes launched with these
+    parameters. When set on a Blueprint launch parameters, Devboxes created from it
+    will inherit this policy unless explicitly overridden.
+    """
+
     required_services: Optional[SequenceNotStr[str]]
     """A list of ContainerizedService names to be started when a Devbox is created.
 

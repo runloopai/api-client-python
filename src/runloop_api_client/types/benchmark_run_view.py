@@ -10,14 +10,11 @@ __all__ = ["BenchmarkRunView"]
 
 class BenchmarkRunView(BaseModel):
     """
-    A BenchmarkRunView represents a run of a complete set of Scenarios, organized under a Benchmark.
+    A BenchmarkRunView represents a run of a complete set of Scenarios, organized under a Benchmark or created by a BenchmarkJob.
     """
 
     id: str
     """The ID of the BenchmarkRun."""
-
-    benchmark_id: str
-    """The ID of the Benchmark."""
 
     metadata: Dict[str, str]
     """User defined metadata to attach to the benchmark run for organization."""
@@ -27,6 +24,12 @@ class BenchmarkRunView(BaseModel):
 
     state: Literal["running", "canceled", "completed"]
     """The state of the BenchmarkRun."""
+
+    benchmark_id: Optional[str] = None
+    """The ID of the Benchmark definition.
+
+    Present if run was created from a benchmark definition.
+    """
 
     duration_ms: Optional[int] = None
     """The duration for the BenchmarkRun to complete."""
