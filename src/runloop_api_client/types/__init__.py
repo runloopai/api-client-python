@@ -5,8 +5,10 @@ from __future__ import annotations
 from .shared import (
     Mount as Mount,
     AfterIdle as AfterIdle,
+    AgentMount as AgentMount,
     RunProfile as RunProfile,
     AgentSource as AgentSource,
+    ObjectMount as ObjectMount,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,
 )
@@ -35,6 +37,7 @@ from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .blueprint_build_log import BlueprintBuildLog as BlueprintBuildLog
 from .blueprint_list_view import BlueprintListView as BlueprintListView
 from .input_context_param import InputContextParam as InputContextParam
+from .network_policy_view import NetworkPolicyView as NetworkPolicyView
 from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
 from .devbox_snapshot_view import DevboxSnapshotView as DevboxSnapshotView
 from .devbox_update_params import DevboxUpdateParams as DevboxUpdateParams
@@ -60,6 +63,7 @@ from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdatePar
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
+from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyListView
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
 from .repository_manifest_view import RepositoryManifestView as RepositoryManifestView
@@ -74,6 +78,7 @@ from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStar
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
 from .devbox_execute_sync_params import DevboxExecuteSyncParams as DevboxExecuteSyncParams
 from .input_context_update_param import InputContextUpdateParam as InputContextUpdateParam
+from .network_policy_list_params import NetworkPolicyListParams as NetworkPolicyListParams
 from .repository_connection_view import RepositoryConnectionView as RepositoryConnectionView
 from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvironmentParam
 from .devbox_create_tunnel_params import DevboxCreateTunnelParams as DevboxCreateTunnelParams
@@ -86,6 +91,8 @@ from .benchmark_definitions_params import BenchmarkDefinitionsParams as Benchmar
 from .benchmark_list_public_params import BenchmarkListPublicParams as BenchmarkListPublicParams
 from .blueprint_list_public_params import BlueprintListPublicParams as BlueprintListPublicParams
 from .devbox_execution_detail_view import DevboxExecutionDetailView as DevboxExecutionDetailView
+from .network_policy_create_params import NetworkPolicyCreateParams as NetworkPolicyCreateParams
+from .network_policy_update_params import NetworkPolicyUpdateParams as NetworkPolicyUpdateParams
 from .scoring_contract_result_view import ScoringContractResultView as ScoringContractResultView
 from .scoring_function_result_view import ScoringFunctionResultView as ScoringFunctionResultView
 from .repository_inspection_details import RepositoryInspectionDetails as RepositoryInspectionDetails

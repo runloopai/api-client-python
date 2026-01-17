@@ -5,44 +5,10 @@ from __future__ import annotations
 from typing import Union, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
-__all__ = ["Mount", "ObjectMount", "AgentMount", "CodeMount", "FileMount"]
+from .agent_mount import AgentMount
+from .object_mount import ObjectMount
 
-
-class ObjectMount(TypedDict, total=False):
-    object_id: Required[str]
-    """The ID of the object to write."""
-
-    object_path: Required[str]
-    """The path to write the object on the Devbox.
-
-    Use absolute path of object (ie /home/user/object.txt, or directory if archive
-    /home/user/archive_dir)
-    """
-
-    type: Required[Literal["object_mount"]]
-
-
-class AgentMount(TypedDict, total=False):
-    agent_id: Required[Optional[str]]
-    """The ID of the agent to mount. Either agent_id or name must be set."""
-
-    agent_name: Required[Optional[str]]
-    """The name of the agent to mount.
-
-    Returns the most recent agent with a matching name if no agent id string
-    provided. Either agent id or name must be set
-    """
-
-    type: Required[Literal["agent_mount"]]
-
-    agent_path: Optional[str]
-    """Path to mount the agent on the Devbox.
-
-    Required for git and object agents. Use absolute path (e.g., /home/user/agent)
-    """
-
-    auth_token: Optional[str]
-    """Optional auth token for private repositories. Only used for git agents."""
+__all__ = ["Mount", "CodeMount", "FileMount"]
 
 
 class CodeMount(TypedDict, total=False):
