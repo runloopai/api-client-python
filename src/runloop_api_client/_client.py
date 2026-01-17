@@ -31,12 +31,23 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import agents, objects, secrets, devboxes, scenarios, benchmarks, blueprints, repositories
+    from .resources import (
+        agents,
+        objects,
+        secrets,
+        devboxes,
+        scenarios,
+        benchmarks,
+        blueprints,
+        repositories,
+        network_policies,
+    )
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
+    from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
     from .resources.benchmarks.benchmarks import BenchmarksResource, AsyncBenchmarksResource
@@ -148,6 +159,12 @@ class Runloop(SyncAPIClient):
         from .resources.secrets import SecretsResource
 
         return SecretsResource(self)
+
+    @cached_property
+    def network_policies(self) -> NetworkPoliciesResource:
+        from .resources.network_policies import NetworkPoliciesResource
+
+        return NetworkPoliciesResource(self)
 
     @cached_property
     def with_raw_response(self) -> RunloopWithRawResponse:
@@ -368,6 +385,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncSecretsResource(self)
 
     @cached_property
+    def network_policies(self) -> AsyncNetworkPoliciesResource:
+        from .resources.network_policies import AsyncNetworkPoliciesResource
+
+        return AsyncNetworkPoliciesResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncRunloopWithRawResponse:
         return AsyncRunloopWithRawResponse(self)
 
@@ -534,6 +557,12 @@ class RunloopWithRawResponse:
 
         return SecretsResourceWithRawResponse(self._client.secrets)
 
+    @cached_property
+    def network_policies(self) -> network_policies.NetworkPoliciesResourceWithRawResponse:
+        from .resources.network_policies import NetworkPoliciesResourceWithRawResponse
+
+        return NetworkPoliciesResourceWithRawResponse(self._client.network_policies)
+
 
 class AsyncRunloopWithRawResponse:
     _client: AsyncRunloop
@@ -588,6 +617,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.secrets import AsyncSecretsResourceWithRawResponse
 
         return AsyncSecretsResourceWithRawResponse(self._client.secrets)
+
+    @cached_property
+    def network_policies(self) -> network_policies.AsyncNetworkPoliciesResourceWithRawResponse:
+        from .resources.network_policies import AsyncNetworkPoliciesResourceWithRawResponse
+
+        return AsyncNetworkPoliciesResourceWithRawResponse(self._client.network_policies)
 
 
 class RunloopWithStreamedResponse:
@@ -644,6 +679,12 @@ class RunloopWithStreamedResponse:
 
         return SecretsResourceWithStreamingResponse(self._client.secrets)
 
+    @cached_property
+    def network_policies(self) -> network_policies.NetworkPoliciesResourceWithStreamingResponse:
+        from .resources.network_policies import NetworkPoliciesResourceWithStreamingResponse
+
+        return NetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
+
 
 class AsyncRunloopWithStreamedResponse:
     _client: AsyncRunloop
@@ -698,6 +739,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.secrets import AsyncSecretsResourceWithStreamingResponse
 
         return AsyncSecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def network_policies(self) -> network_policies.AsyncNetworkPoliciesResourceWithStreamingResponse:
+        from .resources.network_policies import AsyncNetworkPoliciesResourceWithStreamingResponse
+
+        return AsyncNetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
 
 
 Client = Runloop

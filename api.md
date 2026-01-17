@@ -3,10 +3,12 @@
 ```python
 from runloop_api_client.types import (
     AfterIdle,
+    AgentMount,
     AgentSource,
     CodeMountParameters,
     LaunchParameters,
     Mount,
+    ObjectMount,
     RunProfile,
 )
 ```
@@ -349,3 +351,24 @@ Methods:
 - <code title="post /v1/secrets/{name}">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">update</a>(name, \*\*<a href="src/runloop_api_client/types/secret_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
 - <code title="get /v1/secrets">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">list</a>(\*\*<a href="src/runloop_api_client/types/secret_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_list_view.py">SecretListView</a></code>
 - <code title="post /v1/secrets/{name}/delete">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">delete</a>(name) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
+
+# NetworkPolicies
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    NetworkPolicyCreateParameters,
+    NetworkPolicyListView,
+    NetworkPolicyUpdateParameters,
+    NetworkPolicyView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/network-policies">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">create</a>(\*\*<a href="src/runloop_api_client/types/network_policy_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="get /v1/network-policies/{id}">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="post /v1/network-policies/{id}">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/network_policy_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="get /v1/network-policies">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">list</a>(\*\*<a href="src/runloop_api_client/types/network_policy_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">SyncNetworkPoliciesCursorIDPage[NetworkPolicyView]</a></code>
+- <code title="post /v1/network-policies/{id}/delete">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
