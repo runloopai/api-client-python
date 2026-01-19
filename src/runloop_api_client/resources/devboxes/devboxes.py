@@ -189,7 +189,6 @@ class DevboxesResource(SyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
-        network_policy_id: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -236,9 +235,6 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          network_policy_id: (Optional) ID of the network policy to apply to this Devbox. If not specified,
-              the default network policy will be used.
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -273,7 +269,6 @@ class DevboxesResource(SyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
-                    "network_policy_id": network_policy_id,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
@@ -1732,7 +1727,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
-        network_policy_id: Optional[str] | Omit = omit,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -1779,9 +1773,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          network_policy_id: (Optional) ID of the network policy to apply to this Devbox. If not specified,
-              the default network policy will be used.
-
           repo_connection_id: Repository connection id the devbox should source its base image from.
 
           secrets: (Optional) Map of environment variable names to secret names. The secret values
@@ -1816,7 +1807,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
-                    "network_policy_id": network_policy_id,
                     "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,

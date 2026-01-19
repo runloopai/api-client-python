@@ -49,12 +49,6 @@ class DevboxBaseCreateParams(TypedDict, total=False):
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""
 
-    network_policy_id: Optional[str]
-    """(Optional) ID of the network policy to apply to this Devbox.
-
-    If not specified, the default network policy will be used.
-    """
-
     repo_connection_id: Optional[str]
     """Repository connection id the devbox should source its base image from."""
 

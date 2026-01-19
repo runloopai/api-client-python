@@ -32,6 +32,12 @@ class BlueprintCreateFromInspectionParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """(Optional) User defined metadata for the Blueprint."""
 
+    network_policy_id: Optional[str]
+    """(Optional) ID of the network policy to apply during blueprint build.
+
+    This restricts network access during the build process.
+    """
+
     secrets: Optional[Dict[str, str]]
     """(Optional) Map of mount IDs/environment variable names to secret names.
 
