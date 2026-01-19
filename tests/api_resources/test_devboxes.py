@@ -90,7 +90,6 @@ class TestDevboxes:
                 }
             ],
             name="name",
-            network_policy_id="network_policy_id",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
@@ -1167,7 +1166,6 @@ class TestAsyncDevboxes:
                 }
             ],
             name="name",
-            network_policy_id="network_policy_id",
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",

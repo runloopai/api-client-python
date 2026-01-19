@@ -71,6 +71,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -262,6 +263,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
@@ -415,6 +417,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -512,6 +515,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -703,6 +707,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
@@ -856,6 +861,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
