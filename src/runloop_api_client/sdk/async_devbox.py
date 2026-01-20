@@ -172,16 +172,34 @@ class AsyncDevbox:
 
     async def resume(
         self,
+        *,
+        polling_config: PollingConfig | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> DevboxView:
-        """Resume a suspended devbox.
+        """Resume a suspended devbox, restoring it to running state.
 
-        Returns immediately after issuing the resume request. Call
-        :meth:`await_running` if you need to wait for the devbox to reach the
-        ``running`` state (contrast with the synchronous SDK, which blocks).
+        Waits for the devbox to reach running state before returning.
 
+        :param polling_config: Optional polling behavior overrides, defaults to None
+        :type polling_config: PollingConfig | None, optional
         :param options: Optional long-running request configuration
         :return: Resumed devbox state info
+        :rtype: DevboxView
+        """
+        await self.resume_async(**options)
+        return await self.await_running(polling_config=polling_config)
+
+    async def resume_async(
+        self,
+        **options: Unpack[LongRequestOptions],
+    ) -> DevboxView:
+        """Resume a suspended devbox without waiting for it to reach running state.
+
+        Initiates the resume operation and returns immediately. Use :meth:`await_running`
+        to wait for the devbox to reach running state if needed.
+
+        :param options: Optional long-running request configuration
+        :return: Devbox state info immediately after resume request
         :rtype: DevboxView
         """
         return await self._client.devboxes.resume(

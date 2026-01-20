@@ -190,6 +190,32 @@ class TestDevbox:
             polling_config=polling_config,
         )
 
+    def test_resume_async(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
+        """Test resume_async method."""
+        mock_client.devboxes.resume.return_value = devbox_view
+        mock_client.devboxes.await_running = Mock()
+
+        devbox = Devbox(mock_client, "dev_123")
+        result = devbox.resume_async(
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+            idempotency_key="key-123",
+        )
+
+        assert result == devbox_view
+        mock_client.devboxes.resume.assert_called_once_with(
+            "dev_123",
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+            idempotency_key="key-123",
+        )
+        # Should not call await_running
+        mock_client.devboxes.await_running.assert_not_called()
+
     def test_keep_alive(self, mock_client: Mock) -> None:
         """Test keep_alive method."""
         mock_client.devboxes.keep_alive.return_value = object()

@@ -185,11 +185,26 @@ class Devbox:
         :return: Resumed devbox state info
         :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
         """
-        self._client.devboxes.resume(
-            self._id,
-            **filter_params(options, LongRequestOptions),
-        )
+        self.resume_async(**filter_params(options, LongRequestOptions))
         return self._client.devboxes.await_running(self._id, polling_config=options.get("polling_config"))
+
+    def resume_async(
+        self,
+        **options: Unpack[LongRequestOptions],
+    ) -> DevboxView:
+        """Resume a suspended devbox without waiting for it to reach running state.
+
+        Initiates the resume operation and returns immediately. Use :meth:`await_running`
+        to wait for the devbox to reach running state if needed.
+
+        :param options: Optional long-running request configuration
+        :return: Devbox state info immediately after resume request
+        :rtype: :class:`~runloop_api_client.types.devbox_view.DevboxView`
+        """
+        return self._client.devboxes.resume(
+            self._id,
+            **options,
+        )
 
     def keep_alive(
         self,

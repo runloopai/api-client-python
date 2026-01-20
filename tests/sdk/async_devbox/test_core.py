@@ -161,9 +161,40 @@ class TestAsyncDevbox:
     async def test_resume(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test resume method."""
         mock_async_client.devboxes.resume = AsyncMock(return_value=devbox_view)
+        mock_async_client.devboxes.await_running = AsyncMock(return_value=devbox_view)
+        polling_config = PollingConfig(timeout_seconds=60.0)
 
         devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.resume(
+            polling_config=polling_config,
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+            idempotency_key="key-123",
+        )
+
+        assert result == devbox_view
+        mock_async_client.devboxes.resume.assert_called_once_with(
+            "dev_123",
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+            idempotency_key="key-123",
+        )
+        mock_async_client.devboxes.await_running.assert_called_once_with(
+            "dev_123",
+            polling_config=polling_config,
+        )
+
+    @pytest.mark.asyncio
+    async def test_resume_async(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
+        """Test resume_async method."""
+        mock_async_client.devboxes.resume = AsyncMock(return_value=devbox_view)
+
+        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        result = await devbox.resume_async(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
