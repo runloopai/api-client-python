@@ -42,6 +42,7 @@ from .scenario_builder import ScenarioBuilder
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
+from ..types import BlueprintView
 
 
 class DevboxOps:
@@ -262,8 +263,8 @@ class BlueprintOps:
         :return: Wrapper bound to the finished blueprint
         :rtype: Blueprint
         """
-        blueprint = self._client.blueprints.create_and_await_build_complete(
-            **params,
+        blueprint: BlueprintView = self._client.blueprints.create_and_await_build_complete(
+            **params,  # type: ignore[call-arg]
         )
         return Blueprint(self._client, blueprint.id)
 

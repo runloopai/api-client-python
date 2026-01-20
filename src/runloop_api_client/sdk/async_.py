@@ -43,6 +43,7 @@ from .async_storage_object import AsyncStorageObject
 from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
+from ..types import BlueprintView
 
 
 class AsyncDevboxOps:
@@ -264,8 +265,8 @@ class AsyncBlueprintOps:
         :return: Wrapper bound to the finished blueprint
         :rtype: AsyncBlueprint
         """
-        blueprint = await self._client.blueprints.create_and_await_build_complete(
-            **params,
+        blueprint: BlueprintView = await self._client.blueprints.create_and_await_build_complete(
+            **params,  # type: ignore[call-arg]
         )
         return AsyncBlueprint(self._client, blueprint.id)
 
