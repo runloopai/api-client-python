@@ -40,6 +40,7 @@ if TYPE_CHECKING:
         benchmarks,
         blueprints,
         repositories,
+        benchmark_runs,
         network_policies,
     )
     from .resources.agents import AgentsResource, AsyncAgentsResource
@@ -47,6 +48,7 @@ if TYPE_CHECKING:
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
+    from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
     from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
@@ -117,6 +119,12 @@ class Runloop(SyncAPIClient):
         from .resources.benchmarks import BenchmarksResource
 
         return BenchmarksResource(self)
+
+    @cached_property
+    def benchmark_runs(self) -> BenchmarkRunsResource:
+        from .resources.benchmark_runs import BenchmarkRunsResource
+
+        return BenchmarkRunsResource(self)
 
     @cached_property
     def agents(self) -> AgentsResource:
@@ -343,6 +351,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncBenchmarksResource(self)
 
     @cached_property
+    def benchmark_runs(self) -> AsyncBenchmarkRunsResource:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResource
+
+        return AsyncBenchmarkRunsResource(self)
+
+    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
@@ -516,6 +530,12 @@ class RunloopWithRawResponse:
         return BenchmarksResourceWithRawResponse(self._client.benchmarks)
 
     @cached_property
+    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithRawResponse:
+        from .resources.benchmark_runs import BenchmarkRunsResourceWithRawResponse
+
+        return BenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
@@ -575,6 +595,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithRawResponse
 
         return AsyncBenchmarksResourceWithRawResponse(self._client.benchmarks)
+
+    @cached_property
+    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithRawResponse:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithRawResponse
+
+        return AsyncBenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
@@ -638,6 +664,12 @@ class RunloopWithStreamedResponse:
         return BenchmarksResourceWithStreamingResponse(self._client.benchmarks)
 
     @cached_property
+    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithStreamingResponse:
+        from .resources.benchmark_runs import BenchmarkRunsResourceWithStreamingResponse
+
+        return BenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
         from .resources.agents import AgentsResourceWithStreamingResponse
 
@@ -697,6 +729,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithStreamingResponse
 
         return AsyncBenchmarksResourceWithStreamingResponse(self._client.benchmarks)
+
+    @cached_property
+    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithStreamingResponse:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithStreamingResponse
+
+        return AsyncBenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:

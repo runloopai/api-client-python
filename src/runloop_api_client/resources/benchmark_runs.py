@@ -2,51 +2,49 @@
 
 from __future__ import annotations
 
-import typing_extensions
 from typing_extensions import Literal
 
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from ..types import benchmark_run_list_params, benchmark_run_list_scenario_runs_params
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from .._utils import maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.benchmarks import run_list_params, run_list_scenario_runs_params
-from ...types.scenario_run_view import ScenarioRunView
-from ...types.benchmark_run_view import BenchmarkRunView
+from ..pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.scenario_run_view import ScenarioRunView
+from ..types.benchmark_run_view import BenchmarkRunView
 
-__all__ = ["RunsResource", "AsyncRunsResource"]
+__all__ = ["BenchmarkRunsResource", "AsyncBenchmarkRunsResource"]
 
 
-class RunsResource(SyncAPIResource):
+class BenchmarkRunsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> RunsResourceWithRawResponse:
+    def with_raw_response(self) -> BenchmarkRunsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return RunsResourceWithRawResponse(self)
+        return BenchmarkRunsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> RunsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> BenchmarkRunsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return RunsResourceWithStreamingResponse(self)
+        return BenchmarkRunsResourceWithStreamingResponse(self)
 
-    @typing_extensions.deprecated("deprecated")
     def retrieve(
         self,
         id: str,
@@ -73,14 +71,13 @@ class RunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/benchmarks/runs/{id}",
+            f"/v1/benchmark_runs/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
@@ -116,7 +113,7 @@ class RunsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/benchmarks/runs",
+            "/v1/benchmark_runs",
             page=SyncBenchmarkRunsCursorIDPage[BenchmarkRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -130,13 +127,12 @@ class RunsResource(SyncAPIResource):
                         "name": name,
                         "starting_after": starting_after,
                     },
-                    run_list_params.RunListParams,
+                    benchmark_run_list_params.BenchmarkRunListParams,
                 ),
             ),
             model=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def cancel(
         self,
         id: str,
@@ -166,7 +162,7 @@ class RunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmarks/runs/{id}/cancel",
+            f"/v1/benchmark_runs/{id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -177,7 +173,6 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def complete(
         self,
         id: str,
@@ -207,7 +202,7 @@ class RunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmarks/runs/{id}/complete",
+            f"/v1/benchmark_runs/{id}/complete",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -218,7 +213,6 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def list_scenario_runs(
         self,
         id: str,
@@ -254,7 +248,7 @@ class RunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmarks/runs/{id}/scenario_runs",
+            f"/v1/benchmark_runs/{id}/scenario_runs",
             page=SyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -267,34 +261,33 @@ class RunsResource(SyncAPIResource):
                         "starting_after": starting_after,
                         "state": state,
                     },
-                    run_list_scenario_runs_params.RunListScenarioRunsParams,
+                    benchmark_run_list_scenario_runs_params.BenchmarkRunListScenarioRunsParams,
                 ),
             ),
             model=ScenarioRunView,
         )
 
 
-class AsyncRunsResource(AsyncAPIResource):
+class AsyncBenchmarkRunsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncRunsResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncBenchmarkRunsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncRunsResourceWithRawResponse(self)
+        return AsyncBenchmarkRunsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncRunsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncBenchmarkRunsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return AsyncRunsResourceWithStreamingResponse(self)
+        return AsyncBenchmarkRunsResourceWithStreamingResponse(self)
 
-    @typing_extensions.deprecated("deprecated")
     async def retrieve(
         self,
         id: str,
@@ -321,14 +314,13 @@ class AsyncRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/benchmarks/runs/{id}",
+            f"/v1/benchmark_runs/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
@@ -364,7 +356,7 @@ class AsyncRunsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/benchmarks/runs",
+            "/v1/benchmark_runs",
             page=AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -378,13 +370,12 @@ class AsyncRunsResource(AsyncAPIResource):
                         "name": name,
                         "starting_after": starting_after,
                     },
-                    run_list_params.RunListParams,
+                    benchmark_run_list_params.BenchmarkRunListParams,
                 ),
             ),
             model=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     async def cancel(
         self,
         id: str,
@@ -414,7 +405,7 @@ class AsyncRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmarks/runs/{id}/cancel",
+            f"/v1/benchmark_runs/{id}/cancel",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -425,7 +416,6 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     async def complete(
         self,
         id: str,
@@ -455,7 +445,7 @@ class AsyncRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmarks/runs/{id}/complete",
+            f"/v1/benchmark_runs/{id}/complete",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -466,7 +456,6 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
-    @typing_extensions.deprecated("deprecated")
     def list_scenario_runs(
         self,
         id: str,
@@ -502,7 +491,7 @@ class AsyncRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmarks/runs/{id}/scenario_runs",
+            f"/v1/benchmark_runs/{id}/scenario_runs",
             page=AsyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -515,132 +504,92 @@ class AsyncRunsResource(AsyncAPIResource):
                         "starting_after": starting_after,
                         "state": state,
                     },
-                    run_list_scenario_runs_params.RunListScenarioRunsParams,
+                    benchmark_run_list_scenario_runs_params.BenchmarkRunListScenarioRunsParams,
                 ),
             ),
             model=ScenarioRunView,
         )
 
 
-class RunsResourceWithRawResponse:
-    def __init__(self, runs: RunsResource) -> None:
-        self._runs = runs
+class BenchmarkRunsResourceWithRawResponse:
+    def __init__(self, benchmark_runs: BenchmarkRunsResource) -> None:
+        self._benchmark_runs = benchmark_runs
 
-        self.retrieve = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                runs.retrieve,  # pyright: ignore[reportDeprecated],
-            )
+        self.retrieve = to_raw_response_wrapper(
+            benchmark_runs.retrieve,
         )
-        self.list = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                runs.list,  # pyright: ignore[reportDeprecated],
-            )
+        self.list = to_raw_response_wrapper(
+            benchmark_runs.list,
         )
-        self.cancel = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                runs.cancel,  # pyright: ignore[reportDeprecated],
-            )
+        self.cancel = to_raw_response_wrapper(
+            benchmark_runs.cancel,
         )
-        self.complete = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                runs.complete,  # pyright: ignore[reportDeprecated],
-            )
+        self.complete = to_raw_response_wrapper(
+            benchmark_runs.complete,
         )
-        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_scenario_runs = to_raw_response_wrapper(
+            benchmark_runs.list_scenario_runs,
         )
 
 
-class AsyncRunsResourceWithRawResponse:
-    def __init__(self, runs: AsyncRunsResource) -> None:
-        self._runs = runs
+class AsyncBenchmarkRunsResourceWithRawResponse:
+    def __init__(self, benchmark_runs: AsyncBenchmarkRunsResource) -> None:
+        self._benchmark_runs = benchmark_runs
 
-        self.retrieve = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                runs.retrieve,  # pyright: ignore[reportDeprecated],
-            )
+        self.retrieve = async_to_raw_response_wrapper(
+            benchmark_runs.retrieve,
         )
-        self.list = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                runs.list,  # pyright: ignore[reportDeprecated],
-            )
+        self.list = async_to_raw_response_wrapper(
+            benchmark_runs.list,
         )
-        self.cancel = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                runs.cancel,  # pyright: ignore[reportDeprecated],
-            )
+        self.cancel = async_to_raw_response_wrapper(
+            benchmark_runs.cancel,
         )
-        self.complete = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                runs.complete,  # pyright: ignore[reportDeprecated],
-            )
+        self.complete = async_to_raw_response_wrapper(
+            benchmark_runs.complete,
         )
-        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_scenario_runs = async_to_raw_response_wrapper(
+            benchmark_runs.list_scenario_runs,
         )
 
 
-class RunsResourceWithStreamingResponse:
-    def __init__(self, runs: RunsResource) -> None:
-        self._runs = runs
+class BenchmarkRunsResourceWithStreamingResponse:
+    def __init__(self, benchmark_runs: BenchmarkRunsResource) -> None:
+        self._benchmark_runs = benchmark_runs
 
-        self.retrieve = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                runs.retrieve,  # pyright: ignore[reportDeprecated],
-            )
+        self.retrieve = to_streamed_response_wrapper(
+            benchmark_runs.retrieve,
         )
-        self.list = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                runs.list,  # pyright: ignore[reportDeprecated],
-            )
+        self.list = to_streamed_response_wrapper(
+            benchmark_runs.list,
         )
-        self.cancel = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                runs.cancel,  # pyright: ignore[reportDeprecated],
-            )
+        self.cancel = to_streamed_response_wrapper(
+            benchmark_runs.cancel,
         )
-        self.complete = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                runs.complete,  # pyright: ignore[reportDeprecated],
-            )
+        self.complete = to_streamed_response_wrapper(
+            benchmark_runs.complete,
         )
-        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_scenario_runs = to_streamed_response_wrapper(
+            benchmark_runs.list_scenario_runs,
         )
 
 
-class AsyncRunsResourceWithStreamingResponse:
-    def __init__(self, runs: AsyncRunsResource) -> None:
-        self._runs = runs
+class AsyncBenchmarkRunsResourceWithStreamingResponse:
+    def __init__(self, benchmark_runs: AsyncBenchmarkRunsResource) -> None:
+        self._benchmark_runs = benchmark_runs
 
-        self.retrieve = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                runs.retrieve,  # pyright: ignore[reportDeprecated],
-            )
+        self.retrieve = async_to_streamed_response_wrapper(
+            benchmark_runs.retrieve,
         )
-        self.list = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                runs.list,  # pyright: ignore[reportDeprecated],
-            )
+        self.list = async_to_streamed_response_wrapper(
+            benchmark_runs.list,
         )
-        self.cancel = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                runs.cancel,  # pyright: ignore[reportDeprecated],
-            )
+        self.cancel = async_to_streamed_response_wrapper(
+            benchmark_runs.cancel,
         )
-        self.complete = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                runs.complete,  # pyright: ignore[reportDeprecated],
-            )
+        self.complete = async_to_streamed_response_wrapper(
+            benchmark_runs.complete,
         )
-        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
-            )
+        self.list_scenario_runs = async_to_streamed_response_wrapper(
+            benchmark_runs.list_scenario_runs,
         )
