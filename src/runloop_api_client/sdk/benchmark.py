@@ -107,6 +107,7 @@ class Benchmark:
             benchmark_id=self._id,
             **params,
         )
+        assert run_view.benchmark_id is not None, "benchmark_id should be set for runs created from a benchmark"
         return BenchmarkRun(self._client, run_view.id, run_view.benchmark_id)
 
     def add_scenarios(
@@ -157,8 +158,12 @@ class Benchmark:
         :return: List of benchmark runs
         :rtype: List[BenchmarkRun]
         """
-        page = self._client.benchmarks.runs.list(
+        page = self._client.benchmark_runs.list(
             benchmark_id=self._id,
             **params,
         )
-        return [BenchmarkRun(self._client, run.id, run.benchmark_id) for run in page.runs]
+        return [
+            BenchmarkRun(self._client, run.id, run.benchmark_id)
+            for run in page.runs
+            if run.benchmark_id is not None
+        ]

@@ -107,6 +107,7 @@ class AsyncBenchmark:
             benchmark_id=self._id,
             **params,
         )
+        assert run_view.benchmark_id is not None, "benchmark_id should be set for runs created from a benchmark"
         return AsyncBenchmarkRun(self._client, run_view.id, run_view.benchmark_id)
 
     async def add_scenarios(
@@ -157,8 +158,12 @@ class AsyncBenchmark:
         :return: List of async benchmark runs
         :rtype: List[AsyncBenchmarkRun]
         """
-        page = await self._client.benchmarks.runs.list(
+        page = await self._client.benchmark_runs.list(
             benchmark_id=self._id,
             **params,
         )
-        return [AsyncBenchmarkRun(self._client, run.id, run.benchmark_id) for run in page.runs]
+        return [
+            AsyncBenchmarkRun(self._client, run.id, run.benchmark_id)
+            for run in page.runs
+            if run.benchmark_id is not None
+        ]

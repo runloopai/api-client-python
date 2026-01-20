@@ -71,7 +71,7 @@ class BenchmarkRun:
         :return: Current benchmark run state info
         :rtype: BenchmarkRunView
         """
-        return self._client.benchmarks.runs.retrieve(
+        return self._client.benchmark_runs.retrieve(
             self._id,
             **options,
         )
@@ -88,7 +88,7 @@ class BenchmarkRun:
         :return: Updated benchmark run state
         :rtype: BenchmarkRunView
         """
-        return self._client.benchmarks.runs.cancel(
+        return self._client.benchmark_runs.cancel(
             self._id,
             **options,
         )
@@ -105,7 +105,7 @@ class BenchmarkRun:
         :return: Completed benchmark run state
         :rtype: BenchmarkRunView
         """
-        return self._client.benchmarks.runs.complete(
+        return self._client.benchmark_runs.complete(
             self._id,
             **options,
         )
@@ -120,7 +120,7 @@ class BenchmarkRun:
         :return: List of scenario run objects
         :rtype: List[ScenarioRun]
         """
-        page = self._client.benchmarks.runs.list_scenario_runs(
+        page = self._client.benchmark_runs.list_scenario_runs(
             self._id,
             **params,
         )
