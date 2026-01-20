@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Optional
+from typing import Dict, Mapping, Optional, cast
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -263,8 +263,11 @@ class BlueprintOps:
         :return: Wrapper bound to the finished blueprint
         :rtype: Blueprint
         """
-        blueprint: BlueprintView = self._client.blueprints.create_and_await_build_complete(
-            **params,  # type: ignore[call-arg]
+        blueprint = cast(
+            BlueprintView,
+            self._client.blueprints.create_and_await_build_complete(
+                **params,  # type: ignore[call-arg]
+            ),
         )
         return Blueprint(self._client, blueprint.id)
 

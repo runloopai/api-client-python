@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict, Mapping, Optional
+from typing import Dict, Mapping, Optional, cast
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -265,8 +265,11 @@ class AsyncBlueprintOps:
         :return: Wrapper bound to the finished blueprint
         :rtype: AsyncBlueprint
         """
-        blueprint: BlueprintView = await self._client.blueprints.create_and_await_build_complete(
-            **params,  # type: ignore[call-arg]
+        blueprint = cast(
+            BlueprintView,
+            await self._client.blueprints.create_and_await_build_complete(
+                **params,  # type: ignore[call-arg]
+            ),
         )
         return AsyncBlueprint(self._client, blueprint.id)
 
