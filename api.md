@@ -3,10 +3,12 @@
 ```python
 from runloop_api_client.types import (
     AfterIdle,
+    AgentMount,
     AgentSource,
     CodeMountParameters,
     LaunchParameters,
     Mount,
+    ObjectMount,
     RunProfile,
 )
 ```
@@ -20,6 +22,8 @@ from runloop_api_client.types import (
     BenchmarkCreateParameters,
     BenchmarkRunListView,
     BenchmarkRunView,
+    BenchmarkScenarioUpdateParameters,
+    BenchmarkUpdateParameters,
     BenchmarkView,
     ScenarioDefinitionListView,
     StartBenchmarkRunParameters,
@@ -35,6 +39,7 @@ Methods:
 - <code title="get /v1/benchmarks/{id}/definitions">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">definitions</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_definitions_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_definition_list_view.py">ScenarioDefinitionListView</a></code>
 - <code title="get /v1/benchmarks/list_public">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
 - <code title="post /v1/benchmarks/start_run">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/benchmark_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="post /v1/benchmarks/{id}/scenarios">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks/benchmarks.py">update_scenarios</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_update_scenarios_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
 
 ## Runs
 
@@ -45,6 +50,22 @@ Methods:
 - <code title="post /v1/benchmarks/runs/{id}/cancel">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="post /v1/benchmarks/runs/{id}/complete">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="get /v1/benchmarks/runs/{id}/scenario_runs">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmarks/run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
+
+# BenchmarkRuns
+
+Types:
+
+```python
+from runloop_api_client.types import BenchmarkRunListView, BenchmarkRunView, ScenarioRunListView
+```
+
+Methods:
+
+- <code title="get /v1/benchmark_runs/{id}">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="get /v1/benchmark_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">SyncBenchmarkRunsCursorIDPage[BenchmarkRunView]</a></code>
+- <code title="post /v1/benchmark_runs/{id}/cancel">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="post /v1/benchmark_runs/{id}/complete">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="get /v1/benchmark_runs/{id}/scenario_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
 
 # Agents
 
@@ -349,3 +370,24 @@ Methods:
 - <code title="post /v1/secrets/{name}">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">update</a>(name, \*\*<a href="src/runloop_api_client/types/secret_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
 - <code title="get /v1/secrets">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">list</a>(\*\*<a href="src/runloop_api_client/types/secret_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/secret_list_view.py">SecretListView</a></code>
 - <code title="post /v1/secrets/{name}/delete">client.secrets.<a href="./src/runloop_api_client/resources/secrets.py">delete</a>(name) -> <a href="./src/runloop_api_client/types/secret_view.py">SecretView</a></code>
+
+# NetworkPolicies
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    NetworkPolicyCreateParameters,
+    NetworkPolicyListView,
+    NetworkPolicyUpdateParameters,
+    NetworkPolicyView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/network-policies">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">create</a>(\*\*<a href="src/runloop_api_client/types/network_policy_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="get /v1/network-policies/{id}">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="post /v1/network-policies/{id}">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/network_policy_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+- <code title="get /v1/network-policies">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">list</a>(\*\*<a href="src/runloop_api_client/types/network_policy_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">SyncNetworkPoliciesCursorIDPage[NetworkPolicyView]</a></code>
+- <code title="post /v1/network-policies/{id}/delete">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>

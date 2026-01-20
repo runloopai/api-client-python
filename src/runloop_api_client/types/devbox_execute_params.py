@@ -24,9 +24,9 @@ class DevboxExecuteParams(TypedDict, total=False):
     """Last n lines of standard error / standard out to return (default: 100)"""
 
     optimistic_timeout: Optional[int]
-    """Timeout in seconds to wait for command completion.
+    """Timeout in seconds to wait for command completion, up to 25 seconds.
 
-    Operation is not killed. Max is 600 seconds.
+    Defaults to 25 seconds. Operation is not killed.
     """
 
     shell_name: Optional[str]

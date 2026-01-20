@@ -1,5 +1,55 @@
 # Changelog
 
+## 1.3.0-alpha (2026-01-20)
+
+Full Changelog: [v1.2.0...v1.3.0-alpha](https://github.com/runloopai/api-client-python/compare/v1.2.0...v1.3.0-alpha)
+
+### ⚠ BREAKING CHANGES
+
+* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710))
+
+### Features
+
+* **benchmarks:** add `update_scenarios` method to benchmarks resource ([71ec221](https://github.com/runloopai/api-client-python/commit/71ec221f1d0cad7aac33c0299d3f8b1aa97d0741))
+* **blueprint:** Set cilium network policy on blueprint build ([#7006](https://github.com/runloopai/api-client-python/issues/7006)) ([95c62ac](https://github.com/runloopai/api-client-python/commit/95c62ac1e2689acdd83cac2dc85f1a639490d982))
+* **client:** add support for binary request streaming ([d6c2200](https://github.com/runloopai/api-client-python/commit/d6c22008f7cd8a6a07055f29bcb4eca4914ec5e0))
+* **devbox:** added stdin streaming endpoint ([83ae56a](https://github.com/runloopai/api-client-python/commit/83ae56a22a9c1d4528719321b9565731532191f2))
+* **devbox:** remove this one ([91854d5](https://github.com/runloopai/api-client-python/commit/91854d5d0db2d89bd0e787c5f56cf84a5ea5a89b))
+* **network-policy:** add network policies to api ([1d98bb1](https://github.com/runloopai/api-client-python/commit/1d98bb1dbcaf428e36cfc099282c71312f838d8a))
+* **scenarios:** add scenario builder to sdk ([#706](https://github.com/runloopai/api-client-python/issues/706)) ([2d41a15](https://github.com/runloopai/api-client-python/commit/2d41a15b4455ed8d7f6a8063cf19b82d51edeef8))
+* **sdk:** add Benchmark and AsyncBenchmark classes ([#714](https://github.com/runloopai/api-client-python/issues/714)) ([8909d8a](https://github.com/runloopai/api-client-python/commit/8909d8aabfc2f1c80ff74b636225b42cac6725ff))
+* **sdk:** add BenchmarkOps and AsyncBenchmarkOps to SDK ([#716](https://github.com/runloopai/api-client-python/issues/716)) ([9b434d9](https://github.com/runloopai/api-client-python/commit/9b434d9bc7ebdcea2b156689403d853a932f0d9e))
+* **sdk:** add BenchmarkRun and AsyncBenchmarkRun classes ([#712](https://github.com/runloopai/api-client-python/issues/712)) ([6aa83e2](https://github.com/runloopai/api-client-python/commit/6aa83e2a6c8a55694435bd2b707340770f0a326a))
+
+
+### Bug Fixes
+
+* **benchmarks:** `update()` for benchmarks and scenarios replaces all provided fields and does not modify unspecified fields ([#6702](https://github.com/runloopai/api-client-python/issues/6702)) ([cfd04b6](https://github.com/runloopai/api-client-python/commit/cfd04b6e7781534fd0e775e1b00793ad53814a47))
+* **types:** allow pyright to infer TypedDict types within SequenceNotStr ([3241717](https://github.com/runloopai/api-client-python/commit/32417177128b5f5d90b852a5460fe6823198cf9b))
+* use async_to_httpx_files in patch method ([88f8fb9](https://github.com/runloopai/api-client-python/commit/88f8fb92e1d48ff6f95833a7ee1e376bef76e0e1))
+
+
+### Chores
+
+* add documentation url to pypi project page ([#711](https://github.com/runloopai/api-client-python/issues/711)) ([7afb327](https://github.com/runloopai/api-client-python/commit/7afb32731842ebee4f479837959ccac856bd5e85))
+* add missing docstrings ([a198632](https://github.com/runloopai/api-client-python/commit/a198632f6a3936bcf5b5b4f4e6324461c4853893))
+* **devbox:** Remove network policy from devbox view; use launch params instead ([#7025](https://github.com/runloopai/api-client-python/issues/7025)) ([d53af14](https://github.com/runloopai/api-client-python/commit/d53af14f6f55144859c8257d936a115989563b6d))
+* **internal:** add `--fix` argument to lint script ([c381201](https://github.com/runloopai/api-client-python/commit/c381201ca37e7e438413c33e6be521fc43fbc762))
+* **internal:** add missing files argument to base client ([b7065e2](https://github.com/runloopai/api-client-python/commit/b7065e204d00f853bcac75637680dc198346a804))
+* **internal:** codegen related update ([75fecdf](https://github.com/runloopai/api-client-python/commit/75fecdf043eb67baa1bf13dbd9f5fabd7042c3f4))
+* **internal:** update `actions/checkout` version ([7a57030](https://github.com/runloopai/api-client-python/commit/7a570300fe84dbd9e057c606bb0702b1e6ffe419))
+* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710)) ([fb3cc3d](https://github.com/runloopai/api-client-python/commit/fb3cc3d354d4279542cd20f44857f2ec28be7082))
+
+
+### Documentation
+
+* reformat sidebar and index pages to be more transparent, add favicon to browser tab ([#715](https://github.com/runloopai/api-client-python/issues/715)) ([1161b8f](https://github.com/runloopai/api-client-python/commit/1161b8fbe8d78dc572e0310da009e1bcc7dec36f))
+
+
+### Refactors
+
+* **benchmark:** Deprecate /benchmark/{id}/runs in favor of /benchmark_runs ([#7019](https://github.com/runloopai/api-client-python/issues/7019)) ([793507a](https://github.com/runloopai/api-client-python/commit/793507a2508945d80f670550493773cc89c43752))
+
 ## 1.2.0 (2025-12-09)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/runloopai/api-client-python/compare/v1.1.0...v1.2.0)

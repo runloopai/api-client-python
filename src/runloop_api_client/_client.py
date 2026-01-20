@@ -31,12 +31,25 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import agents, objects, secrets, devboxes, scenarios, benchmarks, blueprints, repositories
+    from .resources import (
+        agents,
+        objects,
+        secrets,
+        devboxes,
+        scenarios,
+        benchmarks,
+        blueprints,
+        repositories,
+        benchmark_runs,
+        network_policies,
+    )
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
+    from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
+    from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
     from .resources.benchmarks.benchmarks import BenchmarksResource, AsyncBenchmarksResource
@@ -108,6 +121,12 @@ class Runloop(SyncAPIClient):
         return BenchmarksResource(self)
 
     @cached_property
+    def benchmark_runs(self) -> BenchmarkRunsResource:
+        from .resources.benchmark_runs import BenchmarkRunsResource
+
+        return BenchmarkRunsResource(self)
+
+    @cached_property
     def agents(self) -> AgentsResource:
         from .resources.agents import AgentsResource
 
@@ -148,6 +167,12 @@ class Runloop(SyncAPIClient):
         from .resources.secrets import SecretsResource
 
         return SecretsResource(self)
+
+    @cached_property
+    def network_policies(self) -> NetworkPoliciesResource:
+        from .resources.network_policies import NetworkPoliciesResource
+
+        return NetworkPoliciesResource(self)
 
     @cached_property
     def with_raw_response(self) -> RunloopWithRawResponse:
@@ -326,6 +351,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncBenchmarksResource(self)
 
     @cached_property
+    def benchmark_runs(self) -> AsyncBenchmarkRunsResource:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResource
+
+        return AsyncBenchmarkRunsResource(self)
+
+    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
@@ -366,6 +397,12 @@ class AsyncRunloop(AsyncAPIClient):
         from .resources.secrets import AsyncSecretsResource
 
         return AsyncSecretsResource(self)
+
+    @cached_property
+    def network_policies(self) -> AsyncNetworkPoliciesResource:
+        from .resources.network_policies import AsyncNetworkPoliciesResource
+
+        return AsyncNetworkPoliciesResource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncRunloopWithRawResponse:
@@ -493,6 +530,12 @@ class RunloopWithRawResponse:
         return BenchmarksResourceWithRawResponse(self._client.benchmarks)
 
     @cached_property
+    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithRawResponse:
+        from .resources.benchmark_runs import BenchmarkRunsResourceWithRawResponse
+
+        return BenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
+
+    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
@@ -534,6 +577,12 @@ class RunloopWithRawResponse:
 
         return SecretsResourceWithRawResponse(self._client.secrets)
 
+    @cached_property
+    def network_policies(self) -> network_policies.NetworkPoliciesResourceWithRawResponse:
+        from .resources.network_policies import NetworkPoliciesResourceWithRawResponse
+
+        return NetworkPoliciesResourceWithRawResponse(self._client.network_policies)
+
 
 class AsyncRunloopWithRawResponse:
     _client: AsyncRunloop
@@ -546,6 +595,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithRawResponse
 
         return AsyncBenchmarksResourceWithRawResponse(self._client.benchmarks)
+
+    @cached_property
+    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithRawResponse:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithRawResponse
+
+        return AsyncBenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
@@ -589,6 +644,12 @@ class AsyncRunloopWithRawResponse:
 
         return AsyncSecretsResourceWithRawResponse(self._client.secrets)
 
+    @cached_property
+    def network_policies(self) -> network_policies.AsyncNetworkPoliciesResourceWithRawResponse:
+        from .resources.network_policies import AsyncNetworkPoliciesResourceWithRawResponse
+
+        return AsyncNetworkPoliciesResourceWithRawResponse(self._client.network_policies)
+
 
 class RunloopWithStreamedResponse:
     _client: Runloop
@@ -601,6 +662,12 @@ class RunloopWithStreamedResponse:
         from .resources.benchmarks import BenchmarksResourceWithStreamingResponse
 
         return BenchmarksResourceWithStreamingResponse(self._client.benchmarks)
+
+    @cached_property
+    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithStreamingResponse:
+        from .resources.benchmark_runs import BenchmarkRunsResourceWithStreamingResponse
+
+        return BenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
 
     @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
@@ -644,6 +711,12 @@ class RunloopWithStreamedResponse:
 
         return SecretsResourceWithStreamingResponse(self._client.secrets)
 
+    @cached_property
+    def network_policies(self) -> network_policies.NetworkPoliciesResourceWithStreamingResponse:
+        from .resources.network_policies import NetworkPoliciesResourceWithStreamingResponse
+
+        return NetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
+
 
 class AsyncRunloopWithStreamedResponse:
     _client: AsyncRunloop
@@ -656,6 +729,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.benchmarks import AsyncBenchmarksResourceWithStreamingResponse
 
         return AsyncBenchmarksResourceWithStreamingResponse(self._client.benchmarks)
+
+    @cached_property
+    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithStreamingResponse:
+        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithStreamingResponse
+
+        return AsyncBenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
 
     @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
@@ -698,6 +777,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.secrets import AsyncSecretsResourceWithStreamingResponse
 
         return AsyncSecretsResourceWithStreamingResponse(self._client.secrets)
+
+    @cached_property
+    def network_policies(self) -> network_policies.AsyncNetworkPoliciesResourceWithStreamingResponse:
+        from .resources.network_policies import AsyncNetworkPoliciesResourceWithStreamingResponse
+
+        return AsyncNetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
 
 
 Client = Runloop

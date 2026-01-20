@@ -10,6 +10,8 @@ __all__ = ["RepositoryInspectionDetails", "WorkflowContexts", "WorkflowContextsA
 
 
 class WorkflowContextsActionsContext(BaseModel):
+    """Details about actions processing for this workflow."""
+
     actions_skipped_unnecessary: List[str]
     """
     Actions that were skipped because they were unnecessary (e.g., upload
@@ -26,6 +28,10 @@ class WorkflowContextsActionsContext(BaseModel):
 
 
 class WorkflowContexts(BaseModel):
+    """
+    Workflow context containing file name and details about actions processing during inspection.
+    """
+
     actions_context: WorkflowContextsActionsContext
     """Details about actions processing for this workflow."""
 

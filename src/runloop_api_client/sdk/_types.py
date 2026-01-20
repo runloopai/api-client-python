@@ -1,32 +1,41 @@
 from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
+from ..types import (
+    InputContext,
+    ScenarioView,
+    AgentListParams,
+    DevboxListParams,
+    ObjectListParams,
+    AgentCreateParams,
+    DevboxCreateParams,
+    ObjectCreateParams,
+    ScenarioListParams,
+    BenchmarkListParams,
+    BlueprintListParams,
+    ObjectDownloadParams,
+    ScenarioUpdateParams,
+    BenchmarkCreateParams,
+    BenchmarkUpdateParams,
+    BlueprintCreateParams,
+    DevboxUploadFileParams,
+    DevboxCreateTunnelParams,
+    DevboxDownloadFileParams,
+    DevboxRemoveTunnelParams,
+    DevboxSnapshotDiskParams,
+    DevboxReadFileContentsParams,
+    DevboxWriteFileContentsParams,
+)
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
-from ..types.input_context import InputContext
-from ..types.scenario_view import ScenarioView
-from ..types.agent_list_params import AgentListParams
-from ..types.devbox_list_params import DevboxListParams
-from ..types.object_list_params import ObjectListParams
-from ..types.agent_create_params import AgentCreateParams
-from ..types.devbox_create_params import DevboxCreateParams, DevboxBaseCreateParams
-from ..types.object_create_params import ObjectCreateParams
-from ..types.scenario_list_params import ScenarioListParams
-from ..types.blueprint_list_params import BlueprintListParams
-from ..types.object_download_params import ObjectDownloadParams
-from ..types.scenario_update_params import ScenarioUpdateParams
-from ..types.blueprint_create_params import BlueprintCreateParams
-from ..types.devbox_upload_file_params import DevboxUploadFileParams
+from ..types.benchmarks import RunListScenarioRunsParams
+from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
-from ..types.devbox_create_tunnel_params import DevboxCreateTunnelParams
-from ..types.devbox_download_file_params import DevboxDownloadFileParams
+from ..types.benchmark_start_run_params import BenchmarkSelfStartRunParams
+from ..types.benchmarks.run_list_params import RunSelfListParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
-from ..types.devbox_remove_tunnel_params import DevboxRemoveTunnelParams
-from ..types.devbox_snapshot_disk_params import DevboxSnapshotDiskParams
-from ..types.devbox_read_file_contents_params import DevboxReadFileContentsParams
-from ..types.devbox_write_file_contents_params import DevboxWriteFileContentsParams
 
 LogCallback = Callable[[str], None]
 
@@ -66,7 +75,7 @@ class PollingRequestOptions(BaseRequestOptions, total=False):
     """Configuration for polling behavior"""
 
 
-class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):
+class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):  # type: ignore[misc]
     pass
 
 
@@ -203,3 +212,27 @@ class ScenarioPreview(ScenarioView):
 
     input_context: InputContextPreview  # type: ignore[assignment]
     """The input context for the Scenario."""
+
+
+class SDKBenchmarkCreateParams(BenchmarkCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKBenchmarkListParams(BenchmarkListParams, BaseRequestOptions):
+    pass
+
+
+class SDKBenchmarkUpdateParams(BenchmarkUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKBenchmarkStartRunParams(BenchmarkSelfStartRunParams, LongRequestOptions):
+    pass
+
+
+class SDKBenchmarkListRunsParams(RunSelfListParams, BaseRequestOptions):
+    pass
+
+
+class SDKBenchmarkRunListScenarioRunsParams(RunListScenarioRunsParams, BaseRequestOptions):
+    pass

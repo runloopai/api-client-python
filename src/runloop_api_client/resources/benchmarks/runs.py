@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing_extensions import Literal
 
 import httpx
@@ -45,6 +46,7 @@ class RunsResource(SyncAPIResource):
         """
         return RunsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def retrieve(
         self,
         id: str,
@@ -78,11 +80,13 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
         benchmark_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -97,7 +101,9 @@ class RunsResource(SyncAPIResource):
         Args:
           benchmark_id: The Benchmark ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -121,6 +127,7 @@ class RunsResource(SyncAPIResource):
                     {
                         "benchmark_id": benchmark_id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     run_list_params.RunListParams,
@@ -129,6 +136,7 @@ class RunsResource(SyncAPIResource):
             model=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def cancel(
         self,
         id: str,
@@ -169,6 +177,7 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def complete(
         self,
         id: str,
@@ -209,6 +218,7 @@ class RunsResource(SyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def list_scenario_runs(
         self,
         id: str,
@@ -227,7 +237,7 @@ class RunsResource(SyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -284,6 +294,7 @@ class AsyncRunsResource(AsyncAPIResource):
         """
         return AsyncRunsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     async def retrieve(
         self,
         id: str,
@@ -317,11 +328,13 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
         benchmark_id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -336,7 +349,9 @@ class AsyncRunsResource(AsyncAPIResource):
         Args:
           benchmark_id: The Benchmark ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -360,6 +375,7 @@ class AsyncRunsResource(AsyncAPIResource):
                     {
                         "benchmark_id": benchmark_id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
                     run_list_params.RunListParams,
@@ -368,6 +384,7 @@ class AsyncRunsResource(AsyncAPIResource):
             model=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def cancel(
         self,
         id: str,
@@ -408,6 +425,7 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def complete(
         self,
         id: str,
@@ -448,6 +466,7 @@ class AsyncRunsResource(AsyncAPIResource):
             cast_to=BenchmarkRunView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def list_scenario_runs(
         self,
         id: str,
@@ -466,7 +485,7 @@ class AsyncRunsResource(AsyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -507,20 +526,30 @@ class RunsResourceWithRawResponse:
     def __init__(self, runs: RunsResource) -> None:
         self._runs = runs
 
-        self.retrieve = to_raw_response_wrapper(
-            runs.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                runs.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list = to_raw_response_wrapper(
-            runs.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                runs.list,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.cancel = to_raw_response_wrapper(
-            runs.cancel,
+        self.cancel = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                runs.cancel,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.complete = to_raw_response_wrapper(
-            runs.complete,
+        self.complete = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                runs.complete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list_scenario_runs = to_raw_response_wrapper(
-            runs.list_scenario_runs,
+        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -528,20 +557,30 @@ class AsyncRunsResourceWithRawResponse:
     def __init__(self, runs: AsyncRunsResource) -> None:
         self._runs = runs
 
-        self.retrieve = async_to_raw_response_wrapper(
-            runs.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                runs.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list = async_to_raw_response_wrapper(
-            runs.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                runs.list,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.cancel = async_to_raw_response_wrapper(
-            runs.cancel,
+        self.cancel = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                runs.cancel,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.complete = async_to_raw_response_wrapper(
-            runs.complete,
+        self.complete = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                runs.complete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list_scenario_runs = async_to_raw_response_wrapper(
-            runs.list_scenario_runs,
+        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -549,20 +588,30 @@ class RunsResourceWithStreamingResponse:
     def __init__(self, runs: RunsResource) -> None:
         self._runs = runs
 
-        self.retrieve = to_streamed_response_wrapper(
-            runs.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                runs.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list = to_streamed_response_wrapper(
-            runs.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                runs.list,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.cancel = to_streamed_response_wrapper(
-            runs.cancel,
+        self.cancel = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                runs.cancel,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.complete = to_streamed_response_wrapper(
-            runs.complete,
+        self.complete = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                runs.complete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list_scenario_runs = to_streamed_response_wrapper(
-            runs.list_scenario_runs,
+        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -570,18 +619,28 @@ class AsyncRunsResourceWithStreamingResponse:
     def __init__(self, runs: AsyncRunsResource) -> None:
         self._runs = runs
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            runs.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                runs.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list = async_to_streamed_response_wrapper(
-            runs.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                runs.list,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.cancel = async_to_streamed_response_wrapper(
-            runs.cancel,
+        self.cancel = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                runs.cancel,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.complete = async_to_streamed_response_wrapper(
-            runs.complete,
+        self.complete = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                runs.complete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.list_scenario_runs = async_to_streamed_response_wrapper(
-            runs.list_scenario_runs,
+        self.list_scenario_runs = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                runs.list_scenario_runs,  # pyright: ignore[reportDeprecated],
+            )
         )

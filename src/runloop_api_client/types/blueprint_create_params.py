@@ -51,6 +51,15 @@ class BlueprintCreateParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
     """(Optional) User defined metadata for the Blueprint."""
 
+    network_policy_id: Optional[str]
+    """(Optional) ID of the network policy to apply during blueprint build.
+
+    This restricts network access during the build process. This does not affect
+    devboxes created from this blueprint; if you want devboxes created from this
+    blueprint to inherit the network policy, set the network_policy_id on the
+    blueprint launch parameters.
+    """
+
     secrets: Optional[Dict[str, str]]
     """(Optional) Map of mount IDs/environment variable names to secret names.
 
@@ -71,6 +80,8 @@ class BlueprintCreateParams(TypedDict, total=False):
 
 
 class BuildContext(TypedDict, total=False):
+    """A build context backed by an Object."""
+
     object_id: Required[str]
     """The ID of an object, whose contents are to be used as a build context."""
 
@@ -78,6 +89,8 @@ class BuildContext(TypedDict, total=False):
 
 
 class ServiceCredentials(TypedDict, total=False):
+    """The credentials of the container service."""
+
     password: Required[str]
     """The password of the container service."""
 

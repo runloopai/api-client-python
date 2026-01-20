@@ -62,6 +62,7 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -70,6 +71,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -183,6 +185,7 @@ class TestBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -273,6 +276,7 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -281,6 +285,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
@@ -323,6 +328,7 @@ class TestBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(SyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -424,6 +430,7 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -432,6 +439,7 @@ class TestBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -520,6 +528,7 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -528,6 +537,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {
@@ -641,6 +651,7 @@ class TestAsyncBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -731,6 +742,7 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -739,6 +751,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             system_setup_commands=["string"],
         )
@@ -781,6 +794,7 @@ class TestAsyncBlueprints:
             limit=0,
             name="name",
             starting_after="starting_after",
+            status="status",
         )
         assert_matches_type(AsyncBlueprintsCursorIDPage[BlueprintView], blueprint, path=["response"])
 
@@ -882,6 +896,7 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -890,6 +905,7 @@ class TestAsyncBlueprints:
                 },
             },
             metadata={"foo": "string"},
+            network_policy_id="network_policy_id",
             secrets={"foo": "string"},
             services=[
                 {

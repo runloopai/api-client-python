@@ -15,19 +15,19 @@ class TestSnapshot:
 
     def test_init(self, mock_client: Mock) -> None:
         """Test Snapshot initialization."""
-        snapshot = Snapshot(mock_client, "snap_123")
-        assert snapshot.id == "snap_123"
+        snapshot = Snapshot(mock_client, "snp_123")
+        assert snapshot.id == "snp_123"
 
     def test_repr(self, mock_client: Mock) -> None:
         """Test Snapshot string representation."""
-        snapshot = Snapshot(mock_client, "snap_123")
-        assert repr(snapshot) == "<Snapshot id='snap_123'>"
+        snapshot = Snapshot(mock_client, "snp_123")
+        assert repr(snapshot) == "<Snapshot id='snp_123'>"
 
     def test_get_info(self, mock_client: Mock, snapshot_view: MockSnapshotView) -> None:
         """Test get_info method."""
         mock_client.devboxes.disk_snapshots.query_status.return_value = snapshot_view
 
-        snapshot = Snapshot(mock_client, "snap_123")
+        snapshot = Snapshot(mock_client, "snp_123")
         result = snapshot.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -37,7 +37,7 @@ class TestSnapshot:
 
         assert result == snapshot_view
         mock_client.devboxes.disk_snapshots.query_status.assert_called_once_with(
-            "snap_123",
+            "snp_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -46,10 +46,10 @@ class TestSnapshot:
 
     def test_update(self, mock_client: Mock) -> None:
         """Test update method."""
-        updated_snapshot = SimpleNamespace(id="snap_123", name="updated-name")
+        updated_snapshot = SimpleNamespace(id="snp_123", name="updated-name")
         mock_client.devboxes.disk_snapshots.update.return_value = updated_snapshot
 
-        snapshot = Snapshot(mock_client, "snap_123")
+        snapshot = Snapshot(mock_client, "snp_123")
         result = snapshot.update(
             commit_message="Update message",
             metadata={"key": "value"},
@@ -63,7 +63,7 @@ class TestSnapshot:
 
         assert result == updated_snapshot
         mock_client.devboxes.disk_snapshots.update.assert_called_once_with(
-            "snap_123",
+            "snp_123",
             commit_message="Update message",
             metadata={"key": "value"},
             name="updated-name",
@@ -78,7 +78,7 @@ class TestSnapshot:
         """Test delete method."""
         mock_client.devboxes.disk_snapshots.delete.return_value = object()
 
-        snapshot = Snapshot(mock_client, "snap_123")
+        snapshot = Snapshot(mock_client, "snp_123")
         result = snapshot.delete(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -89,7 +89,7 @@ class TestSnapshot:
 
         assert result is not None  # Verify return value is propagated
         mock_client.devboxes.disk_snapshots.delete.assert_called_once_with(
-            "snap_123",
+            "snp_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -102,7 +102,7 @@ class TestSnapshot:
         mock_client.devboxes.disk_snapshots.await_completed.return_value = snapshot_view
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        snapshot = Snapshot(mock_client, "snap_123")
+        snapshot = Snapshot(mock_client, "snp_123")
         result = snapshot.await_completed(
             polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
@@ -113,7 +113,7 @@ class TestSnapshot:
 
         assert result == snapshot_view
         mock_client.devboxes.disk_snapshots.await_completed.assert_called_once_with(
-            "snap_123",
+            "snp_123",
             polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -125,7 +125,7 @@ class TestSnapshot:
         """Test create_devbox method."""
         mock_client.devboxes.create_and_await_running.return_value = devbox_view
 
-        snapshot = Snapshot(mock_client, "snap_123")
+        snapshot = Snapshot(mock_client, "snp_123")
         devbox = snapshot.create_devbox(
             name="test-devbox",
             metadata={"key": "value"},
@@ -133,9 +133,9 @@ class TestSnapshot:
             extra_headers={"X-Custom": "value"},
         )
 
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         mock_client.devboxes.create_and_await_running.assert_called_once()
         call_kwargs = mock_client.devboxes.create_and_await_running.call_args[1]
-        assert call_kwargs["snapshot_id"] == "snap_123"
+        assert call_kwargs["snapshot_id"] == "snp_123"
         assert call_kwargs["name"] == "test-devbox"
         assert call_kwargs["metadata"] == {"key": "value"}

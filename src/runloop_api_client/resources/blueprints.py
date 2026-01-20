@@ -136,6 +136,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -179,6 +180,12 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process. This does not affect devboxes
+              created from this blueprint; if you want devboxes created from this blueprint to
+              inherit the network policy, set the network_policy_id on the blueprint launch
+              parameters.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -218,6 +225,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -389,6 +397,7 @@ class BlueprintsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -400,11 +409,13 @@ class BlueprintsResource(SyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -427,6 +438,7 @@ class BlueprintsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_params.BlueprintListParams,
                 ),
@@ -485,6 +497,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -512,6 +525,9 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               can be used as environment variables in system_setup_commands. Example:
               {"GITHUB_TOKEN": "gh_secret"} makes 'gh_secret' available as GITHUB_TOKEN.
@@ -537,6 +553,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "system_setup_commands": system_setup_commands,
                 },
@@ -558,6 +575,7 @@ class BlueprintsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -569,11 +587,13 @@ class BlueprintsResource(SyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -596,6 +616,7 @@ class BlueprintsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_public_params.BlueprintListPublicParams,
                 ),
@@ -649,6 +670,7 @@ class BlueprintsResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -690,6 +712,12 @@ class BlueprintsResource(SyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process. This does not affect devboxes
+              created from this blueprint; if you want devboxes created from this blueprint to
+              inherit the network policy, set the network_policy_id on the blueprint launch
+              parameters.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -725,6 +753,7 @@ class BlueprintsResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -775,6 +804,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -818,6 +848,12 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process. This does not affect devboxes
+              created from this blueprint; if you want devboxes created from this blueprint to
+              inherit the network policy, set the network_policy_id on the blueprint launch
+              parameters.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -857,6 +893,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,
@@ -1028,6 +1065,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1039,11 +1077,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1066,6 +1106,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_params.BlueprintListParams,
                 ),
@@ -1124,6 +1165,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -1151,6 +1193,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               can be used as environment variables in system_setup_commands. Example:
               {"GITHUB_TOKEN": "gh_secret"} makes 'gh_secret' available as GITHUB_TOKEN.
@@ -1176,6 +1221,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "system_setup_commands": system_setup_commands,
                 },
@@ -1197,6 +1243,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1208,11 +1255,13 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          status: Filter by build status (queued, provisioning, building, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1235,6 +1284,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "status": status,
                     },
                     blueprint_list_public_params.BlueprintListPublicParams,
                 ),
@@ -1288,6 +1338,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
+        network_policy_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         services: Optional[Iterable[blueprint_preview_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -1329,6 +1380,12 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
+          network_policy_id: (Optional) ID of the network policy to apply during blueprint build. This
+              restricts network access during the build process. This does not affect devboxes
+              created from this blueprint; if you want devboxes created from this blueprint to
+              inherit the network policy, set the network_policy_id on the blueprint launch
+              parameters.
+
           secrets: (Optional) Map of mount IDs/environment variable names to secret names. Secrets
               will be available to commands during the build. Secrets are NOT stored in the
               blueprint image. Example: {"DB_PASS": "DATABASE_PASSWORD"} makes the secret
@@ -1364,6 +1421,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
+                    "network_policy_id": network_policy_id,
                     "secrets": secrets,
                     "services": services,
                     "system_setup_commands": system_setup_commands,

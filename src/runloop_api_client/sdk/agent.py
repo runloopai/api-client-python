@@ -64,9 +64,7 @@ class Agent:
         :return: Agent details
         :rtype: AgentView
         """
-        if self._agent_view is None:
-            self._agent_view = self._client.agents.retrieve(
-                self._id,
-                **options,
-            )
-        return self._agent_view
+        return self._client.agents.retrieve(
+            self._id,
+            **options,
+        )

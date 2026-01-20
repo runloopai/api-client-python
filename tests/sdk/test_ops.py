@@ -17,6 +17,7 @@ from tests.sdk.conftest import (
     MockScorerView,
     MockScenarioView,
     MockSnapshotView,
+    MockBenchmarkView,
     MockBlueprintView,
     create_mock_httpx_response,
 )
@@ -27,12 +28,14 @@ from runloop_api_client.sdk import (
     AgentOps,
     Scenario,
     Snapshot,
+    Benchmark,
     Blueprint,
     DevboxOps,
     ScorerOps,
     RunloopSDK,
     ScenarioOps,
     SnapshotOps,
+    BenchmarkOps,
     BlueprintOps,
     StorageObject,
     StorageObjectOps,
@@ -55,7 +58,7 @@ class TestDevboxOps:
         )
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         mock_client.devboxes.create_and_await_running.assert_called_once()
 
     def test_create_from_blueprint_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
@@ -64,15 +67,15 @@ class TestDevboxOps:
 
         ops = DevboxOps(mock_client)
         devbox = ops.create_from_blueprint_id(
-            "bp_123",
+            "bpt_123",
             name="test-devbox",
             metadata={"key": "value"},
         )
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
+        assert devbox.id == "dbx_123"
         call_kwargs = mock_client.devboxes.create_and_await_running.call_args[1]
-        assert call_kwargs["blueprint_id"] == "bp_123"
+        assert call_kwargs["blueprint_id"] == "bpt_123"
 
     def test_create_from_blueprint_name(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test create_from_blueprint_name method."""
@@ -94,24 +97,24 @@ class TestDevboxOps:
 
         ops = DevboxOps(mock_client)
         devbox = ops.create_from_snapshot(
-            "snap_123",
+            "snp_123",
             name="test-devbox",
         )
 
         assert isinstance(devbox, Devbox)
         call_kwargs = mock_client.devboxes.create_and_await_running.call_args[1]
-        assert call_kwargs["snapshot_id"] == "snap_123"
+        assert call_kwargs["snapshot_id"] == "snp_123"
 
     def test_from_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test from_id method waits for running."""
         mock_client.devboxes.await_running.return_value = devbox_view
 
         ops = DevboxOps(mock_client)
-        devbox = ops.from_id("dev_123")
+        devbox = ops.from_id("dbx_123")
 
         assert isinstance(devbox, Devbox)
-        assert devbox.id == "dev_123"
-        mock_client.devboxes.await_running.assert_called_once_with("dev_123")
+        assert devbox.id == "dbx_123"
+        mock_client.devboxes.await_running.assert_called_once_with("dbx_123")
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -138,7 +141,7 @@ class TestDevboxOps:
 
         assert len(devboxes) == 1
         assert isinstance(devboxes[0], Devbox)
-        assert devboxes[0].id == "dev_123"
+        assert devboxes[0].id == "dbx_123"
         mock_client.devboxes.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -168,7 +171,7 @@ class TestSnapshotOps:
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
         ops = SnapshotOps(mock_client)
-        snapshots = ops.list(devbox_id="dev_123", limit=10)
+        snapshots = ops.list(devbox_id="dbx_123", limit=10)
 
         assert len(snapshots) == 0
         mock_client.devboxes.disk_snapshots.list.assert_called_once()
@@ -180,14 +183,14 @@ class TestSnapshotOps:
 
         ops = SnapshotOps(mock_client)
         snapshots = ops.list(
-            devbox_id="dev_123",
+            devbox_id="dbx_123",
             limit=10,
             starting_after="snap_000",
         )
 
         assert len(snapshots) == 1
         assert isinstance(snapshots[0], Snapshot)
-        assert snapshots[0].id == "snap_123"
+        assert snapshots[0].id == "snp_123"
         mock_client.devboxes.disk_snapshots.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -198,7 +201,7 @@ class TestSnapshotOps:
         mock_client.devboxes.disk_snapshots.list.return_value = page
 
         ops = SnapshotOps(mock_client)
-        snapshots = ops.list(devbox_id="dev_123", limit=10)
+        snapshots = ops.list(devbox_id="dbx_123", limit=10)
 
         assert len(snapshots) == 2
         assert isinstance(snapshots[0], Snapshot)
@@ -210,10 +213,10 @@ class TestSnapshotOps:
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = SnapshotOps(mock_client)
-        snapshot = ops.from_id("snap_123")
+        snapshot = ops.from_id("snp_123")
 
         assert isinstance(snapshot, Snapshot)
-        assert snapshot.id == "snap_123"
+        assert snapshot.id == "snp_123"
 
 
 class TestBlueprintOps:
@@ -230,16 +233,16 @@ class TestBlueprintOps:
         )
 
         assert isinstance(blueprint, Blueprint)
-        assert blueprint.id == "bp_123"
+        assert blueprint.id == "bpt_123"
         mock_client.blueprints.create_and_await_build_complete.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = BlueprintOps(mock_client)
-        blueprint = ops.from_id("bp_123")
+        blueprint = ops.from_id("bpt_123")
 
         assert isinstance(blueprint, Blueprint)
-        assert blueprint.id == "bp_123"
+        assert blueprint.id == "bpt_123"
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -266,7 +269,7 @@ class TestBlueprintOps:
 
         assert len(blueprints) == 1
         assert isinstance(blueprints[0], Blueprint)
-        assert blueprints[0].id == "bp_123"
+        assert blueprints[0].id == "bpt_123"
         mock_client.blueprints.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -660,16 +663,16 @@ class TestScorerOps:
         )
 
         assert isinstance(scorer, Scorer)
-        assert scorer.id == "scorer_123"
+        assert scorer.id == "sco_123"
         mock_client.scenarios.scorers.create.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = ScorerOps(mock_client)
-        scorer = ops.from_id("scorer_123")
+        scorer = ops.from_id("sco_123")
 
         assert isinstance(scorer, Scorer)
-        assert scorer.id == "scorer_123"
+        assert scorer.id == "sco_123"
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -693,7 +696,7 @@ class TestScorerOps:
 
         assert len(scorers) == 1
         assert isinstance(scorers[0], Scorer)
-        assert scorers[0].id == "scorer_123"
+        assert scorers[0].id == "sco_123"
         mock_client.scenarios.scorers.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
@@ -723,19 +726,20 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create(
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         client = AgentOps(mock_client)
-        agent = client.from_id("agent_123")
+        agent = client.from_id("agt_123")
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
 
     def test_list(self, mock_client: Mock) -> None:
         """Test list method."""
@@ -765,6 +769,17 @@ class TestAgentClient:
         page = SimpleNamespace(agents=[agent_view_1, agent_view_2, agent_view_3])
         mock_client.agents.list.return_value = page
 
+        # Mock retrieve to return the corresponding agent_view when called
+        def mock_retrieve(agent_id: str, **_kwargs: object) -> MockAgentView:
+            agent_views = {
+                "agent_001": agent_view_1,
+                "agent_002": agent_view_2,
+                "agent_003": agent_view_3,
+            }
+            return agent_views[agent_id]
+
+        mock_client.agents.retrieve.side_effect = mock_retrieve
+
         client = AgentOps(mock_client)
         agents = client.list(
             limit=10,
@@ -780,7 +795,7 @@ class TestAgentClient:
         assert agents[1].id == "agent_002"
         assert agents[2].id == "agent_003"
 
-        # Test that get_info() retrieves the cached AgentView for the first agent
+        # Test that get_info() retrieves the AgentView for the first agent
         info = agents[0].get_info()
         assert info.id == "agent_001"
         assert info.name == "first-agent"
@@ -788,7 +803,7 @@ class TestAgentClient:
         assert info.is_public is False
         assert info.source is None
 
-        # Test that get_info() retrieves the cached AgentView for the second agent
+        # Test that get_info() retrieves the AgentView for the second agent
         info = agents[1].get_info()
         assert info.id == "agent_002"
         assert info.name == "second-agent"
@@ -796,7 +811,7 @@ class TestAgentClient:
         assert info.is_public is True
         assert info.source == {"type": "git", "git": {"repository": "https://github.com/example/repo"}}
 
-        # Test that get_info() retrieves the cached AgentView for the third agent
+        # Test that get_info() retrieves the AgentView for the third agent
         info = agents[2].get_info()
         assert info.id == "agent_003"
         assert info.name == "third-agent"
@@ -804,8 +819,8 @@ class TestAgentClient:
         assert info.is_public is False
         assert info.source == {"type": "npm", "npm": {"package_name": "example-package"}}
 
-        # Verify that agents.retrieve was NOT called (because we're using cached data)
-        mock_client.agents.retrieve.assert_not_called()
+        # Verify that agents.retrieve was called for each agent
+        assert mock_client.agents.retrieve.call_count == 3
 
         mock_client.agents.list.assert_called_once()
 
@@ -817,10 +832,11 @@ class TestAgentClient:
         agent = client.create_from_npm(
             name="test-agent",
             package_name="@runloop/example-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "npm",
@@ -829,6 +845,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_npm_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -838,26 +855,26 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create_from_npm(
             package_name="@runloop/example-agent",
-            npm_version="1.2.3",
             registry_url="https://registry.example.com",
             agent_setup=["npm install", "npm run setup"],
             name="test-agent",
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "npm",
                 "npm": {
                     "package_name": "@runloop/example-agent",
-                    "npm_version": "1.2.3",
                     "registry_url": "https://registry.example.com",
                     "agent_setup": ["npm install", "npm run setup"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
             extra_headers={"X-Custom": "header"},
         )
 
@@ -869,6 +886,7 @@ class TestAgentClient:
             client.create_from_npm(
                 package_name="@runloop/example-agent",
                 name="test-agent",
+                version="1.2.3",
                 source={"type": "git", "git": {"repository": "https://github.com/example/repo"}},
             )
 
@@ -880,10 +898,11 @@ class TestAgentClient:
         agent = client.create_from_pip(
             package_name="runloop-example-agent",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "pip",
@@ -892,6 +911,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_pip_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -901,25 +921,25 @@ class TestAgentClient:
         client = AgentOps(mock_client)
         agent = client.create_from_pip(
             package_name="runloop-example-agent",
-            pip_version="1.2.3",
             registry_url="https://pypi.example.com",
             agent_setup=["pip install extra-deps"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "pip",
                 "pip": {
                     "package_name": "runloop-example-agent",
-                    "pip_version": "1.2.3",
                     "registry_url": "https://pypi.example.com",
                     "agent_setup": ["pip install extra-deps"],
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_git(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -930,10 +950,11 @@ class TestAgentClient:
         agent = client.create_from_git(
             repository="https://github.com/example/agent-repo",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "git",
@@ -942,6 +963,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_git_with_all_options(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -954,10 +976,11 @@ class TestAgentClient:
             ref="develop",
             agent_setup=["npm install", "npm run build"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "git",
@@ -968,6 +991,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_object(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -978,10 +1002,11 @@ class TestAgentClient:
         agent = client.create_from_object(
             object_id="obj_123",
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "object",
@@ -990,6 +1015,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
     def test_create_from_object_with_agent_setup(self, mock_client: Mock, agent_view: MockAgentView) -> None:
@@ -1001,10 +1027,11 @@ class TestAgentClient:
             object_id="obj_123",
             agent_setup=["chmod +x setup.sh", "./setup.sh"],
             name="test-agent",
+            version="1.2.3",
         )
 
         assert isinstance(agent, Agent)
-        assert agent.id == "agent_123"
+        assert agent.id == "agt_123"
         mock_client.agents.create.assert_called_once_with(
             source={
                 "type": "object",
@@ -1014,6 +1041,7 @@ class TestAgentClient:
                 },
             },
             name="test-agent",
+            version="1.2.3",
         )
 
 
@@ -1071,6 +1099,59 @@ class TestScenarioOps:
         mock_client.scenarios.list.assert_called_once()
 
 
+class TestBenchmarkOps:
+    """Tests for BenchmarkOps class."""
+
+    def test_create(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
+        """Test create method."""
+        mock_client.benchmarks.create.return_value = benchmark_view
+
+        ops = BenchmarkOps(mock_client)
+        benchmark = ops.create(name="test-benchmark", scenario_ids=["scn_001", "scn_002"])
+
+        assert isinstance(benchmark, Benchmark)
+        assert benchmark.id == "bmd_123"
+        mock_client.benchmarks.create.assert_called_once_with(
+            name="test-benchmark", scenario_ids=["scn_001", "scn_002"]
+        )
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        ops = BenchmarkOps(mock_client)
+        benchmark = ops.from_id("bmd_123")
+
+        assert isinstance(benchmark, Benchmark)
+        assert benchmark.id == "bmd_123"
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        benchmark_view1 = MockBenchmarkView(id="bmd_001", name="benchmark-1")
+        benchmark_view2 = MockBenchmarkView(id="bmd_002", name="benchmark-2")
+        page = SimpleNamespace(benchmarks=[benchmark_view1, benchmark_view2])
+        mock_client.benchmarks.list.return_value = page
+
+        ops = BenchmarkOps(mock_client)
+        benchmarks = ops.list(limit=10)
+
+        assert len(benchmarks) == 2
+        assert isinstance(benchmarks[0], Benchmark)
+        assert isinstance(benchmarks[1], Benchmark)
+        assert benchmarks[0].id == "bmd_001"
+        assert benchmarks[1].id == "bmd_002"
+        mock_client.benchmarks.list.assert_called_once_with(limit=10)
+
+    def test_list_with_name_filter(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
+        """Test list method with name filter."""
+        page = SimpleNamespace(benchmarks=[benchmark_view])
+        mock_client.benchmarks.list.return_value = page
+
+        ops = BenchmarkOps(mock_client)
+        benchmarks = ops.list(name="test-benchmark", limit=10)
+
+        assert len(benchmarks) == 1
+        mock_client.benchmarks.list.assert_called_once_with(name="test-benchmark", limit=10)
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -1079,6 +1160,7 @@ class TestRunloopSDK:
         runloop = RunloopSDK(bearer_token="test-token")
         assert runloop.api is not None
         assert isinstance(runloop.agent, AgentOps)
+        assert isinstance(runloop.benchmark, BenchmarkOps)
         assert isinstance(runloop.devbox, DevboxOps)
         assert isinstance(runloop.scorer, ScorerOps)
         assert isinstance(runloop.snapshot, SnapshotOps)

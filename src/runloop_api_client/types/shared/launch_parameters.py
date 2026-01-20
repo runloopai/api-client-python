@@ -10,6 +10,11 @@ __all__ = ["LaunchParameters", "UserParameters"]
 
 
 class UserParameters(BaseModel):
+    """Specify the user for execution on Devbox.
+
+    If not set, default `user` will be used.
+    """
+
     uid: int
     """User ID (UID) for the Linux user. Must be a non-negative integer."""
 
@@ -18,6 +23,10 @@ class UserParameters(BaseModel):
 
 
 class LaunchParameters(BaseModel):
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox as well as the environment set up that should be completed before the Devbox is marked as 'running'.
+    """
+
     after_idle: Optional[AfterIdle] = None
     """Configure Devbox lifecycle based on idle activity.
 
@@ -60,6 +69,13 @@ class LaunchParameters(BaseModel):
 
     launch_commands: Optional[List[str]] = None
     """Set of commands to be run at launch time, before the entrypoint process is run."""
+
+    network_policy_id: Optional[str] = None
+    """
+    (Optional) ID of the network policy to apply to Devboxes launched with these
+    parameters. When set on a Blueprint launch parameters, Devboxes created from it
+    will inherit this policy unless explicitly overridden.
+    """
 
     required_services: Optional[List[str]] = None
     """A list of ContainerizedService names to be started when a Devbox is created.

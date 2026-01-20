@@ -558,7 +558,7 @@ class DevboxesResource(SyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -799,8 +799,8 @@ class DevboxesResource(SyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
-              is 600 seconds.
+          optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
+              25 seconds. Operation is not killed.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -1102,7 +1102,7 @@ class DevboxesResource(SyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.
@@ -1569,7 +1569,7 @@ class DevboxesResource(SyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Polls the asynchronous execution's status until it reaches one of the desired
-        statuses or times out. Defaults to 60 seconds.
+        statuses or times out. Max is 25 seconds.
 
         Args:
           statuses: The command execution statuses to wait for. At least one status must be
@@ -1578,8 +1578,8 @@ class DevboxesResource(SyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
-              to 60 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 25 seconds. Defaults
+              to 25 seconds.
 
           extra_headers: Send extra headers
 
@@ -2093,7 +2093,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -2334,8 +2334,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          optimistic_timeout: Timeout in seconds to wait for command completion. Operation is not killed. Max
-              is 600 seconds.
+          optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
+              25 seconds. Operation is not killed.
 
           shell_name: The name of the persistent shell to create or use if already created. When using
               a persistent shell, the command will run from the directory at the end of the
@@ -2638,7 +2638,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           devbox_id: Devbox ID to filter by.
 
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           metadata_key: Filter snapshots by metadata key-value pair. Can be used multiple times for
               different keys.
@@ -3105,7 +3105,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     ) -> DevboxAsyncExecutionDetailView:
         """
         Polls the asynchronous execution's status until it reaches one of the desired
-        statuses or times out. Defaults to 60 seconds.
+        statuses or times out. Max is 25 seconds.
 
         Args:
           statuses: The command execution statuses to wait for. At least one status must be
@@ -3114,8 +3114,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
-          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 60 seconds. Defaults
-              to 60 seconds.
+          timeout_seconds: (Optional) Timeout in seconds to wait for the status, up to 25 seconds. Defaults
+              to 25 seconds.
 
           extra_headers: Send extra headers
 

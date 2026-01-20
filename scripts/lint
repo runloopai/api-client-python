@@ -4,6 +4,12 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+echo "==> Running pyright"
+uv run pyright
+
+echo "==> Running mypy"
+uv run mypy .
+
 echo "==> Running lints"
 uv run ruff check . "$@"
 

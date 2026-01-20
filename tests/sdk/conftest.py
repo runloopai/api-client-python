@@ -1,4 +1,5 @@
 """Shared fixtures and utilities for SDK tests."""
+# pyright: reportUnknownVariableType=false
 
 from __future__ import annotations
 
@@ -15,13 +16,17 @@ from runloop_api_client import Runloop, AsyncRunloop
 
 # Test ID constants
 TEST_IDS = {
-    "devbox": "dev_123",
-    "execution": "exec_123",
-    "snapshot": "snap_123",
-    "blueprint": "bp_123",
+    "devbox": "dbx_123",
+    "execution": "exn_123",
+    "snapshot": "snp_123",
+    "blueprint": "bpt_123",
     "object": "obj_123",
-    "scorer": "scorer_123",
-    "agent": "agent_123",
+    "scorer": "sco_123",
+    "agent": "agt_123",
+    "scenario": "scn_123",
+    "scenario_run": "scr_123",
+    "benchmark": "bmd_123",
+    "benchmark_run": "bmr_123",
 }
 
 # Test URL constants
@@ -42,7 +47,7 @@ NUM_CONCURRENT_THREADS = 5  # Number of threads for concurrency tests
 class MockDevboxView:
     """Mock DevboxView for testing."""
 
-    id: str = "dev_123"
+    id: str = TEST_IDS["devbox"]
     status: str = "running"
     name: str = "test-devbox"
 
@@ -51,8 +56,8 @@ class MockDevboxView:
 class MockExecutionView:
     """Mock DevboxAsyncExecutionDetailView for testing."""
 
-    execution_id: str = "exec_123"
-    devbox_id: str = "dev_123"
+    execution_id: str = TEST_IDS["execution"]
+    devbox_id: str = TEST_IDS["devbox"]
     status: str = "completed"
     exit_status: int = 0
     stdout: str = "output"
@@ -65,7 +70,7 @@ class MockExecutionView:
 class MockSnapshotView:
     """Mock DevboxSnapshotView for testing."""
 
-    id: str = "snap_123"
+    id: str = TEST_IDS["snapshot"]
     status: str = "completed"
     name: str = "test-snapshot"
 
@@ -74,7 +79,7 @@ class MockSnapshotView:
 class MockBlueprintView:
     """Mock BlueprintView for testing."""
 
-    id: str = "bp_123"
+    id: str = TEST_IDS["blueprint"]
     status: str = "built"
     name: str = "test-blueprint"
 
@@ -83,7 +88,7 @@ class MockBlueprintView:
 class MockObjectView:
     """Mock ObjectView for testing."""
 
-    id: str = "obj_123"
+    id: str = TEST_IDS["object"]
     upload_url: str = "https://upload.example.com/obj_123"
     name: str = "test-object"
 
@@ -92,7 +97,7 @@ class MockObjectView:
 class MockScorerView:
     """Mock ScorerView for testing."""
 
-    id: str = "scorer_123"
+    id: str = TEST_IDS["scorer"]
     bash_script: str = "echo 'score=1.0'"
     type: str = "test_scorer"
 
@@ -101,7 +106,7 @@ class MockScorerView:
 class MockAgentView:
     """Mock AgentView for testing."""
 
-    id: str = "agent_123"
+    id: str = TEST_IDS["agent"]
     name: str = "test-agent"
     create_time_ms: int = 1234567890000
     is_public: bool = False
@@ -112,7 +117,7 @@ class MockAgentView:
 class MockScenarioView:
     """Mock ScenarioView for testing."""
 
-    id: str = "scn_123"
+    id: str = TEST_IDS["scenario"]
     name: str = "test-scenario"
     metadata: Dict[str, str] = field(default_factory=dict)
 
@@ -121,12 +126,46 @@ class MockScenarioView:
 class MockScenarioRunView:
     """Mock ScenarioRunView for testing."""
 
-    id: str = "run_123"
-    devbox_id: str = "dev_123"
-    scenario_id: str = "scn_123"
+    id: str = TEST_IDS["scenario_run"]
+    devbox_id: str = TEST_IDS["devbox"]
+    scenario_id: str = TEST_IDS["scenario"]
     state: str = "running"
     metadata: Dict[str, str] = field(default_factory=dict)
     scoring_contract_result: object = None
+
+
+@dataclass
+class MockBenchmarkView:
+    """Mock BenchmarkView for testing."""
+
+    id: str = TEST_IDS["benchmark"]
+    name: str = "test-benchmark"
+    metadata: Dict[str, str] = field(default_factory=dict)
+    scenario_ids: list[str] = field(default_factory=list)
+
+
+@dataclass
+class MockBenchmarkRunView:
+    """Mock BenchmarkRunView for testing."""
+
+    id: str = TEST_IDS["benchmark_run"]
+    benchmark_id: str = TEST_IDS["benchmark"]
+    state: str = "running"
+    metadata: Dict[str, str] = field(default_factory=dict)
+    start_time_ms: int = 1234567890000
+    duration_ms: int | None = None
+    score: float | None = None
+
+
+class AsyncIterableMock:
+    """A simple async iterable mock for testing paginated responses."""
+
+    def __init__(self, items: list[Any]) -> None:
+        self._items = items
+
+    async def __aiter__(self):
+        for item in self._items:
+            yield item
 
 
 def create_mock_httpx_client(methods: dict[str, Any] | None = None) -> AsyncMock:
@@ -235,6 +274,18 @@ def scenario_view() -> MockScenarioView:
 def scenario_run_view() -> MockScenarioRunView:
     """Create a mock ScenarioRunView."""
     return MockScenarioRunView()
+
+
+@pytest.fixture
+def benchmark_view() -> MockBenchmarkView:
+    """Create a mock BenchmarkView."""
+    return MockBenchmarkView()
+
+
+@pytest.fixture
+def benchmark_run_view() -> MockBenchmarkRunView:
+    """Create a mock BenchmarkRunView."""
+    return MockBenchmarkRunView()
 
 
 @pytest.fixture

@@ -160,7 +160,7 @@ class SecretsResource(SyncAPIResource):
         for security reasons.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           extra_headers: Send extra headers
 
@@ -363,7 +363,7 @@ class AsyncSecretsResource(AsyncAPIResource):
         for security reasons.
 
         Args:
-          limit: The limit of items to return. Default is 20.
+          limit: The limit of items to return. Default is 20. Max is 5000.
 
           extra_headers: Send extra headers
 

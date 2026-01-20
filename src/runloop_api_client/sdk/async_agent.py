@@ -68,9 +68,3 @@ class AsyncAgent:
             self._id,
             **options,
         )
-        if self._agent_view is None:
-            self._agent_view = self._client.agents.retrieve(
-                self._id,
-                **options,
-            )
-        return self._agent_view

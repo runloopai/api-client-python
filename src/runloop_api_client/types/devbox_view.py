@@ -31,6 +31,11 @@ class StateTransition(BaseModel):
 
 
 class DevboxView(BaseModel):
+    """A Devbox represents a virtual development environment.
+
+    It is an isolated sandbox that can be given to agents and used to run arbitrary code such as AI generated code.
+    """
+
     id: str
     """The ID of the Devbox."""
 
@@ -76,7 +81,7 @@ class DevboxView(BaseModel):
     initiator_id: Optional[str] = None
     """The ID of the initiator that created the Devbox."""
 
-    initiator_type: Optional[Literal["unknown", "api", "scenario"]] = None
+    initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation"]] = None
     """The type of initiator that created the Devbox."""
 
     name: Optional[str] = None

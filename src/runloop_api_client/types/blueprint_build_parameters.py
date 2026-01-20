@@ -11,6 +11,8 @@ __all__ = ["BlueprintBuildParameters", "BuildContext", "Service", "ServiceCreden
 
 
 class BuildContext(BaseModel):
+    """A build context backed by an Object."""
+
     object_id: str
     """The ID of an object, whose contents are to be used as a build context."""
 
@@ -18,6 +20,8 @@ class BuildContext(BaseModel):
 
 
 class ServiceCredentials(BaseModel):
+    """The credentials of the container service."""
+
     password: str
     """The password of the container service."""
 
@@ -86,6 +90,15 @@ class BlueprintBuildParameters(BaseModel):
 
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""
+
+    network_policy_id: Optional[str] = None
+    """(Optional) ID of the network policy to apply during blueprint build.
+
+    This restricts network access during the build process. This does not affect
+    devboxes created from this blueprint; if you want devboxes created from this
+    blueprint to inherit the network policy, set the network_policy_id on the
+    blueprint launch parameters.
+    """
 
     secrets: Optional[Dict[str, str]] = None
     """(Optional) Map of mount IDs/environment variable names to secret names.

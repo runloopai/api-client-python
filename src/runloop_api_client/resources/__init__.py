@@ -64,6 +64,22 @@ from .repositories import (
     RepositoriesResourceWithStreamingResponse,
     AsyncRepositoriesResourceWithStreamingResponse,
 )
+from .benchmark_runs import (
+    BenchmarkRunsResource,
+    AsyncBenchmarkRunsResource,
+    BenchmarkRunsResourceWithRawResponse,
+    AsyncBenchmarkRunsResourceWithRawResponse,
+    BenchmarkRunsResourceWithStreamingResponse,
+    AsyncBenchmarkRunsResourceWithStreamingResponse,
+)
+from .network_policies import (
+    NetworkPoliciesResource,
+    AsyncNetworkPoliciesResource,
+    NetworkPoliciesResourceWithRawResponse,
+    AsyncNetworkPoliciesResourceWithRawResponse,
+    NetworkPoliciesResourceWithStreamingResponse,
+    AsyncNetworkPoliciesResourceWithStreamingResponse,
+)
 
 __all__ = [
     "BenchmarksResource",
@@ -72,6 +88,12 @@ __all__ = [
     "AsyncBenchmarksResourceWithRawResponse",
     "BenchmarksResourceWithStreamingResponse",
     "AsyncBenchmarksResourceWithStreamingResponse",
+    "BenchmarkRunsResource",
+    "AsyncBenchmarkRunsResource",
+    "BenchmarkRunsResourceWithRawResponse",
+    "AsyncBenchmarkRunsResourceWithRawResponse",
+    "BenchmarkRunsResourceWithStreamingResponse",
+    "AsyncBenchmarkRunsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",
@@ -114,4 +136,10 @@ __all__ = [
     "AsyncSecretsResourceWithRawResponse",
     "SecretsResourceWithStreamingResponse",
     "AsyncSecretsResourceWithStreamingResponse",
+    "NetworkPoliciesResource",
+    "AsyncNetworkPoliciesResource",
+    "NetworkPoliciesResourceWithRawResponse",
+    "AsyncNetworkPoliciesResourceWithRawResponse",
+    "NetworkPoliciesResourceWithStreamingResponse",
+    "AsyncNetworkPoliciesResourceWithStreamingResponse",
 ]

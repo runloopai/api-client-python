@@ -72,9 +72,12 @@ class TestRuns:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         run = client.scenarios.runs.list(
+            benchmark_run_id="benchmark_run_id",
             limit=0,
+            name="name",
             scenario_id="scenario_id",
             starting_after="starting_after",
+            state="state",
         )
         assert_matches_type(SyncBenchmarkRunsCursorIDPage[ScenarioRunView], run, path=["response"])
 
@@ -320,9 +323,12 @@ class TestAsyncRuns:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         run = await async_client.scenarios.runs.list(
+            benchmark_run_id="benchmark_run_id",
             limit=0,
+            name="name",
             scenario_id="scenario_id",
             starting_after="starting_after",
+            state="state",
         )
         assert_matches_type(AsyncBenchmarkRunsCursorIDPage[ScenarioRunView], run, path=["response"])
 
