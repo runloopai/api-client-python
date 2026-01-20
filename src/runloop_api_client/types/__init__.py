@@ -67,6 +67,7 @@ from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyList
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
 from .repository_manifest_view import RepositoryManifestView as RepositoryManifestView
+from .benchmark_run_list_params import BenchmarkRunListParams as BenchmarkRunListParams
 from .devbox_send_std_in_result import DevboxSendStdInResult as DevboxSendStdInResult
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
 from .devbox_upload_file_params import DevboxUploadFileParams as DevboxUploadFileParams
@@ -110,6 +111,9 @@ from .devbox_snapshot_disk_async_params import DevboxSnapshotDiskAsyncParams as 
 from .devbox_write_file_contents_params import DevboxWriteFileContentsParams as DevboxWriteFileContentsParams
 from .devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView as DevboxAsyncExecutionDetailView
 from .devbox_read_file_contents_response import DevboxReadFileContentsResponse as DevboxReadFileContentsResponse
+from .benchmark_run_list_scenario_runs_params import (
+    BenchmarkRunListScenarioRunsParams as BenchmarkRunListScenarioRunsParams,
+)
 from .blueprint_create_from_inspection_params import (
     BlueprintCreateFromInspectionParams as BlueprintCreateFromInspectionParams,
 )

@@ -51,6 +51,22 @@ Methods:
 - <code title="post /v1/benchmarks/runs/{id}/complete">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="get /v1/benchmarks/runs/{id}/scenario_runs">client.benchmarks.runs.<a href="./src/runloop_api_client/resources/benchmarks/runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmarks/run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
 
+# BenchmarkRuns
+
+Types:
+
+```python
+from runloop_api_client.types import BenchmarkRunListView, BenchmarkRunView, ScenarioRunListView
+```
+
+Methods:
+
+- <code title="get /v1/benchmark_runs/{id}">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="get /v1/benchmark_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">SyncBenchmarkRunsCursorIDPage[BenchmarkRunView]</a></code>
+- <code title="post /v1/benchmark_runs/{id}/cancel">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="post /v1/benchmark_runs/{id}/complete">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
+- <code title="get /v1/benchmark_runs/{id}/scenario_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
+
 # Agents
 
 Types:
