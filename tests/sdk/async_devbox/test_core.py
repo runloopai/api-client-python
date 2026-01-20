@@ -176,7 +176,7 @@ class TestAsyncDevbox:
 
         assert result == devbox_view
         mock_async_client.devboxes.resume.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
@@ -184,7 +184,7 @@ class TestAsyncDevbox:
             idempotency_key="key-123",
         )
         mock_async_client.devboxes.await_running.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             polling_config=polling_config,
         )
 
@@ -204,7 +204,7 @@ class TestAsyncDevbox:
 
         assert result == devbox_view
         mock_async_client.devboxes.resume.assert_called_once_with(
-            "dbx_123",
+            "dev_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
