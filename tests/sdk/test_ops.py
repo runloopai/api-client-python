@@ -38,10 +38,10 @@ from runloop_api_client.sdk import (
     SnapshotOps,
     BenchmarkOps,
     BlueprintOps,
-    StorageObject,
     NetworkPolicy,
-    StorageObjectOps,
+    StorageObject,
     NetworkPolicyOps,
+    StorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 

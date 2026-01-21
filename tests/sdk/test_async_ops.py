@@ -38,10 +38,10 @@ from runloop_api_client.sdk import (
     AsyncSnapshotOps,
     AsyncBenchmarkOps,
     AsyncBlueprintOps,
-    AsyncStorageObject,
     AsyncNetworkPolicy,
-    AsyncStorageObjectOps,
+    AsyncStorageObject,
     AsyncNetworkPolicyOps,
+    AsyncStorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
 
@@ -1304,9 +1304,7 @@ class TestAsyncNetworkPolicyOps:
         assert len(network_policies) == 0
 
     @pytest.mark.asyncio
-    async def test_list_single(
-        self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView
-    ) -> None:
+    async def test_list_single(self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView) -> None:
         """Test list method with single result."""
 
         async def async_iter():

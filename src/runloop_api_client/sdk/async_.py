@@ -41,8 +41,8 @@ from .async_snapshot import AsyncSnapshot
 from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
-from .async_storage_object import AsyncStorageObject
 from .async_network_policy import AsyncNetworkPolicy
+from .async_storage_object import AsyncStorageObject
 from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object

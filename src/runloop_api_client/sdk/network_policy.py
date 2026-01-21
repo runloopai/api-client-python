@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 from typing import Optional
-
 from typing_extensions import Unpack, override
 
-from .._types import SequenceNotStr
 from ._types import BaseRequestOptions, LongRequestOptions
+from .._types import SequenceNotStr
 from .._client import Runloop
 from ..types.network_policy_view import NetworkPolicyView
 

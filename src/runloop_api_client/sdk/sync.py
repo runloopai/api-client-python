@@ -39,8 +39,8 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
-from .storage_object import StorageObject
 from .network_policy import NetworkPolicy
+from .storage_object import StorageObject
 from .scenario_builder import ScenarioBuilder
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
