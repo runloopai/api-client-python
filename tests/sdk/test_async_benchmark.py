@@ -84,7 +84,7 @@ class TestAsyncBenchmark:
     ) -> None:
         """Test list_runs method with single result."""
         page = SimpleNamespace(runs=[benchmark_run_view])
-        mock_async_client.benchmarks.runs.list = AsyncMock(return_value=page)
+        mock_async_client.benchmark_runs.list = AsyncMock(return_value=page)
 
         benchmark = AsyncBenchmark(mock_async_client, "bmd_123")
         result = await benchmark.list_runs()
@@ -93,14 +93,14 @@ class TestAsyncBenchmark:
         assert isinstance(result[0], AsyncBenchmarkRun)
         assert result[0].id == benchmark_run_view.id
         assert result[0].benchmark_id == benchmark_run_view.benchmark_id
-        mock_async_client.benchmarks.runs.list.assert_awaited_once_with(benchmark_id="bmd_123")
+        mock_async_client.benchmark_runs.list.assert_awaited_once_with(benchmark_id="bmd_123")
 
     async def test_list_runs_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list_runs method with multiple results."""
         run_view1 = MockBenchmarkRunView(id="bmr_001")
         run_view2 = MockBenchmarkRunView(id="bmr_002")
         page = SimpleNamespace(runs=[run_view1, run_view2])
-        mock_async_client.benchmarks.runs.list = AsyncMock(return_value=page)
+        mock_async_client.benchmark_runs.list = AsyncMock(return_value=page)
 
         benchmark = AsyncBenchmark(mock_async_client, "bmd_123")
         result = await benchmark.list_runs()
@@ -112,19 +112,19 @@ class TestAsyncBenchmark:
         assert result[0].benchmark_id == run_view1.benchmark_id
         assert result[1].id == run_view2.id
         assert result[1].benchmark_id == run_view2.benchmark_id
-        mock_async_client.benchmarks.runs.list.assert_awaited_once_with(benchmark_id="bmd_123")
+        mock_async_client.benchmark_runs.list.assert_awaited_once_with(benchmark_id="bmd_123")
 
     async def test_list_runs_with_params(
         self, mock_async_client: AsyncMock, benchmark_run_view: MockBenchmarkRunView
     ) -> None:
         """Test list_runs method with filtering parameters."""
         page = SimpleNamespace(runs=[benchmark_run_view])
-        mock_async_client.benchmarks.runs.list = AsyncMock(return_value=page)
+        mock_async_client.benchmark_runs.list = AsyncMock(return_value=page)
 
         benchmark = AsyncBenchmark(mock_async_client, "bmd_123")
         result = await benchmark.list_runs(limit=10, name="test-run")
 
         assert len(result) == 1
-        mock_async_client.benchmarks.runs.list.assert_awaited_once_with(
+        mock_async_client.benchmark_runs.list.assert_awaited_once_with(
             benchmark_id="bmd_123", limit=10, name="test-run"
         )

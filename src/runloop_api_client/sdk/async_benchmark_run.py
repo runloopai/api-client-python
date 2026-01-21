@@ -71,7 +71,7 @@ class AsyncBenchmarkRun:
         :return: Current benchmark run state info
         :rtype: BenchmarkRunView
         """
-        return await self._client.benchmarks.runs.retrieve(
+        return await self._client.benchmark_runs.retrieve(
             self._id,
             **options,
         )
@@ -88,7 +88,7 @@ class AsyncBenchmarkRun:
         :return: Updated benchmark run state
         :rtype: BenchmarkRunView
         """
-        return await self._client.benchmarks.runs.cancel(
+        return await self._client.benchmark_runs.cancel(
             self._id,
             **options,
         )
@@ -105,7 +105,7 @@ class AsyncBenchmarkRun:
         :return: Completed benchmark run state
         :rtype: BenchmarkRunView
         """
-        return await self._client.benchmarks.runs.complete(
+        return await self._client.benchmark_runs.complete(
             self._id,
             **options,
         )
@@ -120,7 +120,7 @@ class AsyncBenchmarkRun:
         :return: List of async scenario run objects
         :rtype: List[AsyncScenarioRun]
         """
-        page = await self._client.benchmarks.runs.list_scenario_runs(
+        page = await self._client.benchmark_runs.list_scenario_runs(
             self._id,
             **params,
         )

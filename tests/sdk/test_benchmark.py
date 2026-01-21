@@ -80,7 +80,7 @@ class TestBenchmark:
     def test_list_runs_single(self, mock_client: Mock, benchmark_run_view: MockBenchmarkRunView) -> None:
         """Test list_runs method with single result."""
         page = SimpleNamespace(runs=[benchmark_run_view])
-        mock_client.benchmarks.runs.list.return_value = page
+        mock_client.benchmark_runs.list.return_value = page
 
         benchmark = Benchmark(mock_client, "bmd_123")
         result = benchmark.list_runs()
@@ -89,14 +89,14 @@ class TestBenchmark:
         assert isinstance(result[0], BenchmarkRun)
         assert result[0].id == benchmark_run_view.id
         assert result[0].benchmark_id == benchmark_run_view.benchmark_id
-        mock_client.benchmarks.runs.list.assert_called_once_with(benchmark_id="bmd_123")
+        mock_client.benchmark_runs.list.assert_called_once_with(benchmark_id="bmd_123")
 
     def test_list_runs_multiple(self, mock_client: Mock) -> None:
         """Test list_runs method with multiple results."""
         run_view1 = MockBenchmarkRunView(id="bmr_001")
         run_view2 = MockBenchmarkRunView(id="bmr_002")
         page = SimpleNamespace(runs=[run_view1, run_view2])
-        mock_client.benchmarks.runs.list.return_value = page
+        mock_client.benchmark_runs.list.return_value = page
 
         benchmark = Benchmark(mock_client, "bmd_123")
         result = benchmark.list_runs()
@@ -108,15 +108,15 @@ class TestBenchmark:
         assert result[0].benchmark_id == run_view1.benchmark_id
         assert result[1].id == run_view2.id
         assert result[1].benchmark_id == run_view2.benchmark_id
-        mock_client.benchmarks.runs.list.assert_called_once_with(benchmark_id="bmd_123")
+        mock_client.benchmark_runs.list.assert_called_once_with(benchmark_id="bmd_123")
 
     def test_list_runs_with_params(self, mock_client: Mock, benchmark_run_view: MockBenchmarkRunView) -> None:
         """Test list_runs method with filtering parameters."""
         page = SimpleNamespace(runs=[benchmark_run_view])
-        mock_client.benchmarks.runs.list.return_value = page
+        mock_client.benchmark_runs.list.return_value = page
 
         benchmark = Benchmark(mock_client, "bmd_123")
         result = benchmark.list_runs(limit=10, name="test-run")
 
         assert len(result) == 1
-        mock_client.benchmarks.runs.list.assert_called_once_with(benchmark_id="bmd_123", limit=10, name="test-run")
+        mock_client.benchmark_runs.list.assert_called_once_with(benchmark_id="bmd_123", limit=10, name="test-run")
