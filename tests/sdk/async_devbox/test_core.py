@@ -193,7 +193,7 @@ class TestAsyncDevbox:
         """Test resume_async method."""
         mock_async_client.devboxes.resume = AsyncMock(return_value=devbox_view)
 
-        devbox = AsyncDevbox(mock_async_client, "dev_123")
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.resume_async(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},

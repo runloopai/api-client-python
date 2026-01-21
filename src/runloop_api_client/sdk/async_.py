@@ -26,6 +26,8 @@ from ._types import (
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
+    SDKNetworkPolicyListParams,
+    SDKNetworkPolicyCreateParams,
     SDKDevboxCreateFromImageParams,
 )
 from .._types import Timeout, NotGiven, not_given
@@ -40,6 +42,7 @@ from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_storage_object import AsyncStorageObject
+from .async_network_policy import AsyncNetworkPolicy
 from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
@@ -867,6 +870,60 @@ class AsyncBenchmarkOps:
         return [AsyncBenchmark(self._client, item.id) for item in page.benchmarks]
 
 
+class AsyncNetworkPolicyOps:
+    """High-level async manager for creating and managing network policies.
+
+    Accessed via ``runloop.network_policy`` from :class:`AsyncRunloopSDK`, provides
+    coroutines to create, retrieve, update, delete, and list network policies.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> policy = await runloop.network_policy.create(
+        ...     name="my-policy",
+        ...     allowed_hostnames=["github.com", "*.npmjs.org"],
+        ... )
+        >>> policies = await runloop.network_policy.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncNetworkPolicyOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKNetworkPolicyCreateParams]) -> AsyncNetworkPolicy:
+        """Create a new network policy.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKNetworkPolicyCreateParams` for available parameters
+        :return: The newly created network policy
+        :rtype: AsyncNetworkPolicy
+        """
+        response = await self._client.network_policies.create(**params)
+        return AsyncNetworkPolicy(self._client, response.id)
+
+    def from_id(self, network_policy_id: str) -> AsyncNetworkPolicy:
+        """Get an AsyncNetworkPolicy instance for an existing network policy ID.
+
+        :param network_policy_id: ID of the network policy
+        :type network_policy_id: str
+        :return: AsyncNetworkPolicy instance for the given ID
+        :rtype: AsyncNetworkPolicy
+        """
+        return AsyncNetworkPolicy(self._client, network_policy_id)
+
+    async def list(self, **params: Unpack[SDKNetworkPolicyListParams]) -> list[AsyncNetworkPolicy]:
+        """List all network policies, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKNetworkPolicyListParams` for available parameters
+        :return: List of network policies
+        :rtype: list[AsyncNetworkPolicy]
+        """
+        page = self._client.network_policies.list(**params)
+        return [AsyncNetworkPolicy(self._client, item.id) async for item in page]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -892,6 +949,8 @@ class AsyncRunloopSDK:
     :vartype snapshot: AsyncSnapshotOps
     :ivar storage_object: High-level async interface for storage object management
     :vartype storage_object: AsyncStorageObjectOps
+    :ivar network_policy: High-level async interface for network policy management
+    :vartype network_policy: AsyncNetworkPolicyOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -906,6 +965,7 @@ class AsyncRunloopSDK:
     benchmark: AsyncBenchmarkOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    network_policy: AsyncNetworkPolicyOps
     scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
     snapshot: AsyncSnapshotOps
@@ -953,6 +1013,7 @@ class AsyncRunloopSDK:
         self.benchmark = AsyncBenchmarkOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.network_policy = AsyncNetworkPolicyOps(self.api)
         self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)

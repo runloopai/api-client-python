@@ -23,7 +23,10 @@ from ..types import (
     DevboxDownloadFileParams,
     DevboxRemoveTunnelParams,
     DevboxSnapshotDiskParams,
+    NetworkPolicyListParams,
     DevboxReadFileContentsParams,
+    NetworkPolicyCreateParams,
+    NetworkPolicyUpdateParams,
     DevboxWriteFileContentsParams,
 )
 from .._types import Body, Query, Headers, Timeout, NotGiven
@@ -235,4 +238,16 @@ class SDKBenchmarkListRunsParams(RunSelfListParams, BaseRequestOptions):
 
 
 class SDKBenchmarkRunListScenarioRunsParams(RunListScenarioRunsParams, BaseRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyCreateParams(NetworkPolicyCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyListParams(NetworkPolicyListParams, BaseRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyUpdateParams(NetworkPolicyUpdateParams, LongRequestOptions):
     pass

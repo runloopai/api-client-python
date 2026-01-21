@@ -195,7 +195,7 @@ class TestDevbox:
         mock_client.devboxes.resume.return_value = devbox_view
         mock_client.devboxes.await_running = Mock()
 
-        devbox = Devbox(mock_client, "dev_123")
+        devbox = Devbox(mock_client, "dbx_123")
         result = devbox.resume_async(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -206,7 +206,7 @@ class TestDevbox:
 
         assert result == devbox_view
         mock_client.devboxes.resume.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
