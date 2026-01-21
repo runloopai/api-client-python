@@ -26,6 +26,8 @@ from ._types import (
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
+    SDKNetworkPolicyListParams,
+    SDKNetworkPolicyCreateParams,
     SDKDevboxCreateFromImageParams,
 )
 from .devbox import Devbox
@@ -37,6 +39,7 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
+from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
 from .scenario_builder import ScenarioBuilder
 from ..lib.context_loader import TarFilter, build_directory_tar
@@ -892,6 +895,60 @@ class BenchmarkOps:
         return [Benchmark(self._client, item.id) for item in page.benchmarks]
 
 
+class NetworkPolicyOps:
+    """High-level manager for creating and managing network policies.
+
+    Accessed via ``runloop.network_policy`` from :class:`RunloopSDK`, provides methods
+    to create, retrieve, update, delete, and list network policies.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> policy = runloop.network_policy.create(
+        ...     name="my-policy",
+        ...     allowed_hostnames=["github.com", "*.npmjs.org"],
+        ... )
+        >>> policies = runloop.network_policy.list()
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize NetworkPolicyOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, **params: Unpack[SDKNetworkPolicyCreateParams]) -> NetworkPolicy:
+        """Create a new network policy.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKNetworkPolicyCreateParams` for available parameters
+        :return: The newly created network policy
+        :rtype: NetworkPolicy
+        """
+        response = self._client.network_policies.create(**params)
+        return NetworkPolicy(self._client, response.id)
+
+    def from_id(self, network_policy_id: str) -> NetworkPolicy:
+        """Get a NetworkPolicy instance for an existing network policy ID.
+
+        :param network_policy_id: ID of the network policy
+        :type network_policy_id: str
+        :return: NetworkPolicy instance for the given ID
+        :rtype: NetworkPolicy
+        """
+        return NetworkPolicy(self._client, network_policy_id)
+
+    def list(self, **params: Unpack[SDKNetworkPolicyListParams]) -> list[NetworkPolicy]:
+        """List all network policies, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKNetworkPolicyListParams` for available parameters
+        :return: List of network policies
+        :rtype: list[NetworkPolicy]
+        """
+        page = self._client.network_policies.list(**params)
+        return [NetworkPolicy(self._client, item.id) for item in page]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -917,6 +974,8 @@ class RunloopSDK:
     :vartype snapshot: SnapshotOps
     :ivar storage_object: High-level interface for storage object management
     :vartype storage_object: StorageObjectOps
+    :ivar network_policy: High-level interface for network policy management
+    :vartype network_policy: NetworkPolicyOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -931,6 +990,7 @@ class RunloopSDK:
     benchmark: BenchmarkOps
     devbox: DevboxOps
     blueprint: BlueprintOps
+    network_policy: NetworkPolicyOps
     scenario: ScenarioOps
     scorer: ScorerOps
     snapshot: SnapshotOps
@@ -978,6 +1038,7 @@ class RunloopSDK:
         self.benchmark = BenchmarkOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
+        self.network_policy = NetworkPolicyOps(self.api)
         self.scenario = ScenarioOps(self.api)
         self.scorer = ScorerOps(self.api)
         self.snapshot = SnapshotOps(self.api)

@@ -19,6 +19,7 @@ from tests.sdk.conftest import (
     MockSnapshotView,
     MockBenchmarkView,
     MockBlueprintView,
+    MockNetworkPolicyView,
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import (
@@ -37,7 +38,9 @@ from runloop_api_client.sdk import (
     SnapshotOps,
     BenchmarkOps,
     BlueprintOps,
+    NetworkPolicy,
     StorageObject,
+    NetworkPolicyOps,
     StorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
@@ -1152,6 +1155,73 @@ class TestBenchmarkOps:
         mock_client.benchmarks.list.assert_called_once_with(name="test-benchmark", limit=10)
 
 
+class TestNetworkPolicyOps:
+    """Tests for NetworkPolicyOps class."""
+
+    def test_create(self, mock_client: Mock, network_policy_view: MockNetworkPolicyView) -> None:
+        """Test create method."""
+        mock_client.network_policies.create.return_value = network_policy_view
+
+        ops = NetworkPolicyOps(mock_client)
+        network_policy = ops.create(
+            name="test-network-policy",
+            allowed_hostnames=["github.com", "*.npmjs.org"],
+        )
+
+        assert isinstance(network_policy, NetworkPolicy)
+        assert network_policy.id == "np_123"
+        mock_client.network_policies.create.assert_called_once()
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        ops = NetworkPolicyOps(mock_client)
+        network_policy = ops.from_id("np_123")
+
+        assert isinstance(network_policy, NetworkPolicy)
+        assert network_policy.id == "np_123"
+
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        mock_client.network_policies.list.return_value = []
+
+        ops = NetworkPolicyOps(mock_client)
+        network_policies = ops.list(limit=10)
+
+        assert len(network_policies) == 0
+        mock_client.network_policies.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, network_policy_view: MockNetworkPolicyView) -> None:
+        """Test list method with single result."""
+        mock_client.network_policies.list.return_value = [network_policy_view]
+
+        ops = NetworkPolicyOps(mock_client)
+        network_policies = ops.list(
+            limit=10,
+            starting_after="np_000",
+        )
+
+        assert len(network_policies) == 1
+        assert isinstance(network_policies[0], NetworkPolicy)
+        assert network_policies[0].id == "np_123"
+        mock_client.network_policies.list.assert_called_once()
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
+        network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
+        mock_client.network_policies.list.return_value = [network_policy_view1, network_policy_view2]
+
+        ops = NetworkPolicyOps(mock_client)
+        network_policies = ops.list(limit=10)
+
+        assert len(network_policies) == 2
+        assert isinstance(network_policies[0], NetworkPolicy)
+        assert isinstance(network_policies[1], NetworkPolicy)
+        assert network_policies[0].id == "np_001"
+        assert network_policies[1].id == "np_002"
+        mock_client.network_policies.list.assert_called_once()
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -1162,6 +1232,7 @@ class TestRunloopSDK:
         assert isinstance(runloop.agent, AgentOps)
         assert isinstance(runloop.benchmark, BenchmarkOps)
         assert isinstance(runloop.devbox, DevboxOps)
+        assert isinstance(runloop.network_policy, NetworkPolicyOps)
         assert isinstance(runloop.scorer, ScorerOps)
         assert isinstance(runloop.snapshot, SnapshotOps)
         assert isinstance(runloop.blueprint, BlueprintOps)

@@ -163,7 +163,5 @@ class Benchmark:
             **params,
         )
         return [
-            BenchmarkRun(self._client, run.id, run.benchmark_id)
-            for run in page.runs
-            if run.benchmark_id is not None
+            BenchmarkRun(self._client, run.id, run.benchmark_id) for run in page.runs if run.benchmark_id is not None
         ]

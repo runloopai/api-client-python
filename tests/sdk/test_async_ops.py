@@ -19,6 +19,7 @@ from tests.sdk.conftest import (
     MockSnapshotView,
     MockBenchmarkView,
     MockBlueprintView,
+    MockNetworkPolicyView,
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import (
@@ -37,7 +38,9 @@ from runloop_api_client.sdk import (
     AsyncSnapshotOps,
     AsyncBenchmarkOps,
     AsyncBlueprintOps,
+    AsyncNetworkPolicy,
     AsyncStorageObject,
+    AsyncNetworkPolicyOps,
     AsyncStorageObjectOps,
 )
 from runloop_api_client.lib.polling import PollingConfig
@@ -1259,6 +1262,88 @@ class TestAsyncBenchmarkOps:
         mock_async_client.benchmarks.list.assert_awaited_once_with(name="test-benchmark", limit=10)
 
 
+class TestAsyncNetworkPolicyOps:
+    """Tests for AsyncNetworkPolicyOps class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView) -> None:
+        """Test create method."""
+        mock_async_client.network_policies.create = AsyncMock(return_value=network_policy_view)
+
+        ops = AsyncNetworkPolicyOps(mock_async_client)
+        network_policy = await ops.create(
+            name="test-network-policy",
+            allowed_hostnames=["github.com", "*.npmjs.org"],
+        )
+
+        assert isinstance(network_policy, AsyncNetworkPolicy)
+        assert network_policy.id == "np_123"
+        mock_async_client.network_policies.create.assert_awaited_once()
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        ops = AsyncNetworkPolicyOps(mock_async_client)
+        network_policy = ops.from_id("np_123")
+
+        assert isinstance(network_policy, AsyncNetworkPolicy)
+        assert network_policy.id == "np_123"
+
+    @pytest.mark.asyncio
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+
+        async def async_iter():
+            return
+            yield  # Make this a generator
+
+        mock_async_client.network_policies.list.return_value = async_iter()
+
+        ops = AsyncNetworkPolicyOps(mock_async_client)
+        network_policies = await ops.list(limit=10)
+
+        assert len(network_policies) == 0
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView) -> None:
+        """Test list method with single result."""
+
+        async def async_iter():
+            yield network_policy_view
+
+        mock_async_client.network_policies.list.return_value = async_iter()
+
+        ops = AsyncNetworkPolicyOps(mock_async_client)
+        network_policies = await ops.list(
+            limit=10,
+            starting_after="np_000",
+        )
+
+        assert len(network_policies) == 1
+        assert isinstance(network_policies[0], AsyncNetworkPolicy)
+        assert network_policies[0].id == "np_123"
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
+        network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
+
+        async def async_iter():
+            yield network_policy_view1
+            yield network_policy_view2
+
+        mock_async_client.network_policies.list.return_value = async_iter()
+
+        ops = AsyncNetworkPolicyOps(mock_async_client)
+        network_policies = await ops.list(limit=10)
+
+        assert len(network_policies) == 2
+        assert isinstance(network_policies[0], AsyncNetworkPolicy)
+        assert isinstance(network_policies[1], AsyncNetworkPolicy)
+        assert network_policies[0].id == "np_001"
+        assert network_policies[1].id == "np_002"
+
+
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
 
@@ -1269,6 +1354,7 @@ class TestAsyncRunloopSDK:
         assert isinstance(runloop.agent, AsyncAgentOps)
         assert isinstance(runloop.benchmark, AsyncBenchmarkOps)
         assert isinstance(runloop.devbox, AsyncDevboxOps)
+        assert isinstance(runloop.network_policy, AsyncNetworkPolicyOps)
         assert isinstance(runloop.scorer, AsyncScorerOps)
         assert isinstance(runloop.snapshot, AsyncSnapshotOps)
         assert isinstance(runloop.blueprint, AsyncBlueprintOps)

@@ -27,6 +27,7 @@ TEST_IDS = {
     "scenario_run": "scr_123",
     "benchmark": "bmd_123",
     "benchmark_run": "bmr_123",
+    "network_policy": "np_123",
 }
 
 # Test URL constants
@@ -155,6 +156,27 @@ class MockBenchmarkRunView:
     start_time_ms: int = 1234567890000
     duration_ms: int | None = None
     score: float | None = None
+
+
+@dataclass
+class MockEgress:
+    """Mock Egress for testing."""
+
+    allow_all: bool = False
+    allow_devbox_to_devbox: bool = False
+    allowed_hostnames: list[str] = field(default_factory=lambda: ["github.com", "*.npmjs.org"])
+
+
+@dataclass
+class MockNetworkPolicyView:
+    """Mock NetworkPolicyView for testing."""
+
+    id: str = TEST_IDS["network_policy"]
+    name: str = "test-network-policy"
+    description: str | None = "Test network policy description"
+    create_time_ms: int = 1234567890000
+    update_time_ms: int = 1234567890000
+    egress: MockEgress = field(default_factory=MockEgress)
 
 
 class AsyncIterableMock:
@@ -286,6 +308,12 @@ def benchmark_view() -> MockBenchmarkView:
 def benchmark_run_view() -> MockBenchmarkRunView:
     """Create a mock BenchmarkRunView."""
     return MockBenchmarkRunView()
+
+
+@pytest.fixture
+def network_policy_view() -> MockNetworkPolicyView:
+    """Create a mock NetworkPolicyView."""
+    return MockNetworkPolicyView()
 
 
 @pytest.fixture

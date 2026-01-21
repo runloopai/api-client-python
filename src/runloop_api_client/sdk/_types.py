@@ -19,10 +19,13 @@ from ..types import (
     BenchmarkUpdateParams,
     BlueprintCreateParams,
     DevboxUploadFileParams,
+    NetworkPolicyListParams,
     DevboxCreateTunnelParams,
     DevboxDownloadFileParams,
     DevboxRemoveTunnelParams,
     DevboxSnapshotDiskParams,
+    NetworkPolicyCreateParams,
+    NetworkPolicyUpdateParams,
     DevboxReadFileContentsParams,
     DevboxWriteFileContentsParams,
 )
@@ -235,4 +238,16 @@ class SDKBenchmarkListRunsParams(RunSelfListParams, BaseRequestOptions):
 
 
 class SDKBenchmarkRunListScenarioRunsParams(RunListScenarioRunsParams, BaseRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyCreateParams(NetworkPolicyCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyListParams(NetworkPolicyListParams, BaseRequestOptions):
+    pass
+
+
+class SDKNetworkPolicyUpdateParams(NetworkPolicyUpdateParams, LongRequestOptions):
     pass
