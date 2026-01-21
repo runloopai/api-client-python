@@ -204,7 +204,7 @@ class TestAsyncDevbox:
 
         assert result == devbox_view
         mock_async_client.devboxes.resume.assert_called_once_with(
-            "dev_123",
+            "dbx_123",
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
             extra_body={"key": "value"},
