@@ -163,5 +163,7 @@ class AsyncBenchmark:
             **params,
         )
         return [
-            AsyncBenchmarkRun(self._client, run.id, run.benchmark_id) for run in page.runs if run.benchmark_id is not None
+            AsyncBenchmarkRun(self._client, run.id, run.benchmark_id)
+            for run in page.runs
+            if run.benchmark_id is not None
         ]
