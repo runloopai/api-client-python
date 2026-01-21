@@ -27,7 +27,7 @@ TEST_IDS = {
     "scenario_run": "scr_123",
     "benchmark": "bmd_123",
     "benchmark_run": "bmr_123",
-    "network_policy": "npo_123",
+    "network_policy": "np_123",
 }
 
 # Test URL constants

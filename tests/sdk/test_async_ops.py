@@ -1277,16 +1277,16 @@ class TestAsyncNetworkPolicyOps:
         )
 
         assert isinstance(network_policy, AsyncNetworkPolicy)
-        assert network_policy.id == "npo_123"
+        assert network_policy.id == "np_123"
         mock_async_client.network_policies.create.assert_awaited_once()
 
     def test_from_id(self, mock_async_client: AsyncMock) -> None:
         """Test from_id method."""
         ops = AsyncNetworkPolicyOps(mock_async_client)
-        network_policy = ops.from_id("npo_123")
+        network_policy = ops.from_id("np_123")
 
         assert isinstance(network_policy, AsyncNetworkPolicy)
-        assert network_policy.id == "npo_123"
+        assert network_policy.id == "np_123"
 
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
@@ -1315,18 +1315,18 @@ class TestAsyncNetworkPolicyOps:
         ops = AsyncNetworkPolicyOps(mock_async_client)
         network_policies = await ops.list(
             limit=10,
-            starting_after="npo_000",
+            starting_after="np_000",
         )
 
         assert len(network_policies) == 1
         assert isinstance(network_policies[0], AsyncNetworkPolicy)
-        assert network_policies[0].id == "npo_123"
+        assert network_policies[0].id == "np_123"
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list method with multiple results."""
-        network_policy_view1 = MockNetworkPolicyView(id="npo_001", name="policy-1")
-        network_policy_view2 = MockNetworkPolicyView(id="npo_002", name="policy-2")
+        network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
+        network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
 
         async def async_iter():
             yield network_policy_view1
@@ -1340,8 +1340,8 @@ class TestAsyncNetworkPolicyOps:
         assert len(network_policies) == 2
         assert isinstance(network_policies[0], AsyncNetworkPolicy)
         assert isinstance(network_policies[1], AsyncNetworkPolicy)
-        assert network_policies[0].id == "npo_001"
-        assert network_policies[1].id == "npo_002"
+        assert network_policies[0].id == "np_001"
+        assert network_policies[1].id == "np_002"
 
 
 class TestAsyncRunloopSDK:

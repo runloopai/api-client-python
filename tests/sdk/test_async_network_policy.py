@@ -15,20 +15,20 @@ class TestAsyncNetworkPolicy:
 
     def test_init(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncNetworkPolicy initialization."""
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
-        assert network_policy.id == "npo_123"
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
+        assert network_policy.id == "np_123"
 
     def test_repr(self, mock_async_client: AsyncMock) -> None:
         """Test AsyncNetworkPolicy string representation."""
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
-        assert repr(network_policy) == "<AsyncNetworkPolicy id='npo_123'>"
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
+        assert repr(network_policy) == "<AsyncNetworkPolicy id='np_123'>"
 
     @pytest.mark.asyncio
     async def test_get_info(self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView) -> None:
         """Test get_info method."""
         mock_async_client.network_policies.retrieve = AsyncMock(return_value=network_policy_view)
 
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
         result = await network_policy.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -44,7 +44,7 @@ class TestAsyncNetworkPolicy:
         """Test update method."""
         mock_async_client.network_policies.update = AsyncMock(return_value=network_policy_view)
 
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
         result = await network_policy.update(
             name="updated-policy",
             description="Updated description",
@@ -65,7 +65,7 @@ class TestAsyncNetworkPolicy:
         """Test update method with partial fields."""
         mock_async_client.network_policies.update = AsyncMock(return_value=network_policy_view)
 
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
         result = await network_policy.update(
             name="renamed-policy",
         )
@@ -78,7 +78,7 @@ class TestAsyncNetworkPolicy:
         """Test delete method."""
         mock_async_client.network_policies.delete = AsyncMock(return_value=network_policy_view)
 
-        network_policy = AsyncNetworkPolicy(mock_async_client, "npo_123")
+        network_policy = AsyncNetworkPolicy(mock_async_client, "np_123")
         result = await network_policy.delete(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},

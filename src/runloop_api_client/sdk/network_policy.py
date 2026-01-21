@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing_extensions import Unpack, override
 
-from ._types import BaseRequestOptions, LongRequestOptions
-from .._types import SequenceNotStr
+from ._types import BaseRequestOptions, LongRequestOptions, SDKNetworkPolicyUpdateParams
 from .._client import Runloop
 from ..types.network_policy_view import NetworkPolicyView
 
@@ -57,41 +55,14 @@ class NetworkPolicy:
             **options,
         )
 
-    def update(
-        self,
-        *,
-        allow_all: Optional[bool] = None,
-        allow_devbox_to_devbox: Optional[bool] = None,
-        allowed_hostnames: Optional[SequenceNotStr[str]] = None,
-        description: Optional[str] = None,
-        name: Optional[str] = None,
-        **options: Unpack[LongRequestOptions],
-    ) -> NetworkPolicyView:
+    def update(self, **params: Unpack[SDKNetworkPolicyUpdateParams]) -> NetworkPolicyView:
         """Update the network policy.
 
-        :param allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy)
-        :type allow_all: Optional[bool]
-        :param allow_devbox_to_devbox: If true, allows traffic between devboxes via tunnels
-        :type allow_devbox_to_devbox: Optional[bool]
-        :param allowed_hostnames: DNS-based allow list with wildcard support
-        :type allowed_hostnames: Optional[SequenceNotStr[str]]
-        :param description: Updated description for the NetworkPolicy
-        :type description: Optional[str]
-        :param name: Updated human-readable name for the NetworkPolicy
-        :type name: Optional[str]
-        :param options: Optional long-running request configuration
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKNetworkPolicyUpdateParams` for available parameters
         :return: Updated network policy view
         :rtype: NetworkPolicyView
         """
-        return self._client.network_policies.update(
-            self._id,
-            allow_all=allow_all,
-            allow_devbox_to_devbox=allow_devbox_to_devbox,
-            allowed_hostnames=allowed_hostnames,
-            description=description,
-            name=name,
-            **options,
-        )
+        return self._client.network_policies.update(self._id, **params)
 
     def delete(
         self,

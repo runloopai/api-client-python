@@ -1169,16 +1169,16 @@ class TestNetworkPolicyOps:
         )
 
         assert isinstance(network_policy, NetworkPolicy)
-        assert network_policy.id == "npo_123"
+        assert network_policy.id == "np_123"
         mock_client.network_policies.create.assert_called_once()
 
     def test_from_id(self, mock_client: Mock) -> None:
         """Test from_id method."""
         ops = NetworkPolicyOps(mock_client)
-        network_policy = ops.from_id("npo_123")
+        network_policy = ops.from_id("np_123")
 
         assert isinstance(network_policy, NetworkPolicy)
-        assert network_policy.id == "npo_123"
+        assert network_policy.id == "np_123"
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
@@ -1197,18 +1197,18 @@ class TestNetworkPolicyOps:
         ops = NetworkPolicyOps(mock_client)
         network_policies = ops.list(
             limit=10,
-            starting_after="npo_000",
+            starting_after="np_000",
         )
 
         assert len(network_policies) == 1
         assert isinstance(network_policies[0], NetworkPolicy)
-        assert network_policies[0].id == "npo_123"
+        assert network_policies[0].id == "np_123"
         mock_client.network_policies.list.assert_called_once()
 
     def test_list_multiple(self, mock_client: Mock) -> None:
         """Test list method with multiple results."""
-        network_policy_view1 = MockNetworkPolicyView(id="npo_001", name="policy-1")
-        network_policy_view2 = MockNetworkPolicyView(id="npo_002", name="policy-2")
+        network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
+        network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
         mock_client.network_policies.list.return_value = [network_policy_view1, network_policy_view2]
 
         ops = NetworkPolicyOps(mock_client)
@@ -1217,8 +1217,8 @@ class TestNetworkPolicyOps:
         assert len(network_policies) == 2
         assert isinstance(network_policies[0], NetworkPolicy)
         assert isinstance(network_policies[1], NetworkPolicy)
-        assert network_policies[0].id == "npo_001"
-        assert network_policies[1].id == "npo_002"
+        assert network_policies[0].id == "np_001"
+        assert network_policies[1].id == "np_002"
         mock_client.network_policies.list.assert_called_once()
 
 
