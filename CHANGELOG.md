@@ -7,24 +7,6 @@ Full Changelog: [v1.3.0-alpha...v1.3.0](https://github.com/runloopai/api-client-
 ### Features
 
 * **network-policy:** add network policies ([#720](https://github.com/runloopai/api-client-python/issues/720)) ([9b31116](https://github.com/runloopai/api-client-python/commit/9b311168fcda2554f8ea03c9698c1e284dc1bdba))
-
-
-### Chores
-
-* fix stainless spec / remove deprecated benchmark/runs ([#7074](https://github.com/runloopai/api-client-python/issues/7074)) ([3ed7d80](https://github.com/runloopai/api-client-python/commit/3ed7d806edc349b4bb4cfb8e0e54b78f272a6d75))
-* fix tests and linting ([#719](https://github.com/runloopai/api-client-python/issues/719)) ([74db814](https://github.com/runloopai/api-client-python/commit/74db81455af44b94896e8adc7a6e24ba71b9e2ef))
-* update network policy create params descriptions ([#7069](https://github.com/runloopai/api-client-python/issues/7069)) ([b151692](https://github.com/runloopai/api-client-python/commit/b15169283ff344c447b203b6bc3589f05c400ea7))
-
-## 1.3.0-alpha (2026-01-20)
-
-Full Changelog: [v1.2.0...v1.3.0-alpha](https://github.com/runloopai/api-client-python/compare/v1.2.0...v1.3.0-alpha)
-
-### ⚠ BREAKING CHANGES
-
-* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710))
-
-### Features
-
 * **benchmarks:** add `update_scenarios` method to benchmarks resource ([71ec221](https://github.com/runloopai/api-client-python/commit/71ec221f1d0cad7aac33c0299d3f8b1aa97d0741))
 * **blueprint:** Set cilium network policy on blueprint build ([#7006](https://github.com/runloopai/api-client-python/issues/7006)) ([95c62ac](https://github.com/runloopai/api-client-python/commit/95c62ac1e2689acdd83cac2dc85f1a639490d982))
 * **client:** add support for binary request streaming ([d6c2200](https://github.com/runloopai/api-client-python/commit/d6c22008f7cd8a6a07055f29bcb4eca4914ec5e0))
@@ -46,6 +28,10 @@ Full Changelog: [v1.2.0...v1.3.0-alpha](https://github.com/runloopai/api-client-
 
 ### Chores
 
+* fix stainless spec / remove deprecated benchmark/runs ([#7074](https://github.com/runloopai/api-client-python/issues/7074)) ([3ed7d80](https://github.com/runloopai/api-client-python/commit/3ed7d806edc349b4bb4cfb8e0e54b78f272a6d75))
+* fix tests and linting ([#719](https://github.com/runloopai/api-client-python/issues/719)) ([74db814](https://github.com/runloopai/api-client-python/commit/74db81455af44b94896e8adc7a6e24ba71b9e2ef))
+* update network policy create params descriptions ([#7069](https://github.com/runloopai/api-client-python/issues/7069)) ([b151692](https://github.com/runloopai/api-client-python/commit/b15169283ff344c447b203b6bc3589f05c400ea7))
+* remove support for pydantic-v1, pydantic-v2 is now default ([#710](https://github.com/runloopai/api-client-python/issues/710))
 * add documentation url to pypi project page ([#711](https://github.com/runloopai/api-client-python/issues/711)) ([7afb327](https://github.com/runloopai/api-client-python/commit/7afb32731842ebee4f479837959ccac856bd5e85))
 * add missing docstrings ([a198632](https://github.com/runloopai/api-client-python/commit/a198632f6a3936bcf5b5b4f4e6324461c4853893))
 * **devbox:** Remove network policy from devbox view; use launch params instead ([#7025](https://github.com/runloopai/api-client-python/issues/7025)) ([d53af14](https://github.com/runloopai/api-client-python/commit/d53af14f6f55144859c8257d936a115989563b6d))
