@@ -18,16 +18,20 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     """
 
     allow_all: Optional[bool]
-    """If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults to false."""
-
-    allow_devbox_to_devbox: Optional[bool]
-    """If true, allows traffic between the account's own devboxes via tunnels.
+    """(Optional) If true, all egress traffic is allowed (ALLOW_ALL policy).
 
     Defaults to false.
     """
 
+    allow_devbox_to_devbox: Optional[bool]
+    """
+    (Optional) If true, allows traffic between the account's own devboxes via
+    tunnels. Defaults to false. If allow_all is true, this is automatically set to
+    true.
+    """
+
     allowed_hostnames: Optional[SequenceNotStr[str]]
-    """DNS-based allow list with wildcard support.
+    """(Optional) DNS-based allow list with wildcard support.
 
     Examples: ['github.com', '*.npmjs.org'].
     """

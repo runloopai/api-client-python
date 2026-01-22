@@ -364,6 +364,8 @@ class TestDevboxStateManagement:
             name=unique_name("sdk-devbox-resume-async"),
             launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
         )
+        # wait for devbox to be running
+        devbox.await_running(polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0))
 
         try:
             # Suspend the devbox
@@ -382,7 +384,7 @@ class TestDevboxStateManagement:
 
             # Status might still be suspended or transitioning
             info_after_resume = devbox.get_info()
-            assert info_after_resume.status in ["suspended", "running", "starting"]
+            assert info_after_resume.status in ["suspended", "running", "starting", "provisioning"]
 
             # Now wait for running state explicitly
             running_info = devbox.await_running(
@@ -463,7 +465,7 @@ class TestDevboxCreationMethods:
         # First create a blueprint
         blueprint = sdk_client.blueprint.create(
             name=unique_name("sdk-blueprint-for-devbox"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y curl",
         )
 
         try:
@@ -491,7 +493,7 @@ class TestDevboxCreationMethods:
         # Create blueprint
         blueprint = sdk_client.blueprint.create(
             name=blueprint_name,
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y wget",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y wget",
         )
 
         try:

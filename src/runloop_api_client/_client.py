@@ -46,13 +46,13 @@ if TYPE_CHECKING:
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
     from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
     from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
-    from .resources.benchmarks.benchmarks import BenchmarksResource, AsyncBenchmarksResource
 
 __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Runloop", "AsyncRunloop", "Client", "AsyncClient"]
 

@@ -6,15 +6,7 @@ from typing import Dict, Optional
 
 import httpx
 
-from .runs import (
-    RunsResource,
-    AsyncRunsResource,
-    RunsResourceWithRawResponse,
-    AsyncRunsResourceWithRawResponse,
-    RunsResourceWithStreamingResponse,
-    AsyncRunsResourceWithStreamingResponse,
-)
-from ...types import (
+from ..types import (
     benchmark_list_params,
     benchmark_create_params,
     benchmark_update_params,
@@ -23,31 +15,27 @@ from ...types import (
     benchmark_list_public_params,
     benchmark_update_scenarios_params,
 )
-from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from .._utils import maybe_transform, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.benchmark_view import BenchmarkView
-from ...types.benchmark_run_view import BenchmarkRunView
-from ...types.shared_params.run_profile import RunProfile
-from ...types.scenario_definition_list_view import ScenarioDefinitionListView
+from ..pagination import SyncBenchmarksCursorIDPage, AsyncBenchmarksCursorIDPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.benchmark_view import BenchmarkView
+from ..types.benchmark_run_view import BenchmarkRunView
+from ..types.shared_params.run_profile import RunProfile
+from ..types.scenario_definition_list_view import ScenarioDefinitionListView
 
 __all__ = ["BenchmarksResource", "AsyncBenchmarksResource"]
 
 
 class BenchmarksResource(SyncAPIResource):
-    @cached_property
-    def runs(self) -> RunsResource:
-        return RunsResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> BenchmarksResourceWithRawResponse:
         """
@@ -513,10 +501,6 @@ class BenchmarksResource(SyncAPIResource):
 
 
 class AsyncBenchmarksResource(AsyncAPIResource):
-    @cached_property
-    def runs(self) -> AsyncRunsResource:
-        return AsyncRunsResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncBenchmarksResourceWithRawResponse:
         """
@@ -1010,10 +994,6 @@ class BenchmarksResourceWithRawResponse:
             benchmarks.update_scenarios,
         )
 
-    @cached_property
-    def runs(self) -> RunsResourceWithRawResponse:
-        return RunsResourceWithRawResponse(self._benchmarks.runs)
-
 
 class AsyncBenchmarksResourceWithRawResponse:
     def __init__(self, benchmarks: AsyncBenchmarksResource) -> None:
@@ -1043,10 +1023,6 @@ class AsyncBenchmarksResourceWithRawResponse:
         self.update_scenarios = async_to_raw_response_wrapper(
             benchmarks.update_scenarios,
         )
-
-    @cached_property
-    def runs(self) -> AsyncRunsResourceWithRawResponse:
-        return AsyncRunsResourceWithRawResponse(self._benchmarks.runs)
 
 
 class BenchmarksResourceWithStreamingResponse:
@@ -1078,10 +1054,6 @@ class BenchmarksResourceWithStreamingResponse:
             benchmarks.update_scenarios,
         )
 
-    @cached_property
-    def runs(self) -> RunsResourceWithStreamingResponse:
-        return RunsResourceWithStreamingResponse(self._benchmarks.runs)
-
 
 class AsyncBenchmarksResourceWithStreamingResponse:
     def __init__(self, benchmarks: AsyncBenchmarksResource) -> None:
@@ -1111,7 +1083,3 @@ class AsyncBenchmarksResourceWithStreamingResponse:
         self.update_scenarios = async_to_streamed_response_wrapper(
             benchmarks.update_scenarios,
         )
-
-    @cached_property
-    def runs(self) -> AsyncRunsResourceWithStreamingResponse:
-        return AsyncRunsResourceWithStreamingResponse(self._benchmarks.runs)

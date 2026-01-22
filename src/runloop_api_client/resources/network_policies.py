@@ -69,12 +69,14 @@ class NetworkPoliciesResource(SyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
-          allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults to false.
-
-          allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels. Defaults
+          allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
 
-          allowed_hostnames: DNS-based allow list with wildcard support. Examples: ['github.com',
+          allow_devbox_to_devbox: (Optional) If true, allows traffic between the account's own devboxes via
+              tunnels. Defaults to false. If allow_all is true, this is automatically set to
+              true.
+
+          allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
           description: Optional description for the NetworkPolicy.
@@ -353,12 +355,14 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
-          allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults to false.
-
-          allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels. Defaults
+          allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
 
-          allowed_hostnames: DNS-based allow list with wildcard support. Examples: ['github.com',
+          allow_devbox_to_devbox: (Optional) If true, allows traffic between the account's own devboxes via
+              tunnels. Defaults to false. If allow_all is true, this is automatically set to
+              true.
+
+          allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
           description: Optional description for the NetworkPolicy.
