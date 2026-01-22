@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.0 (2026-01-22)
+
+Full Changelog: [v1.3.0-alpha...v1.3.0](https://github.com/runloopai/api-client-python/compare/v1.3.0-alpha...v1.3.0)
+
+### Features
+
+* **network-policy:** add network policies ([#720](https://github.com/runloopai/api-client-python/issues/720)) ([9b31116](https://github.com/runloopai/api-client-python/commit/9b311168fcda2554f8ea03c9698c1e284dc1bdba))
+
+
+### Chores
+
+* fix stainless spec / remove deprecated benchmark/runs ([#7074](https://github.com/runloopai/api-client-python/issues/7074)) ([3ed7d80](https://github.com/runloopai/api-client-python/commit/3ed7d806edc349b4bb4cfb8e0e54b78f272a6d75))
+* fix tests and linting ([#719](https://github.com/runloopai/api-client-python/issues/719)) ([74db814](https://github.com/runloopai/api-client-python/commit/74db81455af44b94896e8adc7a6e24ba71b9e2ef))
+* update network policy create params descriptions ([#7069](https://github.com/runloopai/api-client-python/issues/7069)) ([b151692](https://github.com/runloopai/api-client-python/commit/b15169283ff344c447b203b6bc3589f05c400ea7))
+
 ## 1.3.0-alpha (2026-01-20)
 
 Full Changelog: [v1.2.0...v1.3.0-alpha](https://github.com/runloopai/api-client-python/compare/v1.2.0...v1.3.0-alpha)
