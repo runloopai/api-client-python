@@ -365,6 +365,8 @@ class TestAsyncDevboxStateManagement:
             name=unique_name("sdk-async-devbox-resume-async"),
             launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
         )
+        # wait for devbox to be running
+        await devbox.await_running(polling_config=PollingConfig(timeout_seconds=120.0, interval_seconds=5.0))
 
         try:
             # Suspend the devbox
@@ -385,7 +387,7 @@ class TestAsyncDevboxStateManagement:
 
             # Status might still be suspended or transitioning
             info_after_resume = await devbox.get_info()
-            assert info_after_resume.status in ["suspended", "running", "starting"]
+            assert info_after_resume.status in ["suspended", "running", "starting", "provisioning"]
 
             # Now wait for running state explicitly
             running_info = await devbox.await_running(

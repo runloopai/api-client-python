@@ -384,7 +384,7 @@ class TestDevboxStateManagement:
 
             # Status might still be suspended or transitioning
             info_after_resume = devbox.get_info()
-            assert info_after_resume.status in ["suspended", "running", "starting"]
+            assert info_after_resume.status in ["suspended", "running", "starting", "provisioning"]
 
             # Now wait for running state explicitly
             running_info = devbox.await_running(
