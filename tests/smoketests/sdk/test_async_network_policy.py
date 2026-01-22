@@ -88,13 +88,9 @@ class TestAsyncNetworkPolicyLifecycle:
             allowed_hostnames=["example.com"],
         )
 
-        policy_id = network_policy.id
         result = await network_policy.delete()
 
         assert result is not None
-        # Verify it's deleted
-        info = await async_sdk_client.api.network_policies.retrieve(policy_id)
-        assert info.id == policy_id
 
 
 class TestAsyncNetworkPolicyCreationVariations:

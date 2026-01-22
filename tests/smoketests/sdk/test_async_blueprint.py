@@ -22,7 +22,7 @@ class TestAsyncBlueprintLifecycle:
         name = unique_name("sdk-async-blueprint-basic")
         blueprint = await async_sdk_client.blueprint.create(
             name=name,
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y curl",
         )
 
         try:
@@ -43,7 +43,7 @@ class TestAsyncBlueprintLifecycle:
         name = unique_name("sdk-async-blueprint-setup")
         blueprint = await async_sdk_client.blueprint.create(
             name=name,
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
             system_setup_commands=[
                 "sudo apt-get update",
                 "sudo apt-get install -y wget",
@@ -64,7 +64,7 @@ class TestAsyncBlueprintLifecycle:
         name = unique_name("sdk-async-blueprint-info")
         blueprint = await async_sdk_client.blueprint.create(
             name=name,
-            dockerfile="FROM ubuntu:20.04\nRUN echo 'test'",
+            dockerfile="FROM ubuntu:22.04\nRUN echo 'test'",
         )
 
         try:
@@ -81,7 +81,7 @@ class TestAsyncBlueprintLifecycle:
         """Test deleting a blueprint."""
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-async-blueprint-delete"),
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
         )
 
         blueprint_id = blueprint.id
@@ -102,7 +102,7 @@ class TestAsyncBlueprintCreationVariations:
         # Create base blueprint
         base_blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-async-blueprint-base"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y curl",
         )
 
         try:
@@ -135,7 +135,7 @@ class TestAsyncBlueprintCreationVariations:
 
         blueprint = await async_sdk_client.blueprint.create(
             name=name,
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
             metadata=metadata,
         )
 
@@ -168,7 +168,7 @@ class TestAsyncBlueprintListing:
         # Create a blueprint
         created = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-async-blueprint-retrieve"),
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
         )
 
         try:
@@ -190,7 +190,7 @@ class TestAsyncBlueprintListing:
         # Create a blueprint with a specific name
         blueprint = await async_sdk_client.blueprint.create(
             name=blueprint_name,
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
         )
 
         try:
@@ -216,7 +216,7 @@ class TestAsyncBlueprintDevboxIntegration:
         # Create a blueprint
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-async-blueprint-for-devbox"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y python3",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y python3",
         )
 
         try:
@@ -255,7 +255,7 @@ class TestAsyncBlueprintErrorHandling:
         try:
             blueprint = await async_sdk_client.blueprint.create(
                 name=unique_name("sdk-async-blueprint-invalid"),
-                dockerfile="FROM ubuntu:20.04\nRUN INVALID_COMMAND_THAT_DOES_NOT_EXIST",
+                dockerfile="FROM ubuntu:22.04\nRUN INVALID_COMMAND_THAT_DOES_NOT_EXIST",
             )
             # If it somehow succeeds, verify it failed during build
             info = await blueprint.get_info()

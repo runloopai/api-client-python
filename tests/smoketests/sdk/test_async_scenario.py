@@ -207,7 +207,7 @@ class TestAsyncScenarioBuilder:
         """Test creating/updating a scenario from a blueprint."""
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-async-scenario-bp"),
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
         )
 
         builder = (
@@ -233,7 +233,7 @@ class TestAsyncScenarioBuilder:
         # Create blueprint -> devbox -> snapshot chain
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-smoketest-async-scenario-snap-bp"),
-            dockerfile="FROM ubuntu:20.04",
+            dockerfile="FROM ubuntu:22.04",
         )
         devbox = await async_sdk_client.devbox.create(blueprint_id=blueprint.id)
         snapshot = await devbox.snapshot_disk(name=unique_name("sdk-smoketest-async-scenario-snap"))

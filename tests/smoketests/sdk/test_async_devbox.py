@@ -466,7 +466,7 @@ class TestAsyncDevboxCreationMethods:
         # First create a blueprint
         blueprint = await async_sdk_client.blueprint.create(
             name=unique_name("sdk-async-blueprint-for-devbox"),
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y curl",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y curl",
         )
 
         try:
@@ -494,7 +494,7 @@ class TestAsyncDevboxCreationMethods:
         # Create blueprint
         blueprint = await async_sdk_client.blueprint.create(
             name=blueprint_name,
-            dockerfile="FROM ubuntu:20.04\nRUN apt-get update && apt-get install -y wget",
+            dockerfile="FROM ubuntu:22.04\nRUN apt-get update && apt-get install -y wget",
         )
 
         try:

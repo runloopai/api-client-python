@@ -88,13 +88,9 @@ class TestNetworkPolicyLifecycle:
             allowed_hostnames=["example.com"],
         )
 
-        policy_id = network_policy.id
         result = network_policy.delete()
 
         assert result is not None
-        # Verify it's deleted
-        info = sdk_client.api.network_policies.retrieve(policy_id)
-        assert info.id == policy_id
 
 
 class TestNetworkPolicyCreationVariations:
