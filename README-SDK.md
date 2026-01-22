@@ -428,6 +428,7 @@ blueprint = runloop.blueprint.create(
 
 # Or create a blueprint with a Docker build context from a local directory
 from pathlib import Path
+from datetime import timedelta
 from runloop_api_client.lib.context_loader import build_docker_context_tar
 
 context_root = Path("./my-app")
@@ -437,6 +438,7 @@ build_ctx_obj = runloop.storage_object.upload_from_bytes(
     data=tar_bytes,
     name="my-app-context.tar.gz",
     content_type="tgz",
+    ttl=timedelta(weeks=1),  # Default is 1 week
 )
 
 blueprint_with_context = runloop.blueprint.create(

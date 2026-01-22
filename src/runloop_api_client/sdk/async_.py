@@ -240,7 +240,7 @@ class AsyncBlueprintOps:
         >>> runloop = AsyncRunloopSDK()
         >>> obj = await runloop.object_storage.upload_from_dir(
         ...     "./",
-        ...     ttl=timedelta(hours=1),
+        ...     ttl=timedelta(weeks=1),
         ... )
         >>> blueprint = await runloop.blueprint.create(
         ...     name="my-blueprint",
@@ -406,7 +406,7 @@ class AsyncStorageObjectOps:
         *,
         name: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
-        ttl: Optional[timedelta] = None,
+        ttl: Optional[timedelta] = timedelta(weeks=1),
         ignore: TarFilter | None = None,
         **options: Unpack[LongRequestOptions],
     ) -> AsyncStorageObject:
@@ -420,7 +420,8 @@ class AsyncStorageObjectOps:
         :type name: Optional[str]
         :param metadata: Optional key-value metadata
         :type metadata: Optional[Dict[str, str]]
-        :param ttl: Optional Time-To-Live, after which the object is automatically deleted
+        :param ttl: Optional Time-To-Live, after which the object is automatically deleted.
+            Defaults to 1 week. Pass ``None`` explicitly for no expiration.
         :type ttl: Optional[timedelta]
         :param ignore: Optional tar filter function compatible with
             :meth:`tarfile.TarFile.add`. If provided, it will be called for each
