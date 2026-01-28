@@ -28,6 +28,7 @@ from .scoring_function import ScoringFunction as ScoringFunction
 from .secret_list_view import SecretListView as SecretListView
 from .agent_list_params import AgentListParams as AgentListParams
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
+from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
 from .devbox_tunnel_view import DevboxTunnelView as DevboxTunnelView
@@ -58,6 +59,7 @@ from .scenario_update_params import ScenarioUpdateParams as ScenarioUpdateParams
 from .scoring_contract_param import ScoringContractParam as ScoringContractParam
 from .scoring_function_param import ScoringFunctionParam as ScoringFunctionParam
 from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreateParams
+from .benchmark_job_list_view import BenchmarkJobListView as BenchmarkJobListView
 from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListView
 from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
@@ -67,6 +69,7 @@ from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyList
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
 from .repository_manifest_view import RepositoryManifestView as RepositoryManifestView
+from .benchmark_job_list_params import BenchmarkJobListParams as BenchmarkJobListParams
 from .benchmark_run_list_params import BenchmarkRunListParams as BenchmarkRunListParams
 from .devbox_send_std_in_result import DevboxSendStdInResult as DevboxSendStdInResult
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
@@ -82,6 +85,7 @@ from .input_context_update_param import InputContextUpdateParam as InputContextU
 from .network_policy_list_params import NetworkPolicyListParams as NetworkPolicyListParams
 from .repository_connection_view import RepositoryConnectionView as RepositoryConnectionView
 from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvironmentParam
+from .benchmark_job_create_params import BenchmarkJobCreateParams as BenchmarkJobCreateParams
 from .devbox_create_tunnel_params import DevboxCreateTunnelParams as DevboxCreateTunnelParams
 from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownloadFileParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
