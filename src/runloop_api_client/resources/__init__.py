@@ -64,6 +64,14 @@ from .repositories import (
     RepositoriesResourceWithStreamingResponse,
     AsyncRepositoriesResourceWithStreamingResponse,
 )
+from .benchmark_jobs import (
+    BenchmarkJobsResource,
+    AsyncBenchmarkJobsResource,
+    BenchmarkJobsResourceWithRawResponse,
+    AsyncBenchmarkJobsResourceWithRawResponse,
+    BenchmarkJobsResourceWithStreamingResponse,
+    AsyncBenchmarkJobsResourceWithStreamingResponse,
+)
 from .benchmark_runs import (
     BenchmarkRunsResource,
     AsyncBenchmarkRunsResource,
@@ -94,6 +102,12 @@ __all__ = [
     "AsyncBenchmarkRunsResourceWithRawResponse",
     "BenchmarkRunsResourceWithStreamingResponse",
     "AsyncBenchmarkRunsResourceWithStreamingResponse",
+    "BenchmarkJobsResource",
+    "AsyncBenchmarkJobsResource",
+    "BenchmarkJobsResourceWithRawResponse",
+    "AsyncBenchmarkJobsResourceWithRawResponse",
+    "BenchmarkJobsResourceWithStreamingResponse",
+    "AsyncBenchmarkJobsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",

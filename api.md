@@ -55,6 +55,24 @@ Methods:
 - <code title="post /v1/benchmark_runs/{id}/complete">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
 - <code title="get /v1/benchmark_runs/{id}/scenario_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
 
+# BenchmarkJobs
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    BenchmarkJobCreateParameters,
+    BenchmarkJobListView,
+    BenchmarkJobView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/benchmark_jobs">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">create</a>(\*\*<a href="src/runloop_api_client/types/benchmark_job_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_job_view.py">BenchmarkJobView</a></code>
+- <code title="get /v1/benchmark_jobs/{id}">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_job_view.py">BenchmarkJobView</a></code>
+- <code title="get /v1/benchmark_jobs">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_job_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_job_list_view.py">BenchmarkJobListView</a></code>
+
 # Agents
 
 Types:
