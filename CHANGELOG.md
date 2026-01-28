@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.1 (2026-01-28)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/runloopai/api-client-python/compare/v1.3.0...v1.3.1)
+
+### Features
+
+* **benchmark:** adding in progress benchmark runs for benchmark jobs ([#7183](https://github.com/runloopai/api-client-python/issues/7183)) ([2f11e9f](https://github.com/runloopai/api-client-python/commit/2f11e9f0298d0a30c03abd19c6c7096a26487b02))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([7ba3962](https://github.com/runloopai/api-client-python/commit/7ba3962181d62b0791dd6d064c52ca512443a2ca))
+
 ## 1.3.0 (2026-01-22)
 
 Full Changelog: [v1.3.0-alpha...v1.3.0](https://github.com/runloopai/api-client-python/compare/v1.3.0-alpha...v1.3.0)
