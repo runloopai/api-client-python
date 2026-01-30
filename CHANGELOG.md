@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.2 (2026-01-30)
+
+Full Changelog: [v1.3.1...v1.3.2](https://github.com/runloopai/api-client-python/compare/v1.3.1...v1.3.2)
+
+### Bug Fixes
+
+* **blueprint:** blueprint state queued handled by is ready ([#726](https://github.com/runloopai/api-client-python/issues/726)) ([77e91ab](https://github.com/runloopai/api-client-python/commit/77e91ab1f75bba3fd824f7a87cb4132412ce4961))
+
 ## 1.3.1 (2026-01-28)
 
 Full Changelog: [v1.3.0...v1.3.1](https://github.com/runloopai/api-client-python/compare/v1.3.0...v1.3.1)
