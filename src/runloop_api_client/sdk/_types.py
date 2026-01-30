@@ -22,6 +22,7 @@ from ..types import (
     NetworkPolicyListParams,
     DevboxCreateTunnelParams,
     DevboxDownloadFileParams,
+    DevboxEnableTunnelParams,
     DevboxRemoveTunnelParams,
     DevboxSnapshotDiskParams,
     NetworkPolicyCreateParams,
@@ -118,6 +119,10 @@ class SDKDevboxUploadFileParams(DevboxUploadFileParams, LongRequestOptions):
 
 
 class SDKDevboxCreateTunnelParams(DevboxCreateTunnelParams, LongRequestOptions):
+    pass
+
+
+class SDKDevboxEnableTunnelParams(DevboxEnableTunnelParams, LongRequestOptions):
     pass
 
 

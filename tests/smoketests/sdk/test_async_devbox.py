@@ -458,6 +458,53 @@ class TestAsyncDevboxNetworking:
         finally:
             await devbox.shutdown()
 
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_create_with_tunnel_param(self, async_sdk_client: AsyncRunloopSDK) -> None:
+        """Test creating a devbox with tunnel configuration in create params."""
+        devbox = await async_sdk_client.devbox.create(
+            name=unique_name("sdk-async-devbox-tunnel-param"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+            tunnel={"auth_mode": "open"},
+        )
+
+        try:
+            # Verify devbox is running
+            info = await devbox.get_info()
+            assert info.status == "running"
+
+            # Verify tunnel was created at launch
+            assert info.tunnel is not None
+            assert info.tunnel.tunnel_key is not None
+            assert info.tunnel.auth_mode is not None
+        finally:
+            await devbox.shutdown()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_enable_tunnel(self, async_sdk_client: AsyncRunloopSDK) -> None:
+        """Test enabling a V2 tunnel on an existing devbox."""
+        devbox = await async_sdk_client.devbox.create(
+            name=unique_name("sdk-async-devbox-enable-tunnel"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+        )
+
+        try:
+            # Verify no tunnel exists initially
+            info = await devbox.get_info()
+            assert info.tunnel is None
+
+            # Enable tunnel using the V2 API via SDK
+            tunnel = await devbox.net.enable_tunnel(auth_mode="open")
+            assert tunnel is not None
+            assert tunnel.tunnel_key is not None
+            assert tunnel.auth_mode is not None
+
+            # Verify tunnel is now present in devbox info
+            info = await devbox.get_info()
+            assert info.tunnel is not None
+            assert info.tunnel.tunnel_key == tunnel.tunnel_key
+        finally:
+            await devbox.shutdown()
+
 
 class TestAsyncDevboxCreationMethods:
     """Test various async devbox creation methods."""
