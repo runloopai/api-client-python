@@ -311,7 +311,7 @@ class BlueprintsResource(SyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning"]
 
         blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
 
@@ -981,7 +981,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning"]
 
         blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
 
