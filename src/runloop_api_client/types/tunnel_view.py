@@ -15,7 +15,7 @@ class TunnelView(BaseModel):
     Usage: https://{port}-{tunnel_key}.tunnel.runloop.ai
     """
 
-    auth_mode: Literal["public_", "authenticated"]
+    auth_mode: Literal["open", "authenticated"]
     """The authentication mode for the tunnel."""
 
     create_time_ms: int
