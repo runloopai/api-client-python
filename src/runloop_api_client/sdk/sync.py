@@ -552,7 +552,7 @@ class ScorerOps:
         :rtype: list[Scorer]
         """
         page = self._client.scenarios.scorers.list(**params)
-        return [Scorer(self._client, item.id) for item in page]
+        return [Scorer(self._client, item.id) for item in page.scorers]
 
 
 class AgentOps:
@@ -843,7 +843,7 @@ class ScenarioOps:
         :rtype: list[Scenario]
         """
         page = self._client.scenarios.list(**params)
-        return [Scenario(self._client, item.id) for item in page]
+        return [Scenario(self._client, item.id) for item in page.scenarios]
 
 
 class BenchmarkOps:
@@ -946,7 +946,7 @@ class NetworkPolicyOps:
         :rtype: list[NetworkPolicy]
         """
         page = self._client.network_policies.list(**params)
-        return [NetworkPolicy(self._client, item.id) for item in page]
+        return [NetworkPolicy(self._client, item.id) for item in page.network_policies]
 
 
 class RunloopSDK:
