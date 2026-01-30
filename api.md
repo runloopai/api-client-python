@@ -397,3 +397,24 @@ Methods:
 - <code title="post /v1/network-policies/{id}">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/network_policy_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
 - <code title="get /v1/network-policies">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">list</a>(\*\*<a href="src/runloop_api_client/types/network_policy_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/network_policy_view.py">SyncNetworkPoliciesCursorIDPage[NetworkPolicyView]</a></code>
 - <code title="post /v1/network-policies/{id}/delete">client.network_policies.<a href="./src/runloop_api_client/resources/network_policies.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/network_policy_view.py">NetworkPolicyView</a></code>
+
+# GatewayConfigs
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    GatewayConfigCreateParameters,
+    GatewayConfigListView,
+    GatewayConfigUpdateParameters,
+    GatewayConfigView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/gateway-configs">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">create</a>(\*\*<a href="src/runloop_api_client/types/gateway_config_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>
+- <code title="get /v1/gateway-configs/{id}">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>
+- <code title="post /v1/gateway-configs/{id}">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/gateway_config_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>
+- <code title="get /v1/gateway-configs">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">list</a>(\*\*<a href="src/runloop_api_client/types/gateway_config_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">SyncGatewayConfigsCursorIDPage[GatewayConfigView]</a></code>
+- <code title="post /v1/gateway-configs/{id}/delete">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>

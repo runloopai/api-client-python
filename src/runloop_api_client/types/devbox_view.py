@@ -6,7 +6,7 @@ from typing_extensions import Literal
 from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 
-__all__ = ["DevboxView", "StateTransition"]
+__all__ = ["DevboxView", "StateTransition", "GatewaySpecs"]
 
 
 class StateTransition(BaseModel):
@@ -28,6 +28,14 @@ class StateTransition(BaseModel):
 
     transition_time_ms: Optional[object] = None
     """The time the status change occurred"""
+
+
+class GatewaySpecs(BaseModel):
+    gateway_config_id: str
+    """The ID of the gateway config (e.g., gwc_123abc)."""
+
+    secret_id: str
+    """The ID of the secret containing the credential."""
 
 
 class DevboxView(BaseModel):
@@ -77,6 +85,12 @@ class DevboxView(BaseModel):
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
     """The failure reason if the Devbox failed, if the Devbox has a 'failure' status."""
+
+    gateway_specs: Optional[Dict[str, GatewaySpecs]] = None
+    """[Beta] Gateway specifications configured for this devbox.
+
+    Map key is the environment variable prefix (e.g., 'GWS_ANTHROPIC').
+    """
 
     initiator_id: Optional[str] = None
     """The ID of the initiator that created the Devbox."""

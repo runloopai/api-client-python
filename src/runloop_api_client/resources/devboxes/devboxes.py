@@ -185,6 +185,7 @@ class DevboxesResource(SyncAPIResource):
         entrypoint: Optional[str] | Omit = omit,
         environment_variables: Optional[Dict[str, str]] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
@@ -227,6 +228,12 @@ class DevboxesResource(SyncAPIResource):
 
           file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
+          gateways: [Beta] (Optional) Gateway specifications for credential proxying. Map key is the
+              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway will proxy
+              requests to external APIs using the specified credential without exposing the
+              real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
+              'my_claude_key'}}
+
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           metadata: User defined metadata to attach to the devbox for organization.
@@ -265,6 +272,7 @@ class DevboxesResource(SyncAPIResource):
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "gateways": gateways,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "mounts": mounts,
@@ -1723,6 +1731,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         entrypoint: Optional[str] | Omit = omit,
         environment_variables: Optional[Dict[str, str]] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
@@ -1765,6 +1774,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
+          gateways: [Beta] (Optional) Gateway specifications for credential proxying. Map key is the
+              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway will proxy
+              requests to external APIs using the specified credential without exposing the
+              real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
+              'my_claude_key'}}
+
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
           metadata: User defined metadata to attach to the devbox for organization.
@@ -1803,6 +1818,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "entrypoint": entrypoint,
                     "environment_variables": environment_variables,
                     "file_mounts": file_mounts,
+                    "gateways": gateways,
                     "launch_parameters": launch_parameters,
                     "metadata": metadata,
                     "mounts": mounts,

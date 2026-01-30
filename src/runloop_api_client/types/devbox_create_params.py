@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from typing import Dict, Iterable, Optional
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 from .shared_params.mount import Mount
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxCreateParams"]
+__all__ = ["DevboxCreateParams", "Gateways"]
 
 # We split up the original DevboxCreateParams into two nested types to enable us to
 # omit blueprint_id, blueprint_name, and snapshot_id when we unpack the TypedDict
@@ -36,6 +36,15 @@ class DevboxBaseCreateParams(TypedDict, total=False):
 
     file_mounts: Optional[Dict[str, str]]
     """Map of paths and file contents to write before setup. Use mounts instead."""
+
+    gateways: Optional[Dict[str, Gateways]]
+    """[Beta] (Optional) Gateway specifications for credential proxying.
+
+    Map key is the environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway
+    will proxy requests to external APIs using the specified credential without
+    exposing the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic',
+    'secret': 'my_claude_key'}}
+    """
 
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure the resources and launch time behavior of the Devbox."""
@@ -84,3 +93,15 @@ class DevboxCreateParams(DevboxBaseCreateParams, total=False):
 
     Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
     """
+
+
+class Gateways(TypedDict, total=False):
+    """
+    [Beta] GatewaySpec links a gateway configuration to a secret for credential proxying in a devbox. The gateway will proxy requests to external APIs using the specified credential without exposing the real API key.
+    """
+
+    gateway: Required[str]
+    """The gateway config to use. Can be a gateway config ID (gwc_xxx) or name."""
+
+    secret: Required[str]
+    """The secret containing the credential. Can be a secret ID or name."""
