@@ -954,6 +954,7 @@ class DevboxesResource(SyncAPIResource):
             cast_to=str,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def remove_tunnel(
         self,
         id: str,
@@ -967,8 +968,10 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        Remove a previously opened tunnel on the Devbox.
+        """[Deprecated] Tunnels remain active until devbox is shutdown.
+
+        This endpoint
+        removes a legacy tunnel.
 
         Args:
           port: Devbox port that tunnel will expose.
@@ -2280,6 +2283,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=str,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def remove_tunnel(
         self,
         id: str,
@@ -2293,8 +2297,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        Remove a previously opened tunnel on the Devbox.
+        """[Deprecated] Tunnels remain active until devbox is shutdown.
+
+        This endpoint
+        removes a legacy tunnel.
 
         Args:
           port: Devbox port that tunnel will expose.
@@ -2810,8 +2816,10 @@ class DevboxesResourceWithRawResponse:
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = to_raw_response_wrapper(
-            devboxes.remove_tunnel,
+        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.resume = to_raw_response_wrapper(
             devboxes.resume,
@@ -2910,8 +2918,10 @@ class AsyncDevboxesResourceWithRawResponse:
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = async_to_raw_response_wrapper(
-            devboxes.remove_tunnel,
+        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.resume = async_to_raw_response_wrapper(
             devboxes.resume,
@@ -3010,8 +3020,10 @@ class DevboxesResourceWithStreamingResponse:
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = to_streamed_response_wrapper(
-            devboxes.remove_tunnel,
+        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.resume = to_streamed_response_wrapper(
             devboxes.resume,
@@ -3110,8 +3122,10 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = async_to_streamed_response_wrapper(
-            devboxes.remove_tunnel,
+        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
+            )
         )
         self.resume = async_to_streamed_response_wrapper(
             devboxes.resume,
