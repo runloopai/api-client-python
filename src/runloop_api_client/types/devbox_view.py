@@ -6,7 +6,7 @@ from typing_extensions import Literal
 from .._models import BaseModel
 from .shared.launch_parameters import LaunchParameters
 
-__all__ = ["DevboxView", "StateTransition", "GatewaySpecs"]
+__all__ = ["DevboxView", "StateTransition", "GatewaySpecs", "Tunnel"]
 
 
 class StateTransition(BaseModel):
@@ -36,6 +36,30 @@ class GatewaySpecs(BaseModel):
 
     secret_id: str
     """The ID of the secret containing the credential."""
+
+
+class Tunnel(BaseModel):
+    """
+    V2 tunnel information if a tunnel was created at launch time or via the createTunnel API.
+    """
+
+    auth_mode: Literal["public_", "authenticated"]
+    """The authentication mode for the tunnel."""
+
+    create_time_ms: int
+    """Creation time of the tunnel (Unix timestamp milliseconds)."""
+
+    tunnel_key: str
+    """The encrypted tunnel key used to construct the tunnel URL.
+
+    URL format: https://{port}-{tunnel_key}.tunnel.runloop.{domain}
+    """
+
+    auth_token: Optional[str] = None
+    """Bearer token for tunnel authentication.
+
+    Only present when auth_mode is 'authenticated'.
+    """
 
 
 class DevboxView(BaseModel):
@@ -111,4 +135,10 @@ class DevboxView(BaseModel):
     """
     The Snapshot ID used in creation of the Devbox, if the devbox was created from a
     Snapshot.
+    """
+
+    tunnel: Optional[Tunnel] = None
+    """
+    V2 tunnel information if a tunnel was created at launch time or via the
+    createTunnel API.
     """

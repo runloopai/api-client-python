@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from typing import Dict, Iterable, Optional
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .shared_params.mount import Mount
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxCreateParams", "Gateways"]
+__all__ = ["DevboxCreateParams", "Gateways", "Tunnel"]
 
 # We split up the original DevboxCreateParams into two nested types to enable us to
 # omit blueprint_id, blueprint_name, and snapshot_id when we unpack the TypedDict
@@ -94,6 +94,13 @@ class DevboxCreateParams(DevboxBaseCreateParams, total=False):
     Only one of (Snapshot ID, Blueprint ID, Blueprint name) should be specified.
     """
 
+    tunnel: Optional[Tunnel]
+    """(Optional) Configuration for creating a V2 tunnel at Devbox launch time.
+
+    When specified, a tunnel will be automatically provisioned and the tunnel
+    details will be included in the Devbox response.
+    """
+
 
 class Gateways(TypedDict, total=False):
     """
@@ -105,3 +112,13 @@ class Gateways(TypedDict, total=False):
 
     secret: Required[str]
     """The secret containing the credential. Can be a secret ID or name."""
+
+
+class Tunnel(TypedDict, total=False):
+    """(Optional) Configuration for creating a V2 tunnel at Devbox launch time.
+
+    When specified, a tunnel will be automatically provisioned and the tunnel details will be included in the Devbox response.
+    """
+
+    auth_mode: Optional[Literal["open", "authenticated"]]
+    """Authentication mode for the tunnel. Defaults to 'public' if not specified."""
