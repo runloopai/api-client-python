@@ -61,6 +61,12 @@ class TestDevboxes:
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
+            gateways={
+                "foo": {
+                    "gateway": "gateway",
+                    "secret": "secret",
+                }
+            },
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,
@@ -1137,6 +1143,12 @@ class TestAsyncDevboxes:
             entrypoint="entrypoint",
             environment_variables={"foo": "string"},
             file_mounts={"foo": "string"},
+            gateways={
+                "foo": {
+                    "gateway": "gateway",
+                    "secret": "secret",
+                }
+            },
             launch_parameters={
                 "after_idle": {
                     "idle_time_seconds": 0,

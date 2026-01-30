@@ -42,6 +42,7 @@ if TYPE_CHECKING:
         repositories,
         benchmark_jobs,
         benchmark_runs,
+        gateway_configs,
         network_policies,
     )
     from .resources.agents import AgentsResource, AsyncAgentsResource
@@ -52,6 +53,7 @@ if TYPE_CHECKING:
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
     from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource
     from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
+    from .resources.gateway_configs import GatewayConfigsResource, AsyncGatewayConfigsResource
     from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
@@ -181,6 +183,12 @@ class Runloop(SyncAPIClient):
         from .resources.network_policies import NetworkPoliciesResource
 
         return NetworkPoliciesResource(self)
+
+    @cached_property
+    def gateway_configs(self) -> GatewayConfigsResource:
+        from .resources.gateway_configs import GatewayConfigsResource
+
+        return GatewayConfigsResource(self)
 
     @cached_property
     def with_raw_response(self) -> RunloopWithRawResponse:
@@ -419,6 +427,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncNetworkPoliciesResource(self)
 
     @cached_property
+    def gateway_configs(self) -> AsyncGatewayConfigsResource:
+        from .resources.gateway_configs import AsyncGatewayConfigsResource
+
+        return AsyncGatewayConfigsResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncRunloopWithRawResponse:
         return AsyncRunloopWithRawResponse(self)
 
@@ -603,6 +617,12 @@ class RunloopWithRawResponse:
 
         return NetworkPoliciesResourceWithRawResponse(self._client.network_policies)
 
+    @cached_property
+    def gateway_configs(self) -> gateway_configs.GatewayConfigsResourceWithRawResponse:
+        from .resources.gateway_configs import GatewayConfigsResourceWithRawResponse
+
+        return GatewayConfigsResourceWithRawResponse(self._client.gateway_configs)
+
 
 class AsyncRunloopWithRawResponse:
     _client: AsyncRunloop
@@ -675,6 +695,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.network_policies import AsyncNetworkPoliciesResourceWithRawResponse
 
         return AsyncNetworkPoliciesResourceWithRawResponse(self._client.network_policies)
+
+    @cached_property
+    def gateway_configs(self) -> gateway_configs.AsyncGatewayConfigsResourceWithRawResponse:
+        from .resources.gateway_configs import AsyncGatewayConfigsResourceWithRawResponse
+
+        return AsyncGatewayConfigsResourceWithRawResponse(self._client.gateway_configs)
 
 
 class RunloopWithStreamedResponse:
@@ -749,6 +775,12 @@ class RunloopWithStreamedResponse:
 
         return NetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
 
+    @cached_property
+    def gateway_configs(self) -> gateway_configs.GatewayConfigsResourceWithStreamingResponse:
+        from .resources.gateway_configs import GatewayConfigsResourceWithStreamingResponse
+
+        return GatewayConfigsResourceWithStreamingResponse(self._client.gateway_configs)
+
 
 class AsyncRunloopWithStreamedResponse:
     _client: AsyncRunloop
@@ -821,6 +853,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.network_policies import AsyncNetworkPoliciesResourceWithStreamingResponse
 
         return AsyncNetworkPoliciesResourceWithStreamingResponse(self._client.network_policies)
+
+    @cached_property
+    def gateway_configs(self) -> gateway_configs.AsyncGatewayConfigsResourceWithStreamingResponse:
+        from .resources.gateway_configs import AsyncGatewayConfigsResourceWithStreamingResponse
+
+        return AsyncGatewayConfigsResourceWithStreamingResponse(self._client.gateway_configs)
 
 
 Client = Runloop

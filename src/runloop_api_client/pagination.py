@@ -30,6 +30,8 @@ __all__ = [
     "AsyncObjectsCursorIDPage",
     "SyncNetworkPoliciesCursorIDPage",
     "AsyncNetworkPoliciesCursorIDPage",
+    "SyncGatewayConfigsCursorIDPage",
+    "AsyncGatewayConfigsCursorIDPage",
 ]
 
 _T = TypeVar("_T")
@@ -92,6 +94,11 @@ class ObjectsCursorIDPageItem(Protocol):
 
 @runtime_checkable
 class NetworkPoliciesCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class GatewayConfigsCursorIDPageItem(Protocol):
     id: str
 
 
@@ -905,6 +912,74 @@ class AsyncNetworkPoliciesCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[
 
         item = cast(Any, network_policies[-1])
         if not isinstance(item, NetworkPoliciesCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncGatewayConfigsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    gateway_configs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        gateway_configs = self.gateway_configs
+        if not gateway_configs:
+            return []
+        return gateway_configs
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        gateway_configs = self.gateway_configs
+        if not gateway_configs:
+            return None
+
+        item = cast(Any, gateway_configs[-1])
+        if not isinstance(item, GatewayConfigsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncGatewayConfigsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    gateway_configs: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        gateway_configs = self.gateway_configs
+        if not gateway_configs:
+            return []
+        return gateway_configs
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        gateway_configs = self.gateway_configs
+        if not gateway_configs:
+            return None
+
+        item = cast(Any, gateway_configs[-1])
+        if not isinstance(item, GatewayConfigsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
             # TODO emit warning log
             return None
 
