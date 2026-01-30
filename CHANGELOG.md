@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.1 (2026-01-30)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/runloopai/api-client-python/compare/v1.5.0...v1.5.1)
+
+### Chores
+
+* **devbox:** rename tunnel auth enum ([#7239](https://github.com/runloopai/api-client-python/issues/7239)) ([7a9b7a4](https://github.com/runloopai/api-client-python/commit/7a9b7a449ce648ad4f220af83b35f800727ea28d))
+
 ## 1.5.0 (2026-01-30)
 
 Full Changelog: [v1.4.0...v1.5.0](https://github.com/runloopai/api-client-python/compare/v1.4.0...v1.5.0)
