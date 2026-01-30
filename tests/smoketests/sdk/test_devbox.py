@@ -455,6 +455,51 @@ class TestDevboxNetworking:
         finally:
             devbox.shutdown()
 
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_create_with_tunnel_param(self, sdk_client: RunloopSDK) -> None:
+        """Test creating a devbox with tunnel configuration in create params."""
+        devbox = sdk_client.devbox.create(
+            name=unique_name("sdk-devbox-tunnel-param"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+            tunnel={"auth_mode": "open"},
+        )
+
+        try:
+            # Verify devbox is running
+            info = devbox.get_info()
+            assert info.status == "running"
+
+            # Verify tunnel was created at launch
+            assert info.tunnel is not None
+            assert info.tunnel.tunnel_key is not None
+            assert info.tunnel.auth_mode is not None
+        finally:
+            devbox.shutdown()
+
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    def test_enable_tunnel(self, sdk_client: RunloopSDK) -> None:
+        """Test enabling a V2 tunnel on an existing devbox."""
+        devbox = sdk_client.devbox.create(
+            name=unique_name("sdk-devbox-enable-tunnel"),
+            launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
+        )
+
+        try:
+            info = devbox.get_info()
+            assert info.tunnel is None
+
+            # Enable tunnel using the V2 API via SDK
+            tunnel = devbox.net.enable_tunnel(auth_mode="open")
+            assert tunnel is not None
+            assert tunnel.tunnel_key is not None
+            assert tunnel.auth_mode is not None
+
+            info = devbox.get_info()
+            assert info.tunnel is not None
+            assert info.tunnel.tunnel_key == tunnel.tunnel_key
+        finally:
+            devbox.shutdown()
+
 
 class TestDevboxCreationMethods:
     """Test various devbox creation methods."""
