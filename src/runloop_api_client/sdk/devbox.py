@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 from typing_extensions import Unpack, override
@@ -743,10 +744,12 @@ class NetworkInterface:
             >>> tunnel = devbox.net.create_tunnel(port=8080)
             >>> print(f"Public URL: {tunnel.url}")
         """
-        return self._devbox._client.devboxes.create_tunnel(
-            self._devbox.id,
-            **params,
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return self._devbox._client.devboxes.create_tunnel(  # type: ignore[deprecated]
+                self._devbox.id,
+                **params,
+            )
 
     def remove_tunnel(
         self,
@@ -761,7 +764,9 @@ class NetworkInterface:
         Example:
             >>> devbox.net.remove_tunnel(port=8080)
         """
-        return self._devbox._client.devboxes.remove_tunnel(
-            self._devbox.id,
-            **params,
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return self._devbox._client.devboxes.remove_tunnel(  # type: ignore[deprecated]
+                self._devbox.id,
+                **params,
+            )

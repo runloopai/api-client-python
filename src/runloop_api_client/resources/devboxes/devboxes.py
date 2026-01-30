@@ -494,6 +494,7 @@ class DevboxesResource(SyncAPIResource):
         entrypoint: Optional[str] | Omit = omit,
         environment_variables: Optional[Dict[str, str]] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
@@ -502,6 +503,7 @@ class DevboxesResource(SyncAPIResource):
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
+        tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -533,6 +535,7 @@ class DevboxesResource(SyncAPIResource):
             entrypoint=entrypoint,
             environment_variables=environment_variables,
             file_mounts=file_mounts,
+            gateways=gateways,
             launch_parameters=launch_parameters,
             metadata=metadata,
             mounts=mounts,
@@ -540,6 +543,7 @@ class DevboxesResource(SyncAPIResource):
             repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
+            tunnel=tunnel,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -1900,6 +1904,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         entrypoint: Optional[str] | Omit = omit,
         environment_variables: Optional[Dict[str, str]] | Omit = omit,
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
+        gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
@@ -1908,6 +1913,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
+        tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1940,6 +1946,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             entrypoint=entrypoint,
             environment_variables=environment_variables,
             file_mounts=file_mounts,
+            gateways=gateways,
             launch_parameters=launch_parameters,
             metadata=metadata,
             mounts=mounts,
@@ -1947,6 +1954,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
+            tunnel=tunnel,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence, Awaitable, cast
 from typing_extensions import Unpack, override
 
@@ -740,10 +741,12 @@ class AsyncNetworkInterface:
             >>> tunnel = await devbox.net.create_tunnel(port=8080)
             >>> print(f"Public URL: {tunnel.url}")
         """
-        return await self._devbox._client.devboxes.create_tunnel(
-            self._devbox.id,
-            **params,
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return await self._devbox._client.devboxes.create_tunnel(  # type: ignore[deprecated]
+                self._devbox.id,
+                **params,
+            )
 
     async def remove_tunnel(
         self,
@@ -758,7 +761,9 @@ class AsyncNetworkInterface:
         Example:
             >>> await devbox.net.remove_tunnel(port=8080)
         """
-        return await self._devbox._client.devboxes.remove_tunnel(
-            self._devbox.id,
-            **params,
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return await self._devbox._client.devboxes.remove_tunnel(  # type: ignore[deprecated]
+                self._devbox.id,
+                **params,
+            )
