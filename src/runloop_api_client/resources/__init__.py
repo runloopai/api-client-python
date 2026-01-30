@@ -80,6 +80,14 @@ from .benchmark_runs import (
     BenchmarkRunsResourceWithStreamingResponse,
     AsyncBenchmarkRunsResourceWithStreamingResponse,
 )
+from .gateway_configs import (
+    GatewayConfigsResource,
+    AsyncGatewayConfigsResource,
+    GatewayConfigsResourceWithRawResponse,
+    AsyncGatewayConfigsResourceWithRawResponse,
+    GatewayConfigsResourceWithStreamingResponse,
+    AsyncGatewayConfigsResourceWithStreamingResponse,
+)
 from .network_policies import (
     NetworkPoliciesResource,
     AsyncNetworkPoliciesResource,
@@ -156,4 +164,10 @@ __all__ = [
     "AsyncNetworkPoliciesResourceWithRawResponse",
     "NetworkPoliciesResourceWithStreamingResponse",
     "AsyncNetworkPoliciesResourceWithStreamingResponse",
+    "GatewayConfigsResource",
+    "AsyncGatewayConfigsResource",
+    "GatewayConfigsResourceWithRawResponse",
+    "AsyncGatewayConfigsResourceWithRawResponse",
+    "GatewayConfigsResourceWithStreamingResponse",
+    "AsyncGatewayConfigsResourceWithStreamingResponse",
 ]

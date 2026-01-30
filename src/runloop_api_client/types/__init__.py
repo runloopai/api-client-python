@@ -37,6 +37,7 @@ from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .blueprint_build_log import BlueprintBuildLog as BlueprintBuildLog
 from .blueprint_list_view import BlueprintListView as BlueprintListView
+from .gateway_config_view import GatewayConfigView as GatewayConfigView
 from .input_context_param import InputContextParam as InputContextParam
 from .network_policy_view import NetworkPolicyView as NetworkPolicyView
 from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
@@ -65,6 +66,7 @@ from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdatePar
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
+from .gateway_config_list_view import GatewayConfigListView as GatewayConfigListView
 from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyListView
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams
@@ -81,6 +83,7 @@ from .scenario_start_run_params import ScenarioStartRunParams as ScenarioStartRu
 from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStartRunParams
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
 from .devbox_execute_sync_params import DevboxExecuteSyncParams as DevboxExecuteSyncParams
+from .gateway_config_list_params import GatewayConfigListParams as GatewayConfigListParams
 from .input_context_update_param import InputContextUpdateParam as InputContextUpdateParam
 from .network_policy_list_params import NetworkPolicyListParams as NetworkPolicyListParams
 from .repository_connection_view import RepositoryConnectionView as RepositoryConnectionView
@@ -96,6 +99,8 @@ from .benchmark_definitions_params import BenchmarkDefinitionsParams as Benchmar
 from .benchmark_list_public_params import BenchmarkListPublicParams as BenchmarkListPublicParams
 from .blueprint_list_public_params import BlueprintListPublicParams as BlueprintListPublicParams
 from .devbox_execution_detail_view import DevboxExecutionDetailView as DevboxExecutionDetailView
+from .gateway_config_create_params import GatewayConfigCreateParams as GatewayConfigCreateParams
+from .gateway_config_update_params import GatewayConfigUpdateParams as GatewayConfigUpdateParams
 from .network_policy_create_params import NetworkPolicyCreateParams as NetworkPolicyCreateParams
 from .network_policy_update_params import NetworkPolicyUpdateParams as NetworkPolicyUpdateParams
 from .scoring_contract_result_view import ScoringContractResultView as ScoringContractResultView
