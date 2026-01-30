@@ -492,8 +492,8 @@ class TestAsyncDevboxNetworking:
             info = await devbox.get_info()
             assert info.tunnel is None
 
-            # Enable tunnel using the V2 API
-            tunnel = await async_sdk_client.api.devboxes.enable_tunnel(devbox.id, auth_mode="open")
+            # Enable tunnel using the V2 API via SDK
+            tunnel = await devbox.net.enable_tunnel(auth_mode="open")
             assert tunnel is not None
             assert tunnel.tunnel_key is not None
             assert tunnel.auth_mode is not None

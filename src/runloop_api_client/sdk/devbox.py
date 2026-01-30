@@ -10,6 +10,7 @@ from typing_extensions import Unpack, override
 
 from ..types import (
     DevboxView,
+    TunnelView,
     DevboxTunnelView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
@@ -25,6 +26,7 @@ from ._types import (
     SDKDevboxUploadFileParams,
     SDKDevboxCreateTunnelParams,
     SDKDevboxDownloadFileParams,
+    SDKDevboxEnableTunnelParams,
     SDKDevboxExecuteAsyncParams,
     SDKDevboxRemoveTunnelParams,
     SDKDevboxSnapshotDiskParams,
@@ -734,7 +736,9 @@ class NetworkInterface:
         self,
         **params: Unpack[SDKDevboxCreateTunnelParams],
     ) -> DevboxTunnelView:
-        """Create a network tunnel to expose a devbox port publicly.
+        """[Deprecated] Create a legacy tunnel to expose a devbox port publicly.
+
+        Use :meth:`enable_tunnel` instead for the V2 tunnel API.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
         :return: Details about the public endpoint
@@ -750,6 +754,30 @@ class NetworkInterface:
                 self._devbox.id,
                 **params,
             )
+
+    def enable_tunnel(
+        self,
+        **params: Unpack[SDKDevboxEnableTunnelParams],
+    ) -> TunnelView:
+        """Enable a V2 tunnel for secure HTTP access to the devbox.
+
+        V2 tunnels provide encrypted URL-based access without exposing internal IDs.
+        Each devbox can have one tunnel. The tunnel URL format is:
+        ``https://{port}-{tunnel_key}.tunnel.runloop.ai``
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxEnableTunnelParams` for available parameters
+        :return: Tunnel details including the tunnel key for constructing URLs
+        :rtype: :class:`~runloop_api_client.types.tunnel_view.TunnelView`
+
+        Example:
+            >>> tunnel = devbox.net.enable_tunnel(auth_mode="open")
+            >>> print(f"Tunnel key: {tunnel.tunnel_key}")
+            >>> # Access via: https://8080-{tunnel.tunnel_key}.tunnel.runloop.ai
+        """
+        return self._devbox._client.devboxes.enable_tunnel(
+            self._devbox.id,
+            **params,
+        )
 
     def remove_tunnel(
         self,

@@ -488,7 +488,8 @@ class TestDevboxNetworking:
             info = devbox.get_info()
             assert info.tunnel is None
 
-            tunnel = sdk_client.api.devboxes.enable_tunnel(devbox.id, auth_mode="open")
+            # Enable tunnel using the V2 API via SDK
+            tunnel = devbox.net.enable_tunnel(auth_mode="open")
             assert tunnel is not None
             assert tunnel.tunnel_key is not None
             assert tunnel.auth_mode is not None
