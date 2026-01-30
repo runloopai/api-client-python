@@ -16,6 +16,7 @@ from .agent_view import AgentView as AgentView
 from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
+from .tunnel_view import TunnelView as TunnelView
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .benchmark_view import BenchmarkView as BenchmarkView
@@ -91,6 +92,7 @@ from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvi
 from .benchmark_job_create_params import BenchmarkJobCreateParams as BenchmarkJobCreateParams
 from .devbox_create_tunnel_params import DevboxCreateTunnelParams as DevboxCreateTunnelParams
 from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownloadFileParams
+from .devbox_enable_tunnel_params import DevboxEnableTunnelParams as DevboxEnableTunnelParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
 from .devbox_remove_tunnel_params import DevboxRemoveTunnelParams as DevboxRemoveTunnelParams
 from .devbox_snapshot_disk_params import DevboxSnapshotDiskParams as DevboxSnapshotDiskParams
