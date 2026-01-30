@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.0 (2026-01-30)
+
+Full Changelog: [v1.3.2...v1.4.0](https://github.com/runloopai/api-client-python/compare/v1.3.2...v1.4.0)
+
+### Features
+
+* **client:** add custom JSON encoder for extended type support ([840addd](https://github.com/runloopai/api-client-python/commit/840addd8884fd93ede0c9bbc2a16cf399d6372d0))
+* **devbox:** add gateway routes ([#7212](https://github.com/runloopai/api-client-python/issues/7212)) ([2527bb7](https://github.com/runloopai/api-client-python/commit/2527bb7714f9ce9114964286bfbb35582ceaa976))
+* **devbox:** add new tunnel APIs and deprecate old tunnel API ([#7227](https://github.com/runloopai/api-client-python/issues/7227)) ([71620a1](https://github.com/runloopai/api-client-python/commit/71620a114080506898864b6d73378d4ff30b1070))
+
+
+### Chores
+
+* **devbox:** deprecate remove tunnel API ([#7230](https://github.com/runloopai/api-client-python/issues/7230)) ([d48832d](https://github.com/runloopai/api-client-python/commit/d48832d0aa076bd621decae3f5dadca7141c29d3))
+* **documentation:** made warning message language more accurate ([#7215](https://github.com/runloopai/api-client-python/issues/7215)) ([08e0586](https://github.com/runloopai/api-client-python/commit/08e058660cf02e67701899e3b46173c5e9011b7d))
+
 ## 1.3.2 (2026-01-30)
 
 Full Changelog: [v1.3.1...v1.3.2](https://github.com/runloopai/api-client-python/compare/v1.3.1...v1.3.2)
