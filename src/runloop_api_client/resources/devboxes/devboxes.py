@@ -28,6 +28,7 @@ from ...types import (
     devbox_execute_sync_params,
     devbox_create_tunnel_params,
     devbox_download_file_params,
+    devbox_enable_tunnel_params,
     devbox_execute_async_params,
     devbox_remove_tunnel_params,
     devbox_snapshot_disk_params,
@@ -99,6 +100,7 @@ from .disk_snapshots import (
 )
 from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
+from ...types.tunnel_view import TunnelView
 from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
@@ -785,6 +787,55 @@ class DevboxesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=BinaryAPIResponse,
+        )
+
+    def enable_tunnel(
+        self,
+        id: str,
+        *,
+        auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> TunnelView:
+        """Create a V2 tunnel for an existing running Devbox.
+
+        Tunnels provide encrypted
+        URL-based access to the Devbox without exposing internal IDs. The tunnel URL
+        format is: https://{port}-{tunnel_key}.tunnel.runloop.ai
+
+        Each Devbox can have one tunnel.
+
+        Args:
+          auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/devboxes/{id}/enable_tunnel",
+            body=maybe_transform({"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=TunnelView,
         )
 
     def execute(
@@ -2347,6 +2398,57 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=AsyncBinaryAPIResponse,
         )
 
+    async def enable_tunnel(
+        self,
+        id: str,
+        *,
+        auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> TunnelView:
+        """Create a V2 tunnel for an existing running Devbox.
+
+        Tunnels provide encrypted
+        URL-based access to the Devbox without exposing internal IDs. The tunnel URL
+        format is: https://{port}-{tunnel_key}.tunnel.runloop.ai
+
+        Each Devbox can have one tunnel.
+
+        Args:
+          auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/devboxes/{id}/enable_tunnel",
+            body=await async_maybe_transform(
+                {"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=TunnelView,
+        )
+
     async def execute(
         self,
         id: str,
@@ -3293,6 +3395,9 @@ class DevboxesResourceWithRawResponse:
             devboxes.download_file,
             BinaryAPIResponse,
         )
+        self.enable_tunnel = to_raw_response_wrapper(
+            devboxes.enable_tunnel,
+        )
         self.execute = to_raw_response_wrapper(
             devboxes.execute,
         )
@@ -3394,6 +3499,9 @@ class AsyncDevboxesResourceWithRawResponse:
         self.download_file = async_to_custom_raw_response_wrapper(
             devboxes.download_file,
             AsyncBinaryAPIResponse,
+        )
+        self.enable_tunnel = async_to_raw_response_wrapper(
+            devboxes.enable_tunnel,
         )
         self.execute = async_to_raw_response_wrapper(
             devboxes.execute,
@@ -3497,6 +3605,9 @@ class DevboxesResourceWithStreamingResponse:
             devboxes.download_file,
             StreamedBinaryAPIResponse,
         )
+        self.enable_tunnel = to_streamed_response_wrapper(
+            devboxes.enable_tunnel,
+        )
         self.execute = to_streamed_response_wrapper(
             devboxes.execute,
         )
@@ -3598,6 +3709,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.download_file = async_to_custom_streamed_response_wrapper(
             devboxes.download_file,
             AsyncStreamedBinaryAPIResponse,
+        )
+        self.enable_tunnel = async_to_streamed_response_wrapper(
+            devboxes.enable_tunnel,
         )
         self.execute = async_to_streamed_response_wrapper(
             devboxes.execute,
