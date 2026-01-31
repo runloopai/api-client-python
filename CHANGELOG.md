@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.2 (2026-01-31)
+
+Full Changelog: [v1.5.1...v1.5.2](https://github.com/runloopai/api-client-python/compare/v1.5.1...v1.5.2)
+
+### Bug Fixes
+
+* **sdk:** fixed pagination for scorer, scenario and network policy list methods ([#731](https://github.com/runloopai/api-client-python/issues/731)) ([d55fceb](https://github.com/runloopai/api-client-python/commit/d55fceb7d42877cd0ac69a934ef300815f371342))
+
 ## 1.5.1 (2026-01-30)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/runloopai/api-client-python/compare/v1.5.0...v1.5.1)
