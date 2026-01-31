@@ -732,12 +732,8 @@ class TestAsyncScorerOps:
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
         """Test list method with empty results."""
-
-        async def async_iter():
-            return
-            yield  # Make this a generator
-
-        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scorers=[])
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=page)
 
         ops = AsyncScorerOps(mock_async_client)
         scorers = await ops.list(limit=10)
@@ -748,11 +744,8 @@ class TestAsyncScorerOps:
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, scorer_view: MockScorerView) -> None:
         """Test list method with single result."""
-
-        async def async_iter():
-            yield scorer_view
-
-        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scorers=[scorer_view])
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=page)
 
         ops = AsyncScorerOps(mock_async_client)
         scorers = await ops.list(
@@ -770,12 +763,8 @@ class TestAsyncScorerOps:
         """Test list method with multiple results."""
         scorer_view1 = MockScorerView(id="scorer_001", type="scorer-1")
         scorer_view2 = MockScorerView(id="scorer_002", type="scorer-2")
-
-        async def async_iter():
-            yield scorer_view1
-            yield scorer_view2
-
-        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scorers=[scorer_view1, scorer_view2])
+        mock_async_client.scenarios.scorers.list = AsyncMock(return_value=page)
 
         ops = AsyncScorerOps(mock_async_client)
         scorers = await ops.list(limit=10)
@@ -1152,12 +1141,8 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
         """Test list method with empty results."""
-
-        async def async_iter():
-            return
-            yield  # Make this a generator
-
-        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scenarios=[])
+        mock_async_client.scenarios.list = AsyncMock(return_value=page)
 
         ops = AsyncScenarioOps(mock_async_client)
         scenarios = await ops.list(limit=10)
@@ -1168,11 +1153,8 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-
-        async def async_iter():
-            yield scenario_view
-
-        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scenarios=[scenario_view])
+        mock_async_client.scenarios.list = AsyncMock(return_value=page)
 
         ops = AsyncScenarioOps(mock_async_client)
         scenarios = await ops.list(limit=10)
@@ -1185,15 +1167,10 @@ class TestAsyncScenarioOps:
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list method with multiple results."""
-
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
-
-        async def async_iter():
-            yield scenario_view1
-            yield scenario_view2
-
-        mock_async_client.scenarios.list = AsyncMock(return_value=async_iter())
+        page = SimpleNamespace(scenarios=[scenario_view1, scenario_view2])
+        mock_async_client.scenarios.list = AsyncMock(return_value=page)
 
         ops = AsyncScenarioOps(mock_async_client)
         scenarios = await ops.list(limit=10)
@@ -1291,26 +1268,20 @@ class TestAsyncNetworkPolicyOps:
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
         """Test list method with empty results."""
-
-        async def async_iter():
-            return
-            yield  # Make this a generator
-
-        mock_async_client.network_policies.list.return_value = async_iter()
+        page = SimpleNamespace(network_policies=[])
+        mock_async_client.network_policies.list = AsyncMock(return_value=page)
 
         ops = AsyncNetworkPolicyOps(mock_async_client)
         network_policies = await ops.list(limit=10)
 
         assert len(network_policies) == 0
+        mock_async_client.network_policies.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_single(self, mock_async_client: AsyncMock, network_policy_view: MockNetworkPolicyView) -> None:
         """Test list method with single result."""
-
-        async def async_iter():
-            yield network_policy_view
-
-        mock_async_client.network_policies.list.return_value = async_iter()
+        page = SimpleNamespace(network_policies=[network_policy_view])
+        mock_async_client.network_policies.list = AsyncMock(return_value=page)
 
         ops = AsyncNetworkPolicyOps(mock_async_client)
         network_policies = await ops.list(
@@ -1321,18 +1292,15 @@ class TestAsyncNetworkPolicyOps:
         assert len(network_policies) == 1
         assert isinstance(network_policies[0], AsyncNetworkPolicy)
         assert network_policies[0].id == "np_123"
+        mock_async_client.network_policies.list.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
         """Test list method with multiple results."""
         network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
         network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
-
-        async def async_iter():
-            yield network_policy_view1
-            yield network_policy_view2
-
-        mock_async_client.network_policies.list.return_value = async_iter()
+        page = SimpleNamespace(network_policies=[network_policy_view1, network_policy_view2])
+        mock_async_client.network_policies.list = AsyncMock(return_value=page)
 
         ops = AsyncNetworkPolicyOps(mock_async_client)
         network_policies = await ops.list(limit=10)
@@ -1342,6 +1310,7 @@ class TestAsyncNetworkPolicyOps:
         assert isinstance(network_policies[1], AsyncNetworkPolicy)
         assert network_policies[0].id == "np_001"
         assert network_policies[1].id == "np_002"
+        mock_async_client.network_policies.list.assert_awaited_once()
 
 
 class TestAsyncRunloopSDK:

@@ -679,7 +679,8 @@ class TestScorerOps:
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
-        mock_client.scenarios.scorers.list.return_value = []
+        page = SimpleNamespace(scorers=[])
+        mock_client.scenarios.scorers.list.return_value = page
 
         ops = ScorerOps(mock_client)
         scorers = ops.list(limit=10)
@@ -689,7 +690,8 @@ class TestScorerOps:
 
     def test_list_single(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
         """Test list method with single result."""
-        mock_client.scenarios.scorers.list.return_value = [scorer_view]
+        page = SimpleNamespace(scorers=[scorer_view])
+        mock_client.scenarios.scorers.list.return_value = page
 
         ops = ScorerOps(mock_client)
         scorers = ops.list(
@@ -706,7 +708,8 @@ class TestScorerOps:
         """Test list method with multiple results."""
         scorer_view1 = MockScorerView(id="scorer_001", type="scorer-1")
         scorer_view2 = MockScorerView(id="scorer_002", type="scorer-2")
-        mock_client.scenarios.scorers.list.return_value = [scorer_view1, scorer_view2]
+        page = SimpleNamespace(scorers=[scorer_view1, scorer_view2])
+        mock_client.scenarios.scorers.list.return_value = page
 
         ops = ScorerOps(mock_client)
         scorers = ops.list(limit=10)
@@ -1062,8 +1065,8 @@ class TestScenarioOps:
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
-
-        mock_client.scenarios.list.return_value = []
+        page = SimpleNamespace(scenarios=[])
+        mock_client.scenarios.list.return_value = page
 
         ops = ScenarioOps(mock_client)
         scenarios = ops.list(limit=10)
@@ -1073,8 +1076,8 @@ class TestScenarioOps:
 
     def test_list_single(self, mock_client: Mock, scenario_view: MockScenarioView) -> None:
         """Test list method with single result."""
-
-        mock_client.scenarios.list.return_value = [scenario_view]
+        page = SimpleNamespace(scenarios=[scenario_view])
+        mock_client.scenarios.list.return_value = page
 
         ops = ScenarioOps(mock_client)
         scenarios = ops.list(limit=10)
@@ -1086,10 +1089,10 @@ class TestScenarioOps:
 
     def test_list_multiple(self, mock_client: Mock) -> None:
         """Test list method with multiple results."""
-
         scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
         scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
-        mock_client.scenarios.list.return_value = [scenario_view1, scenario_view2]
+        page = SimpleNamespace(scenarios=[scenario_view1, scenario_view2])
+        mock_client.scenarios.list.return_value = page
 
         ops = ScenarioOps(mock_client)
         scenarios = ops.list(limit=10)
@@ -1182,7 +1185,8 @@ class TestNetworkPolicyOps:
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""
-        mock_client.network_policies.list.return_value = []
+        page = SimpleNamespace(network_policies=[])
+        mock_client.network_policies.list.return_value = page
 
         ops = NetworkPolicyOps(mock_client)
         network_policies = ops.list(limit=10)
@@ -1192,7 +1196,8 @@ class TestNetworkPolicyOps:
 
     def test_list_single(self, mock_client: Mock, network_policy_view: MockNetworkPolicyView) -> None:
         """Test list method with single result."""
-        mock_client.network_policies.list.return_value = [network_policy_view]
+        page = SimpleNamespace(network_policies=[network_policy_view])
+        mock_client.network_policies.list.return_value = page
 
         ops = NetworkPolicyOps(mock_client)
         network_policies = ops.list(
@@ -1209,7 +1214,8 @@ class TestNetworkPolicyOps:
         """Test list method with multiple results."""
         network_policy_view1 = MockNetworkPolicyView(id="np_001", name="policy-1")
         network_policy_view2 = MockNetworkPolicyView(id="np_002", name="policy-2")
-        mock_client.network_policies.list.return_value = [network_policy_view1, network_policy_view2]
+        page = SimpleNamespace(network_policies=[network_policy_view1, network_policy_view2])
+        mock_client.network_policies.list.return_value = page
 
         ops = NetworkPolicyOps(mock_client)
         network_policies = ops.list(limit=10)
