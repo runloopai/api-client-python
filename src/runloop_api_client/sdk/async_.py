@@ -557,7 +557,7 @@ class AsyncScorerOps:
         :rtype: list[AsyncScorer]
         """
         page = await self._client.scenarios.scorers.list(**params)
-        return [AsyncScorer(self._client, item.id) async for item in page]
+        return [AsyncScorer(self._client, item.id) for item in page.scorers]
 
 
 class AsyncAgentOps:
@@ -818,7 +818,7 @@ class AsyncScenarioOps:
         :rtype: list[AsyncScenario]
         """
         page = await self._client.scenarios.list(**params)
-        return [AsyncScenario(self._client, item.id) async for item in page]
+        return [AsyncScenario(self._client, item.id) for item in page.scenarios]
 
 
 class AsyncBenchmarkOps:
@@ -920,8 +920,8 @@ class AsyncNetworkPolicyOps:
         :return: List of network policies
         :rtype: list[AsyncNetworkPolicy]
         """
-        page = self._client.network_policies.list(**params)
-        return [AsyncNetworkPolicy(self._client, item.id) async for item in page]
+        page = await self._client.network_policies.list(**params)
+        return [AsyncNetworkPolicy(self._client, item.id) for item in page.network_policies]
 
 
 class AsyncRunloopSDK:
