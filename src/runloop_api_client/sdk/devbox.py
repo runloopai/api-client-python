@@ -63,16 +63,21 @@ class Devbox:
         # Devbox is automatically shutdown on exit
     """
 
-    def __init__(self, client: Runloop, devbox_id: str) -> None:
+    def __init__(
+        self,
+        client: Runloop,
+        devbox_view: DevboxView,
+    ) -> None:
         """Initialize the wrapper.
 
         :param client: Generated Runloop client
         :type client: Runloop
-        :param devbox_id: Devbox identifier returned by the API
-        :type devbox_id: str
+        :param devbox_view: DevboxView from the API
+        :type devbox_view: DevboxView
         """
         self._client = client
-        self._id = devbox_id
+        self._id = devbox_view.id
+        self._tunnel: Optional[TunnelView] = devbox_view.tunnel
         self._logger = logging.getLogger(__name__)
 
     @override
@@ -102,6 +107,18 @@ class Devbox:
         :rtype: str
         """
         return self._id
+
+    @property
+    def tunnel(self) -> Optional[TunnelView]:
+        """Return the cached tunnel info, if available.
+
+        This returns the tunnel info cached at creation time. For the latest
+        tunnel state, use :meth:`get_info` or :meth:`net.view_tunnel`.
+
+        :return: Cached tunnel info, or None if no tunnel was enabled at creation
+        :rtype: TunnelView | None
+        """
+        return self._tunnel
 
     def get_info(
         self,
@@ -778,6 +795,24 @@ class NetworkInterface:
             self._devbox.id,
             **params,
         )
+
+    def view_tunnel(
+        self,
+        **options: Unpack[BaseRequestOptions],
+    ) -> Optional[TunnelView]:
+        """Retrieve the current tunnel info for this devbox, if one exists.
+
+        :param options: Optional request configuration
+        :return: Current tunnel info, or None if no tunnel is enabled
+        :rtype: TunnelView | None
+
+        Example:
+            >>> tunnel = devbox.net.view_tunnel()
+            >>> if tunnel:
+            ...     print(f"Tunnel key: {tunnel.tunnel_key}")
+        """
+        info = self._devbox.get_info(**options)
+        return info.tunnel
 
     def remove_tunnel(
         self,

@@ -81,7 +81,7 @@ class DevboxOps:
         devbox_view = self._client.devboxes.create_and_await_running(
             **params,
         )
-        return Devbox(self._client, devbox_view.id)
+        return Devbox(self._client, devbox_view)
 
     def create_from_blueprint_id(
         self,
@@ -100,7 +100,7 @@ class DevboxOps:
             blueprint_id=blueprint_id,
             **params,
         )
-        return Devbox(self._client, devbox_view.id)
+        return Devbox(self._client, devbox_view)
 
     def create_from_blueprint_name(
         self,
@@ -119,7 +119,7 @@ class DevboxOps:
             blueprint_name=blueprint_name,
             **params,
         )
-        return Devbox(self._client, devbox_view.id)
+        return Devbox(self._client, devbox_view)
 
     def create_from_snapshot(
         self,
@@ -138,7 +138,7 @@ class DevboxOps:
             snapshot_id=snapshot_id,
             **params,
         )
-        return Devbox(self._client, devbox_view.id)
+        return Devbox(self._client, devbox_view)
 
     def from_id(self, devbox_id: str) -> Devbox:
         """Attach to an existing devbox by ID.
@@ -152,7 +152,8 @@ class DevboxOps:
         :rtype: Devbox
         """
         self._client.devboxes.await_running(devbox_id)
-        return Devbox(self._client, devbox_id)
+        devbox_view = self._client.devboxes.retrieve(devbox_id)
+        return Devbox(self._client, devbox_view)
 
     def list(
         self,
@@ -167,7 +168,7 @@ class DevboxOps:
         page = self._client.devboxes.list(
             **params,
         )
-        return [Devbox(self._client, item.id) for item in page.devboxes]
+        return [Devbox(self._client, item) for item in page.devboxes]
 
 
 class SnapshotOps:

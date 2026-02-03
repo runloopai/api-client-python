@@ -82,7 +82,7 @@ class AsyncDevboxOps:
         devbox_view = await self._client.devboxes.create_and_await_running(
             **params,
         )
-        return AsyncDevbox(self._client, devbox_view.id)
+        return AsyncDevbox(self._client, devbox_view)
 
     async def create_from_blueprint_id(
         self,
@@ -101,7 +101,7 @@ class AsyncDevboxOps:
             blueprint_id=blueprint_id,
             **params,
         )
-        return AsyncDevbox(self._client, devbox_view.id)
+        return AsyncDevbox(self._client, devbox_view)
 
     async def create_from_blueprint_name(
         self,
@@ -120,7 +120,7 @@ class AsyncDevboxOps:
             blueprint_name=blueprint_name,
             **params,
         )
-        return AsyncDevbox(self._client, devbox_view.id)
+        return AsyncDevbox(self._client, devbox_view)
 
     async def create_from_snapshot(
         self,
@@ -139,9 +139,9 @@ class AsyncDevboxOps:
             snapshot_id=snapshot_id,
             **params,
         )
-        return AsyncDevbox(self._client, devbox_view.id)
+        return AsyncDevbox(self._client, devbox_view)
 
-    def from_id(self, devbox_id: str) -> AsyncDevbox:
+    async def from_id(self, devbox_id: str) -> AsyncDevbox:
         """Attach to an existing devbox by ID.
 
         Returns immediately without waiting for the devbox to reach ``running``
@@ -153,7 +153,8 @@ class AsyncDevboxOps:
         :return: Wrapper bound to the requested devbox
         :rtype: AsyncDevbox
         """
-        return AsyncDevbox(self._client, devbox_id)
+        devbox_view = await self._client.devboxes.retrieve(devbox_id)
+        return AsyncDevbox(self._client, devbox_view)
 
     async def list(
         self,
@@ -168,7 +169,7 @@ class AsyncDevboxOps:
         page = await self._client.devboxes.list(
             **params,
         )
-        return [AsyncDevbox(self._client, item.id) for item in page.devboxes]
+        return [AsyncDevbox(self._client, item) for item in page.devboxes]
 
 
 class AsyncSnapshotOps:
