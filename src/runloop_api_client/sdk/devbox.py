@@ -118,6 +118,50 @@ class Devbox:
             **options,
         )
 
+    def get_tunnel(
+        self,
+        **options: Unpack[BaseRequestOptions],
+    ) -> TunnelView | None:
+        """Retrieve the V2 tunnel information for this devbox.
+
+        :param options: Optional request configuration
+        :return: Tunnel details if a tunnel is enabled, None otherwise
+        :rtype: :class:`~runloop_api_client.types.tunnel_view.TunnelView` | None
+
+        Example:
+            >>> tunnel = devbox.get_tunnel()
+            >>> if tunnel:
+            ...     print(f"Tunnel key: {tunnel.tunnel_key}")
+        """
+        info = self.get_info(**options)
+        return info.tunnel
+
+    def get_tunnel_url(
+        self,
+        port: int,
+        **options: Unpack[BaseRequestOptions],
+    ) -> str | None:
+        """Get the public tunnel URL for a specific port.
+
+        Constructs the tunnel URL using the format:
+        ``https://{port}-{tunnel_key}.tunnel.runloop.ai``
+
+        :param port: The port number to construct the URL for
+        :type port: int
+        :param options: Optional request configuration
+        :return: The public tunnel URL if a tunnel is enabled, None otherwise
+        :rtype: str | None
+
+        Example:
+            >>> url = devbox.get_tunnel_url(8080)
+            >>> if url:
+            ...     print(f"Access your service at: {url}")
+        """
+        tunnel_view = self.get_tunnel(**options)
+        if tunnel_view is None:
+            return None
+        return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.runloop.ai"
+
     def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.
 

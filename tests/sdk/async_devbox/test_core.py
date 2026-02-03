@@ -323,3 +323,79 @@ class TestAsyncDevbox:
         net = devbox.net
         assert isinstance(net, AsyncNetworkInterface)
         assert net._devbox is devbox
+
+    @pytest.mark.asyncio
+    async def test_get_tunnel_returns_tunnel_view(self, mock_async_client: AsyncMock) -> None:
+        """Test get_tunnel returns the tunnel from get_info."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_with_tunnel)
+
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        result = await devbox.get_tunnel()
+
+        assert result is not None
+        assert result == tunnel_view
+        assert result.tunnel_key == "abc123xyz"
+        mock_async_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    @pytest.mark.asyncio
+    async def test_get_tunnel_returns_none_when_no_tunnel(self, mock_async_client: AsyncMock) -> None:
+        """Test get_tunnel returns None when no tunnel is enabled."""
+        devbox_view_no_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=None,
+        )
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_no_tunnel)
+
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        result = await devbox.get_tunnel()
+
+        assert result is None
+        mock_async_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    @pytest.mark.asyncio
+    async def test_get_tunnel_url_constructs_url(self, mock_async_client: AsyncMock) -> None:
+        """Test get_tunnel_url constructs the correct URL."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_with_tunnel)
+
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        result = await devbox.get_tunnel_url(8080)
+
+        assert result == "https://8080-abc123xyz.tunnel.runloop.ai"
+        mock_async_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    @pytest.mark.asyncio
+    async def test_get_tunnel_url_returns_none_when_no_tunnel(self, mock_async_client: AsyncMock) -> None:
+        """Test get_tunnel_url returns None when no tunnel is enabled."""
+        devbox_view_no_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=None,
+        )
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_no_tunnel)
+
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        result = await devbox.get_tunnel_url(8080)
+
+        assert result is None
+        mock_async_client.devboxes.retrieve.assert_called_once_with("dbx_123")
