@@ -84,6 +84,7 @@ from .scenario_start_run_params import ScenarioStartRunParams as ScenarioStartRu
 from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStartRunParams
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
 from .devbox_execute_sync_params import DevboxExecuteSyncParams as DevboxExecuteSyncParams
+from .devbox_resource_usage_view import DevboxResourceUsageView as DevboxResourceUsageView
 from .gateway_config_list_params import GatewayConfigListParams as GatewayConfigListParams
 from .input_context_update_param import InputContextUpdateParam as InputContextUpdateParam
 from .network_policy_list_params import NetworkPolicyListParams as NetworkPolicyListParams
