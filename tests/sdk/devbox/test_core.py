@@ -322,3 +322,75 @@ class TestDevbox:
         net = devbox.net
         assert isinstance(net, NetworkInterface)
         assert net._devbox is devbox
+
+    def test_get_tunnel_returns_tunnel_view(self, mock_client: Mock) -> None:
+        """Test get_tunnel returns the tunnel from get_info."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_client.devboxes.retrieve.return_value = devbox_view_with_tunnel
+
+        devbox = Devbox(mock_client, "dbx_123")
+        result = devbox.get_tunnel()
+
+        assert result is not None
+        assert result == tunnel_view
+        assert result.tunnel_key == "abc123xyz"
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    def test_get_tunnel_returns_none_when_no_tunnel(self, mock_client: Mock) -> None:
+        """Test get_tunnel returns None when no tunnel is enabled."""
+        devbox_view_no_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=None,
+        )
+        mock_client.devboxes.retrieve.return_value = devbox_view_no_tunnel
+
+        devbox = Devbox(mock_client, "dbx_123")
+        result = devbox.get_tunnel()
+
+        assert result is None
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    def test_get_tunnel_url_constructs_url(self, mock_client: Mock) -> None:
+        """Test get_tunnel_url constructs the correct URL."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_client.devboxes.retrieve.return_value = devbox_view_with_tunnel
+
+        devbox = Devbox(mock_client, "dbx_123")
+        result = devbox.get_tunnel_url(8080)
+
+        assert result == "https://8080-abc123xyz.tunnel.runloop.ai"
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    def test_get_tunnel_url_returns_none_when_no_tunnel(self, mock_client: Mock) -> None:
+        """Test get_tunnel_url returns None when no tunnel is enabled."""
+        devbox_view_no_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=None,
+        )
+        mock_client.devboxes.retrieve.return_value = devbox_view_no_tunnel
+
+        devbox = Devbox(mock_client, "dbx_123")
+        result = devbox.get_tunnel_url(8080)
+
+        assert result is None
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
