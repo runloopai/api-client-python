@@ -77,7 +77,8 @@ class ScenarioRun:
         :return: Devbox instance
         :rtype: Devbox
         """
-        return Devbox(self._client, self._devbox_id)
+        devbox_view = self._client.devboxes.retrieve(self._devbox_id)
+        return Devbox(self._client, devbox_view)
 
     def get_info(
         self,

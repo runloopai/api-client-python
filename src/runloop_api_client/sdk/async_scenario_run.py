@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 from typing import Union, Optional
-from functools import cached_property
 from typing_extensions import Unpack, override
 
 from ..types import ScenarioRunView
@@ -68,16 +67,16 @@ class AsyncScenarioRun:
         """
         return self._devbox_id
 
-    @cached_property
-    def devbox(self) -> AsyncDevbox:
-        """The devbox instance for this scenario run.
+    async def get_devbox(self) -> AsyncDevbox:
+        """Get the devbox instance for this scenario run.
 
         Use this to interact with the devbox environment during the scenario run.
 
         :return: AsyncDevbox instance
         :rtype: AsyncDevbox
         """
-        return AsyncDevbox(self._client, self._devbox_id)
+        devbox_view = await self._client.devboxes.retrieve(self._devbox_id)
+        return AsyncDevbox(self._client, devbox_view)
 
     async def get_info(
         self,

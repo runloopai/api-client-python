@@ -11,7 +11,7 @@ import threading
 from types import SimpleNamespace
 from unittest.mock import Mock
 
-from tests.sdk.conftest import THREAD_STARTUP_DELAY
+from tests.sdk.conftest import THREAD_STARTUP_DELAY, mock_devbox_view
 from runloop_api_client.sdk import Devbox
 from runloop_api_client._streaming import Stream
 from runloop_api_client.sdk.execution import _StreamingGroup
@@ -26,7 +26,7 @@ class TestDevboxStreaming:
 
     def test_start_streaming_no_callbacks(self, mock_client: Mock) -> None:
         """Test _start_streaming returns None when no callbacks."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=None)
         assert result is None
 
@@ -34,7 +34,7 @@ class TestDevboxStreaming:
         """Test _start_streaming with stdout callback only."""
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         stdout_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=stdout_calls.append, stderr=None, output=None)
 
@@ -47,7 +47,7 @@ class TestDevboxStreaming:
         """Test _start_streaming with stderr callback only."""
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         stderr_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=None, stderr=stderr_calls.append, output=None)
 
@@ -61,7 +61,7 @@ class TestDevboxStreaming:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         output_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=output_calls.append)
 
@@ -74,7 +74,7 @@ class TestDevboxStreaming:
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
         mock_client.devboxes.executions.stream_stderr_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         stdout_calls: list[str] = []
         stderr_calls: list[str] = []
         output_calls: list[str] = []
@@ -104,7 +104,7 @@ class TestDevboxStreaming:
         mock_stream.__enter__ = Mock(return_value=mock_stream)
         mock_stream.__exit__ = Mock(return_value=None)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         stop_event = threading.Event()
         calls: list[str] = []
 
@@ -147,7 +147,7 @@ class TestDevboxStreaming:
         mock_stream.__enter__ = Mock(return_value=mock_stream)
         mock_stream.__exit__ = Mock(return_value=None)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         stop_event = threading.Event()
         calls: list[str] = []
 

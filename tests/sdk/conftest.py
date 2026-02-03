@@ -51,6 +51,20 @@ class MockDevboxView:
     id: str = TEST_IDS["devbox"]
     status: str = "running"
     name: str = "test-devbox"
+    tunnel: Any = None
+
+
+def mock_devbox_view(
+    id: str = TEST_IDS["devbox"],
+    status: str = "running",
+    name: str = "test-devbox",
+    tunnel: Any = None,
+) -> Any:
+    """Create a mock DevboxView for testing.
+
+    Returns Any to satisfy type checkers when passed to Devbox/AsyncDevbox constructors.
+    """
+    return MockDevboxView(id=id, status=status, name=name, tunnel=tunnel)
 
 
 @dataclass

@@ -133,7 +133,7 @@ class TestAsyncScenarioRun:
             await run.await_env_ready()
 
             # Access devbox
-            devbox = run.devbox
+            devbox = await run.get_devbox()
             info = await devbox.get_info()
             assert info.status == "running"
 
@@ -169,7 +169,7 @@ class TestAsyncScenarioRun:
             assert run.devbox_id is not None
 
             # Devbox should be ready
-            devbox = run.devbox
+            devbox = await run.get_devbox()
             info = await devbox.get_info()
             assert info.status == "running"
 

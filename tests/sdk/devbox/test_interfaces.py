@@ -12,7 +12,7 @@ from unittest.mock import Mock
 
 import httpx
 
-from tests.sdk.conftest import MockExecutionView
+from tests.sdk.conftest import MockExecutionView, mock_devbox_view
 from runloop_api_client.sdk import Devbox
 
 
@@ -24,7 +24,7 @@ class TestCommandInterface:
         mock_client.devboxes.execute_async.return_value = execution_view
         mock_client.devboxes.executions.await_completed.return_value = execution_view
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
@@ -57,7 +57,7 @@ class TestCommandInterface:
 
         stdout_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
@@ -86,7 +86,7 @@ class TestCommandInterface:
 
         stderr_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.cmd.exec("echo hello", stderr=stderr_calls.append)
 
         assert result.exit_code == 0
@@ -115,7 +115,7 @@ class TestCommandInterface:
 
         output_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.cmd.exec("echo hello", output=output_calls.append)
 
         assert result.exit_code == 0
@@ -146,7 +146,7 @@ class TestCommandInterface:
         stderr_calls: list[str] = []
         output_calls: list[str] = []
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.cmd.exec(
             "echo hello",
             stdout=stdout_calls.append,
@@ -168,7 +168,7 @@ class TestCommandInterface:
         mock_client.devboxes.execute_async.return_value = execution_async
         mock_client.devboxes.executions.stream_stdout_updates.return_value = mock_stream
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         execution = devbox.cmd.exec_async("long-running command")
 
         assert execution.execution_id == "exn_123"
@@ -183,7 +183,7 @@ class TestFileInterface:
         """Test file read."""
         mock_client.devboxes.read_file_contents.return_value = "file content"
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
@@ -196,7 +196,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -210,7 +210,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.write_file_contents.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -225,7 +225,7 @@ class TestFileInterface:
         mock_response.read.return_value = b"file content"
         mock_client.devboxes.download_file.return_value = mock_response
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
@@ -238,7 +238,7 @@ class TestFileInterface:
         execution_detail = SimpleNamespace()
         mock_client.devboxes.upload_file.return_value = execution_detail
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         # Create a temporary file for upload
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
@@ -260,7 +260,7 @@ class TestNetworkInterface:
         ssh_key_response = SimpleNamespace(public_key="ssh-rsa ...")
         mock_client.devboxes.create_ssh_key.return_value = ssh_key_response
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.net.create_ssh_key(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -284,7 +284,7 @@ class TestNetworkInterface:
         tunnel_view = SimpleNamespace(port=8080)
         mock_client.devboxes.create_tunnel.return_value = tunnel_view
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.net.create_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},
@@ -309,7 +309,7 @@ class TestNetworkInterface:
         """Test remove tunnel."""
         mock_client.devboxes.remove_tunnel.return_value = object()
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.net.remove_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},

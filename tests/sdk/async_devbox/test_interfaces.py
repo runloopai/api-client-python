@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock
 import httpx
 import pytest
 
-from tests.sdk.conftest import MockExecutionView
+from tests.sdk.conftest import MockExecutionView, mock_devbox_view
 from runloop_api_client.sdk import AsyncDevbox
 
 
@@ -27,7 +27,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_view)
         mock_async_client.devboxes.executions.await_completed = AsyncMock(return_value=execution_view)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.cmd.exec("echo hello")
 
         assert result.exit_code == 0
@@ -61,7 +61,7 @@ class TestAsyncCommandInterface:
 
         stdout_calls: list[str] = []
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.cmd.exec("echo hello", stdout=stdout_calls.append)
 
         assert result.exit_code == 0
@@ -81,7 +81,7 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_async)
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         execution = await devbox.cmd.exec_async("long-running command")
 
         assert execution.execution_id == "exn_123"
@@ -97,7 +97,7 @@ class TestAsyncFileInterface:
         """Test file read."""
         mock_async_client.devboxes.read_file_contents = AsyncMock(return_value="file content")
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.file.read(file_path="/path/to/file")
 
         assert result == "file content"
@@ -109,7 +109,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -121,7 +121,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.write_file_contents = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.file.write(file_path="/path/to/file", contents="content")
 
         assert result == execution_detail
@@ -134,7 +134,7 @@ class TestAsyncFileInterface:
         mock_response.read = AsyncMock(return_value=b"file content")
         mock_async_client.devboxes.download_file = AsyncMock(return_value=mock_response)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.file.download(path="/path/to/file")
 
         assert result == b"file content"
@@ -146,7 +146,7 @@ class TestAsyncFileInterface:
         execution_detail = SimpleNamespace()
         mock_async_client.devboxes.upload_file = AsyncMock(return_value=execution_detail)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         # Create a temporary file for upload
         temp_file = tmp_path / "test_file.txt"
         temp_file.write_text("test content")
@@ -166,7 +166,7 @@ class TestAsyncNetworkInterface:
         ssh_key_response = SimpleNamespace(public_key="ssh-rsa ...")
         mock_async_client.devboxes.create_ssh_key = AsyncMock(return_value=ssh_key_response)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.net.create_ssh_key(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -184,7 +184,7 @@ class TestAsyncNetworkInterface:
         tunnel_view = SimpleNamespace(tunnel_id="tunnel_123")
         mock_async_client.devboxes.create_tunnel = AsyncMock(return_value=tunnel_view)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.net.create_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},
@@ -202,7 +202,7 @@ class TestAsyncNetworkInterface:
         """Test remove tunnel."""
         mock_async_client.devboxes.remove_tunnel = AsyncMock(return_value=object())
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = await devbox.net.remove_tunnel(
             port=8080,
             extra_headers={"X-Custom": "value"},

@@ -110,16 +110,17 @@ class TestAsyncDevboxOps:
         call_kwargs = mock_async_client.devboxes.create_and_await_running.call_args[1]
         assert call_kwargs["snapshot_id"] == "snp_123"
 
-    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+    @pytest.mark.asyncio
+    async def test_from_id(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
         """Test from_id method."""
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view)
+
         ops = AsyncDevboxOps(mock_async_client)
-        devbox = ops.from_id("dbx_123")
+        devbox = await ops.from_id("dbx_123")
 
         assert isinstance(devbox, AsyncDevbox)
         assert devbox.id == "dbx_123"
-        # Verify from_id does not wait for running status
-        if hasattr(mock_async_client.devboxes, "await_running"):
-            assert not mock_async_client.devboxes.await_running.called
+        mock_async_client.devboxes.retrieve.assert_awaited_once_with("dbx_123")
 
     @pytest.mark.asyncio
     async def test_list_empty(self, mock_async_client: AsyncMock) -> None:

@@ -630,7 +630,7 @@ class TestAsyncDevboxListing:
 
         try:
             # Retrieve it by ID
-            retrieved = async_sdk_client.devbox.from_id(created.id)
+            retrieved = await async_sdk_client.devbox.from_id(created.id)
             assert retrieved.id == created.id
 
             # Verify it's the same devbox

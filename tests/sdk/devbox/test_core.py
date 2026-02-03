@@ -11,9 +11,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from tests.sdk.conftest import (
-    MockDevboxView,
-)
+from tests.sdk.conftest import MockDevboxView, mock_devbox_view
 from runloop_api_client.sdk import Devbox
 from runloop_api_client._types import omit
 from runloop_api_client.sdk.devbox import (
@@ -29,19 +27,19 @@ class TestDevbox:
 
     def test_init(self, mock_client: Mock) -> None:
         """Test Devbox initialization."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         assert devbox.id == "dbx_123"
 
     def test_repr(self, mock_client: Mock) -> None:
         """Test Devbox string representation."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         assert repr(devbox) == "<Devbox id='dbx_123'>"
 
     def test_context_manager_enter_exit(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test context manager behavior with successful shutdown."""
         mock_client.devboxes.shutdown.return_value = devbox_view
 
-        with Devbox(mock_client, "dbx_123") as devbox:
+        with Devbox(mock_client, mock_devbox_view()) as devbox:
             assert devbox.id == "dbx_123"
 
         call_kwargs = mock_client.devboxes.shutdown.call_args[1]
@@ -52,7 +50,7 @@ class TestDevbox:
         mock_client.devboxes.shutdown.side_effect = RuntimeError("Shutdown failed")
 
         with pytest.raises(ValueError, match="Test error"):
-            with Devbox(mock_client, "dbx_123"):
+            with Devbox(mock_client, mock_devbox_view()):
                 raise ValueError("Test error")
 
         # Shutdown should be called even when body raises exception
@@ -62,7 +60,7 @@ class TestDevbox:
         """Test get_info method."""
         mock_client.devboxes.retrieve.return_value = devbox_view
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.get_info(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -84,7 +82,7 @@ class TestDevbox:
         mock_client.devboxes.await_running.return_value = devbox_view
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.await_running(polling_config=polling_config)
 
         assert result == devbox_view
@@ -98,7 +96,7 @@ class TestDevbox:
         mock_client.devboxes.await_suspended.return_value = devbox_view
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.await_suspended(polling_config=polling_config)
 
         assert result == devbox_view
@@ -111,7 +109,7 @@ class TestDevbox:
         """Test shutdown method."""
         mock_client.devboxes.shutdown.return_value = devbox_view
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.shutdown(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -136,7 +134,7 @@ class TestDevbox:
         mock_client.devboxes.await_suspended.return_value = devbox_view
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.suspend(
             polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
@@ -166,7 +164,7 @@ class TestDevbox:
         mock_client.devboxes.await_running.return_value = devbox_view
         polling_config = PollingConfig(timeout_seconds=60.0)
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.resume(
             polling_config=polling_config,
             extra_headers={"X-Custom": "value"},
@@ -195,7 +193,7 @@ class TestDevbox:
         mock_client.devboxes.resume.return_value = devbox_view
         mock_client.devboxes.await_running = Mock()
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.resume_async(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -220,7 +218,7 @@ class TestDevbox:
         """Test keep_alive method."""
         mock_client.devboxes.keep_alive.return_value = object()
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         result = devbox.keep_alive(
             extra_headers={"X-Custom": "value"},
             extra_query={"param": "value"},
@@ -247,7 +245,7 @@ class TestDevbox:
         mock_client.devboxes.snapshot_disk_async.return_value = snapshot_data
         mock_client.devboxes.disk_snapshots.await_completed.return_value = snapshot_status
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         polling_config = PollingConfig(timeout_seconds=60.0)
         snapshot = devbox.snapshot_disk(
             name="test-snapshot",
@@ -273,7 +271,7 @@ class TestDevbox:
         snapshot_data = SimpleNamespace(id="snp_123")
         mock_client.devboxes.snapshot_disk_async.return_value = snapshot_data
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         snapshot = devbox.snapshot_disk_async(
             name="test-snapshot",
             metadata={"key": "value"},
@@ -296,7 +294,7 @@ class TestDevbox:
         """Test close method calls shutdown."""
         mock_client.devboxes.shutdown.return_value = devbox_view
 
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         devbox.close()
 
         call_kwargs = mock_client.devboxes.shutdown.call_args[1]
@@ -304,21 +302,21 @@ class TestDevbox:
 
     def test_cmd_property(self, mock_client: Mock) -> None:
         """Test cmd property returns CommandInterface."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         cmd = devbox.cmd
         assert isinstance(cmd, CommandInterface)
         assert cmd._devbox is devbox
 
     def test_file_property(self, mock_client: Mock) -> None:
         """Test file property returns FileInterface."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         file_interface = devbox.file
         assert isinstance(file_interface, FileInterface)
         assert file_interface._devbox is devbox
 
     def test_net_property(self, mock_client: Mock) -> None:
         """Test net property returns NetworkInterface."""
-        devbox = Devbox(mock_client, "dbx_123")
+        devbox = Devbox(mock_client, mock_devbox_view())
         net = devbox.net
         assert isinstance(net, NetworkInterface)
         assert net._devbox is devbox

@@ -111,6 +111,7 @@ class TestDevboxOps:
     def test_from_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test from_id method waits for running."""
         mock_client.devboxes.await_running.return_value = devbox_view
+        mock_client.devboxes.retrieve.return_value = devbox_view
 
         ops = DevboxOps(mock_client)
         devbox = ops.from_id("dbx_123")
@@ -118,6 +119,7 @@ class TestDevboxOps:
         assert isinstance(devbox, Devbox)
         assert devbox.id == "dbx_123"
         mock_client.devboxes.await_running.assert_called_once_with("dbx_123")
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
 
     def test_list_empty(self, mock_client: Mock) -> None:
         """Test list method with empty results."""

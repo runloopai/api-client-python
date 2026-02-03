@@ -13,7 +13,7 @@ from unittest.mock import Mock, AsyncMock
 
 import pytest
 
-from tests.sdk.conftest import TASK_COMPLETION_SHORT
+from tests.sdk.conftest import TASK_COMPLETION_SHORT, mock_devbox_view
 from runloop_api_client.sdk import AsyncDevbox
 from runloop_api_client._streaming import AsyncStream
 from runloop_api_client.types.devboxes import ExecutionUpdateChunk
@@ -25,7 +25,7 @@ class TestAsyncDevboxStreaming:
 
     def test_start_streaming_no_callbacks(self, mock_async_client: AsyncMock) -> None:
         """Test _start_streaming returns None when no callbacks."""
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=None)
         assert result is None
 
@@ -46,7 +46,7 @@ class TestAsyncDevboxStreaming:
 
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         stdout_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=stdout_calls.append, stderr=None, output=None)
 
@@ -76,7 +76,7 @@ class TestAsyncDevboxStreaming:
 
         mock_async_client.devboxes.executions.stream_stderr_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         stderr_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=None, stderr=stderr_calls.append, output=None)
 
@@ -107,7 +107,7 @@ class TestAsyncDevboxStreaming:
         mock_async_client.devboxes.executions.stream_stdout_updates = AsyncMock(return_value=mock_async_stream)
         mock_async_client.devboxes.executions.stream_stderr_updates = AsyncMock(return_value=mock_async_stream)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         output_calls: list[str] = []
         result = devbox._start_streaming("exn_123", stdout=None, stderr=None, output=output_calls.append)
 
@@ -136,7 +136,7 @@ class TestAsyncDevboxStreaming:
         mock_async_stream.__aenter__ = AsyncMock(return_value=mock_async_stream)
         mock_async_stream.__aexit__ = AsyncMock(return_value=None)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         calls: list[str] = []
 
         async def stream_factory() -> AsyncStream[ExecutionUpdateChunk]:
@@ -166,7 +166,7 @@ class TestAsyncDevboxStreaming:
         mock_async_stream.__aenter__ = AsyncMock(return_value=mock_async_stream)
         mock_async_stream.__aexit__ = AsyncMock(return_value=None)
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         calls: list[str] = []
 
         async def stream_factory() -> AsyncStream[ExecutionUpdateChunk]:

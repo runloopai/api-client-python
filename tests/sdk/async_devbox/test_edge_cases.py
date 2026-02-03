@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock
 import httpx
 import pytest
 
+from tests.sdk.conftest import mock_devbox_view
 from runloop_api_client.sdk import AsyncDevbox
 
 
@@ -21,6 +22,6 @@ class TestAsyncDevboxErrorHandling:
         """Test handling of network errors in async."""
         mock_async_client.devboxes.retrieve = AsyncMock(side_effect=httpx.NetworkError("Connection failed"))
 
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        devbox = AsyncDevbox(mock_async_client, mock_devbox_view())
         with pytest.raises(httpx.NetworkError):
             await devbox.get_info()

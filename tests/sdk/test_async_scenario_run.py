@@ -24,12 +24,14 @@ class TestAsyncScenarioRun:
         run = AsyncScenarioRun(mock_async_client, "scr_123", "dbx_123")
         assert repr(run) == "<AsyncScenarioRun id='scr_123'>"
 
-    def test_devbox_property(self, mock_async_client: AsyncMock) -> None:
-        """Test devbox property returns AsyncDevbox wrapper."""
+    async def test_get_devbox(self, mock_async_client: AsyncMock, devbox_view: MockDevboxView) -> None:
+        """Test get_devbox method returns AsyncDevbox wrapper."""
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view)
         run = AsyncScenarioRun(mock_async_client, "scr_123", "dbx_123")
-        devbox = run.devbox
+        devbox = await run.get_devbox()
 
         assert devbox.id == "dbx_123"
+        mock_async_client.devboxes.retrieve.assert_awaited_once_with("dbx_123")
 
     async def test_get_info(self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView) -> None:
         """Test get_info method."""

@@ -24,12 +24,15 @@ class TestScenarioRun:
         run = ScenarioRun(mock_client, "scr_123", "dbx_123")
         assert repr(run) == "<ScenarioRun id='scr_123'>"
 
-    def test_devbox_property(self, mock_client: Mock) -> None:
+    def test_devbox_property(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test devbox property returns Devbox wrapper."""
+        mock_client.devboxes.retrieve.return_value = devbox_view
+
         run = ScenarioRun(mock_client, "scr_123", "dbx_123")
         devbox = run.devbox
 
         assert devbox.id == "dbx_123"
+        mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
 
     def test_get_info(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:
         """Test get_info method."""

@@ -122,4 +122,4 @@ class Snapshot:
             snapshot_id=self._id,
             **params,
         )
-        return Devbox(self._client, devbox_view.id)
+        return Devbox(self._client, devbox_view)
