@@ -27,7 +27,9 @@ from ._types import (
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
     SDKNetworkPolicyListParams,
+    SDKGatewayConfigListParams,
     SDKNetworkPolicyCreateParams,
+    SDKGatewayConfigCreateParams,
     SDKDevboxCreateFromImageParams,
 )
 from .._types import Timeout, NotGiven, not_given
@@ -42,6 +44,7 @@ from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_network_policy import AsyncNetworkPolicy
+from .async_gateway_config import AsyncGatewayConfig
 from .async_storage_object import AsyncStorageObject
 from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
@@ -924,6 +927,90 @@ class AsyncNetworkPolicyOps:
         return [AsyncNetworkPolicy(self._client, item.id) for item in page.network_policies]
 
 
+class AsyncGatewayConfigOps:
+    """High-level async manager for creating and managing gateway configurations.
+
+    Accessed via ``runloop.gateway_config`` from :class:`AsyncRunloopSDK`, provides
+    coroutines to create, retrieve, update, delete, and list gateway configs. Gateway configs
+    define how to proxy API requests through the credential gateway, enabling secure API
+    proxying without exposing API keys.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> gateway_config = await runloop.gateway_config.create(
+        ...     name="my-api-gateway",
+        ...     endpoint="https://api.example.com",
+        ...     auth_mechanism={"type": "bearer"},
+        ... )
+        >>> # Use with a devbox
+        >>> devbox = await runloop.devbox.create(
+        ...     name="my-devbox",
+        ...     gateways={
+        ...         "MY_API": {
+        ...             "gateway": gateway_config.id,
+        ...             "secret": "my-api-key-secret",
+        ...         },
+        ...     },
+        ... )
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncGatewayConfigOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKGatewayConfigCreateParams]) -> AsyncGatewayConfig:
+        """Create a new gateway config.
+
+        Example:
+            >>> gateway_config = await runloop.gateway_config.create(
+            ...     name="my-gateway",
+            ...     endpoint="https://api.example.com",
+            ...     auth_mechanism={"type": "header", "key": "x-api-key"},
+            ...     description="Gateway for My API",
+            ... )
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKGatewayConfigCreateParams` for available parameters
+        :return: The newly created gateway config
+        :rtype: AsyncGatewayConfig
+        """
+        response = await self._client.gateway_configs.create(**params)
+        return AsyncGatewayConfig(self._client, response.id)
+
+    def from_id(self, gateway_config_id: str) -> AsyncGatewayConfig:
+        """Get an AsyncGatewayConfig instance for an existing gateway config ID.
+
+        Example:
+            >>> gateway_config = runloop.gateway_config.from_id("gwc_1234567890")
+            >>> info = await gateway_config.get_info()
+            >>> print(f"Gateway Config name: {info.name}")
+
+        :param gateway_config_id: ID of the gateway config
+        :type gateway_config_id: str
+        :return: AsyncGatewayConfig instance for the given ID
+        :rtype: AsyncGatewayConfig
+        """
+        return AsyncGatewayConfig(self._client, gateway_config_id)
+
+    async def list(self, **params: Unpack[SDKGatewayConfigListParams]) -> list[AsyncGatewayConfig]:
+        """List all gateway configs, optionally filtered by parameters.
+
+        Example:
+            >>> configs = await runloop.gateway_config.list(limit=10)
+            >>> for config in configs:
+            ...     print(config.id)
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKGatewayConfigListParams` for available parameters
+        :return: List of gateway configs
+        :rtype: list[AsyncGatewayConfig]
+        """
+        page = await self._client.gateway_configs.list(**params)
+        return [AsyncGatewayConfig(self._client, item.id) for item in page.gateway_configs]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -951,6 +1038,8 @@ class AsyncRunloopSDK:
     :vartype storage_object: AsyncStorageObjectOps
     :ivar network_policy: High-level async interface for network policy management
     :vartype network_policy: AsyncNetworkPolicyOps
+    :ivar gateway_config: High-level async interface for gateway config management
+    :vartype gateway_config: AsyncGatewayConfigOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -965,6 +1054,7 @@ class AsyncRunloopSDK:
     benchmark: AsyncBenchmarkOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
+    gateway_config: AsyncGatewayConfigOps
     network_policy: AsyncNetworkPolicyOps
     scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
@@ -1013,6 +1103,7 @@ class AsyncRunloopSDK:
         self.benchmark = AsyncBenchmarkOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
+        self.gateway_config = AsyncGatewayConfigOps(self.api)
         self.network_policy = AsyncNetworkPolicyOps(self.api)
         self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)

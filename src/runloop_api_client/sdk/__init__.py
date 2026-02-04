@@ -15,6 +15,7 @@ from .sync import (
     BenchmarkOps,
     BlueprintOps,
     NetworkPolicyOps,
+    GatewayConfigOps,
     StorageObjectOps,
 )
 from .agent import Agent
@@ -29,6 +30,7 @@ from .async_ import (
     AsyncBenchmarkOps,
     AsyncBlueprintOps,
     AsyncNetworkPolicyOps,
+    AsyncGatewayConfigOps,
     AsyncStorageObjectOps,
 )
 from .devbox import Devbox, NamedShell
@@ -46,6 +48,7 @@ from .benchmark_run import BenchmarkRun
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .network_policy import NetworkPolicy
+from .gateway_config import GatewayConfig
 from .storage_object import StorageObject
 from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
@@ -55,6 +58,7 @@ from .scenario_builder import ScenarioBuilder
 from .async_scenario_run import AsyncScenarioRun
 from .async_benchmark_run import AsyncBenchmarkRun
 from .async_network_policy import AsyncNetworkPolicy
+from .async_gateway_config import AsyncGatewayConfig
 from .async_storage_object import AsyncStorageObject
 from .async_execution_result import AsyncExecutionResult
 from .async_scenario_builder import AsyncScenarioBuilder
@@ -82,6 +86,8 @@ __all__ = [
     "AsyncStorageObjectOps",
     "NetworkPolicyOps",
     "AsyncNetworkPolicyOps",
+    "GatewayConfigOps",
+    "AsyncGatewayConfigOps",
     # Resource classes
     "Agent",
     "AsyncAgent",
@@ -112,6 +118,8 @@ __all__ = [
     "AsyncStorageObject",
     "NetworkPolicy",
     "AsyncNetworkPolicy",
+    "GatewayConfig",
+    "AsyncGatewayConfig",
     "NamedShell",
     "AsyncNamedShell",
 ]
