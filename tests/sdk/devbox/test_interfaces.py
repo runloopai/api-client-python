@@ -11,6 +11,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import httpx
+import pytest
 
 from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk import Devbox
@@ -285,14 +286,15 @@ class TestNetworkInterface:
         mock_client.devboxes.create_tunnel.return_value = tunnel_view
 
         devbox = Devbox(mock_client, "dbx_123")
-        result = devbox.net.create_tunnel(
-            port=8080,
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-            idempotency_key="key-123",
-        )
+        with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
+            result = devbox.net.create_tunnel(
+                port=8080,
+                extra_headers={"X-Custom": "value"},
+                extra_query={"param": "value"},
+                extra_body={"key": "value"},
+                timeout=30.0,
+                idempotency_key="key-123",
+            )
 
         assert result == tunnel_view
         mock_client.devboxes.create_tunnel.assert_called_once_with(
@@ -310,14 +312,15 @@ class TestNetworkInterface:
         mock_client.devboxes.remove_tunnel.return_value = object()
 
         devbox = Devbox(mock_client, "dbx_123")
-        result = devbox.net.remove_tunnel(
-            port=8080,
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-            idempotency_key="key-123",
-        )
+        with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
+            result = devbox.net.remove_tunnel(
+                port=8080,
+                extra_headers={"X-Custom": "value"},
+                extra_query={"param": "value"},
+                extra_body={"key": "value"},
+                timeout=30.0,
+                idempotency_key="key-123",
+            )
 
         assert result is not None  # Verify return value is propagated
         mock_client.devboxes.remove_tunnel.assert_called_once_with(

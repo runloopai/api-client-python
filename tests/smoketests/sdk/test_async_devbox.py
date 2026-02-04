@@ -447,14 +447,16 @@ class TestAsyncDevboxNetworking:
 
         try:
             # Create tunnel
-            tunnel = await devbox.net.create_tunnel(port=8080)
+            with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
+                tunnel = await devbox.net.create_tunnel(port=8080)
             assert tunnel is not None
             assert tunnel.url is not None
             assert tunnel.port == 8080
             assert tunnel.devbox_id == devbox.id
 
             # Remove tunnel
-            await devbox.net.remove_tunnel(port=8080)
+            with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
+                await devbox.net.remove_tunnel(port=8080)
         finally:
             await devbox.shutdown()
 

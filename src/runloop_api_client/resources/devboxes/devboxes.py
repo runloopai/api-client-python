@@ -652,7 +652,9 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
-    @typing_extensions.deprecated("deprecated")
+    @typing_extensions.deprecated(
+        "create_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation."
+    )
     def create_tunnel(
         self,
         id: str,
@@ -666,7 +668,7 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxTunnelView:
-        """[Deprecated] Use POST /v1/devboxes/{id}/enable_tunnel instead.
+        """[Deprecated] Use enable_tunnel or configure a tunnel at devbox creation instead.
 
         This endpoint
         creates a legacy tunnel. The new enable_tunnel endpoint provides improved tunnel
@@ -1270,7 +1272,9 @@ class DevboxesResource(SyncAPIResource):
             cast_to=str,
         )
 
-    @typing_extensions.deprecated("deprecated")
+    @typing_extensions.deprecated(
+        "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown."
+    )
     def remove_tunnel(
         self,
         id: str,
@@ -1284,7 +1288,7 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """[Deprecated] Tunnels remain active until devbox is shutdown.
+        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
 
         This endpoint
         removes a legacy tunnel.
@@ -2261,7 +2265,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
-    @typing_extensions.deprecated("deprecated")
+    @typing_extensions.deprecated(
+        "create_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation."
+    )
     async def create_tunnel(
         self,
         id: str,
@@ -2275,7 +2281,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxTunnelView:
-        """[Deprecated] Use POST /v1/devboxes/{id}/enable_tunnel instead.
+        """[Deprecated] Use enable_tunnel or configure a tunnel at devbox creation instead.
 
         This endpoint
         creates a legacy tunnel. The new enable_tunnel endpoint provides improved tunnel
@@ -2882,7 +2888,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=str,
         )
 
-    @typing_extensions.deprecated("deprecated")
+    @typing_extensions.deprecated(
+        "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown."
+    )
     async def remove_tunnel(
         self,
         id: str,
@@ -2896,7 +2904,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """[Deprecated] Tunnels remain active until devbox is shutdown.
+        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
 
         This endpoint
         removes a legacy tunnel.
