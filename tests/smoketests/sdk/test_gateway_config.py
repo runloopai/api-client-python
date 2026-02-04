@@ -6,6 +6,7 @@ import pytest
 
 from runloop_api_client.sdk import RunloopSDK
 from tests.smoketests.utils import unique_name
+from runloop_api_client.types.gateway_config_create_params import AuthMechanism
 
 pytestmark = [pytest.mark.smoketest]
 
@@ -157,7 +158,7 @@ class TestGatewayConfigAuthMechanisms:
         ],
     )
     def test_gateway_config_auth_mechanisms(
-        self, sdk_client: RunloopSDK, auth_mechanism: dict, expected_type: str, expected_key: str | None
+        self, sdk_client: RunloopSDK, auth_mechanism: AuthMechanism, expected_type: str, expected_key: str | None
     ) -> None:
         """Test creating gateway configs with different auth mechanisms."""
         gateway_config = sdk_client.gateway_config.create(

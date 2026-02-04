@@ -6,6 +6,7 @@ import pytest
 
 from runloop_api_client.sdk import AsyncRunloopSDK
 from tests.smoketests.utils import unique_name
+from runloop_api_client.types.gateway_config_create_params import AuthMechanism
 
 pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
@@ -157,7 +158,7 @@ class TestAsyncGatewayConfigAuthMechanisms:
         ],
     )
     async def test_gateway_config_auth_mechanisms(
-        self, async_sdk_client: AsyncRunloopSDK, auth_mechanism: dict, expected_type: str, expected_key: str | None
+        self, async_sdk_client: AsyncRunloopSDK, auth_mechanism: AuthMechanism, expected_type: str, expected_key: str | None
     ) -> None:
         """Test creating gateway configs with different auth mechanisms."""
         gateway_config = await async_sdk_client.gateway_config.create(
