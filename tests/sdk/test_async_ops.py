@@ -19,6 +19,7 @@ from tests.sdk.conftest import (
     MockSnapshotView,
     MockBenchmarkView,
     MockBlueprintView,
+    MockGatewayConfigView,
     MockNetworkPolicyView,
     create_mock_httpx_response,
 )
@@ -38,8 +39,10 @@ from runloop_api_client.sdk import (
     AsyncSnapshotOps,
     AsyncBenchmarkOps,
     AsyncBlueprintOps,
+    AsyncGatewayConfig,
     AsyncNetworkPolicy,
     AsyncStorageObject,
+    AsyncGatewayConfigOps,
     AsyncNetworkPolicyOps,
     AsyncStorageObjectOps,
 )
@@ -1313,6 +1316,81 @@ class TestAsyncNetworkPolicyOps:
         mock_async_client.network_policies.list.assert_awaited_once()
 
 
+class TestAsyncGatewayConfigOps:
+    """Tests for AsyncGatewayConfigOps class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, gateway_config_view: MockGatewayConfigView) -> None:
+        """Test create method."""
+        mock_async_client.gateway_configs.create = AsyncMock(return_value=gateway_config_view)
+
+        ops = AsyncGatewayConfigOps(mock_async_client)
+        gateway_config = await ops.create(
+            name="test-gateway-config",
+            endpoint="https://api.example.com",
+            auth_mechanism={"type": "bearer"},
+        )
+
+        assert isinstance(gateway_config, AsyncGatewayConfig)
+        assert gateway_config.id == "gwc_123"
+        mock_async_client.gateway_configs.create.assert_awaited_once()
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        ops = AsyncGatewayConfigOps(mock_async_client)
+        gateway_config = ops.from_id("gwc_123")
+
+        assert isinstance(gateway_config, AsyncGatewayConfig)
+        assert gateway_config.id == "gwc_123"
+
+    @pytest.mark.asyncio
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(gateway_configs=[])
+        mock_async_client.gateway_configs.list = AsyncMock(return_value=page)
+
+        ops = AsyncGatewayConfigOps(mock_async_client)
+        gateway_configs = await ops.list(limit=10)
+
+        assert len(gateway_configs) == 0
+        mock_async_client.gateway_configs.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, gateway_config_view: MockGatewayConfigView) -> None:
+        """Test list method with single result."""
+        page = SimpleNamespace(gateway_configs=[gateway_config_view])
+        mock_async_client.gateway_configs.list = AsyncMock(return_value=page)
+
+        ops = AsyncGatewayConfigOps(mock_async_client)
+        gateway_configs = await ops.list(
+            limit=10,
+            starting_after="gwc_000",
+        )
+
+        assert len(gateway_configs) == 1
+        assert isinstance(gateway_configs[0], AsyncGatewayConfig)
+        assert gateway_configs[0].id == "gwc_123"
+        mock_async_client.gateway_configs.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        gateway_config_view1 = MockGatewayConfigView(id="gwc_001", name="gateway-1")
+        gateway_config_view2 = MockGatewayConfigView(id="gwc_002", name="gateway-2")
+        page = SimpleNamespace(gateway_configs=[gateway_config_view1, gateway_config_view2])
+        mock_async_client.gateway_configs.list = AsyncMock(return_value=page)
+
+        ops = AsyncGatewayConfigOps(mock_async_client)
+        gateway_configs = await ops.list(limit=10)
+
+        assert len(gateway_configs) == 2
+        assert isinstance(gateway_configs[0], AsyncGatewayConfig)
+        assert isinstance(gateway_configs[1], AsyncGatewayConfig)
+        assert gateway_configs[0].id == "gwc_001"
+        assert gateway_configs[1].id == "gwc_002"
+        mock_async_client.gateway_configs.list.assert_awaited_once()
+
+
 class TestAsyncRunloopSDK:
     """Tests for AsyncRunloopSDK class."""
 
@@ -1323,6 +1401,7 @@ class TestAsyncRunloopSDK:
         assert isinstance(runloop.agent, AsyncAgentOps)
         assert isinstance(runloop.benchmark, AsyncBenchmarkOps)
         assert isinstance(runloop.devbox, AsyncDevboxOps)
+        assert isinstance(runloop.gateway_config, AsyncGatewayConfigOps)
         assert isinstance(runloop.network_policy, AsyncNetworkPolicyOps)
         assert isinstance(runloop.scorer, AsyncScorerOps)
         assert isinstance(runloop.snapshot, AsyncSnapshotOps)

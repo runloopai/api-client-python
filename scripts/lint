@@ -13,5 +13,8 @@ uv run mypy .
 echo "==> Running lints"
 uv run ruff check . "$@"
 
+echo "==> Running format check"
+uv run ruff format --check .
+
 echo "==> Making sure it imports"
 uv run python -c 'import runloop_api_client'

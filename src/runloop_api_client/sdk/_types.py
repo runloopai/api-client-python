@@ -19,12 +19,15 @@ from ..types import (
     BenchmarkUpdateParams,
     BlueprintCreateParams,
     DevboxUploadFileParams,
+    GatewayConfigListParams,
     NetworkPolicyListParams,
     DevboxCreateTunnelParams,
     DevboxDownloadFileParams,
     DevboxEnableTunnelParams,
     DevboxRemoveTunnelParams,
     DevboxSnapshotDiskParams,
+    GatewayConfigCreateParams,
+    GatewayConfigUpdateParams,
     NetworkPolicyCreateParams,
     NetworkPolicyUpdateParams,
     DevboxReadFileContentsParams,
@@ -261,4 +264,16 @@ class SDKNetworkPolicyListParams(NetworkPolicyListParams, BaseRequestOptions):
 
 
 class SDKNetworkPolicyUpdateParams(NetworkPolicyUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKGatewayConfigCreateParams(GatewayConfigCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKGatewayConfigListParams(GatewayConfigListParams, BaseRequestOptions):
+    pass
+
+
+class SDKGatewayConfigUpdateParams(GatewayConfigUpdateParams, LongRequestOptions):
     pass

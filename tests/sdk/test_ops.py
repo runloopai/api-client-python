@@ -19,6 +19,7 @@ from tests.sdk.conftest import (
     MockSnapshotView,
     MockBenchmarkView,
     MockBlueprintView,
+    MockGatewayConfigView,
     MockNetworkPolicyView,
     create_mock_httpx_response,
 )
@@ -38,8 +39,10 @@ from runloop_api_client.sdk import (
     SnapshotOps,
     BenchmarkOps,
     BlueprintOps,
+    GatewayConfig,
     NetworkPolicy,
     StorageObject,
+    GatewayConfigOps,
     NetworkPolicyOps,
     StorageObjectOps,
 )
@@ -1228,6 +1231,77 @@ class TestNetworkPolicyOps:
         mock_client.network_policies.list.assert_called_once()
 
 
+class TestGatewayConfigOps:
+    """Tests for GatewayConfigOps class."""
+
+    def test_create(self, mock_client: Mock, gateway_config_view: MockGatewayConfigView) -> None:
+        """Test create method."""
+        mock_client.gateway_configs.create.return_value = gateway_config_view
+
+        ops = GatewayConfigOps(mock_client)
+        gateway_config = ops.create(
+            name="test-gateway-config",
+            endpoint="https://api.example.com",
+            auth_mechanism={"type": "bearer"},
+        )
+
+        assert isinstance(gateway_config, GatewayConfig)
+        assert gateway_config.id == "gwc_123"
+        mock_client.gateway_configs.create.assert_called_once()
+
+    def test_from_id(self, mock_client: Mock) -> None:
+        """Test from_id method."""
+        ops = GatewayConfigOps(mock_client)
+        gateway_config = ops.from_id("gwc_123")
+
+        assert isinstance(gateway_config, GatewayConfig)
+        assert gateway_config.id == "gwc_123"
+
+    def test_list_empty(self, mock_client: Mock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(gateway_configs=[])
+        mock_client.gateway_configs.list.return_value = page
+
+        ops = GatewayConfigOps(mock_client)
+        gateway_configs = ops.list(limit=10)
+
+        assert len(gateway_configs) == 0
+        mock_client.gateway_configs.list.assert_called_once()
+
+    def test_list_single(self, mock_client: Mock, gateway_config_view: MockGatewayConfigView) -> None:
+        """Test list method with single result."""
+        page = SimpleNamespace(gateway_configs=[gateway_config_view])
+        mock_client.gateway_configs.list.return_value = page
+
+        ops = GatewayConfigOps(mock_client)
+        gateway_configs = ops.list(
+            limit=10,
+            starting_after="gwc_000",
+        )
+
+        assert len(gateway_configs) == 1
+        assert isinstance(gateway_configs[0], GatewayConfig)
+        assert gateway_configs[0].id == "gwc_123"
+        mock_client.gateway_configs.list.assert_called_once()
+
+    def test_list_multiple(self, mock_client: Mock) -> None:
+        """Test list method with multiple results."""
+        gateway_config_view1 = MockGatewayConfigView(id="gwc_001", name="gateway-1")
+        gateway_config_view2 = MockGatewayConfigView(id="gwc_002", name="gateway-2")
+        page = SimpleNamespace(gateway_configs=[gateway_config_view1, gateway_config_view2])
+        mock_client.gateway_configs.list.return_value = page
+
+        ops = GatewayConfigOps(mock_client)
+        gateway_configs = ops.list(limit=10)
+
+        assert len(gateway_configs) == 2
+        assert isinstance(gateway_configs[0], GatewayConfig)
+        assert isinstance(gateway_configs[1], GatewayConfig)
+        assert gateway_configs[0].id == "gwc_001"
+        assert gateway_configs[1].id == "gwc_002"
+        mock_client.gateway_configs.list.assert_called_once()
+
+
 class TestRunloopSDK:
     """Tests for RunloopSDK class."""
 
@@ -1238,6 +1312,7 @@ class TestRunloopSDK:
         assert isinstance(runloop.agent, AgentOps)
         assert isinstance(runloop.benchmark, BenchmarkOps)
         assert isinstance(runloop.devbox, DevboxOps)
+        assert isinstance(runloop.gateway_config, GatewayConfigOps)
         assert isinstance(runloop.network_policy, NetworkPolicyOps)
         assert isinstance(runloop.scorer, ScorerOps)
         assert isinstance(runloop.snapshot, SnapshotOps)

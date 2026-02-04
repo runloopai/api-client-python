@@ -26,7 +26,9 @@ from ._types import (
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
+    SDKGatewayConfigListParams,
     SDKNetworkPolicyListParams,
+    SDKGatewayConfigCreateParams,
     SDKNetworkPolicyCreateParams,
     SDKDevboxCreateFromImageParams,
 )
@@ -39,6 +41,7 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
+from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
 from .scenario_builder import ScenarioBuilder
@@ -949,6 +952,90 @@ class NetworkPolicyOps:
         return [NetworkPolicy(self._client, item.id) for item in page.network_policies]
 
 
+class GatewayConfigOps:
+    """High-level manager for creating and managing gateway configurations.
+
+    Accessed via ``runloop.gateway_config`` from :class:`RunloopSDK`, provides methods
+    to create, retrieve, update, delete, and list gateway configs. Gateway configs define
+    how to proxy API requests through the credential gateway, enabling secure API
+    proxying without exposing API keys.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> gateway_config = runloop.gateway_config.create(
+        ...     name="my-api-gateway",
+        ...     endpoint="https://api.example.com",
+        ...     auth_mechanism={"type": "bearer"},
+        ... )
+        >>> # Use with a devbox
+        >>> devbox = runloop.devbox.create(
+        ...     name="my-devbox",
+        ...     gateways={
+        ...         "MY_API": {
+        ...             "gateway": gateway_config.id,
+        ...             "secret": "my-api-key-secret",
+        ...         },
+        ...     },
+        ... )
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize GatewayConfigOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, **params: Unpack[SDKGatewayConfigCreateParams]) -> GatewayConfig:
+        """Create a new gateway config.
+
+        Example:
+            >>> gateway_config = runloop.gateway_config.create(
+            ...     name="my-gateway",
+            ...     endpoint="https://api.example.com",
+            ...     auth_mechanism={"type": "header", "key": "x-api-key"},
+            ...     description="Gateway for My API",
+            ... )
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKGatewayConfigCreateParams` for available parameters
+        :return: The newly created gateway config
+        :rtype: GatewayConfig
+        """
+        response = self._client.gateway_configs.create(**params)
+        return GatewayConfig(self._client, response.id)
+
+    def from_id(self, gateway_config_id: str) -> GatewayConfig:
+        """Get a GatewayConfig instance for an existing gateway config ID.
+
+        Example:
+            >>> gateway_config = runloop.gateway_config.from_id("gwc_1234567890")
+            >>> info = gateway_config.get_info()
+            >>> print(f"Gateway Config name: {info.name}")
+
+        :param gateway_config_id: ID of the gateway config
+        :type gateway_config_id: str
+        :return: GatewayConfig instance for the given ID
+        :rtype: GatewayConfig
+        """
+        return GatewayConfig(self._client, gateway_config_id)
+
+    def list(self, **params: Unpack[SDKGatewayConfigListParams]) -> list[GatewayConfig]:
+        """List all gateway configs, optionally filtered by parameters.
+
+        Example:
+            >>> configs = runloop.gateway_config.list(limit=10)
+            >>> for config in configs:
+            ...     print(config.id)
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKGatewayConfigListParams` for available parameters
+        :return: List of gateway configs
+        :rtype: list[GatewayConfig]
+        """
+        page = self._client.gateway_configs.list(**params)
+        return [GatewayConfig(self._client, item.id) for item in page.gateway_configs]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -976,6 +1063,8 @@ class RunloopSDK:
     :vartype storage_object: StorageObjectOps
     :ivar network_policy: High-level interface for network policy management
     :vartype network_policy: NetworkPolicyOps
+    :ivar gateway_config: High-level interface for gateway config management
+    :vartype gateway_config: GatewayConfigOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -990,6 +1079,7 @@ class RunloopSDK:
     benchmark: BenchmarkOps
     devbox: DevboxOps
     blueprint: BlueprintOps
+    gateway_config: GatewayConfigOps
     network_policy: NetworkPolicyOps
     scenario: ScenarioOps
     scorer: ScorerOps
@@ -1038,6 +1128,7 @@ class RunloopSDK:
         self.benchmark = BenchmarkOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
+        self.gateway_config = GatewayConfigOps(self.api)
         self.network_policy = NetworkPolicyOps(self.api)
         self.scenario = ScenarioOps(self.api)
         self.scorer = ScorerOps(self.api)
