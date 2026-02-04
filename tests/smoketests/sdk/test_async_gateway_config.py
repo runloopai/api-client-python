@@ -149,52 +149,29 @@ class TestAsyncGatewayConfigAuthMechanisms:
     """Test different async gateway config auth mechanism types."""
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    async def test_gateway_config_with_bearer_auth(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating a gateway config with bearer auth."""
+    @pytest.mark.parametrize(
+        "auth_mechanism,expected_type,expected_key",
+        [
+            ({"type": "bearer"}, "bearer", None),
+            ({"type": "header", "key": "x-api-key"}, "header", "x-api-key"),
+        ],
+    )
+    async def test_gateway_config_auth_mechanisms(
+        self, async_sdk_client: AsyncRunloopSDK, auth_mechanism: dict, expected_type: str, expected_key: str | None
+    ) -> None:
+        """Test creating gateway configs with different auth mechanisms."""
         gateway_config = await async_sdk_client.gateway_config.create(
-            name=unique_name("sdk-async-gateway-bearer"),
-            endpoint="https://api.bearer-test.com",
-            auth_mechanism={"type": "bearer"},
+            name=unique_name(f"sdk-async-gateway-{expected_type}"),
+            endpoint=f"https://api.{expected_type}-test.com",
+            auth_mechanism=auth_mechanism,
         )
 
         try:
             info = await gateway_config.get_info()
             assert info.auth_mechanism is not None
-            assert info.auth_mechanism.type == "bearer"
-        finally:
-            await gateway_config.delete()
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    async def test_gateway_config_with_header_auth(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating a gateway config with header auth."""
-        gateway_config = await async_sdk_client.gateway_config.create(
-            name=unique_name("sdk-async-gateway-header"),
-            endpoint="https://api.header-test.com",
-            auth_mechanism={"type": "header", "key": "x-api-key"},
-        )
-
-        try:
-            info = await gateway_config.get_info()
-            assert info.auth_mechanism is not None
-            assert info.auth_mechanism.type == "header"
-            assert info.auth_mechanism.key == "x-api-key"
-        finally:
-            await gateway_config.delete()
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    async def test_gateway_config_with_authorization_header(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test creating a gateway config with Authorization header."""
-        gateway_config = await async_sdk_client.gateway_config.create(
-            name=unique_name("sdk-async-gateway-auth-header"),
-            endpoint="https://api.auth-header-test.com",
-            auth_mechanism={"type": "header", "key": "Authorization"},
-        )
-
-        try:
-            info = await gateway_config.get_info()
-            assert info.auth_mechanism is not None
-            assert info.auth_mechanism.type == "header"
-            assert info.auth_mechanism.key == "Authorization"
+            assert info.auth_mechanism.type == expected_type
+            if expected_key is not None:
+                assert info.auth_mechanism.key == expected_key
         finally:
             await gateway_config.delete()
 
