@@ -779,7 +779,7 @@ class AsyncNetworkInterface:
     ) -> DevboxTunnelView:
         """[Deprecated] Create a legacy tunnel to expose a devbox port publicly.
 
-        Use :meth:`enable_tunnel` instead for the V2 tunnel API.
+        Use :meth:`enable_tunnel` or configure a tunnel during devbox creation instead.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
         :return: Details about the public endpoint
@@ -789,6 +789,11 @@ class AsyncNetworkInterface:
             >>> tunnel = await devbox.net.create_tunnel(port=8080)
             >>> print(f"Public URL: {tunnel.url}")
         """
+        warnings.warn(
+            "create_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             return await self._devbox._client.devboxes.create_tunnel(  # type: ignore[deprecated]
@@ -824,7 +829,9 @@ class AsyncNetworkInterface:
         self,
         **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object:
-        """Remove a network tunnel, disabling public access to the port.
+        """[Deprecated] Remove a legacy network tunnel.
+
+        Use :meth:`enable_tunnel` or configure a tunnel during devbox creation instead.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
@@ -833,6 +840,11 @@ class AsyncNetworkInterface:
         Example:
             >>> await devbox.net.remove_tunnel(port=8080)
         """
+        warnings.warn(
+            "remove_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             return await self._devbox._client.devboxes.remove_tunnel(  # type: ignore[deprecated]

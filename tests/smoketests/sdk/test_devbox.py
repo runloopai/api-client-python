@@ -444,14 +444,16 @@ class TestDevboxNetworking:
 
         try:
             # Create tunnel
-            tunnel = devbox.net.create_tunnel(port=8080)
+            with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
+                tunnel = devbox.net.create_tunnel(port=8080)
             assert tunnel is not None
             assert tunnel.url is not None
             assert tunnel.port == 8080
             assert tunnel.devbox_id == devbox.id
 
             # Remove tunnel
-            devbox.net.remove_tunnel(port=8080)
+            with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
+                devbox.net.remove_tunnel(port=8080)
         finally:
             devbox.shutdown()
 
