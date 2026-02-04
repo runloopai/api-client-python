@@ -28,6 +28,7 @@ TEST_IDS = {
     "benchmark": "bmd_123",
     "benchmark_run": "bmr_123",
     "network_policy": "np_123",
+    "gateway_config": "gwc_123",
 }
 
 # Test URL constants
@@ -179,6 +180,26 @@ class MockNetworkPolicyView:
     egress: MockEgress = field(default_factory=MockEgress)
 
 
+@dataclass
+class MockAuthMechanism:
+    """Mock AuthMechanism for testing."""
+
+    type: str = "bearer"
+    key: str | None = None
+
+
+@dataclass
+class MockGatewayConfigView:
+    """Mock GatewayConfigView for testing."""
+
+    id: str = TEST_IDS["gateway_config"]
+    name: str = "test-gateway-config"
+    endpoint: str = "https://api.example.com"
+    description: str | None = "Test gateway config description"
+    create_time_ms: int = 1234567890000
+    auth_mechanism: MockAuthMechanism = field(default_factory=MockAuthMechanism)
+
+
 class AsyncIterableMock:
     """A simple async iterable mock for testing paginated responses."""
 
@@ -314,6 +335,12 @@ def benchmark_run_view() -> MockBenchmarkRunView:
 def network_policy_view() -> MockNetworkPolicyView:
     """Create a mock NetworkPolicyView."""
     return MockNetworkPolicyView()
+
+
+@pytest.fixture
+def gateway_config_view() -> MockGatewayConfigView:
+    """Create a mock GatewayConfigView."""
+    return MockGatewayConfigView()
 
 
 @pytest.fixture
