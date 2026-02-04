@@ -829,9 +829,7 @@ class AsyncNetworkInterface:
         self,
         **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object:
-        """[Deprecated] Remove a legacy network tunnel.
-
-        Use :meth:`enable_tunnel` or configure a tunnel during devbox creation instead.
+        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
@@ -841,7 +839,7 @@ class AsyncNetworkInterface:
             >>> await devbox.net.remove_tunnel(port=8080)
         """
         warnings.warn(
-            "remove_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation.",
+            "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown.",
             DeprecationWarning,
             stacklevel=2,
         )
