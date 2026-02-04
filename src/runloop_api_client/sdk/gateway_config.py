@@ -19,9 +19,9 @@ class GatewayConfig:
     Example:
         >>> runloop = RunloopSDK()
         >>> gateway_config = runloop.gateway_config.create(
-        ...     name='my-api-gateway',
-        ...     endpoint='https://api.example.com',
-        ...     auth_mechanism={'type': 'bearer'},
+        ...     name="my-api-gateway",
+        ...     endpoint="https://api.example.com",
+        ...     auth_mechanism={"type": "bearer"},
         ... )
         >>> info = gateway_config.get_info()
         >>> print(f"Gateway Config: {info.name}")
@@ -79,8 +79,8 @@ class GatewayConfig:
 
         Example:
             >>> updated = gateway_config.update(
-            ...     name='updated-gateway-name',
-            ...     description='Updated description',
+            ...     name="updated-gateway-name",
+            ...     description="Updated description",
             ... )
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKGatewayConfigUpdateParams` for available parameters
