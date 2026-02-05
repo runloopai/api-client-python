@@ -37,7 +37,7 @@ from ..types import (
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
-from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams, ScorerValidateParams
+from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
 from ..types.benchmark_start_run_params import BenchmarkSelfStartRunParams
@@ -178,10 +178,6 @@ class SDKScorerListParams(ScorerListParams, BaseRequestOptions):
 
 
 class SDKScorerUpdateParams(ScorerUpdateParams, LongRequestOptions):
-    pass
-
-
-class SDKScorerValidateParams(ScorerValidateParams, LongRequestOptions):
     pass
 
 
