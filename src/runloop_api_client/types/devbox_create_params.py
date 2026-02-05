@@ -9,7 +9,7 @@ from .shared_params.mount import Mount
 from .shared_params.launch_parameters import LaunchParameters
 from .shared_params.code_mount_parameters import CodeMountParameters
 
-__all__ = ["DevboxCreateParams", "Gateways", "Tunnel"]
+__all__ = ["DevboxCreateParams", "Gateways", "Mcp", "Tunnel"]
 
 
 class DevboxCreateParams(TypedDict, total=False):
@@ -56,6 +56,14 @@ class DevboxCreateParams(TypedDict, total=False):
     launch_parameters: Optional[LaunchParameters]
     """Parameters to configure the resources and launch time behavior of the Devbox."""
 
+    mcp: Optional[Iterable[Mcp]]
+    """[Beta] (Optional) MCP specifications for MCP server access.
+
+    Each spec links an MCP config to a secret. The devbox will receive environment
+    variables (RL_MCP_URL, RL_MCP_TOKEN) for accessing MCP servers through the MCP
+    hub. Example: [{'mcp_config': 'github-readonly', 'secret': 'MY_GITHUB_TOKEN'}]
+    """
+
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the devbox for organization."""
 
@@ -100,6 +108,18 @@ class Gateways(TypedDict, total=False):
 
     secret: Required[str]
     """The secret containing the credential. Can be a secret ID or name."""
+
+
+class Mcp(TypedDict, total=False):
+    """
+    [Beta] McpSpec links an MCP configuration to a secret for MCP server access in a devbox. The MCP hub will proxy requests to upstream MCP servers using the specified credential, with tool-level access control based on the MCP config's allowed_tools.
+    """
+
+    mcp_config: Required[str]
+    """The MCP config to use. Can be an MCP config ID (mcp_xxx) or name."""
+
+    secret: Required[str]
+    """The secret containing the MCP server credential. Can be a secret ID or name."""
 
 
 class Tunnel(TypedDict, total=False):

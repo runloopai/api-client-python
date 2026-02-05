@@ -16,8 +16,9 @@ from ..._response import (
 )
 from ...pagination import SyncScenarioScorersCursorIDPage, AsyncScenarioScorersCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenarios import scorer_list_params, scorer_update_params
+from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params
 from ...types.scenarios.scorer_list_response import ScorerListResponse
+from ...types.scenarios.scorer_create_response import ScorerCreateResponse
 from ...types.scenarios.scorer_update_response import ScorerUpdateResponse
 from ...types.scenarios.scorer_retrieve_response import ScorerRetrieveResponse
 
@@ -43,6 +44,57 @@ class ScorersResource(SyncAPIResource):
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
         return ScorersResourceWithStreamingResponse(self)
+
+    def create(
+        self,
+        *,
+        bash_script: str,
+        type: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> ScorerCreateResponse:
+        """
+        Create a custom scenario scorer.
+
+        Args:
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_SCORER_CONTEXT.
+
+          type: Name of the type of custom scorer.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return self._post(
+            "/v1/scenarios/scorers",
+            body=maybe_transform(
+                {
+                    "bash_script": bash_script,
+                    "type": type,
+                },
+                scorer_create_params.ScorerCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScorerCreateResponse,
+        )
 
     def retrieve(
         self,
@@ -199,6 +251,57 @@ class AsyncScorersResource(AsyncAPIResource):
         """
         return AsyncScorersResourceWithStreamingResponse(self)
 
+    async def create(
+        self,
+        *,
+        bash_script: str,
+        type: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> ScorerCreateResponse:
+        """
+        Create a custom scenario scorer.
+
+        Args:
+          bash_script: Bash script for the custom scorer taking context as a json object
+              $RL_SCORER_CONTEXT.
+
+          type: Name of the type of custom scorer.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return await self._post(
+            "/v1/scenarios/scorers",
+            body=await async_maybe_transform(
+                {
+                    "bash_script": bash_script,
+                    "type": type,
+                },
+                scorer_create_params.ScorerCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScorerCreateResponse,
+        )
+
     async def retrieve(
         self,
         id: str,
@@ -338,6 +441,9 @@ class ScorersResourceWithRawResponse:
     def __init__(self, scorers: ScorersResource) -> None:
         self._scorers = scorers
 
+        self.create = to_raw_response_wrapper(
+            scorers.create,
+        )
         self.retrieve = to_raw_response_wrapper(
             scorers.retrieve,
         )
@@ -353,6 +459,9 @@ class AsyncScorersResourceWithRawResponse:
     def __init__(self, scorers: AsyncScorersResource) -> None:
         self._scorers = scorers
 
+        self.create = async_to_raw_response_wrapper(
+            scorers.create,
+        )
         self.retrieve = async_to_raw_response_wrapper(
             scorers.retrieve,
         )
@@ -368,6 +477,9 @@ class ScorersResourceWithStreamingResponse:
     def __init__(self, scorers: ScorersResource) -> None:
         self._scorers = scorers
 
+        self.create = to_streamed_response_wrapper(
+            scorers.create,
+        )
         self.retrieve = to_streamed_response_wrapper(
             scorers.retrieve,
         )
@@ -383,6 +495,9 @@ class AsyncScorersResourceWithStreamingResponse:
     def __init__(self, scorers: AsyncScorersResource) -> None:
         self._scorers = scorers
 
+        self.create = async_to_streamed_response_wrapper(
+            scorers.create,
+        )
         self.retrieve = async_to_streamed_response_wrapper(
             scorers.retrieve,
         )

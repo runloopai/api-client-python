@@ -294,6 +294,7 @@ Types:
 
 ```python
 from runloop_api_client.types.scenarios import (
+    ScorerCreateResponse,
     ScorerRetrieveResponse,
     ScorerUpdateResponse,
     ScorerListResponse,
@@ -302,6 +303,7 @@ from runloop_api_client.types.scenarios import (
 
 Methods:
 
+- <code title="post /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">create</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_create_response.py">ScorerCreateResponse</a></code>
 - <code title="get /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenarios/scorer_retrieve_response.py">ScorerRetrieveResponse</a></code>
 - <code title="post /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_update_response.py">ScorerUpdateResponse</a></code>
 - <code title="get /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_list_response.py">SyncScenarioScorersCursorIDPage[ScorerListResponse]</a></code>
