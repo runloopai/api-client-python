@@ -297,21 +297,17 @@ Types:
 
 ```python
 from runloop_api_client.types.scenarios import (
-    ScorerCreateResponse,
     ScorerRetrieveResponse,
     ScorerUpdateResponse,
     ScorerListResponse,
-    ScorerValidateResponse,
 )
 ```
 
 Methods:
 
-- <code title="post /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">create</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_create_response.py">ScorerCreateResponse</a></code>
 - <code title="get /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenarios/scorer_retrieve_response.py">ScorerRetrieveResponse</a></code>
 - <code title="post /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_update_response.py">ScorerUpdateResponse</a></code>
 - <code title="get /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_list_response.py">SyncScenarioScorersCursorIDPage[ScorerListResponse]</a></code>
-- <code title="post /v1/scenarios/scorers/{id}/validate">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">validate</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_validate_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_validate_response.py">ScorerValidateResponse</a></code>
 
 # Objects
 
@@ -422,3 +418,24 @@ Methods:
 - <code title="post /v1/gateway-configs/{id}">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/gateway_config_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>
 - <code title="get /v1/gateway-configs">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">list</a>(\*\*<a href="src/runloop_api_client/types/gateway_config_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">SyncGatewayConfigsCursorIDPage[GatewayConfigView]</a></code>
 - <code title="post /v1/gateway-configs/{id}/delete">client.gateway_configs.<a href="./src/runloop_api_client/resources/gateway_configs.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/gateway_config_view.py">GatewayConfigView</a></code>
+
+# McpConfigs
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    McpConfigCreateParameters,
+    McpConfigListView,
+    McpConfigUpdateParameters,
+    McpConfigView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/mcp-configs">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">create</a>(\*\*<a href="src/runloop_api_client/types/mcp_config_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
+- <code title="get /v1/mcp-configs/{id}">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
+- <code title="post /v1/mcp-configs/{id}">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/mcp_config_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
+- <code title="get /v1/mcp-configs">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">list</a>(\*\*<a href="src/runloop_api_client/types/mcp_config_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">SyncMcpConfigsCursorIDPage[McpConfigView]</a></code>
+- <code title="post /v1/mcp-configs/{id}/delete">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
