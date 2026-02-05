@@ -2,54 +2,55 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from ..types import mcp_config_list_params, mcp_config_create_params, mcp_config_update_params
+from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from .._utils import maybe_transform, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncScenarioScorersCursorIDPage, AsyncScenarioScorersCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params
-from ...types.scenarios.scorer_list_response import ScorerListResponse
-from ...types.scenarios.scorer_create_response import ScorerCreateResponse
-from ...types.scenarios.scorer_update_response import ScorerUpdateResponse
-from ...types.scenarios.scorer_retrieve_response import ScorerRetrieveResponse
+from ..pagination import SyncMcpConfigsCursorIDPage, AsyncMcpConfigsCursorIDPage
+from .._base_client import AsyncPaginator, make_request_options
+from ..types.mcp_config_view import McpConfigView
 
-__all__ = ["ScorersResource", "AsyncScorersResource"]
+__all__ = ["McpConfigsResource", "AsyncMcpConfigsResource"]
 
 
-class ScorersResource(SyncAPIResource):
+class McpConfigsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> ScorersResourceWithRawResponse:
+    def with_raw_response(self) -> McpConfigsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return ScorersResourceWithRawResponse(self)
+        return McpConfigsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> ScorersResourceWithStreamingResponse:
+    def with_streaming_response(self) -> McpConfigsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return ScorersResourceWithStreamingResponse(self)
+        return McpConfigsResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        bash_script: str,
-        type: str,
+        allowed_tools: SequenceNotStr[str],
+        endpoint: str,
+        name: str,
+        description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -57,15 +58,24 @@ class ScorersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerCreateResponse:
+    ) -> McpConfigView:
         """
-        Create a custom scenario scorer.
+        [Beta] Create a new McpConfig to connect to an upstream MCP (Model Context
+        Protocol) server. The config specifies the target endpoint and which tools are
+        allowed.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          allowed_tools:
+              Glob patterns specifying which tools are allowed from this MCP server. Examples:
+              ['*'] for all tools, ['github.search_*', 'github.get_*'] for specific patterns.
 
-          type: Name of the type of custom scorer.
+          endpoint: The target MCP server endpoint URL (e.g., 'https://mcp.example.com').
+
+          name: The human-readable name for the McpConfig. Must be unique within your account.
+              The first segment before '-' is used as the service name for tool routing (e.g.,
+              'github-readonly' uses 'github' as the service name).
+
+          description: Optional description for this MCP configuration.
 
           extra_headers: Send extra headers
 
@@ -78,13 +88,15 @@ class ScorersResource(SyncAPIResource):
           idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
-            "/v1/scenarios/scorers",
+            "/v1/mcp-configs",
             body=maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "allowed_tools": allowed_tools,
+                    "endpoint": endpoint,
+                    "name": name,
+                    "description": description,
                 },
-                scorer_create_params.ScorerCreateParams,
+                mcp_config_create_params.McpConfigCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -93,7 +105,7 @@ class ScorersResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerCreateResponse,
+            cast_to=McpConfigView,
         )
 
     def retrieve(
@@ -106,9 +118,9 @@ class ScorersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ScorerRetrieveResponse:
+    ) -> McpConfigView:
         """
-        Retrieve Scenario Scorer.
+        [Beta] Get a specific McpConfig by its unique identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -122,19 +134,21 @@ class ScorersResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/scenarios/scorers/{id}",
+            f"/v1/mcp-configs/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScorerRetrieveResponse,
+            cast_to=McpConfigView,
         )
 
     def update(
         self,
         id: str,
         *,
-        bash_script: str,
-        type: str,
+        allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        endpoint: Optional[str] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -142,15 +156,20 @@ class ScorersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerUpdateResponse:
-        """
-        Update a scenario scorer.
+    ) -> McpConfigView:
+        """[Beta] Update an existing McpConfig.
+
+        All fields are optional.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
+              tools, ['github.search_*'] for specific patterns.
 
-          type: Name of the type of custom scorer.
+          description: New description for this MCP configuration.
+
+          endpoint: New target MCP server endpoint URL.
+
+          name: New name for the McpConfig. Must be unique within your account.
 
           extra_headers: Send extra headers
 
@@ -165,13 +184,15 @@ class ScorersResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/scenarios/scorers/{id}",
+            f"/v1/mcp-configs/{id}",
             body=maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "allowed_tools": allowed_tools,
+                    "description": description,
+                    "endpoint": endpoint,
+                    "name": name,
                 },
-                scorer_update_params.ScorerUpdateParams,
+                mcp_config_update_params.McpConfigUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -180,13 +201,15 @@ class ScorersResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerUpdateResponse,
+            cast_to=McpConfigView,
         )
 
     def list(
         self,
         *,
+        id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -194,12 +217,16 @@ class ScorersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncScenarioScorersCursorIDPage[ScorerListResponse]:
+    ) -> SyncMcpConfigsCursorIDPage[McpConfigView]:
         """
-        List all Scenario Scorers matching filter.
+        [Beta] List all McpConfigs for the authenticated account.
 
         Args:
+          id: Filter by ID.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name (prefix match supported).
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -212,8 +239,8 @@ class ScorersResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/scenarios/scorers",
-            page=SyncScenarioScorersCursorIDPage[ScorerListResponse],
+            "/v1/mcp-configs",
+            page=SyncMcpConfigsCursorIDPage[McpConfigView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -221,41 +248,21 @@ class ScorersResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "id": id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
-                    scorer_list_params.ScorerListParams,
+                    mcp_config_list_params.McpConfigListParams,
                 ),
             ),
-            model=ScorerListResponse,
+            model=McpConfigView,
         )
 
-
-class AsyncScorersResource(AsyncAPIResource):
-    @cached_property
-    def with_raw_response(self) -> AsyncScorersResourceWithRawResponse:
-        """
-        This property can be used as a prefix for any HTTP method call to return
-        the raw response object instead of the parsed content.
-
-        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
-        """
-        return AsyncScorersResourceWithRawResponse(self)
-
-    @cached_property
-    def with_streaming_response(self) -> AsyncScorersResourceWithStreamingResponse:
-        """
-        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
-
-        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
-        """
-        return AsyncScorersResourceWithStreamingResponse(self)
-
-    async def create(
+    def delete(
         self,
+        id: str,
         *,
-        bash_script: str,
-        type: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -263,15 +270,89 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerCreateResponse:
-        """
-        Create a custom scenario scorer.
+    ) -> McpConfigView:
+        """[Beta] Delete an existing McpConfig.
+
+        This action is irreversible.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          extra_headers: Send extra headers
 
-          type: Name of the type of custom scorer.
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/mcp-configs/{id}/delete",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=McpConfigView,
+        )
+
+
+class AsyncMcpConfigsResource(AsyncAPIResource):
+    @cached_property
+    def with_raw_response(self) -> AsyncMcpConfigsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
+        """
+        return AsyncMcpConfigsResourceWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncMcpConfigsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
+        """
+        return AsyncMcpConfigsResourceWithStreamingResponse(self)
+
+    async def create(
+        self,
+        *,
+        allowed_tools: SequenceNotStr[str],
+        endpoint: str,
+        name: str,
+        description: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> McpConfigView:
+        """
+        [Beta] Create a new McpConfig to connect to an upstream MCP (Model Context
+        Protocol) server. The config specifies the target endpoint and which tools are
+        allowed.
+
+        Args:
+          allowed_tools:
+              Glob patterns specifying which tools are allowed from this MCP server. Examples:
+              ['*'] for all tools, ['github.search_*', 'github.get_*'] for specific patterns.
+
+          endpoint: The target MCP server endpoint URL (e.g., 'https://mcp.example.com').
+
+          name: The human-readable name for the McpConfig. Must be unique within your account.
+              The first segment before '-' is used as the service name for tool routing (e.g.,
+              'github-readonly' uses 'github' as the service name).
+
+          description: Optional description for this MCP configuration.
 
           extra_headers: Send extra headers
 
@@ -284,13 +365,15 @@ class AsyncScorersResource(AsyncAPIResource):
           idempotency_key: Specify a custom idempotency key for this request
         """
         return await self._post(
-            "/v1/scenarios/scorers",
+            "/v1/mcp-configs",
             body=await async_maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "allowed_tools": allowed_tools,
+                    "endpoint": endpoint,
+                    "name": name,
+                    "description": description,
                 },
-                scorer_create_params.ScorerCreateParams,
+                mcp_config_create_params.McpConfigCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -299,7 +382,7 @@ class AsyncScorersResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerCreateResponse,
+            cast_to=McpConfigView,
         )
 
     async def retrieve(
@@ -312,9 +395,9 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ScorerRetrieveResponse:
+    ) -> McpConfigView:
         """
-        Retrieve Scenario Scorer.
+        [Beta] Get a specific McpConfig by its unique identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -328,19 +411,21 @@ class AsyncScorersResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/scenarios/scorers/{id}",
+            f"/v1/mcp-configs/{id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScorerRetrieveResponse,
+            cast_to=McpConfigView,
         )
 
     async def update(
         self,
         id: str,
         *,
-        bash_script: str,
-        type: str,
+        allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        description: Optional[str] | Omit = omit,
+        endpoint: Optional[str] | Omit = omit,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -348,15 +433,20 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerUpdateResponse:
-        """
-        Update a scenario scorer.
+    ) -> McpConfigView:
+        """[Beta] Update an existing McpConfig.
+
+        All fields are optional.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
+              tools, ['github.search_*'] for specific patterns.
 
-          type: Name of the type of custom scorer.
+          description: New description for this MCP configuration.
+
+          endpoint: New target MCP server endpoint URL.
+
+          name: New name for the McpConfig. Must be unique within your account.
 
           extra_headers: Send extra headers
 
@@ -371,13 +461,15 @@ class AsyncScorersResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/scenarios/scorers/{id}",
+            f"/v1/mcp-configs/{id}",
             body=await async_maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "allowed_tools": allowed_tools,
+                    "description": description,
+                    "endpoint": endpoint,
+                    "name": name,
                 },
-                scorer_update_params.ScorerUpdateParams,
+                mcp_config_update_params.McpConfigUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -386,13 +478,15 @@ class AsyncScorersResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerUpdateResponse,
+            cast_to=McpConfigView,
         )
 
     def list(
         self,
         *,
+        id: str | Omit = omit,
         limit: int | Omit = omit,
+        name: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -400,12 +494,16 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[ScorerListResponse, AsyncScenarioScorersCursorIDPage[ScorerListResponse]]:
+    ) -> AsyncPaginator[McpConfigView, AsyncMcpConfigsCursorIDPage[McpConfigView]]:
         """
-        List all Scenario Scorers matching filter.
+        [Beta] List all McpConfigs for the authenticated account.
 
         Args:
+          id: Filter by ID.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by name (prefix match supported).
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -418,8 +516,8 @@ class AsyncScorersResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get_api_list(
-            "/v1/scenarios/scorers",
-            page=AsyncScenarioScorersCursorIDPage[ScorerListResponse],
+            "/v1/mcp-configs",
+            page=AsyncMcpConfigsCursorIDPage[McpConfigView],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -427,83 +525,138 @@ class AsyncScorersResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "id": id,
                         "limit": limit,
+                        "name": name,
                         "starting_after": starting_after,
                     },
-                    scorer_list_params.ScorerListParams,
+                    mcp_config_list_params.McpConfigListParams,
                 ),
             ),
-            model=ScorerListResponse,
+            model=McpConfigView,
+        )
+
+    async def delete(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> McpConfigView:
+        """[Beta] Delete an existing McpConfig.
+
+        This action is irreversible.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/mcp-configs/{id}/delete",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=McpConfigView,
         )
 
 
-class ScorersResourceWithRawResponse:
-    def __init__(self, scorers: ScorersResource) -> None:
-        self._scorers = scorers
+class McpConfigsResourceWithRawResponse:
+    def __init__(self, mcp_configs: McpConfigsResource) -> None:
+        self._mcp_configs = mcp_configs
 
         self.create = to_raw_response_wrapper(
-            scorers.create,
+            mcp_configs.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            scorers.retrieve,
+            mcp_configs.retrieve,
         )
         self.update = to_raw_response_wrapper(
-            scorers.update,
+            mcp_configs.update,
         )
         self.list = to_raw_response_wrapper(
-            scorers.list,
+            mcp_configs.list,
+        )
+        self.delete = to_raw_response_wrapper(
+            mcp_configs.delete,
         )
 
 
-class AsyncScorersResourceWithRawResponse:
-    def __init__(self, scorers: AsyncScorersResource) -> None:
-        self._scorers = scorers
+class AsyncMcpConfigsResourceWithRawResponse:
+    def __init__(self, mcp_configs: AsyncMcpConfigsResource) -> None:
+        self._mcp_configs = mcp_configs
 
         self.create = async_to_raw_response_wrapper(
-            scorers.create,
+            mcp_configs.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            scorers.retrieve,
+            mcp_configs.retrieve,
         )
         self.update = async_to_raw_response_wrapper(
-            scorers.update,
+            mcp_configs.update,
         )
         self.list = async_to_raw_response_wrapper(
-            scorers.list,
+            mcp_configs.list,
+        )
+        self.delete = async_to_raw_response_wrapper(
+            mcp_configs.delete,
         )
 
 
-class ScorersResourceWithStreamingResponse:
-    def __init__(self, scorers: ScorersResource) -> None:
-        self._scorers = scorers
+class McpConfigsResourceWithStreamingResponse:
+    def __init__(self, mcp_configs: McpConfigsResource) -> None:
+        self._mcp_configs = mcp_configs
 
         self.create = to_streamed_response_wrapper(
-            scorers.create,
+            mcp_configs.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            scorers.retrieve,
+            mcp_configs.retrieve,
         )
         self.update = to_streamed_response_wrapper(
-            scorers.update,
+            mcp_configs.update,
         )
         self.list = to_streamed_response_wrapper(
-            scorers.list,
+            mcp_configs.list,
+        )
+        self.delete = to_streamed_response_wrapper(
+            mcp_configs.delete,
         )
 
 
-class AsyncScorersResourceWithStreamingResponse:
-    def __init__(self, scorers: AsyncScorersResource) -> None:
-        self._scorers = scorers
+class AsyncMcpConfigsResourceWithStreamingResponse:
+    def __init__(self, mcp_configs: AsyncMcpConfigsResource) -> None:
+        self._mcp_configs = mcp_configs
 
         self.create = async_to_streamed_response_wrapper(
-            scorers.create,
+            mcp_configs.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            scorers.retrieve,
+            mcp_configs.retrieve,
         )
         self.update = async_to_streamed_response_wrapper(
-            scorers.update,
+            mcp_configs.update,
         )
         self.list = async_to_streamed_response_wrapper(
-            scorers.list,
+            mcp_configs.list,
+        )
+        self.delete = async_to_streamed_response_wrapper(
+            mcp_configs.delete,
         )

@@ -7,10 +7,9 @@ from typing_extensions import Unpack, override
 from ._types import (
     BaseRequestOptions,
     SDKScorerUpdateParams,
-    SDKScorerValidateParams,
 )
 from .._client import AsyncRunloop
-from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse, ScorerValidateResponse
+from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse
 
 
 class AsyncScorer:
@@ -66,12 +65,3 @@ class AsyncScorer:
         :rtype: ScorerUpdateResponse
         """
         return await self._client.scenarios.scorers.update(self._id, **params)
-
-    async def validate(self, **params: Unpack[SDKScorerValidateParams]) -> ScorerValidateResponse:
-        """Run the scorer against the provided context and return the result.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerValidateParams` for available parameters
-        :return: Validation result with score
-        :rtype: ScorerValidateResponse
-        """
-        return await self._client.scenarios.scorers.validate(self._id, **params)

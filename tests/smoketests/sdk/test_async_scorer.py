@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import pytest
 
-from runloop_api_client import InternalServerError
 from runloop_api_client.sdk import AsyncRunloopSDK
 from tests.smoketests.utils import unique_name
 
@@ -70,24 +69,6 @@ class TestAsyncScorerLifecycle:
         info = await scorer.get_info()
         assert info.type == updated_type
         assert info.bash_script == "echo 'score=1.0'"
-
-    @pytest.mark.timeout(ONE_MINUTE_TIMEOUT)
-    async def test_scorer_validate(self, async_sdk_client: AsyncRunloopSDK) -> None:
-        """Test validating a scorer."""
-        scorer_type = unique_name("sdk-async-scorer-validate")
-        scorer = await async_sdk_client.scorer.create(
-            type=scorer_type,
-            bash_script="echo 'score=1.0'",
-        )
-
-        try:
-            result = await scorer.validate(
-                scoring_context={},
-            )
-            assert result is not None
-        except InternalServerError:
-            # Backend may return 500 for validate endpoint - skip if this happens
-            pytest.skip("Backend returned 500 for scorer validate endpoint")
 
 
 class TestAsyncScorerListing:

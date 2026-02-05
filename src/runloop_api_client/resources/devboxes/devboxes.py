@@ -105,6 +105,7 @@ from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
+from ...types.devbox_resource_usage_view import DevboxResourceUsageView
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
 from ...types.shared_params.launch_parameters import LaunchParameters
@@ -189,6 +190,7 @@ class DevboxesResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -239,6 +241,11 @@ class DevboxesResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          mcp: [Beta] (Optional) MCP specifications for MCP server access. Each spec links an
+              MCP config to a secret. The devbox will receive environment variables
+              (RL_MCP_URL, RL_MCP_TOKEN) for accessing MCP servers through the MCP hub.
+              Example: [{'mcp_config': 'github-readonly', 'secret': 'MY_GITHUB_TOKEN'}]
+
           metadata: User defined metadata to attach to the devbox for organization.
 
           mounts: A list of mounts to be included in the Devbox.
@@ -281,6 +288,7 @@ class DevboxesResource(SyncAPIResource):
                     "file_mounts": file_mounts,
                     "gateways": gateways,
                     "launch_parameters": launch_parameters,
+                    "mcp": mcp,
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
@@ -498,6 +506,7 @@ class DevboxesResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -539,6 +548,7 @@ class DevboxesResource(SyncAPIResource):
             file_mounts=file_mounts,
             gateways=gateways,
             launch_parameters=launch_parameters,
+            mcp=mcp,
             metadata=metadata,
             mounts=mounts,
             name=name,
@@ -1364,6 +1374,43 @@ class DevboxesResource(SyncAPIResource):
             cast_to=DevboxView,
         )
 
+    def retrieve_resource_usage(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxResourceUsageView:
+        """Get resource usage metrics for a specific Devbox.
+
+        Returns CPU, memory, and disk
+        consumption calculated from the Devbox's lifecycle, excluding any suspended
+        periods for CPU and memory. Disk usage includes the full elapsed time since
+        storage is consumed even when suspended.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/devboxes/{id}/usage",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxResourceUsageView,
+        )
+
     def shutdown(
         self,
         id: str,
@@ -1805,6 +1852,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -1855,6 +1903,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
+          mcp: [Beta] (Optional) MCP specifications for MCP server access. Each spec links an
+              MCP config to a secret. The devbox will receive environment variables
+              (RL_MCP_URL, RL_MCP_TOKEN) for accessing MCP servers through the MCP hub.
+              Example: [{'mcp_config': 'github-readonly', 'secret': 'MY_GITHUB_TOKEN'}]
+
           metadata: User defined metadata to attach to the devbox for organization.
 
           mounts: A list of mounts to be included in the Devbox.
@@ -1897,6 +1950,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "file_mounts": file_mounts,
                     "gateways": gateways,
                     "launch_parameters": launch_parameters,
+                    "mcp": mcp,
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
@@ -1961,6 +2015,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -2003,6 +2058,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             file_mounts=file_mounts,
             gateways=gateways,
             launch_parameters=launch_parameters,
+            mcp=mcp,
             metadata=metadata,
             mounts=mounts,
             name=name,
@@ -2980,6 +3036,43 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxView,
         )
 
+    async def retrieve_resource_usage(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxResourceUsageView:
+        """Get resource usage metrics for a specific Devbox.
+
+        Returns CPU, memory, and disk
+        consumption calculated from the Devbox's lifecycle, excluding any suspended
+        periods for CPU and memory. Disk usage includes the full elapsed time since
+        storage is consumed even when suspended.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/devboxes/{id}/usage",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxResourceUsageView,
+        )
+
     async def shutdown(
         self,
         id: str,
@@ -3434,6 +3527,9 @@ class DevboxesResourceWithRawResponse:
         self.resume = to_raw_response_wrapper(
             devboxes.resume,
         )
+        self.retrieve_resource_usage = to_raw_response_wrapper(
+            devboxes.retrieve_resource_usage,
+        )
         self.shutdown = to_raw_response_wrapper(
             devboxes.shutdown,
         )
@@ -3538,6 +3634,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.resume = async_to_raw_response_wrapper(
             devboxes.resume,
+        )
+        self.retrieve_resource_usage = async_to_raw_response_wrapper(
+            devboxes.retrieve_resource_usage,
         )
         self.shutdown = async_to_raw_response_wrapper(
             devboxes.shutdown,
@@ -3644,6 +3743,9 @@ class DevboxesResourceWithStreamingResponse:
         self.resume = to_streamed_response_wrapper(
             devboxes.resume,
         )
+        self.retrieve_resource_usage = to_streamed_response_wrapper(
+            devboxes.retrieve_resource_usage,
+        )
         self.shutdown = to_streamed_response_wrapper(
             devboxes.shutdown,
         )
@@ -3748,6 +3850,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.resume = async_to_streamed_response_wrapper(
             devboxes.resume,
+        )
+        self.retrieve_resource_usage = async_to_streamed_response_wrapper(
+            devboxes.retrieve_resource_usage,
         )
         self.shutdown = async_to_streamed_response_wrapper(
             devboxes.shutdown,

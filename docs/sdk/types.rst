@@ -81,15 +81,13 @@ These TypeDicts define parameters for storage object creation, listing, and down
 Scorer Parameters
 -----------------
 
-These TypeDicts define parameters for scorer creation, listing, updating, and validation.
+These TypeDicts define parameters for scorer creation, listing, and updating.
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKScorerCreateParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKScorerListParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKScorerUpdateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScorerValidateParams
 
 Core Request Options
 --------------------
