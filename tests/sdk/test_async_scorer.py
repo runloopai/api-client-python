@@ -49,4 +49,3 @@ class TestAsyncScorer:
 
         assert result == update_response
         mock_async_client.scenarios.scorers.update.assert_awaited_once()
-

@@ -49,4 +49,3 @@ class TestScorer:
             type="updated_scorer",
             bash_script="echo 'score=1.0'",
         )
-
