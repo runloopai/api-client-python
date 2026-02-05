@@ -30,8 +30,5 @@ class McpConfigView(BaseModel):
     name: str
     """The human-readable name of the McpConfig. Unique per account."""
 
-    account_id: Optional[str] = None
-    """The account ID that owns this config."""
-
     description: Optional[str] = None
     """Optional description for this MCP configuration."""
