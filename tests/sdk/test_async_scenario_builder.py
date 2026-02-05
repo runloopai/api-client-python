@@ -109,16 +109,8 @@ class TestAsyncScenarioBuilder:
         assert mock_builder._scorers[4]["scorer"].get("pattern") == "$A.foo()"
         assert mock_builder._scorers[4]["scorer"].get("lang") == "python"
 
-        # Custom scorer with optional params
-        mock_builder.add_custom_scorer(
-            "custom-scorer", custom_scorer_type="my_scorer", scorer_params={"threshold": 0.5}
-        )
-        assert mock_builder._scorers[5]["scorer"]["type"] == "custom_scorer"
-        assert mock_builder._scorers[5]["scorer"].get("custom_scorer_type") == "my_scorer"
-        assert mock_builder._scorers[5]["scorer"].get("scorer_params") == {"threshold": 0.5}
-
         # Verify multiple scorers accumulated
-        assert len(mock_builder._scorers) == 6
+        assert len(mock_builder._scorers) == 5
 
     def test_add_scorer_rejects_invalid_weight(self, mock_builder: AsyncScenarioBuilder) -> None:
         """Test that adding a scorer with zero or negative weight raises ValueError."""

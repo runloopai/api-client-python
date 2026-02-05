@@ -11,7 +11,6 @@ __all__ = [
     "ScorerAstGrepScoringFunction",
     "ScorerBashScriptScoringFunction",
     "ScorerCommandScoringFunction",
-    "ScorerCustomScoringFunction",
     "ScorerPythonScriptScoringFunction",
     "ScorerTestBasedScoringFunction",
     "ScorerTestBasedScoringFunctionTestFile",
@@ -61,18 +60,6 @@ class ScorerCommandScoringFunction(TypedDict, total=False):
 
     command: str
     """The command to execute."""
-
-
-class ScorerCustomScoringFunction(TypedDict, total=False):
-    """CustomScoringFunction is a custom, user defined scoring function."""
-
-    custom_scorer_type: Required[str]
-    """Type of the scoring function, previously registered with Runloop."""
-
-    type: Required[Literal["custom_scorer"]]
-
-    scorer_params: Optional[object]
-    """Additional JSON structured context to pass to the scoring function."""
 
 
 class ScorerPythonScriptScoringFunction(TypedDict, total=False):
@@ -128,7 +115,6 @@ Scorer: TypeAlias = Union[
     ScorerAstGrepScoringFunction,
     ScorerBashScriptScoringFunction,
     ScorerCommandScoringFunction,
-    ScorerCustomScoringFunction,
     ScorerPythonScriptScoringFunction,
     ScorerTestBasedScoringFunction,
 ]

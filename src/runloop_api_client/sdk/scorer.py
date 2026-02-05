@@ -7,14 +7,13 @@ from typing_extensions import Unpack, override
 from ._types import (
     BaseRequestOptions,
     SDKScorerUpdateParams,
-    SDKScorerValidateParams,
 )
 from .._client import Runloop
-from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse, ScorerValidateResponse
+from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse
 
 
 class Scorer:
-    """A custom scorer for evaluating scenario outputs.
+    """A scorer for evaluating scenario outputs.
 
     Scorers define bash scripts that produce a score in the range [0.0, 1.0] for scenario runs.
     Obtain instances via ``runloop.scorer.create()`` or ``runloop.scorer.from_id()``.
@@ -22,7 +21,6 @@ class Scorer:
     Example:
         >>> runloop = RunloopSDK()
         >>> scorer = runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
-        >>> scorer.validate(scoring_context={"output": "test"})
     """
 
     def __init__(self, client: Runloop, scorer_id: str) -> None:
@@ -66,12 +64,3 @@ class Scorer:
         :rtype: ScorerUpdateResponse
         """
         return self._client.scenarios.scorers.update(self._id, **params)
-
-    def validate(self, **params: Unpack[SDKScorerValidateParams]) -> ScorerValidateResponse:
-        """Run the scorer against the provided context and return the result.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerValidateParams` for available parameters
-        :return: Validation result with score
-        :rtype: ScorerValidateResponse
-        """
-        return self._client.scenarios.scorers.validate(self._id, **params)

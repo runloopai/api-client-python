@@ -12,7 +12,6 @@ __all__ = [
     "ScorerAstGrepScoringFunction",
     "ScorerBashScriptScoringFunction",
     "ScorerCommandScoringFunction",
-    "ScorerCustomScoringFunction",
     "ScorerPythonScriptScoringFunction",
     "ScorerTestBasedScoringFunction",
     "ScorerTestBasedScoringFunctionTestFile",
@@ -62,18 +61,6 @@ class ScorerCommandScoringFunction(BaseModel):
 
     command: Optional[str] = None
     """The command to execute."""
-
-
-class ScorerCustomScoringFunction(BaseModel):
-    """CustomScoringFunction is a custom, user defined scoring function."""
-
-    custom_scorer_type: str
-    """Type of the scoring function, previously registered with Runloop."""
-
-    type: Literal["custom_scorer"]
-
-    scorer_params: Optional[object] = None
-    """Additional JSON structured context to pass to the scoring function."""
 
 
 class ScorerPythonScriptScoringFunction(BaseModel):
@@ -130,7 +117,6 @@ Scorer: TypeAlias = Annotated[
         ScorerAstGrepScoringFunction,
         ScorerBashScriptScoringFunction,
         ScorerCommandScoringFunction,
-        ScorerCustomScoringFunction,
         ScorerPythonScriptScoringFunction,
         ScorerTestBasedScoringFunction,
     ],

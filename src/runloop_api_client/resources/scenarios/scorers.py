@@ -16,13 +16,11 @@ from ..._response import (
 )
 from ...pagination import SyncScenarioScorersCursorIDPage, AsyncScenarioScorersCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params, scorer_validate_params
-from ...types.scenario_environment_param import ScenarioEnvironmentParam
+from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params
 from ...types.scenarios.scorer_list_response import ScorerListResponse
 from ...types.scenarios.scorer_create_response import ScorerCreateResponse
 from ...types.scenarios.scorer_update_response import ScorerUpdateResponse
 from ...types.scenarios.scorer_retrieve_response import ScorerRetrieveResponse
-from ...types.scenarios.scorer_validate_response import ScorerValidateResponse
 
 __all__ = ["ScorersResource", "AsyncScorersResource"]
 
@@ -232,59 +230,6 @@ class ScorersResource(SyncAPIResource):
             model=ScorerListResponse,
         )
 
-    def validate(
-        self,
-        id: str,
-        *,
-        scoring_context: object,
-        environment_parameters: ScenarioEnvironmentParam | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> ScorerValidateResponse:
-        """
-        Validate a scenario scorer.
-
-        Args:
-          scoring_context: Json context that gets passed to the custom scorer
-
-          environment_parameters: The Environment in which the Scenario will run.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/scenarios/scorers/{id}/validate",
-            body=maybe_transform(
-                {
-                    "scoring_context": scoring_context,
-                    "environment_parameters": environment_parameters,
-                },
-                scorer_validate_params.ScorerValidateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=ScorerValidateResponse,
-        )
-
 
 class AsyncScorersResource(AsyncAPIResource):
     @cached_property
@@ -491,59 +436,6 @@ class AsyncScorersResource(AsyncAPIResource):
             model=ScorerListResponse,
         )
 
-    async def validate(
-        self,
-        id: str,
-        *,
-        scoring_context: object,
-        environment_parameters: ScenarioEnvironmentParam | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> ScorerValidateResponse:
-        """
-        Validate a scenario scorer.
-
-        Args:
-          scoring_context: Json context that gets passed to the custom scorer
-
-          environment_parameters: The Environment in which the Scenario will run.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/scenarios/scorers/{id}/validate",
-            body=await async_maybe_transform(
-                {
-                    "scoring_context": scoring_context,
-                    "environment_parameters": environment_parameters,
-                },
-                scorer_validate_params.ScorerValidateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=ScorerValidateResponse,
-        )
-
 
 class ScorersResourceWithRawResponse:
     def __init__(self, scorers: ScorersResource) -> None:
@@ -560,9 +452,6 @@ class ScorersResourceWithRawResponse:
         )
         self.list = to_raw_response_wrapper(
             scorers.list,
-        )
-        self.validate = to_raw_response_wrapper(
-            scorers.validate,
         )
 
 
@@ -582,9 +471,6 @@ class AsyncScorersResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             scorers.list,
         )
-        self.validate = async_to_raw_response_wrapper(
-            scorers.validate,
-        )
 
 
 class ScorersResourceWithStreamingResponse:
@@ -603,9 +489,6 @@ class ScorersResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             scorers.list,
         )
-        self.validate = to_streamed_response_wrapper(
-            scorers.validate,
-        )
 
 
 class AsyncScorersResourceWithStreamingResponse:
@@ -623,7 +506,4 @@ class AsyncScorersResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             scorers.list,
-        )
-        self.validate = async_to_streamed_response_wrapper(
-            scorers.validate,
         )

@@ -50,20 +50,3 @@ class TestAsyncScorer:
         assert result == update_response
         mock_async_client.scenarios.scorers.update.assert_awaited_once()
 
-    @pytest.mark.asyncio
-    async def test_validate(self, mock_async_client: AsyncMock) -> None:
-        """Test validate method."""
-        validate_response = SimpleNamespace(
-            name="test_scorer",
-            scoring_context={},
-            scoring_result=SimpleNamespace(score=0.95),
-        )
-        mock_async_client.scenarios.scorers.validate = AsyncMock(return_value=validate_response)
-
-        scorer = AsyncScorer(mock_async_client, "sco_123")
-        result = await scorer.validate(
-            scoring_context={"test": "context"},
-        )
-
-        assert result == validate_response
-        mock_async_client.scenarios.scorers.validate.assert_awaited_once()

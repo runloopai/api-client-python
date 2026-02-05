@@ -50,22 +50,3 @@ class TestScorer:
             bash_script="echo 'score=1.0'",
         )
 
-    def test_validate(self, mock_client: Mock) -> None:
-        """Test validate method."""
-        validate_response = SimpleNamespace(
-            name="test_scorer",
-            scoring_context={},
-            scoring_result=SimpleNamespace(score=0.95),
-        )
-        mock_client.scenarios.scorers.validate.return_value = validate_response
-
-        scorer = Scorer(mock_client, "sco_123")
-        result = scorer.validate(
-            scoring_context={"test": "context"},
-        )
-
-        assert result == validate_response
-        mock_client.scenarios.scorers.validate.assert_called_once_with(
-            "sco_123",
-            scoring_context={"test": "context"},
-        )
