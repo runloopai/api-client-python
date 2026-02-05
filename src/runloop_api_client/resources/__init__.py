@@ -56,6 +56,14 @@ from .blueprints import (
     BlueprintsResourceWithStreamingResponse,
     AsyncBlueprintsResourceWithStreamingResponse,
 )
+from .mcp_configs import (
+    McpConfigsResource,
+    AsyncMcpConfigsResource,
+    McpConfigsResourceWithRawResponse,
+    AsyncMcpConfigsResourceWithRawResponse,
+    McpConfigsResourceWithStreamingResponse,
+    AsyncMcpConfigsResourceWithStreamingResponse,
+)
 from .repositories import (
     RepositoriesResource,
     AsyncRepositoriesResource,
@@ -170,4 +178,10 @@ __all__ = [
     "AsyncGatewayConfigsResourceWithRawResponse",
     "GatewayConfigsResourceWithStreamingResponse",
     "AsyncGatewayConfigsResourceWithStreamingResponse",
+    "McpConfigsResource",
+    "AsyncMcpConfigsResource",
+    "McpConfigsResourceWithRawResponse",
+    "AsyncMcpConfigsResourceWithRawResponse",
+    "McpConfigsResourceWithStreamingResponse",
+    "AsyncMcpConfigsResourceWithStreamingResponse",
 ]

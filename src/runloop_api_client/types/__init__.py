@@ -22,6 +22,7 @@ from .scenario_view import ScenarioView as ScenarioView
 from .benchmark_view import BenchmarkView as BenchmarkView
 from .blueprint_view import BlueprintView as BlueprintView
 from .agent_list_view import AgentListView as AgentListView
+from .mcp_config_view import McpConfigView as McpConfigView
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
 from .scoring_contract import ScoringContract as ScoringContract
@@ -44,6 +45,7 @@ from .network_policy_view import NetworkPolicyView as NetworkPolicyView
 from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
 from .devbox_snapshot_view import DevboxSnapshotView as DevboxSnapshotView
 from .devbox_update_params import DevboxUpdateParams as DevboxUpdateParams
+from .mcp_config_list_view import McpConfigListView as McpConfigListView
 from .object_create_params import ObjectCreateParams as ObjectCreateParams
 from .scenario_environment import ScenarioEnvironment as ScenarioEnvironment
 from .scenario_list_params import ScenarioListParams as ScenarioListParams
@@ -53,6 +55,7 @@ from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
 from .devbox_execute_params import DevboxExecuteParams as DevboxExecuteParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
+from .mcp_config_list_params import McpConfigListParams as McpConfigListParams
 from .object_download_params import ObjectDownloadParams as ObjectDownloadParams
 from .repository_list_params import RepositoryListParams as RepositoryListParams
 from .scenario_create_params import ScenarioCreateParams as ScenarioCreateParams
@@ -68,6 +71,8 @@ from .blueprint_create_params import BlueprintCreateParams as BlueprintCreatePar
 from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
 from .gateway_config_list_view import GatewayConfigListView as GatewayConfigListView
+from .mcp_config_create_params import McpConfigCreateParams as McpConfigCreateParams
+from .mcp_config_update_params import McpConfigUpdateParams as McpConfigUpdateParams
 from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyListView
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
 from .repository_create_params import RepositoryCreateParams as RepositoryCreateParams

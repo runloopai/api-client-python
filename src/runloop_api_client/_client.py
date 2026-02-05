@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         scenarios,
         benchmarks,
         blueprints,
+        mcp_configs,
         repositories,
         benchmark_jobs,
         benchmark_runs,
@@ -50,6 +51,7 @@ if TYPE_CHECKING:
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
+    from .resources.mcp_configs import McpConfigsResource, AsyncMcpConfigsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
     from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource
     from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
@@ -189,6 +191,12 @@ class Runloop(SyncAPIClient):
         from .resources.gateway_configs import GatewayConfigsResource
 
         return GatewayConfigsResource(self)
+
+    @cached_property
+    def mcp_configs(self) -> McpConfigsResource:
+        from .resources.mcp_configs import McpConfigsResource
+
+        return McpConfigsResource(self)
 
     @cached_property
     def with_raw_response(self) -> RunloopWithRawResponse:
@@ -433,6 +441,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncGatewayConfigsResource(self)
 
     @cached_property
+    def mcp_configs(self) -> AsyncMcpConfigsResource:
+        from .resources.mcp_configs import AsyncMcpConfigsResource
+
+        return AsyncMcpConfigsResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncRunloopWithRawResponse:
         return AsyncRunloopWithRawResponse(self)
 
@@ -623,6 +637,12 @@ class RunloopWithRawResponse:
 
         return GatewayConfigsResourceWithRawResponse(self._client.gateway_configs)
 
+    @cached_property
+    def mcp_configs(self) -> mcp_configs.McpConfigsResourceWithRawResponse:
+        from .resources.mcp_configs import McpConfigsResourceWithRawResponse
+
+        return McpConfigsResourceWithRawResponse(self._client.mcp_configs)
+
 
 class AsyncRunloopWithRawResponse:
     _client: AsyncRunloop
@@ -701,6 +721,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.gateway_configs import AsyncGatewayConfigsResourceWithRawResponse
 
         return AsyncGatewayConfigsResourceWithRawResponse(self._client.gateway_configs)
+
+    @cached_property
+    def mcp_configs(self) -> mcp_configs.AsyncMcpConfigsResourceWithRawResponse:
+        from .resources.mcp_configs import AsyncMcpConfigsResourceWithRawResponse
+
+        return AsyncMcpConfigsResourceWithRawResponse(self._client.mcp_configs)
 
 
 class RunloopWithStreamedResponse:
@@ -781,6 +807,12 @@ class RunloopWithStreamedResponse:
 
         return GatewayConfigsResourceWithStreamingResponse(self._client.gateway_configs)
 
+    @cached_property
+    def mcp_configs(self) -> mcp_configs.McpConfigsResourceWithStreamingResponse:
+        from .resources.mcp_configs import McpConfigsResourceWithStreamingResponse
+
+        return McpConfigsResourceWithStreamingResponse(self._client.mcp_configs)
+
 
 class AsyncRunloopWithStreamedResponse:
     _client: AsyncRunloop
@@ -859,6 +891,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.gateway_configs import AsyncGatewayConfigsResourceWithStreamingResponse
 
         return AsyncGatewayConfigsResourceWithStreamingResponse(self._client.gateway_configs)
+
+    @cached_property
+    def mcp_configs(self) -> mcp_configs.AsyncMcpConfigsResourceWithStreamingResponse:
+        from .resources.mcp_configs import AsyncMcpConfigsResourceWithStreamingResponse
+
+        return AsyncMcpConfigsResourceWithStreamingResponse(self._client.mcp_configs)
 
 
 Client = Runloop
