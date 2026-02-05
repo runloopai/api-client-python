@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.7.0 (2026-02-05)
+
+Full Changelog: [v1.5.1...v1.7.0](https://github.com/runloopai/api-client-python/compare/v1.5.1...v1.7.0)
+
+### Features
+
+* add api to query devbox usage ([#7296](https://github.com/runloopai/api-client-python/issues/7296)) ([ab903f5](https://github.com/runloopai/api-client-python/commit/ab903f557ecc8be15c8d150068a82dfaaac23f4e))
+* adding MCP Config routes ([#7331](https://github.com/runloopai/api-client-python/issues/7331)) ([79d05c0](https://github.com/runloopai/api-client-python/commit/79d05c00f9bb85a458cc300c5b065b6249a16a88))
+* **devbox:** add mcp configuration to devbox create ([#7341](https://github.com/runloopai/api-client-python/issues/7341)) ([0b81e31](https://github.com/runloopai/api-client-python/commit/0b81e3151e3df41f667923cac4e714ba6d7ca3bc))
+* **devbox:** adding gateway config ([#736](https://github.com/runloopai/api-client-python/issues/736)) ([9f4b49d](https://github.com/runloopai/api-client-python/commit/9f4b49daa13dd3aac5a8ee26a262fd7b5b705ff1))
+
+
+### Bug Fixes
+
+* **sdk:** fixed pagination for scorer, scenario and network policy list methods ([#731](https://github.com/runloopai/api-client-python/issues/731)) ([d55fceb](https://github.com/runloopai/api-client-python/commit/d55fceb7d42877cd0ac69a934ef300815f371342))
+
+
+### Chores
+
+* Mark legacy tunnel methods deprecated ([#737](https://github.com/runloopai/api-client-python/issues/737)) ([764b445](https://github.com/runloopai/api-client-python/commit/764b445018ec50db3105c0dd8ea58b02e4690e12))
+
 ## 1.5.1 (2026-01-30)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/runloopai/api-client-python/compare/v1.5.0...v1.5.1)
