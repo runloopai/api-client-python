@@ -93,6 +93,7 @@ class TestScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            scorer_timeout_sec=0,
             validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
@@ -232,6 +233,7 @@ class TestScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            scorer_timeout_sec=0,
             scoring_contract={
                 "scoring_function_parameters": [
                     {
@@ -502,6 +504,7 @@ class TestAsyncScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            scorer_timeout_sec=0,
             validation_type="UNSPECIFIED",
         )
         assert_matches_type(ScenarioView, scenario, path=["response"])
@@ -641,6 +644,7 @@ class TestAsyncScenarios:
             reference_output="reference_output",
             required_environment_variables=["string"],
             required_secret_names=["string"],
+            scorer_timeout_sec=0,
             scoring_contract={
                 "scoring_function_parameters": [
                     {
