@@ -42,6 +42,9 @@ class ScenarioUpdateParams(TypedDict, total=False):
     required_secret_names: Optional[SequenceNotStr[str]]
     """Secrets required to run the scenario. Pass in empty list to clear."""
 
+    scorer_timeout_sec: Optional[int]
+    """Timeout for scoring in seconds. Default 30 minutes (1800s)."""
+
     scoring_contract: Optional[ScoringContractUpdateParam]
     """The scoring contract for the Scenario."""
 

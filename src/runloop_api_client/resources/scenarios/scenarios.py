@@ -94,6 +94,7 @@ class ScenariosResource(SyncAPIResource):
         reference_output: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
         required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scorer_timeout_sec: Optional[int] | Omit = omit,
         validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -129,6 +130,8 @@ class ScenariosResource(SyncAPIResource):
               secret name). If these secrets are not provided or the mapping is incorrect, the
               scenario will fail to start.
 
+          scorer_timeout_sec: Timeout for scoring in seconds. Default 30 minutes (1800s).
+
           validation_type: Validation strategy.
 
           extra_headers: Send extra headers
@@ -153,6 +156,7 @@ class ScenariosResource(SyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "scorer_timeout_sec": scorer_timeout_sec,
                     "validation_type": validation_type,
                 },
                 scenario_create_params.ScenarioCreateParams,
@@ -211,6 +215,7 @@ class ScenariosResource(SyncAPIResource):
         reference_output: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
         required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scorer_timeout_sec: Optional[int] | Omit = omit,
         scoring_contract: Optional[ScoringContractUpdateParam] | Omit = omit,
         validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -244,6 +249,8 @@ class ScenariosResource(SyncAPIResource):
 
           required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
+          scorer_timeout_sec: Timeout for scoring in seconds. Default 30 minutes (1800s).
+
           scoring_contract: The scoring contract for the Scenario.
 
           validation_type: Validation strategy. Pass in empty string to clear.
@@ -271,6 +278,7 @@ class ScenariosResource(SyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "scorer_timeout_sec": scorer_timeout_sec,
                     "scoring_contract": scoring_contract,
                     "validation_type": validation_type,
                 },
@@ -556,6 +564,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         reference_output: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
         required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scorer_timeout_sec: Optional[int] | Omit = omit,
         validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -591,6 +600,8 @@ class AsyncScenariosResource(AsyncAPIResource):
               secret name). If these secrets are not provided or the mapping is incorrect, the
               scenario will fail to start.
 
+          scorer_timeout_sec: Timeout for scoring in seconds. Default 30 minutes (1800s).
+
           validation_type: Validation strategy.
 
           extra_headers: Send extra headers
@@ -615,6 +626,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "scorer_timeout_sec": scorer_timeout_sec,
                     "validation_type": validation_type,
                 },
                 scenario_create_params.ScenarioCreateParams,
@@ -673,6 +685,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         reference_output: Optional[str] | Omit = omit,
         required_environment_variables: Optional[SequenceNotStr[str]] | Omit = omit,
         required_secret_names: Optional[SequenceNotStr[str]] | Omit = omit,
+        scorer_timeout_sec: Optional[int] | Omit = omit,
         scoring_contract: Optional[ScoringContractUpdateParam] | Omit = omit,
         validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -706,6 +719,8 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           required_secret_names: Secrets required to run the scenario. Pass in empty list to clear.
 
+          scorer_timeout_sec: Timeout for scoring in seconds. Default 30 minutes (1800s).
+
           scoring_contract: The scoring contract for the Scenario.
 
           validation_type: Validation strategy. Pass in empty string to clear.
@@ -733,6 +748,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                     "reference_output": reference_output,
                     "required_environment_variables": required_environment_variables,
                     "required_secret_names": required_secret_names,
+                    "scorer_timeout_sec": scorer_timeout_sec,
                     "scoring_contract": scoring_contract,
                     "validation_type": validation_type,
                 },

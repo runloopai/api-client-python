@@ -57,5 +57,8 @@ class ScenarioView(BaseModel):
     If any required secrets are missing, the scenario will fail to start.
     """
 
+    scorer_timeout_sec: Optional[int] = None
+    """Timeout for scoring in seconds. Default 30 minutes (1800s)."""
+
     validation_type: Optional[Literal["UNSPECIFIED", "FORWARD", "REVERSE", "EVALUATION"]] = None
     """Validation strategy."""
