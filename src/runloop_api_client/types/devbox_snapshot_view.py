@@ -26,5 +26,8 @@ class DevboxSnapshotView(BaseModel):
     name: Optional[str] = None
     """(Optional) The custom name of the snapshot."""
 
+    size_bytes: Optional[int] = None
+    """(Optional) The size of the snapshot in bytes, relative to the base blueprint."""
+
     source_blueprint_id: Optional[str] = None
     """(Optional) The source Blueprint ID this snapshot was created from."""
