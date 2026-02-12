@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.8.0 (2026-02-12)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/runloopai/api-client-python/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **benchmarks:** scenario scoring timeout ([#7300](https://github.com/runloopai/api-client-python/issues/7300)) ([6615183](https://github.com/runloopai/api-client-python/commit/661518379a6d197127014932c0a015757e77aa0d))
+* **devbox:** expose snapshot size (in bytes) ([#7444](https://github.com/runloopai/api-client-python/issues/7444)) ([b25c3f7](https://github.com/runloopai/api-client-python/commit/b25c3f772c62465cf6bb7fa34e7bc57c601eeb28))
+
+
+### Bug Fixes
+
+* remove duplicate operationId createDevboxTunnel in openapi ([#7397](https://github.com/runloopai/api-client-python/issues/7397)) ([bb2cd8f](https://github.com/runloopai/api-client-python/commit/bb2cd8f4248cc763966a66372e62c1d90e2aa626))
+
+
+### Chores
+
+* **internal:** bump dependencies ([94e6c44](https://github.com/runloopai/api-client-python/commit/94e6c44f2b398fc498ae96c5b3e8e62da2b8bdf9))
+* **internal:** fix lint error on Python 3.14 ([37ab1b7](https://github.com/runloopai/api-client-python/commit/37ab1b7dbe3b852e9062d6a547510c8d38ee2c35))
+
 ## 1.7.0 (2026-02-05)
 
 Full Changelog: [v1.5.1...v1.7.0](https://github.com/runloopai/api-client-python/compare/v1.5.1...v1.7.0)
