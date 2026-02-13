@@ -21,7 +21,6 @@ class AsyncScorer:
     Example:
         >>> runloop = AsyncRunloopSDK()
         >>> scorer = await runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
-        >>> await scorer.validate(scoring_context={"output": "test"})
     """
 
     def __init__(self, client: AsyncRunloop, scorer_id: str) -> None:

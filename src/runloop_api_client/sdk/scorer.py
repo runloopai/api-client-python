@@ -21,7 +21,6 @@ class Scorer:
     Example:
         >>> runloop = RunloopSDK()
         >>> scorer = runloop.scorer.create(type="my_scorer", bash_script="echo 'score=1.0'")
-        >>> scorer.validate(scoring_context={"output": "test"})
     """
 
     def __init__(self, client: Runloop, scorer_id: str) -> None:
