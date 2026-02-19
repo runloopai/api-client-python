@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .gateway_config_view import GatewayConfigView
@@ -17,5 +17,8 @@ class GatewayConfigListView(BaseModel):
     has_more: bool
     """Whether there are more results available beyond this page."""
 
-    total_count: int
-    """Total count of GatewayConfigs that match the query."""
+    total_count: Optional[int] = None
+    """Total count of GatewayConfigs that match the query.
+
+    Deprecated: will be removed in a future breaking change.
+    """

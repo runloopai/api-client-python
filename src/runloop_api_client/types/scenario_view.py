@@ -31,6 +31,9 @@ class ScenarioView(BaseModel):
     scoring_contract: ScoringContract
     """The scoring contract for the Scenario."""
 
+    status: str
+    """The state of the scenario."""
+
     environment: Optional[ScenarioEnvironment] = None
     """The Environment in which the Scenario is run."""
 
