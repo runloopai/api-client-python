@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .agent_view import AgentView
@@ -17,8 +17,14 @@ class AgentListView(BaseModel):
     has_more: bool
     """Whether there are more Agents to fetch."""
 
-    remaining_count: int
-    """The count of remaining Agents."""
+    remaining_count: Optional[int] = None
+    """The count of remaining Agents.
 
-    total_count: int
-    """The total count of Agents."""
+    Deprecated: will be removed in a future breaking change.
+    """
+
+    total_count: Optional[int] = None
+    """The total count of Agents.
+
+    Deprecated: will be removed in a future breaking change.
+    """

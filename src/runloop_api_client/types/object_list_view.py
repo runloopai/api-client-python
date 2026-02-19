@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .object_view import ObjectView
@@ -17,8 +17,14 @@ class ObjectListView(BaseModel):
     objects: List[ObjectView]
     """List of Object entities."""
 
-    remaining_count: int
-    """Number of Objects remaining after this page."""
+    remaining_count: Optional[int] = None
+    """Number of Objects remaining after this page.
 
-    total_count: int
-    """Total number of Objects across all pages."""
+    Deprecated: will be removed in a future breaking change.
+    """
+
+    total_count: Optional[int] = None
+    """Total number of Objects across all pages.
+
+    Deprecated: will be removed in a future breaking change.
+    """

@@ -24,6 +24,7 @@ from ...types import (
     devbox_create_params,
     devbox_update_params,
     devbox_execute_params,
+    devbox_shutdown_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
     devbox_create_tunnel_params,
@@ -1415,6 +1416,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        force: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1427,9 +1429,13 @@ class DevboxesResource(SyncAPIResource):
 
         This will permanently stop the Devbox. If you want to
         save the state of the Devbox, you should take a snapshot before shutting down or
-        should suspend the Devbox instead of shutting down.
+        should suspend the Devbox instead of shutting down. If the Devbox has any
+        in-progress snapshots, the shutdown will be rejected with a 409 Conflict unless
+        force=true is specified.
 
         Args:
+          force: If true, force shutdown even if snapshots are in progress. Defaults to false.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1450,6 +1456,7 @@ class DevboxesResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=maybe_transform({"force": force}, devbox_shutdown_params.DevboxShutdownParams),
             ),
             cast_to=DevboxView,
         )
@@ -3077,6 +3084,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        force: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -3089,9 +3097,13 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         This will permanently stop the Devbox. If you want to
         save the state of the Devbox, you should take a snapshot before shutting down or
-        should suspend the Devbox instead of shutting down.
+        should suspend the Devbox instead of shutting down. If the Devbox has any
+        in-progress snapshots, the shutdown will be rejected with a 409 Conflict unless
+        force=true is specified.
 
         Args:
+          force: If true, force shutdown even if snapshots are in progress. Defaults to false.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -3112,6 +3124,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=await async_maybe_transform({"force": force}, devbox_shutdown_params.DevboxShutdownParams),
             ),
             cast_to=DevboxView,
         )
