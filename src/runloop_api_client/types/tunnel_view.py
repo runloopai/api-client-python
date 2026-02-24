@@ -21,6 +21,12 @@ class TunnelView(BaseModel):
     create_time_ms: int
     """Creation time of the tunnel (Unix timestamp milliseconds)."""
 
+    http_keep_alive: bool
+    """
+    When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
+    policies, resetting the idle timer.
+    """
+
     tunnel_key: str
     """The encrypted tunnel key used to construct the tunnel URL.
 
