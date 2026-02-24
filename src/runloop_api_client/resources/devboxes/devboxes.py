@@ -602,6 +602,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        http_keep_alive: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -621,6 +622,9 @@ class DevboxesResource(SyncAPIResource):
         Args:
           auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
 
+          http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
+              policies, resetting the idle timer. Defaults to true if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -635,7 +639,13 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/enable_tunnel",
-            body=maybe_transform({"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams),
+            body=maybe_transform(
+                {
+                    "auth_mode": auth_mode,
+                    "http_keep_alive": http_keep_alive,
+                },
+                devbox_enable_tunnel_params.DevboxEnableTunnelParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2030,6 +2040,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        http_keep_alive: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2049,6 +2060,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
 
+          http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
+              policies, resetting the idle timer. Defaults to true if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2064,7 +2078,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/enable_tunnel",
             body=await async_maybe_transform(
-                {"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams
+                {
+                    "auth_mode": auth_mode,
+                    "http_keep_alive": http_keep_alive,
+                },
+                devbox_enable_tunnel_params.DevboxEnableTunnelParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,

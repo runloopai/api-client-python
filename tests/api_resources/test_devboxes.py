@@ -107,7 +107,10 @@ class TestDevboxes:
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
-            tunnel={"auth_mode": "open"},
+            tunnel={
+                "auth_mode": "open",
+                "http_keep_alive": True,
+            },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
@@ -443,6 +446,7 @@ class TestDevboxes:
         devbox = client.devboxes.enable_tunnel(
             id="id",
             auth_mode="open",
+            http_keep_alive=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 
@@ -1298,7 +1302,10 @@ class TestAsyncDevboxes:
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
-            tunnel={"auth_mode": "open"},
+            tunnel={
+                "auth_mode": "open",
+                "http_keep_alive": True,
+            },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
@@ -1634,6 +1641,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.enable_tunnel(
             id="id",
             auth_mode="open",
+            http_keep_alive=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 

@@ -352,6 +352,48 @@ class ScenariosResource(SyncAPIResource):
             model=ScenarioView,
         )
 
+    def archive(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> ScenarioView:
+        """Archive a previously created Scenario.
+
+        The scenario will no longer appear in
+        list endpoints but can still be retrieved by ID.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/scenarios/{id}/archive",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScenarioView,
+        )
+
     def list_public(
         self,
         *,
@@ -764,6 +806,48 @@ class AsyncScenariosResource(AsyncAPIResource):
             model=ScenarioView,
         )
 
+    async def archive(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> ScenarioView:
+        """Archive a previously created Scenario.
+
+        The scenario will no longer appear in
+        list endpoints but can still be retrieved by ID.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/scenarios/{id}/archive",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=ScenarioView,
+        )
+
     def list_public(
         self,
         *,
@@ -894,6 +978,9 @@ class ScenariosResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             scenarios.list,
         )
+        self.archive = to_raw_response_wrapper(
+            scenarios.archive,
+        )
         self.list_public = to_raw_response_wrapper(
             scenarios.list_public,
         )
@@ -925,6 +1012,9 @@ class AsyncScenariosResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             scenarios.list,
+        )
+        self.archive = async_to_raw_response_wrapper(
+            scenarios.archive,
         )
         self.list_public = async_to_raw_response_wrapper(
             scenarios.list_public,
@@ -958,6 +1048,9 @@ class ScenariosResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             scenarios.list,
         )
+        self.archive = to_streamed_response_wrapper(
+            scenarios.archive,
+        )
         self.list_public = to_streamed_response_wrapper(
             scenarios.list_public,
         )
@@ -989,6 +1082,9 @@ class AsyncScenariosResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             scenarios.list,
+        )
+        self.archive = async_to_streamed_response_wrapper(
+            scenarios.archive,
         )
         self.list_public = async_to_streamed_response_wrapper(
             scenarios.list_public,
