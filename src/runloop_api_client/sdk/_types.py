@@ -1,4 +1,4 @@
-from typing import Union, Callable, Optional
+from typing import Union, Literal, Callable, Optional
 from typing_extensions import TypedDict
 
 from ..types import (
@@ -218,6 +218,9 @@ class ScenarioPreview(ScenarioView):
 
     input_context: InputContextPreview  # type: ignore[assignment]
     """The input context for the Scenario."""
+
+    status: Optional[Literal["active", "archived"]] = None  # type: ignore[assignment]
+    """Status is not set for previews."""
 
 
 class SDKBenchmarkCreateParams(BenchmarkCreateParams, LongRequestOptions):

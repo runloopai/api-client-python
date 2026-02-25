@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .mcp_config_view import McpConfigView
@@ -17,5 +17,8 @@ class McpConfigListView(BaseModel):
     mcp_configs: List[McpConfigView]
     """The list of McpConfigs."""
 
-    total_count: int
-    """Total count of McpConfigs that match the query."""
+    total_count: Optional[int] = None
+    """Total count of McpConfigs that match the query.
+
+    Deprecated: will be removed in a future breaking change.
+    """

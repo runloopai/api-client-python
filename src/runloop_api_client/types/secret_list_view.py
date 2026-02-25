@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .secret_view import SecretView
@@ -14,11 +14,17 @@ class SecretListView(BaseModel):
     has_more: bool
     """True if there are more results available beyond this page."""
 
-    remaining_count: int
-    """Number of Secrets remaining after this page."""
-
     secrets: List[SecretView]
     """List of Secret objects. Values are omitted for security."""
 
-    total_count: int
-    """Total number of Secrets across all pages."""
+    remaining_count: Optional[int] = None
+    """Number of Secrets remaining after this page.
+
+    Deprecated: will be removed in a future breaking change.
+    """
+
+    total_count: Optional[int] = None
+    """Total number of Secrets across all pages.
+
+    Deprecated: will be removed in a future breaking change.
+    """

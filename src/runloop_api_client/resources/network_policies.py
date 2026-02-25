@@ -48,8 +48,10 @@ class NetworkPoliciesResource(SyncAPIResource):
         self,
         *,
         name: str,
+        allow_ai_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
+        allow_mcp_gateway: Optional[bool] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -69,12 +71,18 @@ class NetworkPoliciesResource(SyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
+          allow_ai_gateway: (Optional) If true, allows devbox egress to the AI credential gateway for
+              credential proxying. Defaults to false.
+
           allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
 
           allow_devbox_to_devbox: (Optional) If true, allows traffic between the account's own devboxes via
               tunnels. Defaults to false. If allow_all is true, this is automatically set to
               true.
+
+          allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
+              Defaults to false.
 
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -96,8 +104,10 @@ class NetworkPoliciesResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
+                    "allow_ai_gateway": allow_ai_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
+                    "allow_mcp_gateway": allow_mcp_gateway,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -150,8 +160,10 @@ class NetworkPoliciesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        allow_ai_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
+        allow_mcp_gateway: Optional[bool] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -168,9 +180,13 @@ class NetworkPoliciesResource(SyncAPIResource):
         All fields are optional.
 
         Args:
+          allow_ai_gateway: If true, allows devbox egress to the AI credential gateway.
+
           allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy).
 
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
+
+          allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -195,8 +211,10 @@ class NetworkPoliciesResource(SyncAPIResource):
             f"/v1/network-policies/{id}",
             body=maybe_transform(
                 {
+                    "allow_ai_gateway": allow_ai_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
+                    "allow_mcp_gateway": allow_mcp_gateway,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,
@@ -334,8 +352,10 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         self,
         *,
         name: str,
+        allow_ai_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
+        allow_mcp_gateway: Optional[bool] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -355,12 +375,18 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
+          allow_ai_gateway: (Optional) If true, allows devbox egress to the AI credential gateway for
+              credential proxying. Defaults to false.
+
           allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
 
           allow_devbox_to_devbox: (Optional) If true, allows traffic between the account's own devboxes via
               tunnels. Defaults to false. If allow_all is true, this is automatically set to
               true.
+
+          allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
+              Defaults to false.
 
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -382,8 +408,10 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
+                    "allow_ai_gateway": allow_ai_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
+                    "allow_mcp_gateway": allow_mcp_gateway,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -436,8 +464,10 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        allow_ai_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
+        allow_mcp_gateway: Optional[bool] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -454,9 +484,13 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         All fields are optional.
 
         Args:
+          allow_ai_gateway: If true, allows devbox egress to the AI credential gateway.
+
           allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy).
 
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
+
+          allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -481,8 +515,10 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
             f"/v1/network-policies/{id}",
             body=await async_maybe_transform(
                 {
+                    "allow_ai_gateway": allow_ai_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
+                    "allow_mcp_gateway": allow_mcp_gateway,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,

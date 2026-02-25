@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .network_policy_view import NetworkPolicyView
@@ -17,5 +17,8 @@ class NetworkPolicyListView(BaseModel):
     network_policies: List[NetworkPolicyView]
     """The list of NetworkPolicies."""
 
-    total_count: int
-    """Total count of items in this response."""
+    total_count: Optional[int] = None
+    """Total count of items in this response.
+
+    Deprecated: will be removed in a future breaking change.
+    """

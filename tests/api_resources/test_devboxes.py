@@ -111,7 +111,10 @@ class TestDevboxes:
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
-            tunnel={"auth_mode": "open"},
+            tunnel={
+                "auth_mode": "open",
+                "http_keep_alive": True,
+            },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
@@ -447,6 +450,7 @@ class TestDevboxes:
         devbox = client.devboxes.enable_tunnel(
             id="id",
             auth_mode="open",
+            http_keep_alive=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 
@@ -893,14 +897,22 @@ class TestDevboxes:
     @parametrize
     def test_method_shutdown(self, client: Runloop) -> None:
         devbox = client.devboxes.shutdown(
-            "id",
+            id="id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    def test_method_shutdown_with_all_params(self, client: Runloop) -> None:
+        devbox = client.devboxes.shutdown(
+            id="id",
+            force="force",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_shutdown(self, client: Runloop) -> None:
         response = client.devboxes.with_raw_response.shutdown(
-            "id",
+            id="id",
         )
 
         assert response.is_closed is True
@@ -911,7 +923,7 @@ class TestDevboxes:
     @parametrize
     def test_streaming_response_shutdown(self, client: Runloop) -> None:
         with client.devboxes.with_streaming_response.shutdown(
-            "id",
+            id="id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -925,7 +937,7 @@ class TestDevboxes:
     def test_path_params_shutdown(self, client: Runloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.devboxes.with_raw_response.shutdown(
-                "",
+                id="",
             )
 
     @parametrize
@@ -1767,7 +1779,10 @@ class TestAsyncDevboxes:
             repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
-            tunnel={"auth_mode": "open"},
+            tunnel={
+                "auth_mode": "open",
+                "http_keep_alive": True,
+            },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
@@ -2103,6 +2118,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.enable_tunnel(
             id="id",
             auth_mode="open",
+            http_keep_alive=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 
@@ -2549,14 +2565,22 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_shutdown(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.shutdown(
-            "id",
+            id="id",
+        )
+        assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_shutdown_with_all_params(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.shutdown(
+            id="id",
+            force="force",
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_shutdown(self, async_client: AsyncRunloop) -> None:
         response = await async_client.devboxes.with_raw_response.shutdown(
-            "id",
+            id="id",
         )
 
         assert response.is_closed is True
@@ -2567,7 +2591,7 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_streaming_response_shutdown(self, async_client: AsyncRunloop) -> None:
         async with async_client.devboxes.with_streaming_response.shutdown(
-            "id",
+            id="id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -2581,7 +2605,7 @@ class TestAsyncDevboxes:
     async def test_path_params_shutdown(self, async_client: AsyncRunloop) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.devboxes.with_raw_response.shutdown(
-                "",
+                id="",
             )
 
     @parametrize

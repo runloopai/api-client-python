@@ -31,6 +31,12 @@ class ScenarioView(BaseModel):
     scoring_contract: ScoringContract
     """The scoring contract for the Scenario."""
 
+    status: Literal["active", "archived"]
+    """Whether the scenario is active or archived.
+
+    Archived scenarios are excluded from listings and cannot be updated.
+    """
+
     environment: Optional[ScenarioEnvironment] = None
     """The Environment in which the Scenario is run."""
 

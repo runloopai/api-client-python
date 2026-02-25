@@ -24,6 +24,7 @@ from ...types import (
     devbox_create_params,
     devbox_update_params,
     devbox_execute_params,
+    devbox_shutdown_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
     devbox_create_tunnel_params,
@@ -806,6 +807,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        http_keep_alive: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -825,6 +827,9 @@ class DevboxesResource(SyncAPIResource):
         Args:
           auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
 
+          http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
+              policies, resetting the idle timer. Defaults to true if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -839,7 +844,13 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             f"/v1/devboxes/{id}/enable_tunnel",
-            body=maybe_transform({"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams),
+            body=maybe_transform(
+                {
+                    "auth_mode": auth_mode,
+                    "http_keep_alive": http_keep_alive,
+                },
+                devbox_enable_tunnel_params.DevboxEnableTunnelParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1415,6 +1426,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        force: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1427,9 +1439,13 @@ class DevboxesResource(SyncAPIResource):
 
         This will permanently stop the Devbox. If you want to
         save the state of the Devbox, you should take a snapshot before shutting down or
-        should suspend the Devbox instead of shutting down.
+        should suspend the Devbox instead of shutting down. If the Devbox has any
+        in-progress snapshots, the shutdown will be rejected with a 409 Conflict unless
+        force=true is specified.
 
         Args:
+          force: If true, force shutdown even if snapshots are in progress. Defaults to false.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1450,6 +1466,7 @@ class DevboxesResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=maybe_transform({"force": force}, devbox_shutdown_params.DevboxShutdownParams),
             ),
             cast_to=DevboxView,
         )
@@ -2465,6 +2482,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
+        http_keep_alive: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2484,6 +2502,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
           auth_mode: Authentication mode for the tunnel. Defaults to 'public' if not specified.
 
+          http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
+              policies, resetting the idle timer. Defaults to true if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2499,7 +2520,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self._post(
             f"/v1/devboxes/{id}/enable_tunnel",
             body=await async_maybe_transform(
-                {"auth_mode": auth_mode}, devbox_enable_tunnel_params.DevboxEnableTunnelParams
+                {
+                    "auth_mode": auth_mode,
+                    "http_keep_alive": http_keep_alive,
+                },
+                devbox_enable_tunnel_params.DevboxEnableTunnelParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -3077,6 +3102,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        force: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -3089,9 +3115,13 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         This will permanently stop the Devbox. If you want to
         save the state of the Devbox, you should take a snapshot before shutting down or
-        should suspend the Devbox instead of shutting down.
+        should suspend the Devbox instead of shutting down. If the Devbox has any
+        in-progress snapshots, the shutdown will be rejected with a 409 Conflict unless
+        force=true is specified.
 
         Args:
+          force: If true, force shutdown even if snapshots are in progress. Defaults to false.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -3112,6 +3142,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 idempotency_key=idempotency_key,
+                query=await async_maybe_transform({"force": force}, devbox_shutdown_params.DevboxShutdownParams),
             ),
             cast_to=DevboxView,
         )

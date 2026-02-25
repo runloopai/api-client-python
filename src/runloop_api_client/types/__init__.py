@@ -55,6 +55,7 @@ from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
 from .devbox_execute_params import DevboxExecuteParams as DevboxExecuteParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
+from .devbox_shutdown_params import DevboxShutdownParams as DevboxShutdownParams
 from .mcp_config_list_params import McpConfigListParams as McpConfigListParams
 from .object_download_params import ObjectDownloadParams as ObjectDownloadParams
 from .repository_list_params import RepositoryListParams as RepositoryListParams

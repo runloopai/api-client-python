@@ -32,6 +32,7 @@ from ._exceptions import APIStatusError, APITimeoutError
 
 if TYPE_CHECKING:
     from ._client import Runloop, AsyncRunloop
+    from ._models import FinalRequestOptions
 
 
 _T = TypeVar("_T")
@@ -41,7 +42,7 @@ class Stream(Generic[_T]):
     """Provides the core interface to iterate over a synchronous stream response."""
 
     response: httpx.Response
-
+    _options: Optional[FinalRequestOptions] = None
     _decoder: SSEBytesDecoder
 
     def __init__(
@@ -50,10 +51,12 @@ class Stream(Generic[_T]):
         cast_to: type[_T],
         response: httpx.Response,
         client: Runloop,
+        options: Optional[FinalRequestOptions] = None,
     ) -> None:
         self.response = response
         self._cast_to = cast_to
         self._client = client
+        self._options = options
         self._decoder = client._make_sse_decoder()
         self._iterator = self.__stream__()
 
@@ -114,7 +117,7 @@ class AsyncStream(Generic[_T]):
     """Provides the core interface to iterate over an asynchronous stream response."""
 
     response: httpx.Response
-
+    _options: Optional[FinalRequestOptions] = None
     _decoder: SSEDecoder | SSEBytesDecoder
 
     def __init__(
@@ -123,10 +126,12 @@ class AsyncStream(Generic[_T]):
         cast_to: type[_T],
         response: httpx.Response,
         client: AsyncRunloop,
+        options: Optional[FinalRequestOptions] = None,
     ) -> None:
         self.response = response
         self._cast_to = cast_to
         self._client = client
+        self._options = options
         self._decoder = client._make_sse_decoder()
         self._iterator = self.__stream__()
 
