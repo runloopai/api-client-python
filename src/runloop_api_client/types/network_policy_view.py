@@ -10,6 +10,12 @@ __all__ = ["NetworkPolicyView", "Egress"]
 class Egress(BaseModel):
     """The egress rules for this policy."""
 
+    allow_ai_gateway: bool
+    """
+    If true, allows devbox egress to the AI credential gateway for credential
+    proxying.
+    """
+
     allow_all: bool
     """If true, all egress traffic is allowed and other fields are ignored.
 
@@ -18,6 +24,9 @@ class Egress(BaseModel):
 
     allow_devbox_to_devbox: bool
     """If true, allows traffic between the account's own devboxes via tunnels."""
+
+    allow_mcp_gateway: bool
+    """If true, allows devbox egress to the MCP hub for MCP server access."""
 
     allowed_hostnames: List[str]
     """DNS-based allow list with wildcard support.

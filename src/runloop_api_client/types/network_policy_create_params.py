@@ -17,6 +17,12 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     Must be unique within the account.
     """
 
+    allow_ai_gateway: Optional[bool]
+    """
+    (Optional) If true, allows devbox egress to the AI credential gateway for
+    credential proxying. Defaults to false.
+    """
+
     allow_all: Optional[bool]
     """(Optional) If true, all egress traffic is allowed (ALLOW_ALL policy).
 
@@ -28,6 +34,12 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     (Optional) If true, allows traffic between the account's own devboxes via
     tunnels. Defaults to false. If allow_all is true, this is automatically set to
     true.
+    """
+
+    allow_mcp_gateway: Optional[bool]
+    """(Optional) If true, allows devbox egress to the MCP hub for MCP server access.
+
+    Defaults to false.
     """
 
     allowed_hostnames: Optional[SequenceNotStr[str]]
