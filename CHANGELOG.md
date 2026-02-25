@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.9.0 (2026-02-25)
+
+Full Changelog: [v1.8.0...v1.9.0](https://github.com/runloopai/api-client-python/compare/v1.8.0...v1.9.0)
+
+### Features
+
+* Add AI gateway and MCP gateway flags to network policy create ([#7638](https://github.com/runloopai/api-client-python/issues/7638)) ([85f2146](https://github.com/runloopai/api-client-python/commit/85f2146d2f25085d19d5bf34096066b0ba18cb5d))
+
+
+### Chores
+
+* Add archive method to stainless ([#7537](https://github.com/runloopai/api-client-python/issues/7537)) ([836f18d](https://github.com/runloopai/api-client-python/commit/836f18d52c20b4b43f9135a52571f8c7e87a0477))
+* **benchmarks:** removed scorer ([#740](https://github.com/runloopai/api-client-python/issues/740)) ([1033264](https://github.com/runloopai/api-client-python/commit/1033264b0ed34cc47e2e16cac3ae5986f2a4e381))
+* format all `api.md` files ([ee5d577](https://github.com/runloopai/api-client-python/commit/ee5d5773d408ac8e61101fd0187ec071709bebab))
+* **internal:** add request options to SSE classes ([e636aca](https://github.com/runloopai/api-client-python/commit/e636aca4eedb81b35d80bd6f5229cc71153ec545))
+* **internal:** make `test_proxy_environment_variables` more resilient ([564cd57](https://github.com/runloopai/api-client-python/commit/564cd5730fbf94b7014390ee71d7595cb7d6e71a))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([21d4ce8](https://github.com/runloopai/api-client-python/commit/21d4ce865094d9272841871eefde3cf15c183d19))
+* **scenarios:** make scenario status enum instead of string ([#7552](https://github.com/runloopai/api-client-python/issues/7552)) ([e6e5208](https://github.com/runloopai/api-client-python/commit/e6e5208c19360f24f10b3c0da84119f7eb356bb1))
+* update mock server docs ([273fb5e](https://github.com/runloopai/api-client-python/commit/273fb5ec761bcc5948571d9757780d86b6f0f50d))
+
+
+### Refactors
+
+* deprecate and make Nullable total_count and remaining_count of ListViews ([#7533](https://github.com/runloopai/api-client-python/issues/7533)) ([8b16ebe](https://github.com/runloopai/api-client-python/commit/8b16ebe7aba9f96592f03ed2844211209b35d9e6))
+
 ## 1.8.0 (2026-02-12)
 
 Full Changelog: [v1.7.0...v1.8.0](https://github.com/runloopai/api-client-python/compare/v1.7.0...v1.8.0)
