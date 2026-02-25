@@ -11,11 +11,17 @@ __all__ = ["NetworkPolicyUpdateParams"]
 
 
 class NetworkPolicyUpdateParams(TypedDict, total=False):
+    allow_ai_gateway: Optional[bool]
+    """If true, allows devbox egress to the AI credential gateway."""
+
     allow_all: Optional[bool]
     """If true, all egress traffic is allowed (ALLOW_ALL policy)."""
 
     allow_devbox_to_devbox: Optional[bool]
     """If true, allows traffic between the account's own devboxes via tunnels."""
+
+    allow_mcp_gateway: Optional[bool]
+    """If true, allows devbox egress to the MCP hub."""
 
     allowed_hostnames: Optional[SequenceNotStr[str]]
     """Updated DNS-based allow list with wildcard support.

@@ -31,8 +31,10 @@ class TestNetworkPolicies:
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         network_policy = client.network_policies.create(
             name="name",
+            allow_ai_gateway=True,
             allow_all=True,
             allow_devbox_to_devbox=True,
+            allow_mcp_gateway=True,
             allowed_hostnames=["string"],
             description="description",
         )
@@ -111,8 +113,10 @@ class TestNetworkPolicies:
     def test_method_update_with_all_params(self, client: Runloop) -> None:
         network_policy = client.network_policies.update(
             id="id",
+            allow_ai_gateway=True,
             allow_all=True,
             allow_devbox_to_devbox=True,
+            allow_mcp_gateway=True,
             allowed_hostnames=["string"],
             description="description",
             name="name",
@@ -240,8 +244,10 @@ class TestAsyncNetworkPolicies:
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         network_policy = await async_client.network_policies.create(
             name="name",
+            allow_ai_gateway=True,
             allow_all=True,
             allow_devbox_to_devbox=True,
+            allow_mcp_gateway=True,
             allowed_hostnames=["string"],
             description="description",
         )
@@ -320,8 +326,10 @@ class TestAsyncNetworkPolicies:
     async def test_method_update_with_all_params(self, async_client: AsyncRunloop) -> None:
         network_policy = await async_client.network_policies.update(
             id="id",
+            allow_ai_gateway=True,
             allow_all=True,
             allow_devbox_to_devbox=True,
+            allow_mcp_gateway=True,
             allowed_hostnames=["string"],
             description="description",
             name="name",
