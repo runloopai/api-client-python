@@ -234,10 +234,10 @@ class DevboxesResource(SyncAPIResource):
 
           file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
-          gateways: [Beta] (Optional) Gateway specifications for credential proxying. Map key is the
-              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway will proxy
-              requests to external APIs using the specified credential without exposing the
-              real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
+          gateways: (Optional) Agent gateway specifications for credential proxying. Map key is the
+              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The agent gateway will
+              proxy requests to external APIs using the specified credential without exposing
+              the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
               'my_claude_key'}}
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
@@ -1912,10 +1912,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           file_mounts: Map of paths and file contents to write before setup. Use mounts instead.
 
-          gateways: [Beta] (Optional) Gateway specifications for credential proxying. Map key is the
-              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway will proxy
-              requests to external APIs using the specified credential without exposing the
-              real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
+          gateways: (Optional) Agent gateway specifications for credential proxying. Map key is the
+              environment variable prefix (e.g., 'GWS_ANTHROPIC'). The agent gateway will
+              proxy requests to external APIs using the specified credential without exposing
+              the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
               'my_claude_key'}}
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.

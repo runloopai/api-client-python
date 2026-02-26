@@ -48,7 +48,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         self,
         *,
         name: str,
-        allow_ai_gateway: Optional[bool] | Omit = omit,
+        allow_agent_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
@@ -71,8 +71,8 @@ class NetworkPoliciesResource(SyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
-          allow_ai_gateway: (Optional) If true, allows devbox egress to the AI credential gateway for
-              credential proxying. Defaults to false.
+          allow_agent_gateway: (Optional) If true, allows devbox egress to the agent gateway for credential
+              proxying. Defaults to false.
 
           allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
@@ -104,7 +104,7 @@ class NetworkPoliciesResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
-                    "allow_ai_gateway": allow_ai_gateway,
+                    "allow_agent_gateway": allow_agent_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
@@ -160,7 +160,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         self,
         id: str,
         *,
-        allow_ai_gateway: Optional[bool] | Omit = omit,
+        allow_agent_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
@@ -180,7 +180,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         All fields are optional.
 
         Args:
-          allow_ai_gateway: If true, allows devbox egress to the AI credential gateway.
+          allow_agent_gateway: If true, allows devbox egress to the agent gateway.
 
           allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy).
 
@@ -211,7 +211,7 @@ class NetworkPoliciesResource(SyncAPIResource):
             f"/v1/network-policies/{id}",
             body=maybe_transform(
                 {
-                    "allow_ai_gateway": allow_ai_gateway,
+                    "allow_agent_gateway": allow_agent_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
@@ -352,7 +352,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        allow_ai_gateway: Optional[bool] | Omit = omit,
+        allow_agent_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
@@ -375,8 +375,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           name: The human-readable name for the NetworkPolicy. Must be unique within the
               account.
 
-          allow_ai_gateway: (Optional) If true, allows devbox egress to the AI credential gateway for
-              credential proxying. Defaults to false.
+          allow_agent_gateway: (Optional) If true, allows devbox egress to the agent gateway for credential
+              proxying. Defaults to false.
 
           allow_all: (Optional) If true, all egress traffic is allowed (ALLOW_ALL policy). Defaults
               to false.
@@ -408,7 +408,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
-                    "allow_ai_gateway": allow_ai_gateway,
+                    "allow_agent_gateway": allow_agent_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
@@ -464,7 +464,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        allow_ai_gateway: Optional[bool] | Omit = omit,
+        allow_agent_gateway: Optional[bool] | Omit = omit,
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
@@ -484,7 +484,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         All fields are optional.
 
         Args:
-          allow_ai_gateway: If true, allows devbox egress to the AI credential gateway.
+          allow_agent_gateway: If true, allows devbox egress to the agent gateway.
 
           allow_all: If true, all egress traffic is allowed (ALLOW_ALL policy).
 
@@ -515,7 +515,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
             f"/v1/network-policies/{id}",
             body=await async_maybe_transform(
                 {
-                    "allow_ai_gateway": allow_ai_gateway,
+                    "allow_agent_gateway": allow_agent_gateway,
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
