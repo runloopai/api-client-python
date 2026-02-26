@@ -61,10 +61,6 @@ class McpConfig:
     ) -> McpConfigView:
         """Retrieve the latest MCP config details.
 
-        Example:
-            >>> info = mcp_config.get_info()
-            >>> print(f"MCP Config: {info.name}, endpoint: {info.endpoint}")
-
         :param options: Optional request configuration
         :return: API response describing the MCP config
         :rtype: McpConfigView
@@ -77,12 +73,6 @@ class McpConfig:
     def update(self, **params: Unpack[SDKMcpConfigUpdateParams]) -> McpConfigView:
         """Update the MCP config.
 
-        Example:
-            >>> updated = mcp_config.update(
-            ...     name="updated-mcp-name",
-            ...     description="Updated description",
-            ... )
-
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigUpdateParams` for available parameters
         :return: Updated MCP config view
         :rtype: McpConfigView
@@ -94,9 +84,6 @@ class McpConfig:
         **options: Unpack[LongRequestOptions],
     ) -> McpConfigView:
         """Delete the MCP config. This action is irreversible.
-
-        Example:
-            >>> mcp_config.delete()
 
         :param options: Optional long-running request configuration
         :return: API response acknowledging deletion

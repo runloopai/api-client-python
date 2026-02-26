@@ -1042,14 +1042,6 @@ class AsyncMcpConfigOps:
     async def create(self, **params: Unpack[SDKMcpConfigCreateParams]) -> AsyncMcpConfig:
         """Create a new MCP config.
 
-        Example:
-            >>> mcp_config = await runloop.mcp_config.create(
-            ...     name="my-mcp-server",
-            ...     endpoint="https://mcp.example.com",
-            ...     allowed_tools=["*"],
-            ...     description="MCP server for my tools",
-            ... )
-
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigCreateParams` for available parameters
         :return: The newly created MCP config
         :rtype: AsyncMcpConfig
@@ -1060,11 +1052,6 @@ class AsyncMcpConfigOps:
     def from_id(self, mcp_config_id: str) -> AsyncMcpConfig:
         """Get an AsyncMcpConfig instance for an existing MCP config ID.
 
-        Example:
-            >>> mcp_config = runloop.mcp_config.from_id("mcp_1234567890")
-            >>> info = await mcp_config.get_info()
-            >>> print(f"MCP Config name: {info.name}")
-
         :param mcp_config_id: ID of the MCP config
         :type mcp_config_id: str
         :return: AsyncMcpConfig instance for the given ID
@@ -1074,11 +1061,6 @@ class AsyncMcpConfigOps:
 
     async def list(self, **params: Unpack[SDKMcpConfigListParams]) -> list[AsyncMcpConfig]:
         """List all MCP configs, optionally filtered by parameters.
-
-        Example:
-            >>> configs = await runloop.mcp_config.list(limit=10)
-            >>> for config in configs:
-            ...     print(config.id)
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigListParams` for available parameters
         :return: List of MCP configs
