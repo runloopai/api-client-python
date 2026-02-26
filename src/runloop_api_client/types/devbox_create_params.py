@@ -38,12 +38,12 @@ class DevboxBaseCreateParams(TypedDict, total=False):
     """Map of paths and file contents to write before setup. Use mounts instead."""
 
     gateways: Optional[Dict[str, Gateways]]
-    """[Beta] (Optional) Gateway specifications for credential proxying.
+    """(Optional) Agent gateway specifications for credential proxying.
 
-    Map key is the environment variable prefix (e.g., 'GWS_ANTHROPIC'). The gateway
-    will proxy requests to external APIs using the specified credential without
-    exposing the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic',
-    'secret': 'my_claude_key'}}
+    Map key is the environment variable prefix (e.g., 'GWS_ANTHROPIC'). The agent
+    gateway will proxy requests to external APIs using the specified credential
+    without exposing the real API key. Example: {'GWS_ANTHROPIC': {'gateway':
+    'anthropic', 'secret': 'my_claude_key'}}
     """
 
     launch_parameters: Optional[LaunchParameters]
@@ -112,7 +112,7 @@ class DevboxCreateParams(DevboxBaseCreateParams, total=False):
 
 class Gateways(TypedDict, total=False):
     """
-    [Beta] GatewaySpec links a gateway configuration to a secret for credential proxying in a devbox. The gateway will proxy requests to external APIs using the specified credential without exposing the real API key.
+    GatewaySpec links an agent gateway configuration to a secret for credential proxying in a devbox. The agent gateway will proxy requests to external APIs using the specified credential without exposing the real API key.
     """
 
     gateway: Required[str]

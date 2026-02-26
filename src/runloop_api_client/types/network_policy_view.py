@@ -10,11 +10,8 @@ __all__ = ["NetworkPolicyView", "Egress"]
 class Egress(BaseModel):
     """The egress rules for this policy."""
 
-    allow_ai_gateway: bool
-    """
-    If true, allows devbox egress to the AI credential gateway for credential
-    proxying.
-    """
+    allow_agent_gateway: bool
+    """If true, allows devbox egress to the agent gateway for credential proxying."""
 
     allow_all: bool
     """If true, all egress traffic is allowed and other fields are ignored.

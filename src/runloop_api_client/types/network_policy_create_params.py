@@ -17,10 +17,10 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     Must be unique within the account.
     """
 
-    allow_ai_gateway: Optional[bool]
+    allow_agent_gateway: Optional[bool]
     """
-    (Optional) If true, allows devbox egress to the AI credential gateway for
-    credential proxying. Defaults to false.
+    (Optional) If true, allows devbox egress to the agent gateway for credential
+    proxying. Defaults to false.
     """
 
     allow_all: Optional[bool]

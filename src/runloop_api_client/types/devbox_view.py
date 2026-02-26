@@ -96,7 +96,7 @@ class DevboxView(BaseModel):
     """The failure reason if the Devbox failed, if the Devbox has a 'failure' status."""
 
     gateway_specs: Optional[Dict[str, GatewaySpecs]] = None
-    """[Beta] Gateway specifications configured for this devbox.
+    """Gateway specifications configured for this devbox.
 
     Map key is the environment variable prefix (e.g., 'GWS_ANTHROPIC').
     """

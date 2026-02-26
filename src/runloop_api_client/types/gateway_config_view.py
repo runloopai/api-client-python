@@ -19,7 +19,7 @@ class AuthMechanism(BaseModel):
 
 class GatewayConfigView(BaseModel):
     """
-    A GatewayConfig defines a configuration for proxying API requests through the credential gateway. It specifies the target endpoint and how credentials should be applied.
+    A GatewayConfig defines a configuration for proxying API requests through the agent gateway. It specifies the target endpoint and how credentials should be applied.
     """
 
     id: str
