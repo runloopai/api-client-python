@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.10.0 (2026-02-26)
+
+Full Changelog: [v1.9.0...v1.10.0](https://github.com/runloopai/api-client-python/compare/v1.9.0...v1.10.0)
+
+### Features
+
+* add MCP Hub to sdk ([#742](https://github.com/runloopai/api-client-python/issues/742)) ([e9f6756](https://github.com/runloopai/api-client-python/commit/e9f6756d5ffdd1316d8155f82ea7075d6e8daa5c))
+
 ## 1.9.0 (2026-02-25)
 
 Full Changelog: [v1.8.0...v1.9.0](https://github.com/runloopai/api-client-python/compare/v1.8.0...v1.9.0)
