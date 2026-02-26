@@ -14,6 +14,7 @@ from .sync import (
     SnapshotOps,
     BenchmarkOps,
     BlueprintOps,
+    McpConfigOps,
     GatewayConfigOps,
     NetworkPolicyOps,
     StorageObjectOps,
@@ -29,6 +30,7 @@ from .async_ import (
     AsyncSnapshotOps,
     AsyncBenchmarkOps,
     AsyncBlueprintOps,
+    AsyncMcpConfigOps,
     AsyncGatewayConfigOps,
     AsyncNetworkPolicyOps,
     AsyncStorageObjectOps,
@@ -47,6 +49,7 @@ from .scenario_run import ScenarioRun
 from .benchmark_run import BenchmarkRun
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
+from .mcp_config import McpConfig
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
@@ -57,6 +60,7 @@ from .execution_result import ExecutionResult
 from .scenario_builder import ScenarioBuilder
 from .async_scenario_run import AsyncScenarioRun
 from .async_benchmark_run import AsyncBenchmarkRun
+from .async_mcp_config import AsyncMcpConfig
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
@@ -86,6 +90,8 @@ __all__ = [
     "AsyncStorageObjectOps",
     "NetworkPolicyOps",
     "AsyncNetworkPolicyOps",
+    "McpConfigOps",
+    "AsyncMcpConfigOps",
     "GatewayConfigOps",
     "AsyncGatewayConfigOps",
     # Resource classes
@@ -118,6 +124,8 @@ __all__ = [
     "AsyncStorageObject",
     "NetworkPolicy",
     "AsyncNetworkPolicy",
+    "McpConfig",
+    "AsyncMcpConfig",
     "GatewayConfig",
     "AsyncGatewayConfig",
     "NamedShell",

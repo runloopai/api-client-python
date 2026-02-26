@@ -26,8 +26,10 @@ from ._types import (
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKDiskSnapshotListParams,
+    SDKMcpConfigListParams,
     SDKGatewayConfigListParams,
     SDKNetworkPolicyListParams,
+    SDKMcpConfigCreateParams,
     SDKGatewayConfigCreateParams,
     SDKNetworkPolicyCreateParams,
     SDKDevboxCreateFromImageParams,
@@ -43,6 +45,7 @@ from .async_snapshot import AsyncSnapshot
 from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from ..lib.context_loader import TarFilter, build_directory_tar
+from .async_mcp_config import AsyncMcpConfig
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
@@ -1011,6 +1014,80 @@ class AsyncGatewayConfigOps:
         return [AsyncGatewayConfig(self._client, item.id) for item in page.gateway_configs]
 
 
+class AsyncMcpConfigOps:
+    """High-level async manager for creating and managing MCP configurations.
+
+    Accessed via ``runloop.mcp_config`` from :class:`AsyncRunloopSDK`, provides methods
+    to create, retrieve, update, delete, and list MCP configs. MCP configs define
+    how to connect to upstream MCP (Model Context Protocol) servers, specifying the
+    target endpoint and which tools are allowed.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> mcp_config = await runloop.mcp_config.create(
+        ...     name="my-mcp-server",
+        ...     endpoint="https://mcp.example.com",
+        ...     allowed_tools=["*"],
+        ... )
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncMcpConfigOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKMcpConfigCreateParams]) -> AsyncMcpConfig:
+        """Create a new MCP config.
+
+        Example:
+            >>> mcp_config = await runloop.mcp_config.create(
+            ...     name="my-mcp-server",
+            ...     endpoint="https://mcp.example.com",
+            ...     allowed_tools=["*"],
+            ...     description="MCP server for my tools",
+            ... )
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigCreateParams` for available parameters
+        :return: The newly created MCP config
+        :rtype: AsyncMcpConfig
+        """
+        response = await self._client.mcp_configs.create(**params)
+        return AsyncMcpConfig(self._client, response.id)
+
+    def from_id(self, mcp_config_id: str) -> AsyncMcpConfig:
+        """Get an AsyncMcpConfig instance for an existing MCP config ID.
+
+        Example:
+            >>> mcp_config = runloop.mcp_config.from_id("mcp_1234567890")
+            >>> info = await mcp_config.get_info()
+            >>> print(f"MCP Config name: {info.name}")
+
+        :param mcp_config_id: ID of the MCP config
+        :type mcp_config_id: str
+        :return: AsyncMcpConfig instance for the given ID
+        :rtype: AsyncMcpConfig
+        """
+        return AsyncMcpConfig(self._client, mcp_config_id)
+
+    async def list(self, **params: Unpack[SDKMcpConfigListParams]) -> list[AsyncMcpConfig]:
+        """List all MCP configs, optionally filtered by parameters.
+
+        Example:
+            >>> configs = await runloop.mcp_config.list(limit=10)
+            >>> for config in configs:
+            ...     print(config.id)
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigListParams` for available parameters
+        :return: List of MCP configs
+        :rtype: list[AsyncMcpConfig]
+        """
+        page = await self._client.mcp_configs.list(**params)
+        return [AsyncMcpConfig(self._client, item.id) for item in page.mcp_configs]
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -1040,6 +1117,8 @@ class AsyncRunloopSDK:
     :vartype network_policy: AsyncNetworkPolicyOps
     :ivar gateway_config: High-level async interface for gateway config management
     :vartype gateway_config: AsyncGatewayConfigOps
+    :ivar mcp_config: High-level async interface for MCP config management
+    :vartype mcp_config: AsyncMcpConfigOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -1055,6 +1134,7 @@ class AsyncRunloopSDK:
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
     gateway_config: AsyncGatewayConfigOps
+    mcp_config: AsyncMcpConfigOps
     network_policy: AsyncNetworkPolicyOps
     scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
@@ -1104,6 +1184,7 @@ class AsyncRunloopSDK:
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)
         self.gateway_config = AsyncGatewayConfigOps(self.api)
+        self.mcp_config = AsyncMcpConfigOps(self.api)
         self.network_policy = AsyncNetworkPolicyOps(self.api)
         self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)

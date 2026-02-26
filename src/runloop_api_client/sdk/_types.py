@@ -19,6 +19,7 @@ from ..types import (
     BenchmarkUpdateParams,
     BlueprintCreateParams,
     DevboxUploadFileParams,
+    McpConfigListParams,
     GatewayConfigListParams,
     NetworkPolicyListParams,
     DevboxCreateTunnelParams,
@@ -26,6 +27,8 @@ from ..types import (
     DevboxEnableTunnelParams,
     DevboxRemoveTunnelParams,
     DevboxSnapshotDiskParams,
+    McpConfigCreateParams,
+    McpConfigUpdateParams,
     GatewayConfigCreateParams,
     GatewayConfigUpdateParams,
     NetworkPolicyCreateParams,
@@ -263,6 +266,18 @@ class SDKNetworkPolicyListParams(NetworkPolicyListParams, BaseRequestOptions):
 
 
 class SDKNetworkPolicyUpdateParams(NetworkPolicyUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKMcpConfigCreateParams(McpConfigCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKMcpConfigListParams(McpConfigListParams, BaseRequestOptions):
+    pass
+
+
+class SDKMcpConfigUpdateParams(McpConfigUpdateParams, LongRequestOptions):
     pass
 
 
