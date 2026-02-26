@@ -11,8 +11,8 @@ __all__ = ["NetworkPolicyUpdateParams"]
 
 
 class NetworkPolicyUpdateParams(TypedDict, total=False):
-    allow_ai_gateway: Optional[bool]
-    """If true, allows devbox egress to the AI credential gateway."""
+    allow_agent_gateway: Optional[bool]
+    """If true, allows devbox egress to the agent gateway."""
 
     allow_all: Optional[bool]
     """If true, all egress traffic is allowed (ALLOW_ALL policy)."""

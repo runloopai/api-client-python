@@ -59,9 +59,10 @@ class GatewayConfigsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """
-        Create a new GatewayConfig to proxy API requests through the credential gateway.
-        The config specifies the target endpoint and how credentials should be applied.
+        """Create a new GatewayConfig to proxy API requests through the agent gateway.
+
+        The
+        config specifies the target endpoint and how credentials should be applied.
 
         Args:
           auth_mechanism: How credentials should be applied to proxied requests. Specify the type
@@ -333,9 +334,10 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """
-        Create a new GatewayConfig to proxy API requests through the credential gateway.
-        The config specifies the target endpoint and how credentials should be applied.
+        """Create a new GatewayConfig to proxy API requests through the agent gateway.
+
+        The
+        config specifies the target endpoint and how credentials should be applied.
 
         Args:
           auth_mechanism: How credentials should be applied to proxied requests. Specify the type
