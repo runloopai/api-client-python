@@ -23,8 +23,10 @@ from ._types import (
     SDKScorerCreateParams,
     SDKBenchmarkListParams,
     SDKBlueprintListParams,
+    SDKMcpConfigListParams,
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
+    SDKMcpConfigCreateParams,
     SDKDiskSnapshotListParams,
     SDKGatewayConfigListParams,
     SDKNetworkPolicyListParams,
@@ -41,6 +43,7 @@ from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
+from .mcp_config import McpConfig
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
@@ -1036,6 +1039,62 @@ class GatewayConfigOps:
         return [GatewayConfig(self._client, item.id) for item in page.gateway_configs]
 
 
+class McpConfigOps:
+    """High-level manager for creating and managing MCP configurations.
+
+    Accessed via ``runloop.mcp_config`` from :class:`RunloopSDK`, provides methods
+    to create, retrieve, update, delete, and list MCP configs. MCP configs define
+    how to connect to upstream MCP (Model Context Protocol) servers, specifying the
+    target endpoint and which tools are allowed.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> mcp_config = runloop.mcp_config.create(
+        ...     name="my-mcp-server",
+        ...     endpoint="https://mcp.example.com",
+        ...     allowed_tools=["*"],
+        ... )
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize McpConfigOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, **params: Unpack[SDKMcpConfigCreateParams]) -> McpConfig:
+        """Create a new MCP config.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigCreateParams` for available parameters
+        :return: The newly created MCP config
+        :rtype: McpConfig
+        """
+        response = self._client.mcp_configs.create(**params)
+        return McpConfig(self._client, response.id)
+
+    def from_id(self, mcp_config_id: str) -> McpConfig:
+        """Get a McpConfig instance for an existing MCP config ID.
+
+        :param mcp_config_id: ID of the MCP config
+        :type mcp_config_id: str
+        :return: McpConfig instance for the given ID
+        :rtype: McpConfig
+        """
+        return McpConfig(self._client, mcp_config_id)
+
+    def list(self, **params: Unpack[SDKMcpConfigListParams]) -> list[McpConfig]:
+        """List all MCP configs, optionally filtered by parameters.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKMcpConfigListParams` for available parameters
+        :return: List of MCP configs
+        :rtype: list[McpConfig]
+        """
+        page = self._client.mcp_configs.list(**params)
+        return [McpConfig(self._client, item.id) for item in page.mcp_configs]
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -1065,6 +1124,8 @@ class RunloopSDK:
     :vartype network_policy: NetworkPolicyOps
     :ivar gateway_config: High-level interface for gateway config management
     :vartype gateway_config: GatewayConfigOps
+    :ivar mcp_config: High-level interface for MCP config management
+    :vartype mcp_config: McpConfigOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -1080,6 +1141,7 @@ class RunloopSDK:
     devbox: DevboxOps
     blueprint: BlueprintOps
     gateway_config: GatewayConfigOps
+    mcp_config: McpConfigOps
     network_policy: NetworkPolicyOps
     scenario: ScenarioOps
     scorer: ScorerOps
@@ -1129,6 +1191,7 @@ class RunloopSDK:
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)
         self.gateway_config = GatewayConfigOps(self.api)
+        self.mcp_config = McpConfigOps(self.api)
         self.network_policy = NetworkPolicyOps(self.api)
         self.scenario = ScenarioOps(self.api)
         self.scorer = ScorerOps(self.api)

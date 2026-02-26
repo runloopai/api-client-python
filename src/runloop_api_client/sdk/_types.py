@@ -13,11 +13,14 @@ from ..types import (
     ScenarioListParams,
     BenchmarkListParams,
     BlueprintListParams,
+    McpConfigListParams,
     ObjectDownloadParams,
     ScenarioUpdateParams,
     BenchmarkCreateParams,
     BenchmarkUpdateParams,
     BlueprintCreateParams,
+    McpConfigCreateParams,
+    McpConfigUpdateParams,
     DevboxUploadFileParams,
     GatewayConfigListParams,
     NetworkPolicyListParams,
@@ -263,6 +266,18 @@ class SDKNetworkPolicyListParams(NetworkPolicyListParams, BaseRequestOptions):
 
 
 class SDKNetworkPolicyUpdateParams(NetworkPolicyUpdateParams, LongRequestOptions):
+    pass
+
+
+class SDKMcpConfigCreateParams(McpConfigCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKMcpConfigListParams(McpConfigListParams, BaseRequestOptions):
+    pass
+
+
+class SDKMcpConfigUpdateParams(McpConfigUpdateParams, LongRequestOptions):
     pass
 
 
