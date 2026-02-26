@@ -60,9 +60,8 @@ class GatewayConfigsResource(SyncAPIResource):
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
         """
-        [Beta] Create a new GatewayConfig to proxy API requests through the credential
-        gateway. The config specifies the target endpoint and how credentials should be
-        applied.
+        Create a new GatewayConfig to proxy API requests through the credential gateway.
+        The config specifies the target endpoint and how credentials should be applied.
 
         Args:
           auth_mechanism: How credentials should be applied to proxied requests. Specify the type
@@ -118,7 +117,7 @@ class GatewayConfigsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> GatewayConfigView:
         """
-        [Beta] Get a specific GatewayConfig by its unique identifier.
+        Get a specific GatewayConfig by its unique identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -155,7 +154,7 @@ class GatewayConfigsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """[Beta] Update an existing GatewayConfig.
+        """Update an existing GatewayConfig.
 
         All fields are optional.
 
@@ -216,8 +215,8 @@ class GatewayConfigsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncGatewayConfigsCursorIDPage[GatewayConfigView]:
         """
-        [Beta] List all GatewayConfigs for the authenticated account, including
-        system-provided configs like 'anthropic' and 'openai'.
+        List all GatewayConfigs for the authenticated account, including system-provided
+        configs like 'anthropic' and 'openai'.
 
         Args:
           id: Filter by ID.
@@ -269,7 +268,7 @@ class GatewayConfigsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """[Beta] Delete an existing GatewayConfig.
+        """Delete an existing GatewayConfig.
 
         This action is irreversible.
 
@@ -335,9 +334,8 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
         """
-        [Beta] Create a new GatewayConfig to proxy API requests through the credential
-        gateway. The config specifies the target endpoint and how credentials should be
-        applied.
+        Create a new GatewayConfig to proxy API requests through the credential gateway.
+        The config specifies the target endpoint and how credentials should be applied.
 
         Args:
           auth_mechanism: How credentials should be applied to proxied requests. Specify the type
@@ -393,7 +391,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> GatewayConfigView:
         """
-        [Beta] Get a specific GatewayConfig by its unique identifier.
+        Get a specific GatewayConfig by its unique identifier.
 
         Args:
           extra_headers: Send extra headers
@@ -430,7 +428,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """[Beta] Update an existing GatewayConfig.
+        """Update an existing GatewayConfig.
 
         All fields are optional.
 
@@ -491,8 +489,8 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[GatewayConfigView, AsyncGatewayConfigsCursorIDPage[GatewayConfigView]]:
         """
-        [Beta] List all GatewayConfigs for the authenticated account, including
-        system-provided configs like 'anthropic' and 'openai'.
+        List all GatewayConfigs for the authenticated account, including system-provided
+        configs like 'anthropic' and 'openai'.
 
         Args:
           id: Filter by ID.
@@ -544,7 +542,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> GatewayConfigView:
-        """[Beta] Delete an existing GatewayConfig.
+        """Delete an existing GatewayConfig.
 
         This action is irreversible.
 
