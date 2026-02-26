@@ -7,7 +7,7 @@ from .._models import BaseModel
 from .tunnel_view import TunnelView
 from .shared.launch_parameters import LaunchParameters
 
-__all__ = ["DevboxView", "StateTransition", "GatewaySpecs"]
+__all__ = ["DevboxView", "StateTransition", "GatewaySpecs", "McpSpec"]
 
 
 class StateTransition(BaseModel):
@@ -34,6 +34,14 @@ class StateTransition(BaseModel):
 class GatewaySpecs(BaseModel):
     gateway_config_id: str
     """The ID of the gateway config (e.g., gwc_123abc)."""
+
+    secret_id: str
+    """The ID of the secret containing the credential."""
+
+
+class McpSpec(BaseModel):
+    mcp_config_id: str
+    """The ID of the MCP config (e.g., mcp_123abc)."""
 
     secret_id: str
     """The ID of the secret containing the credential."""
@@ -98,6 +106,13 @@ class DevboxView(BaseModel):
 
     initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation"]] = None
     """The type of initiator that created the Devbox."""
+
+    mcp_specs: Optional[List[McpSpec]] = None
+    """[Beta] MCP specifications configured for this devbox.
+
+    Each spec links an MCP config to a secret for MCP server access through the MCP
+    hub.
+    """
 
     name: Optional[str] = None
     """The name of the Devbox."""
