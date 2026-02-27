@@ -13,7 +13,19 @@ from ..types.object_download_url_view import ObjectDownloadURLView
 
 
 class StorageObject:
-    """Wrapper around storage object operations, including uploads and downloads."""
+    """Synchronous wrapper around a storage object resource.
+
+    Storage objects hold uploaded files and archives (text, binary, tgz). They can be
+    downloaded, mounted into devboxes, or used as blueprint build contexts. Use the
+    convenience upload helpers on ``runloop.storage_object`` to create objects from
+    text, bytes, files, or directories.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> obj = runloop.storage_object.upload_from_text("Hello!", name="greeting.txt")
+        >>> print(obj.download_as_text())  # "Hello!"
+        >>> obj.delete()
+    """
 
     def __init__(self, client: Runloop, object_id: str, upload_url: str | None) -> None:
         """Initialize the wrapper.

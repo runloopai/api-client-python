@@ -12,7 +12,21 @@ from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 
 
 class Blueprint:
-    """Synchronous wrapper around a blueprint resource."""
+    """Synchronous wrapper around a blueprint resource.
+
+    Blueprints are reusable devbox templates built from Dockerfiles. They define the
+    base image, installed packages, and system configuration. Create blueprints via
+    ``runloop.blueprint.create()`` and then launch devboxes from them.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> blueprint = runloop.blueprint.create(
+        ...     name="python-ml",
+        ...     dockerfile="FROM ubuntu:22.04\\nRUN apt-get update && apt-get install -y python3",
+        ... )
+        >>> logs = blueprint.logs()
+        >>> devbox = blueprint.create_devbox(name="ml-workbench")
+    """
 
     def __init__(
         self,

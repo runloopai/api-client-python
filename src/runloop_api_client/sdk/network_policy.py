@@ -10,7 +10,20 @@ from ..types.network_policy_view import NetworkPolicyView
 
 
 class NetworkPolicy:
-    """Synchronous wrapper around a network policy resource."""
+    """Synchronous wrapper around a network policy resource.
+
+    Network policies control egress network access for devboxes. They specify
+    allowed hostnames via glob patterns and whether devbox-to-devbox traffic is
+    permitted. Apply policies when creating devboxes or blueprints.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> policy = runloop.network_policy.create(
+        ...     name="restricted",
+        ...     allowed_hostnames=["github.com", "*.npmjs.org"],
+        ... )
+        >>> devbox = runloop.devbox.create(name="locked-down", network_policy_id=policy.id)
+    """
 
     def __init__(
         self,
