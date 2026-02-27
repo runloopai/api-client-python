@@ -93,12 +93,12 @@ class TestDevboxes:
                     "username": "username",
                 },
             },
-            mcp=[
-                {
+            mcp={
+                "foo": {
                     "mcp_config": "mcp_config",
                     "secret": "secret",
                 }
-            ],
+            },
             metadata={"foo": "string"},
             mounts=[
                 {
@@ -1761,12 +1761,12 @@ class TestAsyncDevboxes:
                     "username": "username",
                 },
             },
-            mcp=[
-                {
+            mcp={
+                "foo": {
                     "mcp_config": "mcp_config",
                     "secret": "secret",
                 }
-            ],
+            },
             metadata={"foo": "string"},
             mounts=[
                 {
