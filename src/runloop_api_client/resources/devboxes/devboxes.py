@@ -160,7 +160,7 @@ class DevboxesResource(SyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
+        mcp: Optional[Dict[str, devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -211,10 +211,11 @@ class DevboxesResource(SyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
-          mcp: [Beta] (Optional) MCP specifications for MCP server access. Each spec links an
-              MCP config to a secret. The devbox will receive environment variables
-              (RL_MCP_URL, RL_MCP_TOKEN) for accessing MCP servers through the MCP hub.
-              Example: [{'mcp_config': 'github-readonly', 'secret': 'MY_GITHUB_TOKEN'}]
+          mcp: [Beta] (Optional) MCP specifications for MCP server access. Map key is the
+              environment variable name for the MCP token envelope. Each spec links an MCP
+              config to a secret. The devbox will also receive RL_MCP_URL for the MCP hub
+              endpoint. Example: {'MCP_SECRET': {'mcp_config': 'github-readonly', 'secret':
+              'MY_GITHUB_TOKEN'}}
 
           metadata: User defined metadata to attach to the devbox for organization.
 
@@ -1598,7 +1599,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         file_mounts: Optional[Dict[str, str]] | Omit = omit,
         gateways: Optional[Dict[str, devbox_create_params.Gateways]] | Omit = omit,
         launch_parameters: Optional[LaunchParameters] | Omit = omit,
-        mcp: Optional[Iterable[devbox_create_params.Mcp]] | Omit = omit,
+        mcp: Optional[Dict[str, devbox_create_params.Mcp]] | Omit = omit,
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -1649,10 +1650,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
 
-          mcp: [Beta] (Optional) MCP specifications for MCP server access. Each spec links an
-              MCP config to a secret. The devbox will receive environment variables
-              (RL_MCP_URL, RL_MCP_TOKEN) for accessing MCP servers through the MCP hub.
-              Example: [{'mcp_config': 'github-readonly', 'secret': 'MY_GITHUB_TOKEN'}]
+          mcp: [Beta] (Optional) MCP specifications for MCP server access. Map key is the
+              environment variable name for the MCP token envelope. Each spec links an MCP
+              config to a secret. The devbox will also receive RL_MCP_URL for the MCP hub
+              endpoint. Example: {'MCP_SECRET': {'mcp_config': 'github-readonly', 'secret':
+              'MY_GITHUB_TOKEN'}}
 
           metadata: User defined metadata to attach to the devbox for organization.
 
