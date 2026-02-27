@@ -18,7 +18,17 @@ from ..types.devbox_snapshot_view import DevboxSnapshotView
 
 
 class Snapshot:
-    """Wrapper around synchronous snapshot operations."""
+    """Synchronous wrapper around a disk snapshot resource.
+
+    Snapshots capture the full disk state of a devbox. Create snapshots via
+    ``devbox.snapshot_disk()`` or ``devbox.snapshot_disk_async()``, then restore
+    them into new devboxes with ``snapshot.create_devbox()``.
+
+    Example:
+        >>> snapshot = devbox.snapshot_disk(name="checkpoint-v1")
+        >>> new_devbox = snapshot.create_devbox(name="restored")
+        >>> snapshot.delete()
+    """
 
     def __init__(
         self,
