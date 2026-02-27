@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.10.3 (2026-02-27)
+
+Full Changelog: [v1.10.2...v1.10.3](https://github.com/runloopai/api-client-python/compare/v1.10.2...v1.10.3)
+
+### Bug Fixes
+
+* switching to MCP definition to specify a secret name per MCP server ([#7715](https://github.com/runloopai/api-client-python/issues/7715)) ([01f4b3d](https://github.com/runloopai/api-client-python/commit/01f4b3dc66f20126adf6737554e42ce1a1b19fe0))
+
+
+### Chores
+
+* **ci:** bump uv version ([b0fad50](https://github.com/runloopai/api-client-python/commit/b0fad503bde3ad7c472e6aac71073a01e92b7a6a))
+
 ## 1.10.2 (2026-02-26)
 
 Full Changelog: [v1.10.1...v1.10.2](https://github.com/runloopai/api-client-python/compare/v1.10.1...v1.10.2)
