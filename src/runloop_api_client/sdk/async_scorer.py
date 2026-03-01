@@ -13,7 +13,7 @@ from ..types.scenarios import ScorerUpdateResponse, ScorerRetrieveResponse
 
 
 class AsyncScorer:
-    """A custom scorer for evaluating scenario outputs (async).
+    """A scorer for evaluating scenario outputs (async).
 
     Scorers define bash scripts that produce a score in the range [0.0, 1.0] for scenario runs.
     Obtain instances via ``runloop.scorer.create()`` or ``runloop.scorer.from_id()``.

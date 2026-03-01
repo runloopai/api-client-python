@@ -14,7 +14,6 @@ from .blueprint import Blueprint
 from ..types.scoring_function_param import (
     Scorer,
     ScoringFunctionParam,
-    ScorerCustomScoringFunction,
     ScorerAstGrepScoringFunction,
     ScorerCommandScoringFunction,
     ScorerTestBasedScoringFunction,
@@ -302,35 +301,6 @@ class ScenarioBuilder:
         }
         if lang:
             scorer["lang"] = lang
-        return self._add_scorer(name, weight, scorer)
-
-    def add_custom_scorer(
-        self,
-        name: str,
-        *,
-        custom_scorer_type: str,
-        weight: float = 1.0,
-        scorer_params: Optional[object] = None,
-    ) -> Self:
-        """Add a custom scorer registered with Runloop.
-
-        :param name: Name of the scoring function
-        :type name: str
-        :param custom_scorer_type: Type identifier registered with Runloop
-        :type custom_scorer_type: str
-        :param weight: Weight for this scorer (normalized automatically)
-        :type weight: float
-        :param scorer_params: Additional JSON parameters for the scorer
-        :type scorer_params: Optional[object]
-        :return: Self for method chaining
-        :rtype: Self
-        """
-        scorer: ScorerCustomScoringFunction = {
-            "type": "custom_scorer",
-            "custom_scorer_type": custom_scorer_type,
-        }
-        if scorer_params:
-            scorer["scorer_params"] = scorer_params
         return self._add_scorer(name, weight, scorer)
 
     def with_metadata(self, metadata: Dict[str, str]) -> Self:
