@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 # Add the root directory to the path so we can import examples
-sys.path.insert(0, str(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))))
+sys.path.insert(0, str(Path(__file__).parents[3]))
 
 from examples.types import ExampleResult  # noqa: E402
 from examples.registry import example_registry  # noqa: E402
