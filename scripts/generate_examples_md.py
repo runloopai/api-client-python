@@ -23,7 +23,7 @@ OUTPUT_REGISTRY_FILE = EXAMPLES_DIR / "registry.py"
 LLMS_FILE = ROOT / "llms.txt"
 
 REQUIRED_FIELDS = ["title", "slug", "use_case", "workflow", "tags", "prerequisites", "run", "test"]
-EXCLUDED_FILES = {"_harness.py", "types.py", "registry.py", "__init__.py"}
+EXCLUDED_FILES = {"_harness.py", "example_types.py", "registry.py", "__init__.py"}
 
 
 def parse_example(path: Path) -> dict[str, Any]:
@@ -64,8 +64,9 @@ def validate_example(metadata: dict[str, Any], file_name: str, seen_slugs: set[s
         raise ValueError(f"{path}: duplicate slug")
     seen_slugs.add(slug)
 
-    if f"examples/{file_name}" not in metadata["run"]:
-        raise ValueError(f"{path}: run command must reference the file")
+    module_name = file_name.replace(".py", "")
+    if f"examples.{module_name}" not in metadata["run"]:
+        raise ValueError(f"{path}: run command must reference 'examples.{module_name}'")
 
 
 def ensure_llms_references(examples: list[dict[str, Any]]) -> None:
@@ -180,7 +181,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
-from .types import ExampleResult
+from .example_types import ExampleResult
 {chr(10).join(imports)}
 
 ExampleRegistryEntry = dict[str, Any]

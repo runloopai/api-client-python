@@ -29,7 +29,7 @@ Runnable examples live in [`examples/`](./examples).
 
 ### Run
 ```sh
-uv run examples/devbox_from_blueprint_lifecycle.py
+uv run python -m examples.devbox_from_blueprint_lifecycle
 ```
 
 ### Test
@@ -61,7 +61,7 @@ uv run pytest -m smoketest tests/smoketests/examples/
 
 ### Run
 ```sh
-GITHUB_TOKEN=ghp_xxx ANTHROPIC_API_KEY=sk-ant-xxx uv run examples/mcp_github_tools.py
+GITHUB_TOKEN=ghp_xxx ANTHROPIC_API_KEY=sk-ant-xxx uv run python -m examples.mcp_github_tools
 ```
 
 ### Test

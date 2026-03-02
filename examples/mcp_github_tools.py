@@ -21,7 +21,7 @@ prerequisites:
   - RUNLOOP_API_KEY
   - GITHUB_TOKEN (GitHub PAT with repo scope)
   - ANTHROPIC_API_KEY
-run: GITHUB_TOKEN=ghp_xxx ANTHROPIC_API_KEY=sk-ant-xxx uv run examples/mcp_github_tools.py
+run: GITHUB_TOKEN=ghp_xxx ANTHROPIC_API_KEY=sk-ant-xxx uv run python -m examples.mcp_github_tools
 test: uv run pytest -m smoketest tests/smoketests/examples/
 ---
 """
@@ -34,7 +34,7 @@ from dataclasses import dataclass
 
 from runloop_api_client import RunloopSDK
 
-from .types import ExampleCheck, RecipeOutput, RecipeContext
+from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 from ._harness import run_as_cli, wrap_recipe_with_options
 
 

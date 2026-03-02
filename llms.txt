@@ -26,7 +26,7 @@
 - Execute commands with `await devbox.cmd.exec('command')`, not raw API calls
 - Always call `await devbox.shutdown()` to clean up resources (or use context manager)
 - Streaming callbacks (`stdout`, `stderr`) must be synchronous functions even with async SDK
-- In example files, focus on the `recipe` function body for SDK usage patterns; ignore test harness files (`_harness.py`, `registry.py`, `types.py`)
+- In example files, focus on the `recipe` function body for SDK usage patterns; ignore test harness files (`_harness.py`, `registry.py`, `example_types.py`)
 
 ## Async vs Sync
 

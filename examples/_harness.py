@@ -6,7 +6,7 @@ import asyncio
 from typing import Any, TypeVar, Callable, Awaitable
 from dataclasses import asdict
 
-from .types import (
+from .example_types import (
     ExampleCheck,
     RecipeOutput,
     ExampleResult,

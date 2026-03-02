@@ -16,8 +16,8 @@ import pytest
 # Add the root directory to the path so we can import examples
 sys.path.insert(0, str(Path(__file__).parents[3]))
 
-from examples.types import ExampleResult  # noqa: E402
 from examples.registry import example_registry  # noqa: E402
+from examples.example_types import ExampleResult  # noqa: E402
 from examples.mcp_github_tools import McpExampleOptions, run_mcp_github_tools_example  # noqa: E402
 
 LONG_TIMEOUT = 600  # 10 minutes for live tests

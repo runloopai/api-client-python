@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
-from .types import ExampleResult
+from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
 from .devbox_from_blueprint_lifecycle import run_devbox_from_blueprint_lifecycle_example
 

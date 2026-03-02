@@ -17,7 +17,7 @@ tags:
   - cleanup
 prerequisites:
   - RUNLOOP_API_KEY
-run: uv run examples/devbox_from_blueprint_lifecycle.py
+run: uv run python -m examples.devbox_from_blueprint_lifecycle
 test: uv run pytest -m smoketest tests/smoketests/examples/
 ---
 """
@@ -29,7 +29,7 @@ import time
 from runloop_api_client import RunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
 
-from .types import ExampleCheck, RecipeOutput, RecipeContext
+from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 from ._harness import run_as_cli, wrap_recipe
 
 
