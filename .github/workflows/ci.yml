@@ -32,6 +32,9 @@ jobs:
       - name: Run lints
         run: ./scripts/lint
 
+      - name: Verify generated examples docs
+        run: uv run python scripts/generate_examples_md.py --check
+
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     timeout-minutes: 10
