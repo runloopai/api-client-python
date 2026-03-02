@@ -88,6 +88,23 @@ asyncio.run(main())
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
 
+## Examples
+
+Workflow-oriented runnable examples are documented in [`EXAMPLES.md`](./EXAMPLES.md).
+
+`EXAMPLES.md` is generated from metadata in `examples/*.py` and should not be edited manually.
+Regenerate it with:
+
+```sh
+uv run python scripts/generate_examples_md.py
+```
+
+## Agent Guidance
+
+Detailed agent-specific instructions for developing using this package live in [`llms.txt`](./llms.txt). Consolidated recipes for frequent tasks are in [`EXAMPLES.md`](./EXAMPLES.md).
+
+After completing any modifications to this project, ensure `llms.txt` and `README.md` are kept in sync.
+
 ### With aiohttp
 
 By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.

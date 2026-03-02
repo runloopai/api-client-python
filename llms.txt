@@ -1,0 +1,57 @@
+# Runloop Python SDK
+
+> Python client for Runloop.ai - create cloud devboxes, execute commands, manage blueprints and snapshots. Additional platform documentation is available at [docs.runloop.ai](https://docs.runloop.ai) and [docs.runloop.ai/llms.txt](https://docs.runloop.ai/llms.txt).
+
+## Quick Start
+
+- [README.md](README.md): Installation, authentication, and quickstart example
+- [README-SDK.md](README-SDK.md): Object-oriented SDK documentation
+- [EXAMPLES.md](EXAMPLES.md): Consolidated workflow recipes
+
+## Core Patterns
+
+- [Devbox lifecycle example](examples/devbox_from_blueprint_lifecycle.py): Create blueprint, launch devbox, run commands, cleanup
+- [MCP GitHub example](examples/mcp_github_tools.py): MCP Hub integration with Claude Code
+
+## API Reference
+
+- [SDK entry point](src/runloop_api_client/__init__.py): `AsyncRunloopSDK` and `RunloopSDK` classes
+- [Type definitions](src/runloop_api_client/types/): Pydantic types for all resources
+
+## Key Guidance
+
+- **Prefer `AsyncRunloopSDK` over `RunloopSDK`** for better concurrency and performance; all SDK methods have async equivalents
+- Use `async with await runloop.devbox.create()` for automatic cleanup via context manager
+- For resources without SDK coverage (e.g., secrets, benchmarks), use `runloop.api.*` as a fallback
+- Execute commands with `await devbox.cmd.exec('command')`, not raw API calls
+- Always call `await devbox.shutdown()` to clean up resources (or use context manager)
+- Streaming callbacks (`stdout`, `stderr`) must be synchronous functions even with async SDK
+- In example files, focus on the `recipe` function body for SDK usage patterns; ignore test harness files (`_harness.py`, `registry.py`, `example_types.py`)
+
+## Async vs Sync
+
+The SDK provides both sync and async variants. **The async SDK (`AsyncRunloopSDK`) is recommended** because:
+
+- Better resource utilization when running multiple devbox operations
+- Non-blocking I/O for long-running commands
+- Native async/await support integrates cleanly with modern Python frameworks
+
+Sync SDK example:
+```python
+from runloop_api_client import RunloopSDK
+runloop = RunloopSDK()
+with runloop.devbox.create(name="my-devbox") as devbox:
+    result = devbox.cmd.exec("echo hello")
+```
+
+Async SDK example (preferred):
+```python
+from runloop_api_client import AsyncRunloopSDK
+runloop = AsyncRunloopSDK()
+async with await runloop.devbox.create(name="my-devbox") as devbox:
+    result = await devbox.cmd.exec("echo hello")
+```
+
+## Optional
+
+- [External docs](https://docs.runloop.ai/llms.txt): Additional agent guidance from Runloop platform documentation
