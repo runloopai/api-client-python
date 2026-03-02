@@ -29,8 +29,8 @@ import time
 from runloop_api_client import RunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
 
-from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 from ._harness import run_as_cli, wrap_recipe
+from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 
 
 def unique_name(prefix: str) -> str:
