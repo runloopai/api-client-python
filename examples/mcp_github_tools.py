@@ -29,19 +29,12 @@ test: uv run pytest -m smoketest tests/smoketests/examples/
 from __future__ import annotations
 
 import os
-import time
 from dataclasses import dataclass
 
 from runloop_api_client import RunloopSDK
 
-from ._harness import run_as_cli, wrap_recipe_with_options
+from ._harness import run_as_cli, unique_name, wrap_recipe_with_options
 from .example_types import ExampleCheck, RecipeOutput, RecipeContext
-
-
-def unique_name(prefix: str) -> str:
-    """Generate a unique name with timestamp and random suffix."""
-    return f"{prefix}-{int(time.time())}-{hex(int(time.time() * 1000) % 0xFFFFFF)[2:]}"
-
 
 GITHUB_MCP_ENDPOINT = "https://api.githubcopilot.com/mcp/"
 

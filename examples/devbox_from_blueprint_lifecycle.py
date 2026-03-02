@@ -24,19 +24,11 @@ test: uv run pytest -m smoketest tests/smoketests/examples/
 
 from __future__ import annotations
 
-import time
-
 from runloop_api_client import RunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
 
-from ._harness import run_as_cli, wrap_recipe
+from ._harness import run_as_cli, unique_name, wrap_recipe
 from .example_types import ExampleCheck, RecipeOutput, RecipeContext
-
-
-def unique_name(prefix: str) -> str:
-    """Generate a unique name with timestamp and random suffix."""
-    return f"{prefix}-{int(time.time())}-{hex(int(time.time() * 1000) % 0xFFFFFF)[2:]}"
-
 
 BLUEPRINT_POLL_TIMEOUT_S = 10 * 60
 

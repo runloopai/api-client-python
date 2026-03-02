@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 import json
+import time
 import asyncio
 from typing import Any, TypeVar, Callable, Awaitable
 from dataclasses import asdict
@@ -13,10 +14,14 @@ from .example_types import (
     RecipeContext,
     ExampleCleanupStatus,
     ExampleCleanupFailure,
-    empty_cleanup_status,
 )
 
 T = TypeVar("T")
+
+
+def unique_name(prefix: str) -> str:
+    """Generate a unique name with timestamp and random suffix."""
+    return f"{prefix}-{int(time.time())}-{hex(int(time.time() * 1000) % 0xFFFFFF)[2:]}"
 
 
 class _CleanupTracker:
@@ -56,6 +61,35 @@ def _should_fail_process(result: ExampleResult) -> bool:
     return result.skipped or has_failed_checks or len(result.cleanup_status.failed) > 0
 
 
+def _run_recipe_impl(
+    recipe_call: Callable[[], RecipeOutput | Awaitable[RecipeOutput]],
+    cleanup: _CleanupTracker,
+    cleanup_status: ExampleCleanupStatus,
+) -> ExampleResult:
+    """Shared implementation for running recipes with cleanup."""
+
+    async def _run_async() -> RecipeOutput:
+        try:
+            result = recipe_call()
+            if asyncio.iscoroutine(result):
+                output: RecipeOutput = await result
+                return output
+            return result  # type: ignore[return-value]
+        finally:
+            await cleanup.run()
+
+    loop = asyncio.new_event_loop()
+    try:
+        output = loop.run_until_complete(_run_async())
+        return ExampleResult(
+            resources_created=output.resources_created,
+            checks=output.checks,
+            cleanup_status=cleanup_status,
+        )
+    finally:
+        loop.close()
+
+
 def wrap_recipe(
     recipe: Callable[[RecipeContext], RecipeOutput] | Callable[[RecipeContext], Awaitable[RecipeOutput]],
     validate_env: Callable[[], tuple[bool, list[ExampleCheck]]] | None = None,
@@ -72,7 +106,7 @@ def wrap_recipe(
     """
 
     def run() -> ExampleResult:
-        cleanup_status = empty_cleanup_status()
+        cleanup_status = ExampleCleanupStatus()
         cleanup = _CleanupTracker(cleanup_status)
 
         if validate_env is not None:
@@ -86,27 +120,7 @@ def wrap_recipe(
                 )
 
         ctx = RecipeContext(cleanup=cleanup)
-
-        async def _run_async() -> RecipeOutput:
-            try:
-                result = recipe(ctx)
-                if asyncio.iscoroutine(result):
-                    output: RecipeOutput = await result
-                    return output
-                return result  # type: ignore[return-value]
-            finally:
-                await cleanup.run()
-
-        loop = asyncio.new_event_loop()
-        try:
-            output = loop.run_until_complete(_run_async())
-            return ExampleResult(
-                resources_created=output.resources_created,
-                checks=output.checks,
-                cleanup_status=cleanup_status,
-            )
-        finally:
-            loop.close()
+        return _run_recipe_impl(lambda: recipe(ctx), cleanup, cleanup_status)
 
     return run
 
@@ -127,7 +141,7 @@ def wrap_recipe_with_options(
     """
 
     def run(options: T) -> ExampleResult:
-        cleanup_status = empty_cleanup_status()
+        cleanup_status = ExampleCleanupStatus()
         cleanup = _CleanupTracker(cleanup_status)
 
         if validate_env is not None:
@@ -141,27 +155,7 @@ def wrap_recipe_with_options(
                 )
 
         ctx = RecipeContext(cleanup=cleanup)
-
-        async def _run_async() -> RecipeOutput:
-            try:
-                result = recipe(ctx, options)
-                if asyncio.iscoroutine(result):
-                    output: RecipeOutput = await result
-                    return output
-                return result  # type: ignore[return-value]
-            finally:
-                await cleanup.run()
-
-        loop = asyncio.new_event_loop()
-        try:
-            output = loop.run_until_complete(_run_async())
-            return ExampleResult(
-                resources_created=output.resources_created,
-                checks=output.checks,
-                cleanup_status=cleanup_status,
-            )
-        finally:
-            loop.close()
+        return _run_recipe_impl(lambda: recipe(ctx, options), cleanup, cleanup_status)
 
     return run
 

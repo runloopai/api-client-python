@@ -62,8 +62,3 @@ class RecipeContext:
     """Context passed to recipe functions."""
 
     cleanup: Any  # CleanupTracker, but using Any to avoid circular typing issues
-
-
-def empty_cleanup_status() -> ExampleCleanupStatus:
-    """Create an empty cleanup status."""
-    return ExampleCleanupStatus(attempted=[], succeeded=[], failed=[])
