@@ -41,8 +41,8 @@ from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 BLUEPRINT_POLL_TIMEOUT_S = 10 * 60
 BLUEPRINT_POLL_MAX_ATTEMPTS = 600
 
-# make context available for a week (this is a demo value to show you can configure this value)
-ONE_WEEK = timedelta(weeks=1)
+# configure object storage ttl for the build context
+BUILD_CONTEXT_TTL = timedelta(days=1)
 
 
 async def recipe(ctx: RecipeContext) -> RecipeOutput:
@@ -61,7 +61,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         storage_obj = await sdk.storage_object.upload_from_dir(
             tmp_path,
             name=unique_name("example-build-context"),
-            ttl=ONE_WEEK,
+            ttl=BUILD_CONTEXT_TTL,
         )
         cleanup.add(f"storage_object:{storage_obj.id}", storage_obj.delete)
 
