@@ -9,11 +9,19 @@ from typing import Any, Callable, cast
 
 from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
+from .blueprint_with_build_context import run_blueprint_with_build_context_example
 from .devbox_from_blueprint_lifecycle import run_devbox_from_blueprint_lifecycle_example
 
 ExampleRegistryEntry = dict[str, Any]
 
 example_registry: list[ExampleRegistryEntry] = [
+    {
+        "slug": "blueprint-with-build-context",
+        "title": "Blueprint with Build Context",
+        "file_name": "blueprint_with_build_context.py",
+        "required_env": ["RUNLOOP_API_KEY"],
+        "run": run_blueprint_with_build_context_example,
+    },
     {
         "slug": "devbox-from-blueprint-lifecycle",
         "title": "Devbox From Blueprint (Run Command, Shutdown)",
