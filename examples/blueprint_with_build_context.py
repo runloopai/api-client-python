@@ -42,7 +42,7 @@ BLUEPRINT_POLL_TIMEOUT_S = 10 * 60
 BLUEPRINT_POLL_MAX_ATTEMPTS = 600
 
 # configure object storage ttl for the build context
-BUILD_CONTEXT_TTL = timedelta(days=1)
+BUILD_CONTEXT_TTL = timedelta(hours=1)
 
 
 async def recipe(ctx: RecipeContext) -> RecipeOutput:
