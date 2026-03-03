@@ -40,6 +40,8 @@ from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 # building can take time: make sure to set a long blueprint build timeout
 BLUEPRINT_POLL_TIMEOUT_S = 10 * 60
 BLUEPRINT_POLL_MAX_ATTEMPTS = 600
+
+# make context available for a week (this is a demo value to show you can configure this value)
 ONE_WEEK = timedelta(weeks=1)
 
 
