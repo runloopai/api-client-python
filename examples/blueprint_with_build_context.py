@@ -3,7 +3,7 @@
 ---
 title: Blueprint with Build Context
 slug: blueprint-with-build-context
-use_case: Create a blueprint using the object store to provide docker build context files, then verify files are copied into the image.
+use_case: Create a blueprint using the object store to provide docker build context files, then verify files are copied into the image. Uses the async SDK.
 workflow:
   - Create a temporary directory with sample application files
   - Upload the directory to object storage as build context
@@ -17,6 +17,7 @@ tags:
   - build-context
   - devbox
   - cleanup
+  - async
 prerequisites:
   - RUNLOOP_API_KEY
 run: uv run python -m examples.blueprint_with_build_context
@@ -30,7 +31,7 @@ import tempfile
 from pathlib import Path
 from datetime import timedelta
 
-from runloop_api_client import RunloopSDK
+from runloop_api_client import AsyncRunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
 
 from ._harness import run_as_cli, unique_name, wrap_recipe
@@ -42,11 +43,11 @@ BLUEPRINT_POLL_MAX_ATTEMPTS = 600
 ONE_WEEK = timedelta(weeks=1)
 
 
-def recipe(ctx: RecipeContext) -> RecipeOutput:
+async def recipe(ctx: RecipeContext) -> RecipeOutput:
     """Create a blueprint with build context from object storage, then verify files in a devbox."""
     cleanup = ctx.cleanup
 
-    sdk = RunloopSDK()
+    sdk = AsyncRunloopSDK()
 
     # setup: create a temporary directory with sample application files to use as build context
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -55,7 +56,7 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
         (tmp_path / "config.txt").write_text("key=value")
 
         # upload the build context to object storage
-        storage_obj = sdk.storage_object.upload_from_dir(
+        storage_obj = await sdk.storage_object.upload_from_dir(
             tmp_path,
             name=unique_name("example-build-context"),
             ttl=ONE_WEEK,
@@ -63,7 +64,7 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
         cleanup.add(f"storage_object:{storage_obj.id}", storage_obj.delete)
 
         # create a blueprint with the build context
-        blueprint = sdk.blueprint.create(
+        blueprint = await sdk.blueprint.create(
             name=unique_name("example-blueprint-context"),
             dockerfile="FROM ubuntu:22.04\nWORKDIR /app\nCOPY . .",
             build_context=storage_obj.as_build_context(),
@@ -74,7 +75,7 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
         )
         cleanup.add(f"blueprint:{blueprint.id}", blueprint.delete)
 
-        devbox = blueprint.create_devbox(
+        devbox = await blueprint.create_devbox(
             name=unique_name("example-devbox"),
             launch_parameters={
                 "resource_size_request": "X_SMALL",
@@ -83,11 +84,11 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
         )
         cleanup.add(f"devbox:{devbox.id}", devbox.shutdown)
 
-        app_result = devbox.cmd.exec("cat /app/app.py")
-        app_stdout = app_result.stdout()
+        app_result = await devbox.cmd.exec("cat /app/app.py")
+        app_stdout = await app_result.stdout()
 
-        config_result = devbox.cmd.exec("cat /app/config.txt")
-        config_stdout = config_result.stdout()
+        config_result = await devbox.cmd.exec("cat /app/config.txt")
+        config_stdout = await config_result.stdout()
 
         return RecipeOutput(
             resources_created=[

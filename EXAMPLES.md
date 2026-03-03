@@ -14,9 +14,9 @@ Runnable examples live in [`examples/`](./examples).
 <a id="blueprint-with-build-context"></a>
 ## Blueprint with Build Context
 
-**Use case:** Create a blueprint using the object store to provide docker build context files, then verify files are copied into the image.
+**Use case:** Create a blueprint using the object store to provide docker build context files, then verify files are copied into the image. Uses the async SDK.
 
-**Tags:** `blueprint`, `object-store`, `build-context`, `devbox`, `cleanup`
+**Tags:** `blueprint`, `object-store`, `build-context`, `devbox`, `cleanup`, `async`
 
 ### Workflow
 - Create a temporary directory with sample application files
