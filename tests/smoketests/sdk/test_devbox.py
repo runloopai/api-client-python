@@ -435,15 +435,20 @@ class TestDevboxNetworking:
             devbox.shutdown()
 
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
-    def test_create_and_remove_tunnel(self, sdk_client: RunloopSDK) -> None:
-        """Test creating and removing a tunnel."""
+    def test_create_tunnel_deprecated(self, sdk_client: RunloopSDK) -> None:
+        """Test creating a tunnel (deprecated - now creates v2 tunnel).
+        
+        Note: The deprecated create_tunnel endpoint now creates v2 Portal tunnels
+        which cannot be removed. They remain active until the devbox is stopped.
+        Use enable_tunnel for creating v2 tunnels instead.
+        """
         devbox = sdk_client.devbox.create(
             name=unique_name("sdk-devbox-tunnel"),
             launch_parameters={"resource_size_request": "SMALL", "keep_alive_time_seconds": 60 * 5},
         )
 
         try:
-            # Create tunnel
+            # Create tunnel (now creates v2 Portal tunnel)
             with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
                 tunnel = devbox.net.create_tunnel(port=8080)
             assert tunnel is not None
@@ -451,9 +456,10 @@ class TestDevboxNetworking:
             assert tunnel.port == 8080
             assert tunnel.devbox_id == devbox.id
 
-            # Remove tunnel
-            with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
-                devbox.net.remove_tunnel(port=8080)
+            # Verify tunnel persists in devbox info (v2 tunnels cannot be removed)
+            info = devbox.info()
+            assert info.tunnel is not None
+            assert info.tunnel.tunnel_key is not None
         finally:
             devbox.shutdown()
 
