@@ -23,9 +23,11 @@
 - **Prefer `AsyncRunloopSDK` over `RunloopSDK`** for better concurrency and performance; all SDK methods have async equivalents
 - Use `async with await runloop.devbox.create()` for automatic cleanup via context manager
 - For resources without SDK coverage (e.g., secrets, benchmarks), use `runloop.api.*` as a fallback
-- Execute commands with `await devbox.cmd.exec('command')`, not raw API calls
-- Always call `await devbox.shutdown()` to clean up resources (or use context manager)
-- Streaming callbacks (`stdout`, `stderr`) must be synchronous functions even with async SDK
+- Use `await devbox.cmd.exec('command')` for most commands—blocks until completion, returns `ExecutionResult` with stdout/stderr
+- Use `await devbox.cmd.exec_async('command')` for long-running or background processes (servers, watchers)—returns immediately with `Execution` handle to check status, get result, or kill
+- Both `exec` and `exec_async` support streaming callbacks (`stdout`, `stderr`, `output`) for real-time output
+- Call `await devbox.shutdown()` to clean up resources that are no longer in use.
+- Streaming callbacks (`stdout`, `stderr`, `output`) must be synchronous functions even with async SDK
 - In example files, focus on the `recipe` function body for SDK usage patterns; ignore test harness files (`_harness.py`, `registry.py`, `example_types.py`)
 
 ## Async vs Sync
