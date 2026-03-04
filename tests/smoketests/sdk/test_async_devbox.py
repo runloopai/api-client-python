@@ -1064,3 +1064,55 @@ class TestAsyncDevboxNamedShell:
         # Verify streaming captured same data as result
         assert stdout_combined == await result.stdout()
         assert stderr_combined == await result.stderr()
+
+
+class TestAsyncDevboxLogs:
+    """Test async devbox logs retrieval functionality."""
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_logs_basic(self, shared_devbox: AsyncDevbox) -> None:
+        """Test retrieving devbox logs returns valid response structure."""
+        test_message = "async basic log test message"
+        result = await shared_devbox.cmd.exec(f'echo "{test_message}"')
+        assert result.exit_code == 0
+
+        logs = await shared_devbox.logs()
+
+        assert logs is not None
+        assert hasattr(logs, "logs")
+        assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_logs_with_execution_filter(self, shared_devbox: AsyncDevbox) -> None:
+        """Test retrieving devbox logs filtered by execution ID."""
+        test_message = "async filtered log test"
+        result = await shared_devbox.cmd.exec(f'echo "{test_message}"')
+        assert result.exit_code == 0
+
+        logs = await shared_devbox.logs(execution_id=result.execution_id)
+
+        assert logs is not None
+        assert hasattr(logs, "logs")
+        assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    async def test_logs_with_shell_name_filter(self, shared_devbox: AsyncDevbox) -> None:
+        """Test retrieving devbox logs filtered by shell name."""
+        shell_name = "async-test-logs-shell"
+        shell = shared_devbox.shell(shell_name)
+
+        test_message = "async shell log test"
+        result = await shell.exec(f'echo "{test_message}"')
+        assert result.exit_code == 0
+
+        logs = await shared_devbox.logs(shell_name=shell_name)
+
+        assert logs is not None
+        assert hasattr(logs, "logs")
+        assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content

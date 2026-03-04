@@ -34,6 +34,7 @@ from ._types import (
     SDKDevboxSnapshotDiskAsyncParams,
     SDKDevboxWriteFileContentsParams,
 )
+from .._types import omit
 from .._client import Runloop
 from ._helpers import filter_params
 from .execution import Execution, _StreamingGroup
@@ -42,6 +43,7 @@ from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .execution_result import ExecutionResult
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
+from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 if TYPE_CHECKING:
@@ -161,6 +163,38 @@ class Devbox:
         if tunnel_view is None:
             return None
         return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.runloop.ai"
+
+    def logs(
+        self,
+        *,
+        execution_id: str | None = None,
+        shell_name: str | None = None,
+        **options: Unpack[BaseRequestOptions],
+    ) -> DevboxLogsListView:
+        """Retrieve logs for the devbox.
+
+        Returns all logs from a running or completed devbox. Optionally filter
+        by execution ID or shell name.
+
+        :param execution_id: Filter logs by execution ID, defaults to None
+        :type execution_id: str | None, optional
+        :param shell_name: Filter logs by shell name, defaults to None
+        :type shell_name: str | None, optional
+        :param options: Optional request configuration
+        :return: Log entries for the devbox
+        :rtype: :class:`~runloop_api_client.types.devboxes.devbox_logs_list_view.DevboxLogsListView`
+
+        Example:
+            >>> logs = devbox.logs()
+            >>> for log in logs.logs:
+            ...     print(f"[{log.level}] {log.message}")
+        """
+        return self._client.devboxes.logs.list(
+            self._id,
+            execution_id=execution_id if execution_id is not None else omit,
+            shell_name=shell_name if shell_name is not None else omit,
+            **options,
+        )
 
     def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.
