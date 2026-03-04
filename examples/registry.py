@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
+from .devbox_tunnel import run_devbox_tunnel_example
 from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
 from .blueprint_with_build_context import run_blueprint_with_build_context_example
@@ -28,6 +29,13 @@ example_registry: list[ExampleRegistryEntry] = [
         "file_name": "devbox_from_blueprint_lifecycle.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_from_blueprint_lifecycle_example,
+    },
+    {
+        "slug": "devbox-tunnel",
+        "title": "Devbox Tunnel (HTTP Server Access)",
+        "file_name": "devbox_tunnel.py",
+        "required_env": ["RUNLOOP_API_KEY"],
+        "run": run_devbox_tunnel_example,
     },
     {
         "slug": "mcp-github-tools",
