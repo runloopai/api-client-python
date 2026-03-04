@@ -457,7 +457,7 @@ class TestDevboxNetworking:
             assert tunnel.devbox_id == devbox.id
 
             # Verify tunnel persists in devbox info (v2 tunnels cannot be removed)
-            info = devbox.info()
+            info = devbox.get_info()
             assert info.tunnel is not None
             assert info.tunnel.tunnel_key is not None
         finally:
