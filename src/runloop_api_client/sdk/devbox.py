@@ -15,6 +15,7 @@ from ..types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
+from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ._types import (
     LogCallback,
     BaseRequestOptions,
@@ -161,6 +162,38 @@ class Devbox:
         if tunnel_view is None:
             return None
         return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.runloop.ai"
+
+    def logs(
+        self,
+        *,
+        execution_id: str | None = None,
+        shell_name: str | None = None,
+        **options: Unpack[BaseRequestOptions],
+    ) -> DevboxLogsListView:
+        """Retrieve logs for the devbox.
+
+        Returns all logs from a running or completed devbox. Optionally filter
+        by execution ID or shell name.
+
+        :param execution_id: Filter logs by execution ID, defaults to None
+        :type execution_id: str | None, optional
+        :param shell_name: Filter logs by shell name, defaults to None
+        :type shell_name: str | None, optional
+        :param options: Optional request configuration
+        :return: Log entries for the devbox
+        :rtype: :class:`~runloop_api_client.types.devboxes.devbox_logs_list_view.DevboxLogsListView`
+
+        Example:
+            >>> logs = devbox.logs()
+            >>> for log in logs.logs:
+            ...     print(f"[{log.level}] {log.message}")
+        """
+        return self._client.devboxes.logs.list(
+            self._id,
+            execution_id=execution_id,
+            shell_name=shell_name,
+            **options,
+        )
 
     def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.

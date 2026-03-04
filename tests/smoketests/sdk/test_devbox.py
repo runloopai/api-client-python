@@ -1050,3 +1050,47 @@ class TestDevboxNamedShell:
         # Verify streaming captured same data as result
         assert stdout_combined == result.stdout()
         assert stderr_combined == result.stderr()
+
+
+class TestDevboxLogs:
+    """Test devbox logs retrieval functionality."""
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_logs_basic(self, shared_devbox: Devbox) -> None:
+        """Test retrieving devbox logs returns valid response structure."""
+        # Fetch logs - the API may return empty logs depending on timing
+        logs = shared_devbox.logs()
+
+        assert logs is not None
+        assert hasattr(logs, "logs")
+        assert isinstance(logs.logs, list)
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_logs_with_execution_filter(self, shared_devbox: Devbox) -> None:
+        """Test retrieving devbox logs filtered by execution ID."""
+        # Run a command and get its execution ID
+        execution = shared_devbox.cmd.exec_async('echo "filtered log test"')
+        result = execution.result()
+        assert result.exit_code == 0
+
+        # Fetch logs filtered by execution ID - verifies API accepts the filter
+        logs = shared_devbox.logs(execution_id=execution.execution_id)
+
+        assert logs is not None
+        assert isinstance(logs.logs, list)
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_logs_with_shell_name_filter(self, shared_devbox: Devbox) -> None:
+        """Test retrieving devbox logs filtered by shell name."""
+        shell_name = "test-logs-shell"
+        shell = shared_devbox.shell(shell_name)
+
+        # Run a command in the named shell
+        result = shell.exec('echo "shell log test"')
+        assert result.exit_code == 0
+
+        # Fetch logs filtered by shell name - verifies API accepts the filter
+        logs = shared_devbox.logs(shell_name=shell_name)
+
+        assert logs is not None
+        assert isinstance(logs.logs, list)
