@@ -15,7 +15,6 @@ from ..types import (
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
-from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ._types import (
     LogCallback,
     BaseRequestOptions,
@@ -34,6 +33,7 @@ from ._types import (
     SDKDevboxSnapshotDiskAsyncParams,
     SDKDevboxWriteFileContentsParams,
 )
+from .._types import omit
 from .._client import AsyncRunloop
 from ._helpers import filter_params
 from .._streaming import AsyncStream
@@ -42,6 +42,7 @@ from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
+from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 StreamFactory = Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]
@@ -191,8 +192,8 @@ class AsyncDevbox:
         """
         return await self._client.devboxes.logs.list(
             self._id,
-            execution_id=execution_id,
-            shell_name=shell_name,
+            execution_id=execution_id if execution_id is not None else omit,
+            shell_name=shell_name if shell_name is not None else omit,
             **options,
         )
 

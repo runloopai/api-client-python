@@ -82,12 +82,12 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
             ),
             ExampleCheck(
                 name="blueprint build logs are retrievable",
-                passed=blueprint_logs is not None and hasattr(blueprint_logs, "logs"),
+                passed=hasattr(blueprint_logs, "logs"),
                 details=f"blueprint_log_count={len(blueprint_logs.logs)}",
             ),
             ExampleCheck(
                 name="devbox logs are retrievable",
-                passed=devbox_logs is not None and hasattr(devbox_logs, "logs"),
+                passed=hasattr(devbox_logs, "logs"),
                 details=f"devbox_log_count={len(devbox_logs.logs)}",
             ),
         ],
