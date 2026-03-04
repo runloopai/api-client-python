@@ -1058,26 +1058,32 @@ class TestDevboxLogs:
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_basic(self, shared_devbox: Devbox) -> None:
         """Test retrieving devbox logs returns valid response structure."""
-        # Fetch logs - the API may return empty logs depending on timing
+        test_message = "basic log test message"
+        result = shared_devbox.cmd.exec(f'echo "{test_message}"')
+        assert result.exit_code == 0
+
         logs = shared_devbox.logs()
 
         assert logs is not None
         assert hasattr(logs, "logs")
         assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_with_execution_filter(self, shared_devbox: Devbox) -> None:
         """Test retrieving devbox logs filtered by execution ID."""
-        # Run a command and get its execution ID
-        execution = shared_devbox.cmd.exec_async('echo "filtered log test"')
-        result = execution.result()
+        test_message = "filtered log test"
+        result = shared_devbox.cmd.exec(f'echo "{test_message}"')
         assert result.exit_code == 0
 
-        # Fetch logs filtered by execution ID - verifies API accepts the filter
-        logs = shared_devbox.logs(execution_id=execution.execution_id)
+        logs = shared_devbox.logs(execution_id=result.execution_id)
 
         assert logs is not None
+        assert hasattr(logs, "logs")
         assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_with_shell_name_filter(self, shared_devbox: Devbox) -> None:
@@ -1085,12 +1091,14 @@ class TestDevboxLogs:
         shell_name = "test-logs-shell"
         shell = shared_devbox.shell(shell_name)
 
-        # Run a command in the named shell
-        result = shell.exec('echo "shell log test"')
+        test_message = "shell log test"
+        result = shell.exec(f'echo "{test_message}"')
         assert result.exit_code == 0
 
-        # Fetch logs filtered by shell name - verifies API accepts the filter
         logs = shared_devbox.logs(shell_name=shell_name)
 
         assert logs is not None
+        assert hasattr(logs, "logs")
         assert isinstance(logs.logs, list)
+        log_content = " ".join(str(log) for log in logs.logs)
+        assert test_message in log_content
