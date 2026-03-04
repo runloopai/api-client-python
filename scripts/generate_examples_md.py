@@ -150,12 +150,13 @@ def generate_markdown(examples: list[dict[str, Any]]) -> str:
 
 def generate_registry(examples: list[dict[str, Any]]) -> str:
     """Generate the registry.py content."""
-    imports: list[str] = []
+    imports: list[tuple[str, str]] = [("example_types", "ExampleResult")]
     for example in examples:
         module = example["file_name"].replace(".py", "")
         runner = f"run_{module}_example"
-        imports.append(f"from .{module} import {runner}")
-    imports.sort(key=len)
+        imports.append((module, runner))
+    imports.sort(key=lambda x: (len(x[0]), x[0]))
+    import_lines = [f"from .{mod} import {name}" for mod, name in imports]
 
     entries: list[str] = []
     for example in examples:
@@ -181,8 +182,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
-from .example_types import ExampleResult
-{chr(10).join(imports)}
+{chr(10).join(import_lines)}
 
 ExampleRegistryEntry = dict[str, Any]
 
