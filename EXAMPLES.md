@@ -9,6 +9,7 @@ Runnable examples live in [`examples/`](./examples).
 
 - [Blueprint with Build Context](#blueprint-with-build-context)
 - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
+- [Devbox Snapshot and Resume](#devbox-snapshot-resume)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
 
 <a id="blueprint-with-build-context"></a>
@@ -69,6 +70,37 @@ uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_from_blueprint_lifecycle.py`](./examples/devbox_from_blueprint_lifecycle.py)
+
+<a id="devbox-snapshot-resume"></a>
+## Devbox Snapshot and Resume
+
+**Use case:** Create a devbox, snapshot its disk, resume from the snapshot, and demonstrate that changes in the original devbox do not affect the clone. Uses the async SDK.
+
+**Tags:** `devbox`, `snapshot`, `resume`, `cleanup`, `async`
+
+### Workflow
+- Create a devbox
+- Write a file to the devbox
+- Create a disk snapshot
+- Create a new devbox from the snapshot
+- Modify the file on the original devbox
+- Verify the clone has the original content
+- Shutdown both devboxes and delete the snapshot
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+
+### Run
+```sh
+uv run python -m examples.devbox_snapshot_resume
+```
+
+### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
+
+**Source:** [`examples/devbox_snapshot_resume.py`](./examples/devbox_snapshot_resume.py)
 
 <a id="mcp-github-tools"></a>
 ## MCP Hub + Claude Code + GitHub
