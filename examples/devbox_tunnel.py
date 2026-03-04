@@ -68,6 +68,8 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
 
     # Get the tunnel URL for the server port
     tunnel_url = await devbox.get_tunnel_url(HTTP_SERVER_PORT)
+    if tunnel_url is None:
+        raise RuntimeError("Failed to get tunnel URL after enabling tunnel")
 
     # Make an HTTP request from the LOCAL MACHINE through the tunnel to the devbox
     # This demonstrates that the tunnel allows external access to the devbox service
@@ -88,7 +90,9 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
             ),
             ExampleCheck(
                 name="tunnel URL was constructed correctly",
-                passed=tunnel.tunnel_key in tunnel_url and str(HTTP_SERVER_PORT) in tunnel_url,
+                passed=bool(
+                    tunnel.tunnel_key and tunnel.tunnel_key in tunnel_url and str(HTTP_SERVER_PORT) in tunnel_url
+                ),
                 details=tunnel_url,
             ),
             ExampleCheck(
