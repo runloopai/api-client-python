@@ -49,7 +49,6 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         name="devbox-tunnel-example",
         launch_parameters={
             "resource_size_request": "X_SMALL",
-            "keep_alive_time_seconds": 60 * 10,
         },
     )
     cleanup.add(f"devbox:{devbox.id}", devbox.shutdown)
