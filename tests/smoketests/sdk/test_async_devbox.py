@@ -440,7 +440,7 @@ class TestAsyncDevboxNetworking:
     @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
     async def test_create_tunnel_deprecated(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a tunnel (deprecated - now creates v2 tunnel).
-        
+
         Note: The deprecated create_tunnel endpoint now creates v2 Portal tunnels
         which cannot be removed. They remain active until the devbox is stopped.
         Use enable_tunnel for creating v2 tunnels instead.
