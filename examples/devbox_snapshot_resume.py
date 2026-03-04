@@ -54,7 +54,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     cleanup.add(f"devbox:{dbx_original.id}", dbx_original.shutdown)
 
     # Write a file to the original devbox
-    await dbx_original.file.write(FILE_PATH, ORIGINAL_CONTENT)
+    await dbx_original.file.write(file_path=FILE_PATH, contents=ORIGINAL_CONTENT)
 
     # Read and display the file contents
     cat_original_before = await dbx_original.cmd.exec(f"cat {FILE_PATH}")
@@ -76,7 +76,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     cleanup.add(f"devbox:{dbx_clone.id}", dbx_clone.shutdown)
 
     # Modify the file on the original devbox
-    await dbx_original.file.write(FILE_PATH, MODIFIED_CONTENT)
+    await dbx_original.file.write(file_path=FILE_PATH, contents=MODIFIED_CONTENT)
 
     # Read the file contents from both devboxes
     cat_clone = await dbx_clone.cmd.exec(f"cat {FILE_PATH}")
