@@ -11,6 +11,7 @@ import httpx
 
 from .agent import Agent
 from ._types import (
+    BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
     SDKDevboxListParams,
@@ -36,6 +37,7 @@ from ._types import (
 )
 from .devbox import Devbox
 from .scorer import Scorer
+from .secret import Secret
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
@@ -48,6 +50,7 @@ from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
 from .scenario_builder import ScenarioBuilder
+from ..types.secret_view import SecretView
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
@@ -1095,6 +1098,127 @@ class McpConfigOps:
         return [McpConfig(self._client, item.id) for item in page.mcp_configs]
 
 
+class SecretOps:
+    """High-level manager for creating and managing Secrets.
+
+    Accessed via ``runloop.secret`` from :class:`RunloopSDK`, provides methods to
+    create, retrieve, update, list, and delete secrets. Secrets are encrypted
+    key-value pairs that can be injected into Devboxes as environment variables.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> secret = runloop.secret.create(name="MY_API_KEY", value="secret-value")
+        >>> secrets = runloop.secret.list()
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        """Initialize SecretOps.
+
+        :param client: Runloop client instance
+        :type client: Runloop
+        """
+        self._client = client
+
+    def create(self, name: str, value: str, **options: Unpack[LongRequestOptions]) -> Secret:
+        """Create a new secret.
+
+        Example:
+            >>> secret = runloop.secret.create(
+            ...     name="DATABASE_PASSWORD",
+            ...     value="my-secure-password",
+            ... )
+            >>> print(f"Created secret: {secret.name}")
+
+        :param name: Globally unique secret name (must be a valid env var name)
+        :type name: str
+        :param value: Secret value to store (encrypted at rest)
+        :type value: str
+        :param options: Optional request configuration
+        :return: The created Secret instance
+        :rtype: Secret
+        """
+        view = self._client.secrets.create(name=name, value=value, **options)
+        return Secret(self._client, view.name, view.id)
+
+    def from_name(self, name: str) -> Secret:
+        """Get a Secret instance by name without making an API call.
+
+        Use ``get_info()`` on the returned Secret to fetch the actual data.
+
+        Example:
+            >>> secret = runloop.secret.from_name("MY_API_KEY")
+            >>> info = secret.get_info()
+            >>> print(f"Secret ID: {info.id}")
+
+        :param name: The globally unique name of the secret
+        :type name: str
+        :return: A Secret instance (no API call made)
+        :rtype: Secret
+        """
+        return Secret(self._client, name)
+
+    def update(
+        self,
+        secret: "Secret | str",
+        value: str,
+        **options: Unpack[LongRequestOptions],
+    ) -> Secret:
+        """Update an existing secret's value.
+
+        Example:
+            >>> updated = runloop.secret.update("DATABASE_PASSWORD", "new-password")
+            >>> # Or using a Secret object
+            >>> updated = runloop.secret.update(secret, "new-password")
+
+        :param secret: The secret to update (Secret object or name string)
+        :type secret: Secret | str
+        :param value: The new secret value
+        :type value: str
+        :param options: Optional request configuration
+        :return: The updated Secret instance
+        :rtype: Secret
+        """
+        name = secret if isinstance(secret, str) else secret.name
+        self._client.secrets.update(name, value=value, **options)
+        return Secret(self._client, name)
+
+    def list(self, **options: Unpack[BaseRequestOptions]) -> list[Secret]:
+        """List all secrets.
+
+        Example:
+            >>> secrets = runloop.secret.list()
+            >>> for s in secrets:
+            ...     print(s.name)
+
+        :param options: Optional request configuration
+        :return: List of Secret instances
+        :rtype: list[Secret]
+        """
+        result = self._client.secrets.list(**options)
+        return [Secret(self._client, view.name, view.id) for view in result.secrets]
+
+    def delete(
+        self,
+        secret: "Secret | str",
+        **options: Unpack[LongRequestOptions],
+    ) -> SecretView:
+        """Delete a secret. This action is irreversible.
+
+        Example:
+            >>> runloop.secret.delete("DATABASE_PASSWORD")
+            >>> # Or using a Secret object
+            >>> runloop.secret.delete(secret)
+
+        :param secret: The secret to delete (Secret object or name string)
+        :type secret: Secret | str
+        :param options: Optional request configuration
+        :return: The deleted secret metadata
+        :rtype: SecretView
+        """
+        name = secret if isinstance(secret, str) else secret.name
+        return self._client.secrets.delete(name, **options)
+
+
 class RunloopSDK:
     """High-level synchronous entry point for the Runloop SDK.
 
@@ -1126,6 +1250,8 @@ class RunloopSDK:
     :vartype gateway_config: GatewayConfigOps
     :ivar mcp_config: High-level interface for MCP config management
     :vartype mcp_config: McpConfigOps
+    :ivar secret: High-level interface for secret management
+    :vartype secret: SecretOps
 
     Example:
         >>> runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -1145,6 +1271,7 @@ class RunloopSDK:
     network_policy: NetworkPolicyOps
     scenario: ScenarioOps
     scorer: ScorerOps
+    secret: SecretOps
     snapshot: SnapshotOps
     storage_object: StorageObjectOps
 
@@ -1193,6 +1320,7 @@ class RunloopSDK:
         self.gateway_config = GatewayConfigOps(self.api)
         self.mcp_config = McpConfigOps(self.api)
         self.network_policy = NetworkPolicyOps(self.api)
+        self.secret = SecretOps(self.api)
         self.scenario = ScenarioOps(self.api)
         self.scorer = ScorerOps(self.api)
         self.snapshot = SnapshotOps(self.api)

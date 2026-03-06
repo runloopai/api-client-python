@@ -11,6 +11,7 @@ Runnable examples live in [`examples/`](./examples).
 - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
 - [Devbox Snapshot and Resume](#devbox-snapshot-resume)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
+- [Secrets with Devbox (Create, Inject, Verify, Delete)](#secrets-with-devbox)
 
 <a id="blueprint-with-build-context"></a>
 ## Blueprint with Build Context
@@ -135,3 +136,34 @@ uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/mcp_github_tools.py`](./examples/mcp_github_tools.py)
+
+<a id="secrets-with-devbox"></a>
+## Secrets with Devbox (Create, Inject, Verify, Delete)
+
+**Use case:** Create a secret, inject it into a devbox as an environment variable, verify access, and clean up.
+
+**Tags:** `secrets`, `devbox`, `environment-variables`, `cleanup`
+
+### Workflow
+- Create a secret with a test value
+- Create a devbox with the secret mapped to an env var
+- Execute a command that reads the secret from the environment
+- Verify the value matches
+- Update the secret and verify
+- List secrets and verify the secret appears
+- Shutdown devbox and delete secret
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+
+### Run
+```sh
+uv run python -m examples.secrets_with_devbox
+```
+
+### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
+
+**Source:** [`examples/secrets_with_devbox.py`](./examples/secrets_with_devbox.py)
