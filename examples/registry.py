@@ -9,6 +9,7 @@ from typing import Any, Callable, cast
 
 from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
+from .devbox_snapshot_resume import run_devbox_snapshot_resume_example
 from .blueprint_with_build_context import run_blueprint_with_build_context_example
 from .devbox_from_blueprint_lifecycle import run_devbox_from_blueprint_lifecycle_example
 
@@ -28,6 +29,13 @@ example_registry: list[ExampleRegistryEntry] = [
         "file_name": "devbox_from_blueprint_lifecycle.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_from_blueprint_lifecycle_example,
+    },
+    {
+        "slug": "devbox-snapshot-resume",
+        "title": "Devbox Snapshot and Resume",
+        "file_name": "devbox_snapshot_resume.py",
+        "required_env": ["RUNLOOP_API_KEY"],
+        "run": run_devbox_snapshot_resume_example,
     },
     {
         "slug": "mcp-github-tools",
