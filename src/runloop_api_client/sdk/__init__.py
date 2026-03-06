@@ -123,7 +123,6 @@ __all__ = [
     "ScenarioBuilder",
     "AsyncScenarioBuilder",
     "ScenarioPreview",
-
     "Secret",
     "Scorer",
     "AsyncScorer",
