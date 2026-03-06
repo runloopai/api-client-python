@@ -80,9 +80,9 @@ def recipe(ctx: RecipeContext, options: McpExampleOptions) -> RecipeOutput:  # n
 
     # Store the GitHub PAT as a Runloop secret
     secret_name = unique_name("example-github-mcp")
-    sdk.api.secrets.create(name=secret_name, value=github_token)
+    secret = sdk.secret.create(name=secret_name, value=github_token)
     resources_created.append(f"secret:{secret_name}")
-    cleanup.add(f"secret:{secret_name}", lambda: sdk.api.secrets.delete(secret_name))
+    cleanup.add(f"secret:{secret_name}", secret.delete)
 
     # Launch a devbox with MCP Hub wiring
     devbox = sdk.devbox.create(

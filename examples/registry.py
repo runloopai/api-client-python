@@ -9,6 +9,7 @@ from typing import Any, Callable, cast
 
 from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
+from .secrets_with_devbox import run_secrets_with_devbox_example
 from .devbox_snapshot_resume import run_devbox_snapshot_resume_example
 from .blueprint_with_build_context import run_blueprint_with_build_context_example
 from .devbox_from_blueprint_lifecycle import run_devbox_from_blueprint_lifecycle_example
@@ -43,6 +44,13 @@ example_registry: list[ExampleRegistryEntry] = [
         "file_name": "mcp_github_tools.py",
         "required_env": ["RUNLOOP_API_KEY", "GITHUB_TOKEN", "ANTHROPIC_API_KEY"],
         "run": run_mcp_github_tools_example,
+    },
+    {
+        "slug": "secrets-with-devbox",
+        "title": "Secrets with Devbox (Create, Inject, Verify, Delete)",
+        "file_name": "secrets_with_devbox.py",
+        "required_env": ["RUNLOOP_API_KEY"],
+        "run": run_secrets_with_devbox_example,
     },
 ]
 

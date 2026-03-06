@@ -116,6 +116,7 @@ The SDK provides object-oriented interfaces for all major Runloop resources:
 - **`runloop.blueprint`** - Blueprint management (create, list, build blueprints)
 - **`runloop.snapshot`** - Snapshot management (list disk snapshots)
 - **`runloop.storage_object`** - Storage object management (upload, download, list objects)
+- **`runloop.secret`** - Secret management (create, update, list, delete encrypted key-value pairs)
 - **`runloop.api`** - Direct access to the underlying REST API client
 
 ### Devbox
