@@ -1083,7 +1083,7 @@ class TestDevboxes:
         devbox = client.devboxes.upload_file(
             id="id",
             path="path",
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -2278,7 +2278,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.upload_file(
             id="id",
             path="path",
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(object, devbox, path=["response"])
 
