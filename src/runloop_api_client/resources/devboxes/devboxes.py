@@ -867,7 +867,7 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         command: str,
-        command_id: str = str(uuid7()),
+        command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -892,7 +892,8 @@ class DevboxesResource(SyncAPIResource):
               specified the command is run from the directory based on the recent state of the
               persistent shell.
 
-          command_id: The command ID in UUIDv7 string format for idempotency and tracking
+          command_id: The command ID in UUIDv7 string format for idempotency and tracking.
+              A fresh UUID is generated per call if not provided.
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
@@ -915,6 +916,8 @@ class DevboxesResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if command_id is None:
+            command_id = str(uuid7())
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
@@ -944,7 +947,7 @@ class DevboxesResource(SyncAPIResource):
         devbox_id: str,
         *,
         command: str,
-        command_id: str = str(uuid7()),
+        command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -963,9 +966,11 @@ class DevboxesResource(SyncAPIResource):
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
 
-        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        A command_id (UUIDv7) is automatically generated per call for idempotency and tracking.
         You can provide your own command_id to enable custom retry logic or external tracking.
         """
+        if command_id is None:
+            command_id = str(uuid7())
         execution = self.execute(
             devbox_id,
             command=command,
@@ -2543,7 +2548,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         command: str,
-        command_id: str = str(uuid7()),
+        command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -2568,7 +2573,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
               specified the command is run from the directory based on the recent state of the
               persistent shell.
 
-          command_id: The command ID in UUIDv7 string format for idempotency and tracking
+          command_id: The command ID in UUIDv7 string format for idempotency and tracking.
+              A fresh UUID is generated per call if not provided.
 
           last_n: Last n lines of standard error / standard out to return (default: 100)
 
@@ -2591,6 +2597,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        if command_id is None:
+            command_id = str(uuid7())
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
@@ -2620,7 +2628,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         devbox_id: str,
         *,
         command: str,
-        command_id: str = str(uuid7()),
+        command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
         shell_name: Optional[str] | Omit = omit,
@@ -2639,7 +2647,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return the result within the initial request's timeout. If the execution is not yet
         complete, it switches to using wait_for_command to minimize latency while waiting.
 
-        A command_id (UUIDv7) is automatically generated for idempotency and tracking.
+        A command_id (UUIDv7) is automatically generated per call for idempotency and tracking.
         You can provide your own command_id to enable custom retry logic or external tracking.
         """
 
