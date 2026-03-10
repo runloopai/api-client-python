@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.11.0 (2026-03-10)
+
+Full Changelog: [v1.10.3...v1.11.0](https://github.com/runloopai/api-client-python/compare/v1.10.3...v1.11.0)
+
+### Features
+
+* add snapshots example ([#753](https://github.com/runloopai/api-client-python/issues/753)) ([f13916a](https://github.com/runloopai/api-client-python/commit/f13916a570fe708aef56c6fbfd5c06b9e0dc158e))
+* **documentation:** added llms.txt, examples and referenced these artifacts via README ([#748](https://github.com/runloopai/api-client-python/issues/748)) ([bceb953](https://github.com/runloopai/api-client-python/commit/bceb953c8486bec6bbe5bca1276ed54d625eda5d))
+
+
+### Bug Fixes
+
+* add logs to devboxes, smoke tests & examples ([#755](https://github.com/runloopai/api-client-python/issues/755)) ([da5faa4](https://github.com/runloopai/api-client-python/commit/da5faa4e69348dd6f034a538046ab9ff2ff4831b))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([6874252](https://github.com/runloopai/api-client-python/commit/6874252fe355ac8a44be6bc57cd6bb15a3f035be))
+* **documentation:** correct exec advice ([#752](https://github.com/runloopai/api-client-python/issues/752)) ([fa16c1d](https://github.com/runloopai/api-client-python/commit/fa16c1d602ec301200e82a48fe23c2218ae82a08))
+* **test:** do not count install time for mock server timeout ([f6fde05](https://github.com/runloopai/api-client-python/commit/f6fde050a5f4b985c01003cd7593c1619ede028f))
+* update placeholder string ([5dfcd93](https://github.com/runloopai/api-client-python/commit/5dfcd93bb05cda783901377ee7fc03a6acffe0ae))
+
 ## 1.10.3 (2026-02-27)
 
 Full Changelog: [v1.10.2...v1.10.3](https://github.com/runloopai/api-client-python/compare/v1.10.2...v1.10.3)
