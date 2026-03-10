@@ -7,15 +7,16 @@ default (the bug fixed in this change).
 from __future__ import annotations
 
 import json
+from typing import cast
 
 import httpx
 import pytest
-import respx
+from respx import Route, MockRouter
 
-from runloop_api_client import AsyncRunloop, Runloop
+from runloop_api_client import Runloop, AsyncRunloop
 
-BASE = "http://localhost"
-EXECUTE_PATTERN = f"{BASE}/v1/devboxes/dbx_test/execute"
+base_url = "http://127.0.0.1:4010"
+EXECUTE_PATH = "/v1/devboxes/dbx_test/execute"
 
 STUB_RESPONSE = {
     "execution_id": "exec_1",
@@ -28,59 +29,66 @@ STUB_RESPONSE = {
 }
 
 
-class TestCommandIdUniqueness:
-    """Every call without an explicit command_id must produce a distinct UUID."""
+def _get_command_ids(route: Route) -> list[str]:
+    return [
+        json.loads(cast(bytes, call.request.content))["command_id"]  # type: ignore[union-attr]
+        for call in route.calls  # type: ignore[union-attr]
+    ]
 
-    @respx.mock
-    def test_sync_execute_generates_unique_ids(self) -> None:
-        route = respx.post(EXECUTE_PATTERN).mock(
-            return_value=httpx.Response(200, json=STUB_RESPONSE)
-        )
-        client = Runloop(base_url=BASE, bearer_token="test")
+
+def _get_request_body(route: Route, index: int = 0) -> dict[str, object]:
+    return json.loads(cast(bytes, route.calls[index].request.content))  # type: ignore[union-attr]
+
+
+class TestCommandIdGeneration:
+    """command_id must be a fresh UUIDv7 per call when not explicitly provided."""
+
+    @pytest.mark.respx(base_url=base_url)
+    def test_execute_generates_unique_command_ids(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        client = Runloop(base_url=base_url, bearer_token="test")
 
         for _ in range(5):
             client.devboxes.execute(id="dbx_test", command="echo hi")
 
         assert route.call_count == 5
-        ids = [json.loads(call.request.content)["command_id"] for call in route.calls]
-        assert len(set(ids)) == 5, f"All command_ids should be unique, got: {ids}"
+        ids = _get_command_ids(route)
+        assert len(set(ids)) == 5, f"command_ids should all be unique, got: {ids}"
 
-    @respx.mock
-    def test_sync_execute_respects_explicit_id(self) -> None:
-        route = respx.post(EXECUTE_PATTERN).mock(
-            return_value=httpx.Response(200, json=STUB_RESPONSE)
-        )
-        client = Runloop(base_url=BASE, bearer_token="test")
+    @pytest.mark.respx(base_url=base_url)
+    def test_execute_preserves_explicit_command_id(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        client = Runloop(base_url=base_url, bearer_token="test")
 
         client.devboxes.execute(id="dbx_test", command="echo hi", command_id="my-custom-id")
 
-        body = json.loads(route.calls[0].request.content)
+        body = _get_request_body(route)
         assert body["command_id"] == "my-custom-id"
 
-    @respx.mock
+
+class TestAsyncCommandIdGeneration:
+    """Async variant: command_id must be a fresh UUIDv7 per call when not explicitly provided."""
+
+    @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
-    async def test_async_execute_generates_unique_ids(self) -> None:
-        route = respx.post(EXECUTE_PATTERN).mock(
-            return_value=httpx.Response(200, json=STUB_RESPONSE)
-        )
-        client = AsyncRunloop(base_url=BASE, bearer_token="test")
+    async def test_execute_generates_unique_command_ids(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        client = AsyncRunloop(base_url=base_url, bearer_token="test")
 
         for _ in range(5):
             await client.devboxes.execute(id="dbx_test", command="echo hi")
 
         assert route.call_count == 5
-        ids = [json.loads(call.request.content)["command_id"] for call in route.calls]
-        assert len(set(ids)) == 5, f"All command_ids should be unique, got: {ids}"
+        ids = _get_command_ids(route)
+        assert len(set(ids)) == 5, f"command_ids should all be unique, got: {ids}"
 
-    @respx.mock
+    @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
-    async def test_async_execute_respects_explicit_id(self) -> None:
-        route = respx.post(EXECUTE_PATTERN).mock(
-            return_value=httpx.Response(200, json=STUB_RESPONSE)
-        )
-        client = AsyncRunloop(base_url=BASE, bearer_token="test")
+    async def test_execute_preserves_explicit_command_id(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        client = AsyncRunloop(base_url=base_url, bearer_token="test")
 
         await client.devboxes.execute(id="dbx_test", command="echo hi", command_id="my-custom-id")
 
-        body = json.loads(route.calls[0].request.content)
+        body = _get_request_body(route)
         assert body["command_id"] == "my-custom-id"
