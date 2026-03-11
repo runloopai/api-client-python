@@ -124,6 +124,7 @@ __all__ = [
     "AsyncScenarioBuilder",
     "ScenarioPreview",
     "Secret",
+    "AsyncSecret",
     "Scorer",
     "AsyncScorer",
     "Snapshot",
