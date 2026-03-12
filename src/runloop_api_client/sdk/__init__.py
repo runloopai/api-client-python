@@ -9,6 +9,7 @@ from .sync import (
     AgentOps,
     DevboxOps,
     ScorerOps,
+    SecretOps,
     RunloopSDK,
     ScenarioOps,
     SnapshotOps,
@@ -25,6 +26,7 @@ from .async_ import (
     AsyncAgentOps,
     AsyncDevboxOps,
     AsyncScorerOps,
+    AsyncSecretOps,
     AsyncRunloopSDK,
     AsyncScenarioOps,
     AsyncSnapshotOps,
@@ -37,6 +39,7 @@ from .async_ import (
 )
 from .devbox import Devbox, NamedShell
 from .scorer import Scorer
+from .secret import Secret
 from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
@@ -46,6 +49,7 @@ from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
 from .async_scorer import AsyncScorer
+from .async_secret import AsyncSecret
 from .scenario_run import ScenarioRun
 from .benchmark_run import BenchmarkRun
 from .async_scenario import AsyncScenario
@@ -82,6 +86,8 @@ __all__ = [
     "AsyncBlueprintOps",
     "ScenarioOps",
     "AsyncScenarioOps",
+    "SecretOps",
+    "AsyncSecretOps",
     "ScorerOps",
     "AsyncScorerOps",
     "SnapshotOps",
@@ -97,6 +103,7 @@ __all__ = [
     # Resource classes
     "Agent",
     "AsyncAgent",
+    "AsyncSecret",
     "Benchmark",
     "AsyncBenchmark",
     "BenchmarkRun",
@@ -116,6 +123,7 @@ __all__ = [
     "ScenarioBuilder",
     "AsyncScenarioBuilder",
     "ScenarioPreview",
+    "Secret",
     "Scorer",
     "AsyncScorer",
     "Snapshot",
