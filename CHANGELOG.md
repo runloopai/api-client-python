@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.1 (2026-03-12)
+
+Full Changelog: [v1.11.0...v1.11.1](https://github.com/runloopai/api-client-python/compare/v1.11.0...v1.11.1)
+
+### Chores
+
+* configure new SDK language ([dfedad9](https://github.com/runloopai/api-client-python/commit/dfedad97af549cfcff160903568994091db9eabe))
+
 ## 1.11.0 (2026-03-10)
 
 Full Changelog: [v1.10.3...v1.11.0](https://github.com/runloopai/api-client-python/compare/v1.10.3...v1.11.0)
