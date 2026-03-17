@@ -11,6 +11,7 @@ from typing_extensions import Unpack
 import httpx
 
 from ._types import (
+    BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
     SDKDevboxListParams,
@@ -40,11 +41,13 @@ from ._helpers import detect_content_type
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
+from .async_secret import AsyncSecret
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from .async_mcp_config import AsyncMcpConfig
+from ..types.secret_view import SecretView
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
@@ -1070,6 +1073,127 @@ class AsyncMcpConfigOps:
         return [AsyncMcpConfig(self._client, item.id) for item in page.mcp_configs]
 
 
+class AsyncSecretOps:
+    """High-level async manager for creating and managing Secrets.
+
+    Accessed via ``runloop.secret`` from :class:`AsyncRunloopSDK`, provides methods to
+    create, retrieve, update, list, and delete secrets. Secrets are encrypted
+    key-value pairs that can be injected into Devboxes as environment variables.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> secret = await runloop.secret.create(name="MY_API_KEY", value="secret-value")
+        >>> secrets = await runloop.secret.list()
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        """Initialize AsyncSecretOps.
+
+        :param client: AsyncRunloop client instance
+        :type client: AsyncRunloop
+        """
+        self._client = client
+
+    async def create(self, name: str, value: str, **options: Unpack[LongRequestOptions]) -> AsyncSecret:
+        """Create a new secret.
+
+        Example:
+            >>> secret = await runloop.secret.create(
+            ...     name="DATABASE_PASSWORD",
+            ...     value="my-secure-password",
+            ... )
+            >>> print(f"Created secret: {secret.name}")
+
+        :param name: Globally unique secret name (must be a valid env var name)
+        :type name: str
+        :param value: Secret value to store (encrypted at rest)
+        :type value: str
+        :param options: Optional request configuration
+        :return: The created AsyncSecret instance
+        :rtype: AsyncSecret
+        """
+        view = await self._client.secrets.create(name=name, value=value, **options)
+        return AsyncSecret(self._client, view.name, view.id)
+
+    def from_name(self, name: str) -> AsyncSecret:
+        """Get an AsyncSecret instance by name without making an API call.
+
+        Use ``get_info()`` on the returned AsyncSecret to fetch the actual data.
+
+        Example:
+            >>> secret = runloop.secret.from_name("MY_API_KEY")
+            >>> info = await secret.get_info()
+            >>> print(f"Secret ID: {info.id}")
+
+        :param name: The globally unique name of the secret
+        :type name: str
+        :return: An AsyncSecret instance (no API call made)
+        :rtype: AsyncSecret
+        """
+        return AsyncSecret(self._client, name)
+
+    async def update(
+        self,
+        secret: "AsyncSecret | str",
+        value: str,
+        **options: Unpack[LongRequestOptions],
+    ) -> AsyncSecret:
+        """Update an existing secret's value.
+
+        Example:
+            >>> updated = await runloop.secret.update("DATABASE_PASSWORD", "new-password")
+            >>> # Or using an AsyncSecret object
+            >>> updated = await runloop.secret.update(secret, "new-password")
+
+        :param secret: The secret to update (AsyncSecret object or name string)
+        :type secret: AsyncSecret | str
+        :param value: The new secret value
+        :type value: str
+        :param options: Optional request configuration
+        :return: The updated AsyncSecret instance
+        :rtype: AsyncSecret
+        """
+        name = secret if isinstance(secret, str) else secret.name
+        await self._client.secrets.update(name, value=value, **options)
+        return AsyncSecret(self._client, name)
+
+    async def list(self, **options: Unpack[BaseRequestOptions]) -> list[AsyncSecret]:
+        """List all secrets.
+
+        Example:
+            >>> secrets = await runloop.secret.list()
+            >>> for s in secrets:
+            ...     print(s.name)
+
+        :param options: Optional request configuration
+        :return: List of AsyncSecret instances
+        :rtype: list[AsyncSecret]
+        """
+        result = await self._client.secrets.list(**options)
+        return [AsyncSecret(self._client, view.name, view.id) for view in result.secrets]
+
+    async def delete(
+        self,
+        secret: "AsyncSecret | str",
+        **options: Unpack[LongRequestOptions],
+    ) -> SecretView:
+        """Delete a secret. This action is irreversible.
+
+        Example:
+            >>> await runloop.secret.delete("DATABASE_PASSWORD")
+            >>> # Or using an AsyncSecret object
+            >>> await runloop.secret.delete(secret)
+
+        :param secret: The secret to delete (AsyncSecret object or name string)
+        :type secret: AsyncSecret | str
+        :param options: Optional request configuration
+        :return: The deleted secret metadata
+        :rtype: SecretView
+        """
+        name = secret if isinstance(secret, str) else secret.name
+        return await self._client.secrets.delete(name, **options)
+
+
 class AsyncRunloopSDK:
     """High-level asynchronous entry point for the Runloop SDK.
 
@@ -1101,6 +1225,8 @@ class AsyncRunloopSDK:
     :vartype gateway_config: AsyncGatewayConfigOps
     :ivar mcp_config: High-level async interface for MCP config management
     :vartype mcp_config: AsyncMcpConfigOps
+    :ivar secret: High-level async interface for secret management
+    :vartype secret: AsyncSecretOps
 
     Example:
         >>> runloop = AsyncRunloopSDK()  # Uses RUNLOOP_API_KEY env var
@@ -1120,6 +1246,7 @@ class AsyncRunloopSDK:
     network_policy: AsyncNetworkPolicyOps
     scenario: AsyncScenarioOps
     scorer: AsyncScorerOps
+    secret: AsyncSecretOps
     snapshot: AsyncSnapshotOps
     storage_object: AsyncStorageObjectOps
 
@@ -1168,6 +1295,7 @@ class AsyncRunloopSDK:
         self.gateway_config = AsyncGatewayConfigOps(self.api)
         self.mcp_config = AsyncMcpConfigOps(self.api)
         self.network_policy = AsyncNetworkPolicyOps(self.api)
+        self.secret = AsyncSecretOps(self.api)
         self.scenario = AsyncScenarioOps(self.api)
         self.scorer = AsyncScorerOps(self.api)
         self.snapshot = AsyncSnapshotOps(self.api)
