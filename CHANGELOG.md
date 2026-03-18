@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.12.0 (2026-03-18)
+
+Full Changelog: [v1.11.0...v1.12.0](https://github.com/runloopai/api-client-python/compare/v1.11.0...v1.12.0)
+
+### Features
+
+* add secrets to oo-sdk ([#756](https://github.com/runloopai/api-client-python/issues/756)) ([09c4997](https://github.com/runloopai/api-client-python/commit/09c4997908ca7ec2ab9a45173d4d0bcf33ad2ca2))
+
+
+### Bug Fixes
+
+* **deps:** bump minimum typing-extensions version ([a873aad](https://github.com/runloopai/api-client-python/commit/a873aada5cbf8d29600374039f4d65bd321fa6bb))
+* **pydantic:** do not pass `by_alias` unless set ([baf3a9a](https://github.com/runloopai/api-client-python/commit/baf3a9a8fe64e14f92f31387781f95dc6c7753de))
+
+
+### Chores
+
+* configure new SDK language ([13d3ada](https://github.com/runloopai/api-client-python/commit/13d3adaa20a78b6d02db41369505f28aed92e1f5))
+* **internal:** tweak CI branches ([b374486](https://github.com/runloopai/api-client-python/commit/b374486156c36b01c55135e4a0c1871b78360176))
+
 ## 1.11.0 (2026-03-10)
 
 Full Changelog: [v1.10.3...v1.11.0](https://github.com/runloopai/api-client-python/compare/v1.10.3...v1.11.0)
