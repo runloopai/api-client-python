@@ -145,8 +145,11 @@ class BenchmarkRunsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
-        """
-        Cancel a currently running Benchmark run.
+        """Cancel a Benchmark run.
+
+        This will do the following: 1. Cancel all running
+        scenarios and shutdown the underlying Devbox resources 2. Update the benchmark
+        state to CANCELED 3. Calculate final score from completed scenarios
 
         Args:
           extra_headers: Send extra headers
@@ -388,8 +391,11 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> BenchmarkRunView:
-        """
-        Cancel a currently running Benchmark run.
+        """Cancel a Benchmark run.
+
+        This will do the following: 1. Cancel all running
+        scenarios and shutdown the underlying Devbox resources 2. Update the benchmark
+        state to CANCELED 3. Calculate final score from completed scenarios
 
         Args:
           extra_headers: Send extra headers

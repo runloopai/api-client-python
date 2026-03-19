@@ -24,7 +24,6 @@ from ...types import (
     devbox_shutdown_params,
     devbox_upload_file_params,
     devbox_execute_sync_params,
-    devbox_create_tunnel_params,
     devbox_download_file_params,
     devbox_enable_tunnel_params,
     devbox_execute_async_params,
@@ -96,7 +95,6 @@ from .disk_snapshots import (
 )
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
-from ...types.devbox_tunnel_view import DevboxTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.devbox_resource_usage_view import DevboxResourceUsageView
@@ -459,54 +457,6 @@ class DevboxesResource(SyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=DevboxCreateSSHKeyResponse,
-        )
-
-    @typing_extensions.deprecated("deprecated")
-    def create_tunnel(
-        self,
-        id: str,
-        *,
-        port: int,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxTunnelView:
-        """[Deprecated] Use POST /v1/devboxes/{id}/enable_tunnel instead.
-
-        This endpoint
-        creates a legacy tunnel. The new enable_tunnel endpoint provides improved tunnel
-        functionality with authentication options.
-
-        Args:
-          port: Devbox port that tunnel will expose.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return self._post(
-            f"/v1/devboxes/{id}/create_tunnel",
-            body=maybe_transform({"port": port}, devbox_create_tunnel_params.DevboxCreateTunnelParams),
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxTunnelView,
         )
 
     def delete_disk_snapshot(
@@ -1900,54 +1850,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxCreateSSHKeyResponse,
         )
 
-    @typing_extensions.deprecated("deprecated")
-    async def create_tunnel(
-        self,
-        id: str,
-        *,
-        port: int,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-        idempotency_key: str | None = None,
-    ) -> DevboxTunnelView:
-        """[Deprecated] Use POST /v1/devboxes/{id}/enable_tunnel instead.
-
-        This endpoint
-        creates a legacy tunnel. The new enable_tunnel endpoint provides improved tunnel
-        functionality with authentication options.
-
-        Args:
-          port: Devbox port that tunnel will expose.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-
-          idempotency_key: Specify a custom idempotency key for this request
-        """
-        if not id:
-            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
-        return await self._post(
-            f"/v1/devboxes/{id}/create_tunnel",
-            body=await async_maybe_transform({"port": port}, devbox_create_tunnel_params.DevboxCreateTunnelParams),
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                idempotency_key=idempotency_key,
-            ),
-            cast_to=DevboxTunnelView,
-        )
-
     async def delete_disk_snapshot(
         self,
         id: str,
@@ -3008,11 +2910,6 @@ class DevboxesResourceWithRawResponse:
         self.create_ssh_key = to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
-        self.create_tunnel = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                devboxes.create_tunnel,  # pyright: ignore[reportDeprecated],
-            )
-        )
         self.delete_disk_snapshot = to_raw_response_wrapper(
             devboxes.delete_disk_snapshot,
         )
@@ -3115,11 +3012,6 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.create_ssh_key = async_to_raw_response_wrapper(
             devboxes.create_ssh_key,
-        )
-        self.create_tunnel = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                devboxes.create_tunnel,  # pyright: ignore[reportDeprecated],
-            )
         )
         self.delete_disk_snapshot = async_to_raw_response_wrapper(
             devboxes.delete_disk_snapshot,
@@ -3224,11 +3116,6 @@ class DevboxesResourceWithStreamingResponse:
         self.create_ssh_key = to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
-        self.create_tunnel = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                devboxes.create_tunnel,  # pyright: ignore[reportDeprecated],
-            )
-        )
         self.delete_disk_snapshot = to_streamed_response_wrapper(
             devboxes.delete_disk_snapshot,
         )
@@ -3331,11 +3218,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.create_ssh_key = async_to_streamed_response_wrapper(
             devboxes.create_ssh_key,
-        )
-        self.create_tunnel = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                devboxes.create_tunnel,  # pyright: ignore[reportDeprecated],
-            )
         )
         self.delete_disk_snapshot = async_to_streamed_response_wrapper(
             devboxes.delete_disk_snapshot,

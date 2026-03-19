@@ -171,7 +171,7 @@ class InProgressRun(BaseModel):
     start_time_ms: int
     """Start time (Unix milliseconds)."""
 
-    state: Literal["running", "canceled", "completed"]
+    state: Literal["running", "canceled", "completed", "failed"]
     """The current state of the run."""
 
     agent_config: Optional[InProgressRunAgentConfig] = None
