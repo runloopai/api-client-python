@@ -33,7 +33,6 @@ from .scenario_run_view import ScenarioRunView as ScenarioRunView
 from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
-from .devbox_tunnel_view import DevboxTunnelView as DevboxTunnelView
 from .object_list_params import ObjectListParams as ObjectListParams
 from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
@@ -97,7 +96,6 @@ from .network_policy_list_params import NetworkPolicyListParams as NetworkPolicy
 from .repository_connection_view import RepositoryConnectionView as RepositoryConnectionView
 from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvironmentParam
 from .benchmark_job_create_params import BenchmarkJobCreateParams as BenchmarkJobCreateParams
-from .devbox_create_tunnel_params import DevboxCreateTunnelParams as DevboxCreateTunnelParams
 from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownloadFileParams
 from .devbox_enable_tunnel_params import DevboxEnableTunnelParams as DevboxEnableTunnelParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
