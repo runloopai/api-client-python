@@ -8,7 +8,6 @@ from ..types import (
     DevboxListParams,
     ObjectListParams,
     AgentCreateParams,
-    DevboxCreateParams,
     ObjectCreateParams,
     ScenarioListParams,
     BenchmarkListParams,
@@ -85,10 +84,6 @@ class PollingRequestOptions(BaseRequestOptions, total=False):
 
 
 class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):  # type: ignore[misc]
-    pass
-
-
-class SDKDevboxCreateParams(DevboxCreateParams, LongPollingRequestOptions):
     pass
 
 
