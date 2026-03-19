@@ -280,33 +280,6 @@ class TestNetworkInterface:
             idempotency_key="key-123",
         )
 
-    def test_create_tunnel(self, mock_client: Mock) -> None:
-        """Test create tunnel."""
-        tunnel_view = SimpleNamespace(port=8080)
-        mock_client.devboxes.create_tunnel.return_value = tunnel_view
-
-        devbox = Devbox(mock_client, "dbx_123")
-        with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
-            result = devbox.net.create_tunnel(
-                port=8080,
-                extra_headers={"X-Custom": "value"},
-                extra_query={"param": "value"},
-                extra_body={"key": "value"},
-                timeout=30.0,
-                idempotency_key="key-123",
-            )
-
-        assert result == tunnel_view
-        mock_client.devboxes.create_tunnel.assert_called_once_with(
-            "dbx_123",
-            port=8080,
-            extra_headers={"X-Custom": "value"},
-            extra_query={"param": "value"},
-            extra_body={"key": "value"},
-            timeout=30.0,
-            idempotency_key="key-123",
-        )
-
     def test_remove_tunnel(self, mock_client: Mock) -> None:
         """Test remove tunnel."""
         mock_client.devboxes.remove_tunnel.return_value = object()

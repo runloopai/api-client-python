@@ -179,26 +179,6 @@ class TestAsyncNetworkInterface:
         mock_async_client.devboxes.create_ssh_key.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_create_tunnel(self, mock_async_client: AsyncMock) -> None:
-        """Test create tunnel."""
-        tunnel_view = SimpleNamespace(tunnel_id="tunnel_123")
-        mock_async_client.devboxes.create_tunnel = AsyncMock(return_value=tunnel_view)
-
-        devbox = AsyncDevbox(mock_async_client, "dbx_123")
-        with pytest.warns(DeprecationWarning, match="create_tunnel is deprecated"):
-            result = await devbox.net.create_tunnel(
-                port=8080,
-                extra_headers={"X-Custom": "value"},
-                extra_query={"param": "value"},
-                extra_body={"key": "value"},
-                timeout=30.0,
-                idempotency_key="key-123",
-            )
-
-        assert result == tunnel_view
-        mock_async_client.devboxes.create_tunnel.assert_called_once()
-
-    @pytest.mark.asyncio
     async def test_remove_tunnel(self, mock_async_client: AsyncMock) -> None:
         """Test remove tunnel."""
         mock_async_client.devboxes.remove_tunnel = AsyncMock(return_value=object())
