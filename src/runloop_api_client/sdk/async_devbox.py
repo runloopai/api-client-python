@@ -11,7 +11,6 @@ from typing_extensions import Unpack, override
 from ..types import (
     DevboxView,
     TunnelView,
-    DevboxTunnelView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
@@ -23,7 +22,6 @@ from ._types import (
     SDKDevboxExecuteParams,
     ExecuteStreamingCallbacks,
     SDKDevboxUploadFileParams,
-    SDKDevboxCreateTunnelParams,
     SDKDevboxDownloadFileParams,
     SDKDevboxEnableTunnelParams,
     SDKDevboxExecuteAsyncParams,
@@ -806,34 +804,6 @@ class AsyncNetworkInterface:
             self._devbox.id,
             **options,
         )
-
-    async def create_tunnel(
-        self,
-        **params: Unpack[SDKDevboxCreateTunnelParams],
-    ) -> DevboxTunnelView:
-        """[Deprecated] Create a legacy tunnel to expose a devbox port publicly.
-
-        Use :meth:`enable_tunnel` or configure a tunnel during devbox creation instead.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
-        :return: Details about the public endpoint
-        :rtype: DevboxTunnelView
-
-        Example:
-            >>> tunnel = await devbox.net.create_tunnel(port=8080)
-            >>> print(f"Public URL: {tunnel.url}")
-        """
-        warnings.warn(
-            "create_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            return await self._devbox._client.devboxes.create_tunnel(  # type: ignore[deprecated]
-                self._devbox.id,
-                **params,
-            )
 
     async def enable_tunnel(
         self,
