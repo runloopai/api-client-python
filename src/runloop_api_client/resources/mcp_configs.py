@@ -208,6 +208,7 @@ class McpConfigsResource(SyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -223,6 +224,9 @@ class McpConfigsResource(SyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -249,6 +253,7 @@ class McpConfigsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -485,6 +490,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -500,6 +506,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -526,6 +535,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,

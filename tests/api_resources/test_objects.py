@@ -112,6 +112,7 @@ class TestObjects:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         object_ = client.objects.list(
             content_type="unspecified",
+            include_total_count=True,
             limit=0,
             name="name",
             search="search",
@@ -271,6 +272,7 @@ class TestObjects:
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         object_ = client.objects.list_public(
             content_type="unspecified",
+            include_total_count=True,
             limit=0,
             name="name",
             search="search",
@@ -396,6 +398,7 @@ class TestAsyncObjects:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.list(
             content_type="unspecified",
+            include_total_count=True,
             limit=0,
             name="name",
             search="search",
@@ -555,6 +558,7 @@ class TestAsyncObjects:
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         object_ = await async_client.objects.list_public(
             content_type="unspecified",
+            include_total_count=True,
             limit=0,
             name="name",
             search="search",

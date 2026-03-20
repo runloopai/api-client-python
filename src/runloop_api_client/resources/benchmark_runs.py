@@ -82,6 +82,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -97,6 +98,9 @@ class BenchmarkRunsResource(SyncAPIResource):
 
         Args:
           benchmark_id: The Benchmark ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -123,6 +127,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -220,6 +225,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         self,
         id: str,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
@@ -234,6 +240,9 @@ class BenchmarkRunsResource(SyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -260,6 +269,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "state": state,
@@ -328,6 +338,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -343,6 +354,9 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
 
         Args:
           benchmark_id: The Benchmark ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -369,6 +383,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -466,6 +481,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
@@ -480,6 +496,9 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -506,6 +525,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "state": state,

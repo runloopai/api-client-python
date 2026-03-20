@@ -17,14 +17,5 @@ class AgentListView(BaseModel):
     has_more: bool
     """Whether there are more Agents to fetch."""
 
-    remaining_count: Optional[int] = None
-    """The count of remaining Agents.
-
-    Deprecated: will be removed in a future breaking change.
-    """
-
     total_count: Optional[int] = None
-    """The total count of Agents.
-
-    Deprecated: will be removed in a future breaking change.
-    """
+    """The total count of Agents."""

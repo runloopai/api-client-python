@@ -368,6 +368,7 @@ class DevboxesResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         status: Literal[
@@ -385,6 +386,9 @@ class DevboxesResource(SyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -409,6 +413,7 @@ class DevboxesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "status": status,
@@ -861,6 +866,7 @@ class DevboxesResource(SyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -879,6 +885,9 @@ class DevboxesResource(SyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -910,6 +919,7 @@ class DevboxesResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
@@ -1763,6 +1773,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         status: Literal[
@@ -1780,6 +1791,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
         List all Devboxes while optionally filtering by status.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -1804,6 +1818,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "status": status,
@@ -2256,6 +2271,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -2274,6 +2290,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -2305,6 +2324,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,

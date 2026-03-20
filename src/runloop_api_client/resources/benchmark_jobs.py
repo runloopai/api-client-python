@@ -131,6 +131,7 @@ class BenchmarkJobsResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -145,6 +146,9 @@ class BenchmarkJobsResource(SyncAPIResource):
         [Beta] List all BenchmarkJobs matching filter.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -168,6 +172,7 @@ class BenchmarkJobsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -286,6 +291,7 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -300,6 +306,9 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
         [Beta] List all BenchmarkJobs matching filter.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -323,6 +332,7 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,

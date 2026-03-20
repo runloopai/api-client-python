@@ -102,6 +102,7 @@ class TestBenchmarkJobs:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         benchmark_job = client.benchmark_jobs.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -216,6 +217,7 @@ class TestAsyncBenchmarkJobs:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark_job = await async_client.benchmark_jobs.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",

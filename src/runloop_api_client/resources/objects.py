@@ -144,6 +144,7 @@ class ObjectsResource(SyncAPIResource):
         self,
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
@@ -161,6 +162,9 @@ class ObjectsResource(SyncAPIResource):
 
         Args:
           content_type: Filter storage objects by content type.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -191,6 +195,7 @@ class ObjectsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "content_type": content_type,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "search": search,
@@ -334,6 +339,7 @@ class ObjectsResource(SyncAPIResource):
         self,
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
@@ -351,6 +357,9 @@ class ObjectsResource(SyncAPIResource):
 
         Args:
           content_type: Filter storage objects by content type.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -381,6 +390,7 @@ class ObjectsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "content_type": content_type,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "search": search,
@@ -512,6 +522,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         self,
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
@@ -529,6 +540,9 @@ class AsyncObjectsResource(AsyncAPIResource):
 
         Args:
           content_type: Filter storage objects by content type.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -559,6 +573,7 @@ class AsyncObjectsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "content_type": content_type,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "search": search,
@@ -702,6 +717,7 @@ class AsyncObjectsResource(AsyncAPIResource):
         self,
         *,
         content_type: Literal["unspecified", "text", "binary", "gzip", "tar", "tgz"] | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
@@ -719,6 +735,9 @@ class AsyncObjectsResource(AsyncAPIResource):
 
         Args:
           content_type: Filter storage objects by content type.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -749,6 +768,7 @@ class AsyncObjectsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "content_type": content_type,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "search": search,

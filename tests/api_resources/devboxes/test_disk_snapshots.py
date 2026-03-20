@@ -78,6 +78,7 @@ class TestDiskSnapshots:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         disk_snapshot = client.devboxes.disk_snapshots.list(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
@@ -245,6 +246,7 @@ class TestAsyncDiskSnapshots:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         disk_snapshot = await async_client.devboxes.disk_snapshots.list(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",

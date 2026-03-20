@@ -163,6 +163,7 @@ class TestMcpConfigs:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         mcp_config = client.mcp_configs.list(
             id="id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -376,6 +377,7 @@ class TestAsyncMcpConfigs:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         mcp_config = await async_client.mcp_configs.list(
             id="id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",

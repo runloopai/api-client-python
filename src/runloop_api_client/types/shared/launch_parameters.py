@@ -36,6 +36,12 @@ class LaunchParameters(BaseModel):
     architecture: Optional[Literal["x86_64", "arm64"]] = None
     """The target architecture for the Devbox. If unset, defaults to x86_64."""
 
+    available_ports: Optional[List[int]] = None
+    """[Deprecated] A list of ports to make available on the Devbox.
+
+    This field is ignored.
+    """
+
     custom_cpu_cores: Optional[int] = None
     """Custom CPU cores. Must be 0.5, 1, or a multiple of 2. Max is 16."""
 

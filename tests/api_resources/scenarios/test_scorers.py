@@ -149,6 +149,7 @@ class TestScorers:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         scorer = client.scenarios.scorers.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
         )
@@ -306,6 +307,7 @@ class TestAsyncScorers:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         scorer = await async_client.scenarios.scorers.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
         )

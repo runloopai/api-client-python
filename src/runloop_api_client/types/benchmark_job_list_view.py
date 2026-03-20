@@ -14,6 +14,4 @@ class BenchmarkJobListView(BaseModel):
     jobs: List[BenchmarkJobView]
     """List of BenchmarkJobs matching filter."""
 
-    remaining_count: Optional[int] = None
-
     total_count: Optional[int] = None

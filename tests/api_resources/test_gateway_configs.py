@@ -169,6 +169,7 @@ class TestGatewayConfigs:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         gateway_config = client.gateway_configs.list(
             id="id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -388,6 +389,7 @@ class TestAsyncGatewayConfigs:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         gateway_config = await async_client.gateway_configs.list(
             id="id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",

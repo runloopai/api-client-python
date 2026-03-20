@@ -18,7 +18,4 @@ class McpConfigListView(BaseModel):
     """The list of McpConfigs."""
 
     total_count: Optional[int] = None
-    """Total count of McpConfigs that match the query.
-
-    Deprecated: will be removed in a future breaking change.
-    """
+    """Total count of McpConfigs that match the query."""

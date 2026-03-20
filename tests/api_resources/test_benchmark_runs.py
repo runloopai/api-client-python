@@ -68,6 +68,7 @@ class TestBenchmarkRuns:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         benchmark_run = client.benchmark_runs.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -181,6 +182,7 @@ class TestBenchmarkRuns:
     def test_method_list_scenario_runs_with_all_params(self, client: Runloop) -> None:
         benchmark_run = client.benchmark_runs.list_scenario_runs(
             id="id",
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             state="running",
@@ -271,6 +273,7 @@ class TestAsyncBenchmarkRuns:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark_run = await async_client.benchmark_runs.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -384,6 +387,7 @@ class TestAsyncBenchmarkRuns:
     async def test_method_list_scenario_runs_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark_run = await async_client.benchmark_runs.list_scenario_runs(
             id="id",
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             state="running",

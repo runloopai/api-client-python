@@ -18,7 +18,4 @@ class NetworkPolicyListView(BaseModel):
     """The list of NetworkPolicies."""
 
     total_count: Optional[int] = None
-    """Total count of items in this response.
-
-    Deprecated: will be removed in a future breaking change.
-    """
+    """Total count of items in this response."""

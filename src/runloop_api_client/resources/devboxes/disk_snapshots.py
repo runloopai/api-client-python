@@ -108,6 +108,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -126,6 +127,9 @@ class DiskSnapshotsResource(SyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -157,6 +161,7 @@ class DiskSnapshotsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
@@ -327,6 +332,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -345,6 +351,9 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -376,6 +385,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
