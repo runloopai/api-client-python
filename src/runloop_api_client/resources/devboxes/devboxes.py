@@ -36,7 +36,7 @@ from ...types import (
     devbox_write_file_contents_params,
 )
 from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
-from ..._utils import is_given, extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .browsers import (
     BrowsersResource,
     AsyncBrowsersResource,
@@ -304,7 +304,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/devboxes/{id}",
+            path_template("/v1/devboxes/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -347,7 +347,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}",
+            path_template("/v1/devboxes/{id}", id=id),
             body=maybe_transform(
                 {
                     "metadata": metadata,
@@ -448,7 +448,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/create_ssh_key",
+            path_template("/v1/devboxes/{id}/create_ssh_key", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -488,7 +488,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/disk_snapshots/{id}/delete",
+            path_template("/v1/devboxes/disk_snapshots/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -536,7 +536,7 @@ class DevboxesResource(SyncAPIResource):
             timeout = 600
         extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return self._post(
-            f"/v1/devboxes/{id}/download_file",
+            path_template("/v1/devboxes/{id}/download_file", id=id),
             body=maybe_transform({"path": path}, devbox_download_file_params.DevboxDownloadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -589,7 +589,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/enable_tunnel",
+            path_template("/v1/devboxes/{id}/enable_tunnel", id=id),
             body=maybe_transform(
                 {
                     "auth_mode": auth_mode,
@@ -663,7 +663,7 @@ class DevboxesResource(SyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
-            f"/v1/devboxes/{id}/execute",
+            path_template("/v1/devboxes/{id}/execute", id=id),
             body=maybe_transform(
                 {
                     "command": command,
@@ -729,7 +729,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/execute_async",
+            path_template("/v1/devboxes/{id}/execute_async", id=id),
             body=maybe_transform(
                 {
                     "command": command,
@@ -797,7 +797,7 @@ class DevboxesResource(SyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
-            f"/v1/devboxes/{id}/execute_sync",
+            path_template("/v1/devboxes/{id}/execute_sync", id=id),
             body=maybe_transform(
                 {
                     "command": command,
@@ -846,7 +846,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/keep_alive",
+            path_template("/v1/devboxes/{id}/keep_alive", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -961,7 +961,7 @@ class DevboxesResource(SyncAPIResource):
             timeout = 600
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return self._post(
-            f"/v1/devboxes/{id}/read_file_contents",
+            path_template("/v1/devboxes/{id}/read_file_contents", id=id),
             body=maybe_transform(
                 {"file_path": file_path}, devbox_read_file_contents_params.DevboxReadFileContentsParams
             ),
@@ -1010,7 +1010,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/remove_tunnel",
+            path_template("/v1/devboxes/{id}/remove_tunnel", id=id),
             body=maybe_transform({"port": port}, devbox_remove_tunnel_params.DevboxRemoveTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -1054,7 +1054,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/resume",
+            path_template("/v1/devboxes/{id}/resume", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1095,7 +1095,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/devboxes/{id}/usage",
+            path_template("/v1/devboxes/{id}/usage", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -1139,7 +1139,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/shutdown",
+            path_template("/v1/devboxes/{id}/shutdown", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1192,7 +1192,7 @@ class DevboxesResource(SyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
-            f"/v1/devboxes/{id}/snapshot_disk",
+            path_template("/v1/devboxes/{id}/snapshot_disk", id=id),
             body=maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -1251,7 +1251,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/snapshot_disk_async",
+            path_template("/v1/devboxes/{id}/snapshot_disk_async", id=id),
             body=maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -1301,7 +1301,7 @@ class DevboxesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/suspend",
+            path_template("/v1/devboxes/{id}/suspend", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1362,7 +1362,7 @@ class DevboxesResource(SyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
-            f"/v1/devboxes/{id}/upload_file",
+            path_template("/v1/devboxes/{id}/upload_file", id=id),
             body=maybe_transform(body, devbox_upload_file_params.DevboxUploadFileParams),
             files=files,
             options=make_request_options(
@@ -1420,7 +1420,11 @@ class DevboxesResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=maybe_transform(
                 {
                     "statuses": statuses,
@@ -1479,7 +1483,7 @@ class DevboxesResource(SyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
-            f"/v1/devboxes/{id}/write_file_contents",
+            path_template("/v1/devboxes/{id}/write_file_contents", id=id),
             body=maybe_transform(
                 {
                     "contents": contents,
@@ -1695,7 +1699,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/devboxes/{id}",
+            path_template("/v1/devboxes/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -1738,7 +1742,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}",
+            path_template("/v1/devboxes/{id}", id=id),
             body=await async_maybe_transform(
                 {
                     "metadata": metadata,
@@ -1839,7 +1843,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/create_ssh_key",
+            path_template("/v1/devboxes/{id}/create_ssh_key", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1879,7 +1883,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/disk_snapshots/{id}/delete",
+            path_template("/v1/devboxes/disk_snapshots/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1927,7 +1931,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             timeout = 600
         extra_headers = {"Accept": "application/octet-stream", **(extra_headers or {})}
         return await self._post(
-            f"/v1/devboxes/{id}/download_file",
+            path_template("/v1/devboxes/{id}/download_file", id=id),
             body=await async_maybe_transform({"path": path}, devbox_download_file_params.DevboxDownloadFileParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -1980,7 +1984,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/enable_tunnel",
+            path_template("/v1/devboxes/{id}/enable_tunnel", id=id),
             body=await async_maybe_transform(
                 {
                     "auth_mode": auth_mode,
@@ -2054,7 +2058,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
-            f"/v1/devboxes/{id}/execute",
+            path_template("/v1/devboxes/{id}/execute", id=id),
             body=await async_maybe_transform(
                 {
                     "command": command,
@@ -2120,7 +2124,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/execute_async",
+            path_template("/v1/devboxes/{id}/execute_async", id=id),
             body=await async_maybe_transform(
                 {
                     "command": command,
@@ -2188,7 +2192,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
-            f"/v1/devboxes/{id}/execute_sync",
+            path_template("/v1/devboxes/{id}/execute_sync", id=id),
             body=await async_maybe_transform(
                 {
                     "command": command,
@@ -2237,7 +2241,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/keep_alive",
+            path_template("/v1/devboxes/{id}/keep_alive", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2352,7 +2356,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             timeout = 600
         extra_headers = {"Accept": "text/plain", **(extra_headers or {})}
         return await self._post(
-            f"/v1/devboxes/{id}/read_file_contents",
+            path_template("/v1/devboxes/{id}/read_file_contents", id=id),
             body=await async_maybe_transform(
                 {"file_path": file_path}, devbox_read_file_contents_params.DevboxReadFileContentsParams
             ),
@@ -2401,7 +2405,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/remove_tunnel",
+            path_template("/v1/devboxes/{id}/remove_tunnel", id=id),
             body=await async_maybe_transform({"port": port}, devbox_remove_tunnel_params.DevboxRemoveTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -2445,7 +2449,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/resume",
+            path_template("/v1/devboxes/{id}/resume", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2486,7 +2490,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/devboxes/{id}/usage",
+            path_template("/v1/devboxes/{id}/usage", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -2530,7 +2534,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/shutdown",
+            path_template("/v1/devboxes/{id}/shutdown", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2583,7 +2587,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
-            f"/v1/devboxes/{id}/snapshot_disk",
+            path_template("/v1/devboxes/{id}/snapshot_disk", id=id),
             body=await async_maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -2642,7 +2646,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/snapshot_disk_async",
+            path_template("/v1/devboxes/{id}/snapshot_disk_async", id=id),
             body=await async_maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -2692,7 +2696,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/suspend",
+            path_template("/v1/devboxes/{id}/suspend", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2753,7 +2757,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         # multipart/form-data; boundary=---abc--
         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
-            f"/v1/devboxes/{id}/upload_file",
+            path_template("/v1/devboxes/{id}/upload_file", id=id),
             body=await async_maybe_transform(body, devbox_upload_file_params.DevboxUploadFileParams),
             files=files,
             options=make_request_options(
@@ -2811,7 +2815,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=await async_maybe_transform(
                 {
                     "statuses": statuses,
@@ -2872,7 +2880,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
-            f"/v1/devboxes/{id}/write_file_contents",
+            path_template("/v1/devboxes/{id}/write_file_contents", id=id),
             body=await async_maybe_transform(
                 {
                     "contents": contents,

@@ -6,7 +6,7 @@ import httpx
 
 from ..types import secret_list_params, secret_create_params, secret_update_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -131,7 +131,7 @@ class SecretsResource(SyncAPIResource):
         if not name:
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return self._post(
-            f"/v1/secrets/{name}",
+            path_template("/v1/secrets/{name}", name=name),
             body=maybe_transform({"value": value}, secret_update_params.SecretUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -213,7 +213,7 @@ class SecretsResource(SyncAPIResource):
         if not name:
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return self._post(
-            f"/v1/secrets/{name}/delete",
+            path_template("/v1/secrets/{name}/delete", name=name),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -334,7 +334,7 @@ class AsyncSecretsResource(AsyncAPIResource):
         if not name:
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return await self._post(
-            f"/v1/secrets/{name}",
+            path_template("/v1/secrets/{name}", name=name),
             body=await async_maybe_transform({"value": value}, secret_update_params.SecretUpdateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -416,7 +416,7 @@ class AsyncSecretsResource(AsyncAPIResource):
         if not name:
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return await self._post(
-            f"/v1/secrets/{name}/delete",
+            path_template("/v1/secrets/{name}/delete", name=name),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

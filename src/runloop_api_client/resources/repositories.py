@@ -14,7 +14,7 @@ from ..types import (
     repository_refresh_params,
 )
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -138,7 +138,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/{id}",
+            path_template("/v1/repositories/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -230,7 +230,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/delete",
+            path_template("/v1/repositories/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -274,7 +274,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/inspect",
+            path_template("/v1/repositories/{id}/inspect", id=id),
             body=maybe_transform(
                 {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
@@ -315,7 +315,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/{id}/inspections",
+            path_template("/v1/repositories/{id}/inspections", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -359,7 +359,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/refresh",
+            path_template("/v1/repositories/{id}/refresh", id=id),
             body=maybe_transform(
                 {
                     "blueprint_id": blueprint_id,
@@ -403,7 +403,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/inspections/{id}",
+            path_template("/v1/repositories/inspections/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -517,7 +517,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/{id}",
+            path_template("/v1/repositories/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -609,7 +609,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/delete",
+            path_template("/v1/repositories/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -653,7 +653,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/inspect",
+            path_template("/v1/repositories/{id}/inspect", id=id),
             body=await async_maybe_transform(
                 {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
@@ -694,7 +694,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/{id}/inspections",
+            path_template("/v1/repositories/{id}/inspections", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -738,7 +738,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/refresh",
+            path_template("/v1/repositories/{id}/refresh", id=id),
             body=await async_maybe_transform(
                 {
                     "blueprint_id": blueprint_id,
@@ -782,7 +782,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/inspections/{id}",
+            path_template("/v1/repositories/inspections/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
