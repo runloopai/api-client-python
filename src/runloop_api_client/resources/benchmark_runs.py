@@ -8,7 +8,7 @@ import httpx
 
 from ..types import benchmark_run_list_params, benchmark_run_list_scenario_runs_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform
+from .._utils import path_template, maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -71,7 +71,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/benchmark_runs/{id}",
+            path_template("/v1/benchmark_runs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -165,7 +165,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmark_runs/{id}/cancel",
+            path_template("/v1/benchmark_runs/{id}/cancel", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -205,7 +205,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmark_runs/{id}/complete",
+            path_template("/v1/benchmark_runs/{id}/complete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -251,7 +251,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmark_runs/{id}/scenario_runs",
+            path_template("/v1/benchmark_runs/{id}/scenario_runs", id=id),
             page=SyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -317,7 +317,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/benchmark_runs/{id}",
+            path_template("/v1/benchmark_runs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -411,7 +411,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmark_runs/{id}/cancel",
+            path_template("/v1/benchmark_runs/{id}/cancel", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -451,7 +451,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmark_runs/{id}/complete",
+            path_template("/v1/benchmark_runs/{id}/complete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -497,7 +497,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmark_runs/{id}/scenario_runs",
+            path_template("/v1/benchmark_runs/{id}/scenario_runs", id=id),
             page=AsyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
