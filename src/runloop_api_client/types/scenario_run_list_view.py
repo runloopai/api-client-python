@@ -14,6 +14,4 @@ class ScenarioRunListView(BaseModel):
     runs: List[ScenarioRunView]
     """List of ScenarioRuns matching filter."""
 
-    remaining_count: Optional[int] = None
-
     total_count: Optional[int] = None

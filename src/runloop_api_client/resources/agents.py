@@ -137,6 +137,7 @@ class AgentsResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         is_public: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
@@ -154,6 +155,9 @@ class AgentsResource(SyncAPIResource):
         List all Agents for the authenticated account with pagination support.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           is_public: Filter agents by public visibility.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
@@ -184,6 +188,7 @@ class AgentsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "is_public": is_public,
                         "limit": limit,
                         "name": name,
@@ -310,6 +315,7 @@ class AsyncAgentsResource(AsyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         is_public: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
@@ -327,6 +333,9 @@ class AsyncAgentsResource(AsyncAPIResource):
         List all Agents for the authenticated account with pagination support.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           is_public: Filter agents by public visibility.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
@@ -357,6 +366,7 @@ class AsyncAgentsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "is_public": is_public,
                         "limit": limit,
                         "name": name,

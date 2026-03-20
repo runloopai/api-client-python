@@ -17,14 +17,5 @@ class SecretListView(BaseModel):
     secrets: List[SecretView]
     """List of Secret objects. Values are omitted for security."""
 
-    remaining_count: Optional[int] = None
-    """Number of Secrets remaining after this page.
-
-    Deprecated: will be removed in a future breaking change.
-    """
-
     total_count: Optional[int] = None
-    """Total number of Secrets across all pages.
-
-    Deprecated: will be removed in a future breaking change.
-    """
+    """Total number of Secrets across all pages."""

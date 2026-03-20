@@ -78,6 +78,7 @@ class TestDevboxes:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -229,6 +230,7 @@ class TestDevboxes:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             status="provisioning",
@@ -652,6 +654,7 @@ class TestDevboxes:
     def test_method_list_disk_snapshots_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
@@ -1698,6 +1701,7 @@ class TestAsyncDevboxes:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -1849,6 +1853,7 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             status="provisioning",
@@ -2272,6 +2277,7 @@ class TestAsyncDevboxes:
     async def test_method_list_disk_snapshots_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",

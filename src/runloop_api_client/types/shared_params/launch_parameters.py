@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Literal, Required, TypedDict
 
 from ..._types import SequenceNotStr
@@ -37,6 +37,12 @@ class LaunchParameters(TypedDict, total=False):
 
     architecture: Optional[Literal["x86_64", "arm64"]]
     """The target architecture for the Devbox. If unset, defaults to x86_64."""
+
+    available_ports: Optional[Iterable[int]]
+    """[Deprecated] A list of ports to make available on the Devbox.
+
+    This field is ignored.
+    """
 
     custom_cpu_cores: Optional[int]
     """Custom CPU cores. Must be 0.5, 1, or a multiple of 2. Max is 16."""

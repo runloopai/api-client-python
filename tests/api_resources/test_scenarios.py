@@ -72,6 +72,7 @@ class TestScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,
@@ -206,6 +207,7 @@ class TestScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,
@@ -290,6 +292,7 @@ class TestScenarios:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -363,6 +366,7 @@ class TestScenarios:
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -411,6 +415,7 @@ class TestScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,
@@ -518,6 +523,7 @@ class TestAsyncScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,
@@ -652,6 +658,7 @@ class TestAsyncScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,
@@ -736,6 +743,7 @@ class TestAsyncScenarios:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -809,6 +817,7 @@ class TestAsyncScenarios:
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -857,6 +866,7 @@ class TestAsyncScenarios:
                         "on_idle": "shutdown",
                     },
                     "architecture": "x86_64",
+                    "available_ports": [0],
                     "custom_cpu_cores": 0,
                     "custom_disk_size": 0,
                     "custom_gb_memory": 0,

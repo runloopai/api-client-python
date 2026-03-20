@@ -56,6 +56,7 @@ class TestBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -181,6 +182,7 @@ class TestBlueprints:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -269,6 +271,7 @@ class TestBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -323,6 +326,7 @@ class TestBlueprints:
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         blueprint = client.blueprints.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -422,6 +426,7 @@ class TestBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -519,6 +524,7 @@ class TestAsyncBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -644,6 +650,7 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -732,6 +739,7 @@ class TestAsyncBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,
@@ -786,6 +794,7 @@ class TestAsyncBlueprints:
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         blueprint = await async_client.blueprints.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -885,6 +894,7 @@ class TestAsyncBlueprints:
                     "on_idle": "shutdown",
                 },
                 "architecture": "x86_64",
+                "available_ports": [0],
                 "custom_cpu_cores": 0,
                 "custom_disk_size": 0,
                 "custom_gb_memory": 0,

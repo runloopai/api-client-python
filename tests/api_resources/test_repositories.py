@@ -114,6 +114,7 @@ class TestRepositories:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         repository = client.repositories.list(
+            include_total_count=True,
             limit=0,
             name="name",
             owner="owner",
@@ -451,6 +452,7 @@ class TestAsyncRepositories:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         repository = await async_client.repositories.list(
+            include_total_count=True,
             limit=0,
             name="name",
             owner="owner",

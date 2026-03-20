@@ -14,6 +14,4 @@ class DevboxListView(BaseModel):
 
     has_more: bool
 
-    remaining_count: Optional[int] = None
-
     total_count: Optional[int] = None

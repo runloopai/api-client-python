@@ -298,6 +298,7 @@ class ScenariosResource(SyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -314,6 +315,9 @@ class ScenariosResource(SyncAPIResource):
 
         Args:
           benchmark_id: Filter scenarios by benchmark ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -342,6 +346,7 @@ class ScenariosResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -398,6 +403,7 @@ class ScenariosResource(SyncAPIResource):
     def list_public(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -412,6 +418,9 @@ class ScenariosResource(SyncAPIResource):
         List all public scenarios matching filter.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
@@ -436,6 +445,7 @@ class ScenariosResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -810,6 +820,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -826,6 +837,9 @@ class AsyncScenariosResource(AsyncAPIResource):
 
         Args:
           benchmark_id: Filter scenarios by benchmark ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -854,6 +868,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -910,6 +925,7 @@ class AsyncScenariosResource(AsyncAPIResource):
     def list_public(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -924,6 +940,9 @@ class AsyncScenariosResource(AsyncAPIResource):
         List all public scenarios matching filter.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
@@ -948,6 +967,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,

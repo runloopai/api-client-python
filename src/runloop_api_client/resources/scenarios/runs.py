@@ -90,6 +90,7 @@ class RunsResource(SyncAPIResource):
         self,
         *,
         benchmark_run_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         scenario_id: str | Omit = omit,
@@ -107,6 +108,9 @@ class RunsResource(SyncAPIResource):
 
         Args:
           benchmark_run_id: Filter by benchmark run ID
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -137,6 +141,7 @@ class RunsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_run_id": benchmark_run_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "scenario_id": scenario_id,
@@ -510,6 +515,7 @@ class AsyncRunsResource(AsyncAPIResource):
         self,
         *,
         benchmark_run_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         scenario_id: str | Omit = omit,
@@ -527,6 +533,9 @@ class AsyncRunsResource(AsyncAPIResource):
 
         Args:
           benchmark_run_id: Filter by benchmark run ID
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -557,6 +566,7 @@ class AsyncRunsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_run_id": benchmark_run_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "scenario_id": scenario_id,

@@ -148,6 +148,7 @@ class RepositoriesResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         owner: str | Omit = omit,
@@ -163,6 +164,9 @@ class RepositoriesResource(SyncAPIResource):
         List all available repository connections.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
@@ -189,6 +193,7 @@ class RepositoriesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "owner": owner,
@@ -527,6 +532,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         owner: str | Omit = omit,
@@ -542,6 +548,9 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         List all available repository connections.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
@@ -568,6 +577,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "owner": owner,
