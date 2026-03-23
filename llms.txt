@@ -11,7 +11,9 @@
 ## Core Patterns
 
 - [Devbox lifecycle example](examples/devbox_from_blueprint_lifecycle.py): Create blueprint, launch devbox, run commands, cleanup
+- [Devbox snapshot and resume example](examples/devbox_snapshot_resume.py): Snapshot disk, resume from snapshot, verify state isolation
 - [MCP GitHub example](examples/mcp_github_tools.py): MCP Hub integration with Claude Code
+- [Secrets with Devbox example](examples/secrets_with_devbox.py): Create secret, inject into devbox, verify, cleanup
 
 ## API Reference
 
@@ -22,9 +24,9 @@
 
 - **Prefer `AsyncRunloopSDK` over `RunloopSDK`** for better concurrency and performance; all SDK methods have async equivalents
 - Use `async with await runloop.devbox.create()` for automatic cleanup via context manager
-- For resources without SDK coverage (e.g., secrets, benchmarks), use `runloop.api.*` as a fallback
-- Use `await devbox.cmd.exec('command')` for most commands—blocks until completion, returns `ExecutionResult` with stdout/stderr
-- Use `await devbox.cmd.exec_async('command')` for long-running or background processes (servers, watchers)—returns immediately with `Execution` handle to check status, get result, or kill
+- For resources without SDK coverage (e.g., benchmarks), use `runloop.api.*` as a fallback
+- Use `await devbox.cmd.exec('command')` for commands expected to return immediately (e.g., `echo`, `pwd`, `cat`)—blocks until completion, returns `ExecutionResult` with stdout/stderr
+- Use `await devbox.cmd.exec_async('command')` for long-running or background processes (servers, watchers, builds)—returns immediately with `Execution` handle to check status, get result, or kill
 - Both `exec` and `exec_async` support streaming callbacks (`stdout`, `stderr`, `output`) for real-time output
 - Call `await devbox.shutdown()` to clean up resources that are no longer in use.
 - Streaming callbacks (`stdout`, `stderr`, `output`) must be synchronous functions even with async SDK

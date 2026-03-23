@@ -22,7 +22,7 @@ class BenchmarkRunView(BaseModel):
     start_time_ms: int
     """The time the benchmark run execution started (Unix timestamp milliseconds)."""
 
-    state: Literal["running", "canceled", "completed"]
+    state: Literal["running", "canceled", "completed", "failed"]
     """The state of the BenchmarkRun."""
 
     benchmark_id: Optional[str] = None

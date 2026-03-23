@@ -15,7 +15,6 @@ from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     DevboxView,
     TunnelView,
-    DevboxTunnelView,
     DevboxSnapshotView,
     DevboxResourceUsageView,
     DevboxExecutionDetailView,
@@ -294,53 +293,6 @@ class TestDevboxes:
             client.devboxes.with_raw_response.create_ssh_key(
                 "",
             )
-
-    @parametrize
-    def test_method_create_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            devbox = client.devboxes.create_tunnel(
-                id="id",
-                port=0,
-            )
-
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-    @parametrize
-    def test_raw_response_create_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = client.devboxes.with_raw_response.create_tunnel(
-                id="id",
-                port=0,
-            )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        devbox = response.parse()
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-    @parametrize
-    def test_streaming_response_create_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with client.devboxes.with_streaming_response.create_tunnel(
-                id="id",
-                port=0,
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-                devbox = response.parse()
-                assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_path_params_create_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-                client.devboxes.with_raw_response.create_tunnel(
-                    id="",
-                    port=0,
-                )
 
     @parametrize
     def test_method_delete_disk_snapshot(self, client: Runloop) -> None:
@@ -1087,7 +1039,7 @@ class TestDevboxes:
         devbox = client.devboxes.upload_file(
             id="id",
             path="path",
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(object, devbox, path=["response"])
 
@@ -1964,53 +1916,6 @@ class TestAsyncDevboxes:
             )
 
     @parametrize
-    async def test_method_create_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            devbox = await async_client.devboxes.create_tunnel(
-                id="id",
-                port=0,
-            )
-
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-    @parametrize
-    async def test_raw_response_create_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = await async_client.devboxes.with_raw_response.create_tunnel(
-                id="id",
-                port=0,
-            )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        devbox = await response.parse()
-        assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_create_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            async with async_client.devboxes.with_streaming_response.create_tunnel(
-                id="id",
-                port=0,
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-                devbox = await response.parse()
-                assert_matches_type(DevboxTunnelView, devbox, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_path_params_create_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-                await async_client.devboxes.with_raw_response.create_tunnel(
-                    id="",
-                    port=0,
-                )
-
-    @parametrize
     async def test_method_delete_disk_snapshot(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.delete_disk_snapshot(
             "id",
@@ -2755,7 +2660,7 @@ class TestAsyncDevboxes:
         devbox = await async_client.devboxes.upload_file(
             id="id",
             path="path",
-            file=b"raw file contents",
+            file=b"Example data",
         )
         assert_matches_type(object, devbox, path=["response"])
 

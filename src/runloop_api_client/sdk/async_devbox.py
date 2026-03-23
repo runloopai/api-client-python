@@ -11,7 +11,6 @@ from typing_extensions import Unpack, override
 from ..types import (
     DevboxView,
     TunnelView,
-    DevboxTunnelView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
 )
@@ -23,7 +22,6 @@ from ._types import (
     SDKDevboxExecuteParams,
     ExecuteStreamingCallbacks,
     SDKDevboxUploadFileParams,
-    SDKDevboxCreateTunnelParams,
     SDKDevboxDownloadFileParams,
     SDKDevboxEnableTunnelParams,
     SDKDevboxExecuteAsyncParams,
@@ -33,6 +31,7 @@ from ._types import (
     SDKDevboxSnapshotDiskAsyncParams,
     SDKDevboxWriteFileContentsParams,
 )
+from .._types import omit
 from .._client import AsyncRunloop
 from ._helpers import filter_params
 from .._streaming import AsyncStream
@@ -41,6 +40,7 @@ from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
+from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
 StreamFactory = Callable[[], Awaitable[AsyncStream[ExecutionUpdateChunk]]]
@@ -162,6 +162,38 @@ class AsyncDevbox:
         if tunnel_view is None:
             return None
         return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.runloop.ai"
+
+    async def logs(
+        self,
+        *,
+        execution_id: str | None = None,
+        shell_name: str | None = None,
+        **options: Unpack[BaseRequestOptions],
+    ) -> DevboxLogsListView:
+        """Retrieve logs for the devbox.
+
+        Returns all logs from a running or completed devbox. Optionally filter
+        by execution ID or shell name.
+
+        :param execution_id: Filter logs by execution ID, defaults to None
+        :type execution_id: str | None, optional
+        :param shell_name: Filter logs by shell name, defaults to None
+        :type shell_name: str | None, optional
+        :param options: Optional request configuration
+        :return: Log entries for the devbox
+        :rtype: :class:`~runloop_api_client.types.devboxes.devbox_logs_list_view.DevboxLogsListView`
+
+        Example:
+            >>> logs = await devbox.logs()
+            >>> for log in logs.logs:
+            ...     print(f"[{log.level}] {log.message}")
+        """
+        return await self._client.devboxes.logs.list(
+            self._id,
+            execution_id=execution_id if execution_id is not None else omit,
+            shell_name=shell_name if shell_name is not None else omit,
+            **options,
+        )
 
     async def await_running(self, *, polling_config: PollingConfig | None = None) -> DevboxView:
         """Wait for the devbox to reach running state.
@@ -772,34 +804,6 @@ class AsyncNetworkInterface:
             self._devbox.id,
             **options,
         )
-
-    async def create_tunnel(
-        self,
-        **params: Unpack[SDKDevboxCreateTunnelParams],
-    ) -> DevboxTunnelView:
-        """[Deprecated] Create a legacy tunnel to expose a devbox port publicly.
-
-        Use :meth:`enable_tunnel` or configure a tunnel during devbox creation instead.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams` for available parameters
-        :return: Details about the public endpoint
-        :rtype: DevboxTunnelView
-
-        Example:
-            >>> tunnel = await devbox.net.create_tunnel(port=8080)
-            >>> print(f"Public URL: {tunnel.url}")
-        """
-        warnings.warn(
-            "create_tunnel is deprecated; use enable_tunnel or configure a tunnel at devbox creation.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            return await self._devbox._client.devboxes.create_tunnel(  # type: ignore[deprecated]
-                self._devbox.id,
-                **params,
-            )
 
     async def enable_tunnel(
         self,

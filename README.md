@@ -497,6 +497,17 @@ print(runloop_api_client.__version__)
 
 Python 3.9 or higher.
 
+## Development
+
+After cloning the repository, run the bootstrap script and install git hooks:
+
+```sh
+./scripts/bootstrap
+./scripts/install-hooks
+```
+
+This installs pre-push hooks that run linting and verify generated files are up to date.
+
 ## Contributing
 
 See [the contributing documentation](./CONTRIBUTING.md).

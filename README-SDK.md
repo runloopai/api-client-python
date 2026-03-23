@@ -116,6 +116,7 @@ The SDK provides object-oriented interfaces for all major Runloop resources:
 - **`runloop.blueprint`** - Blueprint management (create, list, build blueprints)
 - **`runloop.snapshot`** - Snapshot management (list disk snapshots)
 - **`runloop.storage_object`** - Storage object management (upload, download, list objects)
+- **`runloop.secret`** - Secret management (create, update, list, delete encrypted key-value pairs)
 - **`runloop.api`** - Direct access to the underlying REST API client
 
 ### Devbox
@@ -160,13 +161,13 @@ print(f"Devbox {info.name} is {info.status}")
 Execute commands synchronously or asynchronously:
 
 ```python
-# Synchronous command execution (waits for completion)
+# exec blocks until completion - use for commands that return immediately
 result = devbox.cmd.exec("ls -la")
 print("Output:", result.stdout())
 print("Exit code:", result.exit_code)
 print("Success:", result.success)
 
-# Asynchronous command execution (returns immediately)
+# exec_async returns immediately - use for long-running processes
 execution = devbox.cmd.exec_async("npm run dev")
 
 # Check execution status
@@ -393,11 +394,30 @@ async with await runloop.devbox.create(name="temp-devbox") as devbox:
 # devbox is automatically shutdown when exiting the context
 ```
 
+#### Devbox Logs
+
+Retrieve logs from a devbox, optionally filtered by execution ID or shell name:
+
+```python
+# Get all devbox logs
+logs = devbox.logs()
+for log in logs.logs:
+    print(f"[{log.level}] {log.message}")
+
+# Filter logs by execution ID
+result = devbox.cmd.exec('echo "hello"')
+exec_logs = devbox.logs(execution_id=result.execution_id)
+
+# Filter logs by shell name
+shell_logs = devbox.logs(shell_name="my-shell")
+```
+
 **Key methods:**
 
 - `devbox.get_info()` - Get devbox details and status
 - `devbox.cmd.exec()` - Execute commands synchronously
 - `devbox.cmd.exec_async()` - Execute commands asynchronously
+- `devbox.logs()` - Retrieve devbox logs (optionally filter by execution_id or shell_name)
 - `devbox.file.read()` - Read file contents
 - `devbox.file.write()` - Write file contents
 - `devbox.file.upload()` - Upload files
