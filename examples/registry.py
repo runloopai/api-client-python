@@ -33,19 +33,16 @@ example_registry: list[ExampleRegistryEntry] = [
         "run": run_devbox_from_blueprint_lifecycle_example,
     },
     {
-<<<<<<< HEAD
         "slug": "devbox-tunnel",
         "title": "Devbox Tunnel (HTTP Server Access)",
         "file_name": "devbox_tunnel.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_tunnel_example,
-=======
         "slug": "devbox-snapshot-resume",
         "title": "Devbox Snapshot and Resume",
         "file_name": "devbox_snapshot_resume.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_snapshot_resume_example,
->>>>>>> main
     },
     {
         "slug": "mcp-github-tools",
