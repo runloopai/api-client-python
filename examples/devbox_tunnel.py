@@ -3,11 +3,10 @@
 ---
 title: Devbox Tunnel (HTTP Server Access)
 slug: devbox-tunnel
-use_case: Create a devbox, start an HTTP server, enable a tunnel, and access the server from the local machine through the tunnel. Uses the async SDK.
+use_case: Create a devbox with a tunnel, start an HTTP server, and access the server from the local machine through the tunnel. Uses the async SDK.
 workflow:
-  - Create a devbox
+  - Create a devbox with tunnel configuration
   - Start an HTTP server inside the devbox
-  - Enable a tunnel for external access
   - Make an HTTP request from the local machine through the tunnel
   - Validate the response
   - Shutdown the devbox
@@ -40,7 +39,7 @@ SERVER_STARTUP_DELAY_S = 2
 
 
 async def recipe(ctx: RecipeContext) -> RecipeOutput:
-    """Create a devbox, start an HTTP server, enable a tunnel, and access it from the local machine."""
+    """Create a devbox with a tunnel, start an HTTP server, and access it from the local machine."""
     cleanup = ctx.cleanup
 
     sdk = AsyncRunloopSDK()
@@ -50,6 +49,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         launch_parameters={
             "resource_size_request": "X_SMALL",
         },
+        tunnel={"auth_mode": "open"},
     )
     cleanup.add(f"devbox:{devbox.id}", devbox.shutdown)
 
@@ -60,15 +60,17 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     # Give the server a moment to start
     await asyncio.sleep(SERVER_STARTUP_DELAY_S)
 
-    # Enable a tunnel to expose the HTTP server
-    # For authenticated tunnels, use auth_mode="authenticated" and include the auth_token
+    # The tunnel was created with the devbox. For authenticated tunnels, set
+    # tunnel={"auth_mode": "authenticated"} on create and include the auth_token
     # in your requests via the Authorization header: `Authorization: Bearer {tunnel.auth_token}`
-    tunnel = await devbox.net.enable_tunnel(auth_mode="open")
+    tunnel = await devbox.get_tunnel()
+    if tunnel is None:
+        raise RuntimeError("Failed to create tunnel at devbox launch time")
 
     # Get the tunnel URL for the server port
     tunnel_url = await devbox.get_tunnel_url(HTTP_SERVER_PORT)
     if tunnel_url is None:
-        raise RuntimeError("Failed to get tunnel URL after enabling tunnel")
+        raise RuntimeError("Failed to get tunnel URL after creating tunnel")
 
     # Make an HTTP request from the LOCAL MACHINE through the tunnel to the devbox
     # This demonstrates that the tunnel allows external access to the devbox service
