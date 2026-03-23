@@ -1,20 +1,22 @@
 #!/usr/bin/env -S uv run python
 """
 ---
-title: Secrets with Devbox via Agent Gateway
+title: Secrets with Devbox and Agent Gateway
 slug: secrets-with-devbox
-use_case: Create a secret, proxy it into a devbox through agent gateway, verify the devbox only gets gateway credentials, and clean up.
+use_case: Use a normal secret for sensitive app data in the devbox and agent gateway for upstream API credentials that should never be exposed to the agent.
 workflow:
-  - Create a secret with a test credential
+  - Create a secret for application data that should be available inside the devbox
+  - Create a separate secret for an upstream API credential
   - Create an agent gateway config for an upstream API
-  - Launch a devbox with the gateway wired to the secret
-  - Verify the devbox receives a gateway URL and token instead of the raw secret
-  - Shutdown the devbox and delete the gateway config and secret
+  - Launch a devbox with one secret injected directly and the credential wired through agent gateway
+  - Verify the devbox can read MAGIC_NUMBER while the upstream API credential is replaced with gateway values
+  - Shutdown the devbox and delete the gateway config and both secrets
 tags:
   - secrets
   - devbox
   - agent-gateway
   - credentials
+  - environment-variables
   - cleanup
 prerequisites:
   - RUNLOOP_API_KEY
@@ -33,34 +35,56 @@ from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 # Note: do NOT hardcode secret values in your code!
 # This is example code only; use environment variables instead!
 _EXAMPLE_GATEWAY_ENDPOINT = "https://api.example.com"
-_EXAMPLE_SECRET_VALUE = "example-upstream-api-key"
+_UPSTREAM_CREDENTIAL_VALUE = "example-upstream-api-key"
+_MAGIC_NUMBER_VALUE = "42"
 
 
 def recipe(ctx: RecipeContext) -> RecipeOutput:
-    """Create a secret, proxy it through an agent gateway, and verify the devbox only gets gateway credentials."""
+    """Demonstrate direct secret injection for app data and agent gateway protection for upstream credentials."""
     cleanup = ctx.cleanup
 
     sdk = RunloopSDK()
     resources_created: list[str] = []
     checks: list[ExampleCheck] = []
 
-    secret_name = unique_name("agent-gateway-secret")
+    magic_number_name = unique_name("magic-number-secret")
+    upstream_credential_name = unique_name("agent-gateway-secret")
 
-    secret = sdk.secret.create(name=secret_name, value=_EXAMPLE_SECRET_VALUE)
-    resources_created.append(f"secret:{secret_name}")
-    cleanup.add(f"secret:{secret_name}", lambda: secret.delete())
+    magic_number_secret = sdk.secret.create(name=magic_number_name, value=_MAGIC_NUMBER_VALUE)
+    resources_created.append(f"secret:{magic_number_name}")
+    cleanup.add(f"secret:{magic_number_name}", magic_number_secret.delete)
 
-    secret_info = secret.get_info()
+    magic_number_info = magic_number_secret.get_info()
     checks.append(
         ExampleCheck(
-            name="secret created successfully",
-            passed=secret.name == secret_name and secret_info.id.startswith("sec_"),
-            details=f"name={secret.name}, id={secret_info.id}",
+            name="magic number secret created successfully",
+            passed=(magic_number_secret.name == magic_number_name and magic_number_info.id.startswith("sec_")),
+            details=f"name={magic_number_secret.name}, id={magic_number_info.id}",
         )
     )
 
-    # Hide upstream credentials from the devbox by routing requests through an
-    # agent gateway config. This prevents direct secret exfiltration.
+    upstream_credential_secret = sdk.secret.create(
+        name=upstream_credential_name,
+        value=_UPSTREAM_CREDENTIAL_VALUE,
+    )
+    resources_created.append(f"secret:{upstream_credential_name}")
+    cleanup.add(f"secret:{upstream_credential_name}", upstream_credential_secret.delete)
+
+    upstream_credential_info = upstream_credential_secret.get_info()
+    checks.append(
+        ExampleCheck(
+            name="upstream credential secret created successfully",
+            passed=(
+                upstream_credential_secret.name == upstream_credential_name
+                and upstream_credential_info.id.startswith("sec_")
+            ),
+            details=(f"name={upstream_credential_secret.name}, id={upstream_credential_info.id}"),
+        )
+    )
+
+    # Use direct secret injection when code inside the devbox legitimately needs
+    # the secret value at runtime. Use agent gateway for upstream credentials
+    # that should never be exposed to the agent.
     gateway_config = sdk.gateway_config.create(
         name=unique_name("agent-gateway-config"),
         endpoint=_EXAMPLE_GATEWAY_ENDPOINT,
@@ -81,10 +105,13 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
 
     devbox = sdk.devbox.create(
         name=unique_name("agent-gateway-devbox"),
+        secrets={
+            "MAGIC_NUMBER": magic_number_secret.name,
+        },
         gateways={
             "MY_API": {
                 "gateway": gateway_config.id,
-                "secret": secret.name,
+                "secret": upstream_credential_secret.name,
             }
         },
         launch_parameters={
@@ -112,6 +139,16 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
         )
     )
 
+    magic_number_result = devbox.cmd.exec("echo $MAGIC_NUMBER")
+    magic_number = magic_number_result.stdout().strip()
+    checks.append(
+        ExampleCheck(
+            name="devbox receives plain secret when app needs the value",
+            passed=(magic_number_result.exit_code == 0 and magic_number == _MAGIC_NUMBER_VALUE),
+            details=(f"exit_code={magic_number_result.exit_code}, MAGIC_NUMBER={magic_number}"),
+        )
+    )
+
     url_result = devbox.cmd.exec("echo $MY_API_URL")
     gateway_url = url_result.stdout().strip()
     checks.append(
@@ -130,7 +167,7 @@ def recipe(ctx: RecipeContext) -> RecipeOutput:
             passed=(
                 token_result.exit_code == 0
                 and gateway_token.startswith("gws_")
-                and gateway_token != _EXAMPLE_SECRET_VALUE
+                and gateway_token != _UPSTREAM_CREDENTIAL_VALUE
             ),
             details=(f"exit_code={token_result.exit_code}, token_prefix={gateway_token[:4] or 'missing'}"),
         )
