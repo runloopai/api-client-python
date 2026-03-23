@@ -13,7 +13,7 @@
 - [Devbox lifecycle example](examples/devbox_from_blueprint_lifecycle.py): Create blueprint, launch devbox, run commands, cleanup
 - [Devbox snapshot and resume example](examples/devbox_snapshot_resume.py): Snapshot disk, resume from snapshot, verify state isolation
 - [MCP GitHub example](examples/mcp_github_tools.py): MCP Hub integration with Claude Code
-- [Secrets with Devbox example](examples/secrets_with_devbox.py): Create secret, inject into devbox, verify, cleanup
+- [Secrets with Devbox example](examples/secrets_with_devbox.py): Create secret, protect it with agent gateway config, verify gateway credentials in devbox, cleanup
 
 ## API Reference
 

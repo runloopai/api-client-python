@@ -12,7 +12,7 @@ Runnable examples live in [`examples/`](./examples).
 - [Devbox Snapshot and Resume](#devbox-snapshot-resume)
 - [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
-- [Secrets with Devbox (Create, Inject, Verify, Delete)](#secrets-with-devbox)
+- [Secrets with Devbox via Agent Gateway](#secrets-with-devbox)
 
 <a id="blueprint-with-build-context"></a>
 ## Blueprint with Build Context
@@ -168,20 +168,18 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Source:** [`examples/mcp_github_tools.py`](./examples/mcp_github_tools.py)
 
 <a id="secrets-with-devbox"></a>
-## Secrets with Devbox (Create, Inject, Verify, Delete)
+## Secrets with Devbox via Agent Gateway
 
-**Use case:** Create a secret, inject it into a devbox as an environment variable, verify access, and clean up.
+**Use case:** Create a secret, proxy it into a devbox through agent gateway, verify the devbox only gets gateway credentials, and clean up.
 
-**Tags:** `secrets`, `devbox`, `environment-variables`, `cleanup`
+**Tags:** `secrets`, `devbox`, `agent-gateway`, `credentials`, `cleanup`
 
 ### Workflow
-- Create a secret with a test value
-- Create a devbox with the secret mapped to an env var
-- Execute a command that reads the secret from the environment
-- Verify the value matches
-- Update the secret and verify
-- List secrets and verify the secret appears
-- Shutdown devbox and delete secret
+- Create a secret with a test credential
+- Create an agent gateway config for an upstream API
+- Launch a devbox with the gateway wired to the secret
+- Verify the devbox receives a gateway URL and token instead of the raw secret
+- Shutdown the devbox and delete the gateway config and secret
 
 ### Prerequisites
 - `RUNLOOP_API_KEY`
