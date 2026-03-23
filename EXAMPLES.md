@@ -10,6 +10,7 @@ Runnable examples live in [`examples/`](./examples).
 - [Blueprint with Build Context](#blueprint-with-build-context)
 - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
 - [Devbox Snapshot and Resume](#devbox-snapshot-resume)
+- [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
 - [Secrets with Devbox (Create, Inject, Verify, Delete)](#secrets-with-devbox)
 
@@ -104,6 +105,35 @@ uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_snapshot_resume.py`](./examples/devbox_snapshot_resume.py)
+
+<a id="devbox-tunnel"></a>
+## Devbox Tunnel (HTTP Server Access)
+
+**Use case:** Create a devbox with a tunnel, start an HTTP server, and access the server from the local machine through the tunnel. Uses the async SDK.
+
+**Tags:** `devbox`, `tunnel`, `networking`, `http`, `async`
+
+### Workflow
+- Create a devbox with tunnel configuration
+- Start an HTTP server inside the devbox
+- Make an HTTP request from the local machine through the tunnel
+- Validate the response
+- Shutdown the devbox
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+
+### Run
+```sh
+uv run python -m examples.devbox_tunnel
+```
+
+### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
+
+**Source:** [`examples/devbox_tunnel.py`](./examples/devbox_tunnel.py)
 
 <a id="mcp-github-tools"></a>
 ## MCP Hub + Claude Code + GitHub
