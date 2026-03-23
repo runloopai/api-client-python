@@ -7,38 +7,14 @@ Runnable examples live in [`examples/`](./examples).
 
 ## Table of Contents
 
-- [Examples](#examples)
-  - [Table of Contents](#table-of-contents)
-  - [Blueprint with Build Context](#blueprint-with-build-context)
-    - [Workflow](#workflow)
-    - [Prerequisites](#prerequisites)
-    - [Run](#run)
-    - [Test](#test)
-  - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-run-command-shutdown)
-    - [Workflow](#workflow-1)
-    - [Prerequisites](#prerequisites-1)
-    - [Run](#run-1)
-    - [Test](#test-1)
-  - [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel-http-server-access)
-    - [Workflow](#workflow-2)
-  - [Devbox Snapshot and Resume](#devbox-snapshot-and-resume)
-    - [Workflow](#workflow-3)
-    - [Prerequisites](#prerequisites-2)
-    - [Run](#run-2)
-    - [Test](#test-2)
-  - [MCP Hub + Claude Code + GitHub](#mcp-hub--claude-code--github)
-    - [Workflow](#workflow-4)
-    - [Prerequisites](#prerequisites-3)
-    - [Run](#run-3)
-    - [Test](#test-3)
-  - [Secrets with Devbox (Create, Inject, Verify, Delete)](#secrets-with-devbox-create-inject-verify-delete)
-    - [Workflow](#workflow-5)
-    - [Prerequisites](#prerequisites-4)
-    - [Run](#run-4)
-    - [Test](#test-4)
+- [Blueprint with Build Context](#blueprint-with-build-context)
+- [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
+- [Devbox Snapshot and Resume](#devbox-snapshot-resume)
+- [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel)
+- [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
+- [Secrets with Devbox (Create, Inject, Verify, Delete)](#secrets-with-devbox)
 
 <a id="blueprint-with-build-context"></a>
-
 ## Blueprint with Build Context
 
 **Use case:** Create a blueprint using the object store to provide docker build context files, then verify files are copied into the image. Uses the async SDK.
@@ -46,7 +22,6 @@ Runnable examples live in [`examples/`](./examples).
 **Tags:** `blueprint`, `object-store`, `build-context`, `devbox`, `cleanup`, `async`
 
 ### Workflow
-
 - Create a temporary directory with sample application files
 - Upload the directory to object storage as build context
 - Create a blueprint with a Dockerfile that copies the context files
@@ -55,17 +30,14 @@ Runnable examples live in [`examples/`](./examples).
 - Shutdown devbox and delete blueprint and storage object
 
 ### Prerequisites
-
 - `RUNLOOP_API_KEY`
 
 ### Run
-
 ```sh
 uv run python -m examples.blueprint_with_build_context
 ```
 
 ### Test
-
 ```sh
 uv run pytest -m smoketest tests/smoketests/examples/
 ```
@@ -73,7 +45,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Source:** [`examples/blueprint_with_build_context.py`](./examples/blueprint_with_build_context.py)
 
 <a id="devbox-from-blueprint-lifecycle"></a>
-
 ## Devbox From Blueprint (Run Command, Shutdown)
 
 **Use case:** Create a devbox from a blueprint, run a command, fetch logs, validate output, and cleanly tear everything down.
@@ -81,7 +52,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Tags:** `devbox`, `blueprint`, `commands`, `logs`, `cleanup`
 
 ### Workflow
-
 - Create a blueprint
 - Fetch blueprint build logs
 - Create a devbox from the blueprint
@@ -91,41 +61,21 @@ uv run pytest -m smoketest tests/smoketests/examples/
 - Shutdown devbox and delete blueprint
 
 ### Prerequisites
-
 - `RUNLOOP_API_KEY`
 
 ### Run
-
 ```sh
 uv run python -m examples.devbox_from_blueprint_lifecycle
 ```
 
 ### Test
-
 ```sh
 uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_from_blueprint_lifecycle.py`](./examples/devbox_from_blueprint_lifecycle.py)
 
-<a id="devbox-tunnel"></a>
-
-## Devbox Tunnel (HTTP Server Access)
-
-**Use case:** Create a devbox, start an HTTP server, enable a tunnel, and access the server from the local machine through the tunnel. Uses the async SDK.
-
-**Tags:** `devbox`, `tunnel`, `networking`, `http`, `async`
-
-### Workflow
-
-- Create a devbox
-- Start an HTTP server inside the devbox
-- Enable a tunnel for external access
-- Make an HTTP request from the local machine through the tunnel
-- Validate the response
-- Shutdown the devbox
-  <a id="devbox-snapshot-resume"></a>
-
+<a id="devbox-snapshot-resume"></a>
 ## Devbox Snapshot and Resume
 
 **Use case:** Create a devbox, snapshot its disk, resume from the snapshot, and demonstrate that changes in the original devbox do not affect the clone. Uses the async SDK.
@@ -133,7 +83,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Tags:** `devbox`, `snapshot`, `resume`, `cleanup`, `async`
 
 ### Workflow
-
 - Create a devbox
 - Write a file to the devbox
 - Create a disk snapshot
@@ -143,27 +92,51 @@ uv run pytest -m smoketest tests/smoketests/examples/
 - Shutdown both devboxes and delete the snapshot
 
 ### Prerequisites
-
 - `RUNLOOP_API_KEY`
 
 ### Run
-
 ```sh
-uv run python -m examples.devbox_tunnel
 uv run python -m examples.devbox_snapshot_resume
 ```
 
 ### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
 
+**Source:** [`examples/devbox_snapshot_resume.py`](./examples/devbox_snapshot_resume.py)
+
+<a id="devbox-tunnel"></a>
+## Devbox Tunnel (HTTP Server Access)
+
+**Use case:** Create a devbox, start an HTTP server, enable a tunnel, and access the server from the local machine through the tunnel. Uses the async SDK.
+
+**Tags:** `devbox`, `tunnel`, `networking`, `http`, `async`
+
+### Workflow
+- Create a devbox
+- Start an HTTP server inside the devbox
+- Enable a tunnel for external access
+- Make an HTTP request from the local machine through the tunnel
+- Validate the response
+- Shutdown the devbox
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+
+### Run
+```sh
+uv run python -m examples.devbox_tunnel
+```
+
+### Test
 ```sh
 uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_tunnel.py`](./examples/devbox_tunnel.py)
-**Source:** [`examples/devbox_snapshot_resume.py`](./examples/devbox_snapshot_resume.py)
 
 <a id="mcp-github-tools"></a>
-
 ## MCP Hub + Claude Code + GitHub
 
 **Use case:** Connect Claude Code running in a devbox to GitHub tools through MCP Hub without exposing raw GitHub credentials to the devbox.
@@ -171,7 +144,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Tags:** `mcp`, `devbox`, `github`, `commands`, `cleanup`
 
 ### Workflow
-
 - Create an MCP config for GitHub
 - Store GitHub token as a Runloop secret
 - Launch a devbox with MCP Hub wiring
@@ -180,19 +152,16 @@ uv run pytest -m smoketest tests/smoketests/examples/
 - Shutdown devbox and clean up cloud resources
 
 ### Prerequisites
-
 - `RUNLOOP_API_KEY`
 - `GITHUB_TOKEN (GitHub PAT with repo scope)`
 - `ANTHROPIC_API_KEY`
 
 ### Run
-
 ```sh
 GITHUB_TOKEN=ghp_xxx ANTHROPIC_API_KEY=sk-ant-xxx uv run python -m examples.mcp_github_tools
 ```
 
 ### Test
-
 ```sh
 uv run pytest -m smoketest tests/smoketests/examples/
 ```
@@ -200,7 +169,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Source:** [`examples/mcp_github_tools.py`](./examples/mcp_github_tools.py)
 
 <a id="secrets-with-devbox"></a>
-
 ## Secrets with Devbox (Create, Inject, Verify, Delete)
 
 **Use case:** Create a secret, inject it into a devbox as an environment variable, verify access, and clean up.
@@ -208,7 +176,6 @@ uv run pytest -m smoketest tests/smoketests/examples/
 **Tags:** `secrets`, `devbox`, `environment-variables`, `cleanup`
 
 ### Workflow
-
 - Create a secret with a test value
 - Create a devbox with the secret mapped to an env var
 - Execute a command that reads the secret from the environment
@@ -218,17 +185,14 @@ uv run pytest -m smoketest tests/smoketests/examples/
 - Shutdown devbox and delete secret
 
 ### Prerequisites
-
 - `RUNLOOP_API_KEY`
 
 ### Run
-
 ```sh
 uv run python -m examples.secrets_with_devbox
 ```
 
 ### Test
-
 ```sh
 uv run pytest -m smoketest tests/smoketests/examples/
 ```
