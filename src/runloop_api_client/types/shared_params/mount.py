@@ -6,6 +6,7 @@ from typing import Union, Optional
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
 
 from .agent_mount import AgentMount
+from .broker_mount import BrokerMount
 from .object_mount import ObjectMount
 
 __all__ = ["Mount", "CodeMount", "FileMount"]
@@ -40,4 +41,4 @@ class FileMount(TypedDict, total=False):
     type: Required[Literal["file_mount"]]
 
 
-Mount: TypeAlias = Union[ObjectMount, AgentMount, CodeMount, FileMount]
+Mount: TypeAlias = Union[ObjectMount, AgentMount, CodeMount, FileMount, BrokerMount]
