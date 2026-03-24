@@ -32,6 +32,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        axons,
         agents,
         objects,
         secrets,
@@ -46,6 +47,7 @@ if TYPE_CHECKING:
         gateway_configs,
         network_policies,
     )
+    from .resources.axons import AxonsResource, AsyncAxonsResource
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
@@ -143,6 +145,12 @@ class Runloop(SyncAPIClient):
         from .resources.agents import AgentsResource
 
         return AgentsResource(self)
+
+    @cached_property
+    def axons(self) -> AxonsResource:
+        from .resources.axons import AxonsResource
+
+        return AxonsResource(self)
 
     @cached_property
     def blueprints(self) -> BlueprintsResource:
@@ -393,6 +401,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncAgentsResource(self)
 
     @cached_property
+    def axons(self) -> AsyncAxonsResource:
+        from .resources.axons import AsyncAxonsResource
+
+        return AsyncAxonsResource(self)
+
+    @cached_property
     def blueprints(self) -> AsyncBlueprintsResource:
         from .resources.blueprints import AsyncBlueprintsResource
 
@@ -590,6 +604,12 @@ class RunloopWithRawResponse:
         return AgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
+    def axons(self) -> axons.AxonsResourceWithRawResponse:
+        from .resources.axons import AxonsResourceWithRawResponse
+
+        return AxonsResourceWithRawResponse(self._client.axons)
+
+    @cached_property
     def blueprints(self) -> blueprints.BlueprintsResourceWithRawResponse:
         from .resources.blueprints import BlueprintsResourceWithRawResponse
 
@@ -673,6 +693,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.agents import AsyncAgentsResourceWithRawResponse
 
         return AsyncAgentsResourceWithRawResponse(self._client.agents)
+
+    @cached_property
+    def axons(self) -> axons.AsyncAxonsResourceWithRawResponse:
+        from .resources.axons import AsyncAxonsResourceWithRawResponse
+
+        return AsyncAxonsResourceWithRawResponse(self._client.axons)
 
     @cached_property
     def blueprints(self) -> blueprints.AsyncBlueprintsResourceWithRawResponse:
@@ -760,6 +786,12 @@ class RunloopWithStreamedResponse:
         return AgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
+    def axons(self) -> axons.AxonsResourceWithStreamingResponse:
+        from .resources.axons import AxonsResourceWithStreamingResponse
+
+        return AxonsResourceWithStreamingResponse(self._client.axons)
+
+    @cached_property
     def blueprints(self) -> blueprints.BlueprintsResourceWithStreamingResponse:
         from .resources.blueprints import BlueprintsResourceWithStreamingResponse
 
@@ -843,6 +875,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.agents import AsyncAgentsResourceWithStreamingResponse
 
         return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
+
+    @cached_property
+    def axons(self) -> axons.AsyncAxonsResourceWithStreamingResponse:
+        from .resources.axons import AsyncAxonsResourceWithStreamingResponse
+
+        return AsyncAxonsResourceWithStreamingResponse(self._client.axons)
 
     @cached_property
     def blueprints(self) -> blueprints.AsyncBlueprintsResourceWithStreamingResponse:
