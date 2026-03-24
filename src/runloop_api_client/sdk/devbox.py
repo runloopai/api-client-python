@@ -843,7 +843,7 @@ class NetworkInterface:
         :rtype: object
 
         Example:
-            >>> devbox.net.remove_tunnel(port=8080)
+            >>> devbox.net.remove_tunnel()
         """
         warnings.warn(
             "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown.",

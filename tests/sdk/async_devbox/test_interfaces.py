@@ -186,7 +186,6 @@ class TestAsyncNetworkInterface:
         devbox = AsyncDevbox(mock_async_client, "dbx_123")
         with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
             result = await devbox.net.remove_tunnel(
-                port=8080,
                 extra_headers={"X-Custom": "value"},
                 extra_query={"param": "value"},
                 extra_body={"key": "value"},

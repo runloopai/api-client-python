@@ -30,7 +30,6 @@ from ...types import (
     devbox_download_file_params,
     devbox_enable_tunnel_params,
     devbox_execute_async_params,
-    devbox_remove_tunnel_params,
     devbox_snapshot_disk_params,
     devbox_wait_for_command_params,
     devbox_read_file_contents_params,
@@ -1257,14 +1256,10 @@ class DevboxesResource(SyncAPIResource):
             cast_to=str,
         )
 
-    @typing_extensions.deprecated(
-        "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown."
-    )
     def remove_tunnel(
         self,
         id: str,
         *,
-        port: int,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1273,14 +1268,10 @@ class DevboxesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
-
-        This endpoint
-        removes a legacy tunnel.
+        """
+        Remove an existing V2 tunnel from the Devbox.
 
         Args:
-          port: Devbox port that tunnel will expose.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1295,7 +1286,6 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
             path_template("/v1/devboxes/{id}/remove_tunnel", id=id),
-            body=maybe_transform({"port": port}, devbox_remove_tunnel_params.DevboxRemoveTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -2901,14 +2891,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=str,
         )
 
-    @typing_extensions.deprecated(
-        "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown."
-    )
     async def remove_tunnel(
         self,
         id: str,
         *,
-        port: int,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2917,14 +2903,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
-
-        This endpoint
-        removes a legacy tunnel.
+        """
+        Remove an existing V2 tunnel from the Devbox.
 
         Args:
-          port: Devbox port that tunnel will expose.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2939,7 +2921,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
             path_template("/v1/devboxes/{id}/remove_tunnel", id=id),
-            body=await async_maybe_transform({"port": port}, devbox_remove_tunnel_params.DevboxRemoveTunnelParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -3481,10 +3462,8 @@ class DevboxesResourceWithRawResponse:
         self.read_file_contents = to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
-            to_raw_response_wrapper(
-                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
-            )
+        self.remove_tunnel = to_raw_response_wrapper(
+            devboxes.remove_tunnel,
         )
         self.resume = to_raw_response_wrapper(
             devboxes.resume,
@@ -3584,10 +3563,8 @@ class AsyncDevboxesResourceWithRawResponse:
         self.read_file_contents = async_to_raw_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
-            async_to_raw_response_wrapper(
-                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
-            )
+        self.remove_tunnel = async_to_raw_response_wrapper(
+            devboxes.remove_tunnel,
         )
         self.resume = async_to_raw_response_wrapper(
             devboxes.resume,
@@ -3687,10 +3664,8 @@ class DevboxesResourceWithStreamingResponse:
         self.read_file_contents = to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
-            to_streamed_response_wrapper(
-                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
-            )
+        self.remove_tunnel = to_streamed_response_wrapper(
+            devboxes.remove_tunnel,
         )
         self.resume = to_streamed_response_wrapper(
             devboxes.resume,
@@ -3790,10 +3765,8 @@ class AsyncDevboxesResourceWithStreamingResponse:
         self.read_file_contents = async_to_streamed_response_wrapper(
             devboxes.read_file_contents,
         )
-        self.remove_tunnel = (  # pyright: ignore[reportDeprecated]
-            async_to_streamed_response_wrapper(
-                devboxes.remove_tunnel,  # pyright: ignore[reportDeprecated],
-            )
+        self.remove_tunnel = async_to_streamed_response_wrapper(
+            devboxes.remove_tunnel,
         )
         self.resume = async_to_streamed_response_wrapper(
             devboxes.resume,
