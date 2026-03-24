@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.13.0 (2026-03-24)
+
+Full Changelog: [v1.12.1...v1.13.0](https://github.com/runloopai/api-client-python/compare/v1.12.1...v1.13.0)
+
+### Features
+
+* example for using tunnels ([#754](https://github.com/runloopai/api-client-python/issues/754)) ([97bcd70](https://github.com/runloopai/api-client-python/commit/97bcd701c6aac8077b8dea9cd4d0693d524de9b7))
+
+
+### Bug Fixes
+
+* add AxonEventView schema to OpenAPI spec for SSE subscribe endpoint ([#8274](https://github.com/runloopai/api-client-python/issues/8274)) ([618f1bb](https://github.com/runloopai/api-client-python/commit/618f1bb48ff7757e5285cddd083f49ccbbeeed3c))
+* add name to Axon ([#8277](https://github.com/runloopai/api-client-python/issues/8277)) ([7bdb527](https://github.com/runloopai/api-client-python/commit/7bdb527e9011a68f456c927f138fac22d73b3035))
+* sanitize endpoint path params ([5182d36](https://github.com/runloopai/api-client-python/commit/5182d3666b20f4fe5b245201e0b992705443d024))
+* sanitize endpoint path params ([0993026](https://github.com/runloopai/api-client-python/commit/0993026b7dd67b1f7a9a81036c7fc93ab638112d))
+* **tunnels:** allow tunnel removal ([#8257](https://github.com/runloopai/api-client-python/issues/8257)) ([6cff97e](https://github.com/runloopai/api-client-python/commit/6cff97ee43a2f2c906833e9900841e34d478d176))
+
+
+### Chores
+
+* **internal:** update gitignore ([96bd6fd](https://github.com/runloopai/api-client-python/commit/96bd6fdc7b767371b21f5753729f01020f9e78ec))
+* remove dead port configuration code, mark deprecated / ignored in the API ([#8195](https://github.com/runloopai/api-client-python/issues/8195)) ([e565324](https://github.com/runloopai/api-client-python/commit/e5653245b65f7afd6210abe1b507ae64151da9b7))
+* **tests:** bump steady to v0.19.4 ([66cb637](https://github.com/runloopai/api-client-python/commit/66cb637779eaea2cacc4b1a06ac3a33f2358b0ee))
+* **tests:** bump steady to v0.19.5 ([601c93a](https://github.com/runloopai/api-client-python/commit/601c93afffb8379770ac895b89235903c8348b00))
+* **tests:** bump steady to v0.19.6 ([95b2ffc](https://github.com/runloopai/api-client-python/commit/95b2ffc5d487f6595ec1dc73b6a34696c309f67d))
+
+
+### Refactors
+
+* **tests:** switch from prism to steady ([dd8fe60](https://github.com/runloopai/api-client-python/commit/dd8fe60922808bb0f001b49a99988004195d806f))
+* undeprecate total_count from pagination API, remove remaining_count ([#8084](https://github.com/runloopai/api-client-python/issues/8084)) ([4bd524f](https://github.com/runloopai/api-client-python/commit/4bd524fa32e6aad6efeeabd8a5bbef5e3c7ea742))
+
 ## 1.12.1 (2026-03-19)
 
 Full Changelog: [v1.12.0...v1.12.1](https://github.com/runloopai/api-client-python/compare/v1.12.0...v1.12.1)
