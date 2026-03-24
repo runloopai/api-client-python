@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing_extensions import Literal
 
 import httpx
 
-from ..types import axon_publish_params
-from .._types import Body, Query, Headers, NotGiven, not_given
+from ..types import axon_create_params, axon_publish_params
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -50,6 +51,7 @@ class AxonsResource(SyncAPIResource):
     def create(
         self,
         *,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -58,9 +60,25 @@ class AxonsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> AxonView:
-        """[Beta] Create a new axon."""
+        """
+        [Beta] Create a new axon.
+
+        Args:
+          name: (Optional) Name for the axon.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
         return self._post(
             "/v1/axons",
+            body=maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -243,6 +261,7 @@ class AsyncAxonsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -251,9 +270,25 @@ class AsyncAxonsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> AxonView:
-        """[Beta] Create a new axon."""
+        """
+        [Beta] Create a new axon.
+
+        Args:
+          name: (Optional) Name for the axon.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
         return await self._post(
             "/v1/axons",
+            body=await async_maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

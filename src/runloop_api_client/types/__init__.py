@@ -33,6 +33,7 @@ from .scoring_function import ScoringFunction as ScoringFunction
 from .secret_list_view import SecretListView as SecretListView
 from .agent_list_params import AgentListParams as AgentListParams
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
+from .axon_create_params import AxonCreateParams as AxonCreateParams
 from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
