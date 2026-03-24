@@ -55,7 +55,7 @@ example_registry: list[ExampleRegistryEntry] = [
     },
     {
         "slug": "secrets-with-devbox",
-        "title": "Secrets with Devbox (Create, Inject, Verify, Delete)",
+        "title": "Secrets with Devbox and Agent Gateway",
         "file_name": "secrets_with_devbox.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_secrets_with_devbox_example,
