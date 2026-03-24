@@ -31,8 +31,6 @@ test: uv run pytest -m smoketest tests/smoketests/examples/
 ---
 """
 
-from __future__ import annotations
-
 import os
 import shlex
 import shutil
@@ -42,7 +40,9 @@ from pathlib import Path
 from datetime import timedelta
 
 from runloop_api_client import AsyncRunloopSDK
+from runloop_api_client.sdk.async_devbox import AsyncDevbox
 from runloop_api_client.sdk.async_storage_object import AsyncStorageObject
+from runloop_api_client.sdk.async_execution_result import AsyncExecutionResult
 
 from ._harness import run_as_cli, unique_name, wrap_recipe
 from .example_types import ExampleCheck, RecipeOutput, RecipeContext
@@ -88,7 +88,7 @@ async def ensure_claude_code_agent(sdk: AsyncRunloopSDK) -> tuple[str, bool]:
     return agent.id, False
 
 
-def create_bootstrap_dir() -> tuple[Path, Path]:
+def create_bootstrap_dir() -> Path:
     """Create local files that will be uploaded and extracted via object mount."""
     temp_dir = Path(tempfile.mkdtemp(prefix="runloop-devbox-mounts-"))
     copied_example_path = temp_dir / COPIED_EXAMPLE_FILE_NAME
@@ -97,12 +97,12 @@ def create_bootstrap_dir() -> tuple[Path, Path]:
         "This directory was uploaded with upload_from_dir(), stored as a tgz object, "
         "and extracted onto the devbox via an object mount.\n"
     )
-    return temp_dir, copied_example_path
+    return temp_dir
 
 
-async def discover_code_mount_path(devbox) -> str:
+async def discover_code_mount_path(devbox: AsyncDevbox) -> str:
     """Find the repository path created by the code mount."""
-    result = await devbox.cmd.exec(
+    result: AsyncExecutionResult = await devbox.cmd.exec(
         "if [ -d /home/user/rl-cli ]; then printf /home/user/rl-cli; "
         "elif [ -d /home/user/rl-clis ]; then printf /home/user/rl-clis; "
         "else exit 1; fi"
@@ -141,7 +141,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     resources_created.append(f"secret:{secret.name}")
     cleanup.add(f"secret:{secret.name}", secret.delete)
 
-    bootstrap_dir, copied_example_path = create_bootstrap_dir()
+    bootstrap_dir = create_bootstrap_dir()
     cleanup.add(f"temp_dir:{bootstrap_dir}", lambda: shutil.rmtree(bootstrap_dir, ignore_errors=True))
 
     archive: AsyncStorageObject = await sdk.storage_object.upload_from_dir(
@@ -204,9 +204,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     # claude_prompt_result = await devbox.cmd.exec(claude_gateway_command)
 
     repo_mount_path = await discover_code_mount_path(devbox)
-    repo_package_json = (
-        await devbox.file.read(file_path=f"{repo_mount_path}/package.json") if repo_mount_path else ""
-    )
+    repo_package_json = await devbox.file.read(file_path=f"{repo_mount_path}/package.json") if repo_mount_path else ""
 
     mounted_example_path = f"{OBJECT_MOUNT_DIR}/{COPIED_EXAMPLE_FILE_NAME}"
     mounted_example_contents = await devbox.file.read(file_path=mounted_example_path)
@@ -251,7 +249,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
             ExampleCheck(
                 name="object mount extracted the uploaded example file onto the devbox",
                 passed=(
-                    'title: Devbox Mounts (Agent, Code, Object)' in mounted_example_contents
+                    "title: Devbox Mounts (Agent, Code, Object)" in mounted_example_contents
                     and mounted_example_contents.startswith("#!/usr/bin/env -S uv run python")
                 ),
                 details=mounted_example_path,
