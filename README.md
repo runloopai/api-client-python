@@ -91,6 +91,7 @@ Functionality between the synchronous and asynchronous clients is otherwise iden
 ## Examples
 
 Workflow-oriented runnable examples are documented in [`EXAMPLES.md`](./EXAMPLES.md).
+For a suspend/resume plus shared snapshot restore workflow, see [`examples/devbox_snapshots.py`](./examples/devbox_snapshots.py).
 
 `EXAMPLES.md` is generated from metadata in `examples/*.py` and should not be edited manually.
 Regenerate it with:
