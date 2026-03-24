@@ -23,6 +23,13 @@ class TestAxons:
         assert_matches_type(AxonView, axon, path=["response"])
 
     @parametrize
+    def test_method_create_with_all_params(self, client: Runloop) -> None:
+        axon = client.axons.create(
+            name="name",
+        )
+        assert_matches_type(AxonView, axon, path=["response"])
+
+    @parametrize
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.axons.with_raw_response.create()
 
@@ -205,6 +212,13 @@ class TestAsyncAxons:
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         axon = await async_client.axons.create()
+        assert_matches_type(AxonView, axon, path=["response"])
+
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
+        axon = await async_client.axons.create(
+            name="name",
+        )
         assert_matches_type(AxonView, axon, path=["response"])
 
     @parametrize
