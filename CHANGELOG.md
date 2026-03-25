@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.13.2 (2026-03-25)
+
+Full Changelog: [v1.13.1...v1.13.2](https://github.com/runloopai/api-client-python/compare/v1.13.1...v1.13.2)
+
+### Bug Fixes
+
+* adding axon SQL to sdk ([#767](https://github.com/runloopai/api-client-python/issues/767)) ([d683fd1](https://github.com/runloopai/api-client-python/commit/d683fd189b45120c0d2abe2963236ccb394a5eef))
+
 ## 1.13.1 (2026-03-25)
 
 Full Changelog: [v1.13.0...v1.13.1](https://github.com/runloopai/api-client-python/compare/v1.13.0...v1.13.1)
