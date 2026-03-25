@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 
 from runloop_api_client.sdk import RunloopSDK
+
+
+def _unique_table() -> str:
+    return f"t_{uuid.uuid4().hex[:12]}"
 
 pytestmark = [pytest.mark.smoketest]
 
@@ -76,12 +81,13 @@ class TestAxonSql:
     def test_sql_query_create_and_select(self, sdk_client: RunloopSDK) -> None:
         """Test creating a table and querying it via sql.query."""
         axon = sdk_client.axon.create()
+        table = _unique_table()
 
-        axon.sql.query(sql="CREATE TABLE IF NOT EXISTS smoke_test (id INTEGER PRIMARY KEY, value TEXT)")
+        axon.sql.query(sql=f"CREATE TABLE {table} (id INTEGER PRIMARY KEY, value TEXT)")
 
-        axon.sql.query(sql="INSERT INTO smoke_test (id, value) VALUES (?, ?)", params=[1, "hello"])
+        axon.sql.query(sql=f"INSERT INTO {table} (id, value) VALUES (?, ?)", params=[1, "hello"])
 
-        result = axon.sql.query(sql="SELECT * FROM smoke_test WHERE id = ?", params=[1])
+        result = axon.sql.query(sql=f"SELECT * FROM {table} WHERE id = ?", params=[1])
 
         assert result.columns is not None
         assert len(result.columns) > 0

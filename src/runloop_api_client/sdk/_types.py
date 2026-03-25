@@ -1,4 +1,4 @@
-from typing import Union, Literal, Callable, Iterable, Optional
+from typing import Union, Literal, Callable, Optional
 from typing_extensions import TypedDict
 
 from ..types import (
@@ -42,8 +42,9 @@ from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
+from ..types.axons.sql_batch_params import SqlBatchParams
+from ..types.axons.sql_query_params import SqlQueryParams
 from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
-from ..types.axons.sql_statement_params import SqlStatementParams
 from ..types.benchmark_start_run_params import BenchmarkSelfStartRunParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 
@@ -197,17 +198,12 @@ class SDKAxonPublishParams(AxonPublishParams, LongRequestOptions):
     pass
 
 
-class SDKAxonSqlQueryParams(LongRequestOptions, total=False):
-    sql: str
-    """SQL query with ?-style positional placeholders."""
-
-    params: list[object]
-    """Positional parameter bindings for ? placeholders."""
+class SDKAxonSqlQueryParams(SqlQueryParams, LongRequestOptions):
+    pass
 
 
-class SDKAxonSqlBatchParams(LongRequestOptions, total=False):
-    statements: Iterable[SqlStatementParams]
-    """The SQL statements to execute atomically within a transaction."""
+class SDKAxonSqlBatchParams(SqlBatchParams, LongRequestOptions):
+    pass
 
 
 class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
