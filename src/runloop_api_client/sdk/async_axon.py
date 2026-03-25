@@ -26,6 +26,9 @@ class AsyncAxon:
         >>> runloop = AsyncRunloopSDK()
         >>> axon = await runloop.axon.create()
         >>> await axon.publish(event_type="task_done", origin="AGENT_EVENT", payload="{}", source="my-agent")
+        >>> async with await axon.subscribe_sse() as stream:
+        ...     async for event in stream:
+        ...         print(event.event_type, event.payload)
     """
 
     def __init__(self, client: AsyncRunloop, axon_id: str) -> None:

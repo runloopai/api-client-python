@@ -26,6 +26,9 @@ class Axon:
         >>> runloop = RunloopSDK()
         >>> axon = runloop.axon.create()
         >>> axon.publish(event_type="task_done", origin="AGENT_EVENT", payload="{}", source="my-agent")
+        >>> with axon.subscribe_sse() as stream:
+        ...     for event in stream:
+        ...         print(event.event_type, event.payload)
     """
 
     def __init__(self, client: Runloop, axon_id: str) -> None:
