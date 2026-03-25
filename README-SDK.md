@@ -25,6 +25,10 @@ The `RunloopSDK` builds on top of the underlying REST client and provides a Pyth
   - [StorageObject](#storageobject)
     - [Storage Object Upload Helpers](#storage-object-upload-helpers)
   - [Mounting Storage Objects to Devboxes](#mounting-storage-objects-to-devboxes)
+  - [Axon](#axon)
+    - [Publishing Events](#publishing-events)
+    - [Subscribing to Events (SSE)](#subscribing-to-events-sse)
+    - [SQL Operations](#sql-operations)
 - [Accessing the Underlying REST Client](#accessing-the-underlying-rest-client)
 - [Error Handling](#error-handling)
 - [Advanced Configuration](#advanced-configuration)
@@ -116,6 +120,7 @@ The SDK provides object-oriented interfaces for all major Runloop resources:
 - **`runloop.blueprint`** - Blueprint management (create, list, build blueprints)
 - **`runloop.snapshot`** - Snapshot management (list disk snapshots)
 - **`runloop.storage_object`** - Storage object management (upload, download, list objects)
+- **`runloop.axon`** - [Beta] Axon management (create, publish events, subscribe to SSE streams, SQL queries)
 - **`runloop.secret`** - Secret management (create, update, list, delete encrypted key-value pairs)
 - **`runloop.api`** - Direct access to the underlying REST API client
 
@@ -678,6 +683,112 @@ devbox_with_archive = runloop.devbox.create(
 result = devbox_with_archive.cmd.exec("ls -la /home/user/project/")
 print(result.stdout())
 ```
+
+### Axon
+
+> **Beta:** Axon APIs are in beta and may change.
+
+Object-oriented interface for working with axons — event communication channels that support
+publishing events, subscribing to event streams via SSE, and executing SQL queries against an
+embedded SQLite database. Created via `runloop.axon.create()` or `runloop.axon.from_id()`:
+
+```python
+# Create a new axon
+axon = runloop.axon.create(name="my-axon")
+
+# Or get an existing one
+axon = runloop.axon.from_id(axon_id="axn_123")
+
+# List all axons
+axons = runloop.axon.list()
+
+# Get axon details
+info = axon.get_info()
+print(f"Axon {info.name} created at {info.created_at_ms}")
+```
+
+#### Publishing Events
+
+Publish structured events to an axon:
+
+```python
+result = axon.publish(
+    event_type="task_completed",
+    origin="AGENT_EVENT",     # EXTERNAL_EVENT | AGENT_EVENT | USER_EVENT
+    payload='{"task_id": 42, "status": "done"}',
+    source="my-agent",
+)
+print(f"Sequence: {result.sequence}, Timestamp: {result.timestamp_ms}")
+```
+
+#### Subscribing to Events (SSE)
+
+Subscribe to real-time events via server-sent events:
+
+```python
+with axon.subscribe_sse() as stream:
+    for event in stream:
+        print(f"[{event.source}] {event.event_type}: {event.payload}")
+        # event.axon_id, event.origin, event.sequence, event.timestamp_ms also available
+```
+
+Async:
+
+```python
+async with await axon.subscribe_sse() as stream:
+    async for event in stream:
+        print(f"[{event.source}] {event.event_type}: {event.payload}")
+```
+
+#### SQL Operations
+
+Each axon has an embedded SQLite database accessible via `axon.sql`:
+
+```python
+# Create a table
+axon.sql.query(sql="CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT, done INTEGER)")
+
+# Insert with parameterized queries (? placeholders)
+axon.sql.query(
+    sql="INSERT INTO tasks (id, name, done) VALUES (?, ?, ?)",
+    params=[1, "Write docs", 0],
+)
+
+# Query
+result = axon.sql.query(sql="SELECT * FROM tasks WHERE done = ?", params=[0])
+for row in result.rows:
+    print(row)           # e.g. [1, "Write docs", 0]
+print(result.columns)    # [SqlColumnMetaView(name="id", type="INTEGER"), ...]
+print(result.meta)       # SqlResultMetaView(changes=0, duration_ms=0.5, rows_read_limit_reached=False)
+```
+
+Execute multiple statements atomically with `batch`:
+
+```python
+result = axon.sql.batch(
+    statements=[
+        {"sql": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"},
+        {"sql": "INSERT INTO users (id, name) VALUES (?, ?)", "params": [1, "Alice"]},
+        {"sql": "INSERT INTO users (id, name) VALUES (?, ?)", "params": [2, "Bob"]},
+        {"sql": "SELECT * FROM users ORDER BY id"},
+    ],
+)
+
+# Each statement gets a result
+for step in result.results:
+    if step.success:
+        print(f"Rows: {step.success.rows}, Changes: {step.success.meta.changes}")
+    elif step.error:
+        print(f"Error: {step.error}")
+```
+
+**Key methods:**
+
+- `axon.get_info()` – Get axon details (name, created_at_ms)
+- `axon.publish()` – Publish an event (event_type, origin, payload, source)
+- `axon.subscribe_sse()` – Subscribe to event stream (returns `Stream[AxonEventView]`)
+- `axon.sql.query()` – Execute a single SQL statement with optional params
+- `axon.sql.batch()` – Execute multiple SQL statements atomically
 
 ## Accessing the Underlying REST Client
 
