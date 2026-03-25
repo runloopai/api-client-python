@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlQueryResultView, MockSqlBatchResultView
+from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlBatchResultView, MockSqlQueryResultView
 from runloop_api_client.sdk import AsyncAxon
 
 

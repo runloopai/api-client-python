@@ -7,16 +7,16 @@ from typing_extensions import Unpack, override
 from ._types import (
     BaseRequestOptions,
     SDKAxonPublishParams,
-    SDKAxonSqlQueryParams,
     SDKAxonSqlBatchParams,
+    SDKAxonSqlQueryParams,
 )
 from .._client import Runloop
 from .._streaming import Stream
 from ..types.axon_view import AxonView
 from ..types.axon_event_view import AxonEventView
 from ..types.publish_result_view import PublishResultView
-from ..types.axons.sql_query_result_view import SqlQueryResultView
 from ..types.axons.sql_batch_result_view import SqlBatchResultView
+from ..types.axons.sql_query_result_view import SqlQueryResultView
 
 
 class AxonSqlOps:

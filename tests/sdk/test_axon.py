@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlQueryResultView, MockSqlBatchResultView
+from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlBatchResultView, MockSqlQueryResultView
 from runloop_api_client.sdk import Axon
 
 
