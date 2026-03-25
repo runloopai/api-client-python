@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 
 from runloop_api_client.sdk import AsyncRunloopSDK
+
+
+def _unique_table() -> str:
+    return f"t_{uuid.uuid4().hex[:12]}"
+
 
 pytestmark = [pytest.mark.smoketest, pytest.mark.asyncio]
 
@@ -76,12 +82,13 @@ class TestAsyncAxonSql:
     async def test_sql_query_create_and_select(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test creating a table and querying it via sql.query."""
         axon = await async_sdk_client.axon.create()
+        table = _unique_table()
 
-        await axon.sql.query(sql="CREATE TABLE IF NOT EXISTS smoke_test (id INTEGER PRIMARY KEY, value TEXT)")
+        await axon.sql.query(sql=f"CREATE TABLE {table} (id INTEGER PRIMARY KEY, value TEXT)")
 
-        await axon.sql.query(sql="INSERT INTO smoke_test (id, value) VALUES (?, ?)", params=[1, "hello"])
+        await axon.sql.query(sql=f"INSERT INTO {table} (id, value) VALUES (?, ?)", params=[1, "hello"])
 
-        result = await axon.sql.query(sql="SELECT * FROM smoke_test WHERE id = ?", params=[1])
+        result = await axon.sql.query(sql=f"SELECT * FROM {table} WHERE id = ?", params=[1])
 
         assert result.columns is not None
         assert len(result.columns) > 0
@@ -92,13 +99,14 @@ class TestAsyncAxonSql:
     async def test_sql_batch(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Test executing multiple statements atomically via sql.batch."""
         axon = await async_sdk_client.axon.create()
+        table = _unique_table()
 
         result = await axon.sql.batch(
             statements=[
-                {"sql": "CREATE TABLE IF NOT EXISTS batch_test (id INTEGER PRIMARY KEY, name TEXT)"},
-                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [1, "alice"]},
-                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [2, "bob"]},
-                {"sql": "SELECT * FROM batch_test ORDER BY id"},
+                {"sql": f"CREATE TABLE {table} (id INTEGER PRIMARY KEY, name TEXT)"},
+                {"sql": f"INSERT INTO {table} (id, name) VALUES (?, ?)", "params": [1, "alice"]},
+                {"sql": f"INSERT INTO {table} (id, name) VALUES (?, ?)", "params": [2, "bob"]},
+                {"sql": f"SELECT * FROM {table} ORDER BY id"},
             ],
         )
 

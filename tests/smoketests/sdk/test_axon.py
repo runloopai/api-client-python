@@ -13,6 +13,7 @@ from runloop_api_client.sdk import RunloopSDK
 def _unique_table() -> str:
     return f"t_{uuid.uuid4().hex[:12]}"
 
+
 pytestmark = [pytest.mark.smoketest]
 
 THIRTY_SECOND_TIMEOUT = 30
@@ -98,13 +99,14 @@ class TestAxonSql:
     def test_sql_batch(self, sdk_client: RunloopSDK) -> None:
         """Test executing multiple statements atomically via sql.batch."""
         axon = sdk_client.axon.create()
+        table = _unique_table()
 
         result = axon.sql.batch(
             statements=[
-                {"sql": "CREATE TABLE IF NOT EXISTS batch_test (id INTEGER PRIMARY KEY, name TEXT)"},
-                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [1, "alice"]},
-                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [2, "bob"]},
-                {"sql": "SELECT * FROM batch_test ORDER BY id"},
+                {"sql": f"CREATE TABLE {table} (id INTEGER PRIMARY KEY, name TEXT)"},
+                {"sql": f"INSERT INTO {table} (id, name) VALUES (?, ?)", "params": [1, "alice"]},
+                {"sql": f"INSERT INTO {table} (id, name) VALUES (?, ?)", "params": [2, "bob"]},
+                {"sql": f"SELECT * FROM {table} ORDER BY id"},
             ],
         )
 

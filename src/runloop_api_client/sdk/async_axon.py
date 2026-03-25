@@ -64,7 +64,11 @@ class AsyncAxon:
     def __init__(self, client: AsyncRunloop, axon_id: str) -> None:
         self._client = client
         self._id = axon_id
-        self.sql = AsyncAxonSqlOps(client, axon_id)
+        self._sql = AsyncAxonSqlOps(client, axon_id)
+
+    @property
+    def sql(self) -> AsyncAxonSqlOps:
+        return self._sql
 
     @override
     def __repr__(self) -> str:
