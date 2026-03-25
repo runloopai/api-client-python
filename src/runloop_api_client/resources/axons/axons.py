@@ -7,28 +7,40 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import axon_create_params, axon_publish_params
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import path_template, maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from .sql import (
+    SqlResource,
+    AsyncSqlResource,
+    SqlResourceWithRawResponse,
+    AsyncSqlResourceWithRawResponse,
+    SqlResourceWithStreamingResponse,
+    AsyncSqlResourceWithStreamingResponse,
+)
+from ...types import axon_create_params, axon_publish_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._streaming import Stream, AsyncStream
-from .._base_client import make_request_options
-from ..types.axon_view import AxonView
-from ..types.axon_list_view import AxonListView
-from ..types.axon_event_view import AxonEventView
-from ..types.publish_result_view import PublishResultView
+from ..._streaming import Stream, AsyncStream
+from ..._base_client import make_request_options
+from ...types.axon_view import AxonView
+from ...types.axon_list_view import AxonListView
+from ...types.axon_event_view import AxonEventView
+from ...types.publish_result_view import PublishResultView
 
 __all__ = ["AxonsResource", "AsyncAxonsResource"]
 
 
 class AxonsResource(SyncAPIResource):
+    @cached_property
+    def sql(self) -> SqlResource:
+        return SqlResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AxonsResourceWithRawResponse:
         """
@@ -239,6 +251,10 @@ class AxonsResource(SyncAPIResource):
 
 
 class AsyncAxonsResource(AsyncAPIResource):
+    @cached_property
+    def sql(self) -> AsyncSqlResource:
+        return AsyncSqlResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncAxonsResourceWithRawResponse:
         """
@@ -468,6 +484,10 @@ class AxonsResourceWithRawResponse:
             axons.subscribe_sse,
         )
 
+    @cached_property
+    def sql(self) -> SqlResourceWithRawResponse:
+        return SqlResourceWithRawResponse(self._axons.sql)
+
 
 class AsyncAxonsResourceWithRawResponse:
     def __init__(self, axons: AsyncAxonsResource) -> None:
@@ -488,6 +508,10 @@ class AsyncAxonsResourceWithRawResponse:
         self.subscribe_sse = async_to_raw_response_wrapper(
             axons.subscribe_sse,
         )
+
+    @cached_property
+    def sql(self) -> AsyncSqlResourceWithRawResponse:
+        return AsyncSqlResourceWithRawResponse(self._axons.sql)
 
 
 class AxonsResourceWithStreamingResponse:
@@ -510,6 +534,10 @@ class AxonsResourceWithStreamingResponse:
             axons.subscribe_sse,
         )
 
+    @cached_property
+    def sql(self) -> SqlResourceWithStreamingResponse:
+        return SqlResourceWithStreamingResponse(self._axons.sql)
+
 
 class AsyncAxonsResourceWithStreamingResponse:
     def __init__(self, axons: AsyncAxonsResource) -> None:
@@ -530,3 +558,7 @@ class AsyncAxonsResourceWithStreamingResponse:
         self.subscribe_sse = async_to_streamed_response_wrapper(
             axons.subscribe_sse,
         )
+
+    @cached_property
+    def sql(self) -> AsyncSqlResourceWithStreamingResponse:
+        return AsyncSqlResourceWithStreamingResponse(self._axons.sql)
