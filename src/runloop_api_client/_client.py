@@ -47,12 +47,12 @@ if TYPE_CHECKING:
         gateway_configs,
         network_policies,
     )
-    from .resources.axons import AxonsResource, AsyncAxonsResource
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
+    from .resources.axons.axons import AxonsResource, AsyncAxonsResource
     from .resources.mcp_configs import McpConfigsResource, AsyncMcpConfigsResource
     from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
     from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource

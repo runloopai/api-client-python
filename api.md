@@ -105,11 +105,33 @@ from runloop_api_client.types import (
 
 Methods:
 
-- <code title="post /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons.py">create</a>(\*\*<a href="src/runloop_api_client/types/axon_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
-- <code title="get /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
-- <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons.py">list</a>() -> <a href="./src/runloop_api_client/types/axon_list_view.py">AxonListView</a></code>
-- <code title="post /v1/axons/{id}/publish">client.axons.<a href="./src/runloop_api_client/resources/axons.py">publish</a>(id, \*\*<a href="src/runloop_api_client/types/axon_publish_params.py">params</a>) -> <a href="./src/runloop_api_client/types/publish_result_view.py">PublishResultView</a></code>
-- <code title="get /v1/axons/{id}/subscribe/sse">client.axons.<a href="./src/runloop_api_client/resources/axons.py">subscribe_sse</a>(id) -> <a href="./src/runloop_api_client/types/axon_event_view.py">AxonEventView</a></code>
+- <code title="post /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">create</a>(\*\*<a href="src/runloop_api_client/types/axon_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
+- <code title="get /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
+- <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">list</a>() -> <a href="./src/runloop_api_client/types/axon_list_view.py">AxonListView</a></code>
+- <code title="post /v1/axons/{id}/publish">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">publish</a>(id, \*\*<a href="src/runloop_api_client/types/axon_publish_params.py">params</a>) -> <a href="./src/runloop_api_client/types/publish_result_view.py">PublishResultView</a></code>
+- <code title="get /v1/axons/{id}/subscribe/sse">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">subscribe_sse</a>(id) -> <a href="./src/runloop_api_client/types/axon_event_view.py">AxonEventView</a></code>
+
+## Sql
+
+Types:
+
+```python
+from runloop_api_client.types.axons import (
+    SqlBatchParams,
+    SqlBatchResultView,
+    SqlColumnMetaView,
+    SqlQueryResultView,
+    SqlResultMetaView,
+    SqlStatementParams,
+    SqlStepErrorView,
+    SqlStepResultView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/axons/{id}/sql/batch">client.axons.sql.<a href="./src/runloop_api_client/resources/axons/sql.py">batch</a>(id, \*\*<a href="src/runloop_api_client/types/axons/sql_batch_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axons/sql_batch_result_view.py">SqlBatchResultView</a></code>
+- <code title="post /v1/axons/{id}/sql/query">client.axons.sql.<a href="./src/runloop_api_client/resources/axons/sql.py">query</a>(id, \*\*<a href="src/runloop_api_client/types/axons/sql_query_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axons/sql_query_result_view.py">SqlQueryResultView</a></code>
 
 # Blueprints
 
