@@ -8,6 +8,7 @@ from .shared import (
     AgentMount as AgentMount,
     RunProfile as RunProfile,
     AgentSource as AgentSource,
+    BrokerMount as BrokerMount,
     ObjectMount as ObjectMount,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,

@@ -6,6 +6,7 @@ from typing_extensions import Literal, Annotated, TypeAlias
 from ..._utils import PropertyInfo
 from ..._models import BaseModel
 from .agent_mount import AgentMount
+from .broker_mount import BrokerMount
 from .object_mount import ObjectMount
 
 __all__ = ["Mount", "CodeMount", "FileMount"]
@@ -40,4 +41,6 @@ class FileMount(BaseModel):
     type: Literal["file_mount"]
 
 
-Mount: TypeAlias = Annotated[Union[ObjectMount, AgentMount, CodeMount, FileMount], PropertyInfo(discriminator="type")]
+Mount: TypeAlias = Annotated[
+    Union[ObjectMount, AgentMount, CodeMount, FileMount, BrokerMount], PropertyInfo(discriminator="type")
+]
