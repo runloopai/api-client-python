@@ -14,6 +14,7 @@ from ._types import (
     BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
+    SDKAxonCreateParams,
     SDKDevboxListParams,
     SDKObjectListParams,
     SDKScorerListParams,
@@ -38,6 +39,7 @@ from ._types import (
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
+from .async_axon import AsyncAxon
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
@@ -519,6 +521,33 @@ class AsyncStorageObjectOps:
         await obj.upload_content(data)
         await obj.complete()
         return obj
+
+
+class AsyncAxonOps:
+    """[Beta] Create and manage axons (async). Access via ``runloop.axon``.
+
+    Example:
+        >>> runloop = AsyncRunloopSDK()
+        >>> axon = await runloop.axon.create()
+        >>> await axon.publish(event_type="test", origin="USER_EVENT", payload="{}", source="sdk")
+    """
+
+    def __init__(self, client: AsyncRunloop) -> None:
+        self._client = client
+
+    async def create(self, **params: Unpack[SDKAxonCreateParams]) -> AsyncAxon:
+        """[Beta] Create a new axon."""
+        response = await self._client.axons.create(**params)
+        return AsyncAxon(self._client, response.id)
+
+    def from_id(self, axon_id: str) -> AsyncAxon:
+        """Get an AsyncAxon instance for an existing axon ID."""
+        return AsyncAxon(self._client, axon_id)
+
+    async def list(self, **options: Unpack[BaseRequestOptions]) -> list[AsyncAxon]:
+        """[Beta] List all active axons."""
+        result = await self._client.axons.list(**options)
+        return [AsyncAxon(self._client, axon.id) for axon in result.axons]
 
 
 class AsyncScorerOps:
@@ -1205,6 +1234,8 @@ class AsyncRunloopSDK:
     :vartype api: AsyncRunloop
     :ivar agent: High-level async interface for agent management.
     :vartype agent: AsyncAgentOps
+    :ivar axon: [Beta] High-level async interface for axon management
+    :vartype axon: AsyncAxonOps
     :ivar benchmark: High-level async interface for benchmark management
     :vartype benchmark: AsyncBenchmarkOps
     :ivar devbox: High-level async interface for devbox management
@@ -1238,6 +1269,7 @@ class AsyncRunloopSDK:
 
     api: AsyncRunloop
     agent: AsyncAgentOps
+    axon: AsyncAxonOps
     benchmark: AsyncBenchmarkOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
@@ -1289,6 +1321,7 @@ class AsyncRunloopSDK:
         )
 
         self.agent = AsyncAgentOps(self.api)
+        self.axon = AsyncAxonOps(self.api)
         self.benchmark = AsyncBenchmarkOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)

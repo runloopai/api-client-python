@@ -9,11 +9,13 @@ from typing_extensions import Unpack
 
 import httpx
 
+from .axon import Axon
 from .agent import Agent
 from ._types import (
     BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
+    SDKAxonCreateParams,
     SDKDevboxListParams,
     SDKObjectListParams,
     SDKScorerListParams,
@@ -514,6 +516,33 @@ class StorageObjectOps:
         obj.upload_content(data)
         obj.complete()
         return obj
+
+
+class AxonOps:
+    """[Beta] Create and manage axons. Access via ``runloop.axon``.
+
+    Example:
+        >>> runloop = RunloopSDK()
+        >>> axon = runloop.axon.create()
+        >>> axon.publish(event_type="test", origin="USER_EVENT", payload="{}", source="sdk")
+    """
+
+    def __init__(self, client: Runloop) -> None:
+        self._client = client
+
+    def create(self, **params: Unpack[SDKAxonCreateParams]) -> Axon:
+        """[Beta] Create a new axon."""
+        response = self._client.axons.create(**params)
+        return Axon(self._client, response.id)
+
+    def from_id(self, axon_id: str) -> Axon:
+        """Get an Axon instance for an existing axon ID."""
+        return Axon(self._client, axon_id)
+
+    def list(self, **options: Unpack[BaseRequestOptions]) -> list[Axon]:
+        """[Beta] List all active axons."""
+        result = self._client.axons.list(**options)
+        return [Axon(self._client, axon.id) for axon in result.axons]
 
 
 class ScorerOps:
@@ -1230,6 +1259,8 @@ class RunloopSDK:
     :vartype api: Runloop
     :ivar agent: High-level interface for agent management.
     :vartype agent: AgentOps
+    :ivar axon: [Beta] High-level interface for axon management
+    :vartype axon: AxonOps
     :ivar benchmark: High-level interface for benchmark management
     :vartype benchmark: BenchmarkOps
     :ivar devbox: High-level interface for devbox management
@@ -1263,6 +1294,7 @@ class RunloopSDK:
 
     api: Runloop
     agent: AgentOps
+    axon: AxonOps
     benchmark: BenchmarkOps
     devbox: DevboxOps
     blueprint: BlueprintOps
@@ -1314,6 +1346,7 @@ class RunloopSDK:
         )
 
         self.agent = AgentOps(self.api)
+        self.axon = AxonOps(self.api)
         self.benchmark = BenchmarkOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)

@@ -227,10 +227,12 @@ class AxonsResource(SyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        default_headers: Headers = {"Accept": "text/event-stream"}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         return self._get(
             path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=AxonEventView,
             stream=True,
@@ -437,10 +439,12 @@ class AsyncAxonsResource(AsyncAPIResource):
         """
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        default_headers: Headers = {"Accept": "text/event-stream"}
+        merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
         return await self._get(
             path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=AxonEventView,
             stream=True,

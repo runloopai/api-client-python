@@ -23,6 +23,7 @@ TEST_IDS = {
     "object": "obj_123",
     "scorer": "sco_123",
     "agent": "agt_123",
+    "axon": "axn_123",
     "scenario": "scn_123",
     "scenario_run": "scr_123",
     "benchmark": "bmd_123",
@@ -113,6 +114,23 @@ class MockAgentView:
     create_time_ms: int = 1234567890000
     is_public: bool = False
     source: Any = None
+
+
+@dataclass
+class MockAxonView:
+    """Mock AxonView for testing."""
+
+    id: str = TEST_IDS["axon"]
+    created_at_ms: int = 1234567890000
+    name: str = "test-axon"
+
+
+@dataclass
+class MockPublishResultView:
+    """Mock PublishResultView for testing."""
+
+    sequence: int = 1
+    timestamp_ms: int = 1234567890000
 
 
 @dataclass
@@ -305,6 +323,12 @@ def scorer_view() -> MockScorerView:
 def agent_view() -> MockAgentView:
     """Create a mock AgentView."""
     return MockAgentView()
+
+
+@pytest.fixture
+def axon_view() -> MockAxonView:
+    """Create a mock AxonView."""
+    return MockAxonView()
 
 
 @pytest.fixture
