@@ -7,19 +7,48 @@ from typing_extensions import Unpack, override
 from ._types import (
     BaseRequestOptions,
     SDKAxonPublishParams,
+    SDKAxonSqlBatchParams,
+    SDKAxonSqlQueryParams,
 )
 from .._client import AsyncRunloop
 from .._streaming import AsyncStream
 from ..types.axon_view import AxonView
 from ..types.axon_event_view import AxonEventView
 from ..types.publish_result_view import PublishResultView
+from ..types.axons.sql_batch_result_view import SqlBatchResultView
+from ..types.axons.sql_query_result_view import SqlQueryResultView
+
+
+class AsyncAxonSqlOps:
+    """[Beta] Async SQL operations for an axon's SQLite database.
+
+    Access via ``axon.sql``.
+
+    Example:
+        >>> axon = await runloop.axon.create()
+        >>> await axon.sql.query(sql="CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT)")
+        >>> result = await axon.sql.query(sql="SELECT * FROM tasks WHERE id = ?", params=[1])
+    """
+
+    def __init__(self, client: AsyncRunloop, axon_id: str) -> None:
+        self._client = client
+        self._axon_id = axon_id
+
+    async def query(self, **params: Unpack[SDKAxonSqlQueryParams]) -> SqlQueryResultView:
+        """[Beta] Execute a single parameterized SQL statement against this axon's SQLite database."""
+        return await self._client.axons.sql.query(self._axon_id, **params)
+
+    async def batch(self, **params: Unpack[SDKAxonSqlBatchParams]) -> SqlBatchResultView:
+        """[Beta] Execute multiple SQL statements atomically within a single transaction."""
+        return await self._client.axons.sql.batch(self._axon_id, **params)
 
 
 class AsyncAxon:
     """[Beta] Wrapper around asynchronous axon operations.
 
-    Axons are event communication channels that support publishing events
-    and subscribing to event streams via server-sent events (SSE).
+    Axons are event communication channels that support publishing events,
+    subscribing to event streams via server-sent events (SSE), and executing
+    SQL queries against an embedded SQLite database.
     Obtain instances via ``runloop.axon.create()`` or ``runloop.axon.from_id()``.
 
     Example:
@@ -29,11 +58,17 @@ class AsyncAxon:
         >>> async with await axon.subscribe_sse() as stream:
         ...     async for event in stream:
         ...         print(event.event_type, event.payload)
+        >>> await axon.sql.query(sql="CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT)")
     """
 
     def __init__(self, client: AsyncRunloop, axon_id: str) -> None:
         self._client = client
         self._id = axon_id
+        self._sql = AsyncAxonSqlOps(client, axon_id)
+
+    @property
+    def sql(self) -> AsyncAxonSqlOps:
+        return self._sql
 
     @override
     def __repr__(self) -> str:
