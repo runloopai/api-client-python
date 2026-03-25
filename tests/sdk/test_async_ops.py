@@ -11,6 +11,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from tests.sdk.conftest import (
+    MockAxonView,
     MockAgentView,
     MockDevboxView,
     MockObjectView,
@@ -24,9 +25,11 @@ from tests.sdk.conftest import (
     create_mock_httpx_response,
 )
 from runloop_api_client.sdk import (
+    AsyncAxon,
     AsyncAgent,
     AsyncDevbox,
     AsyncScorer,
+    AsyncAxonOps,
     AsyncAgentOps,
     AsyncScenario,
     AsyncSnapshot,
@@ -778,6 +781,74 @@ class TestAsyncScorerOps:
         assert scorers[0].id == "scorer_001"
         assert scorers[1].id == "scorer_002"
         mock_async_client.scenarios.scorers.list.assert_awaited_once()
+
+
+class TestAsyncAxonOps:
+    """Tests for AsyncAxonOps class."""
+
+    @pytest.mark.asyncio
+    async def test_create(self, mock_async_client: AsyncMock, axon_view: MockAxonView) -> None:
+        """Test create method."""
+        mock_async_client.axons.create = AsyncMock(return_value=axon_view)
+
+        ops = AsyncAxonOps(mock_async_client)
+        axon = await ops.create(name="test-axon")
+
+        assert isinstance(axon, AsyncAxon)
+        assert axon.id == "axn_123"
+        mock_async_client.axons.create.assert_awaited_once()
+
+    def test_from_id(self, mock_async_client: AsyncMock) -> None:
+        """Test from_id method."""
+        ops = AsyncAxonOps(mock_async_client)
+        axon = ops.from_id("axn_123")
+
+        assert isinstance(axon, AsyncAxon)
+        assert axon.id == "axn_123"
+
+    @pytest.mark.asyncio
+    async def test_list_empty(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with empty results."""
+        page = SimpleNamespace(axons=[])
+        mock_async_client.axons.list = AsyncMock(return_value=page)
+
+        ops = AsyncAxonOps(mock_async_client)
+        axons = await ops.list()
+
+        assert len(axons) == 0
+        mock_async_client.axons.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_single(self, mock_async_client: AsyncMock, axon_view: MockAxonView) -> None:
+        """Test list method with single result."""
+        page = SimpleNamespace(axons=[axon_view])
+        mock_async_client.axons.list = AsyncMock(return_value=page)
+
+        ops = AsyncAxonOps(mock_async_client)
+        axons = await ops.list()
+
+        assert len(axons) == 1
+        assert isinstance(axons[0], AsyncAxon)
+        assert axons[0].id == "axn_123"
+        mock_async_client.axons.list.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_list_multiple(self, mock_async_client: AsyncMock) -> None:
+        """Test list method with multiple results."""
+        axon_view1 = MockAxonView(id="axn_001", name="axon-1")
+        axon_view2 = MockAxonView(id="axn_002", name="axon-2")
+        page = SimpleNamespace(axons=[axon_view1, axon_view2])
+        mock_async_client.axons.list = AsyncMock(return_value=page)
+
+        ops = AsyncAxonOps(mock_async_client)
+        axons = await ops.list()
+
+        assert len(axons) == 2
+        assert isinstance(axons[0], AsyncAxon)
+        assert isinstance(axons[1], AsyncAxon)
+        assert axons[0].id == "axn_001"
+        assert axons[1].id == "axn_002"
+        mock_async_client.axons.list.assert_awaited_once()
 
 
 class TestAsyncAgentClient:

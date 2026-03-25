@@ -5,9 +5,11 @@ from ..types import (
     InputContext,
     ScenarioView,
     AgentListParams,
+    AxonCreateParams,
     DevboxListParams,
     ObjectListParams,
     AgentCreateParams,
+    AxonPublishParams,
     DevboxCreateParams,
     ObjectCreateParams,
     ScenarioListParams,
@@ -183,6 +185,14 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
 
 
 class SDKAgentListParams(AgentListParams, BaseRequestOptions):
+    pass
+
+
+class SDKAxonCreateParams(AxonCreateParams, LongRequestOptions):
+    pass
+
+
+class SDKAxonPublishParams(AxonPublishParams, LongRequestOptions):
     pass
 
 
