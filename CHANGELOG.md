@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.13.1 (2026-03-25)
+
+Full Changelog: [v1.13.0...v1.13.1](https://github.com/runloopai/api-client-python/compare/v1.13.0...v1.13.1)
+
+### Features
+
+* Add axon rest endpoints for raw SQL access ([#8287](https://github.com/runloopai/api-client-python/issues/8287)) ([d3135f4](https://github.com/runloopai/api-client-python/commit/d3135f4791d18c685981d3cb959568d36414ac81))
+* add BrokerMount to OpenAPI spec ([#8282](https://github.com/runloopai/api-client-python/issues/8282)) ([fc41e95](https://github.com/runloopai/api-client-python/commit/fc41e957a30f1387781d7285489372a617c50967))
+* **sdk:** add axons to OO SDK ([#766](https://github.com/runloopai/api-client-python/issues/766)) ([821cf30](https://github.com/runloopai/api-client-python/commit/821cf30a83e05c1d591eaad41485c8acf1ff3c8b))
+
+
+### Bug Fixes
+
+* **broker:** broker protocol renames for clarity / future proof ([#8285](https://github.com/runloopai/api-client-python/issues/8285)) ([4f07960](https://github.com/runloopai/api-client-python/commit/4f0796094fcc154f88bad8c243a50fbfc7c738b4))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([b276bc4](https://github.com/runloopai/api-client-python/commit/b276bc45e3549f33888df99f589473812fb153e7))
+* **tests:** bump steady to v0.19.7 ([2f380b6](https://github.com/runloopai/api-client-python/commit/2f380b6d400d6a8879313a0928eb3a9d4151d560))
+
 ## 1.13.0 (2026-03-24)
 
 Full Changelog: [v1.12.1...v1.13.0](https://github.com/runloopai/api-client-python/compare/v1.12.1...v1.13.0)
