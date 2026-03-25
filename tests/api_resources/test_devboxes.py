@@ -230,6 +230,7 @@ class TestDevboxes:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             status="provisioning",
@@ -653,6 +654,7 @@ class TestDevboxes:
     def test_method_list_disk_snapshots_with_all_params(self, client: Runloop) -> None:
         devbox = client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
@@ -725,21 +727,16 @@ class TestDevboxes:
 
     @parametrize
     def test_method_remove_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            devbox = client.devboxes.remove_tunnel(
-                id="id",
-                port=0,
-            )
-
+        devbox = client.devboxes.remove_tunnel(
+            "id",
+        )
         assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     def test_raw_response_remove_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = client.devboxes.with_raw_response.remove_tunnel(
-                id="id",
-                port=0,
-            )
+        response = client.devboxes.with_raw_response.remove_tunnel(
+            "id",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -748,27 +745,23 @@ class TestDevboxes:
 
     @parametrize
     def test_streaming_response_remove_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with client.devboxes.with_streaming_response.remove_tunnel(
-                id="id",
-                port=0,
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with client.devboxes.with_streaming_response.remove_tunnel(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                devbox = response.parse()
-                assert_matches_type(object, devbox, path=["response"])
+            devbox = response.parse()
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_path_params_remove_tunnel(self, client: Runloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-                client.devboxes.with_raw_response.remove_tunnel(
-                    id="",
-                    port=0,
-                )
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.devboxes.with_raw_response.remove_tunnel(
+                "",
+            )
 
     @parametrize
     def test_method_resume(self, client: Runloop) -> None:
@@ -1851,6 +1844,7 @@ class TestAsyncDevboxes:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
             status="provisioning",
@@ -2274,6 +2268,7 @@ class TestAsyncDevboxes:
     async def test_method_list_disk_snapshots_with_all_params(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.list_disk_snapshots(
             devbox_id="devbox_id",
+            include_total_count=True,
             limit=0,
             metadata_key="metadata[key]",
             metadata_key_in="metadata[key][in]",
@@ -2346,21 +2341,16 @@ class TestAsyncDevboxes:
 
     @parametrize
     async def test_method_remove_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            devbox = await async_client.devboxes.remove_tunnel(
-                id="id",
-                port=0,
-            )
-
+        devbox = await async_client.devboxes.remove_tunnel(
+            "id",
+        )
         assert_matches_type(object, devbox, path=["response"])
 
     @parametrize
     async def test_raw_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = await async_client.devboxes.with_raw_response.remove_tunnel(
-                id="id",
-                port=0,
-            )
+        response = await async_client.devboxes.with_raw_response.remove_tunnel(
+            "id",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -2369,27 +2359,23 @@ class TestAsyncDevboxes:
 
     @parametrize
     async def test_streaming_response_remove_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            async with async_client.devboxes.with_streaming_response.remove_tunnel(
-                id="id",
-                port=0,
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        async with async_client.devboxes.with_streaming_response.remove_tunnel(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                devbox = await response.parse()
-                assert_matches_type(object, devbox, path=["response"])
+            devbox = await response.parse()
+            assert_matches_type(object, devbox, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_path_params_remove_tunnel(self, async_client: AsyncRunloop) -> None:
-        with pytest.warns(DeprecationWarning):
-            with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
-                await async_client.devboxes.with_raw_response.remove_tunnel(
-                    id="",
-                    port=0,
-                )
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.devboxes.with_raw_response.remove_tunnel(
+                "",
+            )
 
     @parametrize
     async def test_method_resume(self, async_client: AsyncRunloop) -> None:

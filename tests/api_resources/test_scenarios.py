@@ -292,6 +292,7 @@ class TestScenarios:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -365,6 +366,7 @@ class TestScenarios:
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         scenario = client.scenarios.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -741,6 +743,7 @@ class TestAsyncScenarios:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list(
             benchmark_id="benchmark_id",
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -814,6 +817,7 @@ class TestAsyncScenarios:
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         scenario = await async_client.scenarios.list_public(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",

@@ -8,7 +8,7 @@ import httpx
 
 from ..types import network_policy_list_params, network_policy_create_params, network_policy_update_params
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -149,7 +149,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/network-policies/{id}",
+            path_template("/v1/network-policies/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -208,7 +208,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/network-policies/{id}",
+            path_template("/v1/network-policies/{id}", id=id),
             body=maybe_transform(
                 {
                     "allow_agent_gateway": allow_agent_gateway,
@@ -235,6 +235,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -250,6 +251,9 @@ class NetworkPoliciesResource(SyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -276,6 +280,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -316,7 +321,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/network-policies/{id}/delete",
+            path_template("/v1/network-policies/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -453,7 +458,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/network-policies/{id}",
+            path_template("/v1/network-policies/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -512,7 +517,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/network-policies/{id}",
+            path_template("/v1/network-policies/{id}", id=id),
             body=await async_maybe_transform(
                 {
                     "allow_agent_gateway": allow_agent_gateway,
@@ -539,6 +544,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -554,6 +560,9 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -580,6 +589,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -620,7 +630,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/network-policies/{id}/delete",
+            path_template("/v1/network-policies/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

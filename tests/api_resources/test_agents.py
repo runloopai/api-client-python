@@ -128,6 +128,7 @@ class TestAgents:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         agent = client.agents.list(
+            include_total_count=True,
             is_public=True,
             limit=0,
             name="name",
@@ -273,6 +274,7 @@ class TestAsyncAgents:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         agent = await async_client.agents.list(
+            include_total_count=True,
             is_public=True,
             limit=0,
             name="name",

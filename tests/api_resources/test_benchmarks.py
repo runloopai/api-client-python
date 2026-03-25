@@ -164,6 +164,7 @@ class TestBenchmarks:
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -245,6 +246,7 @@ class TestBenchmarks:
     @parametrize
     def test_method_list_public_with_all_params(self, client: Runloop) -> None:
         benchmark = client.benchmarks.list_public(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
         )
@@ -537,6 +539,7 @@ class TestAsyncBenchmarks:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list(
+            include_total_count=True,
             limit=0,
             name="name",
             starting_after="starting_after",
@@ -618,6 +621,7 @@ class TestAsyncBenchmarks:
     @parametrize
     async def test_method_list_public_with_all_params(self, async_client: AsyncRunloop) -> None:
         benchmark = await async_client.benchmarks.list_public(
+            include_total_count=True,
             limit=0,
             starting_after="starting_after",
         )

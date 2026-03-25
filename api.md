@@ -87,6 +87,29 @@ Methods:
 - <code title="get /v1/agents/{id}">client.agents.<a href="./src/runloop_api_client/resources/agents.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
 - <code title="get /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list</a>(\*\*<a href="src/runloop_api_client/types/agent_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
 
+# Axons
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    AxonCreateParams,
+    AxonEventView,
+    AxonListView,
+    AxonView,
+    PublishParams,
+    PublishResultView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons.py">create</a>(\*\*<a href="src/runloop_api_client/types/axon_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
+- <code title="get /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
+- <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons.py">list</a>() -> <a href="./src/runloop_api_client/types/axon_list_view.py">AxonListView</a></code>
+- <code title="post /v1/axons/{id}/publish">client.axons.<a href="./src/runloop_api_client/resources/axons.py">publish</a>(id, \*\*<a href="src/runloop_api_client/types/axon_publish_params.py">params</a>) -> <a href="./src/runloop_api_client/types/publish_result_view.py">PublishResultView</a></code>
+- <code title="get /v1/axons/{id}/subscribe/sse">client.axons.<a href="./src/runloop_api_client/resources/axons.py">subscribe_sse</a>(id) -> <a href="./src/runloop_api_client/types/axon_event_view.py">AxonEventView</a></code>
+
 # Blueprints
 
 Types:
@@ -155,7 +178,7 @@ Methods:
 - <code title="post /v1/devboxes/{id}/keep_alive">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">keep_alive</a>(id) -> object</code>
 - <code title="get /v1/devboxes/disk_snapshots">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list_disk_snapshots</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_disk_snapshots_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_snapshot_view.py">SyncDiskSnapshotsCursorIDPage[DevboxSnapshotView]</a></code>
 - <code title="post /v1/devboxes/{id}/read_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">read_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_read_file_contents_params.py">params</a>) -> str</code>
-- <code title="post /v1/devboxes/{id}/remove_tunnel">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">remove_tunnel</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_remove_tunnel_params.py">params</a>) -> object</code>
+- <code title="post /v1/devboxes/{id}/remove_tunnel">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">remove_tunnel</a>(id) -> object</code>
 - <code title="post /v1/devboxes/{id}/resume">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">resume</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes/{id}/usage">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve_resource_usage</a>(id) -> <a href="./src/runloop_api_client/types/devbox_resource_usage_view.py">DevboxResourceUsageView</a></code>
 - <code title="post /v1/devboxes/{id}/shutdown">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">shutdown</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_shutdown_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>

@@ -73,6 +73,7 @@ class TestRuns:
     def test_method_list_with_all_params(self, client: Runloop) -> None:
         run = client.scenarios.runs.list(
             benchmark_run_id="benchmark_run_id",
+            include_total_count=True,
             limit=0,
             name="name",
             scenario_id="scenario_id",
@@ -324,6 +325,7 @@ class TestAsyncRuns:
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
         run = await async_client.scenarios.runs.list(
             benchmark_run_id="benchmark_run_id",
+            include_total_count=True,
             limit=0,
             name="name",
             scenario_id="scenario_id",

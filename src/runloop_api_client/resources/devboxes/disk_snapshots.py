@@ -7,7 +7,7 @@ from typing import Dict, Optional
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -88,7 +88,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/disk_snapshots/{id}",
+            path_template("/v1/devboxes/disk_snapshots/{id}", id=id),
             body=maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -111,6 +111,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -129,6 +130,9 @@ class DiskSnapshotsResource(SyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -160,6 +164,7 @@ class DiskSnapshotsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
@@ -201,7 +206,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/disk_snapshots/{id}/delete",
+            path_template("/v1/devboxes/disk_snapshots/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -239,7 +244,7 @@ class DiskSnapshotsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/devboxes/disk_snapshots/{id}/status",
+            path_template("/v1/devboxes/disk_snapshots/{id}/status", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -339,7 +344,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/disk_snapshots/{id}",
+            path_template("/v1/devboxes/disk_snapshots/{id}", id=id),
             body=await async_maybe_transform(
                 {
                     "commit_message": commit_message,
@@ -362,6 +367,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         self,
         *,
         devbox_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         metadata_key: str | Omit = omit,
         metadata_key_in: str | Omit = omit,
@@ -380,6 +386,9 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
 
         Args:
           devbox_id: Devbox ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -411,6 +420,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "devbox_id": devbox_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "metadata_key": metadata_key,
                         "metadata_key_in": metadata_key_in,
@@ -452,7 +462,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/disk_snapshots/{id}/delete",
+            path_template("/v1/devboxes/disk_snapshots/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -490,7 +500,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/devboxes/disk_snapshots/{id}/status",
+            path_template("/v1/devboxes/disk_snapshots/{id}/status", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

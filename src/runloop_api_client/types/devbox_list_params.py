@@ -8,6 +8,12 @@ __all__ = ["DevboxListParams"]
 
 
 class DevboxListParams(TypedDict, total=False):
+    include_total_count: bool
+    """If true (default), includes total_count in the response.
+
+    Set to false to skip the count query for better performance on large datasets.
+    """
+
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""
 

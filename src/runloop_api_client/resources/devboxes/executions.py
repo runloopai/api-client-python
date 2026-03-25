@@ -9,7 +9,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import is_given, maybe_transform, async_maybe_transform
+from ..._utils import is_given, path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -104,7 +104,9 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}", devbox_id=devbox_id, execution_id=execution_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -210,7 +212,7 @@ class ExecutionsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/devboxes/{id}/execute_async",
+            path_template("/v1/devboxes/{id}/execute_async", id=id),
             body=maybe_transform(
                 {
                     "command": command,
@@ -278,7 +280,7 @@ class ExecutionsResource(SyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return self._post(
-            f"/v1/devboxes/{id}/execute_sync",
+            path_template("/v1/devboxes/{id}/execute_sync", id=id),
             body=maybe_transform(
                 {
                     "command": command,
@@ -334,7 +336,11 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=maybe_transform({"kill_process_group": kill_process_group}, execution_kill_params.ExecutionKillParams),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -384,7 +390,11 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=maybe_transform(
                 {
                     "signal": signal,
@@ -435,12 +445,18 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
 
+        stream_path = path_template(
+            "/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+            devbox_id=devbox_id,
+            execution_id=execution_id,
+        )
+
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -458,7 +474,7 @@ class ExecutionsResource(SyncAPIResource):
         def create_stream(last_offset: str | None) -> Stream[ExecutionUpdateChunk]:
             new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
             return self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -520,12 +536,18 @@ class ExecutionsResource(SyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
 
+        stream_path = path_template(
+            "/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+            devbox_id=devbox_id,
+            execution_id=execution_id,
+        )
+
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -543,7 +565,7 @@ class ExecutionsResource(SyncAPIResource):
         def create_stream(last_offset: str | None) -> Stream[ExecutionUpdateChunk]:
             new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
             return self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -626,7 +648,9 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._get(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}", devbox_id=devbox_id, execution_id=execution_id
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -730,7 +754,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/devboxes/{id}/execute_async",
+            path_template("/v1/devboxes/{id}/execute_async", id=id),
             body=await async_maybe_transform(
                 {
                     "command": command,
@@ -798,7 +822,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
         return await self._post(
-            f"/v1/devboxes/{id}/execute_sync",
+            path_template("/v1/devboxes/{id}/execute_sync", id=id),
             body=await async_maybe_transform(
                 {
                     "command": command,
@@ -854,7 +878,11 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/kill",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=await async_maybe_transform(
                 {"kill_process_group": kill_process_group}, execution_kill_params.ExecutionKillParams
             ),
@@ -906,7 +934,11 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
         return await self._post(
-            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+            path_template(
+                "/v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in",
+                devbox_id=devbox_id,
+                execution_id=execution_id,
+            ),
             body=await async_maybe_transform(
                 {
                     "signal": signal,
@@ -957,12 +989,18 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
 
+        stream_path = path_template(
+            "/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+            devbox_id=devbox_id,
+            execution_id=execution_id,
+        )
+
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -980,7 +1018,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         async def create_stream(last_offset: str | None) -> AsyncStream[ExecutionUpdateChunk]:
             new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -1042,13 +1080,19 @@ class AsyncExecutionsResource(AsyncAPIResource):
         if not execution_id:
             raise ValueError(f"Expected a non-empty value for `execution_id` but received {execution_id!r}")
 
+        stream_path = path_template(
+            "/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+            devbox_id=devbox_id,
+            execution_id=execution_id,
+        )
+
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
 
         # If caller requested a raw or streaming response wrapper, return the underlying stream as-is
         if merged_headers and merged_headers.get(RAW_RESPONSE_HEADER):
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,
@@ -1066,7 +1110,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         async def create_stream(last_offset: str | None) -> AsyncStream[ExecutionUpdateChunk]:
             new_offset = last_offset if last_offset is not None else (None if isinstance(offset, NotGiven) else offset)
             return await self._get(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates",
+                stream_path,
                 options=make_request_options(
                     extra_headers=merged_headers,
                     extra_query=extra_query,

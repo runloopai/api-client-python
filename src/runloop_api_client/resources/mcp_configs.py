@@ -8,7 +8,7 @@ import httpx
 
 from ..types import mcp_config_list_params, mcp_config_create_params, mcp_config_update_params
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -134,7 +134,7 @@ class McpConfigsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/mcp-configs/{id}",
+            path_template("/v1/mcp-configs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -184,7 +184,7 @@ class McpConfigsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/mcp-configs/{id}",
+            path_template("/v1/mcp-configs/{id}", id=id),
             body=maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
@@ -208,6 +208,7 @@ class McpConfigsResource(SyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -223,6 +224,9 @@ class McpConfigsResource(SyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -249,6 +253,7 @@ class McpConfigsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -289,7 +294,7 @@ class McpConfigsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/mcp-configs/{id}/delete",
+            path_template("/v1/mcp-configs/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -411,7 +416,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/mcp-configs/{id}",
+            path_template("/v1/mcp-configs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -461,7 +466,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/mcp-configs/{id}",
+            path_template("/v1/mcp-configs/{id}", id=id),
             body=await async_maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
@@ -485,6 +490,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         self,
         *,
         id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -500,6 +506,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
 
         Args:
           id: Filter by ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -526,6 +535,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "id": id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -566,7 +576,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/mcp-configs/{id}/delete",
+            path_template("/v1/mcp-configs/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

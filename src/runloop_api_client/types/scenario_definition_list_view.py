@@ -14,6 +14,4 @@ class ScenarioDefinitionListView(BaseModel):
     scenarios: List[ScenarioView]
     """List of Scenarios matching filter."""
 
-    remaining_count: Optional[int] = None
-
     total_count: Optional[int] = None

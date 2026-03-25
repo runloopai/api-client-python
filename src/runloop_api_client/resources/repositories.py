@@ -14,7 +14,7 @@ from ..types import (
     repository_refresh_params,
 )
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -138,7 +138,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/{id}",
+            path_template("/v1/repositories/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -148,6 +148,7 @@ class RepositoriesResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         owner: str | Omit = omit,
@@ -163,6 +164,9 @@ class RepositoriesResource(SyncAPIResource):
         List all available repository connections.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
@@ -189,6 +193,7 @@ class RepositoriesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "owner": owner,
@@ -230,7 +235,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/delete",
+            path_template("/v1/repositories/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -274,7 +279,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/inspect",
+            path_template("/v1/repositories/{id}/inspect", id=id),
             body=maybe_transform(
                 {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
@@ -315,7 +320,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/{id}/inspections",
+            path_template("/v1/repositories/{id}/inspections", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -359,7 +364,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/repositories/{id}/refresh",
+            path_template("/v1/repositories/{id}/refresh", id=id),
             body=maybe_transform(
                 {
                     "blueprint_id": blueprint_id,
@@ -403,7 +408,7 @@ class RepositoriesResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/repositories/inspections/{id}",
+            path_template("/v1/repositories/inspections/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -517,7 +522,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/{id}",
+            path_template("/v1/repositories/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -527,6 +532,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         owner: str | Omit = omit,
@@ -542,6 +548,9 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         List all available repository connections.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by repository name
@@ -568,6 +577,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "owner": owner,
@@ -609,7 +619,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/delete",
+            path_template("/v1/repositories/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -653,7 +663,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/inspect",
+            path_template("/v1/repositories/{id}/inspect", id=id),
             body=await async_maybe_transform(
                 {"github_auth_token": github_auth_token}, repository_inspect_params.RepositoryInspectParams
             ),
@@ -694,7 +704,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/{id}/inspections",
+            path_template("/v1/repositories/{id}/inspections", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -738,7 +748,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/repositories/{id}/refresh",
+            path_template("/v1/repositories/{id}/refresh", id=id),
             body=await async_maybe_transform(
                 {
                     "blueprint_id": blueprint_id,
@@ -782,7 +792,7 @@ class AsyncRepositoriesResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/repositories/inspections/{id}",
+            path_template("/v1/repositories/inspections/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

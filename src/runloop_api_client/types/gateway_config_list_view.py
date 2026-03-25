@@ -18,7 +18,4 @@ class GatewayConfigListView(BaseModel):
     """Whether there are more results available beyond this page."""
 
     total_count: Optional[int] = None
-    """Total count of GatewayConfigs that match the query.
-
-    Deprecated: will be removed in a future breaking change.
-    """
+    """Total count of GatewayConfigs that match the query."""

@@ -2,54 +2,56 @@
 
 from __future__ import annotations
 
+from typing import Optional
+from typing_extensions import Literal
+
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import path_template, maybe_transform, async_maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from ..types import axon_create_params, axon_publish_params
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from .._utils import path_template, maybe_transform, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...pagination import SyncScenarioScorersCursorIDPage, AsyncScenarioScorersCursorIDPage
-from ..._base_client import AsyncPaginator, make_request_options
-from ...types.scenarios import scorer_list_params, scorer_create_params, scorer_update_params
-from ...types.scenarios.scorer_list_response import ScorerListResponse
-from ...types.scenarios.scorer_create_response import ScorerCreateResponse
-from ...types.scenarios.scorer_update_response import ScorerUpdateResponse
-from ...types.scenarios.scorer_retrieve_response import ScorerRetrieveResponse
+from .._streaming import Stream, AsyncStream
+from .._base_client import make_request_options
+from ..types.axon_view import AxonView
+from ..types.axon_list_view import AxonListView
+from ..types.axon_event_view import AxonEventView
+from ..types.publish_result_view import PublishResultView
 
-__all__ = ["ScorersResource", "AsyncScorersResource"]
+__all__ = ["AxonsResource", "AsyncAxonsResource"]
 
 
-class ScorersResource(SyncAPIResource):
+class AxonsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> ScorersResourceWithRawResponse:
+    def with_raw_response(self) -> AxonsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return ScorersResourceWithRawResponse(self)
+        return AxonsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> ScorersResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AxonsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return ScorersResourceWithStreamingResponse(self)
+        return AxonsResourceWithStreamingResponse(self)
 
     def create(
         self,
         *,
-        bash_script: str,
-        type: str,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -57,15 +59,12 @@ class ScorersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerCreateResponse:
+    ) -> AxonView:
         """
-        Create a custom scenario scorer.
+        [Beta] Create a new axon.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
-
-          type: Name of the type of custom scorer.
+          name: (Optional) Name for the axon.
 
           extra_headers: Send extra headers
 
@@ -78,14 +77,8 @@ class ScorersResource(SyncAPIResource):
           idempotency_key: Specify a custom idempotency key for this request
         """
         return self._post(
-            "/v1/scenarios/scorers",
-            body=maybe_transform(
-                {
-                    "bash_script": bash_script,
-                    "type": type,
-                },
-                scorer_create_params.ScorerCreateParams,
-            ),
+            "/v1/axons",
+            body=maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -93,7 +86,7 @@ class ScorersResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerCreateResponse,
+            cast_to=AxonView,
         )
 
     def retrieve(
@@ -106,9 +99,9 @@ class ScorersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ScorerRetrieveResponse:
+    ) -> AxonView:
         """
-        Retrieve Scenario Scorer.
+        [Beta] Get an axon given ID.
 
         Args:
           extra_headers: Send extra headers
@@ -122,19 +115,40 @@ class ScorersResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            path_template("/v1/scenarios/scorers/{id}", id=id),
+            path_template("/v1/axons/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScorerRetrieveResponse,
+            cast_to=AxonView,
         )
 
-    def update(
+    def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AxonListView:
+        """[Beta] List all active axons."""
+        return self._get(
+            "/v1/axons",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AxonListView,
+        )
+
+    def publish(
         self,
         id: str,
         *,
-        bash_script: str,
-        type: str,
+        event_type: str,
+        origin: Literal["EXTERNAL_EVENT", "AGENT_EVENT", "USER_EVENT"],
+        payload: str,
+        source: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -142,15 +156,18 @@ class ScorersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerUpdateResponse:
+    ) -> PublishResultView:
         """
-        Update a scenario scorer.
+        [Beta] Publish an event to a specified axon.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          event_type: The event type (e.g. push, pull_request).
 
-          type: Name of the type of custom scorer.
+          origin: Event origin.
+
+          payload: Event payload.
+
+          source: The source of the event (e.g. github, slack).
 
           extra_headers: Send extra headers
 
@@ -165,13 +182,15 @@ class ScorersResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            path_template("/v1/scenarios/scorers/{id}", id=id),
+            path_template("/v1/axons/{id}/publish", id=id),
             body=maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "event_type": event_type,
+                    "origin": origin,
+                    "payload": payload,
+                    "source": source,
                 },
-                scorer_update_params.ScorerUpdateParams,
+                axon_publish_params.AxonPublishParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -180,33 +199,24 @@ class ScorersResource(SyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerUpdateResponse,
+            cast_to=PublishResultView,
         )
 
-    def list(
+    def subscribe_sse(
         self,
+        id: str,
         *,
-        include_total_count: bool | Omit = omit,
-        limit: int | Omit = omit,
-        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SyncScenarioScorersCursorIDPage[ScorerListResponse]:
+    ) -> Stream[AxonEventView]:
         """
-        List all Scenario Scorers matching filter.
+        [Beta] Subscribe to an axon event stream via server-sent events.
 
         Args:
-          include_total_count: If true (default), includes total_count in the response. Set to false to skip
-              the count query for better performance on large datasets.
-
-          limit: The limit of items to return. Default is 20. Max is 5000.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -215,52 +225,43 @@ class ScorersResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get_api_list(
-            "/v1/scenarios/scorers",
-            page=SyncScenarioScorersCursorIDPage[ScorerListResponse],
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "include_total_count": include_total_count,
-                        "limit": limit,
-                        "starting_after": starting_after,
-                    },
-                    scorer_list_params.ScorerListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=ScorerListResponse,
+            cast_to=AxonEventView,
+            stream=True,
+            stream_cls=Stream[AxonEventView],
         )
 
 
-class AsyncScorersResource(AsyncAPIResource):
+class AsyncAxonsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncScorersResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncAxonsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/runloopai/api-client-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncScorersResourceWithRawResponse(self)
+        return AsyncAxonsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncScorersResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncAxonsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/runloopai/api-client-python#with_streaming_response
         """
-        return AsyncScorersResourceWithStreamingResponse(self)
+        return AsyncAxonsResourceWithStreamingResponse(self)
 
     async def create(
         self,
         *,
-        bash_script: str,
-        type: str,
+        name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -268,15 +269,12 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerCreateResponse:
+    ) -> AxonView:
         """
-        Create a custom scenario scorer.
+        [Beta] Create a new axon.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
-
-          type: Name of the type of custom scorer.
+          name: (Optional) Name for the axon.
 
           extra_headers: Send extra headers
 
@@ -289,14 +287,8 @@ class AsyncScorersResource(AsyncAPIResource):
           idempotency_key: Specify a custom idempotency key for this request
         """
         return await self._post(
-            "/v1/scenarios/scorers",
-            body=await async_maybe_transform(
-                {
-                    "bash_script": bash_script,
-                    "type": type,
-                },
-                scorer_create_params.ScorerCreateParams,
-            ),
+            "/v1/axons",
+            body=await async_maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -304,7 +296,7 @@ class AsyncScorersResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerCreateResponse,
+            cast_to=AxonView,
         )
 
     async def retrieve(
@@ -317,9 +309,9 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ScorerRetrieveResponse:
+    ) -> AxonView:
         """
-        Retrieve Scenario Scorer.
+        [Beta] Get an axon given ID.
 
         Args:
           extra_headers: Send extra headers
@@ -333,19 +325,40 @@ class AsyncScorersResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            path_template("/v1/scenarios/scorers/{id}", id=id),
+            path_template("/v1/axons/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScorerRetrieveResponse,
+            cast_to=AxonView,
         )
 
-    async def update(
+    async def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AxonListView:
+        """[Beta] List all active axons."""
+        return await self._get(
+            "/v1/axons",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AxonListView,
+        )
+
+    async def publish(
         self,
         id: str,
         *,
-        bash_script: str,
-        type: str,
+        event_type: str,
+        origin: Literal["EXTERNAL_EVENT", "AGENT_EVENT", "USER_EVENT"],
+        payload: str,
+        source: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -353,15 +366,18 @@ class AsyncScorersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
-    ) -> ScorerUpdateResponse:
+    ) -> PublishResultView:
         """
-        Update a scenario scorer.
+        [Beta] Publish an event to a specified axon.
 
         Args:
-          bash_script: Bash script for the custom scorer taking context as a json object
-              $RL_SCORER_CONTEXT.
+          event_type: The event type (e.g. push, pull_request).
 
-          type: Name of the type of custom scorer.
+          origin: Event origin.
+
+          payload: Event payload.
+
+          source: The source of the event (e.g. github, slack).
 
           extra_headers: Send extra headers
 
@@ -376,13 +392,15 @@ class AsyncScorersResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            path_template("/v1/scenarios/scorers/{id}", id=id),
+            path_template("/v1/axons/{id}/publish", id=id),
             body=await async_maybe_transform(
                 {
-                    "bash_script": bash_script,
-                    "type": type,
+                    "event_type": event_type,
+                    "origin": origin,
+                    "payload": payload,
+                    "source": source,
                 },
-                scorer_update_params.ScorerUpdateParams,
+                axon_publish_params.AxonPublishParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -391,33 +409,24 @@ class AsyncScorersResource(AsyncAPIResource):
                 timeout=timeout,
                 idempotency_key=idempotency_key,
             ),
-            cast_to=ScorerUpdateResponse,
+            cast_to=PublishResultView,
         )
 
-    def list(
+    async def subscribe_sse(
         self,
+        id: str,
         *,
-        include_total_count: bool | Omit = omit,
-        limit: int | Omit = omit,
-        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AsyncPaginator[ScorerListResponse, AsyncScenarioScorersCursorIDPage[ScorerListResponse]]:
+    ) -> AsyncStream[AxonEventView]:
         """
-        List all Scenario Scorers matching filter.
+        [Beta] Subscribe to an axon event stream via server-sent events.
 
         Args:
-          include_total_count: If true (default), includes total_count in the response. Set to false to skip
-              the count query for better performance on large datasets.
-
-          limit: The limit of items to return. Default is 20. Max is 5000.
-
-          starting_after: Load the next page of data starting after the item with the given ID.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -426,94 +435,98 @@ class AsyncScorersResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get_api_list(
-            "/v1/scenarios/scorers",
-            page=AsyncScenarioScorersCursorIDPage[ScorerListResponse],
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "include_total_count": include_total_count,
-                        "limit": limit,
-                        "starting_after": starting_after,
-                    },
-                    scorer_list_params.ScorerListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=ScorerListResponse,
+            cast_to=AxonEventView,
+            stream=True,
+            stream_cls=AsyncStream[AxonEventView],
         )
 
 
-class ScorersResourceWithRawResponse:
-    def __init__(self, scorers: ScorersResource) -> None:
-        self._scorers = scorers
+class AxonsResourceWithRawResponse:
+    def __init__(self, axons: AxonsResource) -> None:
+        self._axons = axons
 
         self.create = to_raw_response_wrapper(
-            scorers.create,
+            axons.create,
         )
         self.retrieve = to_raw_response_wrapper(
-            scorers.retrieve,
-        )
-        self.update = to_raw_response_wrapper(
-            scorers.update,
+            axons.retrieve,
         )
         self.list = to_raw_response_wrapper(
-            scorers.list,
+            axons.list,
+        )
+        self.publish = to_raw_response_wrapper(
+            axons.publish,
+        )
+        self.subscribe_sse = to_raw_response_wrapper(
+            axons.subscribe_sse,
         )
 
 
-class AsyncScorersResourceWithRawResponse:
-    def __init__(self, scorers: AsyncScorersResource) -> None:
-        self._scorers = scorers
+class AsyncAxonsResourceWithRawResponse:
+    def __init__(self, axons: AsyncAxonsResource) -> None:
+        self._axons = axons
 
         self.create = async_to_raw_response_wrapper(
-            scorers.create,
+            axons.create,
         )
         self.retrieve = async_to_raw_response_wrapper(
-            scorers.retrieve,
-        )
-        self.update = async_to_raw_response_wrapper(
-            scorers.update,
+            axons.retrieve,
         )
         self.list = async_to_raw_response_wrapper(
-            scorers.list,
+            axons.list,
+        )
+        self.publish = async_to_raw_response_wrapper(
+            axons.publish,
+        )
+        self.subscribe_sse = async_to_raw_response_wrapper(
+            axons.subscribe_sse,
         )
 
 
-class ScorersResourceWithStreamingResponse:
-    def __init__(self, scorers: ScorersResource) -> None:
-        self._scorers = scorers
+class AxonsResourceWithStreamingResponse:
+    def __init__(self, axons: AxonsResource) -> None:
+        self._axons = axons
 
         self.create = to_streamed_response_wrapper(
-            scorers.create,
+            axons.create,
         )
         self.retrieve = to_streamed_response_wrapper(
-            scorers.retrieve,
-        )
-        self.update = to_streamed_response_wrapper(
-            scorers.update,
+            axons.retrieve,
         )
         self.list = to_streamed_response_wrapper(
-            scorers.list,
+            axons.list,
+        )
+        self.publish = to_streamed_response_wrapper(
+            axons.publish,
+        )
+        self.subscribe_sse = to_streamed_response_wrapper(
+            axons.subscribe_sse,
         )
 
 
-class AsyncScorersResourceWithStreamingResponse:
-    def __init__(self, scorers: AsyncScorersResource) -> None:
-        self._scorers = scorers
+class AsyncAxonsResourceWithStreamingResponse:
+    def __init__(self, axons: AsyncAxonsResource) -> None:
+        self._axons = axons
 
         self.create = async_to_streamed_response_wrapper(
-            scorers.create,
+            axons.create,
         )
         self.retrieve = async_to_streamed_response_wrapper(
-            scorers.retrieve,
-        )
-        self.update = async_to_streamed_response_wrapper(
-            scorers.update,
+            axons.retrieve,
         )
         self.list = async_to_streamed_response_wrapper(
-            scorers.list,
+            axons.list,
+        )
+        self.publish = async_to_streamed_response_wrapper(
+            axons.publish,
+        )
+        self.subscribe_sse = async_to_streamed_response_wrapper(
+            axons.subscribe_sse,
         )

@@ -14,7 +14,7 @@ from ..types import (
     blueprint_create_from_inspection_params,
 )
 from .._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import is_given, maybe_transform, async_maybe_transform
+from .._utils import is_given, path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -268,7 +268,7 @@ class BlueprintsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/blueprints/{id}",
+            path_template("/v1/blueprints/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -396,6 +396,7 @@ class BlueprintsResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -411,6 +412,9 @@ class BlueprintsResource(SyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -437,6 +441,7 @@ class BlueprintsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -480,7 +485,7 @@ class BlueprintsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/blueprints/{id}/delete",
+            path_template("/v1/blueprints/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -574,6 +579,7 @@ class BlueprintsResource(SyncAPIResource):
     def list_public(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -589,6 +595,9 @@ class BlueprintsResource(SyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -615,6 +624,7 @@ class BlueprintsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -652,7 +662,7 @@ class BlueprintsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/blueprints/{id}/logs",
+            path_template("/v1/blueprints/{id}/logs", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -938,7 +948,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/blueprints/{id}",
+            path_template("/v1/blueprints/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -1066,6 +1076,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -1081,6 +1092,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all Blueprints or filter by name.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -1107,6 +1121,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -1150,7 +1165,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/blueprints/{id}/delete",
+            path_template("/v1/blueprints/{id}/delete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -1244,6 +1259,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
     def list_public(
         self,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -1259,6 +1275,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         List all public Blueprints that are available to all users.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
@@ -1285,6 +1304,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -1322,7 +1342,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/blueprints/{id}/logs",
+            path_template("/v1/blueprints/{id}/logs", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

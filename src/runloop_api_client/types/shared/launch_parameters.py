@@ -37,10 +37,9 @@ class LaunchParameters(BaseModel):
     """The target architecture for the Devbox. If unset, defaults to x86_64."""
 
     available_ports: Optional[List[int]] = None
-    """A list of ports to make available on the Devbox.
+    """[Deprecated] A list of ports to make available on the Devbox.
 
-    Only ports made available will be surfaced to create tunnels via the
-    'createTunnel' API.
+    This field is ignored.
     """
 
     custom_cpu_cores: Optional[int] = None

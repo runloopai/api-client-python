@@ -8,7 +8,7 @@ import httpx
 
 from ..types import benchmark_run_list_params, benchmark_run_list_scenario_runs_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform
+from .._utils import path_template, maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -71,7 +71,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get(
-            f"/v1/benchmark_runs/{id}",
+            path_template("/v1/benchmark_runs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -82,6 +82,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -97,6 +98,9 @@ class BenchmarkRunsResource(SyncAPIResource):
 
         Args:
           benchmark_id: The Benchmark ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -123,6 +127,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -165,7 +170,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmark_runs/{id}/cancel",
+            path_template("/v1/benchmark_runs/{id}/cancel", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -205,7 +210,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._post(
-            f"/v1/benchmark_runs/{id}/complete",
+            path_template("/v1/benchmark_runs/{id}/complete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -220,6 +225,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         self,
         id: str,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
@@ -234,6 +240,9 @@ class BenchmarkRunsResource(SyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -251,7 +260,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmark_runs/{id}/scenario_runs",
+            path_template("/v1/benchmark_runs/{id}/scenario_runs", id=id),
             page=SyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -260,6 +269,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "state": state,
@@ -317,7 +327,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._get(
-            f"/v1/benchmark_runs/{id}",
+            path_template("/v1/benchmark_runs/{id}", id=id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -328,6 +338,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         self,
         *,
         benchmark_id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -343,6 +354,9 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
 
         Args:
           benchmark_id: The Benchmark ID to filter by.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
 
@@ -369,6 +383,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                 query=maybe_transform(
                     {
                         "benchmark_id": benchmark_id,
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
@@ -411,7 +426,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmark_runs/{id}/cancel",
+            path_template("/v1/benchmark_runs/{id}/cancel", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -451,7 +466,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._post(
-            f"/v1/benchmark_runs/{id}/complete",
+            path_template("/v1/benchmark_runs/{id}/complete", id=id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -466,6 +481,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
@@ -480,6 +496,9 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         List started scenario runs for a benchmark run.
 
         Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           starting_after: Load the next page of data starting after the item with the given ID.
@@ -497,7 +516,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._get_api_list(
-            f"/v1/benchmark_runs/{id}/scenario_runs",
+            path_template("/v1/benchmark_runs/{id}/scenario_runs", id=id),
             page=AsyncBenchmarkRunsCursorIDPage[ScenarioRunView],
             options=make_request_options(
                 extra_headers=extra_headers,
@@ -506,6 +525,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "include_total_count": include_total_count,
                         "limit": limit,
                         "starting_after": starting_after,
                         "state": state,
