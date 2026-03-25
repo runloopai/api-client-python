@@ -1,4 +1,4 @@
-from typing import Union, Literal, Callable, Optional
+from typing import Union, Literal, Callable, Iterable, Optional
 from typing_extensions import TypedDict
 
 from ..types import (
@@ -39,6 +39,7 @@ from ..types import (
 )
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
+from ..types.axons.sql_statement_params import SqlStatementParams
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
@@ -205,7 +206,7 @@ class SDKAxonSqlQueryParams(LongRequestOptions, total=False):
 
 
 class SDKAxonSqlBatchParams(LongRequestOptions, total=False):
-    statements: list[dict[str, object]]
+    statements: Iterable[SqlStatementParams]
     """The SQL statements to execute atomically within a transaction."""
 
 

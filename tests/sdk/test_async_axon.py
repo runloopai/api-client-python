@@ -8,6 +8,7 @@ import pytest
 
 from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlBatchResultView, MockSqlQueryResultView
 from runloop_api_client.sdk import AsyncAxon
+from runloop_api_client.types.axons.sql_statement_params import SqlStatementParams
 
 
 class TestAsyncAxon:
@@ -98,7 +99,7 @@ class TestAsyncAxon:
         mock_result = MockSqlBatchResultView()
         mock_async_client.axons.sql.batch = AsyncMock(return_value=mock_result)
 
-        statements = [
+        statements: list[SqlStatementParams] = [
             {"sql": "CREATE TABLE t (id INTEGER PRIMARY KEY)"},
             {"sql": "INSERT INTO t (id) VALUES (?)", "params": [1]},
         ]
