@@ -22,5 +22,5 @@ class BrokerMount(TypedDict, total=False):
     launch_args: Optional[SequenceNotStr[str]]
     """Arguments to pass to the agent command (e.g., ['acp']). Used by ACP broker."""
 
-    protocol: Optional[Literal["acp", "claude", "codex"]]
+    protocol: Optional[Literal["acp", "claude_json", "codex_app_server"]]
     """The protocol used by the broker to deliver events to the agent."""

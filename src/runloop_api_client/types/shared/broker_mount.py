@@ -20,5 +20,5 @@ class BrokerMount(BaseModel):
     launch_args: Optional[List[str]] = None
     """Arguments to pass to the agent command (e.g., ['acp']). Used by ACP broker."""
 
-    protocol: Optional[Literal["acp", "claude", "codex"]] = None
+    protocol: Optional[Literal["acp", "claude_json", "codex_app_server"]] = None
     """The protocol used by the broker to deliver events to the agent."""
