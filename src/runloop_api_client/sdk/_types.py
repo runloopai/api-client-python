@@ -39,11 +39,11 @@ from ..types import (
 )
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
-from ..types.axons.sql_statement_params import SqlStatementParams
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
+from ..types.axons.sql_statement_params import SqlStatementParams
 from ..types.benchmark_start_run_params import BenchmarkSelfStartRunParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 
