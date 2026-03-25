@@ -5,7 +5,7 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 
 from __future__ import annotations
 
-from .axon import Axon
+from .axon import Axon, AxonSqlOps
 from .sync import (
     AxonOps,
     AgentOps,
@@ -48,7 +48,7 @@ from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
 from .execution import Execution
-from .async_axon import AsyncAxon
+from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
@@ -111,6 +111,8 @@ __all__ = [
     "AsyncAgent",
     "Axon",
     "AsyncAxon",
+    "AxonSqlOps",
+    "AsyncAxonSqlOps",
     "AsyncSecret",
     "Benchmark",
     "AsyncBenchmark",

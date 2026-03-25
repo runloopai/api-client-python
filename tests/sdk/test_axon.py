@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from unittest.mock import Mock
 
-from tests.sdk.conftest import MockAxonView, MockPublishResultView
+from tests.sdk.conftest import MockAxonView, MockPublishResultView, MockSqlQueryResultView, MockSqlBatchResultView
 from runloop_api_client.sdk import Axon
 
 
@@ -70,3 +70,36 @@ class TestAxon:
 
         assert result == mock_stream
         mock_client.axons.subscribe_sse.assert_called_once_with("axn_123")
+
+    def test_sql_query(self, mock_client: Mock) -> None:
+        """Test sql.query method delegates to client.axons.sql.query."""
+        mock_result = MockSqlQueryResultView()
+        mock_client.axons.sql.query.return_value = mock_result
+
+        axon = Axon(mock_client, "axn_123")
+        result = axon.sql.query(sql="SELECT * FROM test WHERE id = ?", params=[1])
+
+        assert result == mock_result
+        mock_client.axons.sql.query.assert_called_once_with(
+            "axn_123",
+            sql="SELECT * FROM test WHERE id = ?",
+            params=[1],
+        )
+
+    def test_sql_batch(self, mock_client: Mock) -> None:
+        """Test sql.batch method delegates to client.axons.sql.batch."""
+        mock_result = MockSqlBatchResultView()
+        mock_client.axons.sql.batch.return_value = mock_result
+
+        statements = [
+            {"sql": "CREATE TABLE t (id INTEGER PRIMARY KEY)"},
+            {"sql": "INSERT INTO t (id) VALUES (?)", "params": [1]},
+        ]
+        axon = Axon(mock_client, "axn_123")
+        result = axon.sql.batch(statements=statements)
+
+        assert result == mock_result
+        mock_client.axons.sql.batch.assert_called_once_with(
+            "axn_123",
+            statements=statements,
+        )

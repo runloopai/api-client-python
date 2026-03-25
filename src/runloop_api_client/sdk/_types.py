@@ -196,6 +196,19 @@ class SDKAxonPublishParams(AxonPublishParams, LongRequestOptions):
     pass
 
 
+class SDKAxonSqlQueryParams(LongRequestOptions, total=False):
+    sql: str
+    """SQL query with ?-style positional placeholders."""
+
+    params: list[object]
+    """Positional parameter bindings for ? placeholders."""
+
+
+class SDKAxonSqlBatchParams(LongRequestOptions, total=False):
+    statements: list[dict[str, object]]
+    """The SQL statements to execute atomically within a transaction."""
+
+
 class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
     pass
 

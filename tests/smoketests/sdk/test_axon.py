@@ -69,6 +69,46 @@ class TestAxonLifecycle:
             pass
 
 
+class TestAxonSql:
+    """Test axon SQL operations."""
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_sql_query_create_and_select(self, sdk_client: RunloopSDK) -> None:
+        """Test creating a table and querying it via sql.query."""
+        axon = sdk_client.axon.create()
+
+        axon.sql.query(sql="CREATE TABLE IF NOT EXISTS smoke_test (id INTEGER PRIMARY KEY, value TEXT)")
+
+        axon.sql.query(sql="INSERT INTO smoke_test (id, value) VALUES (?, ?)", params=[1, "hello"])
+
+        result = axon.sql.query(sql="SELECT * FROM smoke_test WHERE id = ?", params=[1])
+
+        assert result.columns is not None
+        assert len(result.columns) > 0
+        assert len(result.rows) == 1
+        assert result.meta.duration_ms >= 0
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_sql_batch(self, sdk_client: RunloopSDK) -> None:
+        """Test executing multiple statements atomically via sql.batch."""
+        axon = sdk_client.axon.create()
+
+        result = axon.sql.batch(
+            statements=[
+                {"sql": "CREATE TABLE IF NOT EXISTS batch_test (id INTEGER PRIMARY KEY, name TEXT)"},
+                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [1, "alice"]},
+                {"sql": "INSERT INTO batch_test (id, name) VALUES (?, ?)", "params": [2, "bob"]},
+                {"sql": "SELECT * FROM batch_test ORDER BY id"},
+            ],
+        )
+
+        assert result.results is not None
+        assert len(result.results) == 4
+        select_result = result.results[3]
+        assert select_result.success is not None
+        assert len(select_result.success.rows) == 2
+
+
 class TestAxonListing:
     """Test axon listing operations."""
 

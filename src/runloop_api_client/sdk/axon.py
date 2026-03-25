@@ -7,19 +7,48 @@ from typing_extensions import Unpack, override
 from ._types import (
     BaseRequestOptions,
     SDKAxonPublishParams,
+    SDKAxonSqlQueryParams,
+    SDKAxonSqlBatchParams,
 )
 from .._client import Runloop
 from .._streaming import Stream
 from ..types.axon_view import AxonView
 from ..types.axon_event_view import AxonEventView
 from ..types.publish_result_view import PublishResultView
+from ..types.axons.sql_query_result_view import SqlQueryResultView
+from ..types.axons.sql_batch_result_view import SqlBatchResultView
+
+
+class AxonSqlOps:
+    """[Beta] SQL operations for an axon's SQLite database.
+
+    Access via ``axon.sql``.
+
+    Example:
+        >>> axon = runloop.axon.create()
+        >>> axon.sql.query(sql="CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT)")
+        >>> result = axon.sql.query(sql="SELECT * FROM tasks WHERE id = ?", params=[1])
+    """
+
+    def __init__(self, client: Runloop, axon_id: str) -> None:
+        self._client = client
+        self._axon_id = axon_id
+
+    def query(self, **params: Unpack[SDKAxonSqlQueryParams]) -> SqlQueryResultView:
+        """[Beta] Execute a single parameterized SQL statement against this axon's SQLite database."""
+        return self._client.axons.sql.query(self._axon_id, **params)
+
+    def batch(self, **params: Unpack[SDKAxonSqlBatchParams]) -> SqlBatchResultView:
+        """[Beta] Execute multiple SQL statements atomically within a single transaction."""
+        return self._client.axons.sql.batch(self._axon_id, **params)
 
 
 class Axon:
     """[Beta] Wrapper around synchronous axon operations.
 
-    Axons are event communication channels that support publishing events
-    and subscribing to event streams via server-sent events (SSE).
+    Axons are event communication channels that support publishing events,
+    subscribing to event streams via server-sent events (SSE), and executing
+    SQL queries against an embedded SQLite database.
     Obtain instances via ``runloop.axon.create()`` or ``runloop.axon.from_id()``.
 
     Example:
@@ -29,11 +58,13 @@ class Axon:
         >>> with axon.subscribe_sse() as stream:
         ...     for event in stream:
         ...         print(event.event_type, event.payload)
+        >>> axon.sql.query(sql="CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT)")
     """
 
     def __init__(self, client: Runloop, axon_id: str) -> None:
         self._client = client
         self._id = axon_id
+        self.sql = AxonSqlOps(client, axon_id)
 
     @override
     def __repr__(self) -> str:
