@@ -9,6 +9,8 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import Mock
 
+import httpx
+
 import pytest
 
 from tests.sdk.conftest import (
@@ -373,12 +375,34 @@ class TestDevbox:
             tunnel=tunnel_view,
         )
         mock_client.devboxes.retrieve.return_value = devbox_view_with_tunnel
+        mock_client.base_url = httpx.URL("https://api.runloop.ai")
 
         devbox = Devbox(mock_client, "dbx_123")
         result = devbox.get_tunnel_url(8080)
 
         assert result == "https://8080-abc123xyz.tunnel.runloop.ai"
         mock_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    def test_get_tunnel_url_derives_domain_from_base_url(self, mock_client: Mock) -> None:
+        """Test get_tunnel_url derives tunnel domain from client base_url."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_client.devboxes.retrieve.return_value = devbox_view_with_tunnel
+        devbox = Devbox(mock_client, "dbx_123")
+
+        mock_client.base_url = httpx.URL("https://api.runloop.pro")
+        assert devbox.get_tunnel_url(8080) == "https://8080-abc123xyz.tunnel.runloop.pro"
+
+        mock_client.base_url = httpx.URL("http://127.0.0.1:8080")
+        assert devbox.get_tunnel_url(8080) == "https://8080-abc123xyz.tunnel.127.0.0.1"
 
     def test_get_tunnel_url_returns_none_when_no_tunnel(self, mock_client: Mock) -> None:
         """Test get_tunnel_url returns None when no tunnel is enabled."""

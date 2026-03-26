@@ -9,6 +9,8 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
+import httpx
+
 import pytest
 
 from tests.sdk.conftest import MockDevboxView
@@ -377,12 +379,35 @@ class TestAsyncDevbox:
             tunnel=tunnel_view,
         )
         mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_with_tunnel)
+        mock_async_client.base_url = httpx.URL("https://api.runloop.ai")
 
         devbox = AsyncDevbox(mock_async_client, "dbx_123")
         result = await devbox.get_tunnel_url(8080)
 
         assert result == "https://8080-abc123xyz.tunnel.runloop.ai"
         mock_async_client.devboxes.retrieve.assert_called_once_with("dbx_123")
+
+    @pytest.mark.asyncio
+    async def test_get_tunnel_url_derives_domain_from_base_url(self, mock_async_client: AsyncMock) -> None:
+        """Test get_tunnel_url derives tunnel domain from client base_url."""
+        tunnel_view = SimpleNamespace(
+            tunnel_key="abc123xyz",
+            auth_mode="open",
+            create_time_ms=1234567890000,
+        )
+        devbox_view_with_tunnel = SimpleNamespace(
+            id="dbx_123",
+            status="running",
+            tunnel=tunnel_view,
+        )
+        mock_async_client.devboxes.retrieve = AsyncMock(return_value=devbox_view_with_tunnel)
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+
+        mock_async_client.base_url = httpx.URL("https://api.runloop.pro")
+        assert await devbox.get_tunnel_url(8080) == "https://8080-abc123xyz.tunnel.runloop.pro"
+
+        mock_async_client.base_url = httpx.URL("http://127.0.0.1:8080")
+        assert await devbox.get_tunnel_url(8080) == "https://8080-abc123xyz.tunnel.127.0.0.1"
 
     @pytest.mark.asyncio
     async def test_get_tunnel_url_returns_none_when_no_tunnel(self, mock_async_client: AsyncMock) -> None:
