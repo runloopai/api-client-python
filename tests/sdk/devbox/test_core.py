@@ -10,7 +10,6 @@ from types import SimpleNamespace
 from unittest.mock import Mock
 
 import httpx
-
 import pytest
 
 from tests.sdk.conftest import (
