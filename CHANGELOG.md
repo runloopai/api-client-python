@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.13.3 (2026-03-26)
+
+Full Changelog: [v1.13.2...v1.13.3](https://github.com/runloopai/api-client-python/compare/v1.13.2...v1.13.3)
+
+### Bug Fixes
+
+* **api:** surface scenario setup failures instead of silently dropping them ([#8300](https://github.com/runloopai/api-client-python/issues/8300)) ([dd910d0](https://github.com/runloopai/api-client-python/commit/dd910d0e867e9964d24cb792b27dd9b56d670a98))
+* **devbox:** `get_tunnel_url` now derives tunnel domain from base url ([#771](https://github.com/runloopai/api-client-python/issues/771)) ([2634c64](https://github.com/runloopai/api-client-python/commit/2634c64f91e187633d0252dcda6449d72631bc09))
+
+
+### Chores
+
+* **axon:** add axon to sdk readme ([#769](https://github.com/runloopai/api-client-python/issues/769)) ([68afe5a](https://github.com/runloopai/api-client-python/commit/68afe5aa20120ed5c0aed061d540e287df945f6c))
+
 ## 1.13.2 (2026-03-25)
 
 Full Changelog: [v1.13.1...v1.13.2](https://github.com/runloopai/api-client-python/compare/v1.13.1...v1.13.2)
