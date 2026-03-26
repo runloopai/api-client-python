@@ -53,9 +53,6 @@ class BenchmarkOutcomeScenarioOutcome(BaseModel):
     scenario_name: str
     """The name of the scenario."""
 
-    scenario_run_id: str
-    """The ID of the scenario run."""
-
     state: Literal["COMPLETED", "FAILED", "TIMEOUT", "CANCELED"]
     """The final state of the scenario execution."""
 
@@ -66,6 +63,12 @@ class BenchmarkOutcomeScenarioOutcome(BaseModel):
     """Failure information if the scenario failed or timed out.
 
     Contains exception type and message.
+    """
+
+    scenario_run_id: Optional[str] = None
+    """The ID of the scenario run.
+
+    May be absent if the scenario failed during setup before a run was created.
     """
 
     score: Optional[float] = None
