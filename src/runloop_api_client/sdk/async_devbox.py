@@ -161,7 +161,9 @@ class AsyncDevbox:
         tunnel_view = await self.get_tunnel(**options)
         if tunnel_view is None:
             return None
-        return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.runloop.ai"
+        api_host = self._client.base_url.host
+        base_domain = api_host[4:] if api_host.startswith("api.") else api_host
+        return f"https://{port}-{tunnel_view.tunnel_key}.tunnel.{base_domain}"
 
     async def logs(
         self,
