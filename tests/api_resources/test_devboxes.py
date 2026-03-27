@@ -113,6 +113,7 @@ class TestDevboxes:
             tunnel={
                 "auth_mode": "open",
                 "http_keep_alive": True,
+                "wake_on_http": True,
             },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -404,6 +405,7 @@ class TestDevboxes:
             id="id",
             auth_mode="open",
             http_keep_alive=True,
+            wake_on_http=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 
@@ -1727,6 +1729,7 @@ class TestAsyncDevboxes:
             tunnel={
                 "auth_mode": "open",
                 "http_keep_alive": True,
+                "wake_on_http": True,
             },
         )
         assert_matches_type(DevboxView, devbox, path=["response"])
@@ -2018,6 +2021,7 @@ class TestAsyncDevboxes:
             id="id",
             auth_mode="open",
             http_keep_alive=True,
+            wake_on_http=True,
         )
         assert_matches_type(TunnelView, devbox, path=["response"])
 

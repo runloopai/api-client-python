@@ -761,6 +761,7 @@ class DevboxesResource(SyncAPIResource):
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
         http_keep_alive: Optional[bool] | Omit = omit,
+        wake_on_http: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -783,6 +784,9 @@ class DevboxesResource(SyncAPIResource):
           http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
               policies, resetting the idle timer. Defaults to true if not specified.
 
+          wake_on_http: When true, HTTP traffic to a suspended devbox will automatically trigger a
+              resume. Defaults to false if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -801,6 +805,7 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "auth_mode": auth_mode,
                     "http_keep_alive": http_keep_alive,
+                    "wake_on_http": wake_on_http,
                 },
                 devbox_enable_tunnel_params.DevboxEnableTunnelParams,
             ),
@@ -2397,6 +2402,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         auth_mode: Optional[Literal["open", "authenticated"]] | Omit = omit,
         http_keep_alive: Optional[bool] | Omit = omit,
+        wake_on_http: Optional[bool] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2419,6 +2425,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
           http_keep_alive: When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
               policies, resetting the idle timer. Defaults to true if not specified.
 
+          wake_on_http: When true, HTTP traffic to a suspended devbox will automatically trigger a
+              resume. Defaults to false if not specified.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2437,6 +2446,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "auth_mode": auth_mode,
                     "http_keep_alive": http_keep_alive,
+                    "wake_on_http": wake_on_http,
                 },
                 devbox_enable_tunnel_params.DevboxEnableTunnelParams,
             ),
