@@ -27,6 +27,7 @@ from .blueprint_view import BlueprintView as BlueprintView
 from .agent_list_view import AgentListView as AgentListView
 from .axon_event_view import AxonEventView as AxonEventView
 from .mcp_config_view import McpConfigView as McpConfigView
+from .axon_list_params import AxonListParams as AxonListParams
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
 from .scoring_contract import ScoringContract as ScoringContract

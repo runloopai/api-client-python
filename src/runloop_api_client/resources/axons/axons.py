@@ -15,7 +15,7 @@ from .sql import (
     SqlResourceWithStreamingResponse,
     AsyncSqlResourceWithStreamingResponse,
 )
-from ...types import axon_create_params, axon_publish_params
+from ...types import axon_list_params, axon_create_params, axon_publish_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -137,6 +137,9 @@ class AxonsResource(SyncAPIResource):
     def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -144,11 +147,40 @@ class AxonsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AxonListView:
-        """[Beta] List all active axons."""
+        """
+        [Beta] List all active axons.
+
+        Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/v1/axons",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    axon_list_params.AxonListParams,
+                ),
             ),
             cast_to=AxonListView,
         )
@@ -353,6 +385,9 @@ class AsyncAxonsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -360,11 +395,40 @@ class AsyncAxonsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AxonListView:
-        """[Beta] List all active axons."""
+        """
+        [Beta] List all active axons.
+
+        Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/v1/axons",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "starting_after": starting_after,
+                    },
+                    axon_list_params.AxonListParams,
+                ),
             ),
             cast_to=AxonListView,
         )

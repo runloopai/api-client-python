@@ -33,6 +33,12 @@ class TunnelView(BaseModel):
     URL format: https://{port}-{tunnel_key}.tunnel.runloop.{domain}
     """
 
+    wake_on_http: bool
+    """
+    When true, HTTP traffic to a suspended devbox will automatically trigger a
+    resume.
+    """
+
     auth_token: Optional[str] = None
     """Bearer token for tunnel authentication.
 

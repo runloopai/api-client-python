@@ -149,3 +149,9 @@ class Tunnel(TypedDict, total=False):
     When true, HTTP traffic through the tunnel counts as activity for idle lifecycle
     policies, resetting the idle timer. Defaults to true if not specified.
     """
+
+    wake_on_http: Optional[bool]
+    """
+    When true, HTTP traffic to a suspended devbox will automatically trigger a
+    resume. Defaults to false if not specified.
+    """
