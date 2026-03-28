@@ -8,6 +8,9 @@ __all__ = ["AxonListParams"]
 
 
 class AxonListParams(TypedDict, total=False):
+    id: str
+    """Filter by axon ID."""
+
     include_total_count: bool
     """If true (default), includes total_count in the response.
 
@@ -16,6 +19,9 @@ class AxonListParams(TypedDict, total=False):
 
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""
+
+    name: str
+    """Filter by axon name (prefix match supported)."""
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
