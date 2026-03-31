@@ -1027,6 +1027,23 @@ class TestDevboxLogs:
     """Test devbox logs retrieval functionality."""
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
+    def test_logs_basic(self, shared_devbox: Devbox) -> None:
+        """Test retrieving unfiltered devbox logs."""
+        test_message = "basic log test message"
+        result = shared_devbox.cmd.exec(f'echo "{test_message}"')
+        assert result.exit_code == 0
+
+        # Log ingestion is async — logs may not be queryable immediately after
+        # command execution. Poll every 1s with a 10s timeout (well within the
+        # 30s test timeout) to accommodate variable ingestion latency.
+        logs = poll_until(
+            retriever=lambda: shared_devbox.logs(),
+            is_terminal=lambda l: any(test_message in (log.message or "") for log in l.logs),
+            config=PollingConfig(timeout_seconds=10, interval_seconds=1),
+        )
+        assert any(test_message in (log.message or "") for log in logs.logs)
+
+    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_with_execution_filter(self, shared_devbox: Devbox) -> None:
         """Test retrieving devbox logs filtered by execution ID."""
         test_message = "filtered log test"
