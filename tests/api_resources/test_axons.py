@@ -11,9 +11,9 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     AxonView,
-    AxonListView,
     PublishResultView,
 )
+from runloop_api_client.pagination import SyncAxonsCursorIDPage, AsyncAxonsCursorIDPage
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -94,7 +94,7 @@ class TestAxons:
     @parametrize
     def test_method_list(self, client: Runloop) -> None:
         axon = client.axons.list()
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(SyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     def test_method_list_with_all_params(self, client: Runloop) -> None:
@@ -105,7 +105,7 @@ class TestAxons:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(SyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Runloop) -> None:
@@ -114,7 +114,7 @@ class TestAxons:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         axon = response.parse()
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(SyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Runloop) -> None:
@@ -123,7 +123,7 @@ class TestAxons:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             axon = response.parse()
-            assert_matches_type(AxonListView, axon, path=["response"])
+            assert_matches_type(SyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -297,7 +297,7 @@ class TestAsyncAxons:
     @parametrize
     async def test_method_list(self, async_client: AsyncRunloop) -> None:
         axon = await async_client.axons.list()
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(AsyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncRunloop) -> None:
@@ -308,7 +308,7 @@ class TestAsyncAxons:
             name="name",
             starting_after="starting_after",
         )
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(AsyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncRunloop) -> None:
@@ -317,7 +317,7 @@ class TestAsyncAxons:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         axon = await response.parse()
-        assert_matches_type(AxonListView, axon, path=["response"])
+        assert_matches_type(AsyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncRunloop) -> None:
@@ -326,7 +326,7 @@ class TestAsyncAxons:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             axon = await response.parse()
-            assert_matches_type(AxonListView, axon, path=["response"])
+            assert_matches_type(AsyncAxonsCursorIDPage[AxonView], axon, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
