@@ -14,6 +14,7 @@ from ._types import (
     BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
+    SDKAxonListParams,
     SDKAxonCreateParams,
     SDKDevboxListParams,
     SDKObjectListParams,
@@ -544,9 +545,14 @@ class AsyncAxonOps:
         """Get an AsyncAxon instance for an existing axon ID."""
         return AsyncAxon(self._client, axon_id)
 
-    async def list(self, **options: Unpack[BaseRequestOptions]) -> list[AsyncAxon]:
-        """[Beta] List all active axons."""
-        result = await self._client.axons.list(**options)
+    async def list(self, **params: Unpack[SDKAxonListParams]) -> list[AsyncAxon]:
+        """[Beta] List all active axons.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAxonListParams` for available parameters
+        :return: Collection of axon wrappers
+        :rtype: list[AsyncAxon]
+        """
+        result = await self._client.axons.list(**params)
         return [AsyncAxon(self._client, axon.id) for axon in result.axons]
 
 
