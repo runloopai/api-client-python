@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.14.0 (2026-03-31)
+
+Full Changelog: [v1.13.3...v1.14.0](https://github.com/runloopai/api-client-python/compare/v1.13.3...v1.14.0)
+
+### Features
+
+* add archive / unarchive to benchmarks ([#8391](https://github.com/runloopai/api-client-python/issues/8391)) ([31ebb2c](https://github.com/runloopai/api-client-python/commit/31ebb2cc196e185eaef2ee8d6ddcd3e04b0a6ece))
+* Add axon list filters by id and name ([#8384](https://github.com/runloopai/api-client-python/issues/8384)) ([cd722b3](https://github.com/runloopai/api-client-python/commit/cd722b341a528558a5736894aa27bab44aa4a06e))
+* Add pagination to list active axons ([#8359](https://github.com/runloopai/api-client-python/issues/8359)) ([1937bc9](https://github.com/runloopai/api-client-python/commit/1937bc9c660895d9355d37a1f052f00fde9128e1))
+* **internal:** implement indices array format for query and form serialization ([1239661](https://github.com/runloopai/api-client-python/commit/12396614f8151d5a244c6e91815665caa6cd4c1b))
+
+
+### Bug Fixes
+
+* **sdk:** expose axon list params ([#773](https://github.com/runloopai/api-client-python/issues/773)) ([47e208d](https://github.com/runloopai/api-client-python/commit/47e208d61c247719174f5c0625803355114fa773))
+* **tests:** poll for logs in smoke tests to handle CloudWatch ingestion latency ([#774](https://github.com/runloopai/api-client-python/issues/774)) ([5f1e187](https://github.com/runloopai/api-client-python/commit/5f1e18703bd18370d1f63d7bbb2f6a22716624ff))
+
+
+### Chores
+
+* **axon:** add axon auto-pagination to stainless sdks ([#8420](https://github.com/runloopai/api-client-python/issues/8420)) ([14806e1](https://github.com/runloopai/api-client-python/commit/14806e18b4b8d2164ee8db80ebe62f853f7885bf))
+
+
+### Documentation
+
+* **api:** document vCPU, RAM, and disk for resource_size_request ([#8368](https://github.com/runloopai/api-client-python/issues/8368)) ([1edfb84](https://github.com/runloopai/api-client-python/commit/1edfb840f46ac3295ef097a7574eecb809e2f1d5))
+
 ## 1.13.3 (2026-03-26)
 
 Full Changelog: [v1.13.2...v1.13.3](https://github.com/runloopai/api-client-python/compare/v1.13.2...v1.13.3)

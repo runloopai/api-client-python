@@ -15,7 +15,7 @@ from .sql import (
     SqlResourceWithStreamingResponse,
     AsyncSqlResourceWithStreamingResponse,
 )
-from ...types import axon_create_params, axon_publish_params
+from ...types import axon_list_params, axon_create_params, axon_publish_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -27,9 +27,9 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._streaming import Stream, AsyncStream
-from ..._base_client import make_request_options
+from ...pagination import SyncAxonsCursorIDPage, AsyncAxonsCursorIDPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.axon_view import AxonView
-from ...types.axon_list_view import AxonListView
 from ...types.axon_event_view import AxonEventView
 from ...types.publish_result_view import PublishResultView
 
@@ -137,20 +137,61 @@ class AxonsResource(SyncAPIResource):
     def list(
         self,
         *,
+        id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AxonListView:
-        """[Beta] List all active axons."""
-        return self._get(
+    ) -> SyncAxonsCursorIDPage[AxonView]:
+        """
+        [Beta] List all active axons.
+
+        Args:
+          id: Filter by axon ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by axon name (prefix match supported).
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
             "/v1/axons",
+            page=SyncAxonsCursorIDPage[AxonView],
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "id": id,
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    axon_list_params.AxonListParams,
+                ),
             ),
-            cast_to=AxonListView,
+            model=AxonView,
         )
 
     def publish(
@@ -350,23 +391,64 @@ class AsyncAxonsResource(AsyncAPIResource):
             cast_to=AxonView,
         )
 
-    async def list(
+    def list(
         self,
         *,
+        id: str | Omit = omit,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AxonListView:
-        """[Beta] List all active axons."""
-        return await self._get(
+    ) -> AsyncPaginator[AxonView, AsyncAxonsCursorIDPage[AxonView]]:
+        """
+        [Beta] List all active axons.
+
+        Args:
+          id: Filter by axon ID.
+
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter by axon name (prefix match supported).
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
             "/v1/axons",
+            page=AsyncAxonsCursorIDPage[AxonView],
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "id": id,
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "name": name,
+                        "starting_after": starting_after,
+                    },
+                    axon_list_params.AxonListParams,
+                ),
             ),
-            cast_to=AxonListView,
+            model=AxonView,
         )
 
     async def publish(

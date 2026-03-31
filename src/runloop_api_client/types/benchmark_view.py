@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from pydantic import Field as FieldInfo
 
@@ -25,6 +26,12 @@ class BenchmarkView(BaseModel):
 
     scenario_ids: List[str] = FieldInfo(alias="scenarioIds")
     """List of Scenario IDs that make up the benchmark."""
+
+    status: Literal["active", "archived"]
+    """Whether the benchmark is active or archived.
+
+    Archived benchmarks are excluded from listings and cannot be run.
+    """
 
     attribution: Optional[str] = None
     """Attribution information for the benchmark."""
