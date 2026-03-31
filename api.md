@@ -107,7 +107,7 @@ Methods:
 
 - <code title="post /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">create</a>(\*\*<a href="src/runloop_api_client/types/axon_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
 - <code title="get /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
-- <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">list</a>(\*\*<a href="src/runloop_api_client/types/axon_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_list_view.py">AxonListView</a></code>
+- <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">list</a>(\*\*<a href="src/runloop_api_client/types/axon_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">SyncAxonsCursorIDPage[AxonView]</a></code>
 - <code title="post /v1/axons/{id}/publish">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">publish</a>(id, \*\*<a href="src/runloop_api_client/types/axon_publish_params.py">params</a>) -> <a href="./src/runloop_api_client/types/publish_result_view.py">PublishResultView</a></code>
 - <code title="get /v1/axons/{id}/subscribe/sse">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">subscribe_sse</a>(id) -> <a href="./src/runloop_api_client/types/axon_event_view.py">AxonEventView</a></code>
 
