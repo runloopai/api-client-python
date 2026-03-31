@@ -4,8 +4,8 @@ from typing_extensions import TypedDict
 from ..types import (
     InputContext,
     ScenarioView,
-    AgentListParams,
     AxonListParams,
+    AgentListParams,
     AxonCreateParams,
     DevboxListParams,
     ObjectListParams,
