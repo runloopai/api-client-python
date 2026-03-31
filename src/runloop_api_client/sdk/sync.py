@@ -12,6 +12,7 @@ import httpx
 from .axon import Axon
 from .agent import Agent
 from ._types import (
+    SDKAxonListParams,
     BaseRequestOptions,
     LongRequestOptions,
     SDKAgentListParams,
@@ -539,9 +540,14 @@ class AxonOps:
         """Get an Axon instance for an existing axon ID."""
         return Axon(self._client, axon_id)
 
-    def list(self, **options: Unpack[BaseRequestOptions]) -> list[Axon]:
-        """[Beta] List all active axons."""
-        result = self._client.axons.list(**options)
+    def list(self, **params: Unpack[SDKAxonListParams]) -> list[Axon]:
+        """[Beta] List all active axons.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAxonListParams` for available parameters
+        :return: Collection of axon wrappers
+        :rtype: list[Axon]
+        """
+        result = self._client.axons.list(**params)
         return [Axon(self._client, axon.id) for axon in result.axons]
 
 

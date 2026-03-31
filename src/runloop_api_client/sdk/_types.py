@@ -4,6 +4,7 @@ from typing_extensions import TypedDict
 from ..types import (
     InputContext,
     ScenarioView,
+    AxonListParams,
     AgentListParams,
     AxonCreateParams,
     DevboxListParams,
@@ -187,6 +188,10 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
 
 
 class SDKAgentListParams(AgentListParams, BaseRequestOptions):
+    pass
+
+
+class SDKAxonListParams(AxonListParams, BaseRequestOptions):
     pass
 
 
