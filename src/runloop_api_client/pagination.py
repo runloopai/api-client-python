@@ -18,6 +18,8 @@ __all__ = [
     "AsyncBenchmarksCursorIDPage",
     "SyncAgentsCursorIDPage",
     "AsyncAgentsCursorIDPage",
+    "SyncAxonsCursorIDPage",
+    "AsyncAxonsCursorIDPage",
     "SyncBenchmarkRunsCursorIDPage",
     "AsyncBenchmarkRunsCursorIDPage",
     "SyncScenariosCursorIDPage",
@@ -66,6 +68,11 @@ class BenchmarksCursorIDPageItem(Protocol):
 
 @runtime_checkable
 class AgentsCursorIDPageItem(Protocol):
+    id: str
+
+
+@runtime_checkable
+class AxonsCursorIDPageItem(Protocol):
     id: str
 
 
@@ -511,6 +518,74 @@ class AsyncAgentsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
 
         item = cast(Any, agents[-1])
         if not isinstance(item, AgentsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class SyncAxonsCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    axons: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        axons = self.axons
+        if not axons:
+            return []
+        return axons
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        axons = self.axons
+        if not axons:
+            return None
+
+        item = cast(Any, axons[-1])
+        if not isinstance(item, AxonsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
+            # TODO emit warning log
+            return None
+
+        return PageInfo(params={"starting_after": item.id})
+
+
+class AsyncAxonsCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    axons: List[_T]
+    has_more: Optional[bool] = None
+    total_count: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        axons = self.axons
+        if not axons:
+            return []
+        return axons
+
+    @override
+    def has_next_page(self) -> bool:
+        has_more = self.has_more
+        if has_more is not None and has_more is False:
+            return False
+
+        return super().has_next_page()
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        axons = self.axons
+        if not axons:
+            return None
+
+        item = cast(Any, axons[-1])
+        if not isinstance(item, AxonsCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
             # TODO emit warning log
             return None
 
