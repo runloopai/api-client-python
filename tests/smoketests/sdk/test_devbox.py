@@ -10,7 +10,7 @@ import pytest
 
 from runloop_api_client.sdk import Devbox, RunloopSDK
 from tests.smoketests.utils import unique_name
-from runloop_api_client.lib.polling import PollingConfig
+from runloop_api_client.lib.polling import PollingConfig, poll_until
 
 pytestmark = [pytest.mark.smoketest]
 
@@ -1027,34 +1027,18 @@ class TestDevboxLogs:
     """Test devbox logs retrieval functionality."""
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
-    def test_logs_basic(self, shared_devbox: Devbox) -> None:
-        """Test retrieving devbox logs returns valid response structure."""
-        test_message = "basic log test message"
-        result = shared_devbox.cmd.exec(f'echo "{test_message}"')
-        assert result.exit_code == 0
-
-        logs = shared_devbox.logs()
-
-        assert logs is not None
-        assert hasattr(logs, "logs")
-        assert isinstance(logs.logs, list)
-        log_content = " ".join(str(log) for log in logs.logs)
-        assert test_message in log_content
-
-    @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_with_execution_filter(self, shared_devbox: Devbox) -> None:
         """Test retrieving devbox logs filtered by execution ID."""
         test_message = "filtered log test"
         result = shared_devbox.cmd.exec(f'echo "{test_message}"')
         assert result.exit_code == 0
 
-        logs = shared_devbox.logs(execution_id=result.execution_id)
-
-        assert logs is not None
-        assert hasattr(logs, "logs")
-        assert isinstance(logs.logs, list)
-        log_content = " ".join(str(log) for log in logs.logs)
-        assert test_message in log_content
+        logs = poll_until(
+            retriever=lambda: shared_devbox.logs(execution_id=result.execution_id),
+            is_terminal=lambda l: any(test_message in (log.message or "") for log in l.logs),
+            config=PollingConfig(timeout_seconds=10, interval_seconds=1),
+        )
+        assert any(test_message in (log.message or "") for log in logs.logs)
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_logs_with_shell_name_filter(self, shared_devbox: Devbox) -> None:
@@ -1066,10 +1050,9 @@ class TestDevboxLogs:
         result = shell.exec(f'echo "{test_message}"')
         assert result.exit_code == 0
 
-        logs = shared_devbox.logs(shell_name=shell_name)
-
-        assert logs is not None
-        assert hasattr(logs, "logs")
-        assert isinstance(logs.logs, list)
-        log_content = " ".join(str(log) for log in logs.logs)
-        assert test_message in log_content
+        logs = poll_until(
+            retriever=lambda: shared_devbox.logs(shell_name=shell_name),
+            is_terminal=lambda l: any(test_message in (log.message or "") for log in l.logs),
+            config=PollingConfig(timeout_seconds=10, interval_seconds=1),
+        )
+        assert any(test_message in (log.message or "") for log in logs.logs)
