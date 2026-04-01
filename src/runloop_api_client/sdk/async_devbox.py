@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import warnings
+
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence, Awaitable, cast
 from typing_extensions import Unpack, override
 
@@ -835,7 +835,7 @@ class AsyncNetworkInterface:
         self,
         **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object:
-        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
+        """Remove a tunnel from the devbox.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
@@ -844,14 +844,7 @@ class AsyncNetworkInterface:
         Example:
             >>> await devbox.net.remove_tunnel()
         """
-        warnings.warn(
-            "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown.",
-            DeprecationWarning,
-            stacklevel=2,
+        return await self._devbox._client.devboxes.remove_tunnel(
+            self._devbox.id,
+            **params,
         )
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            return await self._devbox._client.devboxes.remove_tunnel(  # type: ignore[deprecated]
-                self._devbox.id,
-                **params,
-            )

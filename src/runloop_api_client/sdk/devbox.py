@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-import warnings
+
 import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 from typing_extensions import Unpack, override
@@ -838,7 +838,7 @@ class NetworkInterface:
         self,
         **params: Unpack[SDKDevboxRemoveTunnelParams],
     ) -> object:
-        """[Deprecated] V2 tunnels cannot be removed and close on devbox shutdown.
+        """Remove a tunnel from the devbox.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams` for available parameters
         :return: Response confirming the tunnel removal
@@ -847,14 +847,7 @@ class NetworkInterface:
         Example:
             >>> devbox.net.remove_tunnel()
         """
-        warnings.warn(
-            "remove_tunnel is deprecated; V2 tunnels cannot be removed and close on devbox shutdown.",
-            DeprecationWarning,
-            stacklevel=2,
+        return self._devbox._client.devboxes.remove_tunnel(
+            self._devbox.id,
+            **params,
         )
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            return self._devbox._client.devboxes.remove_tunnel(  # type: ignore[deprecated]
-                self._devbox.id,
-                **params,
-            )

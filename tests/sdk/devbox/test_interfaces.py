@@ -285,14 +285,13 @@ class TestNetworkInterface:
         mock_client.devboxes.remove_tunnel.return_value = object()
 
         devbox = Devbox(mock_client, "dbx_123")
-        with pytest.warns(DeprecationWarning, match="remove_tunnel is deprecated"):
-            result = devbox.net.remove_tunnel(
-                extra_headers={"X-Custom": "value"},
-                extra_query={"param": "value"},
-                extra_body={"key": "value"},
-                timeout=30.0,
-                idempotency_key="key-123",
-            )
+        result = devbox.net.remove_tunnel(
+            extra_headers={"X-Custom": "value"},
+            extra_query={"param": "value"},
+            extra_body={"key": "value"},
+            timeout=30.0,
+            idempotency_key="key-123",
+        )
 
         assert result is not None  # Verify return value is propagated
         mock_client.devboxes.remove_tunnel.assert_called_once_with(
