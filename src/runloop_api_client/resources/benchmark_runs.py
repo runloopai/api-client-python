@@ -86,6 +86,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -107,6 +108,8 @@ class BenchmarkRunsResource(SyncAPIResource):
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by state
 
           extra_headers: Send extra headers
 
@@ -131,6 +134,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     benchmark_run_list_params.BenchmarkRunListParams,
                 ),
@@ -342,6 +346,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         starting_after: str | Omit = omit,
+        state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -363,6 +368,8 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
           name: Filter by name
 
           starting_after: Load the next page of data starting after the item with the given ID.
+
+          state: Filter by state
 
           extra_headers: Send extra headers
 
@@ -387,6 +394,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "starting_after": starting_after,
+                        "state": state,
                     },
                     benchmark_run_list_params.BenchmarkRunListParams,
                 ),
