@@ -28,6 +28,7 @@ from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.scenarios import run_list_params
 from ...lib.polling_async import async_poll_until
+from ...lib.cancellation import CancellationToken
 from ...types.scenario_run_view import ScenarioRunView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
@@ -325,6 +326,7 @@ class RunsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -337,6 +339,7 @@ class RunsResource(SyncAPIResource):
         Args:
             id: The ID of the scenario run to wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -347,6 +350,7 @@ class RunsResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before scenario run is scored
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If scenario run enters a non-scored terminal state
         """
 
@@ -358,7 +362,12 @@ class RunsResource(SyncAPIResource):
         def is_done_scoring(run: ScenarioRunView) -> bool:
             return run.state not in ["scoring"]
 
-        run = poll_until(retrieve_run, is_done_scoring, polling_config)
+        run = poll_until(
+            retrieve_run,
+            is_done_scoring,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if run.state != "scored":
             raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
@@ -370,6 +379,7 @@ class RunsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -382,6 +392,7 @@ class RunsResource(SyncAPIResource):
         Args:
             id: The ID of the scenario run to score and wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -392,6 +403,7 @@ class RunsResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before scenario run is scored
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If scenario run enters a non-scored terminal state
         """
         self.score(
@@ -405,6 +417,7 @@ class RunsResource(SyncAPIResource):
         return self.await_scored(
             id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -750,6 +763,7 @@ class AsyncRunsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -762,6 +776,7 @@ class AsyncRunsResource(AsyncAPIResource):
         Args:
             id: The ID of the scenario run to wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -772,6 +787,7 @@ class AsyncRunsResource(AsyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before scenario run is scored
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If scenario run enters a non-scored terminal state
         """
 
@@ -783,7 +799,12 @@ class AsyncRunsResource(AsyncAPIResource):
         def is_done_scoring(run: ScenarioRunView) -> bool:
             return run.state not in ["scoring"]
 
-        run = await async_poll_until(retrieve_run, is_done_scoring, polling_config)
+        run = await async_poll_until(
+            retrieve_run,
+            is_done_scoring,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if run.state != "scored":
             raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
@@ -795,6 +816,7 @@ class AsyncRunsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -807,6 +829,7 @@ class AsyncRunsResource(AsyncAPIResource):
         Args:
             id: The ID of the scenario run to score and wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -817,6 +840,7 @@ class AsyncRunsResource(AsyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before scenario run is scored
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If scenario run enters a non-scored terminal state
         """
         await self.score(
@@ -830,6 +854,7 @@ class AsyncRunsResource(AsyncAPIResource):
         return await self.await_scored(
             id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
