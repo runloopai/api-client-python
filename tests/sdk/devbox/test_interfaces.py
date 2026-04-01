@@ -11,7 +11,6 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import httpx
-import pytest
 
 from tests.sdk.conftest import MockExecutionView
 from runloop_api_client.sdk import Devbox
