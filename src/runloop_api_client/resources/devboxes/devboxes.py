@@ -98,6 +98,7 @@ from .disk_snapshots import (
     AsyncDiskSnapshotsResourceWithStreamingResponse,
 )
 from ...lib.polling_async import async_poll_until
+from ...lib.cancellation import CancellationToken
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
 from ...types.shared_params.mount import Mount
@@ -401,12 +402,14 @@ class DevboxesResource(SyncAPIResource):
         *,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 
         Args:
             id: The ID of the devbox to wait for
             config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -417,6 +420,7 @@ class DevboxesResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If devbox enters a non-running terminal state
         """
 
@@ -443,7 +447,13 @@ class DevboxesResource(SyncAPIResource):
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = poll_until(wait_for_devbox_status, is_done_booting, polling_config, handle_timeout_error)
+        devbox = poll_until(
+            wait_for_devbox_status,
+            is_done_booting,
+            polling_config,
+            handle_timeout_error,
+            cancellation_token=cancellation_token,
+        )
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
@@ -455,18 +465,21 @@ class DevboxesResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxView:
         """Wait for a devbox to reach the suspended state.
 
         Args:
             id: The ID of the devbox to wait for.
             polling_config: Optional polling configuration.
+            cancellation_token: Token to cancel the wait operation.
 
         Returns:
             The devbox in the suspended state.
 
         Raises:
             PollingTimeout: If polling times out before the devbox is suspended.
+            PollingCancelled: If cancellation_token.cancel() is called.
             RunloopError: If the devbox enters a non-suspended terminal state.
         """
 
@@ -487,7 +500,13 @@ class DevboxesResource(SyncAPIResource):
         def is_terminal_state(devbox: DevboxView) -> bool:
             return devbox.status in DEVBOX_TERMINAL_STATES
 
-        devbox = poll_until(wait_for_devbox_status, is_terminal_state, polling_config, handle_timeout_error)
+        devbox = poll_until(
+            wait_for_devbox_status,
+            is_terminal_state,
+            polling_config,
+            handle_timeout_error,
+            cancellation_token=cancellation_token,
+        )
 
         if devbox.status != "suspended":
             raise RunloopError(f"Devbox entered non-suspended terminal state: {devbox.status}")
@@ -510,6 +529,7 @@ class DevboxesResource(SyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -535,6 +555,7 @@ class DevboxesResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If devbox enters a non-running terminal state
         """
         # Pass all create_args to the underlying create method
@@ -565,6 +586,7 @@ class DevboxesResource(SyncAPIResource):
         return self.await_running(
             devbox.id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
         )
 
     def list(
@@ -2001,6 +2023,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
@@ -2020,12 +2043,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
             See the `create` method for detailed documentation.
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
 
         Returns:
             The devbox in running state
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If devbox enters a non-running terminal state
         """
 
@@ -2057,6 +2082,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         return await self.await_running(
             devbox.id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
         )
 
     async def await_running(
@@ -2065,12 +2091,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxView:
         """Wait for a devbox to be in running state.
 
         Args:
             id: The ID of the devbox to wait for
             config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -2081,6 +2109,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If devbox enters a non-running terminal state
         """
 
@@ -2105,7 +2134,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = await async_poll_until(wait_for_devbox_status, is_done_booting, polling_config)
+        devbox = await async_poll_until(
+            wait_for_devbox_status,
+            is_done_booting,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
@@ -2117,18 +2151,21 @@ class AsyncDevboxesResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxView:
         """Wait for a devbox to reach the suspended state.
 
         Args:
             id: The ID of the devbox to wait for.
             polling_config: Optional polling configuration.
+            cancellation_token: Token to cancel the wait operation.
 
         Returns:
             The devbox in the suspended state.
 
         Raises:
             PollingTimeout: If polling times out before the devbox is suspended.
+            PollingCancelled: If cancellation_token.cancel() is called.
             RunloopError: If the devbox enters a non-suspended terminal state.
         """
 
@@ -2147,7 +2184,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
         def is_terminal_state(devbox: DevboxView) -> bool:
             return devbox.status in DEVBOX_TERMINAL_STATES
 
-        devbox = await async_poll_until(wait_for_devbox_status, is_terminal_state, polling_config)
+        devbox = await async_poll_until(
+            wait_for_devbox_status,
+            is_terminal_state,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if devbox.status != "suspended":
             raise RunloopError(f"Devbox entered non-suspended terminal state: {devbox.status}")

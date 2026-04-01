@@ -33,6 +33,7 @@ from ...types.devboxes import (
     execution_stream_stdout_updates_params,
 )
 from ...lib.polling_async import async_poll_until
+from ...lib.cancellation import CancellationToken
 from ...types.devbox_send_std_in_result import DevboxSendStdInResult
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
@@ -124,6 +125,7 @@ class ExecutionsResource(SyncAPIResource):
         *,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -131,6 +133,7 @@ class ExecutionsResource(SyncAPIResource):
             execution_id: The ID of the execution to wait for
             id: The ID of the devbox
             config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -141,6 +144,7 @@ class ExecutionsResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before execution completes
+            PollingCancelled: If cancellation_token.cancel() is called
         """
 
         def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
@@ -165,7 +169,13 @@ class ExecutionsResource(SyncAPIResource):
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return poll_until(wait_for_execution_status, is_done, polling_config, handle_timeout_error)
+        return poll_until(
+            wait_for_execution_status,
+            is_done,
+            polling_config,
+            handle_timeout_error,
+            cancellation_token=cancellation_token,
+        )
 
     def execute_async(
         self,
@@ -670,6 +680,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
         devbox_id: str,
         # Use polling_config to configure the "long" polling behavior.
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
     ) -> DevboxAsyncExecutionDetailView:
         """Wait for an execution to complete.
 
@@ -677,6 +688,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             execution_id: The ID of the execution to wait for
             id: The ID of the devbox
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -687,6 +699,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before execution completes
+            PollingCancelled: If cancellation_token.cancel() is called
         """
 
         async def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
@@ -707,7 +720,12 @@ class AsyncExecutionsResource(AsyncAPIResource):
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return await async_poll_until(wait_for_execution_status, is_done, polling_config)
+        return await async_poll_until(
+            wait_for_execution_status,
+            is_done,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
     async def execute_async(
         self,

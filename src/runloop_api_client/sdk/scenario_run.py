@@ -106,7 +106,11 @@ class ScenarioRun:
         :return: Scenario run state after environment is ready
         :rtype: ScenarioRunView
         """
-        self._client.devboxes.await_running(self._devbox_id, polling_config=options.get("polling_config"))
+        self._client.devboxes.await_running(
+            self._devbox_id,
+            polling_config=options.get("polling_config"),
+            cancellation_token=options.get("cancellation_token"),
+        )
         return self.get_info(**filter_params(options, BaseRequestOptions))
 
     def score(

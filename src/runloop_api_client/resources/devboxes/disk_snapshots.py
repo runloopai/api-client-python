@@ -22,6 +22,7 @@ from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.devboxes import disk_snapshot_list_params, disk_snapshot_update_params
 from ...lib.polling_async import async_poll_until
+from ...lib.cancellation import CancellationToken
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.devboxes.devbox_snapshot_async_status_view import DevboxSnapshotAsyncStatusView
 
@@ -256,12 +257,31 @@ class DiskSnapshotsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
-        """Wait for a disk snapshot operation to complete."""
+        """Wait for a disk snapshot operation to complete.
+
+        Args:
+            id: The ID of the disk snapshot to wait for
+            polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The completed snapshot status
+
+        Raises:
+            PollingTimeout: If polling times out before snapshot completes
+            PollingCancelled: If cancellation_token.cancel() is called
+            RunloopError: If snapshot enters error state
+        """
 
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -275,6 +295,7 @@ class DiskSnapshotsResource(SyncAPIResource):
             ),
             is_terminal,
             polling_config,
+            cancellation_token=cancellation_token,
         )
 
         if status.status == "error":
@@ -512,12 +533,31 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DevboxSnapshotAsyncStatusView:
-        """Wait asynchronously for a disk snapshot operation to complete."""
+        """Wait asynchronously for a disk snapshot operation to complete.
+
+        Args:
+            id: The ID of the disk snapshot to wait for
+            polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
+            extra_headers: Send extra headers
+            extra_query: Add additional query parameters to the request
+            extra_body: Add additional JSON properties to the request
+            timeout: Override the client-level default timeout for this request, in seconds
+
+        Returns:
+            The completed snapshot status
+
+        Raises:
+            PollingTimeout: If polling times out before snapshot completes
+            PollingCancelled: If cancellation_token.cancel() is called
+            RunloopError: If snapshot enters error state
+        """
 
         if not id:
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
@@ -531,6 +571,7 @@ class AsyncDiskSnapshotsResource(AsyncAPIResource):
             ),
             is_terminal,
             polling_config,
+            cancellation_token=cancellation_token,
         )
 
         if status.status == "error":
