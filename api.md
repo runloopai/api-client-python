@@ -376,31 +376,6 @@ Methods:
 - <code title="get /v1/objects/{id}/download">client.objects.<a href="./src/runloop_api_client/resources/objects.py">download</a>(id, \*\*<a href="src/runloop_api_client/types/object_download_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_download_url_view.py">ObjectDownloadURLView</a></code>
 - <code title="get /v1/objects/list_public">client.objects.<a href="./src/runloop_api_client/resources/objects.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/object_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/object_view.py">SyncObjectsCursorIDPage[ObjectView]</a></code>
 
-# Repositories
-
-Types:
-
-```python
-from runloop_api_client.types import (
-    RepositoryConnectionListView,
-    RepositoryConnectionView,
-    RepositoryInspectionDetails,
-    RepositoryInspectionListView,
-    RepositoryManifestView,
-)
-```
-
-Methods:
-
-- <code title="post /v1/repositories">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">create</a>(\*\*<a href="src/runloop_api_client/types/repository_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">RepositoryConnectionView</a></code>
-- <code title="get /v1/repositories/{id}">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">RepositoryConnectionView</a></code>
-- <code title="get /v1/repositories">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list</a>(\*\*<a href="src/runloop_api_client/types/repository_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_connection_view.py">SyncRepositoriesCursorIDPage[RepositoryConnectionView]</a></code>
-- <code title="post /v1/repositories/{id}/delete">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">delete</a>(id) -> object</code>
-- <code title="post /v1/repositories/{id}/inspect">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">inspect</a>(id, \*\*<a href="src/runloop_api_client/types/repository_inspect_params.py">params</a>) -> <a href="./src/runloop_api_client/types/repository_inspection_details.py">RepositoryInspectionDetails</a></code>
-- <code title="get /v1/repositories/{id}/inspections">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">list_inspections</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_list_view.py">RepositoryInspectionListView</a></code>
-- <code title="post /v1/repositories/{id}/refresh">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">refresh</a>(id, \*\*<a href="src/runloop_api_client/types/repository_refresh_params.py">params</a>) -> object</code>
-- <code title="get /v1/repositories/inspections/{id}">client.repositories.<a href="./src/runloop_api_client/resources/repositories.py">retrieve_inspection</a>(id) -> <a href="./src/runloop_api_client/types/repository_inspection_details.py">RepositoryInspectionDetails</a></code>
-
 # Secrets
 
 Types:

@@ -72,14 +72,6 @@ from .mcp_configs import (
     McpConfigsResourceWithStreamingResponse,
     AsyncMcpConfigsResourceWithStreamingResponse,
 )
-from .repositories import (
-    RepositoriesResource,
-    AsyncRepositoriesResource,
-    RepositoriesResourceWithRawResponse,
-    AsyncRepositoriesResourceWithRawResponse,
-    RepositoriesResourceWithStreamingResponse,
-    AsyncRepositoriesResourceWithStreamingResponse,
-)
 from .benchmark_jobs import (
     BenchmarkJobsResource,
     AsyncBenchmarkJobsResource,
@@ -168,12 +160,6 @@ __all__ = [
     "AsyncObjectsResourceWithRawResponse",
     "ObjectsResourceWithStreamingResponse",
     "AsyncObjectsResourceWithStreamingResponse",
-    "RepositoriesResource",
-    "AsyncRepositoriesResource",
-    "RepositoriesResourceWithRawResponse",
-    "AsyncRepositoriesResourceWithRawResponse",
-    "RepositoriesResourceWithStreamingResponse",
-    "AsyncRepositoriesResourceWithStreamingResponse",
     "SecretsResource",
     "AsyncSecretsResource",
     "SecretsResourceWithRawResponse",
