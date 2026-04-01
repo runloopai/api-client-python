@@ -10,8 +10,6 @@ __all__ = [
     "AsyncBlueprintsCursorIDPage",
     "SyncDevboxesCursorIDPage",
     "AsyncDevboxesCursorIDPage",
-    "SyncRepositoriesCursorIDPage",
-    "AsyncRepositoriesCursorIDPage",
     "SyncDiskSnapshotsCursorIDPage",
     "AsyncDiskSnapshotsCursorIDPage",
     "SyncBenchmarksCursorIDPage",
@@ -48,11 +46,6 @@ class BlueprintsCursorIDPageItem(Protocol):
 
 @runtime_checkable
 class DevboxesCursorIDPageItem(Protocol):
-    id: str
-
-
-@runtime_checkable
-class RepositoriesCursorIDPageItem(Protocol):
     id: str
 
 
@@ -246,74 +239,6 @@ class AsyncDevboxesCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
 
         item = cast(Any, devboxes[-1])
         if not isinstance(item, DevboxesCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
-            # TODO emit warning log
-            return None
-
-        return PageInfo(params={"starting_after": item.id})
-
-
-class SyncRepositoriesCursorIDPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
-    repositories: List[_T]
-    has_more: Optional[bool] = None
-    total_count: Optional[int] = None
-
-    @override
-    def _get_page_items(self) -> List[_T]:
-        repositories = self.repositories
-        if not repositories:
-            return []
-        return repositories
-
-    @override
-    def has_next_page(self) -> bool:
-        has_more = self.has_more
-        if has_more is not None and has_more is False:
-            return False
-
-        return super().has_next_page()
-
-    @override
-    def next_page_info(self) -> Optional[PageInfo]:
-        repositories = self.repositories
-        if not repositories:
-            return None
-
-        item = cast(Any, repositories[-1])
-        if not isinstance(item, RepositoriesCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
-            # TODO emit warning log
-            return None
-
-        return PageInfo(params={"starting_after": item.id})
-
-
-class AsyncRepositoriesCursorIDPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
-    repositories: List[_T]
-    has_more: Optional[bool] = None
-    total_count: Optional[int] = None
-
-    @override
-    def _get_page_items(self) -> List[_T]:
-        repositories = self.repositories
-        if not repositories:
-            return []
-        return repositories
-
-    @override
-    def has_next_page(self) -> bool:
-        has_more = self.has_more
-        if has_more is not None and has_more is False:
-            return False
-
-        return super().has_next_page()
-
-    @override
-    def next_page_info(self) -> Optional[PageInfo]:
-        repositories = self.repositories
-        if not repositories:
-            return None
-
-        item = cast(Any, repositories[-1])
-        if not isinstance(item, RepositoriesCursorIDPageItem) or item.id is None:  # pyright: ignore[reportUnnecessaryComparison]
             # TODO emit warning log
             return None
 
