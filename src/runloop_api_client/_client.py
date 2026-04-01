@@ -41,7 +41,6 @@ if TYPE_CHECKING:
         benchmarks,
         blueprints,
         mcp_configs,
-        repositories,
         benchmark_jobs,
         benchmark_runs,
         gateway_configs,
@@ -54,7 +53,6 @@ if TYPE_CHECKING:
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.axons.axons import AxonsResource, AsyncAxonsResource
     from .resources.mcp_configs import McpConfigsResource, AsyncMcpConfigsResource
-    from .resources.repositories import RepositoriesResource, AsyncRepositoriesResource
     from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource
     from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
     from .resources.gateway_configs import GatewayConfigsResource, AsyncGatewayConfigsResource
@@ -175,12 +173,6 @@ class Runloop(SyncAPIClient):
         from .resources.objects import ObjectsResource
 
         return ObjectsResource(self)
-
-    @cached_property
-    def repositories(self) -> RepositoriesResource:
-        from .resources.repositories import RepositoriesResource
-
-        return RepositoriesResource(self)
 
     @cached_property
     def secrets(self) -> SecretsResource:
@@ -431,12 +423,6 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncObjectsResource(self)
 
     @cached_property
-    def repositories(self) -> AsyncRepositoriesResource:
-        from .resources.repositories import AsyncRepositoriesResource
-
-        return AsyncRepositoriesResource(self)
-
-    @cached_property
     def secrets(self) -> AsyncSecretsResource:
         from .resources.secrets import AsyncSecretsResource
 
@@ -634,12 +620,6 @@ class RunloopWithRawResponse:
         return ObjectsResourceWithRawResponse(self._client.objects)
 
     @cached_property
-    def repositories(self) -> repositories.RepositoriesResourceWithRawResponse:
-        from .resources.repositories import RepositoriesResourceWithRawResponse
-
-        return RepositoriesResourceWithRawResponse(self._client.repositories)
-
-    @cached_property
     def secrets(self) -> secrets.SecretsResourceWithRawResponse:
         from .resources.secrets import SecretsResourceWithRawResponse
 
@@ -723,12 +703,6 @@ class AsyncRunloopWithRawResponse:
         from .resources.objects import AsyncObjectsResourceWithRawResponse
 
         return AsyncObjectsResourceWithRawResponse(self._client.objects)
-
-    @cached_property
-    def repositories(self) -> repositories.AsyncRepositoriesResourceWithRawResponse:
-        from .resources.repositories import AsyncRepositoriesResourceWithRawResponse
-
-        return AsyncRepositoriesResourceWithRawResponse(self._client.repositories)
 
     @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithRawResponse:
@@ -816,12 +790,6 @@ class RunloopWithStreamedResponse:
         return ObjectsResourceWithStreamingResponse(self._client.objects)
 
     @cached_property
-    def repositories(self) -> repositories.RepositoriesResourceWithStreamingResponse:
-        from .resources.repositories import RepositoriesResourceWithStreamingResponse
-
-        return RepositoriesResourceWithStreamingResponse(self._client.repositories)
-
-    @cached_property
     def secrets(self) -> secrets.SecretsResourceWithStreamingResponse:
         from .resources.secrets import SecretsResourceWithStreamingResponse
 
@@ -905,12 +873,6 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.objects import AsyncObjectsResourceWithStreamingResponse
 
         return AsyncObjectsResourceWithStreamingResponse(self._client.objects)
-
-    @cached_property
-    def repositories(self) -> repositories.AsyncRepositoriesResourceWithStreamingResponse:
-        from .resources.repositories import AsyncRepositoriesResourceWithStreamingResponse
-
-        return AsyncRepositoriesResourceWithStreamingResponse(self._client.repositories)
 
     @cached_property
     def secrets(self) -> secrets.AsyncSecretsResourceWithStreamingResponse:
