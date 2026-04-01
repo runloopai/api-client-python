@@ -1,9 +1,11 @@
+import threading
 from typing import Any
 from unittest.mock import Mock, patch
 
 import pytest
 
 from src.runloop_api_client.lib.polling import PollingConfig, PollingTimeout, poll_until
+from src.runloop_api_client.lib.cancellation import CancellationToken, PollingCancelled
 
 
 class TestPollingConfig:
@@ -260,3 +262,174 @@ class TestPollUntil:
 
         assert result == "value3"
         assert retriever.call_count == 3
+
+
+class TestPollUntilWithCancellation:
+    """Test poll_until function with CancellationToken."""
+
+    def test_cancellation_before_first_poll(self):
+        """Test cancellation before first poll attempt."""
+        token = CancellationToken()
+        token.cancel()
+
+        retriever = Mock(return_value="value")
+        is_terminal = Mock(return_value=False)
+
+        with pytest.raises(PollingCancelled, match="Polling operation was cancelled"):
+            poll_until(retriever, is_terminal, cancellation_token=token)
+
+        # Should not call retriever since cancelled before first attempt
+        assert retriever.call_count == 0
+
+    def test_cancellation_during_polling(self):
+        """Test cancellation during polling loop."""
+        token = CancellationToken()
+        retriever = Mock(side_effect=["value1", "value2", "value3"])
+        is_terminal = Mock(return_value=False)
+
+        call_count = 0
+
+        def cancel_on_second_call(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            if call_count == 2:
+                token.cancel()
+            # Don't actually sleep, just check cancellation
+            if token.is_cancelled():
+                raise PollingCancelled("Polling operation was cancelled")
+
+        with patch("time.sleep", side_effect=cancel_on_second_call):
+            with pytest.raises(PollingCancelled):
+                poll_until(retriever, is_terminal, cancellation_token=token)
+
+        # Should have called retriever twice before cancellation
+        assert retriever.call_count == 2
+
+    def test_cancellation_during_sleep(self):
+        """Test that cancellation wakes up from sleep."""
+        token = CancellationToken()
+        retriever = Mock(return_value="value")
+        is_terminal = Mock(return_value=False)
+        config = PollingConfig(interval_seconds=10.0)  # Long sleep
+
+        def cancel_after_delay():
+            import time
+
+            time.sleep(0.05)  # Wait a bit
+            token.cancel()
+
+        # Start cancellation in background thread
+        cancel_thread = threading.Thread(target=cancel_after_delay)
+        cancel_thread.start()
+
+        # Poll should be interrupted by cancellation
+        with pytest.raises(PollingCancelled):
+            poll_until(retriever, is_terminal, config, cancellation_token=token)
+
+        cancel_thread.join()
+
+        # Should have attempted once before cancellation during sleep
+        assert retriever.call_count == 1
+
+    def test_no_cancellation_completes_normally(self):
+        """Test that polling completes normally without cancellation."""
+        token = CancellationToken()
+        retriever = Mock(side_effect=["pending", "completed"])
+        is_terminal = Mock(side_effect=[False, True])
+
+        with patch("time.sleep"):
+            result = poll_until(retriever, is_terminal, cancellation_token=token)
+
+        assert result == "completed"
+        assert not token.is_cancelled()
+
+    def test_cancellation_after_completion_no_effect(self):
+        """Test that cancelling after completion has no effect."""
+        token = CancellationToken()
+        retriever = Mock(return_value="completed")
+        is_terminal = Mock(return_value=True)
+
+        result = poll_until(retriever, is_terminal, cancellation_token=token)
+
+        # Cancel after completion
+        token.cancel()
+
+        assert result == "completed"
+
+    def test_cancellation_with_error_handler(self):
+        """Test cancellation works with error handler."""
+        token = CancellationToken()
+        retriever = Mock(side_effect=[ValueError("error"), "value"])
+        is_terminal = Mock(return_value=False)
+
+        def error_handler(_: Exception) -> str:
+            return "handled"
+
+        def cancel_on_first_sleep(*args, **kwargs):
+            token.cancel()
+            raise PollingCancelled("Polling operation was cancelled")
+
+        with patch("time.sleep", side_effect=cancel_on_first_sleep):
+            with pytest.raises(PollingCancelled):
+                poll_until(retriever, is_terminal, on_error=error_handler, cancellation_token=token)
+
+    def test_cancellation_with_custom_config(self):
+        """Test cancellation with custom polling config."""
+        token = CancellationToken()
+        retriever = Mock(return_value="value")
+        is_terminal = Mock(return_value=False)
+        config = PollingConfig(interval_seconds=0.5, max_attempts=10)
+
+        token.cancel()
+
+        with pytest.raises(PollingCancelled):
+            poll_until(retriever, is_terminal, config, cancellation_token=token)
+
+    def test_none_cancellation_token_works_normally(self):
+        """Test that passing None as cancellation_token works (backward compatibility)."""
+        retriever = Mock(side_effect=["pending", "completed"])
+        is_terminal = Mock(side_effect=[False, True])
+
+        with patch("time.sleep"):
+            result = poll_until(retriever, is_terminal, cancellation_token=None)
+
+        assert result == "completed"
+
+    def test_cancellable_sleep_blocks_correctly(self):
+        """Test that cancellable sleep blocks for the correct duration."""
+        import time
+
+        token = CancellationToken()
+        retriever = Mock(side_effect=["pending", "completed"])
+        is_terminal = Mock(side_effect=[False, True])
+        config = PollingConfig(interval_seconds=0.1)
+
+        start = time.time()
+        result = poll_until(retriever, is_terminal, config, cancellation_token=token)
+        elapsed = time.time() - start
+
+        assert result == "completed"
+        # Should have slept approximately 0.1 seconds
+        assert 0.08 <= elapsed <= 0.15  # Allow some tolerance
+
+    def test_multiple_cancellations_same_token(self):
+        """Test that the same token can be used for multiple poll operations."""
+        token = CancellationToken()
+
+        # First poll succeeds
+        retriever1 = Mock(return_value="done")
+        is_terminal1 = Mock(return_value=True)
+        result1 = poll_until(retriever1, is_terminal1, cancellation_token=token)
+        assert result1 == "done"
+
+        # Cancel token
+        token.cancel()
+
+        # Second poll should fail immediately
+        retriever2 = Mock(return_value="value")
+        is_terminal2 = Mock(return_value=False)
+        with pytest.raises(PollingCancelled):
+            poll_until(retriever2, is_terminal2, cancellation_token=token)
+
+        # Second retriever should not be called
+        assert retriever2.call_count == 0
