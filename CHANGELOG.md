@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.14.1 (2026-04-01)
+
+Full Changelog: [v1.14.0...v1.14.1](https://github.com/runloopai/api-client-python/compare/v1.14.0...v1.14.1)
+
+### Bug Fixes
+
+* **sdk:** remove incorrect remove_tunnel DeprecationWarning ([#775](https://github.com/runloopai/api-client-python/issues/775)) ([925c735](https://github.com/runloopai/api-client-python/commit/925c7353c5331df1f83052ab42793cc076e1a4ea))
+
+
+### Chores
+
+* Hide repository connection APIs from public OpenAPI spec ([#8462](https://github.com/runloopai/api-client-python/issues/8462)) ([2eac1fc](https://github.com/runloopai/api-client-python/commit/2eac1fcf5c2d05bcbe7ba596b5f2789f98aae660))
+* **tests:** bump steady to v0.20.1 ([c19d63d](https://github.com/runloopai/api-client-python/commit/c19d63d141ef2f60df570ebb2c21d8fcda2a98b9))
+* **tests:** bump steady to v0.20.2 ([3c0beeb](https://github.com/runloopai/api-client-python/commit/3c0beeb5b142e30c557aa6e85d407ecf65c78051))
+
 ## 1.14.0 (2026-03-31)
 
 Full Changelog: [v1.13.3...v1.14.0](https://github.com/runloopai/api-client-python/compare/v1.13.3...v1.14.0)
