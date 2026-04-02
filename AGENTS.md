@@ -44,7 +44,17 @@ After making changes, run the linter again to catch any issues:
 
 Fix any new errors or warnings that appear.
 
-### 5. Run Tests
+### 5. Run Format
+
+Apply code formatting to ensure consistent style:
+
+```bash
+ruff format .
+```
+
+This auto-formats all Python files to match the project's style guidelines.
+
+### 6. Run Tests
 
 Run the test suite to ensure everything works:
 
@@ -59,9 +69,9 @@ uv run pytest tests/test_axon_sse_reconnect.py -xvs
 uv run pytest tests/smoketests/ -m smoketest
 ```
 
-### 6. Commit Changes
+### 7. Commit Changes
 
-Once lint and tests pass, commit your changes:
+Once lint, format, and tests pass, commit your changes:
 
 ```bash
 git add -A

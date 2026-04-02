@@ -352,7 +352,6 @@ class AxonsResource(SyncAPIResource):
         )
 
 
-
 class AsyncAxonsResource(AsyncAPIResource):
     @cached_property
     def sql(self) -> AsyncSqlResource:
@@ -666,7 +665,6 @@ class AsyncAxonsResource(AsyncAPIResource):
                 get_offset=get_sequence,
             ),
         )
-
 
 
 class AxonsResourceWithRawResponse:
