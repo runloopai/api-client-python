@@ -29,7 +29,6 @@ from ..._response import (
 from ..._constants import RAW_RESPONSE_HEADER
 from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
 from ...pagination import SyncAxonsCursorIDPage, AsyncAxonsCursorIDPage
-from ...types.axons import axon_subscribe_sse_params
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.axon_view import AxonView
 from ...types.axon_event_view import AxonEventView
@@ -311,6 +310,7 @@ class AxonsResource(SyncAPIResource):
 
         def create_stream(last_sequence: str | None) -> Stream[AxonEventView]:
             # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use: int | Omit
             if last_sequence is not None:
                 sequence_to_use = int(last_sequence)
             elif not isinstance(after_sequence, Omit):
@@ -626,6 +626,7 @@ class AsyncAxonsResource(AsyncAPIResource):
 
         async def create_stream(last_sequence: str | None) -> AsyncStream[AxonEventView]:
             # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use: int | Omit
             if last_sequence is not None:
                 sequence_to_use = int(last_sequence)
             elif not isinstance(after_sequence, Omit):
