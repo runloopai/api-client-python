@@ -15,7 +15,7 @@ from .sql import (
     SqlResourceWithStreamingResponse,
     AsyncSqlResourceWithStreamingResponse,
 )
-from ...types import axon_list_params, axon_create_params, axon_publish_params
+from ...types import axon_list_params, axon_create_params, axon_publish_params, axon_subscribe_sse_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -259,6 +259,7 @@ class AxonsResource(SyncAPIResource):
         self,
         id: str,
         *,
+        after_sequence: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -270,6 +271,9 @@ class AxonsResource(SyncAPIResource):
         [Beta] Subscribe to an axon event stream via server-sent events.
 
         Args:
+          after_sequence: Sequence number after which to start streaming. Events with sequence > this
+              value are returned. If unset, replay from the beginning.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -285,7 +289,13 @@ class AxonsResource(SyncAPIResource):
         return self._get(
             path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=merged_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                ),
             ),
             cast_to=AxonEventView,
             stream=True,
@@ -516,6 +526,7 @@ class AsyncAxonsResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        after_sequence: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -527,6 +538,9 @@ class AsyncAxonsResource(AsyncAPIResource):
         [Beta] Subscribe to an axon event stream via server-sent events.
 
         Args:
+          after_sequence: Sequence number after which to start streaming. Events with sequence > this
+              value are returned. If unset, replay from the beginning.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -542,7 +556,13 @@ class AsyncAxonsResource(AsyncAPIResource):
         return await self._get(
             path_template("/v1/axons/{id}/subscribe/sse", id=id),
             options=make_request_options(
-                extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=merged_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                ),
             ),
             cast_to=AxonEventView,
             stream=True,

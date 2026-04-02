@@ -72,6 +72,7 @@ class TestBenchmarkRuns:
             limit=0,
             name="name",
             starting_after="starting_after",
+            state="state",
         )
         assert_matches_type(SyncBenchmarkRunsCursorIDPage[BenchmarkRunView], benchmark_run, path=["response"])
 
@@ -277,6 +278,7 @@ class TestAsyncBenchmarkRuns:
             limit=0,
             name="name",
             starting_after="starting_after",
+            state="state",
         )
         assert_matches_type(AsyncBenchmarkRunsCursorIDPage[BenchmarkRunView], benchmark_run, path=["response"])
 
