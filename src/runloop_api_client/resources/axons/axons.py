@@ -311,7 +311,12 @@ class AxonsResource(SyncAPIResource):
 
         def create_stream(last_sequence: str | None) -> Stream[AxonEventView]:
             # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
-            sequence_to_use = after_sequence if last_sequence is None else int(last_sequence)
+            if last_sequence is not None:
+                sequence_to_use = int(last_sequence)
+            elif not isinstance(after_sequence, Omit):
+                sequence_to_use = after_sequence
+            else:
+                sequence_to_use = omit
             return self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(
@@ -621,7 +626,12 @@ class AsyncAxonsResource(AsyncAPIResource):
 
         async def create_stream(last_sequence: str | None) -> AsyncStream[AxonEventView]:
             # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
-            sequence_to_use = after_sequence if last_sequence is None else int(last_sequence)
+            if last_sequence is not None:
+                sequence_to_use = int(last_sequence)
+            elif not isinstance(after_sequence, Omit):
+                sequence_to_use = after_sequence
+            else:
+                sequence_to_use = omit
             return await self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(

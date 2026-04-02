@@ -161,7 +161,7 @@ class TestAxonSSEReconnectSync:
             assert options["headers"]["Accept"] == "text/event-stream"
             assert options["headers"]["X-Custom"] == "value"
             assert options["params"]["param"] == "value"
-            assert options["params"]["after_sequence"] is None
+            assert "after_sequence" not in options["params"]
             assert options["timeout"] == 30.0
 
 
@@ -322,7 +322,7 @@ class TestAxonSSEReconnectAsync:
             assert options["headers"]["Accept"] == "text/event-stream"
             assert options["headers"]["X-Custom"] == "value"
             assert options["params"]["param"] == "value"
-            assert options["params"]["after_sequence"] is None
+            assert "after_sequence" not in options["params"]
             assert options["timeout"] == 30.0
 
 
