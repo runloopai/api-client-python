@@ -82,6 +82,7 @@ from .mcp_config_create_params import McpConfigCreateParams as McpConfigCreatePa
 from .mcp_config_update_params import McpConfigUpdateParams as McpConfigUpdateParams
 from .network_policy_list_view import NetworkPolicyListView as NetworkPolicyListView
 from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURLView
+from .axon_subscribe_sse_params import AxonSubscribeSseParams as AxonSubscribeSseParams
 from .benchmark_job_list_params import BenchmarkJobListParams as BenchmarkJobListParams
 from .benchmark_run_list_params import BenchmarkRunListParams as BenchmarkRunListParams
 from .devbox_send_std_in_result import DevboxSendStdInResult as DevboxSendStdInResult
