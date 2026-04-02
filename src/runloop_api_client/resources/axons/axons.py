@@ -16,7 +16,6 @@ from .sql import (
     AsyncSqlResourceWithStreamingResponse,
 )
 from ...types import axon_list_params, axon_create_params, axon_publish_params
-from ...types.axons import axon_subscribe_sse_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -30,6 +29,7 @@ from ..._response import (
 from ..._constants import RAW_RESPONSE_HEADER
 from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
 from ...pagination import SyncAxonsCursorIDPage, AsyncAxonsCursorIDPage
+from ...types.axons import axon_subscribe_sse_params
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.axon_view import AxonView
 from ...types.axon_event_view import AxonEventView

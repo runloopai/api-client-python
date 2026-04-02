@@ -372,8 +372,7 @@ def file_from_path(path: str) -> FileTypes:
 def get_required_header(headers: HeadersLike, header: str) -> str:
     lower_header = header.lower()
     if is_mapping_t(headers):
-        # mypy doesn't understand the type narrowing here
-        for k, v in headers.items():  # type: ignore
+        for k, v in cast(Mapping[str, object], headers).items():
             if k.lower() == lower_header and isinstance(v, str):
                 return v
 

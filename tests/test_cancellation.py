@@ -1,12 +1,12 @@
 """Tests for CancellationToken and PollingCancelled exception."""
 
-import threading
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
+import threading
+from concurrent.futures import Future, ThreadPoolExecutor
 
 import pytest
 
-from src.runloop_api_client.lib.cancellation import CancellationToken, PollingCancelled
+from src.runloop_api_client.lib.cancellation import PollingCancelled, CancellationToken
 
 
 class TestPollingCancelled:
@@ -134,7 +134,7 @@ class TestCancellationToken:
     def test_thread_safety(self):
         """Test that CancellationToken is thread-safe."""
         token = CancellationToken()
-        results = []
+        results: list[bool] = []
 
         def cancel_token():
             token.cancel()
@@ -147,7 +147,7 @@ class TestCancellationToken:
             results.append(token.is_cancelled())
 
         with ThreadPoolExecutor(max_workers=5) as executor:
-            futures = []
+            futures: list[Future[None]] = []
             # Start 4 checking threads
             for _ in range(4):
                 futures.append(executor.submit(check_token))

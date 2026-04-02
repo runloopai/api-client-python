@@ -1,14 +1,13 @@
 """Tests for async polling with cancellation."""
 
 import asyncio
-from typing import Any
 from unittest.mock import Mock, AsyncMock, patch
 
 import pytest
 
 from src.runloop_api_client.lib.polling import PollingConfig, PollingTimeout
+from src.runloop_api_client.lib.cancellation import PollingCancelled, CancellationToken
 from src.runloop_api_client.lib.polling_async import async_poll_until
-from src.runloop_api_client.lib.cancellation import CancellationToken, PollingCancelled
 
 
 class TestAsyncPollUntil:
@@ -119,17 +118,17 @@ class TestAsyncPollUntilWithCancellation:
         retriever = AsyncMock(side_effect=["value1", "value2", "value3"])
         is_terminal = Mock(return_value=False)
 
-        call_count = 0
+        wait_call_count = 0
 
-        async def cancel_on_second_call(*args, **kwargs):
-            nonlocal call_count
-            call_count += 1
-            if call_count == 2:
+        async def cancel_on_second_wait(*_args: object, **_kwargs: object) -> None:
+            nonlocal wait_call_count
+            wait_call_count += 1
+            if wait_call_count == 2:
                 token.cancel()
-            if token.is_cancelled():
-                raise PollingCancelled("Polling operation was cancelled")
+                return None
+            raise asyncio.TimeoutError
 
-        with patch("asyncio.sleep", side_effect=cancel_on_second_call):
+        with patch("asyncio.wait_for", side_effect=cancel_on_second_wait):
             with pytest.raises(PollingCancelled):
                 await async_poll_until(retriever, is_terminal, cancellation_token=token)
 
@@ -165,9 +164,9 @@ class TestAsyncPollUntilWithCancellation:
         token = CancellationToken()
         retriever = AsyncMock(side_effect=["pending", "completed"])
         is_terminal = Mock(side_effect=[False, True])
+        config = PollingConfig(interval_seconds=0.001)
 
-        with patch("asyncio.sleep", new_callable=AsyncMock):
-            result = await async_poll_until(retriever, is_terminal, cancellation_token=token)
+        result = await async_poll_until(retriever, is_terminal, config, cancellation_token=token)
 
         assert result == "completed"
         assert not token.is_cancelled()
@@ -195,11 +194,12 @@ class TestAsyncPollUntilWithCancellation:
         def error_handler(_: Exception) -> str:
             return "handled"
 
-        async def cancel_on_first_sleep(*args, **kwargs):
+        async def cancel_on_first_wait(awaitable: asyncio.Task[object], *_args: object, **_kwargs: object) -> None:
+            awaitable.cancel()
             token.cancel()
-            raise PollingCancelled("Polling operation was cancelled")
+            return None
 
-        with patch("asyncio.sleep", side_effect=cancel_on_first_sleep):
+        with patch("asyncio.wait_for", side_effect=cancel_on_first_wait):
             with pytest.raises(PollingCancelled):
                 await async_poll_until(retriever, is_terminal, on_error=error_handler, cancellation_token=token)
 

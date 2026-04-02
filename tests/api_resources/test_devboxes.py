@@ -1386,7 +1386,7 @@ class TestDevboxes:
                 assert result.id == "test_id"
                 assert result.status == "running"
                 mock_create.assert_called_once()
-                mock_await.assert_called_once_with("test_id", polling_config=None)
+                mock_await.assert_called_once_with("test_id", polling_config=None, cancellation_token=None)
 
     @parametrize
     def test_method_create_and_await_running_with_config(self, client: Runloop) -> None:
@@ -1426,7 +1426,7 @@ class TestDevboxes:
 
                 assert result.id == "test_id"
                 assert result.status == "running"
-                mock_await.assert_called_once_with("test_id", polling_config=config)
+                mock_await.assert_called_once_with("test_id", polling_config=config, cancellation_token=None)
 
     @parametrize
     def test_method_create_and_await_running_create_failure(self, client: Runloop) -> None:

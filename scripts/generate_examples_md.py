@@ -11,10 +11,10 @@ from __future__ import annotations
 import re
 import sys
 import argparse
-from typing import Any
+from typing import Any, cast
 from pathlib import Path
 
-import frontmatter  # type: ignore[import-untyped]
+import frontmatter  # type: ignore[import-not-found, import-untyped]
 
 ROOT = Path(__file__).parent.parent
 EXAMPLES_DIR = ROOT / "examples"
@@ -38,7 +38,7 @@ def parse_example(path: Path) -> dict[str, Any]:
         raise ValueError(f"{path}: docstring must start with frontmatter (---)")
 
     try:
-        post = frontmatter.loads(docstring)
+        post = cast(Any, frontmatter).loads(docstring)
         return dict(post.metadata)
     except Exception as e:
         raise ValueError(f"{path}: invalid frontmatter: {e}") from e

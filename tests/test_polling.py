@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.runloop_api_client.lib.polling import PollingConfig, PollingTimeout, poll_until
-from src.runloop_api_client.lib.cancellation import CancellationToken, PollingCancelled
+from src.runloop_api_client.lib.cancellation import PollingCancelled, CancellationToken
 
 
 class TestPollingConfig:
@@ -287,18 +287,17 @@ class TestPollUntilWithCancellation:
         retriever = Mock(side_effect=["value1", "value2", "value3"])
         is_terminal = Mock(return_value=False)
 
-        call_count = 0
+        wait_call_count = 0
 
-        def cancel_on_second_call(*args, **kwargs):
-            nonlocal call_count
-            call_count += 1
-            if call_count == 2:
+        def cancel_on_second_wait(*_args: object, **_kwargs: object) -> bool:
+            nonlocal wait_call_count
+            wait_call_count += 1
+            if wait_call_count == 2:
                 token.cancel()
-            # Don't actually sleep, just check cancellation
-            if token.is_cancelled():
-                raise PollingCancelled("Polling operation was cancelled")
+                return True
+            return False
 
-        with patch("time.sleep", side_effect=cancel_on_second_call):
+        with patch.object(token.sync_event, "wait", side_effect=cancel_on_second_wait):
             with pytest.raises(PollingCancelled):
                 poll_until(retriever, is_terminal, cancellation_token=token)
 
@@ -337,7 +336,7 @@ class TestPollUntilWithCancellation:
         retriever = Mock(side_effect=["pending", "completed"])
         is_terminal = Mock(side_effect=[False, True])
 
-        with patch("time.sleep"):
+        with patch.object(token.sync_event, "wait", return_value=False):
             result = poll_until(retriever, is_terminal, cancellation_token=token)
 
         assert result == "completed"
@@ -365,11 +364,11 @@ class TestPollUntilWithCancellation:
         def error_handler(_: Exception) -> str:
             return "handled"
 
-        def cancel_on_first_sleep(*args, **kwargs):
+        def cancel_on_first_wait(*_args: object, **_kwargs: object) -> bool:
             token.cancel()
-            raise PollingCancelled("Polling operation was cancelled")
+            return True
 
-        with patch("time.sleep", side_effect=cancel_on_first_sleep):
+        with patch.object(token.sync_event, "wait", side_effect=cancel_on_first_wait):
             with pytest.raises(PollingCancelled):
                 poll_until(retriever, is_terminal, on_error=error_handler, cancellation_token=token)
 

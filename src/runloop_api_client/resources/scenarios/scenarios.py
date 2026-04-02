@@ -43,6 +43,7 @@ from ..._response import (
 from ...pagination import SyncScenariosCursorIDPage, AsyncScenariosCursorIDPage
 from ...lib.polling import PollingConfig
 from ..._base_client import AsyncPaginator, make_request_options
+from ...lib.cancellation import CancellationToken
 from ...types.scenario_view import ScenarioView
 from ...types.scenario_run_view import ScenarioRunView
 from ...types.input_context_param import InputContextParam
@@ -527,6 +528,7 @@ class ScenariosResource(SyncAPIResource):
         run_name: Optional[str] | Omit = omit,
         run_profile: Optional[scenario_start_run_params.RunProfile] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -543,6 +545,7 @@ class ScenariosResource(SyncAPIResource):
             run_name: Display name of the run
             run_profile: Runtime configuration to use for this benchmark run
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -572,6 +575,7 @@ class ScenariosResource(SyncAPIResource):
         self._client.devboxes.await_running(
             run.devbox_id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
         )
 
         return run
@@ -1048,6 +1052,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         run_name: Optional[str] | Omit = omit,
         run_profile: Optional[scenario_start_run_params.RunProfile] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1064,6 +1069,7 @@ class AsyncScenariosResource(AsyncAPIResource):
             run_name: Display name of the run
             run_profile: Runtime configuration to use for this benchmark run
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
 
         Returns:
             The scenario run in running state
@@ -1088,6 +1094,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         await self._client.devboxes.await_running(
             run.devbox_id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
         )
 
         return run

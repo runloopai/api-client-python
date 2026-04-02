@@ -1,6 +1,7 @@
 import time
 import asyncio
 from typing import Union, TypeVar, Callable, Optional, Awaitable
+from contextlib import suppress
 
 from .polling import PollingConfig, PollingTimeout
 from .cancellation import CancellationToken
@@ -67,13 +68,13 @@ async def async_poll_until(
 
         # Cancellable async sleep
         if cancellation_token is not None:
+            wait_task = asyncio.create_task(cancellation_token.async_event.wait())
             try:
-                await asyncio.wait_for(
-                    cancellation_token.async_event.wait(),
-                    timeout=config.interval_seconds,
-                )
+                await asyncio.wait_for(wait_task, timeout=config.interval_seconds)
                 cancellation_token.raise_if_cancelled()
             except asyncio.TimeoutError:
-                pass  # Normal sleep completion
+                wait_task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await wait_task
         else:
             await asyncio.sleep(config.interval_seconds)

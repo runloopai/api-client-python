@@ -27,8 +27,8 @@ from ..._exceptions import RunloopError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.scenarios import run_list_params
-from ...lib.polling_async import async_poll_until
 from ...lib.cancellation import CancellationToken
+from ...lib.polling_async import async_poll_until
 from ...types.scenario_run_view import ScenarioRunView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
@@ -429,6 +429,7 @@ class RunsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -441,6 +442,7 @@ class RunsResource(SyncAPIResource):
         Args:
             id: The ID of the scenario run to score, wait for, and complete
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -456,6 +458,7 @@ class RunsResource(SyncAPIResource):
         self.score_and_await(
             id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -866,6 +869,7 @@ class AsyncRunsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -878,6 +882,7 @@ class AsyncRunsResource(AsyncAPIResource):
         Args:
             id: The ID of the scenario run to score, wait for, and complete
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -893,6 +898,7 @@ class AsyncRunsResource(AsyncAPIResource):
         await self.score_and_await(
             id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,

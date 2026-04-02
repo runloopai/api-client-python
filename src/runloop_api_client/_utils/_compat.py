@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 import typing_extensions
-from typing import Any, Type, Union, Literal, Optional
+from typing import Any, Type, Union, Literal, Optional, cast
 from datetime import date, datetime
 from typing_extensions import get_args as _get_args, get_origin as _get_origin
 
@@ -34,7 +34,8 @@ def is_typeddict(tp: Type[Any]) -> bool:
 
 
 def is_literal_type(tp: Type[Any]) -> bool:
-    return get_origin(tp) in _LITERAL_TYPES
+    origin = get_origin(tp)
+    return cast(Any, origin) in _LITERAL_TYPES
 
 
 def parse_date(value: Union[date, StrBytesIntFloat]) -> date:

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-from runloop_api_client.sdk import AsyncRunloopSDK, RunloopSDK
+from runloop_api_client.sdk import RunloopSDK, AsyncRunloopSDK
 from tests.smoketests.utils import unique_name
 from runloop_api_client.types.shared_params import AgentSource
 
@@ -274,7 +274,7 @@ class TestListPaginationWithData:
     async def test_list_limit_with_created_data(self, async_sdk_client: AsyncRunloopSDK) -> None:
         """Create multiple items and verify list limit works correctly."""
         # Create several agents to ensure we have data
-        created_agents = []
+        created_agents: list[object] = []
         for i in range(5):
             agent = await async_sdk_client.agent.create(
                 name=unique_name(f"sdk-list-test-{i}"),
