@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.15.0 (2026-04-02)
+
+Full Changelog: [v1.14.1...v1.15.0](https://github.com/runloopai/api-client-python/compare/v1.14.1...v1.15.0)
+
+### Features
+
+* **benchmark-runs:** add state filter and multi-value benchmark_id support to listBenchmarkRuns ([#8480](https://github.com/runloopai/api-client-python/issues/8480)) ([08e6a25](https://github.com/runloopai/api-client-python/commit/08e6a2543fbac1d20d2f8c1c51b34c989a622003))
+
+
+### Bug Fixes
+
+* Add after_sequence param to axon subscribe ([#8497](https://github.com/runloopai/api-client-python/issues/8497)) ([454cce4](https://github.com/runloopai/api-client-python/commit/454cce48cf22ba3466f4063d58af4650b9b84322))
+
 ## 1.14.1 (2026-04-01)
 
 Full Changelog: [v1.14.0...v1.14.1](https://github.com/runloopai/api-client-python/compare/v1.14.0...v1.14.1)
