@@ -15,7 +15,7 @@ from .sql import (
     SqlResourceWithStreamingResponse,
     AsyncSqlResourceWithStreamingResponse,
 )
-from ...types import axon_list_params, axon_create_params, axon_publish_params
+from ...types import axon_list_params, axon_create_params, axon_publish_params, axon_subscribe_sse_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -261,6 +261,7 @@ class AxonsResource(SyncAPIResource):
         self,
         id: str,
         *,
+        after_sequence: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -274,6 +275,9 @@ class AxonsResource(SyncAPIResource):
         Automatically reconnects on timeout, resuming from last received event.
 
         Args:
+          after_sequence: Sequence number after which to start streaming. Events with sequence > this
+              value are returned. If unset, replay from the beginning.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -292,7 +296,13 @@ class AxonsResource(SyncAPIResource):
             return self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(
-                    extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                    ),
                 ),
                 cast_to=AxonEventView,
                 stream=True,
@@ -300,8 +310,8 @@ class AxonsResource(SyncAPIResource):
             )
 
         def create_stream(last_sequence: str | None) -> Stream[AxonEventView]:
-            # after_sequence is used internally for reconnection only
-            sequence_int = int(last_sequence) if last_sequence is not None else None
+            # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use = after_sequence if last_sequence is None else int(last_sequence)
             return self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(
@@ -310,7 +320,7 @@ class AxonsResource(SyncAPIResource):
                     extra_body=extra_body,
                     timeout=timeout,
                     query=maybe_transform(
-                        {"after_sequence": sequence_int},
+                        {"after_sequence": sequence_to_use},
                         axon_subscribe_sse_params.AxonSubscribeSseParams,
                     ),
                 ),
@@ -335,6 +345,7 @@ class AxonsResource(SyncAPIResource):
                 get_offset=get_sequence,
             ),
         )
+
 
 
 class AsyncAxonsResource(AsyncAPIResource):
@@ -560,6 +571,7 @@ class AsyncAxonsResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        after_sequence: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -573,6 +585,9 @@ class AsyncAxonsResource(AsyncAPIResource):
         Automatically reconnects on timeout, resuming from last received event.
 
         Args:
+          after_sequence: Sequence number after which to start streaming. Events with sequence > this
+              value are returned. If unset, replay from the beginning.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -591,7 +606,13 @@ class AsyncAxonsResource(AsyncAPIResource):
             return await self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(
-                    extra_headers=merged_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                    ),
                 ),
                 cast_to=AxonEventView,
                 stream=True,
@@ -599,8 +620,8 @@ class AsyncAxonsResource(AsyncAPIResource):
             )
 
         async def create_stream(last_sequence: str | None) -> AsyncStream[AxonEventView]:
-            # after_sequence is used internally for reconnection only
-            sequence_int = int(last_sequence) if last_sequence is not None else None
+            # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use = after_sequence if last_sequence is None else int(last_sequence)
             return await self._get(
                 path_template("/v1/axons/{id}/subscribe/sse", id=id),
                 options=make_request_options(
@@ -608,8 +629,8 @@ class AsyncAxonsResource(AsyncAPIResource):
                     extra_query=extra_query,
                     extra_body=extra_body,
                     timeout=timeout,
-                    query=maybe_transform(
-                        {"after_sequence": sequence_int},
+                    query=await async_maybe_transform(
+                        {"after_sequence": sequence_to_use},
                         axon_subscribe_sse_params.AxonSubscribeSseParams,
                     ),
                 ),
@@ -634,6 +655,7 @@ class AsyncAxonsResource(AsyncAPIResource):
                 get_offset=get_sequence,
             ),
         )
+
 
 
 class AxonsResourceWithRawResponse:

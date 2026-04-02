@@ -25,3 +25,6 @@ class BenchmarkRunListParams(TypedDict, total=False):
 
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
+
+    state: str
+    """Filter by state"""
