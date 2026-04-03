@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Dict, Iterable, Optional, TypedDict
 
 import httpx
@@ -669,6 +670,7 @@ class BlueprintsResource(SyncAPIResource):
             cast_to=BlueprintBuildLogsListView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def preview(
         self,
         *,
@@ -1349,6 +1351,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             cast_to=BlueprintBuildLogsListView,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def preview(
         self,
         *,
@@ -1488,8 +1491,10 @@ class BlueprintsResourceWithRawResponse:
         self.logs = to_raw_response_wrapper(
             blueprints.logs,
         )
-        self.preview = to_raw_response_wrapper(
-            blueprints.preview,
+        self.preview = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                blueprints.preview,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -1518,8 +1523,10 @@ class AsyncBlueprintsResourceWithRawResponse:
         self.logs = async_to_raw_response_wrapper(
             blueprints.logs,
         )
-        self.preview = async_to_raw_response_wrapper(
-            blueprints.preview,
+        self.preview = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                blueprints.preview,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -1548,8 +1555,10 @@ class BlueprintsResourceWithStreamingResponse:
         self.logs = to_streamed_response_wrapper(
             blueprints.logs,
         )
-        self.preview = to_streamed_response_wrapper(
-            blueprints.preview,
+        self.preview = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                blueprints.preview,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -1578,6 +1587,8 @@ class AsyncBlueprintsResourceWithStreamingResponse:
         self.logs = async_to_streamed_response_wrapper(
             blueprints.logs,
         )
-        self.preview = async_to_streamed_response_wrapper(
-            blueprints.preview,
+        self.preview = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                blueprints.preview,  # pyright: ignore[reportDeprecated],
+            )
         )
