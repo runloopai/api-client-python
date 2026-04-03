@@ -92,7 +92,7 @@ class DevboxView(BaseModel):
     a Blueprint.
     """
 
-    failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed"]] = None
+    failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed", "health_check_failed"]] = None
     """The failure reason if the Devbox failed, if the Devbox has a 'failure' status."""
 
     gateway_specs: Optional[Dict[str, GatewaySpecs]] = None
