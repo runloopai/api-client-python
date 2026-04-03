@@ -228,40 +228,6 @@ Methods:
 - <code title="post /v1/devboxes/disk_snapshots/{id}/delete">client.devboxes.disk_snapshots.<a href="./src/runloop_api_client/resources/devboxes/disk_snapshots.py">delete</a>(id) -> object</code>
 - <code title="get /v1/devboxes/disk_snapshots/{id}/status">client.devboxes.disk_snapshots.<a href="./src/runloop_api_client/resources/devboxes/disk_snapshots.py">query_status</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/devbox_snapshot_async_status_view.py">DevboxSnapshotAsyncStatusView</a></code>
 
-## Browsers
-
-Types:
-
-```python
-from runloop_api_client.types.devboxes import BrowserView
-```
-
-Methods:
-
-- <code title="post /v1/devboxes/browsers">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">create</a>(\*\*<a href="src/runloop_api_client/types/devboxes/browser_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
-- <code title="get /v1/devboxes/browsers/{id}">client.devboxes.browsers.<a href="./src/runloop_api_client/resources/devboxes/browsers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/browser_view.py">BrowserView</a></code>
-
-## Computers
-
-Types:
-
-```python
-from runloop_api_client.types.devboxes import (
-    ComputerView,
-    ComputerKeyboardInteractionResponse,
-    ComputerMouseInteractionResponse,
-    ComputerScreenInteractionResponse,
-)
-```
-
-Methods:
-
-- <code title="post /v1/devboxes/computers">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">create</a>(\*\*<a href="src/runloop_api_client/types/devboxes/computer_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_view.py">ComputerView</a></code>
-- <code title="get /v1/devboxes/computers/{id}">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devboxes/computer_view.py">ComputerView</a></code>
-- <code title="post /v1/devboxes/computers/{id}/keyboard_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">keyboard_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_keyboard_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_keyboard_interaction_response.py">ComputerKeyboardInteractionResponse</a></code>
-- <code title="post /v1/devboxes/computers/{id}/mouse_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">mouse_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_mouse_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_mouse_interaction_response.py">ComputerMouseInteractionResponse</a></code>
-- <code title="post /v1/devboxes/computers/{id}/screen_interaction">client.devboxes.computers.<a href="./src/runloop_api_client/resources/devboxes/computers.py">screen_interaction</a>(id, \*\*<a href="src/runloop_api_client/types/devboxes/computer_screen_interaction_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/computer_screen_interaction_response.py">ComputerScreenInteractionResponse</a></code>
-
 ## Logs
 
 Types:

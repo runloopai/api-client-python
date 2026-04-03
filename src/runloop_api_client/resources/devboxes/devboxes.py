@@ -39,23 +39,7 @@ from ...types import (
 )
 from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
 from ..._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
-from .browsers import (
-    BrowsersResource,
-    AsyncBrowsersResource,
-    BrowsersResourceWithRawResponse,
-    AsyncBrowsersResourceWithRawResponse,
-    BrowsersResourceWithStreamingResponse,
-    AsyncBrowsersResourceWithStreamingResponse,
-)
 from ..._compat import cached_property
-from .computers import (
-    ComputersResource,
-    AsyncComputersResource,
-    ComputersResourceWithRawResponse,
-    AsyncComputersResourceWithRawResponse,
-    ComputersResourceWithStreamingResponse,
-    AsyncComputersResourceWithStreamingResponse,
-)
 from .executions import (
     ExecutionsResource,
     AsyncExecutionsResource,
@@ -141,14 +125,6 @@ class DevboxesResource(SyncAPIResource):
     @cached_property
     def disk_snapshots(self) -> DiskSnapshotsResource:
         return DiskSnapshotsResource(self._client)
-
-    @cached_property
-    def browsers(self) -> BrowsersResource:
-        return BrowsersResource(self._client)
-
-    @cached_property
-    def computers(self) -> ComputersResource:
-        return ComputersResource(self._client)
 
     @cached_property
     def logs(self) -> LogsResource:
@@ -1785,14 +1761,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
     @cached_property
     def disk_snapshots(self) -> AsyncDiskSnapshotsResource:
         return AsyncDiskSnapshotsResource(self._client)
-
-    @cached_property
-    def browsers(self) -> AsyncBrowsersResource:
-        return AsyncBrowsersResource(self._client)
-
-    @cached_property
-    def computers(self) -> AsyncComputersResource:
-        return AsyncComputersResource(self._client)
 
     @cached_property
     def logs(self) -> AsyncLogsResource:
@@ -3508,14 +3476,6 @@ class DevboxesResourceWithRawResponse:
         return DiskSnapshotsResourceWithRawResponse(self._devboxes.disk_snapshots)
 
     @cached_property
-    def browsers(self) -> BrowsersResourceWithRawResponse:
-        return BrowsersResourceWithRawResponse(self._devboxes.browsers)
-
-    @cached_property
-    def computers(self) -> ComputersResourceWithRawResponse:
-        return ComputersResourceWithRawResponse(self._devboxes.computers)
-
-    @cached_property
     def logs(self) -> LogsResourceWithRawResponse:
         return LogsResourceWithRawResponse(self._devboxes.logs)
 
@@ -3607,14 +3567,6 @@ class AsyncDevboxesResourceWithRawResponse:
     @cached_property
     def disk_snapshots(self) -> AsyncDiskSnapshotsResourceWithRawResponse:
         return AsyncDiskSnapshotsResourceWithRawResponse(self._devboxes.disk_snapshots)
-
-    @cached_property
-    def browsers(self) -> AsyncBrowsersResourceWithRawResponse:
-        return AsyncBrowsersResourceWithRawResponse(self._devboxes.browsers)
-
-    @cached_property
-    def computers(self) -> AsyncComputersResourceWithRawResponse:
-        return AsyncComputersResourceWithRawResponse(self._devboxes.computers)
 
     @cached_property
     def logs(self) -> AsyncLogsResourceWithRawResponse:
@@ -3710,14 +3662,6 @@ class DevboxesResourceWithStreamingResponse:
         return DiskSnapshotsResourceWithStreamingResponse(self._devboxes.disk_snapshots)
 
     @cached_property
-    def browsers(self) -> BrowsersResourceWithStreamingResponse:
-        return BrowsersResourceWithStreamingResponse(self._devboxes.browsers)
-
-    @cached_property
-    def computers(self) -> ComputersResourceWithStreamingResponse:
-        return ComputersResourceWithStreamingResponse(self._devboxes.computers)
-
-    @cached_property
     def logs(self) -> LogsResourceWithStreamingResponse:
         return LogsResourceWithStreamingResponse(self._devboxes.logs)
 
@@ -3809,14 +3753,6 @@ class AsyncDevboxesResourceWithStreamingResponse:
     @cached_property
     def disk_snapshots(self) -> AsyncDiskSnapshotsResourceWithStreamingResponse:
         return AsyncDiskSnapshotsResourceWithStreamingResponse(self._devboxes.disk_snapshots)
-
-    @cached_property
-    def browsers(self) -> AsyncBrowsersResourceWithStreamingResponse:
-        return AsyncBrowsersResourceWithStreamingResponse(self._devboxes.browsers)
-
-    @cached_property
-    def computers(self) -> AsyncComputersResourceWithStreamingResponse:
-        return AsyncComputersResourceWithStreamingResponse(self._devboxes.computers)
 
     @cached_property
     def logs(self) -> AsyncLogsResourceWithStreamingResponse:

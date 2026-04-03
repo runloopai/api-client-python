@@ -8,14 +8,6 @@ from .logs import (
     LogsResourceWithStreamingResponse,
     AsyncLogsResourceWithStreamingResponse,
 )
-from .browsers import (
-    BrowsersResource,
-    AsyncBrowsersResource,
-    BrowsersResourceWithRawResponse,
-    AsyncBrowsersResourceWithRawResponse,
-    BrowsersResourceWithStreamingResponse,
-    AsyncBrowsersResourceWithStreamingResponse,
-)
 from .devboxes import (
     DevboxesResource,
     AsyncDevboxesResource,
@@ -23,14 +15,6 @@ from .devboxes import (
     AsyncDevboxesResourceWithRawResponse,
     DevboxesResourceWithStreamingResponse,
     AsyncDevboxesResourceWithStreamingResponse,
-)
-from .computers import (
-    ComputersResource,
-    AsyncComputersResource,
-    ComputersResourceWithRawResponse,
-    AsyncComputersResourceWithRawResponse,
-    ComputersResourceWithStreamingResponse,
-    AsyncComputersResourceWithStreamingResponse,
 )
 from .executions import (
     ExecutionsResource,
@@ -56,18 +40,6 @@ __all__ = [
     "AsyncDiskSnapshotsResourceWithRawResponse",
     "DiskSnapshotsResourceWithStreamingResponse",
     "AsyncDiskSnapshotsResourceWithStreamingResponse",
-    "BrowsersResource",
-    "AsyncBrowsersResource",
-    "BrowsersResourceWithRawResponse",
-    "AsyncBrowsersResourceWithRawResponse",
-    "BrowsersResourceWithStreamingResponse",
-    "AsyncBrowsersResourceWithStreamingResponse",
-    "ComputersResource",
-    "AsyncComputersResource",
-    "ComputersResourceWithRawResponse",
-    "AsyncComputersResourceWithRawResponse",
-    "ComputersResourceWithStreamingResponse",
-    "AsyncComputersResourceWithStreamingResponse",
     "LogsResource",
     "AsyncLogsResource",
     "LogsResourceWithRawResponse",
