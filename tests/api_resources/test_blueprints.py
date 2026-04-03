@@ -16,6 +16,8 @@ from runloop_api_client.types import (
 )
 from runloop_api_client.pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
 
+# pyright: reportDeprecated=false
+
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
@@ -372,77 +374,82 @@ class TestBlueprints:
 
     @parametrize
     def test_method_preview(self, client: Runloop) -> None:
-        blueprint = client.blueprints.preview(
-            name="name",
-        )
+        with pytest.warns(DeprecationWarning):
+            blueprint = client.blueprints.preview(
+                name="name",
+            )
+
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     def test_method_preview_with_all_params(self, client: Runloop) -> None:
-        blueprint = client.blueprints.preview(
-            name="name",
-            base_blueprint_id="base_blueprint_id",
-            base_blueprint_name="base_blueprint_name",
-            build_args={"foo": "string"},
-            build_context={
-                "object_id": "object_id",
-                "type": "object",
-            },
-            code_mounts=[
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                }
-            ],
-            dockerfile="dockerfile",
-            file_mounts={"foo": "string"},
-            launch_parameters={
-                "after_idle": {
-                    "idle_time_seconds": 0,
-                    "on_idle": "shutdown",
+        with pytest.warns(DeprecationWarning):
+            blueprint = client.blueprints.preview(
+                name="name",
+                base_blueprint_id="base_blueprint_id",
+                base_blueprint_name="base_blueprint_name",
+                build_args={"foo": "string"},
+                build_context={
+                    "object_id": "object_id",
+                    "type": "object",
                 },
-                "architecture": "x86_64",
-                "available_ports": [0],
-                "custom_cpu_cores": 0,
-                "custom_disk_size": 0,
-                "custom_gb_memory": 0,
-                "keep_alive_time_seconds": 0,
-                "launch_commands": ["string"],
-                "network_policy_id": "network_policy_id",
-                "required_services": ["string"],
-                "resource_size_request": "X_SMALL",
-                "user_parameters": {
-                    "uid": 0,
-                    "username": "username",
-                },
-            },
-            metadata={"foo": "string"},
-            network_policy_id="network_policy_id",
-            secrets={"foo": "string"},
-            services=[
-                {
-                    "image": "image",
-                    "name": "name",
-                    "credentials": {
-                        "password": "password",
+                code_mounts=[
+                    {
+                        "repo_name": "repo_name",
+                        "repo_owner": "repo_owner",
+                        "token": "token",
+                        "install_command": "install_command",
+                    }
+                ],
+                dockerfile="dockerfile",
+                file_mounts={"foo": "string"},
+                launch_parameters={
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "architecture": "x86_64",
+                    "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
+                    "custom_gb_memory": 0,
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
+                    "required_services": ["string"],
+                    "resource_size_request": "X_SMALL",
+                    "user_parameters": {
+                        "uid": 0,
                         "username": "username",
                     },
-                    "env": {"foo": "string"},
-                    "options": "options",
-                    "port_mappings": ["string"],
-                }
-            ],
-            system_setup_commands=["string"],
-        )
+                },
+                metadata={"foo": "string"},
+                network_policy_id="network_policy_id",
+                secrets={"foo": "string"},
+                services=[
+                    {
+                        "image": "image",
+                        "name": "name",
+                        "credentials": {
+                            "password": "password",
+                            "username": "username",
+                        },
+                        "env": {"foo": "string"},
+                        "options": "options",
+                        "port_mappings": ["string"],
+                    }
+                ],
+                system_setup_commands=["string"],
+            )
+
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     def test_raw_response_preview(self, client: Runloop) -> None:
-        response = client.blueprints.with_raw_response.preview(
-            name="name",
-        )
+        with pytest.warns(DeprecationWarning):
+            response = client.blueprints.with_raw_response.preview(
+                name="name",
+            )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -451,14 +458,15 @@ class TestBlueprints:
 
     @parametrize
     def test_streaming_response_preview(self, client: Runloop) -> None:
-        with client.blueprints.with_streaming_response.preview(
-            name="name",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with pytest.warns(DeprecationWarning):
+            with client.blueprints.with_streaming_response.preview(
+                name="name",
+            ) as response:
+                assert not response.is_closed
+                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            blueprint = response.parse()
-            assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
+                blueprint = response.parse()
+                assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -818,77 +826,82 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_method_preview(self, async_client: AsyncRunloop) -> None:
-        blueprint = await async_client.blueprints.preview(
-            name="name",
-        )
+        with pytest.warns(DeprecationWarning):
+            blueprint = await async_client.blueprints.preview(
+                name="name",
+            )
+
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     async def test_method_preview_with_all_params(self, async_client: AsyncRunloop) -> None:
-        blueprint = await async_client.blueprints.preview(
-            name="name",
-            base_blueprint_id="base_blueprint_id",
-            base_blueprint_name="base_blueprint_name",
-            build_args={"foo": "string"},
-            build_context={
-                "object_id": "object_id",
-                "type": "object",
-            },
-            code_mounts=[
-                {
-                    "repo_name": "repo_name",
-                    "repo_owner": "repo_owner",
-                    "token": "token",
-                    "install_command": "install_command",
-                }
-            ],
-            dockerfile="dockerfile",
-            file_mounts={"foo": "string"},
-            launch_parameters={
-                "after_idle": {
-                    "idle_time_seconds": 0,
-                    "on_idle": "shutdown",
+        with pytest.warns(DeprecationWarning):
+            blueprint = await async_client.blueprints.preview(
+                name="name",
+                base_blueprint_id="base_blueprint_id",
+                base_blueprint_name="base_blueprint_name",
+                build_args={"foo": "string"},
+                build_context={
+                    "object_id": "object_id",
+                    "type": "object",
                 },
-                "architecture": "x86_64",
-                "available_ports": [0],
-                "custom_cpu_cores": 0,
-                "custom_disk_size": 0,
-                "custom_gb_memory": 0,
-                "keep_alive_time_seconds": 0,
-                "launch_commands": ["string"],
-                "network_policy_id": "network_policy_id",
-                "required_services": ["string"],
-                "resource_size_request": "X_SMALL",
-                "user_parameters": {
-                    "uid": 0,
-                    "username": "username",
-                },
-            },
-            metadata={"foo": "string"},
-            network_policy_id="network_policy_id",
-            secrets={"foo": "string"},
-            services=[
-                {
-                    "image": "image",
-                    "name": "name",
-                    "credentials": {
-                        "password": "password",
+                code_mounts=[
+                    {
+                        "repo_name": "repo_name",
+                        "repo_owner": "repo_owner",
+                        "token": "token",
+                        "install_command": "install_command",
+                    }
+                ],
+                dockerfile="dockerfile",
+                file_mounts={"foo": "string"},
+                launch_parameters={
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "architecture": "x86_64",
+                    "available_ports": [0],
+                    "custom_cpu_cores": 0,
+                    "custom_disk_size": 0,
+                    "custom_gb_memory": 0,
+                    "keep_alive_time_seconds": 0,
+                    "launch_commands": ["string"],
+                    "network_policy_id": "network_policy_id",
+                    "required_services": ["string"],
+                    "resource_size_request": "X_SMALL",
+                    "user_parameters": {
+                        "uid": 0,
                         "username": "username",
                     },
-                    "env": {"foo": "string"},
-                    "options": "options",
-                    "port_mappings": ["string"],
-                }
-            ],
-            system_setup_commands=["string"],
-        )
+                },
+                metadata={"foo": "string"},
+                network_policy_id="network_policy_id",
+                secrets={"foo": "string"},
+                services=[
+                    {
+                        "image": "image",
+                        "name": "name",
+                        "credentials": {
+                            "password": "password",
+                            "username": "username",
+                        },
+                        "env": {"foo": "string"},
+                        "options": "options",
+                        "port_mappings": ["string"],
+                    }
+                ],
+                system_setup_commands=["string"],
+            )
+
         assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
     @parametrize
     async def test_raw_response_preview(self, async_client: AsyncRunloop) -> None:
-        response = await async_client.blueprints.with_raw_response.preview(
-            name="name",
-        )
+        with pytest.warns(DeprecationWarning):
+            response = await async_client.blueprints.with_raw_response.preview(
+                name="name",
+            )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -897,13 +910,14 @@ class TestAsyncBlueprints:
 
     @parametrize
     async def test_streaming_response_preview(self, async_client: AsyncRunloop) -> None:
-        async with async_client.blueprints.with_streaming_response.preview(
-            name="name",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with pytest.warns(DeprecationWarning):
+            async with async_client.blueprints.with_streaming_response.preview(
+                name="name",
+            ) as response:
+                assert not response.is_closed
+                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            blueprint = await response.parse()
-            assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
+                blueprint = await response.parse()
+                assert_matches_type(BlueprintPreviewView, blueprint, path=["response"])
 
         assert cast(Any, response.is_closed) is True
