@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.16.0 (2026-04-03)
+
+Full Changelog: [v1.15.0...v1.16.0](https://github.com/runloopai/api-client-python/compare/v1.15.0...v1.16.0)
+
+### Features
+
+* add specific message when a devbox fails due to missing its health checks ([#8535](https://github.com/runloopai/api-client-python/issues/8535)) ([2b27148](https://github.com/runloopai/api-client-python/commit/2b271486e74ba2da1a0ee96b0a8a7187d5b154f3))
+
+
+### Chores
+
+* **blueprints:** deprecate `blueprints.preview()` method ([#8526](https://github.com/runloopai/api-client-python/issues/8526)) ([b7a2ce9](https://github.com/runloopai/api-client-python/commit/b7a2ce90183776b620a26732d0831cd902028bee))
+* Remove computer and browser use controllers ([#8530](https://github.com/runloopai/api-client-python/issues/8530)) ([b5bfa7d](https://github.com/runloopai/api-client-python/commit/b5bfa7d4fad311e07879f8de61aba7df36c8f59a))
+
 ## 1.15.0 (2026-04-02)
 
 Full Changelog: [v1.14.1...v1.15.0](https://github.com/runloopai/api-client-python/compare/v1.14.1...v1.15.0)
