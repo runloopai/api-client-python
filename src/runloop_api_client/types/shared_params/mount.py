@@ -16,7 +16,7 @@ class CodeMount(TypedDict, total=False):
     repo_name: Required[str]
     """The name of the repo to mount.
 
-    By default, code will be mounted at /home/user/{repo_name}s.
+    By default, code will be mounted at /home/user/{repo_name}.
     """
 
     repo_owner: Required[str]
