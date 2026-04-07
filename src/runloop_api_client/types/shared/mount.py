@@ -16,7 +16,7 @@ class CodeMount(BaseModel):
     repo_name: str
     """The name of the repo to mount.
 
-    By default, code will be mounted at /home/user/{repo_name}s.
+    By default, code will be mounted at /home/user/{repo_name}.
     """
 
     repo_owner: str
