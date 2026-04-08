@@ -8,7 +8,31 @@ from typing_extensions import Literal, Required, TypedDict
 from ..._types import SequenceNotStr
 from .after_idle import AfterIdle
 
-__all__ = ["LaunchParameters", "UserParameters"]
+__all__ = ["LaunchParameters", "Lifecycle", "LifecycleResumeTriggers", "UserParameters"]
+
+
+class LifecycleResumeTriggers(TypedDict, total=False):
+    """Triggers that can resume a suspended Devbox."""
+
+    http: Optional[bool]
+    """When true, HTTP traffic to a suspended Devbox via tunnel will trigger a resume."""
+
+
+class Lifecycle(TypedDict, total=False):
+    """Lifecycle configuration for idle and resume behavior.
+
+    Configure idle policy via lifecycle.after_idle (if both this and the top-level after_idle are set, they must match) and resume triggers via lifecycle.resume_triggers.
+    """
+
+    after_idle: Optional[AfterIdle]
+    """Configure Devbox lifecycle based on idle activity.
+
+    If both this and the top-level after_idle are set, they must have the same
+    value. Prefer this field for new integrations.
+    """
+
+    resume_triggers: Optional[LifecycleResumeTriggers]
+    """Triggers that can resume a suspended Devbox."""
 
 
 class UserParameters(TypedDict, total=False):
@@ -32,7 +56,9 @@ class LaunchParameters(TypedDict, total=False):
     after_idle: Optional[AfterIdle]
     """Configure Devbox lifecycle based on idle activity.
 
-    If after_idle is set, Devbox will ignore keep_alive_time_seconds.
+    If after_idle is set, Devbox will ignore keep_alive_time_seconds. If both
+    after_idle and lifecycle.after_idle are set, they must have the same value. Use
+    lifecycle.after_idle instead.
     """
 
     architecture: Optional[Literal["x86_64", "arm64"]]
@@ -61,6 +87,14 @@ class LaunchParameters(TypedDict, total=False):
 
     launch_commands: Optional[SequenceNotStr[str]]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
+
+    lifecycle: Optional[Lifecycle]
+    """Lifecycle configuration for idle and resume behavior.
+
+    Configure idle policy via lifecycle.after_idle (if both this and the top-level
+    after_idle are set, they must match) and resume triggers via
+    lifecycle.resume_triggers.
+    """
 
     network_policy_id: Optional[str]
     """

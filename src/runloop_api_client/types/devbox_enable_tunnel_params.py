@@ -21,5 +21,7 @@ class DevboxEnableTunnelParams(TypedDict, total=False):
     wake_on_http: Optional[bool]
     """
     When true, HTTP traffic to a suspended devbox will automatically trigger a
-    resume. Defaults to false if not specified.
+    resume. Defaults to false if not specified. Prefer
+    lifecycle.resume_triggers.http on launch_parameters for new integrations. If
+    both are set, lifecycle.resume_triggers.http takes precedence.
     """
