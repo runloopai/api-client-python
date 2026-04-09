@@ -22,7 +22,7 @@ class CodeMountParameters(TypedDict, total=False):
     """The authentication token necessary to pull repo."""
 
     git_ref: Optional[str]
-    """Optional git ref (branch, tag, or commit SHA) to checkout.
+    """Optional git ref (branch or tag) to checkout.
 
     Defaults to the repository default branch.
     """
