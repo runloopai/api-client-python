@@ -60,6 +60,7 @@ class TestDevboxes:
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
                     "token": "token",
+                    "git_ref": "git_ref",
                     "install_command": "install_command",
                 }
             ],
@@ -1683,6 +1684,7 @@ class TestAsyncDevboxes:
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
                     "token": "token",
+                    "git_ref": "git_ref",
                     "install_command": "install_command",
                 }
             ],

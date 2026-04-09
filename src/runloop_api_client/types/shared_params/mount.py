@@ -27,6 +27,12 @@ class CodeMount(TypedDict, total=False):
     token: Optional[str]
     """The authentication token necessary to pull repo."""
 
+    git_ref: Optional[str]
+    """Optional git ref (branch, tag, or commit SHA) to checkout.
+
+    Defaults to the repository default branch.
+    """
+
     install_command: Optional[str]
     """Installation command to install and setup repository."""
 

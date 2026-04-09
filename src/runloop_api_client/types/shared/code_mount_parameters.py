@@ -20,5 +20,11 @@ class CodeMountParameters(BaseModel):
     token: Optional[str] = None
     """The authentication token necessary to pull repo."""
 
+    git_ref: Optional[str] = None
+    """Optional git ref (branch, tag, or commit SHA) to checkout.
+
+    Defaults to the repository default branch.
+    """
+
     install_command: Optional[str] = None
     """Installation command to install and setup repository."""
