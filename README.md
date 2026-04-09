@@ -91,7 +91,6 @@ Functionality between the synchronous and asynchronous clients is otherwise iden
 ## Examples
 
 Workflow-oriented runnable examples are documented in [`EXAMPLES.md`](./EXAMPLES.md).
-For a suspend/resume plus shared snapshot restore workflow, see [`examples/devbox_snapshots.py`](./examples/devbox_snapshots.py).
 
 `EXAMPLES.md` is generated from metadata in `examples/*.py` and should not be edited manually.
 Regenerate it with:
@@ -289,7 +288,7 @@ Error codes are as follows:
 
 Certain errors are automatically retried 5 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors are all retried by default for GET requests. For POST requests, only 
+429 Rate Limit, and >=500 Internal errors are all retried by default for GET requests. For POST requests, only
 429 errors will be retried.
 
 You can use the `max_retries` option to configure or disable retry settings:
