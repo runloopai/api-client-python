@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.17.0 (2026-04-09)
+
+Full Changelog: [v1.16.0...v1.17.0](https://github.com/runloopai/api-client-python/compare/v1.16.0...v1.17.0)
+
+### Features
+
+* Add protocol, launch etc arguments to attach axon grpc, persist them in the db ([#8564](https://github.com/runloopai/api-client-python/issues/8564)) ([76ad33d](https://github.com/runloopai/api-client-python/commit/76ad33d7da11f4324b576f4b03a5eab437eecd2f))
+* **api:** add lifecycle configuration to launch parameters ([#8606](https://github.com/runloopai/api-client-python/issues/8606)) ([1dd716d](https://github.com/runloopai/api-client-python/commit/1dd716d820546f3d088ad61a714a0d5c219124f4))
+* stream kernel messages (kmsg) to devbox logs ([#8588](https://github.com/runloopai/api-client-python/issues/8588)) ([8f0ad67](https://github.com/runloopai/api-client-python/commit/8f0ad674d85e44b02aa0d708fe2037dbce6d5fca))
+
+
+### Bug Fixes
+
+* **broker:** remove codex in favor of codex via acp ([#8602](https://github.com/runloopai/api-client-python/issues/8602)) ([118162e](https://github.com/runloopai/api-client-python/commit/118162e3b64d531c5e2b66f66d47724b01fefb1c))
+* **client:** preserve hardcoded query params when merging with user params ([5ce9b5d](https://github.com/runloopai/api-client-python/commit/5ce9b5d4cb882a93b802275622471086530146f0))
+* propagate git ref to maverick for git-based agents ([#8608](https://github.com/runloopai/api-client-python/issues/8608)) ([fc633d6](https://github.com/runloopai/api-client-python/commit/fc633d64b89ac81aa00cdf5f3528b7b9a2e61627))
+
+
+### Chores
+
+* Cleanup remaining junk left over from browser and computer use ([#8553](https://github.com/runloopai/api-client-python/issues/8553)) ([ddccee2](https://github.com/runloopai/api-client-python/commit/ddccee245aaea07df9d7b6a9b307cb9cd77878cb))
+
+
+### Documentation
+
+* fix typo, fix repoc/git-based agent mounts ignoring custom mount paths ([#8537](https://github.com/runloopai/api-client-python/issues/8537)) ([638bc7a](https://github.com/runloopai/api-client-python/commit/638bc7ac64b07b686d5ddbb6756ac9fabd42dc32))
+
 ## 1.16.0 (2026-04-03)
 
 Full Changelog: [v1.15.0...v1.16.0](https://github.com/runloopai/api-client-python/compare/v1.15.0...v1.16.0)
