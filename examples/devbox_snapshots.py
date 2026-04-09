@@ -34,7 +34,6 @@ from pathlib import Path
 from runloop_api_client import AsyncRunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
 from runloop_api_client.sdk.async_devbox import AsyncDevbox
-from runloop_api_client.sdk.async_snapshot import AsyncSnapshot
 
 from ._harness import run_as_cli, unique_name, wrap_recipe
 from .example_types import ExampleCheck, RecipeOutput, RecipeContext
@@ -55,45 +54,6 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
 
     resources_created: list[str] = []
 
-    source_devbox: AsyncDevbox | None = None
-    clone_a: AsyncDevbox | None = None
-    clone_b: AsyncDevbox | None = None
-    snapshot: AsyncSnapshot | None = None
-    local_file_path: Path | None = None
-
-    source_needs_cleanup = False
-    clone_a_needs_cleanup = False
-    clone_b_needs_cleanup = False
-    snapshot_needs_cleanup = False
-
-    async def cleanup_source() -> None:
-        if source_needs_cleanup and source_devbox is not None:
-            await source_devbox.shutdown()
-
-    async def cleanup_clone_a() -> None:
-        if clone_a_needs_cleanup and clone_a is not None:
-            await clone_a.shutdown()
-
-    async def cleanup_clone_b() -> None:
-        if clone_b_needs_cleanup and clone_b is not None:
-            await clone_b.shutdown()
-
-    async def cleanup_snapshot() -> None:
-        if snapshot_needs_cleanup and snapshot is not None:
-            await snapshot.delete()
-
-    def cleanup_local_file() -> None:
-        if local_file_path is not None:
-            local_file_path.unlink(missing_ok=True)
-
-    # Cleanup runs in LIFO order, so register these handlers up front in reverse
-    # dependency order: clones, then source devbox, then snapshot, then local file.
-    cleanup.add("local-file:snapshot-demo", cleanup_local_file)
-    cleanup.add("snapshot:baseline", cleanup_snapshot)
-    cleanup.add("devbox:source", cleanup_source)
-    cleanup.add("devbox:clone-a", cleanup_clone_a)
-    cleanup.add("devbox:clone-b", cleanup_clone_b)
-
     uploaded_contents = "uploaded-from-local-file"
     baseline_contents = "baseline-after-upload-and-mutation"
     source_contents = "source-devbox-after-isolated-mutation"
@@ -103,6 +63,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".txt") as tmp_file:
         tmp_file.write(uploaded_contents)
         local_file_path = Path(tmp_file.name)
+    cleanup.add("local-file:snapshot-demo", lambda: local_file_path.unlink(missing_ok=True))
 
     source_devbox = await sdk.devbox.create(
         name=unique_name("snapshot-source"),
@@ -110,7 +71,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
             "resource_size_request": "X_SMALL",
         },
     )
-    source_needs_cleanup = True
+    cleanup.add(f"devbox:{source_devbox.id}", source_devbox.shutdown)
     resources_created.append(f"devbox:{source_devbox.id}")
 
     await source_devbox.file.upload(path=FILE_PATH, file=local_file_path)
@@ -118,8 +79,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
 
     await source_devbox.file.write(file_path=FILE_PATH, contents=baseline_contents)
 
-    suspend_response = await source_devbox.suspend()
-    suspended_info = suspend_response
+    suspended_info = await source_devbox.suspend()
     if suspended_info.status != "suspended":
         suspended_info = await source_devbox.await_suspended(polling_config=POLLING_CONFIG)
 
@@ -131,7 +91,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         commit_message="Capture the shared baseline after suspend and resume.",
         polling_config=POLLING_CONFIG,
     )
-    snapshot_needs_cleanup = True
+    cleanup.add(f"snapshot:{snapshot.id}", snapshot.delete)
     resources_created.append(f"snapshot:{snapshot.id}")
 
     clone_a = await snapshot.create_devbox(
@@ -140,9 +100,11 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
             "resource_size_request": "X_SMALL",
         },
     )
-    clone_a_needs_cleanup = True
+    cleanup.add(f"devbox:{clone_a.id}", clone_a.shutdown)
     resources_created.append(f"devbox:{clone_a.id}")
 
+    # clone_a used snapshot.create_devbox(); clone_b uses sdk.devbox.create_from_snapshot()
+    # to demonstrate both entry points for restoring a devbox from a snapshot.
     clone_b = await sdk.devbox.create_from_snapshot(
         snapshot.id,
         name=unique_name("snapshot-clone-b"),
@@ -150,7 +112,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
             "resource_size_request": "X_SMALL",
         },
     )
-    clone_b_needs_cleanup = True
+    cleanup.add(f"devbox:{clone_b.id}", clone_b.shutdown)
     resources_created.append(f"devbox:{clone_b.id}")
 
     clone_a_baseline_readback = await read_file_contents(clone_a)
@@ -163,18 +125,6 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
     source_isolated_readback = await read_file_contents(source_devbox)
     clone_a_isolated_readback = await read_file_contents(clone_a)
     clone_b_isolated_readback = await read_file_contents(clone_b)
-
-    await clone_b.shutdown()
-    clone_b_needs_cleanup = False
-
-    await clone_a.shutdown()
-    clone_a_needs_cleanup = False
-
-    await source_devbox.shutdown()
-    source_needs_cleanup = False
-
-    await snapshot.delete()
-    snapshot_needs_cleanup = False
 
     return RecipeOutput(
         resources_created=resources_created,
@@ -228,11 +178,6 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
                     == 3
                 ),
                 details=(f"values={[source_isolated_readback, clone_a_isolated_readback, clone_b_isolated_readback]}"),
-            ),
-            ExampleCheck(
-                name="snapshot can be deleted after the demo finishes",
-                passed=not snapshot_needs_cleanup,
-                details=f"deleted={not snapshot_needs_cleanup}",
             ),
         ],
     )
