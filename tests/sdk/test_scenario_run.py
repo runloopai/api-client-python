@@ -51,7 +51,11 @@ class TestScenarioRun:
         run = ScenarioRun(mock_client, "scr_123", "dbx_123")
         result = run.await_env_ready()
 
-        mock_client.devboxes.await_running.assert_called_once_with("dbx_123", polling_config=None)
+        mock_client.devboxes.await_running.assert_called_once_with(
+            "dbx_123",
+            polling_config=None,
+            cancellation_token=None,
+        )
         assert result == scenario_run_view
 
     def test_score(self, mock_client: Mock, scenario_run_view: MockScenarioRunView) -> None:

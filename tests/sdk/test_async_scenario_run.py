@@ -54,7 +54,11 @@ class TestAsyncScenarioRun:
         run = AsyncScenarioRun(mock_async_client, "scr_123", "dbx_123")
         result = await run.await_env_ready()
 
-        mock_async_client.devboxes.await_running.assert_awaited_once_with("dbx_123", polling_config=None)
+        mock_async_client.devboxes.await_running.assert_awaited_once_with(
+            "dbx_123",
+            polling_config=None,
+            cancellation_token=None,
+        )
         assert result == scenario_run_view
 
     async def test_score(self, mock_async_client: AsyncMock, scenario_run_view: MockScenarioRunView) -> None:

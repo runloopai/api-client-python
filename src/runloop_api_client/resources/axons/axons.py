@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, cast
 from typing_extensions import Literal
 
 import httpx
@@ -26,7 +26,8 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._streaming import Stream, AsyncStream
+from ..._constants import RAW_RESPONSE_HEADER
+from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
 from ...pagination import SyncAxonsCursorIDPage, AsyncAxonsCursorIDPage
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.axon_view import AxonView
@@ -270,6 +271,8 @@ class AxonsResource(SyncAPIResource):
         """
         [Beta] Subscribe to an axon event stream via server-sent events.
 
+        Automatically reconnects on timeout, resuming from last received event.
+
         Args:
           after_sequence: Sequence number after which to start streaming. Events with sequence > this
               value are returned. If unset, replay from the beginning.
@@ -286,20 +289,66 @@ class AxonsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
-        return self._get(
-            path_template("/v1/axons/{id}/subscribe/sse", id=id),
-            options=make_request_options(
-                extra_headers=merged_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+
+        # Check if user wants raw response (opt-out of reconnection)
+        if extra_headers is not None and RAW_RESPONSE_HEADER in extra_headers:
+            return self._get(
+                path_template("/v1/axons/{id}/subscribe/sse", id=id),
+                options=make_request_options(
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                    ),
                 ),
+                cast_to=AxonEventView,
+                stream=True,
+                stream_cls=Stream[AxonEventView],
+            )
+
+        def create_stream(last_sequence: str | None) -> Stream[AxonEventView]:
+            # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use: int | Omit
+            if last_sequence is not None:
+                sequence_to_use = int(last_sequence)
+            elif not isinstance(after_sequence, Omit):
+                sequence_to_use = after_sequence
+            else:
+                sequence_to_use = omit
+            return self._get(
+                path_template("/v1/axons/{id}/subscribe/sse", id=id),
+                options=make_request_options(
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {"after_sequence": sequence_to_use},
+                        axon_subscribe_sse_params.AxonSubscribeSseParams,
+                    ),
+                ),
+                cast_to=AxonEventView,
+                stream=True,
+                stream_cls=Stream[AxonEventView],
+            )
+
+        initial_stream = create_stream(None)
+
+        def get_sequence(item: AxonEventView) -> str | None:
+            value = getattr(item, "sequence", None)
+            if value is None:
+                return None
+            return str(value)
+
+        return cast(
+            Stream[AxonEventView],
+            ReconnectingStream(
+                current_stream=initial_stream,
+                stream_creator=create_stream,
+                get_offset=get_sequence,
             ),
-            cast_to=AxonEventView,
-            stream=True,
-            stream_cls=Stream[AxonEventView],
         )
 
 
@@ -537,6 +586,8 @@ class AsyncAxonsResource(AsyncAPIResource):
         """
         [Beta] Subscribe to an axon event stream via server-sent events.
 
+        Automatically reconnects on timeout, resuming from last received event.
+
         Args:
           after_sequence: Sequence number after which to start streaming. Events with sequence > this
               value are returned. If unset, replay from the beginning.
@@ -553,20 +604,66 @@ class AsyncAxonsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         default_headers: Headers = {"Accept": "text/event-stream"}
         merged_headers = default_headers if extra_headers is None else {**default_headers, **extra_headers}
-        return await self._get(
-            path_template("/v1/axons/{id}/subscribe/sse", id=id),
-            options=make_request_options(
-                extra_headers=merged_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+
+        # Check if user wants raw response (opt-out of reconnection)
+        if extra_headers is not None and RAW_RESPONSE_HEADER in extra_headers:
+            return await self._get(
+                path_template("/v1/axons/{id}/subscribe/sse", id=id),
+                options=make_request_options(
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {"after_sequence": after_sequence}, axon_subscribe_sse_params.AxonSubscribeSseParams
+                    ),
                 ),
+                cast_to=AxonEventView,
+                stream=True,
+                stream_cls=AsyncStream[AxonEventView],
+            )
+
+        async def create_stream(last_sequence: str | None) -> AsyncStream[AxonEventView]:
+            # Use user-provided after_sequence for initial stream, then use last_sequence for reconnections
+            sequence_to_use: int | Omit
+            if last_sequence is not None:
+                sequence_to_use = int(last_sequence)
+            elif not isinstance(after_sequence, Omit):
+                sequence_to_use = after_sequence
+            else:
+                sequence_to_use = omit
+            return await self._get(
+                path_template("/v1/axons/{id}/subscribe/sse", id=id),
+                options=make_request_options(
+                    extra_headers=merged_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {"after_sequence": sequence_to_use},
+                        axon_subscribe_sse_params.AxonSubscribeSseParams,
+                    ),
+                ),
+                cast_to=AxonEventView,
+                stream=True,
+                stream_cls=AsyncStream[AxonEventView],
+            )
+
+        initial_stream = await create_stream(None)
+
+        def get_sequence(item: AxonEventView) -> str | None:
+            value = getattr(item, "sequence", None)
+            if value is None:
+                return None
+            return str(value)
+
+        return cast(
+            AsyncStream[AxonEventView],
+            AsyncReconnectingStream(
+                current_stream=initial_stream,
+                stream_creator=create_stream,
+                get_offset=get_sequence,
             ),
-            cast_to=AxonEventView,
-            stream=True,
-            stream_cls=AsyncStream[AxonEventView],
         )
 
 

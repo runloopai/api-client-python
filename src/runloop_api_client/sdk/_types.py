@@ -42,6 +42,7 @@ from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
+from ..lib.cancellation import CancellationToken
 from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.axons.sql_batch_params import SqlBatchParams
 from ..types.axons.sql_query_params import SqlQueryParams
@@ -85,6 +86,9 @@ class LongRequestOptions(BaseRequestOptions, total=False):
 class PollingRequestOptions(BaseRequestOptions, total=False):
     polling_config: Optional[PollingConfig]
     """Configuration for polling behavior"""
+
+    cancellation_token: Optional[CancellationToken]
+    """Token to cancel polling operations"""
 
 
 class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):  # type: ignore[misc]

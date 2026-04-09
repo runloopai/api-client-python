@@ -29,6 +29,7 @@ from ..pagination import SyncBlueprintsCursorIDPage, AsyncBlueprintsCursorIDPage
 from .._exceptions import RunloopError
 from ..lib.polling import PollingConfig, poll_until
 from .._base_client import AsyncPaginator, make_request_options
+from ..lib.cancellation import CancellationToken
 from ..lib.polling_async import async_poll_until
 from .._utils._validation import ValidationNotification
 from ..types.blueprint_view import BlueprintView
@@ -42,6 +43,7 @@ from ..types.shared_params.code_mount_parameters import CodeMountParameters
 # Type for request arguments that combine polling config with additional request options
 class BlueprintRequestArgs(TypedDict, total=False):
     polling_config: PollingConfig | None
+    cancellation_token: CancellationToken | None
     # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
     # The extra values given here take precedence over values defined on the client or passed to this method.
     extra_headers: Headers | None
@@ -281,6 +283,7 @@ class BlueprintsResource(SyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -293,6 +296,7 @@ class BlueprintsResource(SyncAPIResource):
         Args:
             id: The ID of the blueprint to wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -303,6 +307,7 @@ class BlueprintsResource(SyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before blueprint is built
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If blueprint enters a non-built terminal state
         """
 
@@ -314,7 +319,12 @@ class BlueprintsResource(SyncAPIResource):
         def is_done_building(blueprint: BlueprintView) -> bool:
             return blueprint.status not in ["queued", "building", "provisioning"]
 
-        blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
+        blueprint = poll_until(
+            retrieve_blueprint,
+            is_done_building,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if blueprint.status != "build_complete":
             raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
@@ -339,6 +349,7 @@ class BlueprintsResource(SyncAPIResource):
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -354,12 +365,14 @@ class BlueprintsResource(SyncAPIResource):
         Args:
             See the `create` method for detailed documentation.
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
 
         Returns:
             The built blueprint
 
         Raises:
             PollingTimeout: If polling times out before blueprint is built
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If blueprint enters a non-built terminal state
         """
         # Pass all create_args to the underlying create method
@@ -388,6 +401,7 @@ class BlueprintsResource(SyncAPIResource):
         return self.await_build_complete(
             blueprint.id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -962,6 +976,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         id: str,
         *,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -974,6 +989,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         Args:
             id: The ID of the blueprint to wait for
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
@@ -984,6 +1000,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
         Raises:
             PollingTimeout: If polling times out before blueprint is built
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If blueprint enters a non-built terminal state
         """
 
@@ -995,7 +1012,12 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         def is_done_building(blueprint: BlueprintView) -> bool:
             return blueprint.status not in ["queued", "building", "provisioning"]
 
-        blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
+        blueprint = await async_poll_until(
+            retrieve_blueprint,
+            is_done_building,
+            polling_config,
+            cancellation_token=cancellation_token,
+        )
 
         if blueprint.status != "build_complete":
             raise RunloopError(f"Blueprint entered non-built terminal state: {blueprint.status}")
@@ -1020,6 +1042,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         services: Optional[Iterable[blueprint_create_params.Service]] | Omit = omit,
         system_setup_commands: Optional[SequenceNotStr[str]] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        cancellation_token: CancellationToken | None = None,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1035,12 +1058,14 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         Args:
             See the `create` method for detailed documentation.
             polling_config: Optional polling configuration
+            cancellation_token: Token to cancel the wait operation
 
         Returns:
             The built blueprint
 
         Raises:
             PollingTimeout: If polling times out before blueprint is built
+            PollingCancelled: If cancellation_token.cancel() is called
             RunloopError: If blueprint enters a non-built terminal state
         """
         # Pass all create_args to the underlying create method
@@ -1069,6 +1094,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
         return await self.await_build_complete(
             blueprint.id,
             polling_config=polling_config,
+            cancellation_token=cancellation_token,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
