@@ -47,6 +47,7 @@ class TestBlueprints:
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
                     "token": "token",
+                    "git_ref": "git_ref",
                     "install_command": "install_command",
                 }
             ],
@@ -64,6 +65,13 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "lifecycle": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "resume_triggers": {"http": True},
+                },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
@@ -279,6 +287,13 @@ class TestBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "lifecycle": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "resume_triggers": {"http": True},
+                },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
@@ -420,6 +435,7 @@ class TestBlueprints:
                         "repo_name": "repo_name",
                         "repo_owner": "repo_owner",
                         "token": "token",
+                        "git_ref": "git_ref",
                         "install_command": "install_command",
                     }
                 ],
@@ -437,6 +453,13 @@ class TestBlueprints:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "lifecycle": {
+                        "after_idle": {
+                            "idle_time_seconds": 0,
+                            "on_idle": "shutdown",
+                        },
+                        "resume_triggers": {"http": True},
+                    },
                     "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
@@ -521,6 +544,7 @@ class TestAsyncBlueprints:
                     "repo_name": "repo_name",
                     "repo_owner": "repo_owner",
                     "token": "token",
+                    "git_ref": "git_ref",
                     "install_command": "install_command",
                 }
             ],
@@ -538,6 +562,13 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "lifecycle": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "resume_triggers": {"http": True},
+                },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
@@ -753,6 +784,13 @@ class TestAsyncBlueprints:
                 "custom_gb_memory": 0,
                 "keep_alive_time_seconds": 0,
                 "launch_commands": ["string"],
+                "lifecycle": {
+                    "after_idle": {
+                        "idle_time_seconds": 0,
+                        "on_idle": "shutdown",
+                    },
+                    "resume_triggers": {"http": True},
+                },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
@@ -894,6 +932,7 @@ class TestAsyncBlueprints:
                         "repo_name": "repo_name",
                         "repo_owner": "repo_owner",
                         "token": "token",
+                        "git_ref": "git_ref",
                         "install_command": "install_command",
                     }
                 ],
@@ -911,6 +950,13 @@ class TestAsyncBlueprints:
                     "custom_gb_memory": 0,
                     "keep_alive_time_seconds": 0,
                     "launch_commands": ["string"],
+                    "lifecycle": {
+                        "after_idle": {
+                            "idle_time_seconds": 0,
+                            "on_idle": "shutdown",
+                        },
+                        "resume_triggers": {"http": True},
+                    },
                     "network_policy_id": "network_policy_id",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",

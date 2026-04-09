@@ -12,7 +12,7 @@ class CodeMountParameters(TypedDict, total=False):
     repo_name: Required[str]
     """The name of the repo to mount.
 
-    By default, code will be mounted at /home/user/{repo_name}s.
+    By default, code will be mounted at /home/user/{repo_name}.
     """
 
     repo_owner: Required[str]
@@ -20,6 +20,12 @@ class CodeMountParameters(TypedDict, total=False):
 
     token: Optional[str]
     """The authentication token necessary to pull repo."""
+
+    git_ref: Optional[str]
+    """Optional git ref (branch, tag, or commit SHA) to checkout.
+
+    Defaults to the repository default branch.
+    """
 
     install_command: Optional[str]
     """Installation command to install and setup repository."""
