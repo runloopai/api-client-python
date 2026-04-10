@@ -138,6 +138,7 @@ exclude = [
     "_dev",
     ".venv",
     ".git",
+    "docs",
 ]
 
 reportImplicitOverride = true

@@ -8,7 +8,13 @@ from __future__ import annotations
 import os
 import sys
 import pkgutil
-from typing import Any, get_type_hints
+from typing import get_type_hints
+
+from sphinx.errors import PycodeError
+from sphinx.pycode import ModuleAnalyzer
+from sphinx.application import Sphinx
+from sphinx.ext.autodoc import Documenter
+from sphinx_toolbox.more_autodoc.autotypeddict import TypedDictDocumenter
 
 # Add the src directory to the path so we can import the package
 sys.path.insert(0, os.path.abspath("../src"))
@@ -74,9 +80,6 @@ def _patch_autotypeddict_inherited_docstrings() -> None:
 
     Upstream bug: https://github.com/sphinx-doc/sphinx/issues/9290
     """
-    from sphinx.errors import PycodeError
-    from sphinx.pycode import ModuleAnalyzer
-    from sphinx_toolbox.more_autodoc.autotypeddict import TypedDictDocumenter
 
     def _collect_field_docstrings(cls: type) -> dict[str, list[str]]:
         result: dict[str, list[str]] = {}
@@ -101,9 +104,9 @@ def _patch_autotypeddict_inherited_docstrings() -> None:
 
     def _patched_sort_members(
         self: TypedDictDocumenter,
-        documenters: list[tuple[Any, bool]],
+        documenters: list[tuple[Documenter, bool]],
         order: str,
-    ) -> list[tuple[Any, bool]]:
+    ) -> list[tuple[Documenter, bool]]:
         documenters = super(TypedDictDocumenter, self).sort_members(documenters, order)
         docstrings = _collect_field_docstrings(self.object)
 
@@ -122,12 +125,12 @@ def _patch_autotypeddict_inherited_docstrings() -> None:
         if required_keys:
             self.add_line("", sourcename)
             self.add_line(":Required Keys:", sourcename)
-            self.document_keys(required_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
+            self.document_keys(required_keys, types, docstrings)
             self.add_line("", sourcename)
         if optional_keys:
             self.add_line("", sourcename)
             self.add_line(":Optional Keys:", sourcename)
-            self.document_keys(optional_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
+            self.document_keys(optional_keys, types, docstrings)
             self.add_line("", sourcename)
 
         return []
@@ -141,7 +144,7 @@ _patch_autotypeddict_inherited_docstrings()
 # -- Dynamic type documentation ----------------------------------------------
 
 
-def _inject_type_submodules(_app: Any, docname: str, source: list[str]) -> None:
+def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> None:
     """Auto-generate automodule directives for all type submodules.
 
     Replaces the ``.. auto-all-types::`` placeholder in types.rst with
@@ -165,7 +168,7 @@ def _inject_type_submodules(_app: Any, docname: str, source: list[str]) -> None:
     source[0] = source[0].replace(".. auto-all-types::", "\n".join(directives))
 
 
-def setup(app: Any) -> None:
+def setup(app: Sphinx) -> None:
     app.connect("source-read", _inject_type_submodules)
 
 
