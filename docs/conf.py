@@ -1,4 +1,3 @@
-# pyright: reportMissingImports=false
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -67,50 +66,45 @@ autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 
 
-# -- Patches -----------------------------------------------------------------
+# -- Autodocumenter extensions -----------------------------------------------
 
 
-def _patch_autotypeddict_inherited_docstrings() -> None:
-    """Patch autotypeddict to include field docstrings from parent TypedDicts.
+def _collect_field_docstrings(cls: type) -> dict[str, list[str]]:
+    """Collect field docstrings from cls and all TypedDict ancestors via __orig_bases__."""
+    result: dict[str, list[str]] = {}
+    # Parents first — child docstrings overwrite via later assignment
+    for base in getattr(cls, "__orig_bases__", ()):
+        origin = getattr(base, "__origin__", base)
+        if isinstance(origin, type) and origin is not cls:
+            result.update(_collect_field_docstrings(origin))
+    try:
+        attr_docs = ModuleAnalyzer.for_module(cls.__module__).find_attr_docs()
+        for (_, attr_name), doc_lines in attr_docs.items():
+            result[attr_name] = doc_lines
+    except PycodeError:
+        pass
+    return result
 
-    sphinx_toolbox's sort_members only scans self.object.__module__ for field
-    docstrings (autotypeddict.py:381-384). SDK TypedDicts like SDKDevboxCreateParams
-    inherit fields from types in other modules (e.g. DevboxCreateParams), so those
-    descriptions are lost. This patch collects docstrings from the full
-    __orig_bases__ chain.
 
+class _InheritedDocsTypedDictDocumenter(TypedDictDocumenter):
+    """TypedDictDocumenter that collects field docstrings from parent TypedDicts.
+
+    Upstream only scans self.object.__module__ for field docstrings, so
+    inherited descriptions are lost. This subclass traverses __orig_bases__.
     Upstream bug: https://github.com/sphinx-doc/sphinx/issues/9290
+    Patching sphinx_toolbox 4.1.2.
     """
 
-    def _collect_field_docstrings(cls: type) -> dict[str, list[str]]:
-        result: dict[str, list[str]] = {}
-        visited: set[type] = set()
-
-        def _walk(klass: type) -> None:
-            if klass in visited or not hasattr(klass, "__annotations__"):
-                return
-            visited.add(klass)
-            try:
-                for (_, fname), doc in ModuleAnalyzer.for_module(klass.__module__).find_attr_docs().items():
-                    if fname not in result:
-                        result[fname] = doc
-            except PycodeError:
-                pass
-            for base in getattr(klass, "__orig_bases__", []):
-                if isinstance(base, type):
-                    _walk(base)
-
-        _walk(cls)
-        return result
-
-    def _patched_sort_members(
-        self: TypedDictDocumenter,
+    def sort_members(
+        self,
         documenters: list[tuple[Documenter, bool]],
         order: str,
     ) -> list[tuple[Documenter, bool]]:
+        # Skip TypedDictDocumenter.sort_members (returns [] after adding
+        # lines with wrong docstrings). Call ClassDocumenter.sort_members
+        # to get the properly sorted documenters list.
         documenters = super(TypedDictDocumenter, self).sort_members(documenters, order)
         docstrings = _collect_field_docstrings(self.object)
-
         required_keys: list[str] = []
         optional_keys: list[str] = []
         types = get_type_hints(self.object)
@@ -126,20 +120,15 @@ def _patch_autotypeddict_inherited_docstrings() -> None:
         if required_keys:
             self.add_line("", sourcename)
             self.add_line(":Required Keys:", sourcename)
-            self.document_keys(required_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
+            self.document_keys(required_keys, types, docstrings)
             self.add_line("", sourcename)
         if optional_keys:
             self.add_line("", sourcename)
             self.add_line(":Optional Keys:", sourcename)
-            self.document_keys(optional_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
+            self.document_keys(optional_keys, types, docstrings)
             self.add_line("", sourcename)
 
         return []
-
-    TypedDictDocumenter.sort_members = _patched_sort_members  # type: ignore[assignment]
-
-
-_patch_autotypeddict_inherited_docstrings()
 
 
 # -- Dynamic type documentation ----------------------------------------------
@@ -170,7 +159,8 @@ def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> No
 
 
 def setup(app: Sphinx) -> None:
-    app.connect("source-read", _inject_type_submodules)  # pyright: ignore[reportUnknownMemberType]
+    app.add_autodocumenter(_InheritedDocsTypedDictDocumenter, override=True)
+    app.connect("source-read", _inject_type_submodules)
 
 
 # Intersphinx mapping
