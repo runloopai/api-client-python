@@ -9,6 +9,7 @@ import os
 import sys
 import pkgutil
 from typing import get_type_hints
+from typing_extensions import override
 
 from sphinx.errors import PycodeError
 from sphinx.pycode import ModuleAnalyzer
@@ -95,6 +96,7 @@ class _InheritedDocsTypedDictDocumenter(TypedDictDocumenter):
     Patching sphinx_toolbox 4.1.2.
     """
 
+    @override
     def sort_members(
         self,
         documenters: list[tuple[Documenter, bool]],
@@ -120,12 +122,12 @@ class _InheritedDocsTypedDictDocumenter(TypedDictDocumenter):
         if required_keys:
             self.add_line("", sourcename)
             self.add_line(":Required Keys:", sourcename)
-            self.document_keys(required_keys, types, docstrings)
+            self.document_keys(required_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
             self.add_line("", sourcename)
         if optional_keys:
             self.add_line("", sourcename)
             self.add_line(":Optional Keys:", sourcename)
-            self.document_keys(optional_keys, types, docstrings)
+            self.document_keys(optional_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
             self.add_line("", sourcename)
 
         return []
@@ -160,7 +162,7 @@ def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> No
 
 def setup(app: Sphinx) -> None:
     app.add_autodocumenter(_InheritedDocsTypedDictDocumenter, override=True)
-    app.connect("source-read", _inject_type_submodules)
+    app.connect("source-read", _inject_type_submodules)  # pyright: ignore[reportUnknownMemberType]
 
 
 # Intersphinx mapping
