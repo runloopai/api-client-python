@@ -15,6 +15,14 @@ from .sql import (
     SqlResourceWithStreamingResponse,
     AsyncSqlResourceWithStreamingResponse,
 )
+from .events import (
+    EventsResource,
+    AsyncEventsResource,
+    EventsResourceWithRawResponse,
+    AsyncEventsResourceWithRawResponse,
+    EventsResourceWithStreamingResponse,
+    AsyncEventsResourceWithStreamingResponse,
+)
 from ...types import axon_list_params, axon_create_params, axon_publish_params, axon_subscribe_sse_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
@@ -37,6 +45,10 @@ __all__ = ["AxonsResource", "AsyncAxonsResource"]
 
 
 class AxonsResource(SyncAPIResource):
+    @cached_property
+    def events(self) -> EventsResource:
+        return EventsResource(self._client)
+
     @cached_property
     def sql(self) -> SqlResource:
         return SqlResource(self._client)
@@ -302,6 +314,10 @@ class AxonsResource(SyncAPIResource):
 
 
 class AsyncAxonsResource(AsyncAPIResource):
+    @cached_property
+    def events(self) -> AsyncEventsResource:
+        return AsyncEventsResource(self._client)
+
     @cached_property
     def sql(self) -> AsyncSqlResource:
         return AsyncSqlResource(self._client)
@@ -587,6 +603,10 @@ class AxonsResourceWithRawResponse:
         )
 
     @cached_property
+    def events(self) -> EventsResourceWithRawResponse:
+        return EventsResourceWithRawResponse(self._axons.events)
+
+    @cached_property
     def sql(self) -> SqlResourceWithRawResponse:
         return SqlResourceWithRawResponse(self._axons.sql)
 
@@ -610,6 +630,10 @@ class AsyncAxonsResourceWithRawResponse:
         self.subscribe_sse = async_to_raw_response_wrapper(
             axons.subscribe_sse,
         )
+
+    @cached_property
+    def events(self) -> AsyncEventsResourceWithRawResponse:
+        return AsyncEventsResourceWithRawResponse(self._axons.events)
 
     @cached_property
     def sql(self) -> AsyncSqlResourceWithRawResponse:
@@ -637,6 +661,10 @@ class AxonsResourceWithStreamingResponse:
         )
 
     @cached_property
+    def events(self) -> EventsResourceWithStreamingResponse:
+        return EventsResourceWithStreamingResponse(self._axons.events)
+
+    @cached_property
     def sql(self) -> SqlResourceWithStreamingResponse:
         return SqlResourceWithStreamingResponse(self._axons.sql)
 
@@ -660,6 +688,10 @@ class AsyncAxonsResourceWithStreamingResponse:
         self.subscribe_sse = async_to_streamed_response_wrapper(
             axons.subscribe_sse,
         )
+
+    @cached_property
+    def events(self) -> AsyncEventsResourceWithStreamingResponse:
+        return AsyncEventsResourceWithStreamingResponse(self._axons.events)
 
     @cached_property
     def sql(self) -> AsyncSqlResourceWithStreamingResponse:
