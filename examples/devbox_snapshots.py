@@ -33,18 +33,12 @@ from pathlib import Path
 
 from runloop_api_client import AsyncRunloopSDK
 from runloop_api_client.lib.polling import PollingConfig
-from runloop_api_client.sdk.async_devbox import AsyncDevbox
 
 from ._harness import run_as_cli, unique_name, wrap_recipe
 from .example_types import ExampleCheck, RecipeOutput, RecipeContext
 
 FILE_PATH = "/tmp/snapshot-demo.txt"
 POLLING_CONFIG = PollingConfig(timeout_seconds=120.0, interval_seconds=5.0)
-
-
-async def read_file_contents(devbox: AsyncDevbox) -> str:
-    """Read the shared demo file from a devbox."""
-    return await devbox.file.read(file_path=FILE_PATH)
 
 
 async def recipe(ctx: RecipeContext) -> RecipeOutput:
@@ -69,22 +63,22 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         name=unique_name("snapshot-source"),
         launch_parameters={
             "resource_size_request": "X_SMALL",
+            "keep_alive_time_seconds": 60 * 5,
         },
     )
     cleanup.add(f"devbox:{source_devbox.id}", source_devbox.shutdown)
     resources_created.append(f"devbox:{source_devbox.id}")
 
     await source_devbox.file.upload(path=FILE_PATH, file=local_file_path)
-    uploaded_readback = await read_file_contents(source_devbox)
+    uploaded_readback = await source_devbox.file.read(file_path=FILE_PATH)
 
     await source_devbox.file.write(file_path=FILE_PATH, contents=baseline_contents)
 
-    suspended_info = await source_devbox.suspend()
-    if suspended_info.status != "suspended":
-        suspended_info = await source_devbox.await_suspended(polling_config=POLLING_CONFIG)
+    await source_devbox.suspend()
+    suspended_info = await source_devbox.await_suspended(polling_config=POLLING_CONFIG)
 
     resumed_info = await source_devbox.resume(polling_config=POLLING_CONFIG)
-    resumed_readback = await read_file_contents(source_devbox)
+    resumed_readback = await source_devbox.file.read(file_path=FILE_PATH)
 
     snapshot = await source_devbox.snapshot_disk(
         name=unique_name("snapshot-baseline"),
@@ -98,6 +92,7 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         name=unique_name("snapshot-clone-a"),
         launch_parameters={
             "resource_size_request": "X_SMALL",
+            "keep_alive_time_seconds": 60 * 5,
         },
     )
     cleanup.add(f"devbox:{clone_a.id}", clone_a.shutdown)
@@ -110,21 +105,22 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
         name=unique_name("snapshot-clone-b"),
         launch_parameters={
             "resource_size_request": "X_SMALL",
+            "keep_alive_time_seconds": 60 * 5,
         },
     )
     cleanup.add(f"devbox:{clone_b.id}", clone_b.shutdown)
     resources_created.append(f"devbox:{clone_b.id}")
 
-    clone_a_baseline_readback = await read_file_contents(clone_a)
-    clone_b_baseline_readback = await read_file_contents(clone_b)
+    clone_a_baseline_readback = await clone_a.file.read(file_path=FILE_PATH)
+    clone_b_baseline_readback = await clone_b.file.read(file_path=FILE_PATH)
 
     await source_devbox.file.write(file_path=FILE_PATH, contents=source_contents)
     await clone_a.file.write(file_path=FILE_PATH, contents=clone_a_contents)
     await clone_b.file.write(file_path=FILE_PATH, contents=clone_b_contents)
 
-    source_isolated_readback = await read_file_contents(source_devbox)
-    clone_a_isolated_readback = await read_file_contents(clone_a)
-    clone_b_isolated_readback = await read_file_contents(clone_b)
+    source_isolated_readback = await source_devbox.file.read(file_path=FILE_PATH)
+    clone_a_isolated_readback = await clone_a.file.read(file_path=FILE_PATH)
+    clone_b_isolated_readback = await clone_b.file.read(file_path=FILE_PATH)
 
     return RecipeOutput(
         resources_created=resources_created,
@@ -164,20 +160,6 @@ async def recipe(ctx: RecipeContext) -> RecipeOutput:
                     f"clone_a={clone_a_isolated_readback}, "
                     f"clone_b={clone_b_isolated_readback}"
                 ),
-            ),
-            ExampleCheck(
-                name="snapshot-backed devboxes stay isolated from one another",
-                passed=(
-                    len(
-                        {
-                            source_isolated_readback,
-                            clone_a_isolated_readback,
-                            clone_b_isolated_readback,
-                        }
-                    )
-                    == 3
-                ),
-                details=(f"values={[source_isolated_readback, clone_a_isolated_readback, clone_b_isolated_readback]}"),
             ),
         ],
     )
