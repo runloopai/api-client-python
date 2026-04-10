@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import os
 import sys
+from typing import TYPE_CHECKING
 
-from sphinx.application import Sphinx
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Add the src directory to the path so we can import the package
 sys.path.insert(0, os.path.abspath("../src"))
