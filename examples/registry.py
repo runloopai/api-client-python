@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
+from .devbox_mounts import run_devbox_mounts_example
 from .devbox_tunnel import run_devbox_tunnel_example
 from .example_types import ExampleResult
 from .mcp_github_tools import run_mcp_github_tools_example
@@ -31,6 +32,13 @@ example_registry: list[ExampleRegistryEntry] = [
         "file_name": "devbox_from_blueprint_lifecycle.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_from_blueprint_lifecycle_example,
+    },
+    {
+        "slug": "devbox-mounts",
+        "title": "Devbox Mounts (Agent, Code, Object)",
+        "file_name": "devbox_mounts.py",
+        "required_env": ["RUNLOOP_API_KEY", "ANTHROPIC_API_KEY"],
+        "run": run_devbox_mounts_example,
     },
     {
         "slug": "devbox-snapshot-resume",

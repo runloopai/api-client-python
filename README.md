@@ -91,6 +91,7 @@ Functionality between the synchronous and asynchronous clients is otherwise iden
 ## Examples
 
 Workflow-oriented runnable examples are documented in [`EXAMPLES.md`](./EXAMPLES.md).
+For a mounts-focused workflow that combines agent, code, and object mounts with agent-gateway credential protection, see [`examples/devbox_mounts.py`](./examples/devbox_mounts.py).
 
 `EXAMPLES.md` is generated from metadata in `examples/*.py` and should not be edited manually.
 Regenerate it with:

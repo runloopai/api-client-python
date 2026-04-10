@@ -9,6 +9,7 @@ Runnable examples live in [`examples/`](./examples).
 
 - [Blueprint with Build Context](#blueprint-with-build-context)
 - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
+- [Devbox Mounts (Agent, Code, Object)](#devbox-mounts)
 - [Devbox Snapshot and Resume](#devbox-snapshot-resume)
 - [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
@@ -74,6 +75,39 @@ uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_from_blueprint_lifecycle.py`](./examples/devbox_from_blueprint_lifecycle.py)
+
+<a id="devbox-mounts"></a>
+## Devbox Mounts (Agent, Code, Object)
+
+**Use case:** Launch a devbox that combines an agent mount for Claude Code, a code mount for the Runloop CLI repo, and an object mount for startup files while routing Anthropic credentials through agent gateway.
+
+**Tags:** `devbox`, `mounts`, `agent`, `code`, `object`, `claude-code`, `agent-gateway`, `ttl`, `async`
+
+### Workflow
+- Create or reuse a Claude Code agent by name
+- Store ANTHROPIC_API_KEY as a Runloop secret for gateway-backed access
+- Upload a temporary bootstrap directory as a storage object with a TTL
+- Launch a devbox with agent, code, and object mounts together
+- Verify the gateway token and URL are present instead of the raw Anthropic key
+- Run Claude Code through the Anthropic agent gateway
+- Verify the code mount and extracted object mount contents are present
+- Shutdown the devbox and delete the temporary secret and storage object
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+- `ANTHROPIC_API_KEY`
+
+### Run
+```sh
+ANTHROPIC_API_KEY=sk-ant-xxx uv run python -m examples.devbox_mounts
+```
+
+### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
+
+**Source:** [`examples/devbox_mounts.py`](./examples/devbox_mounts.py)
 
 <a id="devbox-snapshot-resume"></a>
 ## Devbox Snapshot and Resume
