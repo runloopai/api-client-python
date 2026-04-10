@@ -138,7 +138,6 @@ exclude = [
     "_dev",
     ".venv",
     ".git",
-    "docs",
 ]
 
 reportImplicitOverride = true
@@ -196,6 +195,12 @@ disable_error_code = "func-returns-value,overload-cannot-match"
 [[tool.mypy.overrides]]
 module = "black.files.*"
 ignore_errors = true
+ignore_missing_imports = true
+
+# Sphinx packages are only installed in the docs dependency group,
+# not in the dev group used by CI linters.
+[[tool.mypy.overrides]]
+module = ["sphinx.*", "sphinx_toolbox.*"]
 ignore_missing_imports = true
 
 

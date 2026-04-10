@@ -1,3 +1,4 @@
+# pyright: reportMissingImports=false
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -125,12 +126,12 @@ def _patch_autotypeddict_inherited_docstrings() -> None:
         if required_keys:
             self.add_line("", sourcename)
             self.add_line(":Required Keys:", sourcename)
-            self.document_keys(required_keys, types, docstrings)
+            self.document_keys(required_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
             self.add_line("", sourcename)
         if optional_keys:
             self.add_line("", sourcename)
             self.add_line(":Optional Keys:", sourcename)
-            self.document_keys(optional_keys, types, docstrings)
+            self.document_keys(optional_keys, types, docstrings)  # pyright: ignore[reportUnknownMemberType]
             self.add_line("", sourcename)
 
         return []
@@ -169,7 +170,7 @@ def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> No
 
 
 def setup(app: Sphinx) -> None:
-    app.connect("source-read", _inject_type_submodules)
+    app.connect("source-read", _inject_type_submodules)  # pyright: ignore[reportUnknownMemberType]
 
 
 # Intersphinx mapping
