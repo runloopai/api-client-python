@@ -34,6 +34,7 @@ if TYPE_CHECKING:
     from .resources import (
         axons,
         agents,
+        apikeys,
         objects,
         secrets,
         devboxes,
@@ -44,9 +45,11 @@ if TYPE_CHECKING:
         benchmark_jobs,
         benchmark_runs,
         gateway_configs,
+        restricted_keys,
         network_policies,
     )
     from .resources.agents import AgentsResource, AsyncAgentsResource
+    from .resources.apikeys import ApikeysResource, AsyncApikeysResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
@@ -56,6 +59,7 @@ if TYPE_CHECKING:
     from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource
     from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
     from .resources.gateway_configs import GatewayConfigsResource, AsyncGatewayConfigsResource
+    from .resources.restricted_keys import RestrictedKeysResource, AsyncRestrictedKeysResource
     from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
     from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
@@ -197,6 +201,18 @@ class Runloop(SyncAPIClient):
         from .resources.mcp_configs import McpConfigsResource
 
         return McpConfigsResource(self)
+
+    @cached_property
+    def apikeys(self) -> ApikeysResource:
+        from .resources.apikeys import ApikeysResource
+
+        return ApikeysResource(self)
+
+    @cached_property
+    def restricted_keys(self) -> RestrictedKeysResource:
+        from .resources.restricted_keys import RestrictedKeysResource
+
+        return RestrictedKeysResource(self)
 
     @cached_property
     def with_raw_response(self) -> RunloopWithRawResponse:
@@ -447,6 +463,18 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncMcpConfigsResource(self)
 
     @cached_property
+    def apikeys(self) -> AsyncApikeysResource:
+        from .resources.apikeys import AsyncApikeysResource
+
+        return AsyncApikeysResource(self)
+
+    @cached_property
+    def restricted_keys(self) -> AsyncRestrictedKeysResource:
+        from .resources.restricted_keys import AsyncRestrictedKeysResource
+
+        return AsyncRestrictedKeysResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncRunloopWithRawResponse:
         return AsyncRunloopWithRawResponse(self)
 
@@ -643,6 +671,18 @@ class RunloopWithRawResponse:
 
         return McpConfigsResourceWithRawResponse(self._client.mcp_configs)
 
+    @cached_property
+    def apikeys(self) -> apikeys.ApikeysResourceWithRawResponse:
+        from .resources.apikeys import ApikeysResourceWithRawResponse
+
+        return ApikeysResourceWithRawResponse(self._client.apikeys)
+
+    @cached_property
+    def restricted_keys(self) -> restricted_keys.RestrictedKeysResourceWithRawResponse:
+        from .resources.restricted_keys import RestrictedKeysResourceWithRawResponse
+
+        return RestrictedKeysResourceWithRawResponse(self._client.restricted_keys)
+
 
 class AsyncRunloopWithRawResponse:
     _client: AsyncRunloop
@@ -727,6 +767,18 @@ class AsyncRunloopWithRawResponse:
         from .resources.mcp_configs import AsyncMcpConfigsResourceWithRawResponse
 
         return AsyncMcpConfigsResourceWithRawResponse(self._client.mcp_configs)
+
+    @cached_property
+    def apikeys(self) -> apikeys.AsyncApikeysResourceWithRawResponse:
+        from .resources.apikeys import AsyncApikeysResourceWithRawResponse
+
+        return AsyncApikeysResourceWithRawResponse(self._client.apikeys)
+
+    @cached_property
+    def restricted_keys(self) -> restricted_keys.AsyncRestrictedKeysResourceWithRawResponse:
+        from .resources.restricted_keys import AsyncRestrictedKeysResourceWithRawResponse
+
+        return AsyncRestrictedKeysResourceWithRawResponse(self._client.restricted_keys)
 
 
 class RunloopWithStreamedResponse:
@@ -813,6 +865,18 @@ class RunloopWithStreamedResponse:
 
         return McpConfigsResourceWithStreamingResponse(self._client.mcp_configs)
 
+    @cached_property
+    def apikeys(self) -> apikeys.ApikeysResourceWithStreamingResponse:
+        from .resources.apikeys import ApikeysResourceWithStreamingResponse
+
+        return ApikeysResourceWithStreamingResponse(self._client.apikeys)
+
+    @cached_property
+    def restricted_keys(self) -> restricted_keys.RestrictedKeysResourceWithStreamingResponse:
+        from .resources.restricted_keys import RestrictedKeysResourceWithStreamingResponse
+
+        return RestrictedKeysResourceWithStreamingResponse(self._client.restricted_keys)
+
 
 class AsyncRunloopWithStreamedResponse:
     _client: AsyncRunloop
@@ -897,6 +961,18 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.mcp_configs import AsyncMcpConfigsResourceWithStreamingResponse
 
         return AsyncMcpConfigsResourceWithStreamingResponse(self._client.mcp_configs)
+
+    @cached_property
+    def apikeys(self) -> apikeys.AsyncApikeysResourceWithStreamingResponse:
+        from .resources.apikeys import AsyncApikeysResourceWithStreamingResponse
+
+        return AsyncApikeysResourceWithStreamingResponse(self._client.apikeys)
+
+    @cached_property
+    def restricted_keys(self) -> restricted_keys.AsyncRestrictedKeysResourceWithStreamingResponse:
+        from .resources.restricted_keys import AsyncRestrictedKeysResourceWithStreamingResponse
+
+        return AsyncRestrictedKeysResourceWithStreamingResponse(self._client.restricted_keys)
 
 
 Client = Runloop

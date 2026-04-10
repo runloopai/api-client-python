@@ -16,6 +16,14 @@ from .agents import (
     AgentsResourceWithStreamingResponse,
     AsyncAgentsResourceWithStreamingResponse,
 )
+from .apikeys import (
+    ApikeysResource,
+    AsyncApikeysResource,
+    ApikeysResourceWithRawResponse,
+    AsyncApikeysResourceWithRawResponse,
+    ApikeysResourceWithStreamingResponse,
+    AsyncApikeysResourceWithStreamingResponse,
+)
 from .objects import (
     ObjectsResource,
     AsyncObjectsResource,
@@ -95,6 +103,14 @@ from .gateway_configs import (
     AsyncGatewayConfigsResourceWithRawResponse,
     GatewayConfigsResourceWithStreamingResponse,
     AsyncGatewayConfigsResourceWithStreamingResponse,
+)
+from .restricted_keys import (
+    RestrictedKeysResource,
+    AsyncRestrictedKeysResource,
+    RestrictedKeysResourceWithRawResponse,
+    AsyncRestrictedKeysResourceWithRawResponse,
+    RestrictedKeysResourceWithStreamingResponse,
+    AsyncRestrictedKeysResourceWithStreamingResponse,
 )
 from .network_policies import (
     NetworkPoliciesResource,
@@ -184,4 +200,16 @@ __all__ = [
     "AsyncMcpConfigsResourceWithRawResponse",
     "McpConfigsResourceWithStreamingResponse",
     "AsyncMcpConfigsResourceWithStreamingResponse",
+    "ApikeysResource",
+    "AsyncApikeysResource",
+    "ApikeysResourceWithRawResponse",
+    "AsyncApikeysResourceWithRawResponse",
+    "ApikeysResourceWithStreamingResponse",
+    "AsyncApikeysResourceWithStreamingResponse",
+    "RestrictedKeysResource",
+    "AsyncRestrictedKeysResource",
+    "RestrictedKeysResourceWithRawResponse",
+    "AsyncRestrictedKeysResourceWithRawResponse",
+    "RestrictedKeysResourceWithStreamingResponse",
+    "AsyncRestrictedKeysResourceWithStreamingResponse",
 ]

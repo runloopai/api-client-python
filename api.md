@@ -439,3 +439,31 @@ Methods:
 - <code title="post /v1/mcp-configs/{id}">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/mcp_config_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
 - <code title="get /v1/mcp-configs">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">list</a>(\*\*<a href="src/runloop_api_client/types/mcp_config_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">SyncMcpConfigsCursorIDPage[McpConfigView]</a></code>
 - <code title="post /v1/mcp-configs/{id}/delete">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
+
+# Apikeys
+
+Types:
+
+```python
+from runloop_api_client.types import APIKeyCreatedView, APIKeyCreateParameters
+```
+
+Methods:
+
+- <code title="post /v1/apikeys">client.apikeys.<a href="./src/runloop_api_client/resources/apikeys.py">create</a>(\*\*<a href="src/runloop_api_client/types/apikey_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/api_key_created_view.py">APIKeyCreatedView</a></code>
+
+# RestrictedKeys
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    RestrictedKeyCreatedView,
+    RestrictedKeyCreateParameters,
+    ScopeEntryView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/restricted_keys">client.restricted_keys.<a href="./src/runloop_api_client/resources/restricted_keys.py">create</a>(\*\*<a href="src/runloop_api_client/types/restricted_key_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/restricted_key_created_view.py">RestrictedKeyCreatedView</a></code>
