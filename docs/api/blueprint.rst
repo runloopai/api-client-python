@@ -1,17 +1,14 @@
 Blueprint
 =========
 
-The ``Blueprint`` class represents a reusable devbox configuration built from a Dockerfile
-and optional setup commands. Use blueprints to create pre-configured devbox environments.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_blueprint
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_blueprint
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.blueprint
-   :members:
+      .. automodule:: runloop_api_client.sdk.blueprint
+         :members:

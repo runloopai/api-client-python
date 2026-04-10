@@ -1,23 +1,19 @@
 Core Module
 ===========
 
-The core module provides the main SDK entry points and operation manager classes.
-Use :class:`~runloop_api_client.sdk.async_.AsyncRunloopSDK` for async/await code or
-:class:`~runloop_api_client.sdk.sync.RunloopSDK` for synchronous code.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. autoclass:: runloop_api_client.sdk.async_.AsyncRunloopSDK
+      .. autoclass:: runloop_api_client.sdk.async_.AsyncRunloopSDK
 
-.. automodule:: runloop_api_client.sdk.async_
+      .. automodule:: runloop_api_client.sdk.async_
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. autoclass:: runloop_api_client.sdk.sync.RunloopSDK
+      .. autoclass:: runloop_api_client.sdk.sync.RunloopSDK
 
-.. automodule:: runloop_api_client.sdk.sync
+      .. automodule:: runloop_api_client.sdk.sync
 
 Base REST Client
 ----------------

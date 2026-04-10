@@ -1,18 +1,14 @@
 Benchmark
 =========
 
-The ``Benchmark`` class manages benchmarks that group multiple scenarios for
-systematic evaluation. Use benchmarks to run and compare agent performance
-across a suite of scenarios.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_benchmark
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_benchmark
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.benchmark
-   :members:
+      .. automodule:: runloop_api_client.sdk.benchmark
+         :members:

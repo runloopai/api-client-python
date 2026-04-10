@@ -1,17 +1,14 @@
 Scenario
 ========
 
-The ``Scenario`` class represents a scenario for evaluating agent performance.
-Scenarios define environments, problem statements, and scoring criteria.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_scenario
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_scenario
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.scenario
-   :members:
+      .. automodule:: runloop_api_client.sdk.scenario
+         :members:

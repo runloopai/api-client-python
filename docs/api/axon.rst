@@ -1,21 +1,14 @@
 Axon
 ====
 
-.. note::
+.. tabs::
 
-   Axon APIs are in beta and may change.
+   .. tab:: Async
 
-The ``Axon`` class provides event communication channels with support for
-publish/subscribe messaging, server-sent events (SSE) streaming, and SQL operations.
+      .. automodule:: runloop_api_client.sdk.async_axon
+         :members:
 
-Asynchronous API
-----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.async_axon
-   :members:
-
-Synchronous API
----------------
-
-.. automodule:: runloop_api_client.sdk.axon
-   :members:
+      .. automodule:: runloop_api_client.sdk.axon
+         :members:
