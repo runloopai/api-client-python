@@ -30,6 +30,7 @@ from .mcp_config_view import McpConfigView as McpConfigView
 from .axon_list_params import AxonListParams as AxonListParams
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
+from .scope_entry_view import ScopeEntryView as ScopeEntryView
 from .scoring_contract import ScoringContract as ScoringContract
 from .scoring_function import ScoringFunction as ScoringFunction
 from .secret_list_view import SecretListView as SecretListView
@@ -49,6 +50,8 @@ from .gateway_config_view import GatewayConfigView as GatewayConfigView
 from .input_context_param import InputContextParam as InputContextParam
 from .network_policy_view import NetworkPolicyView as NetworkPolicyView
 from .publish_result_view import PublishResultView as PublishResultView
+from .api_key_created_view import APIKeyCreatedView as APIKeyCreatedView
+from .apikey_create_params import ApikeyCreateParams as ApikeyCreateParams
 from .devbox_create_params import DevboxCreateParams as DevboxCreateParams
 from .devbox_snapshot_view import DevboxSnapshotView as DevboxSnapshotView
 from .devbox_update_params import DevboxUpdateParams as DevboxUpdateParams
@@ -68,6 +71,7 @@ from .object_download_params import ObjectDownloadParams as ObjectDownloadParams
 from .scenario_create_params import ScenarioCreateParams as ScenarioCreateParams
 from .scenario_run_list_view import ScenarioRunListView as ScenarioRunListView
 from .scenario_update_params import ScenarioUpdateParams as ScenarioUpdateParams
+from .scope_entry_view_param import ScopeEntryViewParam as ScopeEntryViewParam
 from .scoring_contract_param import ScoringContractParam as ScoringContractParam
 from .scoring_function_param import ScoringFunctionParam as ScoringFunctionParam
 from .benchmark_create_params import BenchmarkCreateParams as BenchmarkCreateParams
@@ -103,6 +107,7 @@ from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownl
 from .devbox_enable_tunnel_params import DevboxEnableTunnelParams as DevboxEnableTunnelParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
 from .devbox_snapshot_disk_params import DevboxSnapshotDiskParams as DevboxSnapshotDiskParams
+from .restricted_key_created_view import RestrictedKeyCreatedView as RestrictedKeyCreatedView
 from .scenario_list_public_params import ScenarioListPublicParams as ScenarioListPublicParams
 from .benchmark_definitions_params import BenchmarkDefinitionsParams as BenchmarkDefinitionsParams
 from .benchmark_list_public_params import BenchmarkListPublicParams as BenchmarkListPublicParams
@@ -112,6 +117,7 @@ from .gateway_config_create_params import GatewayConfigCreateParams as GatewayCo
 from .gateway_config_update_params import GatewayConfigUpdateParams as GatewayConfigUpdateParams
 from .network_policy_create_params import NetworkPolicyCreateParams as NetworkPolicyCreateParams
 from .network_policy_update_params import NetworkPolicyUpdateParams as NetworkPolicyUpdateParams
+from .restricted_key_create_params import RestrictedKeyCreateParams as RestrictedKeyCreateParams
 from .scoring_contract_result_view import ScoringContractResultView as ScoringContractResultView
 from .scoring_function_result_view import ScoringFunctionResultView as ScoringFunctionResultView
 from .scenario_definition_list_view import ScenarioDefinitionListView as ScenarioDefinitionListView
