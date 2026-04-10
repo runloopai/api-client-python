@@ -3,8 +3,11 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+from __future__ import annotations
+
 import os
 import sys
+from typing import Any
 
 # Add the src directory to the path so we can import the package
 sys.path.insert(0, os.path.abspath("../src"))
@@ -53,6 +56,37 @@ autodoc_default_options = {
 
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
+
+
+def _inject_type_submodules(_app: Any, docname: str, source: list[str]) -> None:
+    """Auto-generate automodule directives for all type submodules.
+
+    Replaces the ``.. auto-all-types::`` placeholder in types.rst with
+    automodule directives for every submodule in runloop_api_client.types.
+    This ensures all types (including file-local helper types like Lifecycle
+    and BuildContext) get documented at their actual module path, making
+    cross-references resolve without any path rewriting.
+    """
+    if docname != "api/types":
+        return
+    import pkgutil
+
+    import runloop_api_client.types as types_pkg
+
+    directives: list[str] = []
+    for _, modname, ispkg in sorted(
+        pkgutil.walk_packages(types_pkg.__path__, types_pkg.__name__ + "."),
+        key=lambda x: x[1],
+    ):
+        if ispkg:
+            continue
+        directives.append(f".. automodule:: {modname}\n   :members:\n   :undoc-members:\n")
+    source[0] = source[0].replace(".. auto-all-types::", "\n".join(directives))
+
+
+def setup(app: Any) -> None:
+    app.connect("source-read", _inject_type_submodules)
+
 
 # Intersphinx mapping
 intersphinx_mapping = {
