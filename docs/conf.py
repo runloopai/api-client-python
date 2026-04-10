@@ -7,10 +7,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sphinx.application import Sphinx
+from typing import Any
 
 # Add the src directory to the path so we can import the package
 sys.path.insert(0, os.path.abspath("../src"))
@@ -61,7 +58,7 @@ autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 
 
-def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> None:
+def _inject_type_submodules(_app: Any, docname: str, source: list[str]) -> None:
     """Auto-generate automodule directives for all type submodules.
 
     Replaces the ``.. auto-all-types::`` placeholder in types.rst with
@@ -87,8 +84,8 @@ def _inject_type_submodules(_app: Sphinx, docname: str, source: list[str]) -> No
     source[0] = source[0].replace(".. auto-all-types::", "\n".join(directives))
 
 
-def setup(app: Sphinx) -> None:
-    app.connect("source-read", _inject_type_submodules)  # pyright: ignore[reportUnknownMemberType]
+def setup(app: Any) -> None:
+    app.connect("source-read", _inject_type_submodules)
 
 
 # Intersphinx mapping
