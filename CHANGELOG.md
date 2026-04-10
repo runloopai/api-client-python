@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.18.1 (2026-04-10)
+
+Full Changelog: [v1.17.0...v1.18.1](https://github.com/runloopai/api-client-python/compare/v1.17.0...v1.18.1)
+
+### Bug Fixes
+
+* add list events to axon ([#8648](https://github.com/runloopai/api-client-python/issues/8648)) ([1203b57](https://github.com/runloopai/api-client-python/commit/1203b577b105dc0c7cd94eae644a609a525b7c32))
+* TTL shutdown showed non-standard reason in devbox logs ([#8636](https://github.com/runloopai/api-client-python/issues/8636)) ([8ac5cc5](https://github.com/runloopai/api-client-python/commit/8ac5cc5116b771316d28b426bfa13fd6af5cedd2))
+
+
+### Documentation
+
+* clarify that we don't support git commit SHA in git agents/blueprint builds ([#8638](https://github.com/runloopai/api-client-python/issues/8638)) ([66b0895](https://github.com/runloopai/api-client-python/commit/66b0895865737ac3dd7f84be74785504fc7bede5))
+
 ## 1.17.0 (2026-04-09)
 
 Full Changelog: [v1.16.0...v1.17.0](https://github.com/runloopai/api-client-python/compare/v1.16.0...v1.17.0)

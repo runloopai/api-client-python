@@ -28,7 +28,7 @@ class CodeMount(BaseModel):
     """The authentication token necessary to pull repo."""
 
     git_ref: Optional[str] = None
-    """Optional git ref (branch, tag, or commit SHA) to checkout.
+    """Optional git ref (branch or tag) to checkout.
 
     Defaults to the repository default branch.
     """
