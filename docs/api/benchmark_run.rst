@@ -1,17 +1,14 @@
 Benchmark Run
 =============
 
-The ``BenchmarkRun`` class represents a running instance of a benchmark.
-Use it to track progress, list scenario runs, and manage the benchmark lifecycle.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_benchmark_run
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_benchmark_run
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.benchmark_run
-   :members:
+      .. automodule:: runloop_api_client.sdk.benchmark_run
+         :members:

@@ -1,17 +1,14 @@
 Secret
 ======
 
-The ``Secret`` class manages encrypted key-value pairs that can be injected
-into devbox environments as environment variables.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_secret
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_secret
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.secret
-   :members:
+      .. automodule:: runloop_api_client.sdk.secret
+         :members:

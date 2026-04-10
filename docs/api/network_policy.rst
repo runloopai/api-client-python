@@ -1,17 +1,14 @@
 Network Policy
 ==============
 
-The ``NetworkPolicy`` class manages network access policies for devboxes,
-controlling which hostnames and services a devbox can communicate with.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_network_policy
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_network_policy
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.network_policy
-   :members:
+      .. automodule:: runloop_api_client.sdk.network_policy
+         :members:

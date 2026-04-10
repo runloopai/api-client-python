@@ -1,17 +1,14 @@
 Snapshot
 ========
 
-The ``Snapshot`` class represents a point-in-time disk snapshot of a devbox.
-Use snapshots to save and restore devbox state.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_snapshot
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_snapshot
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.snapshot
-   :members:
+      .. automodule:: runloop_api_client.sdk.snapshot
+         :members:

@@ -1,17 +1,14 @@
 Storage Object
 ==============
 
-The ``StorageObject`` class manages file storage objects that can be uploaded, downloaded,
-and mounted into devboxes.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_storage_object
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_storage_object
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.storage_object
-   :members:
+      .. automodule:: runloop_api_client.sdk.storage_object
+         :members:

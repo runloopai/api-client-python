@@ -1,17 +1,14 @@
 Gateway Config
 ==============
 
-The ``GatewayConfig`` class manages API gateway configurations that proxy
-requests through devboxes with credential management and authentication.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_gateway_config
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_gateway_config
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.gateway_config
-   :members:
+      .. automodule:: runloop_api_client.sdk.gateway_config
+         :members:

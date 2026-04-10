@@ -1,17 +1,14 @@
 MCP Config
 ==========
 
-The ``McpConfig`` class manages Model Context Protocol (MCP) server configurations
-that can be attached to devboxes, defining which MCP servers and tools are available.
+.. tabs::
 
-Asynchronous API
-----------------
+   .. tab:: Async
 
-.. automodule:: runloop_api_client.sdk.async_mcp_config
-   :members:
+      .. automodule:: runloop_api_client.sdk.async_mcp_config
+         :members:
 
-Synchronous API
----------------
+   .. tab:: Sync
 
-.. automodule:: runloop_api_client.sdk.mcp_config
-   :members:
+      .. automodule:: runloop_api_client.sdk.mcp_config
+         :members:
