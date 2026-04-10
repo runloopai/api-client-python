@@ -50,7 +50,7 @@ File Operation Parameters
 Network Tunnel Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxCreateTunnelParams
+.. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxEnableTunnelParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKDevboxRemoveTunnelParams
 
@@ -78,6 +78,15 @@ These TypeDicts define parameters for storage object creation, listing, and down
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKObjectDownloadParams
 
+Agent Parameters
+----------------
+
+These TypeDicts define parameters for agent creation and listing.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAgentCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAgentListParams
+
 Scorer Parameters
 -----------------
 
@@ -88,6 +97,84 @@ These TypeDicts define parameters for scorer creation, listing, and updating.
 .. autotypeddict:: runloop_api_client.sdk._types.SDKScorerListParams
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKScorerUpdateParams
+
+Axon Parameters
+---------------
+
+These TypeDicts define parameters for axon creation, listing, publishing, and SQL operations.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAxonCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAxonListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAxonPublishParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAxonSqlQueryParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKAxonSqlBatchParams
+
+Scenario Parameters
+-------------------
+
+These TypeDicts define parameters for scenario listing, updating, and running.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioUpdateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioRunParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioRunAsyncParams
+
+Benchmark Parameters
+--------------------
+
+These TypeDicts define parameters for benchmark creation, listing, updating, and running.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkUpdateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkStartRunParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkListRunsParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkRunListScenarioRunsParams
+
+Network Policy Parameters
+-------------------------
+
+These TypeDicts define parameters for network policy creation, listing, and updating.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKNetworkPolicyCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKNetworkPolicyListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKNetworkPolicyUpdateParams
+
+MCP Config Parameters
+---------------------
+
+These TypeDicts define parameters for MCP (Model Context Protocol) configuration creation, listing, and updating.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKMcpConfigCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKMcpConfigListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKMcpConfigUpdateParams
+
+Gateway Config Parameters
+-------------------------
+
+These TypeDicts define parameters for gateway configuration creation, listing, and updating.
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKGatewayConfigCreateParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKGatewayConfigListParams
+
+.. autotypeddict:: runloop_api_client.sdk._types.SDKGatewayConfigUpdateParams
 
 Core Request Options
 --------------------
@@ -109,14 +196,4 @@ These TypeDicts define options for timeouts, idempotency, polling, and other low
 Base API Type Reference
 -----------------------
 
-.. automodule:: runloop_api_client.types.shared_params
-   :members:
-   :undoc-members:
-   :imported-members:
-   :member-order: groupwise
-
-.. automodule:: runloop_api_client.types
-   :members:
-   :undoc-members:
-   :imported-members:
-   :member-order: groupwise
+.. auto-all-types::

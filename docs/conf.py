@@ -54,6 +54,41 @@ autodoc_default_options = {
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 
+
+def _inject_type_submodules(app, docname, source):
+    """Auto-generate automodule directives for all type submodules.
+
+    Replaces the ``.. auto-all-types::`` placeholder in types.rst with
+    automodule directives for every submodule in runloop_api_client.types.
+    This ensures all types (including file-local helper types like Lifecycle
+    and BuildContext) get documented at their actual module path, making
+    cross-references resolve without any path rewriting.
+    """
+    if docname != "api/types":
+        return
+    import pkgutil
+
+    import runloop_api_client.types as types_pkg
+
+    directives = []
+    for _, modname, ispkg in sorted(
+        pkgutil.walk_packages(types_pkg.__path__, types_pkg.__name__ + "."),
+        key=lambda x: x[1],
+    ):
+        if ispkg:
+            continue
+        directives.append(
+            f".. automodule:: {modname}\n"
+            f"   :members:\n"
+            f"   :undoc-members:\n"
+        )
+    source[0] = source[0].replace(".. auto-all-types::", "\n".join(directives))
+
+
+def setup(app):
+    app.connect("source-read", _inject_type_submodules)
+
+
 # Intersphinx mapping
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
