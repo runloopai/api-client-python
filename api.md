@@ -79,7 +79,12 @@ Methods:
 Types:
 
 ```python
-from runloop_api_client.types import AgentCreateParameters, AgentListView, AgentView
+from runloop_api_client.types import (
+    AgentCreateParameters,
+    AgentDevboxCountsView,
+    AgentListView,
+    AgentView,
+)
 ```
 
 Methods:
@@ -87,6 +92,9 @@ Methods:
 - <code title="post /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">create</a>(\*\*<a href="src/runloop_api_client/types/agent_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
 - <code title="get /v1/agents/{id}">client.agents.<a href="./src/runloop_api_client/resources/agents.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
 - <code title="get /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list</a>(\*\*<a href="src/runloop_api_client/types/agent_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
+- <code title="post /v1/agents/{id}/delete">client.agents.<a href="./src/runloop_api_client/resources/agents.py">delete</a>(id) -> object</code>
+- <code title="get /v1/agents/devbox_counts">client.agents.<a href="./src/runloop_api_client/resources/agents.py">devbox_counts</a>() -> <a href="./src/runloop_api_client/types/agent_devbox_counts_view.py">AgentDevboxCountsView</a></code>
+- <code title="get /v1/agents/list_public">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/agent_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
 
 # Axons
 
@@ -439,3 +447,31 @@ Methods:
 - <code title="post /v1/mcp-configs/{id}">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/mcp_config_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
 - <code title="get /v1/mcp-configs">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">list</a>(\*\*<a href="src/runloop_api_client/types/mcp_config_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">SyncMcpConfigsCursorIDPage[McpConfigView]</a></code>
 - <code title="post /v1/mcp-configs/{id}/delete">client.mcp_configs.<a href="./src/runloop_api_client/resources/mcp_configs.py">delete</a>(id) -> <a href="./src/runloop_api_client/types/mcp_config_view.py">McpConfigView</a></code>
+
+# Apikeys
+
+Types:
+
+```python
+from runloop_api_client.types import APIKeyCreatedView, APIKeyCreateParameters
+```
+
+Methods:
+
+- <code title="post /v1/apikeys">client.apikeys.<a href="./src/runloop_api_client/resources/apikeys.py">create</a>(\*\*<a href="src/runloop_api_client/types/apikey_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/api_key_created_view.py">APIKeyCreatedView</a></code>
+
+# RestrictedKeys
+
+Types:
+
+```python
+from runloop_api_client.types import (
+    RestrictedKeyCreatedView,
+    RestrictedKeyCreateParameters,
+    ScopeEntryView,
+)
+```
+
+Methods:
+
+- <code title="post /v1/restricted_keys">client.restricted_keys.<a href="./src/runloop_api_client/resources/restricted_keys.py">create</a>(\*\*<a href="src/runloop_api_client/types/restricted_key_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/restricted_key_created_view.py">RestrictedKeyCreatedView</a></code>

@@ -6,7 +6,7 @@ from typing import Optional
 
 import httpx
 
-from ..types import agent_list_params, agent_create_params
+from ..types import agent_list_params, agent_create_params, agent_list_public_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -20,6 +20,7 @@ from .._response import (
 from ..pagination import SyncAgentsCursorIDPage, AsyncAgentsCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.agent_view import AgentView
+from ..types.agent_devbox_counts_view import AgentDevboxCountsView
 from ..types.shared_params.agent_source import AgentSource
 
 __all__ = ["AgentsResource", "AsyncAgentsResource"]
@@ -197,6 +198,135 @@ class AgentsResource(SyncAPIResource):
                         "version": version,
                     },
                     agent_list_params.AgentListParams,
+                ),
+            ),
+            model=AgentView,
+        )
+
+    def delete(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """Delete an Agent by its unique identifier.
+
+        The Agent will be permanently removed.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/agents/{id}/delete", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
+        )
+
+    def devbox_counts(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentDevboxCountsView:
+        """Returns devbox counts grouped by agent name.
+
+        This endpoint efficiently
+        aggregates devbox counts for all agents in a single request, avoiding N+1 query
+        patterns.
+        """
+        return self._get(
+            "/v1/agents/devbox_counts",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentDevboxCountsView,
+        )
+
+    def list_public(
+        self,
+        *,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        version: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SyncAgentsCursorIDPage[AgentView]:
+        """
+        List all public Agents with pagination support.
+
+        Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter agents by name (partial match supported).
+
+          search: Search by agent ID or name.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          version: Filter by version. Use 'latest' to get the most recently created agent.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/agents/list_public",
+            page=SyncAgentsCursorIDPage[AgentView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "name": name,
+                        "search": search,
+                        "starting_after": starting_after,
+                        "version": version,
+                    },
+                    agent_list_public_params.AgentListPublicParams,
                 ),
             ),
             model=AgentView,
@@ -380,6 +510,135 @@ class AsyncAgentsResource(AsyncAPIResource):
             model=AgentView,
         )
 
+    async def delete(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> object:
+        """Delete an Agent by its unique identifier.
+
+        The Agent will be permanently removed.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/agents/{id}/delete", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=object,
+        )
+
+    async def devbox_counts(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AgentDevboxCountsView:
+        """Returns devbox counts grouped by agent name.
+
+        This endpoint efficiently
+        aggregates devbox counts for all agents in a single request, avoiding N+1 query
+        patterns.
+        """
+        return await self._get(
+            "/v1/agents/devbox_counts",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AgentDevboxCountsView,
+        )
+
+    def list_public(
+        self,
+        *,
+        include_total_count: bool | Omit = omit,
+        limit: int | Omit = omit,
+        name: str | Omit = omit,
+        search: str | Omit = omit,
+        starting_after: str | Omit = omit,
+        version: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncPaginator[AgentView, AsyncAgentsCursorIDPage[AgentView]]:
+        """
+        List all public Agents with pagination support.
+
+        Args:
+          include_total_count: If true (default), includes total_count in the response. Set to false to skip
+              the count query for better performance on large datasets.
+
+          limit: The limit of items to return. Default is 20. Max is 5000.
+
+          name: Filter agents by name (partial match supported).
+
+          search: Search by agent ID or name.
+
+          starting_after: Load the next page of data starting after the item with the given ID.
+
+          version: Filter by version. Use 'latest' to get the most recently created agent.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/agents/list_public",
+            page=AsyncAgentsCursorIDPage[AgentView],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "include_total_count": include_total_count,
+                        "limit": limit,
+                        "name": name,
+                        "search": search,
+                        "starting_after": starting_after,
+                        "version": version,
+                    },
+                    agent_list_public_params.AgentListPublicParams,
+                ),
+            ),
+            model=AgentView,
+        )
+
 
 class AgentsResourceWithRawResponse:
     def __init__(self, agents: AgentsResource) -> None:
@@ -393,6 +652,15 @@ class AgentsResourceWithRawResponse:
         )
         self.list = to_raw_response_wrapper(
             agents.list,
+        )
+        self.delete = to_raw_response_wrapper(
+            agents.delete,
+        )
+        self.devbox_counts = to_raw_response_wrapper(
+            agents.devbox_counts,
+        )
+        self.list_public = to_raw_response_wrapper(
+            agents.list_public,
         )
 
 
@@ -409,6 +677,15 @@ class AsyncAgentsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             agents.list,
         )
+        self.delete = async_to_raw_response_wrapper(
+            agents.delete,
+        )
+        self.devbox_counts = async_to_raw_response_wrapper(
+            agents.devbox_counts,
+        )
+        self.list_public = async_to_raw_response_wrapper(
+            agents.list_public,
+        )
 
 
 class AgentsResourceWithStreamingResponse:
@@ -424,6 +701,15 @@ class AgentsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             agents.list,
         )
+        self.delete = to_streamed_response_wrapper(
+            agents.delete,
+        )
+        self.devbox_counts = to_streamed_response_wrapper(
+            agents.devbox_counts,
+        )
+        self.list_public = to_streamed_response_wrapper(
+            agents.list_public,
+        )
 
 
 class AsyncAgentsResourceWithStreamingResponse:
@@ -438,4 +724,13 @@ class AsyncAgentsResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             agents.list,
+        )
+        self.delete = async_to_streamed_response_wrapper(
+            agents.delete,
+        )
+        self.devbox_counts = async_to_streamed_response_wrapper(
+            agents.devbox_counts,
+        )
+        self.list_public = async_to_streamed_response_wrapper(
+            agents.list_public,
         )

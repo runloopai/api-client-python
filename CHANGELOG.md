@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.19.0 (2026-04-13)
+
+Full Changelog: [v1.18.1...v1.19.0](https://github.com/runloopai/api-client-python/compare/v1.18.1...v1.19.0)
+
+### Features
+
+* Add wake on axon event as an API primitive ([#8681](https://github.com/runloopai/api-client-python/issues/8681)) ([255099a](https://github.com/runloopai/api-client-python/commit/255099a940a7892f3c66e6534517e3545d7daccb))
+* Allow API keys to create API and restricted keys ([#8663](https://github.com/runloopai/api-client-python/issues/8663)) ([2e03b55](https://github.com/runloopai/api-client-python/commit/2e03b55638a83a8354481f47a30910e94ff57fc3))
+
+
+### Bug Fixes
+
+* add missing agent API paths to stainless config ([#8699](https://github.com/runloopai/api-client-python/issues/8699)) ([4f6fe60](https://github.com/runloopai/api-client-python/commit/4f6fe60a63fd31c049e54febb81801031dce2325))
+* ensure file data are only sent as 1 parameter ([f7ca2cc](https://github.com/runloopai/api-client-python/commit/f7ca2cc280f1e7a4ab73f331be8fe3e33ae1c611))
+
+
+### Documentation
+
+* add snapshot, suspend & resume example ([#764](https://github.com/runloopai/api-client-python/issues/764)) ([f4b942b](https://github.com/runloopai/api-client-python/commit/f4b942b3329e98a4ea5182c04d6db90fd0b70308))
+* added Async vs Sync tabs, removed top-level class descriptions ([#783](https://github.com/runloopai/api-client-python/issues/783)) ([6a99c56](https://github.com/runloopai/api-client-python/commit/6a99c569914d93e07087ed5003ee7c77f2ab88ff))
+* restructure sphinx docs with async-first API reference and full type coverage ([#782](https://github.com/runloopai/api-client-python/issues/782)) ([514cf93](https://github.com/runloopai/api-client-python/commit/514cf93e8ff8b97bfde171a83cf9abf211193e7f))
+* show full field descriptions for SDK parameter types ([#784](https://github.com/runloopai/api-client-python/issues/784)) ([f04a506](https://github.com/runloopai/api-client-python/commit/f04a5069c33fceb7a4d3db634bfd77ab789314dc))
+
 ## 1.18.1 (2026-04-10)
 
 Full Changelog: [v1.17.0...v1.18.1](https://github.com/runloopai/api-client-python/compare/v1.17.0...v1.18.1)
