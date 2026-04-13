@@ -80,6 +80,8 @@ from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListVie
 from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
+from .agent_devbox_counts_view import AgentDevboxCountsView as AgentDevboxCountsView
+from .agent_list_public_params import AgentListPublicParams as AgentListPublicParams
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
 from .gateway_config_list_view import GatewayConfigListView as GatewayConfigListView
 from .mcp_config_create_params import McpConfigCreateParams as McpConfigCreateParams
