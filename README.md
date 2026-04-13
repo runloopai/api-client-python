@@ -288,7 +288,7 @@ Error codes are as follows:
 
 Certain errors are automatically retried 5 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors are all retried by default for GET requests. For POST requests, only 
+429 Rate Limit, and >=500 Internal errors are all retried by default for GET requests. For POST requests, only
 429 errors will be retried.
 
 You can use the `max_retries` option to configure or disable retry settings:

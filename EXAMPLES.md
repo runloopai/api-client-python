@@ -10,6 +10,7 @@ Runnable examples live in [`examples/`](./examples).
 - [Blueprint with Build Context](#blueprint-with-build-context)
 - [Devbox From Blueprint (Run Command, Shutdown)](#devbox-from-blueprint-lifecycle)
 - [Devbox Snapshot and Resume](#devbox-snapshot-resume)
+- [Devbox Snapshots (Suspend, Resume, Restore, Delete)](#devbox-snapshots)
 - [Devbox Tunnel (HTTP Server Access)](#devbox-tunnel)
 - [MCP Hub + Claude Code + GitHub](#mcp-github-tools)
 - [Secrets with Devbox and Agent Gateway](#secrets-with-devbox)
@@ -105,6 +106,37 @@ uv run pytest -m smoketest tests/smoketests/examples/
 ```
 
 **Source:** [`examples/devbox_snapshot_resume.py`](./examples/devbox_snapshot_resume.py)
+
+<a id="devbox-snapshots"></a>
+## Devbox Snapshots (Suspend, Resume, Restore, Delete)
+
+**Use case:** Upload a file to a devbox, preserve it across suspend and resume, create a disk snapshot, restore multiple devboxes from that snapshot, mutate each copy independently, and delete the snapshot when finished.
+
+**Tags:** `devbox`, `snapshot`, `suspend`, `resume`, `files`, `cleanup`
+
+### Workflow
+- Create a source devbox
+- Upload a file and mutate it into a shared baseline
+- Suspend and resume the source devbox
+- Create a disk snapshot from the resumed devbox
+- Restore two additional devboxes from the same snapshot baseline
+- Mutate the same file differently in each devbox to prove isolation
+- Shutdown the devboxes and delete the snapshot
+
+### Prerequisites
+- `RUNLOOP_API_KEY`
+
+### Run
+```sh
+uv run python -m examples.devbox_snapshots
+```
+
+### Test
+```sh
+uv run pytest -m smoketest tests/smoketests/examples/
+```
+
+**Source:** [`examples/devbox_snapshots.py`](./examples/devbox_snapshots.py)
 
 <a id="devbox-tunnel"></a>
 ## Devbox Tunnel (HTTP Server Access)

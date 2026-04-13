@@ -9,6 +9,7 @@ from typing import Any, Callable, cast
 
 from .devbox_tunnel import run_devbox_tunnel_example
 from .example_types import ExampleResult
+from .devbox_snapshots import run_devbox_snapshots_example
 from .mcp_github_tools import run_mcp_github_tools_example
 from .secrets_with_devbox import run_secrets_with_devbox_example
 from .devbox_snapshot_resume import run_devbox_snapshot_resume_example
@@ -38,6 +39,13 @@ example_registry: list[ExampleRegistryEntry] = [
         "file_name": "devbox_snapshot_resume.py",
         "required_env": ["RUNLOOP_API_KEY"],
         "run": run_devbox_snapshot_resume_example,
+    },
+    {
+        "slug": "devbox-snapshots",
+        "title": "Devbox Snapshots (Suspend, Resume, Restore, Delete)",
+        "file_name": "devbox_snapshots.py",
+        "required_env": ["RUNLOOP_API_KEY"],
+        "run": run_devbox_snapshots_example,
     },
     {
         "slug": "devbox-tunnel",
