@@ -14,6 +14,9 @@ __all__ = ["LaunchParameters", "Lifecycle", "LifecycleResumeTriggers", "UserPara
 class LifecycleResumeTriggers(TypedDict, total=False):
     """Triggers that can resume a suspended Devbox."""
 
+    axon_event: Optional[bool]
+    """When true, axon events targeting a suspended Devbox will trigger a resume."""
+
     http: Optional[bool]
     """When true, HTTP traffic to a suspended Devbox via tunnel will trigger a resume."""
 

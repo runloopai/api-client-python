@@ -86,7 +86,10 @@ class TestDevboxes:
                         "idle_time_seconds": 0,
                         "on_idle": "shutdown",
                     },
-                    "resume_triggers": {"http": True},
+                    "resume_triggers": {
+                        "axon_event": True,
+                        "http": True,
+                    },
                 },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
@@ -1237,7 +1240,10 @@ class TestAsyncDevboxes:
                         "idle_time_seconds": 0,
                         "on_idle": "shutdown",
                     },
-                    "resume_triggers": {"http": True},
+                    "resume_triggers": {
+                        "axon_event": True,
+                        "http": True,
+                    },
                 },
                 "network_policy_id": "network_policy_id",
                 "required_services": ["string"],
