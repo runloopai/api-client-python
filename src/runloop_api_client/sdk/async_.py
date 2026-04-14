@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict, Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -27,6 +27,7 @@ from ._types import (
     SDKBenchmarkListParams,
     SDKBlueprintListParams,
     SDKMcpConfigListParams,
+    SDKAgentListPublicParams,
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKMcpConfigCreateParams,
@@ -57,6 +58,7 @@ from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
 from .async_scenario_builder import AsyncScenarioBuilder
 from ..types.object_create_params import ContentType
+from ..types.agent_devbox_counts_view import AgentDevboxCountsView
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
 
@@ -804,6 +806,35 @@ class AsyncAgentOps:
             **params,
         )
         return [AsyncAgent(self._client, item.id, item) for item in page.agents]
+
+    async def list_public(
+        self,
+        **params: Unpack[SDKAgentListPublicParams],
+    ) -> List[AsyncAgent]:
+        """List public agents.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters
+        :return: Collection of public agent wrappers
+        :rtype: list[AsyncAgent]
+        """
+        page = await self._client.agents.list_public(
+            **params,
+        )
+        return [AsyncAgent(self._client, item.id, item) for item in page.agents]
+
+    async def devbox_counts(
+        self,
+        **options: Unpack[BaseRequestOptions],
+    ) -> AgentDevboxCountsView:
+        """Get devbox counts grouped by agent name.
+
+        :param options: Optional request configuration
+        :return: Devbox counts per agent name and total
+        :rtype: AgentDevboxCountsView
+        """
+        return await self._client.agents.devbox_counts(
+            **options,
+        )
 
 
 class AsyncScenarioOps:

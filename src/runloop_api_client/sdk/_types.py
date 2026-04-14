@@ -19,6 +19,7 @@ from ..types import (
     McpConfigListParams,
     ObjectDownloadParams,
     ScenarioUpdateParams,
+    AgentListPublicParams,
     BenchmarkCreateParams,
     BenchmarkUpdateParams,
     BlueprintCreateParams,
@@ -188,6 +189,10 @@ class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
 
 
 class SDKAgentListParams(AgentListParams, BaseRequestOptions):
+    pass
+
+
+class SDKAgentListPublicParams(AgentListPublicParams, BaseRequestOptions):
     pass
 
 
