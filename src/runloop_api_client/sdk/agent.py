@@ -7,6 +7,7 @@ from typing_extensions import Unpack, override
 
 from ._types import (
     BaseRequestOptions,
+    LongRequestOptions,
 )
 from .._client import Runloop
 from ..types.agent_view import AgentView
@@ -65,6 +66,21 @@ class Agent:
         :rtype: AgentView
         """
         return self._client.agents.retrieve(
+            self._id,
+            **options,
+        )
+
+    def delete(
+        self,
+        **options: Unpack[LongRequestOptions],
+    ) -> object:
+        """Delete this agent. This action is irreversible.
+
+        :param options: Optional request configuration
+        :return: API response acknowledging deletion
+        :rtype: object
+        """
+        return self._client.agents.delete(
             self._id,
             **options,
         )

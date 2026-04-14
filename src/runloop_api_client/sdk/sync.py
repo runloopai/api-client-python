@@ -28,6 +28,7 @@ from ._types import (
     SDKBenchmarkListParams,
     SDKBlueprintListParams,
     SDKMcpConfigListParams,
+    SDKAgentListPublicParams,
     SDKBenchmarkCreateParams,
     SDKBlueprintCreateParams,
     SDKMcpConfigCreateParams,
@@ -56,6 +57,7 @@ from .scenario_builder import ScenarioBuilder
 from ..types.secret_view import SecretView
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
+from ..types.agent_devbox_counts_view import AgentDevboxCountsView
 from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
 
@@ -829,6 +831,35 @@ class AgentOps:
             **params,
         )
         return [Agent(self._client, item.id, item) for item in page.agents]
+
+    def list_public(
+        self,
+        **params: Unpack[SDKAgentListPublicParams],
+    ) -> list[Agent]:
+        """List public agents.
+
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters
+        :return: Collection of public agent wrappers
+        :rtype: list[Agent]
+        """
+        page = self._client.agents.list_public(
+            **params,
+        )
+        return [Agent(self._client, item.id, item) for item in page.agents]
+
+    def devbox_counts(
+        self,
+        **options: Unpack[BaseRequestOptions],
+    ) -> AgentDevboxCountsView:
+        """Get devbox counts grouped by agent name.
+
+        :param options: Optional request configuration
+        :return: Devbox counts per agent name and total
+        :rtype: AgentDevboxCountsView
+        """
+        return self._client.agents.devbox_counts(
+            **options,
+        )
 
 
 class ScenarioOps:
