@@ -30,3 +30,9 @@ class BrokerMount(TypedDict, total=False):
 
     protocol: Optional[Literal["acp", "claude_json"]]
     """The protocol used by the broker to deliver events to the agent."""
+
+    working_directory: Optional[str]
+    """Working directory in which to launch the agent binary.
+
+    Defaults to the home directory if not specified.
+    """
