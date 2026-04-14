@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -835,7 +835,7 @@ class AgentOps:
     def list_public(
         self,
         **params: Unpack[SDKAgentListPublicParams],
-    ) -> list[Agent]:
+    ) -> List[Agent]:
         """List public agents.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters
