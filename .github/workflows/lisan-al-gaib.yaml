@@ -21,4 +21,8 @@ jobs:
           ecosystems: python,actions
           bypass-keyword: cve-fix
           python-lockfiles: '*.lock'
+          license-overrides: |
+            python:
+              apeye: ignore     # Only used by sphinx-toolbox for docs generation
+              cssutils: ignore  # Only used by sphinx-toolbox for docs generation
 
