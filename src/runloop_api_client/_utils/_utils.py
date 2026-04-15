@@ -344,26 +344,6 @@ def maybe_coerce_boolean(val: str | None) -> bool | None:
     return coerce_boolean(val)
 
 
-def removeprefix(string: str, prefix: str) -> str:
-    """Remove a prefix from a string.
-
-    Backport of `str.removeprefix` for Python < 3.9
-    """
-    if string.startswith(prefix):
-        return string[len(prefix) :]
-    return string
-
-
-def removesuffix(string: str, suffix: str) -> str:
-    """Remove a suffix from a string.
-
-    Backport of `str.removesuffix` for Python < 3.9
-    """
-    if string.endswith(suffix):
-        return string[: -len(suffix)]
-    return string
-
-
 def file_from_path(path: str) -> FileTypes:
     contents = Path(path).read_bytes()
     file_name = os.path.basename(path)
