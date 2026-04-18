@@ -37,8 +37,9 @@ from ...types import (
     devbox_snapshot_disk_async_params,
     devbox_write_file_contents_params,
 )
+from ..._files import deepcopy_with_paths
 from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
-from ..._utils import is_given, extract_files, path_template, maybe_transform, deepcopy_minimal, async_maybe_transform
+from ..._utils import is_given, extract_files, path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from .executions import (
     ExecutionsResource,
@@ -1607,11 +1608,12 @@ class DevboxesResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "path": path,
                 "file": file,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be
@@ -3241,11 +3243,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         if not is_given(timeout) and self._client.timeout == DEFAULT_TIMEOUT:
             timeout = 600
-        body = deepcopy_minimal(
+        body = deepcopy_with_paths(
             {
                 "path": path,
                 "file": file,
-            }
+            },
+            [["file"]],
         )
         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
         # It should be noted that the actual Content-Type header that will be

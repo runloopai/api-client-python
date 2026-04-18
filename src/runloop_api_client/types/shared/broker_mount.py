@@ -28,3 +28,9 @@ class BrokerMount(BaseModel):
 
     protocol: Optional[Literal["acp", "claude_json"]] = None
     """The protocol used by the broker to deliver events to the agent."""
+
+    working_directory: Optional[str] = None
+    """Working directory in which to launch the agent binary.
+
+    Defaults to the home directory if not specified.
+    """
