@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.20.0 (2026-04-18)
+
+Full Changelog: [v1.19.0...v1.20.0](https://github.com/runloopai/api-client-python/compare/v1.19.0...v1.20.0)
+
+### Features
+
+* add OO SDK support for new Agent API calls ([#786](https://github.com/runloopai/api-client-python/issues/786)) ([6197567](https://github.com/runloopai/api-client-python/commit/6197567bee84193beca7699b8616b46479607510))
+* **axon:** add working directory / directory to launch agent ([#8689](https://github.com/runloopai/api-client-python/issues/8689)) ([2097995](https://github.com/runloopai/api-client-python/commit/2097995f63b3e4334c6e6edb7d1c915f5447a9c9))
+
+
+### Performance Improvements
+
+* **client:** optimize file structure copying in multipart requests ([64f27ad](https://github.com/runloopai/api-client-python/commit/64f27adfc44ef5242b19637377c50073c8240538))
+
+
+### Chores
+
+* **tests:** bump steady to v0.22.1 ([c72f34d](https://github.com/runloopai/api-client-python/commit/c72f34dca3653010eb76a762a68519c996e74860))
+
 ## 1.19.0 (2026-04-13)
 
 Full Changelog: [v1.18.1...v1.19.0](https://github.com/runloopai/api-client-python/compare/v1.18.1...v1.19.0)
