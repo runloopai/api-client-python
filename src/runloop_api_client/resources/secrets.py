@@ -96,6 +96,40 @@ class SecretsResource(SyncAPIResource):
             cast_to=SecretView,
         )
 
+    def retrieve(
+        self,
+        name: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SecretView:
+        """Retrieve a Secret by name.
+
+        The secret value is not included for security.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not name:
+            raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
+        return self._get(
+            path_template("/v1/secrets/{name}", name=name),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SecretView,
+        )
+
     def update(
         self,
         name: str,
@@ -299,6 +333,40 @@ class AsyncSecretsResource(AsyncAPIResource):
             cast_to=SecretView,
         )
 
+    async def retrieve(
+        self,
+        name: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SecretView:
+        """Retrieve a Secret by name.
+
+        The secret value is not included for security.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not name:
+            raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
+        return await self._get(
+            path_template("/v1/secrets/{name}", name=name),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SecretView,
+        )
+
     async def update(
         self,
         name: str,
@@ -435,6 +503,9 @@ class SecretsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             secrets.create,
         )
+        self.retrieve = to_raw_response_wrapper(
+            secrets.retrieve,
+        )
         self.update = to_raw_response_wrapper(
             secrets.update,
         )
@@ -452,6 +523,9 @@ class AsyncSecretsResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             secrets.create,
+        )
+        self.retrieve = async_to_raw_response_wrapper(
+            secrets.retrieve,
         )
         self.update = async_to_raw_response_wrapper(
             secrets.update,
@@ -471,6 +545,9 @@ class SecretsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             secrets.create,
         )
+        self.retrieve = to_streamed_response_wrapper(
+            secrets.retrieve,
+        )
         self.update = to_streamed_response_wrapper(
             secrets.update,
         )
@@ -488,6 +565,9 @@ class AsyncSecretsResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             secrets.create,
+        )
+        self.retrieve = async_to_streamed_response_wrapper(
+            secrets.retrieve,
         )
         self.update = async_to_streamed_response_wrapper(
             secrets.update,
