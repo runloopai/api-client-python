@@ -23,8 +23,13 @@ class AgentView(BaseModel):
     name: str
     """The name of the Agent."""
 
-    version: str
-    """The version of the Agent. A semver string (e.g., '2.0.65') or a SHA."""
-
     source: Optional[AgentSource] = None
     """The source configuration for the Agent."""
+
+    version: Optional[str] = None
+    """Optional version identifier for the Agent.
+
+    For npm/pip sources this is typically a semver string (e.g. '2.0.65'). For git
+    sources it can be a branch or tag. Omitted for object sources or when not
+    provided.
+    """

@@ -50,8 +50,8 @@ class AgentsResource(SyncAPIResource):
         self,
         *,
         name: str,
-        version: str,
         source: Optional[AgentSource] | Omit = omit,
+        version: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -68,9 +68,11 @@ class AgentsResource(SyncAPIResource):
         Args:
           name: The name of the Agent.
 
-          version: The version of the Agent. Must be a semver string (e.g., '2.0.65') or a SHA.
-
           source: The source configuration for the Agent.
+
+          version: Optional version identifier for the Agent. For npm/pip sources this is typically
+              a semver string (e.g. '2.0.65'). For git sources it can be a branch or tag.
+              Semantics are user-defined for object sources.
 
           extra_headers: Send extra headers
 
@@ -87,8 +89,8 @@ class AgentsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
-                    "version": version,
                     "source": source,
+                    "version": version,
                 },
                 agent_create_params.AgentCreateParams,
             ),
@@ -357,8 +359,8 @@ class AsyncAgentsResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        version: str,
         source: Optional[AgentSource] | Omit = omit,
+        version: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -375,9 +377,11 @@ class AsyncAgentsResource(AsyncAPIResource):
         Args:
           name: The name of the Agent.
 
-          version: The version of the Agent. Must be a semver string (e.g., '2.0.65') or a SHA.
-
           source: The source configuration for the Agent.
+
+          version: Optional version identifier for the Agent. For npm/pip sources this is typically
+              a semver string (e.g. '2.0.65'). For git sources it can be a branch or tag.
+              Semantics are user-defined for object sources.
 
           extra_headers: Send extra headers
 
@@ -394,8 +398,8 @@ class AsyncAgentsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
-                    "version": version,
                     "source": source,
+                    "version": version,
                 },
                 agent_create_params.AgentCreateParams,
             ),
