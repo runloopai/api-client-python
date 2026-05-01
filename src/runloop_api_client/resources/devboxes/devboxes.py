@@ -72,7 +72,7 @@ from ...pagination import (
     AsyncDiskSnapshotsCursorIDPage,
 )
 from ..._exceptions import RunloopError, APIStatusError, APITimeoutError
-from ...lib.polling import PollingConfig, poll_until
+from ...lib.polling import PollingConfig, poll_until, retry_server_poll_until as sync_retry_server_poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
     DiskSnapshotsResource,
@@ -82,7 +82,7 @@ from .disk_snapshots import (
     DiskSnapshotsResourceWithStreamingResponse,
     AsyncDiskSnapshotsResourceWithStreamingResponse,
 )
-from ...lib.polling_async import async_poll_until, retry_server_poll_until
+from ...lib.polling_async import async_poll_until, async_retry_server_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
 from ...types.shared_params.mount import Mount
@@ -397,30 +397,31 @@ class DevboxesResource(SyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
 
-        def wait_for_devbox_status() -> DevboxView:
-            # This wait_for_status endpoint polls the devbox status for 10 seconds until it reaches either running or failure.
-            # If it's neither, it will throw an error.
-            return self._post(
-                f"/v1/devboxes/{id}/wait_for_status",
-                body={"statuses": ["running", "failure", "shutdown"]},
-                cast_to=DevboxView,
-            )
-
-        def handle_timeout_error(error: Exception) -> DevboxView:
-            # Handle timeout errors by returning current devbox state to continue polling
-            if isinstance(error, APITimeoutError) or (
-                isinstance(error, APIStatusError) and error.response.status_code == 408
-            ):
-                # Return a placeholder result to continue polling
-                return placeholder_devbox_view(id)
-
-            # Re-raise other errors to stop polling
-            raise error
+        def wait_for_devbox_status(remaining_timeout_seconds: float) -> DevboxView:
+            try:
+                return self._post(
+                    f"/v1/devboxes/{id}/wait_for_status",
+                    body={"statuses": ["running", "failure", "shutdown"], "timeout_seconds": remaining_timeout_seconds},
+                    cast_to=DevboxView,
+                    options={"max_retries": 0},
+                )
+            except (APITimeoutError, APIStatusError) as error:
+                if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+                    return placeholder_devbox_view(id)
+                raise
 
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = poll_until(wait_for_devbox_status, is_done_booting, polling_config, handle_timeout_error)
+        config = polling_config
+        if not config:
+            config = PollingConfig()
+
+        timeout = config.interval_seconds * config.max_attempts
+        if config.timeout_seconds is not None and config.timeout_seconds > 0:
+            timeout = min(config.timeout_seconds, timeout)
+
+        devbox = sync_retry_server_poll_until(wait_for_devbox_status, is_done_booting, timeout)
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
@@ -452,6 +453,7 @@ class DevboxesResource(SyncAPIResource):
                 f"/v1/devboxes/{id}/wait_for_status",
                 body={"statuses": list(DEVBOX_TERMINAL_STATES)},
                 cast_to=DevboxView,
+                options={"max_retries": 0},
             )
 
         def handle_timeout_error(error: Exception) -> DevboxView:
@@ -2063,6 +2065,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     f"/v1/devboxes/{id}/wait_for_status",
                     body={"statuses": ["running", "failure", "shutdown"], "timeout_seconds": remaining_timeout_seconds},
                     cast_to=DevboxView,
+                    options={"max_retries": 0},
                 )
             except (APITimeoutError, APIStatusError) as error:
                 # Handle timeout errors by returning current devbox state to continue polling
@@ -2088,7 +2091,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         if config.timeout_seconds is not None and config.timeout_seconds > 0:
             timeout = min(config.timeout_seconds, timeout)
 
-        devbox = await retry_server_poll_until(wait_for_devbox_status, is_done_booting, timeout)
+        devbox = await async_retry_server_poll_until(wait_for_devbox_status, is_done_booting, timeout)
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
@@ -2121,6 +2124,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     f"/v1/devboxes/{id}/wait_for_status",
                     body={"statuses": list(DEVBOX_TERMINAL_STATES)},
                     cast_to=DevboxView,
+                    options={"max_retries": 0},
                 )
             except (APITimeoutError, APIStatusError) as error:
                 if isinstance(error, APITimeoutError) or error.response.status_code == 408:

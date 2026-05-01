@@ -1,5 +1,5 @@
 import time
-from typing import Any, TypeVar, Callable, Optional
+from typing import Any, Union, TypeVar, Callable, Optional
 from dataclasses import dataclass
 
 T = TypeVar("T")
@@ -73,3 +73,46 @@ def poll_until(
                 raise PollingTimeout(f"Exceeded timeout of {config.timeout_seconds} seconds", last_result)
 
         time.sleep(config.interval_seconds)
+
+
+def retry_server_poll_until(
+    retriever: Callable[[float], T],
+    is_terminal: Callable[[T], bool],
+    timeout_seconds: float = 30.0,
+    on_error: Optional[Callable[[Exception], T]] = None,
+) -> T:
+    """
+    Retry a server-side long-poll until a condition is met or max timeout is reached.
+
+    Args:
+        retriever: Callable that takes the remaining timeout (seconds) and
+            returns the object to check.
+        is_terminal: Callable that returns True when polling should stop
+        timeout_seconds: Total time to wait.  Must be > 0
+        on_error: Optional error handler that can return a value to continue polling
+                 or re-raise the exception to stop polling
+
+    Returns:
+        The final state of the polled object
+
+    Raises:
+        PollingTimeout: When max attempts or timeout is reached
+    """
+    last_result: Union[T, None] = None
+    start_time = time.time()
+
+    while True:
+        remaining_time = timeout_seconds - (time.time() - start_time)
+        if remaining_time <= 0:
+            raise PollingTimeout(f"Exceeded timeout of {timeout_seconds} seconds", last_result)
+
+        try:
+            last_result = retriever(remaining_time)
+        except Exception as e:
+            if on_error is not None:
+                last_result = on_error(e)
+            else:
+                raise
+
+        if is_terminal(last_result):
+            return last_result
