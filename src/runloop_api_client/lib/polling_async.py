@@ -60,7 +60,7 @@ async def async_poll_until(
         await asyncio.sleep(config.interval_seconds)
 
 
-async def retry_server_poll_until(
+async def async_retry_server_poll_until(
     retriever: Callable[[float], Awaitable[T]],
     is_terminal: Callable[[T], bool],
     timeout_seconds: float = 30.0,
