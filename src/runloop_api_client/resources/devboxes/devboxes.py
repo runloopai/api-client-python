@@ -2055,7 +2055,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
 
-        async def wait_for_devbox_status(remaining_timeout_seconds) -> DevboxView:
+        async def wait_for_devbox_status(remaining_timeout_seconds: float) -> DevboxView:
             # This wait_for_status endpoint polls the devbox status for 10 seconds until it reaches either running or failure.
             # If it's neither, it will throw an error.
             try:
