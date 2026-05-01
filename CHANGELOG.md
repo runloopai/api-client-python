@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.20.1 (2026-05-01)
+
+Full Changelog: [v1.20.0...v1.20.1](https://github.com/runloopai/api-client-python/compare/v1.20.0...v1.20.1)
+
+### Documentation
+
+* add missing SDK operations to README-SDK ([#791](https://github.com/runloopai/api-client-python/issues/791)) ([98a746a](https://github.com/runloopai/api-client-python/commit/98a746a32075adcad2439edf751bcb2921cddfb5))
+
 ## 1.20.0 (2026-04-21)
 
 Full Changelog: [v1.19.0...v1.20.0](https://github.com/runloopai/api-client-python/compare/v1.19.0...v1.20.0)
