@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.20.2 (2026-05-01)
+
+Full Changelog: [v1.20.1...v1.20.2](https://github.com/runloopai/api-client-python/compare/v1.20.1...v1.20.2)
+
+### Bug Fixes
+
+* additional polling updates ([#794](https://github.com/runloopai/api-client-python/issues/794)) ([26e409a](https://github.com/runloopai/api-client-python/commit/26e409ae797bfde1bdac90abfd8fc58b6971e8a8))
+
 ## 1.20.1 (2026-05-01)
 
 Full Changelog: [v1.20.0...v1.20.1](https://github.com/runloopai/api-client-python/compare/v1.20.0...v1.20.1)
