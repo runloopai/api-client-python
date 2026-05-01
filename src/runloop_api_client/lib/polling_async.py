@@ -101,4 +101,3 @@ async def retry_server_poll_until(
 
         if is_terminal(last_result):
             return last_result
-

@@ -2061,8 +2061,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             try:
                 return await self._post(
                     f"/v1/devboxes/{id}/wait_for_status",
-                    body={"statuses": ["running", "failure", "shutdown"],
-                          "timeout_seconds": remaining_timeout_seconds },
+                    body={"statuses": ["running", "failure", "shutdown"], "timeout_seconds": remaining_timeout_seconds},
                     cast_to=DevboxView,
                 )
             except (APITimeoutError, APIStatusError) as error:
