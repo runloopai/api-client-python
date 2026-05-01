@@ -58,3 +58,48 @@ async def async_poll_until(
                 raise PollingTimeout(f"Exceeded timeout of {config.timeout_seconds} seconds", last_result)
 
         await asyncio.sleep(config.interval_seconds)
+
+
+async def retry_server_poll_until(
+    retriever: Callable[[], Awaitable[T]],
+    is_terminal: Callable[[T], bool],
+    timeout_seconds: float = 30.0,
+    on_error: Optional[Callable[[Exception], T]] = None,
+) -> T:
+    """
+    Retry a server-side long-poll until a condition is met or max timeout is reached.
+
+    Args:
+        retriever: Async or sync callable that returns the object to check.  This takes should
+          take one argument, which is the remaing time to poll.q
+        is_terminal: Callable that returns True when polling should stop
+        timeout_seconds: Total time to wait.  Must be > 0
+        on_error: Optional error handler that can return a value to continue polling
+                 or re-raise the exception to stop polling
+
+    Returns:
+        The final state of the polled object
+
+    Raises:
+        PollingTimeout: When max attempts or timeout is reached
+    """
+    start_time = time.time()
+    last_result: Union[T, None] = None
+
+    while True:
+        elapsed = time.time() - start_time
+        remaining_time = timeout_seconds - elapsed
+        if remaining_time <= 0:
+            raise PollingTimeout(f"Exceeded timeout of {timeout_seconds} seconds", last_result)
+
+        try:
+            last_result = await retriever(remaining_time)
+        except Exception as e:
+            if on_error is not None:
+                last_result = on_error(e)
+            else:
+                raise
+
+        if is_terminal(last_result):
+            return last_result
+

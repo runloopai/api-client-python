@@ -82,7 +82,7 @@ from .disk_snapshots import (
     DiskSnapshotsResourceWithStreamingResponse,
     AsyncDiskSnapshotsResourceWithStreamingResponse,
 )
-from ...lib.polling_async import async_poll_until
+from ...lib.polling_async import async_poll_until, retry_server_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
 from ...types.shared_params.mount import Mount
@@ -2042,11 +2042,10 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
         Args:
             id: The ID of the devbox to wait for
-            config: Optional polling configuration
+            polling_config: Optional polling configuration
             extra_headers: Send extra headers
             extra_query: Add additional query parameters to the request
             extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
 
         Returns:
             The devbox in running state
@@ -2056,13 +2055,14 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
 
-        async def wait_for_devbox_status() -> DevboxView:
+        async def wait_for_devbox_status(remaining_timeout_seconds) -> DevboxView:
             # This wait_for_status endpoint polls the devbox status for 10 seconds until it reaches either running or failure.
             # If it's neither, it will throw an error.
             try:
                 return await self._post(
                     f"/v1/devboxes/{id}/wait_for_status",
-                    body={"statuses": ["running", "failure", "shutdown"]},
+                    body={"statuses": ["running", "failure", "shutdown"],
+                          "timeout_seconds": remaining_timeout_seconds },
                     cast_to=DevboxView,
                 )
             except (APITimeoutError, APIStatusError) as error:
@@ -2077,7 +2077,19 @@ class AsyncDevboxesResource(AsyncAPIResource):
         def is_done_booting(devbox: DevboxView) -> bool:
             return devbox.status not in DEVBOX_BOOTING_STATES
 
-        devbox = await async_poll_until(wait_for_devbox_status, is_done_booting, polling_config)
+        # calculate the timeout to use.  The PollingConfig doesn't
+        # match the semantics for server-side polling well, so we
+        # instead convert interval*attempts to a total time, and take
+        # the minimum total.
+        config = polling_config
+        if not config:
+            config = PollingConfig()  # use defaults
+
+        timeout = config.interval_seconds * config.max_attempts
+        if config.timeout_seconds is not None and config.timeout_seconds > 0:
+            timeout = min(config.timeout_seconds, timeout)
+
+        devbox = await retry_server_poll_until(wait_for_devbox_status, is_done_booting, timeout)
 
         if devbox.status != "running":
             raise RunloopError(f"Devbox entered non-running terminal state: {devbox.status}")
