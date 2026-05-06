@@ -55,6 +55,44 @@ class TestSecrets:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
+    def test_method_retrieve(self, client: Runloop) -> None:
+        secret = client.secrets.retrieve(
+            "name",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_raw_response_retrieve(self, client: Runloop) -> None:
+        response = client.secrets.with_raw_response.retrieve(
+            "name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_streaming_response_retrieve(self, client: Runloop) -> None:
+        with client.secrets.with_streaming_response.retrieve(
+            "name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_retrieve(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `name` but received ''"):
+            client.secrets.with_raw_response.retrieve(
+                "",
+            )
+
+    @parametrize
     def test_method_update(self, client: Runloop) -> None:
         secret = client.secrets.update(
             name="name",
@@ -205,6 +243,44 @@ class TestAsyncSecrets:
             assert_matches_type(SecretView, secret, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_retrieve(self, async_client: AsyncRunloop) -> None:
+        secret = await async_client.secrets.retrieve(
+            "name",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_raw_response_retrieve(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.secrets.with_raw_response.retrieve(
+            "name",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = await response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_retrieve(self, async_client: AsyncRunloop) -> None:
+        async with async_client.secrets.with_streaming_response.retrieve(
+            "name",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = await response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_retrieve(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `name` but received ''"):
+            await async_client.secrets.with_raw_response.retrieve(
+                "",
+            )
 
     @parametrize
     async def test_method_update(self, async_client: AsyncRunloop) -> None:
