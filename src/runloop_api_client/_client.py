@@ -254,6 +254,7 @@ class Runloop(SyncAPIClient):
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
+        shared_http_pool: bool | None = None,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -283,16 +284,18 @@ class Runloop(SyncAPIClient):
             params = set_default_query
 
         if http_client is not None:
-            shared_http_pool = False
+            resolved_shared = False
+        elif shared_http_pool is not None:
+            resolved_shared = shared_http_pool
         else:
-            shared_http_pool = self._uses_shared_pool
+            resolved_shared = self._uses_shared_pool
 
         return self.__class__(
             bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
-            shared_http_pool=shared_http_pool,
+            shared_http_pool=resolved_shared,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,
@@ -524,6 +527,7 @@ class AsyncRunloop(AsyncAPIClient):
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
+        shared_http_pool: bool | None = None,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -553,16 +557,18 @@ class AsyncRunloop(AsyncAPIClient):
             params = set_default_query
 
         if http_client is not None:
-            shared_http_pool = False
+            resolved_shared = False
+        elif shared_http_pool is not None:
+            resolved_shared = shared_http_pool
         else:
-            shared_http_pool = self._uses_shared_pool
+            resolved_shared = self._uses_shared_pool
 
         return self.__class__(
             bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
-            shared_http_pool=shared_http_pool,
+            shared_http_pool=resolved_shared,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,

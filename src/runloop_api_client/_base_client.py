@@ -856,6 +856,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _client: httpx.Client
     _default_stream_cls: type[Stream[Any]] | None = None
     _uses_shared_pool: bool
+    _closed: bool
 
     def __init__(
         self,
@@ -899,6 +900,8 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             _strict_response_validation=_strict_response_validation,
         )
 
+        self._closed = False
+
         if http_client is not None:
             self._client = http_client
             self._uses_shared_pool = False
@@ -922,7 +925,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             self._uses_shared_pool = False
 
     def is_closed(self) -> bool:
-        return self._client.is_closed
+        return self._closed or self._client.is_closed
 
     def close(self) -> None:
         """Close the underlying HTTPX client.
@@ -931,6 +934,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         """
         if not hasattr(self, "_client"):
             return
+        self._closed = True
         if self._uses_shared_pool:
             self._release_shared_pool()
         else:
@@ -1511,6 +1515,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _client: httpx.AsyncClient
     _default_stream_cls: type[AsyncStream[Any]] | None = None
     _uses_shared_pool: bool
+    _closed: bool
 
     def __init__(
         self,
@@ -1554,6 +1559,8 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             _strict_response_validation=_strict_response_validation,
         )
 
+        self._closed = False
+
         if http_client is not None:
             self._client = http_client
             self._uses_shared_pool = False
@@ -1577,13 +1584,16 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             self._uses_shared_pool = False
 
     def is_closed(self) -> bool:
-        return self._client.is_closed
+        return self._closed or self._client.is_closed
 
     async def close(self) -> None:
         """Close the underlying HTTPX client.
 
         The client will *not* be usable after this.
         """
+        if not hasattr(self, "_client"):
+            return
+        self._closed = True
         if self._uses_shared_pool:
             self._release_shared_pool()
         else:
