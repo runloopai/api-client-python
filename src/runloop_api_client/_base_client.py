@@ -92,24 +92,87 @@ from ._utils._json import openapi_dumps
 
 log: logging.Logger = logging.getLogger(__name__)
 
-# Shared HTTP connection pool state. One pool per client type (sync/async),
-# refcounted so the pool is closed when the last SDK client releases it.
-# The async pool is keyed by event loop because httpx.AsyncClient binds to
-# the loop that created it and cannot be reused across asyncio.run() calls.
+# Shared HTTP transport state. We share transports (connection pools) rather
+# than full httpx clients so each SDK instance keeps its own cookie jar and
+# mutable client state. Refcounted wrappers close the real transport only
+# when the last user releases it.
+# The async transport is keyed by event loop because connections bind to the
+# loop that created them and cannot be reused across asyncio.run() calls.
 _pool_lock = threading.Lock()
-_shared_sync_client: httpx.Client | None = None
-_shared_sync_refcount: int = 0
 
 
-class _AsyncPoolState:
-    __slots__ = ("client", "refcount")
+class _SharedTransport(httpx.BaseTransport):
+    """Refcounted wrapper: delegates to a real transport, closes it when refcount hits 0."""
 
-    def __init__(self, client: httpx.AsyncClient) -> None:
-        self.client = client
-        self.refcount = 1
+    def __init__(self, transport: httpx.BaseTransport) -> None:
+        self._transport = transport
+        self._refcount = 1
+        self._lock = threading.Lock()
+
+    @property
+    def refcount(self) -> int:
+        return self._refcount
+
+    def acquire(self) -> bool:
+        with self._lock:
+            if self._refcount <= 0:
+                return False
+            self._refcount += 1
+            return True
+
+    @override
+    def handle_request(self, request: httpx.Request) -> httpx.Response:
+        return self._transport.handle_request(request)
+
+    @override
+    def close(self) -> None:
+        should_close = False
+        with self._lock:
+            self._refcount -= 1
+            if self._refcount <= 0:
+                should_close = True
+        if should_close:
+            self._transport.close()
 
 
-_async_pools: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _AsyncPoolState] = weakref.WeakKeyDictionary()
+class _SharedAsyncTransport(httpx.AsyncBaseTransport):
+    """Async refcounted wrapper: delegates to a real async transport."""
+
+    def __init__(self, transport: httpx.AsyncBaseTransport) -> None:
+        self._transport = transport
+        self._refcount = 1
+        self._lock = threading.Lock()
+
+    @property
+    def refcount(self) -> int:
+        return self._refcount
+
+    def acquire(self) -> bool:
+        with self._lock:
+            if self._refcount <= 0:
+                return False
+            self._refcount += 1
+            return True
+
+    @override
+    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+        return await self._transport.handle_async_request(request)
+
+    @override
+    async def aclose(self) -> None:
+        should_close = False
+        with self._lock:
+            self._refcount -= 1
+            if self._refcount <= 0:
+                should_close = True
+        if should_close:
+            await self._transport.aclose()
+
+
+_shared_sync_transport: _SharedTransport | None = None
+_shared_async_transports: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _SharedAsyncTransport] = (
+    weakref.WeakKeyDictionary()
+)
 
 # TODO: make base page type vars covariant
 SyncPageT = TypeVar("SyncPageT", bound="BaseSyncPage[Any]")
@@ -918,16 +981,17 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             self._client = http_client
             self._uses_shared_pool = False
         elif shared_http_pool:
-            global _shared_sync_client, _shared_sync_refcount
+            global _shared_sync_transport
             with _pool_lock:
-                if _shared_sync_client is None or _shared_sync_client.is_closed:
-                    _shared_sync_client = SyncHttpxClientWrapper(
-                        base_url=base_url,
-                        timeout=cast(Timeout, timeout),
+                if _shared_sync_transport is None or not _shared_sync_transport.acquire():
+                    _shared_sync_transport = _SharedTransport(
+                        httpx.HTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
                     )
-                    _shared_sync_refcount = 0
-                _shared_sync_refcount += 1
-                self._client = _shared_sync_client
+            self._client = SyncHttpxClientWrapper(
+                base_url=base_url,
+                timeout=cast(Timeout, timeout),
+                transport=_shared_sync_transport,
+            )
             self._uses_shared_pool = True
         else:
             self._client = SyncHttpxClientWrapper(
@@ -946,38 +1010,10 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         """
         if not hasattr(self, "_client"):
             return
-        self._closed = True
-        if self._uses_shared_pool:
-            self._release_shared_pool()
-        else:
-            self._client.close()
-
-    def _release_shared_pool(self) -> None:
-        global _shared_sync_client, _shared_sync_refcount
-        with _pool_lock:
-            if not self._uses_shared_pool:
-                return
-            self._uses_shared_pool = False
-            _shared_sync_refcount -= 1
-            if _shared_sync_refcount <= 0:
-                client = _shared_sync_client
-                _shared_sync_client = None
-                _shared_sync_refcount = 0
-            else:
-                client = None
-        if client is not None:
-            try:
-                client.close()
-            except Exception:
-                pass
-
-    def __del__(self) -> None:
-        if not getattr(self, "_uses_shared_pool", False):
+        if self._closed:
             return
-        try:
-            self._release_shared_pool()
-        except Exception:
-            pass
+        self._closed = True
+        self._client.close()
 
     def __enter__(self: _T) -> _T:
         return self
@@ -1528,7 +1564,6 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _default_stream_cls: type[AsyncStream[Any]] | None = None
     _uses_shared_pool: bool
     _closed: bool
-    _pool_loop: asyncio.AbstractEventLoop | None
 
     def __init__(
         self,
@@ -1573,38 +1608,43 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         )
 
         self._closed = False
-        self._pool_loop = None
 
         if http_client is not None:
             self._client = http_client
             self._uses_shared_pool = False
         elif shared_http_pool:
-            self._acquire_shared_pool(base_url, cast(Timeout, timeout))
+            try:
+                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+            if loop is not None:
+                with _pool_lock:
+                    existing = _shared_async_transports.get(loop)
+                    if existing is not None and existing.acquire():
+                        transport: _SharedAsyncTransport = existing
+                    else:
+                        transport = _SharedAsyncTransport(
+                            httpx.AsyncHTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
+                        )
+                        _shared_async_transports[loop] = transport
+                self._client = AsyncHttpxClientWrapper(
+                    base_url=base_url,
+                    timeout=cast(Timeout, timeout),
+                    transport=transport,
+                )
+                self._uses_shared_pool = True
+            else:
+                self._client = AsyncHttpxClientWrapper(
+                    base_url=base_url,
+                    timeout=cast(Timeout, timeout),
+                )
+                self._uses_shared_pool = False
         else:
             self._client = AsyncHttpxClientWrapper(
                 base_url=base_url,
                 timeout=cast(Timeout, timeout),
             )
             self._uses_shared_pool = False
-
-    def _acquire_shared_pool(self, base_url: str | URL, timeout: Timeout) -> None:
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
-        with _pool_lock:
-            pool_state = _async_pools.get(loop) if loop is not None else None
-            if pool_state is None or pool_state.client.is_closed:
-                pool_state = _AsyncPoolState(
-                    AsyncHttpxClientWrapper(base_url=base_url, timeout=timeout),
-                )
-                if loop is not None:
-                    _async_pools[loop] = pool_state
-            else:
-                pool_state.refcount += 1
-            self._client = pool_state.client
-        self._pool_loop = loop
-        self._uses_shared_pool = True
 
     def is_closed(self) -> bool:
         return self._closed or self._client.is_closed
@@ -1616,63 +1656,10 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         """
         if not hasattr(self, "_client"):
             return
-        self._closed = True
-        if self._uses_shared_pool:
-            await self._release_shared_pool()
-        else:
-            await self._client.aclose()
-
-    async def _release_shared_pool(self) -> None:
-        client: httpx.AsyncClient | None = None
-        with _pool_lock:
-            if not self._uses_shared_pool:
-                return
-            self._uses_shared_pool = False
-            loop = self._pool_loop
-            if loop is None:
-                return
-            pool = _async_pools.get(loop)
-            if pool is not None:
-                pool.refcount -= 1
-                if pool.refcount <= 0:
-                    client = pool.client
-                    del _async_pools[loop]
-        if client is not None:
-            try:
-                await client.aclose()
-            except Exception:
-                pass
-
-    def _release_shared_pool_sync(self) -> None:
-        """Best-effort synchronous release for use in __del__."""
-        client: httpx.AsyncClient | None = None
-        with _pool_lock:
-            if not self._uses_shared_pool:
-                return
-            self._uses_shared_pool = False
-            loop = self._pool_loop
-            if loop is None:
-                return
-            pool = _async_pools.get(loop)
-            if pool is not None:
-                pool.refcount -= 1
-                if pool.refcount <= 0:
-                    client = pool.client
-                    del _async_pools[loop]
-        if client is not None:
-            try:
-                running_loop = asyncio.get_running_loop()
-                running_loop.create_task(client.aclose())
-            except Exception:
-                pass
-
-    def __del__(self) -> None:
-        if not getattr(self, "_uses_shared_pool", False):
+        if self._closed:
             return
-        try:
-            self._release_shared_pool_sync()
-        except Exception:
-            pass
+        self._closed = True
+        await self._client.aclose()
 
     async def __aenter__(self: _T) -> _T:
         return self

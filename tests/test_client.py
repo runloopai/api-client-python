@@ -32,7 +32,9 @@ from runloop_api_client._base_client import (
     DefaultHttpxClient,
     DefaultAsyncHttpxClient,
     get_platform,
+    _SharedTransport,
     make_request_options,
+    _SharedAsyncTransport,
 )
 
 from .utils import update_env
@@ -105,7 +107,9 @@ async def _make_async_iterator(iterable: Iterable[T], counter: Optional[Counter]
 
 def _get_open_connections(client: Runloop | AsyncRunloop) -> int:
     transport = client._client._transport
-    assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
+    if isinstance(transport, (_SharedTransport, _SharedAsyncTransport)):
+        transport = transport._transport
+    assert isinstance(transport, (httpx.HTTPTransport, httpx.AsyncHTTPTransport))
 
     pool = transport._pool
     return len(pool._requests)
