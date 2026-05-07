@@ -292,16 +292,16 @@ class TestAsyncCrossLoop:
     def test_separate_loops_get_separate_transports(self):
         """Clients created in different asyncio.run() calls must not share a transport."""
 
-        async def create_client() -> int:
+        async def create_client() -> Any:
             c = _make_async_client(shared_http_pool=True)
-            transport_id = id(_get_transport(c))
+            transport = _get_transport(c)
             await c.close()
-            return transport_id
+            return transport
 
-        id1 = asyncio.run(create_client())
-        id2 = asyncio.run(create_client())
+        t1 = asyncio.run(create_client())
+        t2 = asyncio.run(create_client())
 
-        assert id1 != id2, "each loop should get its own transport"
+        assert t1 is not t2, "each loop should get its own transport"
 
     def test_same_loop_shares_transport(self):
         """Clients created in the same asyncio.run() must share a transport."""
