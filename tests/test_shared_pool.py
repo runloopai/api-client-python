@@ -7,6 +7,7 @@ transport, and that refcounting correctly manages the pool lifecycle.
 from __future__ import annotations
 
 import os
+import asyncio
 from typing import Any, Iterator
 
 import httpx
@@ -36,10 +37,7 @@ def _clear_pool_state() -> None:
         _base_mod._shared_sync_client = None
         _base_mod._shared_sync_refcount = 0
 
-        if _base_mod._shared_async_client is not None and not _base_mod._shared_async_client.is_closed:
-            pass  # async close is best-effort in sync context
-        _base_mod._shared_async_client = None
-        _base_mod._shared_async_refcount = 0
+        _base_mod._async_pools.clear()
 
 
 def _make_client(**kwargs: Any) -> Runloop:
@@ -193,7 +191,7 @@ class TestSyncCopy:
 
 
 class TestAsyncSharedPool:
-    def test_shared_pool_uses_same_client(self):
+    async def test_shared_pool_uses_same_client(self):
         c1 = _make_async_client(shared_http_pool=True)
         c2 = _make_async_client(shared_http_pool=True)
 
@@ -215,45 +213,80 @@ class TestAsyncSharedPool:
         assert c1._client is custom
         assert c1._uses_shared_pool is False
 
-    def test_default_is_shared(self):
+    async def test_default_is_shared(self):
         c1 = _make_async_client()
         assert c1._uses_shared_pool is True
 
 
+def _async_pool_refcount(loop: asyncio.AbstractEventLoop | None) -> int:
+    pool = _base_mod._async_pools.get(loop) if loop is not None else None
+    return pool.refcount if pool is not None else 0
+
+
 class TestAsyncRefcounting:
-    def test_close_one_keeps_pool_alive(self):
+    async def test_close_one_keeps_pool_alive(self):
         c1 = _make_async_client(shared_http_pool=True)
         c2 = _make_async_client(shared_http_pool=True)
+        loop = c1._pool_loop
 
-        # Release c1's ref synchronously (the release_shared_pool is sync)
-        c1._release_shared_pool()
-        assert _base_mod._shared_async_refcount == 1
-        assert _base_mod._shared_async_client is not None
+        c1._release_shared_pool_sync()
+        assert _async_pool_refcount(loop) == 1
 
-        c2._release_shared_pool()
-        assert _base_mod._shared_async_refcount == 0
-        assert _base_mod._shared_async_client is None
+        c2._release_shared_pool_sync()
+        assert _async_pool_refcount(loop) == 0
 
-    def test_double_release_is_safe(self):
+    async def test_double_release_is_safe(self):
         c1 = _make_async_client(shared_http_pool=True)
-        c1._release_shared_pool()
-        c1._release_shared_pool()  # should not raise or go negative
-        assert _base_mod._shared_async_refcount == 0
+        c1._release_shared_pool_sync()
+        c1._release_shared_pool_sync()  # should not raise or go negative
+        assert _async_pool_refcount(c1._pool_loop) == 0
 
 
 class TestAsyncCopy:
-    def test_copy_inherits_shared_pool(self):
+    async def test_copy_inherits_shared_pool(self):
         c1 = _make_async_client(shared_http_pool=True)
         c2 = c1.copy()
+        loop = c1._pool_loop
 
         assert c2._uses_shared_pool is True
         assert c2._client is c1._client
-        assert _base_mod._shared_async_refcount == 2
+        assert _async_pool_refcount(loop) == 2
 
-    def test_copy_with_custom_client_disables_sharing(self):
+    async def test_copy_with_custom_client_disables_sharing(self):
         c1 = _make_async_client(shared_http_pool=True)
         custom = httpx.AsyncClient()
         c2 = c1.copy(http_client=custom)
 
         assert c2._uses_shared_pool is False
         assert c2._client is custom
+
+
+class TestAsyncCrossLoop:
+    def test_separate_loops_get_separate_pools(self):
+        """Clients created in different asyncio.run() calls must not share a pool."""
+
+        async def create_client() -> int:
+            c = _make_async_client(shared_http_pool=True)
+            client_id = id(c._client)
+            await c.close()
+            return client_id
+
+        id1 = asyncio.run(create_client())
+        id2 = asyncio.run(create_client())
+
+        assert id1 != id2, "each loop should get its own httpx.AsyncClient"
+
+    def test_same_loop_shares_pool(self):
+        """Clients created in the same asyncio.run() must share a pool."""
+
+        async def create_two() -> tuple[int, int]:
+            c1 = _make_async_client(shared_http_pool=True)
+            c2 = _make_async_client(shared_http_pool=True)
+            id1 = id(c1._client)
+            id2 = id(c2._client)
+            await c1.close()
+            await c2.close()
+            return id1, id2
+
+        id1, id2 = asyncio.run(create_two())
+        assert id1 == id2
