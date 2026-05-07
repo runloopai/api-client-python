@@ -7,6 +7,7 @@ transport, and that refcounting correctly manages the pool lifecycle.
 from __future__ import annotations
 
 import os
+from typing import Any, Iterator
 
 import httpx
 import pytest
@@ -19,14 +20,13 @@ bearer_token = "My Bearer Token"
 
 
 @pytest.fixture(autouse=True)
-def _reset_shared_pool():
-    """Reset module-level shared pool state before and after each test."""
+def _reset_shared_pool() -> Iterator[None]:  # pyright: ignore[reportUnusedFunction]
     _clear_pool_state()
     yield
     _clear_pool_state()
 
 
-def _clear_pool_state():
+def _clear_pool_state() -> None:
     with _base_mod._pool_lock:
         if _base_mod._shared_sync_client is not None and not _base_mod._shared_sync_client.is_closed:
             try:
@@ -42,13 +42,13 @@ def _clear_pool_state():
         _base_mod._shared_async_refcount = 0
 
 
-def _make_client(**kwargs) -> Runloop:
+def _make_client(**kwargs: Any) -> Runloop:
     kwargs.setdefault("base_url", base_url)
     kwargs.setdefault("bearer_token", bearer_token)
     return Runloop(**kwargs)
 
 
-def _make_async_client(**kwargs) -> AsyncRunloop:
+def _make_async_client(**kwargs: Any) -> AsyncRunloop:
     kwargs.setdefault("base_url", base_url)
     kwargs.setdefault("bearer_token", bearer_token)
     return AsyncRunloop(**kwargs)
