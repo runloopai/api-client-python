@@ -10,6 +10,7 @@ import inspect
 import logging
 import platform
 import warnings
+import threading
 import email.utils
 from types import TracebackType
 from random import random
@@ -89,6 +90,14 @@ from ._exceptions import (
 from ._utils._json import openapi_dumps
 
 log: logging.Logger = logging.getLogger(__name__)
+
+# Shared HTTP connection pool state. One pool per client type (sync/async),
+# refcounted so the pool is closed when the last SDK client releases it.
+_pool_lock = threading.Lock()
+_shared_sync_client: httpx.Client | None = None
+_shared_sync_refcount: int = 0
+_shared_async_client: httpx.AsyncClient | None = None
+_shared_async_refcount: int = 0
 
 # TODO: make base page type vars covariant
 SyncPageT = TypeVar("SyncPageT", bound="BaseSyncPage[Any]")
@@ -816,6 +825,7 @@ class _DefaultHttpxClient(httpx.Client):
         kwargs.setdefault("timeout", DEFAULT_TIMEOUT)
         kwargs.setdefault("limits", DEFAULT_CONNECTION_LIMITS)
         kwargs.setdefault("follow_redirects", True)
+        kwargs.setdefault("http2", True)
         super().__init__(**kwargs)
 
 
@@ -845,6 +855,7 @@ class SyncHttpxClientWrapper(DefaultHttpxClient):
 class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _client: httpx.Client
     _default_stream_cls: type[Stream[Any]] | None = None
+    _uses_shared_pool: bool
 
     def __init__(
         self,
@@ -857,6 +868,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         custom_headers: Mapping[str, str] | None = None,
         custom_query: Mapping[str, object] | None = None,
         _strict_response_validation: bool,
+        shared_http_pool: bool = True,
     ) -> None:
         if not is_given(timeout):
             # if the user passed in a custom http client with a non-default
@@ -886,11 +898,28 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             custom_headers=custom_headers,
             _strict_response_validation=_strict_response_validation,
         )
-        self._client = http_client or SyncHttpxClientWrapper(
-            base_url=base_url,
-            # cast to a valid type because mypy doesn't understand our type narrowing
-            timeout=cast(Timeout, timeout),
-        )
+
+        if http_client is not None:
+            self._client = http_client
+            self._uses_shared_pool = False
+        elif shared_http_pool:
+            global _shared_sync_client, _shared_sync_refcount
+            with _pool_lock:
+                if _shared_sync_client is None or _shared_sync_client.is_closed:
+                    _shared_sync_client = SyncHttpxClientWrapper(
+                        base_url=base_url,
+                        timeout=cast(Timeout, timeout),
+                    )
+                    _shared_sync_refcount = 0
+                _shared_sync_refcount += 1
+                self._client = _shared_sync_client
+            self._uses_shared_pool = True
+        else:
+            self._client = SyncHttpxClientWrapper(
+                base_url=base_url,
+                timeout=cast(Timeout, timeout),
+            )
+            self._uses_shared_pool = False
 
     def is_closed(self) -> bool:
         return self._client.is_closed
@@ -900,10 +929,39 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
 
         The client will *not* be usable after this.
         """
-        # If an error is thrown while constructing a client, self._client
-        # may not be present
-        if hasattr(self, "_client"):
+        if not hasattr(self, "_client"):
+            return
+        if self._uses_shared_pool:
+            self._release_shared_pool()
+        else:
             self._client.close()
+
+    def _release_shared_pool(self) -> None:
+        global _shared_sync_client, _shared_sync_refcount
+        with _pool_lock:
+            if not self._uses_shared_pool:
+                return
+            self._uses_shared_pool = False
+            _shared_sync_refcount -= 1
+            if _shared_sync_refcount <= 0:
+                client = _shared_sync_client
+                _shared_sync_client = None
+                _shared_sync_refcount = 0
+            else:
+                client = None
+        if client is not None:
+            try:
+                client.close()
+            except Exception:
+                pass
+
+    def __del__(self) -> None:
+        if not getattr(self, "_uses_shared_pool", False):
+            return
+        try:
+            self._release_shared_pool()
+        except Exception:
+            pass
 
     def __enter__(self: _T) -> _T:
         return self
@@ -1018,6 +1076,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                         max_retries=max_retries,
                         options=input_options,
                         response=None,
+                        error=err,
                     )
                     continue
 
@@ -1032,6 +1091,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                         max_retries=max_retries,
                         options=input_options,
                         response=None,
+                        error=err,
                     )
                     continue
 
@@ -1083,7 +1143,13 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         )
 
     def _sleep_for_retry(
-        self, *, retries_taken: int, max_retries: int, options: FinalRequestOptions, response: httpx.Response | None
+        self,
+        *,
+        retries_taken: int,
+        max_retries: int,
+        options: FinalRequestOptions,
+        response: httpx.Response | None,
+        error: BaseException | None = None,
     ) -> None:
         remaining_retries = max_retries - retries_taken
         if remaining_retries == 1:
@@ -1092,7 +1158,23 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             log.debug("%i retries left", remaining_retries)
 
         timeout = self._calculate_retry_timeout(remaining_retries, options, response.headers if response else None)
-        log.info("Retrying request to %s in %f seconds", options.url, timeout)
+        if response is not None:
+            log.info(
+                "Retrying request to %s in %f seconds (status %d)",
+                options.url,
+                timeout,
+                response.status_code,
+            )
+        elif error is not None:
+            log.info(
+                "Retrying request to %s in %f seconds (%s: %s)",
+                options.url,
+                timeout,
+                type(error).__name__,
+                error,
+            )
+        else:
+            log.info("Retrying request to %s in %f seconds", options.url, timeout)
 
         time.sleep(timeout)
 
@@ -1428,6 +1510,7 @@ class AsyncHttpxClientWrapper(DefaultAsyncHttpxClient):
 class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _client: httpx.AsyncClient
     _default_stream_cls: type[AsyncStream[Any]] | None = None
+    _uses_shared_pool: bool
 
     def __init__(
         self,
@@ -1440,6 +1523,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         http_client: httpx.AsyncClient | None = None,
         custom_headers: Mapping[str, str] | None = None,
         custom_query: Mapping[str, object] | None = None,
+        shared_http_pool: bool = True,
     ) -> None:
         if not is_given(timeout):
             # if the user passed in a custom http client with a non-default
@@ -1469,11 +1553,28 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             custom_headers=custom_headers,
             _strict_response_validation=_strict_response_validation,
         )
-        self._client = http_client or AsyncHttpxClientWrapper(
-            base_url=base_url,
-            # cast to a valid type because mypy doesn't understand our type narrowing
-            timeout=cast(Timeout, timeout),
-        )
+
+        if http_client is not None:
+            self._client = http_client
+            self._uses_shared_pool = False
+        elif shared_http_pool:
+            global _shared_async_client, _shared_async_refcount
+            with _pool_lock:
+                if _shared_async_client is None or _shared_async_client.is_closed:
+                    _shared_async_client = AsyncHttpxClientWrapper(
+                        base_url=base_url,
+                        timeout=cast(Timeout, timeout),
+                    )
+                    _shared_async_refcount = 0
+                _shared_async_refcount += 1
+                self._client = _shared_async_client
+            self._uses_shared_pool = True
+        else:
+            self._client = AsyncHttpxClientWrapper(
+                base_url=base_url,
+                timeout=cast(Timeout, timeout),
+            )
+            self._uses_shared_pool = False
 
     def is_closed(self) -> bool:
         return self._client.is_closed
@@ -1483,7 +1584,39 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
 
         The client will *not* be usable after this.
         """
-        await self._client.aclose()
+        if self._uses_shared_pool:
+            self._release_shared_pool()
+        else:
+            await self._client.aclose()
+
+    def _release_shared_pool(self) -> None:
+        global _shared_async_client, _shared_async_refcount
+        should_close = False
+        client = None
+        with _pool_lock:
+            if not self._uses_shared_pool:
+                return
+            self._uses_shared_pool = False
+            _shared_async_refcount -= 1
+            if _shared_async_refcount <= 0:
+                client = _shared_async_client
+                _shared_async_client = None
+                _shared_async_refcount = 0
+                should_close = True
+        if should_close and client is not None:
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(client.aclose())
+            except Exception:
+                pass
+
+    def __del__(self) -> None:
+        if not getattr(self, "_uses_shared_pool", False):
+            return
+        try:
+            self._release_shared_pool()
+        except Exception:
+            pass
 
     async def __aenter__(self: _T) -> _T:
         return self
@@ -1603,6 +1736,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                         max_retries=max_retries,
                         options=input_options,
                         response=None,
+                        error=err,
                     )
                     continue
 
@@ -1617,6 +1751,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                         max_retries=max_retries,
                         options=input_options,
                         response=None,
+                        error=err,
                     )
                     continue
 
@@ -1668,7 +1803,13 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         )
 
     async def _sleep_for_retry(
-        self, *, retries_taken: int, max_retries: int, options: FinalRequestOptions, response: httpx.Response | None
+        self,
+        *,
+        retries_taken: int,
+        max_retries: int,
+        options: FinalRequestOptions,
+        response: httpx.Response | None,
+        error: BaseException | None = None,
     ) -> None:
         remaining_retries = max_retries - retries_taken
         if remaining_retries == 1:
@@ -1677,7 +1818,23 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             log.debug("%i retries left", remaining_retries)
 
         timeout = self._calculate_retry_timeout(remaining_retries, options, response.headers if response else None)
-        log.info("Retrying request to %s in %f seconds", options.url, timeout)
+        if response is not None:
+            log.info(
+                "Retrying request to %s in %f seconds (status %d)",
+                options.url,
+                timeout,
+                response.status_code,
+            )
+        elif error is not None:
+            log.info(
+                "Retrying request to %s in %f seconds (%s: %s)",
+                options.url,
+                timeout,
+                type(error).__name__,
+                error,
+            )
+        else:
+            log.info("Retrying request to %s in %f seconds", options.url, timeout)
 
         await anyio.sleep(timeout)
 
