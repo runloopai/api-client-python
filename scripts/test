@@ -13,6 +13,28 @@ function steady_is_running() {
   curl --silent "http://127.0.0.1:4010/_x-steady/health" >/dev/null 2>&1
 }
 
+find_pids_on_port_via_proc() {
+  # Parse /proc/net/tcp{,6} to find socket inodes listening on the port,
+  # then scan /proc/*/fd/ to find which pids own those sockets.
+  local port_hex
+  port_hex=$(printf '%04X' "$1")
+  local inodes
+  inodes=$(awk -v ph="$port_hex" '$2 ~ ":"ph"$" && $4 == "0A" {print $10}' /proc/net/tcp /proc/net/tcp6 2>/dev/null | sort -u)
+  [ -z "$inodes" ] && return
+  local pids=""
+  for inode in $inodes; do
+    for fd in /proc/[0-9]*/fd/*; do
+      if [ "$(readlink "$fd" 2>/dev/null)" = "socket:[$inode]" ]; then
+        local pid="${fd#/proc/}"
+        pid="${pid%%/fd/*}"
+        pids="$pids $pid"
+        break
+      fi
+    done
+  done
+  echo "$pids" | xargs
+}
+
 kill_server_on_port() {
   if command -v lsof >/dev/null 2>&1; then
     pids=$(lsof -t -i tcp:"$1" || echo "")
@@ -20,6 +42,8 @@ kill_server_on_port() {
     pids=$(ss -tlnp "sport = :$1" 2>/dev/null | grep -oP 'pid=\K[0-9]+' || echo "")
   elif command -v fuser >/dev/null 2>&1; then
     pids=$(fuser "$1/tcp" 2>/dev/null || echo "")
+  elif [ -d /proc/net ]; then
+    pids=$(find_pids_on_port_via_proc "$1")
   else
     echo "Warning: no tool available to find processes on port $1"
     return
