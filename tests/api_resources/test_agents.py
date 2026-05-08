@@ -25,7 +25,6 @@ class TestAgents:
     def test_method_create(self, client: Runloop) -> None:
         agent = client.agents.create(
             name="name",
-            version="version",
         )
         assert_matches_type(AgentView, agent, path=["response"])
 
@@ -33,7 +32,6 @@ class TestAgents:
     def test_method_create_with_all_params(self, client: Runloop) -> None:
         agent = client.agents.create(
             name="name",
-            version="version",
             source={
                 "type": "type",
                 "git": {
@@ -56,6 +54,7 @@ class TestAgents:
                     "registry_url": "registry_url",
                 },
             },
+            version="version",
         )
         assert_matches_type(AgentView, agent, path=["response"])
 
@@ -63,7 +62,6 @@ class TestAgents:
     def test_raw_response_create(self, client: Runloop) -> None:
         response = client.agents.with_raw_response.create(
             name="name",
-            version="version",
         )
 
         assert response.is_closed is True
@@ -75,7 +73,6 @@ class TestAgents:
     def test_streaming_response_create(self, client: Runloop) -> None:
         with client.agents.with_streaming_response.create(
             name="name",
-            version="version",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -271,7 +268,6 @@ class TestAsyncAgents:
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         agent = await async_client.agents.create(
             name="name",
-            version="version",
         )
         assert_matches_type(AgentView, agent, path=["response"])
 
@@ -279,7 +275,6 @@ class TestAsyncAgents:
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:
         agent = await async_client.agents.create(
             name="name",
-            version="version",
             source={
                 "type": "type",
                 "git": {
@@ -302,6 +297,7 @@ class TestAsyncAgents:
                     "registry_url": "registry_url",
                 },
             },
+            version="version",
         )
         assert_matches_type(AgentView, agent, path=["response"])
 
@@ -309,7 +305,6 @@ class TestAsyncAgents:
     async def test_raw_response_create(self, async_client: AsyncRunloop) -> None:
         response = await async_client.agents.with_raw_response.create(
             name="name",
-            version="version",
         )
 
         assert response.is_closed is True
@@ -321,7 +316,6 @@ class TestAsyncAgents:
     async def test_streaming_response_create(self, async_client: AsyncRunloop) -> None:
         async with async_client.agents.with_streaming_response.create(
             name="name",
-            version="version",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

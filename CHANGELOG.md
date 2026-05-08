@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.20.3 (2026-05-08)
+
+Full Changelog: [v1.20.2...v1.20.3](https://github.com/runloopai/api-client-python/compare/v1.20.2...v1.20.3)
+
+### Features
+
+* make agent version optional in API ([#8858](https://github.com/runloopai/api-client-python/issues/8858)) ([7e11a9d](https://github.com/runloopai/api-client-python/commit/7e11a9db85aff6c28dcc04b8d391979027f38549))
+* share HTTP connection pool across SDK instances; refactor polling ([#797](https://github.com/runloopai/api-client-python/issues/797)) ([4f2fc4c](https://github.com/runloopai/api-client-python/commit/4f2fc4ca6d0b7a0b13b236dafb0e4e3148c2ed58))
+* support setting headers via env ([54ead49](https://github.com/runloopai/api-client-python/commit/54ead49fd28a61f60e18197d727fa57216c785fd))
+
+
+### Bug Fixes
+
+* use correct field name format for multipart file arrays ([c564da8](https://github.com/runloopai/api-client-python/commit/c564da85b7dfdbb77edf347f6b25ca4ca57e470e))
+
+
+### Chores
+
+* add get secret to stainless ([#7833](https://github.com/runloopai/api-client-python/issues/7833)) ([ce39778](https://github.com/runloopai/api-client-python/commit/ce39778de67907365c90f11ba3b3602cbc7daa2a))
+* **internal:** more robust bootstrap script ([115744e](https://github.com/runloopai/api-client-python/commit/115744e3c181822a1ec172e0526684839e278899))
+* **internal:** reformat pyproject.toml ([89e8401](https://github.com/runloopai/api-client-python/commit/89e8401b518f0ec15cb1e394dde66cb876bf0578))
+
 ## 1.20.2 (2026-05-01)
 
 Full Changelog: [v1.20.1...v1.20.2](https://github.com/runloopai/api-client-python/compare/v1.20.1...v1.20.2)
