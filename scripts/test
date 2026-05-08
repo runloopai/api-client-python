@@ -14,9 +14,18 @@ function steady_is_running() {
 }
 
 kill_server_on_port() {
-  pids=$(lsof -t -i tcp:"$1" || echo "")
+  if command -v lsof >/dev/null 2>&1; then
+    pids=$(lsof -t -i tcp:"$1" || echo "")
+  elif command -v ss >/dev/null 2>&1; then
+    pids=$(ss -tlnp "sport = :$1" 2>/dev/null | grep -oP 'pid=\K[0-9]+' || echo "")
+  elif command -v fuser >/dev/null 2>&1; then
+    pids=$(fuser "$1/tcp" 2>/dev/null || echo "")
+  else
+    echo "Warning: no tool available to find processes on port $1"
+    return
+  fi
   if [ "$pids" != "" ]; then
-    kill "$pids"
+    kill $pids
     echo "Stopped $pids."
   fi
 }
