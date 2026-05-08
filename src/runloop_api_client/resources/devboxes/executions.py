@@ -20,8 +20,7 @@ from ..._response import (
 )
 from ..._constants import DEFAULT_TIMEOUT, RAW_RESPONSE_HEADER
 from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
-from ..._exceptions import APIStatusError, APITimeoutError
-from ...lib.polling import PollingConfig, poll_until
+from ...lib.polling import PollingConfig
 from ..._base_client import make_request_options
 from ...types.devboxes import (
     execution_kill_params,
@@ -32,7 +31,7 @@ from ...types.devboxes import (
     execution_stream_stderr_updates_params,
     execution_stream_stdout_updates_params,
 )
-from ...lib.polling_async import async_poll_until
+from ...lib.wait_for_status import wait_for_status, async_wait_for_status
 from ...types.devbox_send_std_in_result import DevboxSendStdInResult
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devboxes.execution_update_chunk import ExecutionUpdateChunk
@@ -129,12 +128,8 @@ class ExecutionsResource(SyncAPIResource):
 
         Args:
             execution_id: The ID of the execution to wait for
-            id: The ID of the devbox
-            config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
+            devbox_id: The ID of the devbox
+            polling_config: Optional polling configuration
 
         Returns:
             The completed execution
@@ -143,29 +138,18 @@ class ExecutionsResource(SyncAPIResource):
             PollingTimeout: If polling times out before execution completes
         """
 
-        def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
-            # This wait_for_status endpoint polls the execution status for 60 seconds until it reaches either completed.
-            return self._post(
-                f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
-                body={"statuses": ["completed"]},
-                cast_to=DevboxAsyncExecutionDetailView,
-            )
-
-        def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
-            # Handle timeout errors by returning current execution state to continue polling
-            if isinstance(error, APITimeoutError) or (
-                isinstance(error, APIStatusError) and error.response.status_code == 408
-            ):
-                # Return a placeholder result to continue polling
-                return placeholder_execution_detail_view(devbox_id, execution_id)
-            else:
-                # Re-raise other errors to stop polling
-                raise error
-
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return poll_until(wait_for_execution_status, is_done, polling_config, handle_timeout_error)
+        return wait_for_status(
+            self._post,
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+            ["completed"],
+            DevboxAsyncExecutionDetailView,
+            lambda: placeholder_execution_detail_view(devbox_id, execution_id),
+            is_done,
+            polling_config,
+        )
 
     def execute_async(
         self,
@@ -675,12 +659,8 @@ class AsyncExecutionsResource(AsyncAPIResource):
 
         Args:
             execution_id: The ID of the execution to wait for
-            id: The ID of the devbox
+            devbox_id: The ID of the devbox
             polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
 
         Returns:
             The completed execution
@@ -689,25 +669,18 @@ class AsyncExecutionsResource(AsyncAPIResource):
             PollingTimeout: If polling times out before execution completes
         """
 
-        async def wait_for_execution_status() -> DevboxAsyncExecutionDetailView:
-            try:
-                return await self._post(
-                    f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
-                    body={"statuses": ["completed"]},
-                    cast_to=DevboxAsyncExecutionDetailView,
-                )
-            except (APITimeoutError, APIStatusError) as error:
-                # Handle timeout errors by returning placeholder to continue polling
-                if isinstance(error, APITimeoutError) or error.response.status_code == 408:
-                    return placeholder_execution_detail_view(devbox_id, execution_id)
-
-                # Re-raise other errors to stop polling
-                raise
-
         def is_done(execution: DevboxAsyncExecutionDetailView) -> bool:
             return execution.status == "completed"
 
-        return await async_poll_until(wait_for_execution_status, is_done, polling_config)
+        return await async_wait_for_status(
+            self._post,
+            f"/v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status",
+            ["completed"],
+            DevboxAsyncExecutionDetailView,
+            lambda: placeholder_execution_detail_view(devbox_id, execution_id),
+            is_done,
+            polling_config,
+        )
 
     async def execute_async(
         self,
