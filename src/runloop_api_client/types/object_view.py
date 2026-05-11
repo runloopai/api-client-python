@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -28,6 +28,9 @@ class ObjectView(BaseModel):
 
     delete_after_time_ms: Optional[int] = None
     """The time after which the Object will be deleted in milliseconds since epoch."""
+
+    metadata: Optional[Dict[str, str]] = None
+    """User defined metadata to attach to the Object for organization."""
 
     size_bytes: Optional[int] = None
     """The size of the Object content in bytes (null until uploaded)."""
