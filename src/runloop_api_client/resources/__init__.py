@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .pty import (
+    PtyResource,
+    AsyncPtyResource,
+    PtyResourceWithRawResponse,
+    AsyncPtyResourceWithRawResponse,
+    PtyResourceWithStreamingResponse,
+    AsyncPtyResourceWithStreamingResponse,
+)
 from .axons import (
     AxonsResource,
     AsyncAxonsResource,
@@ -164,6 +172,12 @@ __all__ = [
     "AsyncDevboxesResourceWithRawResponse",
     "DevboxesResourceWithStreamingResponse",
     "AsyncDevboxesResourceWithStreamingResponse",
+    "PtyResource",
+    "AsyncPtyResource",
+    "PtyResourceWithRawResponse",
+    "AsyncPtyResourceWithRawResponse",
+    "PtyResourceWithStreamingResponse",
+    "AsyncPtyResourceWithStreamingResponse",
     "ScenariosResource",
     "AsyncScenariosResource",
     "ScenariosResourceWithRawResponse",
