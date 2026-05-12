@@ -36,6 +36,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        pty,
         axons,
         agents,
         apikeys,
@@ -52,6 +53,7 @@ if TYPE_CHECKING:
         restricted_keys,
         network_policies,
     )
+    from .resources.pty import PtyResource, AsyncPtyResource
     from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.apikeys import ApikeysResource, AsyncApikeysResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
@@ -183,6 +185,12 @@ class Runloop(SyncAPIClient):
         from .resources.devboxes import DevboxesResource
 
         return DevboxesResource(self)
+
+    @cached_property
+    def pty(self) -> PtyResource:
+        from .resources.pty import PtyResource
+
+        return PtyResource(self)
 
     @cached_property
     def scenarios(self) -> ScenariosResource:
@@ -467,6 +475,12 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncDevboxesResource(self)
 
     @cached_property
+    def pty(self) -> AsyncPtyResource:
+        from .resources.pty import AsyncPtyResource
+
+        return AsyncPtyResource(self)
+
+    @cached_property
     def scenarios(self) -> AsyncScenariosResource:
         from .resources.scenarios import AsyncScenariosResource
 
@@ -684,6 +698,12 @@ class RunloopWithRawResponse:
         return DevboxesResourceWithRawResponse(self._client.devboxes)
 
     @cached_property
+    def pty(self) -> pty.PtyResourceWithRawResponse:
+        from .resources.pty import PtyResourceWithRawResponse
+
+        return PtyResourceWithRawResponse(self._client.pty)
+
+    @cached_property
     def scenarios(self) -> scenarios.ScenariosResourceWithRawResponse:
         from .resources.scenarios import ScenariosResourceWithRawResponse
 
@@ -779,6 +799,12 @@ class AsyncRunloopWithRawResponse:
         from .resources.devboxes import AsyncDevboxesResourceWithRawResponse
 
         return AsyncDevboxesResourceWithRawResponse(self._client.devboxes)
+
+    @cached_property
+    def pty(self) -> pty.AsyncPtyResourceWithRawResponse:
+        from .resources.pty import AsyncPtyResourceWithRawResponse
+
+        return AsyncPtyResourceWithRawResponse(self._client.pty)
 
     @cached_property
     def scenarios(self) -> scenarios.AsyncScenariosResourceWithRawResponse:
@@ -878,6 +904,12 @@ class RunloopWithStreamedResponse:
         return DevboxesResourceWithStreamingResponse(self._client.devboxes)
 
     @cached_property
+    def pty(self) -> pty.PtyResourceWithStreamingResponse:
+        from .resources.pty import PtyResourceWithStreamingResponse
+
+        return PtyResourceWithStreamingResponse(self._client.pty)
+
+    @cached_property
     def scenarios(self) -> scenarios.ScenariosResourceWithStreamingResponse:
         from .resources.scenarios import ScenariosResourceWithStreamingResponse
 
@@ -973,6 +1005,12 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.devboxes import AsyncDevboxesResourceWithStreamingResponse
 
         return AsyncDevboxesResourceWithStreamingResponse(self._client.devboxes)
+
+    @cached_property
+    def pty(self) -> pty.AsyncPtyResourceWithStreamingResponse:
+        from .resources.pty import AsyncPtyResourceWithStreamingResponse
+
+        return AsyncPtyResourceWithStreamingResponse(self._client.pty)
 
     @cached_property
     def scenarios(self) -> scenarios.AsyncScenariosResourceWithStreamingResponse:

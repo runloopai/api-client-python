@@ -27,9 +27,11 @@ from .blueprint_view import BlueprintView as BlueprintView
 from .agent_list_view import AgentListView as AgentListView
 from .axon_event_view import AxonEventView as AxonEventView
 from .mcp_config_view import McpConfigView as McpConfigView
+from .pty_tunnel_view import PtyTunnelView as PtyTunnelView
 from .axon_list_params import AxonListParams as AxonListParams
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
+from .pty_connect_view import PtyConnectView as PtyConnectView
 from .scope_entry_view import ScopeEntryView as ScopeEntryView
 from .scoring_contract import ScoringContract as ScoringContract
 from .scoring_function import ScoringFunction as ScoringFunction
@@ -41,6 +43,8 @@ from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
 from .object_list_params import ObjectListParams as ObjectListParams
+from .pty_connect_params import PtyConnectParams as PtyConnectParams
+from .pty_control_params import PtyControlParams as PtyControlParams
 from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .axon_publish_params import AxonPublishParams as AxonPublishParams
@@ -80,6 +84,7 @@ from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListVie
 from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
 from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
+from .pty_control_result_view import PtyControlResultView as PtyControlResultView
 from .agent_devbox_counts_view import AgentDevboxCountsView as AgentDevboxCountsView
 from .agent_list_public_params import AgentListPublicParams as AgentListPublicParams
 from .blueprint_preview_params import BlueprintPreviewParams as BlueprintPreviewParams
