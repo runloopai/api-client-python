@@ -19,6 +19,7 @@ from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
 from .tunnel_view import TunnelView as TunnelView
+from .pty_connect_view import PtyConnectView as PtyConnectView
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .axon_list_view import AxonListView as AxonListView
@@ -107,6 +108,8 @@ from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvi
 from .benchmark_job_create_params import BenchmarkJobCreateParams as BenchmarkJobCreateParams
 from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownloadFileParams
 from .devbox_enable_tunnel_params import DevboxEnableTunnelParams as DevboxEnableTunnelParams
+from .pty_connect_params import PtyConnectParams as PtyConnectParams
+from .pty_control_params import PtyControlParams as PtyControlParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
 from .devbox_snapshot_disk_params import DevboxSnapshotDiskParams as DevboxSnapshotDiskParams
 from .restricted_key_created_view import RestrictedKeyCreatedView as RestrictedKeyCreatedView

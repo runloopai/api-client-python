@@ -7,6 +7,7 @@ import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 from typing_extensions import Unpack, override
 
+from .pty import DevboxPtyOps
 from ..types import (
     DevboxView,
     TunnelView,
@@ -73,6 +74,7 @@ class Devbox:
         self._client = client
         self._id = devbox_id
         self._logger = logging.getLogger(__name__)
+        self.pty = DevboxPtyOps(client, devbox_id)
 
     @override
     def __repr__(self) -> str:

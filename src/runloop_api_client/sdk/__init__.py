@@ -41,6 +41,7 @@ from .async_ import (
     AsyncStorageObjectOps,
 )
 from .devbox import Devbox, NamedShell
+from .pty import DevboxPtyOps, DevboxPtySession, DevboxPtyProcess
 from .scorer import Scorer
 from .secret import Secret
 from .scenario import Scenario
@@ -52,6 +53,7 @@ from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
+from .async_pty import AsyncDevboxPtyOps, AsyncDevboxPtySession, AsyncDevboxPtyProcess
 from .async_scorer import AsyncScorer
 from .async_secret import AsyncSecret
 from .scenario_run import ScenarioRun
@@ -149,4 +151,10 @@ __all__ = [
     "AsyncGatewayConfig",
     "NamedShell",
     "AsyncNamedShell",
+    "DevboxPtyOps",
+    "DevboxPtySession",
+    "DevboxPtyProcess",
+    "AsyncDevboxPtyOps",
+    "AsyncDevboxPtySession",
+    "AsyncDevboxPtyProcess",
 ]

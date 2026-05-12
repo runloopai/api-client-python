@@ -33,6 +33,7 @@ from ._types import (
 from .._types import omit
 from .._client import AsyncRunloop
 from ._helpers import filter_params
+from .async_pty import AsyncDevboxPtyOps
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
@@ -74,6 +75,7 @@ class AsyncDevbox:
         self._client = client
         self._id = devbox_id
         self._logger = logging.getLogger(__name__)
+        self.pty = AsyncDevboxPtyOps(client, devbox_id)
 
     @override
     def __repr__(self) -> str:

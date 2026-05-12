@@ -777,6 +777,31 @@ class DevboxesResource(SyncAPIResource):
             cast_to=TunnelView,
         )
 
+    def create_pty_tunnel(
+        self,
+        id: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> TunnelView:
+        """Create an authenticated tunnel for high-level PTY access."""
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/devboxes/{id}/create_pty_tunnel", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=TunnelView,
+        )
+
     def execute(
         self,
         id: str,
@@ -2395,6 +2420,31 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=TunnelView,
         )
 
+    async def create_pty_tunnel(
+        self,
+        id: str,
+        *,
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> TunnelView:
+        """Create an authenticated tunnel for high-level PTY access."""
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/devboxes/{id}/create_pty_tunnel", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=TunnelView,
+        )
+
     async def execute(
         self,
         id: str,
@@ -3388,6 +3438,9 @@ class DevboxesResourceWithRawResponse:
         self.enable_tunnel = to_raw_response_wrapper(
             devboxes.enable_tunnel,
         )
+        self.create_pty_tunnel = to_raw_response_wrapper(
+            devboxes.create_pty_tunnel,
+        )
         self.execute = to_raw_response_wrapper(
             devboxes.execute,
         )
@@ -3480,6 +3533,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.enable_tunnel = async_to_raw_response_wrapper(
             devboxes.enable_tunnel,
+        )
+        self.create_pty_tunnel = async_to_raw_response_wrapper(
+            devboxes.create_pty_tunnel,
         )
         self.execute = async_to_raw_response_wrapper(
             devboxes.execute,
@@ -3574,6 +3630,9 @@ class DevboxesResourceWithStreamingResponse:
         self.enable_tunnel = to_streamed_response_wrapper(
             devboxes.enable_tunnel,
         )
+        self.create_pty_tunnel = to_streamed_response_wrapper(
+            devboxes.create_pty_tunnel,
+        )
         self.execute = to_streamed_response_wrapper(
             devboxes.execute,
         )
@@ -3666,6 +3725,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.enable_tunnel = async_to_streamed_response_wrapper(
             devboxes.enable_tunnel,
+        )
+        self.create_pty_tunnel = async_to_streamed_response_wrapper(
+            devboxes.create_pty_tunnel,
         )
         self.execute = async_to_streamed_response_wrapper(
             devboxes.execute,
