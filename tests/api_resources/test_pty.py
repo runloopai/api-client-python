@@ -28,8 +28,8 @@ class TestPty:
     def test_method_connect_with_all_params(self, client: Runloop) -> None:
         pty = client.pty.connect(
             session_name="session_name",
-            cols="cols",
-            rows="rows",
+            cols=0,
+            rows=0,
         )
         assert_matches_type(PtyConnectView, pty, path=["response"])
 
@@ -130,8 +130,8 @@ class TestAsyncPty:
     async def test_method_connect_with_all_params(self, async_client: AsyncRunloop) -> None:
         pty = await async_client.pty.connect(
             session_name="session_name",
-            cols="cols",
-            rows="rows",
+            cols=0,
+            rows=0,
         )
         assert_matches_type(PtyConnectView, pty, path=["response"])
 

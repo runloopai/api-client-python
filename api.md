@@ -285,7 +285,7 @@ Methods:
 Types:
 
 ```python
-from runloop_api_client.types import PtyConnectView, PtyControlParameters, PtyControlResultView
+from runloop_api_client.types import PtyConnectView, PtyControlParams, PtyControlResultView
 ```
 
 Methods:
