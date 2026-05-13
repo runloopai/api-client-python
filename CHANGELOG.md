@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.21.0 (2026-05-13)
+
+Full Changelog: [v1.20.3...v1.21.0](https://github.com/runloopai/api-client-python/compare/v1.20.3...v1.21.0)
+
+### Features
+
+* **internal/types:** support eagerly validating pydantic iterators ([f089d05](https://github.com/runloopai/api-client-python/commit/f089d05c5e00c2ba980d0afdea79ed026242a174))
+* **metadata:** add object metadata viewing, discovery, and validation ([#9124](https://github.com/runloopai/api-client-python/issues/9124)) ([ba0b5dc](https://github.com/runloopai/api-client-python/commit/ba0b5dc873a47073c453b168fe4d966754cccc0e))
+
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([930b1e2](https://github.com/runloopai/api-client-python/commit/930b1e2d169a291415007f2897fec5a410ecf993))
+* update openapi.stainless.yaml for PTY server methods ([#9218](https://github.com/runloopai/api-client-python/issues/9218)) ([ac1cb22](https://github.com/runloopai/api-client-python/commit/ac1cb2264b8e39da8aa65d8fdcd4595bce55def6))
+* update types for pty control, use int instead of str  ([#9235](https://github.com/runloopai/api-client-python/issues/9235)) ([7ceb2bf](https://github.com/runloopai/api-client-python/commit/7ceb2bf09c3241a27892fbab2272d63ef76b1a8a))
+
 ## 1.20.3 (2026-05-08)
 
 Full Changelog: [v1.20.2...v1.20.3](https://github.com/runloopai/api-client-python/compare/v1.20.2...v1.20.3)

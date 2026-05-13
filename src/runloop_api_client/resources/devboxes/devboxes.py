@@ -86,6 +86,7 @@ from ...lib.polling_async import async_poll_until
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
 from ...lib.wait_for_status import wait_for_status, async_wait_for_status
+from ...types.pty_tunnel_view import PtyTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
@@ -580,6 +581,50 @@ class DevboxesResource(SyncAPIResource):
                 ),
             ),
             model=DevboxView,
+        )
+
+    def create_pty_tunnel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> PtyTunnelView:
+        """Create an ephemeral authenticated tunnel for terminal access to a running
+        Devbox.
+
+        This tunnel is not persisted on the Devbox and is generated fresh on
+        each request. The returned auth_token must be passed as a Bearer token in the
+        Authorization header.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/devboxes/{id}/create_pty_tunnel", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=PtyTunnelView,
         )
 
     def create_ssh_key(
@@ -2200,6 +2245,50 @@ class AsyncDevboxesResource(AsyncAPIResource):
             model=DevboxView,
         )
 
+    async def create_pty_tunnel(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> PtyTunnelView:
+        """Create an ephemeral authenticated tunnel for terminal access to a running
+        Devbox.
+
+        This tunnel is not persisted on the Devbox and is generated fresh on
+        each request. The returned auth_token must be passed as a Bearer token in the
+        Authorization header.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/devboxes/{id}/create_pty_tunnel", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=PtyTunnelView,
+        )
+
     async def create_ssh_key(
         self,
         id: str,
@@ -3375,6 +3464,9 @@ class DevboxesResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             devboxes.list,
         )
+        self.create_pty_tunnel = to_raw_response_wrapper(
+            devboxes.create_pty_tunnel,
+        )
         self.create_ssh_key = to_raw_response_wrapper(
             devboxes.create_ssh_key,
         )
@@ -3467,6 +3559,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
+        )
+        self.create_pty_tunnel = async_to_raw_response_wrapper(
+            devboxes.create_pty_tunnel,
         )
         self.create_ssh_key = async_to_raw_response_wrapper(
             devboxes.create_ssh_key,
@@ -3561,6 +3656,9 @@ class DevboxesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.create_pty_tunnel = to_streamed_response_wrapper(
+            devboxes.create_pty_tunnel,
+        )
         self.create_ssh_key = to_streamed_response_wrapper(
             devboxes.create_ssh_key,
         )
@@ -3653,6 +3751,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
+        )
+        self.create_pty_tunnel = async_to_streamed_response_wrapper(
+            devboxes.create_pty_tunnel,
         )
         self.create_ssh_key = async_to_streamed_response_wrapper(
             devboxes.create_ssh_key,

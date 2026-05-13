@@ -198,6 +198,7 @@ from runloop_api_client.types import (
     DevboxSnapshotListView,
     DevboxSnapshotView,
     DevboxView,
+    PtyTunnelView,
     TunnelView,
     DevboxCreateSSHKeyResponse,
     DevboxReadFileContentsResponse,
@@ -211,6 +212,7 @@ Methods:
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="post /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">SyncDevboxesCursorIDPage[DevboxView]</a></code>
+- <code title="post /v1/devboxes/{id}/create_pty_tunnel">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_pty_tunnel</a>(id) -> <a href="./src/runloop_api_client/types/pty_tunnel_view.py">PtyTunnelView</a></code>
 - <code title="post /v1/devboxes/{id}/create_ssh_key">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_ssh_key</a>(id) -> <a href="./src/runloop_api_client/types/devbox_create_ssh_key_response.py">DevboxCreateSSHKeyResponse</a></code>
 - <code title="post /v1/devboxes/disk_snapshots/{id}/delete">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">delete_disk_snapshot</a>(id) -> object</code>
 - <code title="post /v1/devboxes/{id}/download_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">download_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_download_file_params.py">params</a>) -> BinaryAPIResponse</code>
@@ -277,6 +279,19 @@ Methods:
 - <code title="post /v1/devboxes/{devbox_id}/executions/{execution_id}/send_std_in">client.devboxes.executions.<a href="./src/runloop_api_client/resources/devboxes/executions.py">send_std_in</a>(execution_id, \*, devbox_id, \*\*<a href="src/runloop_api_client/types/devboxes/execution_send_std_in_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_send_std_in_result.py">DevboxSendStdInResult</a></code>
 - <code title="get /v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stderr_updates">client.devboxes.executions.<a href="./src/runloop_api_client/resources/devboxes/executions.py">stream_stderr_updates</a>(execution_id, \*, devbox_id, \*\*<a href="src/runloop_api_client/types/devboxes/execution_stream_stderr_updates_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/execution_update_chunk.py">ExecutionUpdateChunk</a></code>
 - <code title="get /v1/devboxes/{devbox_id}/executions/{execution_id}/stream_stdout_updates">client.devboxes.executions.<a href="./src/runloop_api_client/resources/devboxes/executions.py">stream_stdout_updates</a>(execution_id, \*, devbox_id, \*\*<a href="src/runloop_api_client/types/devboxes/execution_stream_stdout_updates_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devboxes/execution_update_chunk.py">ExecutionUpdateChunk</a></code>
+
+# Pty
+
+Types:
+
+```python
+from runloop_api_client.types import PtyConnectView, PtyControlParams, PtyControlResultView
+```
+
+Methods:
+
+- <code title="get /pty/{session_name}">client.pty.<a href="./src/runloop_api_client/resources/pty.py">connect</a>(session_name, \*\*<a href="src/runloop_api_client/types/pty_connect_params.py">params</a>) -> <a href="./src/runloop_api_client/types/pty_connect_view.py">PtyConnectView</a></code>
+- <code title="post /pty/{session_name}/control">client.pty.<a href="./src/runloop_api_client/resources/pty.py">control</a>(session_name, \*\*<a href="src/runloop_api_client/types/pty_control_params.py">params</a>) -> <a href="./src/runloop_api_client/types/pty_control_result_view.py">PtyControlResultView</a></code>
 
 # Scenarios
 
