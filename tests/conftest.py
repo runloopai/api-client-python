@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import asyncio
 import logging
 from typing import TYPE_CHECKING, Iterator, AsyncIterator
 
@@ -108,6 +109,14 @@ async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncRunloop]:
         raise TypeError(f"Unexpected fixture parameter type {type(param)}, expected bool or dict")
 
     async with AsyncRunloop(
-        base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict, http_client=http_client
+        base_url=base_url,
+        bearer_token=bearer_token,
+        _strict_response_validation=strict,
+        http_client=http_client,
+        shared_http_pool=False,
     ) as client:
         yield client
+
+    # Give async transports a chance to finish closing before pytest collects
+    # unraisable ResourceWarnings under filterwarnings=error.
+    await asyncio.sleep(0.1)
