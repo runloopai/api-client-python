@@ -8,8 +8,11 @@ from runloop_api_client.types import (
     BrokerMount,
     CodeMountParameters,
     LaunchParameters,
+    LifecycleConfiguration,
+    LifecycleHooks,
     Mount,
     ObjectMount,
+    ResumeTriggers,
     RunProfile,
 )
 ```
