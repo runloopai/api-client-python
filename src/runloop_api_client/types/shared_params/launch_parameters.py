@@ -8,7 +8,28 @@ from typing_extensions import Literal, Required, TypedDict
 from ..._types import SequenceNotStr
 from .after_idle import AfterIdle
 
-__all__ = ["LaunchParameters", "Lifecycle", "LifecycleResumeTriggers", "UserParameters"]
+__all__ = ["LaunchParameters", "Lifecycle", "LifecycleLifecycleHooks", "LifecycleResumeTriggers", "UserParameters"]
+
+
+class LifecycleLifecycleHooks(TypedDict, total=False):
+    """Optional lifecycle hooks.
+
+    suspend_commands run through the suspend path before the Devbox suspends; see launch_commands for work on every startup.
+    """
+
+    suspend_commands: Optional[SequenceNotStr[str]]
+    """Commands to run through the suspend path before the Devbox suspends (e.g.
+
+    cleanup, quiesce daemons).
+    """
+
+    suspend_deadline_ms: Optional[int]
+    """Deadline in milliseconds for broker drain and suspend_commands during suspend.
+
+    Defaults to 30000 ms and may not exceed 60000 ms. If exceeded, suspend work is
+    abandoned, the timeout is logged, and the Devbox still proceeds to suspend by
+    shutting down vmagent and killing the VM.
+    """
 
 
 class LifecycleResumeTriggers(TypedDict, total=False):
@@ -24,7 +45,7 @@ class LifecycleResumeTriggers(TypedDict, total=False):
 class Lifecycle(TypedDict, total=False):
     """Lifecycle configuration for idle and resume behavior.
 
-    Configure idle policy via lifecycle.after_idle (if both this and the top-level after_idle are set, they must match) and resume triggers via lifecycle.resume_triggers.
+    Configure idle policy via lifecycle.after_idle (if both this and the top-level after_idle are set, they must match), resume triggers via lifecycle.resume_triggers, and optional lifecycle hooks via lifecycle.lifecycle_hooks.
     """
 
     after_idle: Optional[AfterIdle]
@@ -32,6 +53,13 @@ class Lifecycle(TypedDict, total=False):
 
     If both this and the top-level after_idle are set, they must have the same
     value. Prefer this field for new integrations.
+    """
+
+    lifecycle_hooks: Optional[LifecycleLifecycleHooks]
+    """Optional lifecycle hooks.
+
+    suspend_commands run through the suspend path before the Devbox suspends; see
+    launch_commands for work on every startup.
     """
 
     resume_triggers: Optional[LifecycleResumeTriggers]
@@ -95,8 +123,9 @@ class LaunchParameters(TypedDict, total=False):
     """Lifecycle configuration for idle and resume behavior.
 
     Configure idle policy via lifecycle.after_idle (if both this and the top-level
-    after_idle are set, they must match) and resume triggers via
-    lifecycle.resume_triggers.
+    after_idle are set, they must match), resume triggers via
+    lifecycle.resume_triggers, and optional lifecycle hooks via
+    lifecycle.lifecycle_hooks.
     """
 
     network_policy_id: Optional[str]

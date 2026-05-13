@@ -87,6 +87,10 @@ class TestDevboxes:
                         "idle_time_seconds": 0,
                         "on_idle": "shutdown",
                     },
+                    "lifecycle_hooks": {
+                        "suspend_commands": ["string"],
+                        "suspend_deadline_ms": 0,
+                    },
                     "resume_triggers": {
                         "axon_event": True,
                         "http": True,
@@ -1278,6 +1282,10 @@ class TestAsyncDevboxes:
                     "after_idle": {
                         "idle_time_seconds": 0,
                         "on_idle": "shutdown",
+                    },
+                    "lifecycle_hooks": {
+                        "suspend_commands": ["string"],
+                        "suspend_deadline_ms": 0,
                     },
                     "resume_triggers": {
                         "axon_event": True,
