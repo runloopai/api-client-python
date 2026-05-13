@@ -6,7 +6,7 @@ import uuid
 import codecs
 import asyncio
 import inspect
-from typing import Any, Union, Callable, Awaitable, AsyncIterator
+from typing import Any, Union, Callable, Awaitable, AsyncIterator, cast
 from importlib import import_module
 from urllib.parse import urljoin, urlparse, urlunparse
 
@@ -247,8 +247,8 @@ class AsyncDevboxPtySession:
     async def _recv(self) -> bytes | str | None:
         recv = getattr(self._ws, "recv", None)
         if recv is None:
-            return await self._ws.receive()
-        return await recv()
+            return cast(Union[bytes, str, None], await self._ws.receive())
+        return cast(Union[bytes, str, None], await recv())
 
     async def _close_websocket(self) -> None:
         close = getattr(self._ws, "close", None)
@@ -261,7 +261,7 @@ class AsyncDevboxPtySession:
         try:
             while True:
                 data = await self._recv()
-                if data in (None, b"", ""):
+                if data is None or data == b"" or data == "":
                     break
                 chunk = data.encode("utf-8") if isinstance(data, str) else bytes(data)
                 await self._emit(chunk)
@@ -273,12 +273,12 @@ class AsyncDevboxPtySession:
 
     async def _emit(self, chunk: bytes) -> None:
         await self._queue.put(chunk)
-        for callback in list(self._raw_callbacks):
-            await _maybe_await(callback(chunk))
+        for raw_callback in list(self._raw_callbacks):
+            await _maybe_await(raw_callback(chunk))
         text = self._decoder.decode(chunk)
         if text:
-            for callback in list(self._text_callbacks):
-                await _maybe_await(callback(text))
+            for text_callback in list(self._text_callbacks):
+                await _maybe_await(text_callback(text))
 
 
 class AsyncDevboxPtyProcess:
@@ -384,9 +384,9 @@ class AsyncDevboxPtyProcess:
         if not chunk:
             return
         await self._queue.put(chunk)
-        for callback in list(self._raw_callbacks):
-            await _maybe_await(callback(chunk))
+        for raw_callback in list(self._raw_callbacks):
+            await _maybe_await(raw_callback(chunk))
         text = self._decoder.decode(chunk)
         if text:
-            for callback in list(self._text_callbacks):
-                await _maybe_await(callback(text))
+            for text_callback in list(self._text_callbacks):
+                await _maybe_await(text_callback(text))

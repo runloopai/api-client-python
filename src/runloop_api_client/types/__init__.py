@@ -19,7 +19,6 @@ from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
 from .tunnel_view import TunnelView as TunnelView
-from .pty_connect_view import PtyConnectView as PtyConnectView
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .axon_list_view import AxonListView as AxonListView
@@ -31,6 +30,7 @@ from .mcp_config_view import McpConfigView as McpConfigView
 from .axon_list_params import AxonListParams as AxonListParams
 from .devbox_list_view import DevboxListView as DevboxListView
 from .object_list_view import ObjectListView as ObjectListView
+from .pty_connect_view import PtyConnectView as PtyConnectView
 from .scope_entry_view import ScopeEntryView as ScopeEntryView
 from .scoring_contract import ScoringContract as ScoringContract
 from .scoring_function import ScoringFunction as ScoringFunction
@@ -42,6 +42,8 @@ from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
 from .object_list_params import ObjectListParams as ObjectListParams
+from .pty_connect_params import PtyConnectParams as PtyConnectParams
+from .pty_control_params import PtyControlParams as PtyControlParams
 from .secret_list_params import SecretListParams as SecretListParams
 from .agent_create_params import AgentCreateParams as AgentCreateParams
 from .axon_publish_params import AxonPublishParams as AxonPublishParams
@@ -108,8 +110,6 @@ from .scenario_environment_param import ScenarioEnvironmentParam as ScenarioEnvi
 from .benchmark_job_create_params import BenchmarkJobCreateParams as BenchmarkJobCreateParams
 from .devbox_download_file_params import DevboxDownloadFileParams as DevboxDownloadFileParams
 from .devbox_enable_tunnel_params import DevboxEnableTunnelParams as DevboxEnableTunnelParams
-from .pty_connect_params import PtyConnectParams as PtyConnectParams
-from .pty_control_params import PtyControlParams as PtyControlParams
 from .devbox_execute_async_params import DevboxExecuteAsyncParams as DevboxExecuteAsyncParams
 from .devbox_snapshot_disk_params import DevboxSnapshotDiskParams as DevboxSnapshotDiskParams
 from .restricted_key_created_view import RestrictedKeyCreatedView as RestrictedKeyCreatedView

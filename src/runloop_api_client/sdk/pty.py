@@ -245,12 +245,12 @@ class DevboxPtySession:
 
     def _emit(self, chunk: bytes) -> None:
         self._queue.put(chunk)
-        for callback in list(self._raw_callbacks):
-            callback(chunk)
+        for raw_callback in list(self._raw_callbacks):
+            raw_callback(chunk)
         text = self._decoder.decode(chunk)
         if text:
-            for callback in list(self._text_callbacks):
-                callback(text)
+            for text_callback in list(self._text_callbacks):
+                text_callback(text)
 
 
 class DevboxPtyProcess:
@@ -346,9 +346,9 @@ class DevboxPtyProcess:
         if not chunk:
             return
         self._queue.put(chunk)
-        for callback in list(self._raw_callbacks):
-            callback(chunk)
+        for raw_callback in list(self._raw_callbacks):
+            raw_callback(chunk)
         text = self._decoder.decode(chunk)
         if text:
-            for callback in list(self._text_callbacks):
-                callback(text)
+            for text_callback in list(self._text_callbacks):
+                text_callback(text)

@@ -5,6 +5,7 @@ Provides both sync (`RunloopSDK`) and async (`AsyncRunloopSDK`) interfaces.
 
 from __future__ import annotations
 
+from .pty import DevboxPtyOps, DevboxPtyProcess, DevboxPtySession
 from .axon import Axon, AxonSqlOps
 from .sync import (
     AxonOps,
@@ -41,11 +42,11 @@ from .async_ import (
     AsyncStorageObjectOps,
 )
 from .devbox import Devbox, NamedShell
-from .pty import DevboxPtyOps, DevboxPtySession, DevboxPtyProcess
 from .scorer import Scorer
 from .secret import Secret
 from .scenario import Scenario
 from .snapshot import Snapshot
+from .async_pty import AsyncDevboxPtyOps, AsyncDevboxPtyProcess, AsyncDevboxPtySession
 from .benchmark import Benchmark
 from .blueprint import Blueprint
 from .execution import Execution
@@ -53,7 +54,6 @@ from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
-from .async_pty import AsyncDevboxPtyOps, AsyncDevboxPtySession, AsyncDevboxPtyProcess
 from .async_scorer import AsyncScorer
 from .async_secret import AsyncSecret
 from .scenario_run import ScenarioRun
