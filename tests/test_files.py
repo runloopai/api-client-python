@@ -1,8 +1,9 @@
+import io
 from pathlib import Path
 
 import anyio
 import pytest
-from dirty_equals import IsDict, IsList, IsBytes, IsTuple
+from dirty_equals import IsDict, IsList, IsTuple, IsInstance
 
 from runloop_api_client._files import to_httpx_files, deepcopy_with_paths, async_to_httpx_files
 from runloop_api_client._utils import extract_files
@@ -10,37 +11,63 @@ from runloop_api_client._utils import extract_files
 readme_path = Path(__file__).parent.parent.joinpath("README.md")
 
 
+def _close_file_handles(value: object) -> None:
+    """Recursively close any open file handles in to_httpx_files output.
+
+    The transform now returns streaming file handles instead of bytes, so tests
+    that don't actually issue a request must close them to avoid resource warnings.
+    """
+    if isinstance(value, io.IOBase):
+        value.close()
+    elif isinstance(value, dict):
+        for v in value.values():
+            _close_file_handles(v)
+    elif isinstance(value, (list, tuple)):
+        for v in value:
+            _close_file_handles(v)
+
+
 def test_pathlib_includes_file_name() -> None:
     result = to_httpx_files({"file": readme_path})
-    print(result)
-    assert result == IsDict({"file": IsTuple("README.md", IsBytes())})
+    try:
+        assert result == IsDict({"file": IsTuple("README.md", IsInstance(io.IOBase))})
+    finally:
+        _close_file_handles(result)
 
 
 def test_tuple_input() -> None:
     result = to_httpx_files([("file", readme_path)])
-    print(result)
-    assert result == IsList(IsTuple("file", IsTuple("README.md", IsBytes())))
+    try:
+        assert result == IsList(IsTuple("file", IsTuple("README.md", IsInstance(io.IOBase))))
+    finally:
+        _close_file_handles(result)
 
 
 @pytest.mark.asyncio
 async def test_async_pathlib_includes_file_name() -> None:
     result = await async_to_httpx_files({"file": readme_path})
-    print(result)
-    assert result == IsDict({"file": IsTuple("README.md", IsBytes())})
+    try:
+        assert result == IsDict({"file": IsTuple("README.md", IsInstance(io.IOBase))})
+    finally:
+        _close_file_handles(result)
 
 
 @pytest.mark.asyncio
 async def test_async_supports_anyio_path() -> None:
     result = await async_to_httpx_files({"file": anyio.Path(readme_path)})
-    print(result)
-    assert result == IsDict({"file": IsTuple("README.md", IsBytes())})
+    try:
+        assert result == IsDict({"file": IsTuple("README.md", IsInstance(io.IOBase))})
+    finally:
+        _close_file_handles(result)
 
 
 @pytest.mark.asyncio
 async def test_async_tuple_input() -> None:
     result = await async_to_httpx_files([("file", readme_path)])
-    print(result)
-    assert result == IsList(IsTuple("file", IsTuple("README.md", IsBytes())))
+    try:
+        assert result == IsList(IsTuple("file", IsTuple("README.md", IsInstance(io.IOBase))))
+    finally:
+        _close_file_handles(result)
 
 
 def test_string_not_allowed() -> None:

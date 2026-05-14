@@ -94,6 +94,13 @@ class Runloop(SyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
+        # Override the httpx connection pool limits (max concurrent connections and
+        # keep-alive size). When provided, the client gets a private pool with these
+        # limits and `shared_http_pool` is implicitly disabled — the shared pool is
+        # process-global so per-client limits can't be expressed through it.
+        # Use this to raise the cap above the default 100 for upload-heavy workloads,
+        # or to lower it in memory-constrained environments.
+        connection_limits: httpx.Limits | None = None,
         # Enable or disable schema validation for data returned by the API.
         # When enabled an error APIResponseValidationError is raised
         # if the API responds with invalid data for the expected schema.
@@ -140,6 +147,7 @@ class Runloop(SyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            connection_limits=connection_limits,
         )
 
         self._idempotency_header = "x-request-id"
@@ -276,6 +284,7 @@ class Runloop(SyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
         shared_http_pool: bool | None = None,
+        connection_limits: httpx.Limits | None | NotGiven = not_given,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -304,7 +313,11 @@ class Runloop(SyncAPIClient):
         elif set_default_query is not None:
             params = set_default_query
 
+        resolved_limits = self._connection_limits if isinstance(connection_limits, NotGiven) else connection_limits
+
         if http_client is not None:
+            resolved_shared = False
+        elif resolved_limits is not None:
             resolved_shared = False
         elif shared_http_pool is not None:
             resolved_shared = shared_http_pool
@@ -317,6 +330,7 @@ class Runloop(SyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            connection_limits=resolved_limits,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,
@@ -382,6 +396,13 @@ class AsyncRunloop(AsyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
+        # Override the httpx connection pool limits (max concurrent connections and
+        # keep-alive size). When provided, the client gets a private pool with these
+        # limits and `shared_http_pool` is implicitly disabled — the shared pool is
+        # process-global so per-client limits can't be expressed through it.
+        # Use this to raise the cap above the default 100 for upload-heavy workloads,
+        # or to lower it in memory-constrained environments.
+        connection_limits: httpx.Limits | None = None,
         # Enable or disable schema validation for data returned by the API.
         # When enabled an error APIResponseValidationError is raised
         # if the API responds with invalid data for the expected schema.
@@ -428,6 +449,7 @@ class AsyncRunloop(AsyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            connection_limits=connection_limits,
         )
 
         self._idempotency_header = "x-request-id"
@@ -564,6 +586,7 @@ class AsyncRunloop(AsyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
         shared_http_pool: bool | None = None,
+        connection_limits: httpx.Limits | None | NotGiven = not_given,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -592,7 +615,11 @@ class AsyncRunloop(AsyncAPIClient):
         elif set_default_query is not None:
             params = set_default_query
 
+        resolved_limits = self._connection_limits if isinstance(connection_limits, NotGiven) else connection_limits
+
         if http_client is not None:
+            resolved_shared = False
+        elif resolved_limits is not None:
             resolved_shared = False
         elif shared_http_pool is not None:
             resolved_shared = shared_http_pool
@@ -605,6 +632,7 @@ class AsyncRunloop(AsyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            connection_limits=resolved_limits,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,

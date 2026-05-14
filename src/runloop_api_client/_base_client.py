@@ -870,6 +870,12 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
 
         # Retry on request timeouts.
         if response.status_code == 408:
+            # upload_file 408s mean the server gave up waiting for the request body.
+            # Retrying just queues another large request behind the same exhausted
+            # connection pool and amplifies the stall.
+            if response.request.url.path.endswith("/upload_file"):
+                log.debug("Not retrying upload_file 408 (request-body stall)")
+                return False
             log.debug("Retrying due to status code %i", response.status_code)
             return True
 
@@ -931,6 +937,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _client: httpx.Client
     _default_stream_cls: type[Stream[Any]] | None = None
     _uses_shared_pool: bool
+    _connection_limits: httpx.Limits | None
     _closed: bool
 
     def __init__(
@@ -945,6 +952,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         custom_query: Mapping[str, object] | None = None,
         _strict_response_validation: bool,
         shared_http_pool: bool = True,
+        connection_limits: httpx.Limits | None = None,
     ) -> None:
         if not is_given(timeout):
             # if the user passed in a custom http client with a non-default
@@ -976,9 +984,19 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         )
 
         self._closed = False
+        self._connection_limits = connection_limits
 
         if http_client is not None:
             self._client = http_client
+            self._uses_shared_pool = False
+        elif connection_limits is not None:
+            # Custom limits get a private pool — the shared pool is process-global
+            # so per-client limits can't be respected through it.
+            self._client = SyncHttpxClientWrapper(
+                base_url=base_url,
+                timeout=cast(Timeout, timeout),
+                transport=httpx.HTTPTransport(limits=connection_limits, http2=True),
+            )
             self._uses_shared_pool = False
         elif shared_http_pool:
             global _shared_sync_transport
@@ -1563,6 +1581,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _client: httpx.AsyncClient
     _default_stream_cls: type[AsyncStream[Any]] | None = None
     _uses_shared_pool: bool
+    _connection_limits: httpx.Limits | None
     _closed: bool
 
     def __init__(
@@ -1577,6 +1596,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         custom_headers: Mapping[str, str] | None = None,
         custom_query: Mapping[str, object] | None = None,
         shared_http_pool: bool = True,
+        connection_limits: httpx.Limits | None = None,
     ) -> None:
         if not is_given(timeout):
             # if the user passed in a custom http client with a non-default
@@ -1608,9 +1628,19 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         )
 
         self._closed = False
+        self._connection_limits = connection_limits
 
         if http_client is not None:
             self._client = http_client
+            self._uses_shared_pool = False
+        elif connection_limits is not None:
+            # Custom limits get a private pool — the shared pool is process-global
+            # so per-client limits can't be respected through it.
+            self._client = AsyncHttpxClientWrapper(
+                base_url=base_url,
+                timeout=cast(Timeout, timeout),
+                transport=httpx.AsyncHTTPTransport(limits=connection_limits, http2=True),
+            )
             self._uses_shared_pool = False
         elif shared_http_pool:
             try:
