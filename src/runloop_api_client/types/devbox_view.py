@@ -100,7 +100,7 @@ class DevboxView(BaseModel):
     initiator_id: Optional[str] = None
     """The ID of the initiator that created the Devbox."""
 
-    initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation"]] = None
+    initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation", "reflex"]] = None
     """The type of initiator that created the Devbox."""
 
     mcp_specs: Optional[Dict[str, McpSpecs]] = None
