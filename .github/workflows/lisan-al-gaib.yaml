@@ -1,0 +1,28 @@
+name: "Dependency Check"
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/lisan-al-gaib.yaml
+      - '*.lock'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: runloopai/checkout@main
+
+      - uses: runloopai/lisan-al-gaib-action@main
+        with:
+          ecosystems: python,actions
+          bypass-keyword: cve-fix
+          python-lockfiles: '*.lock'
+          license-overrides: |
+            python:
+              apeye: ignore     # Only used by sphinx-toolbox for docs generation
+              cssutils: ignore  # Only used by sphinx-toolbox for docs generation
+
