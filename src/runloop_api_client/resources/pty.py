@@ -137,8 +137,8 @@ class PtyResource(SyncAPIResource):
         """Applies a PTY control operation to an existing session.
 
         The action field selects
-        the operation; the other fields in PtyControlParameters are interpreted only
-        when they are relevant to the chosen action.
+        the operation; the other fields in PtyControlParams are interpreted only when
+        they are relevant to the chosen action.
 
         resize: cols and rows are required and must each be in 1..=1000. A 0 or
         out-of-range value returns 400. The new winsize is applied to the PTY master and
@@ -302,8 +302,8 @@ class AsyncPtyResource(AsyncAPIResource):
         """Applies a PTY control operation to an existing session.
 
         The action field selects
-        the operation; the other fields in PtyControlParameters are interpreted only
-        when they are relevant to the chosen action.
+        the operation; the other fields in PtyControlParams are interpreted only when
+        they are relevant to the chosen action.
 
         resize: cols and rows are required and must each be in 1..=1000. A 0 or
         out-of-range value returns 400. The new winsize is applied to the PTY master and
