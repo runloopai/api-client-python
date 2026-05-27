@@ -43,7 +43,7 @@ class SpecHarborJobSpec(TypedDict, total=False):
 
 
 class SpecBenchmarkDefinitionJobSpecAgentConfigAgentEnvironment(TypedDict, total=False):
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     environment_variables: Optional[Dict[str, str]]
     """Environment variables to set when launching the agent."""
@@ -64,7 +64,7 @@ class SpecBenchmarkDefinitionJobSpecAgentConfig(TypedDict, total=False):
     type: Required[Literal["job_agent"]]
 
     agent_environment: Optional[SpecBenchmarkDefinitionJobSpecAgentConfigAgentEnvironment]
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     agent_id: Optional[str]
     """ID of the agent to use (optional if agent exists by name)"""
@@ -80,10 +80,7 @@ class SpecBenchmarkDefinitionJobSpecAgentConfig(TypedDict, total=False):
 
 
 class SpecBenchmarkDefinitionJobSpecOrchestratorConfig(TypedDict, total=False):
-    """Orchestrator configuration (optional overrides).
-
-    If not provided, default values will be used.
-    """
+    """Orchestrator configuration for benchmark job execution"""
 
     n_attempts: Optional[int]
     """Number of retry attempts on failure (default: 0).
@@ -125,14 +122,11 @@ class SpecBenchmarkDefinitionJobSpec(TypedDict, total=False):
     type: Required[Literal["benchmark"]]
 
     orchestrator_config: Optional[SpecBenchmarkDefinitionJobSpecOrchestratorConfig]
-    """Orchestrator configuration (optional overrides).
-
-    If not provided, default values will be used.
-    """
+    """Orchestrator configuration for benchmark job execution"""
 
 
 class SpecScenarioDefinitionJobSpecAgentConfigAgentEnvironment(TypedDict, total=False):
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     environment_variables: Optional[Dict[str, str]]
     """Environment variables to set when launching the agent."""
@@ -153,7 +147,7 @@ class SpecScenarioDefinitionJobSpecAgentConfig(TypedDict, total=False):
     type: Required[Literal["job_agent"]]
 
     agent_environment: Optional[SpecScenarioDefinitionJobSpecAgentConfigAgentEnvironment]
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     agent_id: Optional[str]
     """ID of the agent to use (optional if agent exists by name)"""
@@ -169,10 +163,7 @@ class SpecScenarioDefinitionJobSpecAgentConfig(TypedDict, total=False):
 
 
 class SpecScenarioDefinitionJobSpecOrchestratorConfig(TypedDict, total=False):
-    """Orchestrator configuration (optional overrides).
-
-    If not provided, default values will be used.
-    """
+    """Orchestrator configuration for benchmark job execution"""
 
     n_attempts: Optional[int]
     """Number of retry attempts on failure (default: 0).
@@ -211,10 +202,7 @@ class SpecScenarioDefinitionJobSpec(TypedDict, total=False):
     type: Required[Literal["scenarios"]]
 
     orchestrator_config: Optional[SpecScenarioDefinitionJobSpecOrchestratorConfig]
-    """Orchestrator configuration (optional overrides).
-
-    If not provided, default values will be used.
-    """
+    """Orchestrator configuration for benchmark job execution"""
 
 
 Spec: TypeAlias = Union[SpecHarborJobSpec, SpecBenchmarkDefinitionJobSpec, SpecScenarioDefinitionJobSpec]

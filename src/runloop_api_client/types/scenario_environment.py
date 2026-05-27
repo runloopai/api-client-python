@@ -17,7 +17,11 @@ class ScenarioEnvironment(BaseModel):
     """Use the blueprint with matching ID."""
 
     launch_parameters: Optional[LaunchParameters] = None
-    """Optional launch parameters to apply to the devbox environment at launch."""
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox
+    as well as the environment set up that should be completed before the Devbox is
+    marked as 'running'.
+    """
 
     snapshot_id: Optional[str] = None
     """Use the snapshot with matching ID."""

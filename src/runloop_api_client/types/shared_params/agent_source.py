@@ -11,7 +11,7 @@ __all__ = ["AgentSource", "Git", "Npm", "Object", "Pip"]
 
 
 class Git(TypedDict, total=False):
-    """Git source configuration"""
+    """Git-based agent source configuration."""
 
     repository: Required[str]
     """Git repository URL"""
@@ -24,7 +24,7 @@ class Git(TypedDict, total=False):
 
 
 class Npm(TypedDict, total=False):
-    """NPM source configuration"""
+    """NPM-based agent source configuration."""
 
     package_name: Required[str]
     """NPM package name"""
@@ -37,7 +37,7 @@ class Npm(TypedDict, total=False):
 
 
 class Object(TypedDict, total=False):
-    """Object store source configuration"""
+    """Object store agent source configuration."""
 
     object_id: Required[str]
     """Object ID"""
@@ -47,7 +47,7 @@ class Object(TypedDict, total=False):
 
 
 class Pip(TypedDict, total=False):
-    """Pip source configuration"""
+    """Pip-based agent source configuration."""
 
     package_name: Required[str]
     """Pip package name"""
@@ -66,13 +66,13 @@ class AgentSource(TypedDict, total=False):
     """Source type: npm, pip, object, or git"""
 
     git: Optional[Git]
-    """Git source configuration"""
+    """Git-based agent source configuration."""
 
     npm: Optional[Npm]
-    """NPM source configuration"""
+    """NPM-based agent source configuration."""
 
     object: Optional[Object]
-    """Object store source configuration"""
+    """Object store agent source configuration."""
 
     pip: Optional[Pip]
-    """Pip source configuration"""
+    """Pip-based agent source configuration."""

@@ -21,7 +21,11 @@ class RunProfile(TypedDict, total=False):
     """
 
     launch_parameters: Annotated[Optional[LaunchParameters], PropertyInfo(alias="launchParameters")]
-    """Additional runtime LaunchParameters to apply after the devbox starts."""
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox
+    as well as the environment set up that should be completed before the Devbox is
+    marked as 'running'.
+    """
 
     mounts: Optional[Iterable[Mount]]
     """A list of mounts to be included in the scenario run."""

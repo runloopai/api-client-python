@@ -10,7 +10,10 @@ __all__ = ["GatewayConfigUpdateParams", "AuthMechanism"]
 
 class GatewayConfigUpdateParams(TypedDict, total=False):
     auth_mechanism: Optional[AuthMechanism]
-    """New authentication mechanism for applying credentials to proxied requests."""
+    """
+    Defines how credentials are applied to HTTP requests when proxying through the
+    gateway.
+    """
 
     description: Optional[str]
     """New description for this gateway configuration."""
@@ -23,7 +26,9 @@ class GatewayConfigUpdateParams(TypedDict, total=False):
 
 
 class AuthMechanism(TypedDict, total=False):
-    """New authentication mechanism for applying credentials to proxied requests."""
+    """
+    Defines how credentials are applied to HTTP requests when proxying through the gateway.
+    """
 
     type: Required[str]
     """The type of authentication mechanism: 'header', 'bearer'."""

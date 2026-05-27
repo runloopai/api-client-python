@@ -15,7 +15,10 @@ __all__ = ["ScenarioUpdateParams"]
 
 class ScenarioUpdateParams(TypedDict, total=False):
     environment_parameters: Optional[ScenarioEnvironmentParam]
-    """The Environment in which the Scenario will run."""
+    """
+    ScenarioEnvironmentParameters specify the environment in which a Scenario will
+    be run.
+    """
 
     input_context: Optional[InputContextUpdateParam]
     """The input context for the Scenario."""

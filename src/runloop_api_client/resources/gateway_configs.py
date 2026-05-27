@@ -160,7 +160,8 @@ class GatewayConfigsResource(SyncAPIResource):
         All fields are optional.
 
         Args:
-          auth_mechanism: New authentication mechanism for applying credentials to proxied requests.
+          auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
+              gateway.
 
           description: New description for this gateway configuration.
 
@@ -440,7 +441,8 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         All fields are optional.
 
         Args:
-          auth_mechanism: New authentication mechanism for applying credentials to proxied requests.
+          auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
+              gateway.
 
           description: New description for this gateway configuration.
 

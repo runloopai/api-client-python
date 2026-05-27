@@ -184,7 +184,9 @@ class DevboxesResource(SyncAPIResource):
               the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
               'my_claude_key'}}
 
-          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           mcp: [Beta] (Optional) MCP specifications for MCP server access. Map key is the
               environment variable name for the MCP token envelope. Each spec links an MCP
@@ -208,9 +210,8 @@ class DevboxesResource(SyncAPIResource):
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
 
-          tunnel: (Optional) Configuration for creating a V2 tunnel at Devbox launch time. When
-              specified, a tunnel will be automatically provisioned and the tunnel details
-              will be included in the Devbox response.
+          tunnel: Configuration for creating a V2 tunnel. When specified at Devbox creation, a
+              tunnel will be automatically provisioned.
 
           extra_headers: Send extra headers
 
@@ -1626,7 +1627,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
               the real API key. Example: {'GWS_ANTHROPIC': {'gateway': 'anthropic', 'secret':
               'my_claude_key'}}
 
-          launch_parameters: Parameters to configure the resources and launch time behavior of the Devbox.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           mcp: [Beta] (Optional) MCP specifications for MCP server access. Map key is the
               environment variable name for the MCP token envelope. Each spec links an MCP
@@ -1650,9 +1653,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
           snapshot_id: Snapshot ID to use for the Devbox. Only one of (Snapshot ID, Blueprint ID,
               Blueprint name) should be specified.
 
-          tunnel: (Optional) Configuration for creating a V2 tunnel at Devbox launch time. When
-              specified, a tunnel will be automatically provisioned and the tunnel details
-              will be included in the Devbox response.
+          tunnel: Configuration for creating a V2 tunnel. When specified at Devbox creation, a
+              tunnel will be automatically provisioned.
 
           extra_headers: Send extra headers
 

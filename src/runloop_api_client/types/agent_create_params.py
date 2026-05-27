@@ -15,7 +15,7 @@ class AgentCreateParams(TypedDict, total=False):
     """The name of the Agent."""
 
     source: Optional[AgentSource]
-    """The source configuration for the Agent."""
+    """Agent source configuration."""
 
     version: Optional[str]
     """Optional version identifier for the Agent.

@@ -38,7 +38,10 @@ class ScenarioView(BaseModel):
     """
 
     environment: Optional[ScenarioEnvironment] = None
-    """The Environment in which the Scenario is run."""
+    """
+    ScenarioEnvironmentParameters specify the environment in which a Scenario will
+    be run.
+    """
 
     is_public: Optional[bool] = None
     """Whether this scenario is public."""

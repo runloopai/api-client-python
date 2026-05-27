@@ -68,7 +68,7 @@ class AgentsResource(SyncAPIResource):
         Args:
           name: The name of the Agent.
 
-          source: The source configuration for the Agent.
+          source: Agent source configuration.
 
           version: Optional version identifier for the Agent. For npm/pip sources this is typically
               a semver string (e.g. '2.0.65'). For git sources it can be a branch or tag.
@@ -377,7 +377,7 @@ class AsyncAgentsResource(AsyncAPIResource):
         Args:
           name: The name of the Agent.
 
-          source: The source configuration for the Agent.
+          source: Agent source configuration.
 
           version: Optional version identifier for the Agent. For npm/pip sources this is typically
               a semver string (e.g. '2.0.65'). For git sources it can be a branch or tag.

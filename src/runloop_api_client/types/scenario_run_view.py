@@ -46,7 +46,10 @@ class ScenarioRunView(BaseModel):
     """Purpose of the ScenarioRun."""
 
     scoring_contract_result: Optional[ScoringContractResultView] = None
-    """The scoring result of the ScenarioRun."""
+    """
+    A ScoringContractResultView represents the result of running all scoring
+    functions on a given input context.
+    """
 
     secrets_provided: Optional[Dict[str, str]] = None
     """User secrets used to run the scenario."""
