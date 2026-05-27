@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.22.0 (2026-05-27)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/runloopai/api-client-python/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* add reflex initiator type, hidden param ([#9350](https://github.com/runloopai/api-client-python/issues/9350)) ([5922abf](https://github.com/runloopai/api-client-python/commit/5922abfd135589b229cb64ea23750d34fede857f))
+* **api:** expose lifecycle_hooks on LaunchParameters lifecycle ([#9115](https://github.com/runloopai/api-client-python/issues/9115)) ([c9c7c37](https://github.com/runloopai/api-client-python/commit/c9c7c37c2a38f91142b0b28d1e5cbc183b8ee53e))
+* **mux:** initial changes to enable http/2  ([#8936](https://github.com/runloopai/api-client-python/issues/8936)) ([71ce0bf](https://github.com/runloopai/api-client-python/commit/71ce0bf9ac98599b41a9cc6d16a3333c8b70e977))
+
+
+### Bug Fixes
+
+* clean up PTY and lifecycle hook OpenAPI descriptions ([#9502](https://github.com/runloopai/api-client-python/issues/9502)) ([f986282](https://github.com/runloopai/api-client-python/commit/f986282230c815acae4cf9d81685b182ca78ebfa))
+* **mux:** strip internal stub note from PTY OpenAPI descriptions ([#9315](https://github.com/runloopai/api-client-python/issues/9315)) ([214629e](https://github.com/runloopai/api-client-python/commit/214629e9281c38ff75b5769e13b4b977a346bb04))
+* revert workflow actions to runloopai forks ([#805](https://github.com/runloopai/api-client-python/issues/805)) ([88a9632](https://github.com/runloopai/api-client-python/commit/88a9632507cd422bc43eeb3886ac330c2ab3ba44))
+
+
+### Chores
+
+* Update stainless.yml, bump AGENTS.md to keep this updated ([#9268](https://github.com/runloopai/api-client-python/issues/9268)) ([5d86ef5](https://github.com/runloopai/api-client-python/commit/5d86ef5240920ba4b6de9e59456aea3c0971e3ef))
+
 ## 1.21.0 (2026-05-13)
 
 Full Changelog: [v1.20.3...v1.21.0](https://github.com/runloopai/api-client-python/compare/v1.20.3...v1.21.0)
