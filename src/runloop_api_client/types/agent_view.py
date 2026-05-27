@@ -24,7 +24,7 @@ class AgentView(BaseModel):
     """The name of the Agent."""
 
     source: Optional[AgentSource] = None
-    """The source configuration for the Agent."""
+    """Agent source configuration."""
 
     version: Optional[str] = None
     """Optional version identifier for the Agent.

@@ -82,7 +82,13 @@ class BlueprintView(BaseModel):
     """Capabilities that will be available on Devbox."""
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "build_failed"]] = None
-    """The failure reason if the Blueprint build failed, if any."""
+    """The cause of the failure of the Blueprint build.
+
+    out_of_memory: The build has run out of memory. Contact support if this is
+    unexpected. out_of_disk: The build has run out of disk. Contact support if this
+    is unexpected. build_failed: The build has failed. Use the dashboard to look at
+    Blueprint build logs for more info.
+    """
 
     is_public: Optional[bool] = None
     """Whether this Blueprint is publicly accessible to all users."""

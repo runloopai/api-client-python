@@ -24,7 +24,10 @@ class ScenarioCreateParams(TypedDict, total=False):
     """The scoring contract for the Scenario."""
 
     environment_parameters: Optional[ScenarioEnvironmentParam]
-    """The Environment in which the Scenario will run."""
+    """
+    ScenarioEnvironmentParameters specify the environment in which a Scenario will
+    be run.
+    """
 
     metadata: Optional[Dict[str, str]]
     """User defined metadata to attach to the scenario for organization."""

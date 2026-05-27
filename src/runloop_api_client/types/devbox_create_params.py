@@ -47,7 +47,11 @@ class DevboxBaseCreateParams(TypedDict, total=False):
     """
 
     launch_parameters: Optional[LaunchParameters]
-    """Parameters to configure the resources and launch time behavior of the Devbox."""
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox
+    as well as the environment set up that should be completed before the Devbox is
+    marked as 'running'.
+    """
 
     mcp: Optional[Dict[str, Mcp]]
     """[Beta] (Optional) MCP specifications for MCP server access.
@@ -104,10 +108,9 @@ class DevboxCreateParams(DevboxBaseCreateParams, total=False):
     """
 
     tunnel: Optional[Tunnel]
-    """(Optional) Configuration for creating a V2 tunnel at Devbox launch time.
+    """Configuration for creating a V2 tunnel.
 
-    When specified, a tunnel will be automatically provisioned and the tunnel
-    details will be included in the Devbox response.
+    When specified at Devbox creation, a tunnel will be automatically provisioned.
     """
 
 
@@ -136,9 +139,9 @@ class Mcp(TypedDict, total=False):
 
 
 class Tunnel(TypedDict, total=False):
-    """(Optional) Configuration for creating a V2 tunnel at Devbox launch time.
+    """Configuration for creating a V2 tunnel.
 
-    When specified, a tunnel will be automatically provisioned and the tunnel details will be included in the Devbox response.
+    When specified at Devbox creation, a tunnel will be automatically provisioned.
     """
 
     auth_mode: Optional[Literal["open", "authenticated"]]
