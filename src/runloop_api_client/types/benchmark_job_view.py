@@ -30,10 +30,7 @@ __all__ = [
 
 
 class BenchmarkOutcomeScenarioOutcomeFailureReason(BaseModel):
-    """Failure information if the scenario failed or timed out.
-
-    Contains exception type and message.
-    """
+    """Information about why a scenario execution failed"""
 
     exception_message: str
     """The exception message providing context"""
@@ -60,10 +57,7 @@ class BenchmarkOutcomeScenarioOutcome(BaseModel):
     """Duration of the scenario execution in milliseconds."""
 
     failure_reason: Optional[BenchmarkOutcomeScenarioOutcomeFailureReason] = None
-    """Failure information if the scenario failed or timed out.
-
-    Contains exception type and message.
-    """
+    """Information about why a scenario execution failed"""
 
     scenario_run_id: Optional[str] = None
     """The ID of the scenario run.
@@ -121,7 +115,7 @@ class InProgressRunAgentConfigExternalAPIAgentConfig(BaseModel):
 
 
 class InProgressRunAgentConfigJobAgentConfigAgentEnvironment(BaseModel):
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     environment_variables: Optional[Dict[str, str]] = None
     """Environment variables to set when launching the agent."""
@@ -142,7 +136,7 @@ class InProgressRunAgentConfigJobAgentConfig(BaseModel):
     type: Literal["job_agent"]
 
     agent_environment: Optional[InProgressRunAgentConfigJobAgentConfigAgentEnvironment] = None
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     agent_id: Optional[str] = None
     """ID of the agent to use (optional if agent exists by name)"""
@@ -225,7 +219,7 @@ JobSource: TypeAlias = Annotated[
 
 
 class JobSpecAgentConfigAgentEnvironment(BaseModel):
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     environment_variables: Optional[Dict[str, str]] = None
     """Environment variables to set when launching the agent."""
@@ -246,7 +240,7 @@ class JobSpecAgentConfig(BaseModel):
     type: Literal["job_agent"]
 
     agent_environment: Optional[JobSpecAgentConfigAgentEnvironment] = None
-    """Environment configuration to use for this agent"""
+    """Environment configuration for an agent in a benchmark job"""
 
     agent_id: Optional[str] = None
     """ID of the agent to use (optional if agent exists by name)"""
@@ -262,7 +256,7 @@ class JobSpecAgentConfig(BaseModel):
 
 
 class JobSpecOrchestratorConfig(BaseModel):
-    """Orchestrator configuration"""
+    """Orchestrator configuration for benchmark job execution"""
 
     n_attempts: Optional[int] = None
     """Number of retry attempts on failure (default: 0).
@@ -287,10 +281,7 @@ class JobSpecOrchestratorConfig(BaseModel):
 
 
 class JobSpec(BaseModel):
-    """The resolved job specification.
-
-    Contains scenarios, agents, and orchestrator config.
-    """
+    """Job specification describing scenarios and execution configuration"""
 
     agent_configs: List[JobSpecAgentConfig]
     """Agent configurations for this job"""
@@ -299,7 +290,7 @@ class JobSpec(BaseModel):
     """List of scenario IDs to execute"""
 
     orchestrator_config: Optional[JobSpecOrchestratorConfig] = None
-    """Orchestrator configuration"""
+    """Orchestrator configuration for benchmark job execution"""
 
 
 class BenchmarkJobView(BaseModel):
@@ -341,7 +332,4 @@ class BenchmarkJobView(BaseModel):
     """
 
     job_spec: Optional[JobSpec] = None
-    """The resolved job specification.
-
-    Contains scenarios, agents, and orchestrator config.
-    """
+    """Job specification describing scenarios and execution configuration"""

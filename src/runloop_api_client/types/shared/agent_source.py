@@ -8,7 +8,7 @@ __all__ = ["AgentSource", "Git", "Npm", "Object", "Pip"]
 
 
 class Git(BaseModel):
-    """Git source configuration"""
+    """Git-based agent source configuration."""
 
     repository: str
     """Git repository URL"""
@@ -21,7 +21,7 @@ class Git(BaseModel):
 
 
 class Npm(BaseModel):
-    """NPM source configuration"""
+    """NPM-based agent source configuration."""
 
     package_name: str
     """NPM package name"""
@@ -34,7 +34,7 @@ class Npm(BaseModel):
 
 
 class Object(BaseModel):
-    """Object store source configuration"""
+    """Object store agent source configuration."""
 
     object_id: str
     """Object ID"""
@@ -44,7 +44,7 @@ class Object(BaseModel):
 
 
 class Pip(BaseModel):
-    """Pip source configuration"""
+    """Pip-based agent source configuration."""
 
     package_name: str
     """Pip package name"""
@@ -63,13 +63,13 @@ class AgentSource(BaseModel):
     """Source type: npm, pip, object, or git"""
 
     git: Optional[Git] = None
-    """Git source configuration"""
+    """Git-based agent source configuration."""
 
     npm: Optional[Npm] = None
-    """NPM source configuration"""
+    """NPM-based agent source configuration."""
 
     object: Optional[Object] = None
-    """Object store source configuration"""
+    """Object store agent source configuration."""
 
     pip: Optional[Pip] = None
-    """Pip source configuration"""
+    """Pip-based agent source configuration."""

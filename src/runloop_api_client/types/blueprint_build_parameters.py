@@ -86,7 +86,11 @@ class BlueprintBuildParameters(BaseModel):
     """(Optional) Map of paths and file contents to write before setup."""
 
     launch_parameters: Optional[LaunchParameters] = None
-    """Parameters to configure your Devbox at launch time."""
+    """
+    LaunchParameters enable you to customize the resources available to your Devbox
+    as well as the environment set up that should be completed before the Devbox is
+    marked as 'running'.
+    """
 
     metadata: Optional[Dict[str, str]] = None
     """(Optional) User defined metadata for the Blueprint."""

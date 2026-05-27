@@ -177,7 +177,9 @@ class BlueprintsResource(SyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
@@ -529,7 +531,9 @@ class BlueprintsResource(SyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
@@ -722,7 +726,9 @@ class BlueprintsResource(SyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
@@ -858,7 +864,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
@@ -1210,7 +1218,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 
@@ -1403,7 +1413,9 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           file_mounts: (Optional) Map of paths and file contents to write before setup.
 
-          launch_parameters: Parameters to configure your Devbox at launch time.
+          launch_parameters: LaunchParameters enable you to customize the resources available to your Devbox
+              as well as the environment set up that should be completed before the Devbox is
+              marked as 'running'.
 
           metadata: (Optional) User defined metadata for the Blueprint.
 

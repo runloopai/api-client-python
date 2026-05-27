@@ -115,7 +115,8 @@ class ScenariosResource(SyncAPIResource):
 
           scoring_contract: The scoring contract for the Scenario.
 
-          environment_parameters: The Environment in which the Scenario will run.
+          environment_parameters: ScenarioEnvironmentParameters specify the environment in which a Scenario will
+              be run.
 
           metadata: User defined metadata to attach to the scenario for organization.
 
@@ -233,7 +234,8 @@ class ScenariosResource(SyncAPIResource):
         entirely.
 
         Args:
-          environment_parameters: The Environment in which the Scenario will run.
+          environment_parameters: ScenarioEnvironmentParameters specify the environment in which a Scenario will
+              be run.
 
           input_context: The input context for the Scenario.
 
@@ -637,7 +639,8 @@ class AsyncScenariosResource(AsyncAPIResource):
 
           scoring_contract: The scoring contract for the Scenario.
 
-          environment_parameters: The Environment in which the Scenario will run.
+          environment_parameters: ScenarioEnvironmentParameters specify the environment in which a Scenario will
+              be run.
 
           metadata: User defined metadata to attach to the scenario for organization.
 
@@ -755,7 +758,8 @@ class AsyncScenariosResource(AsyncAPIResource):
         entirely.
 
         Args:
-          environment_parameters: The Environment in which the Scenario will run.
+          environment_parameters: ScenarioEnvironmentParameters specify the environment in which a Scenario will
+              be run.
 
           input_context: The input context for the Scenario.
 

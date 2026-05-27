@@ -10,8 +10,11 @@ from .shared import (
     AgentSource as AgentSource,
     BrokerMount as BrokerMount,
     ObjectMount as ObjectMount,
+    LifecycleHooks as LifecycleHooks,
+    ResumeTriggers as ResumeTriggers,
     LaunchParameters as LaunchParameters,
     CodeMountParameters as CodeMountParameters,
+    LifecycleConfiguration as LifecycleConfiguration,
 )
 from .axon_view import AxonView as AxonView
 from .agent_view import AgentView as AgentView

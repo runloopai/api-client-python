@@ -89,7 +89,16 @@ class DevboxView(BaseModel):
     """
 
     failure_reason: Optional[Literal["out_of_memory", "out_of_disk", "execution_failed", "health_check_failed"]] = None
-    """The failure reason if the Devbox failed, if the Devbox has a 'failure' status."""
+    """The category of failure experienced by the Devbox.
+
+    out_of_memory: The Devbox ran out of memory at runtime. Use launch parameters to
+    request a larger resource size. out_of_disk: The Devbox ran out of disk at
+    runtime. Please reach out to support for us to better support your use case.
+    execution_failed: The Devbox failed at runtime. Please use the dashboard to look
+    at the logs of the failure. health_check_failed: The Devbox failed its health
+    checks. This may indicate resource utilization is close to the maximum. Consider
+    requesting a larger resource size.
+    """
 
     gateway_specs: Optional[Dict[str, GatewaySpecs]] = None
     """Gateway specifications configured for this devbox.
@@ -100,7 +109,7 @@ class DevboxView(BaseModel):
     initiator_id: Optional[str] = None
     """The ID of the initiator that created the Devbox."""
 
-    initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation"]] = None
+    initiator_type: Optional[Literal["unknown", "api", "scenario", "scoring_validation", "reflex"]] = None
     """The type of initiator that created the Devbox."""
 
     mcp_specs: Optional[Dict[str, McpSpecs]] = None
@@ -116,9 +125,12 @@ class DevboxView(BaseModel):
     shutdown_reason: Optional[
         Literal["api_shutdown", "keep_alive_timeout", "entrypoint_exit", "idle", "ttl_expired"]
     ] = None
-    """
-    The shutdown reason if the Devbox shutdown, if the Devbox has a 'shutdown'
-    status.
+    """The reason that caused the transition of the Devbox to the shutown state.
+
+    api_shutdown: The Devbox shutdown due to API request. entrypoint_exit: The
+    Devbox entrypoint program completed. idle: The Devbox shutdown due to configured
+    action on idle configuration. ttl_expired: The Devbox shutdown due to TTL
+    expiration.
     """
 
     snapshot_id: Optional[str] = None
@@ -128,7 +140,11 @@ class DevboxView(BaseModel):
     """
 
     tunnel: Optional[TunnelView] = None
-    """
-    V2 tunnel information if a tunnel was created at launch time or via the
-    createTunnel API.
+    """A V2 tunnel provides secure HTTP access to services running on a Devbox.
+
+    Tunnels allow external clients to reach web servers, APIs, or other HTTP
+    services running inside a Devbox without requiring direct network access. Each
+    tunnel is uniquely identified by an encrypted tunnel_key and can be configured
+    for either open (public) or authenticated access. Usage:
+    https://{port}-{tunnel_key}.tunnel.runloop.ai
     """

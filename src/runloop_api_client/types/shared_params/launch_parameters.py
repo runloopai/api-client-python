@@ -7,42 +7,13 @@ from typing_extensions import Literal, Required, TypedDict
 
 from ..._types import SequenceNotStr
 from .after_idle import AfterIdle
+from .lifecycle_configuration import LifecycleConfiguration
 
-__all__ = ["LaunchParameters", "Lifecycle", "LifecycleResumeTriggers", "UserParameters"]
-
-
-class LifecycleResumeTriggers(TypedDict, total=False):
-    """Triggers that can resume a suspended Devbox."""
-
-    axon_event: Optional[bool]
-    """When true, axon events targeting a suspended Devbox will trigger a resume."""
-
-    http: Optional[bool]
-    """When true, HTTP traffic to a suspended Devbox via tunnel will trigger a resume."""
-
-
-class Lifecycle(TypedDict, total=False):
-    """Lifecycle configuration for idle and resume behavior.
-
-    Configure idle policy via lifecycle.after_idle (if both this and the top-level after_idle are set, they must match) and resume triggers via lifecycle.resume_triggers.
-    """
-
-    after_idle: Optional[AfterIdle]
-    """Configure Devbox lifecycle based on idle activity.
-
-    If both this and the top-level after_idle are set, they must have the same
-    value. Prefer this field for new integrations.
-    """
-
-    resume_triggers: Optional[LifecycleResumeTriggers]
-    """Triggers that can resume a suspended Devbox."""
+__all__ = ["LaunchParameters", "UserParameters"]
 
 
 class UserParameters(TypedDict, total=False):
-    """Specify the user for execution on Devbox.
-
-    If not set, default `user` will be used.
-    """
+    """Configuration for the Linux user in the Devbox environment."""
 
     uid: Required[int]
     """User ID (UID) for the Linux user. Must be a non-negative integer."""
@@ -91,12 +62,11 @@ class LaunchParameters(TypedDict, total=False):
     launch_commands: Optional[SequenceNotStr[str]]
     """Set of commands to be run at launch time, before the entrypoint process is run."""
 
-    lifecycle: Optional[Lifecycle]
-    """Lifecycle configuration for idle and resume behavior.
+    lifecycle: Optional[LifecycleConfiguration]
+    """Lifecycle configuration for Devbox idle and resume behavior.
 
-    Configure idle policy via lifecycle.after_idle (if both this and the top-level
-    after_idle are set, they must match) and resume triggers via
-    lifecycle.resume_triggers.
+    Configure idle policy via after_idle, resume triggers via resume_triggers, and
+    optional lifecycle hooks via lifecycle_hooks.
     """
 
     network_policy_id: Optional[str]
@@ -115,17 +85,17 @@ class LaunchParameters(TypedDict, total=False):
     resource_size_request: Optional[
         Literal["X_SMALL", "SMALL", "MEDIUM", "LARGE", "X_LARGE", "XX_LARGE", "CUSTOM_SIZE"]
     ]
-    """Preset Devbox resources (vCPU, RAM in GiB, ephemeral disk in GiB).
+    """The size of the Devbox resources for Runloop to allocate.
 
-    If not set, SMALL is used. X_SMALL: 0.5 vCPU, 1 GiB RAM, 4 GiB disk. SMALL: 1
-    vCPU, 2 GiB RAM, 4 GiB disk. MEDIUM: 2 vCPU, 4 GiB RAM, 8 GiB disk. LARGE: 2
-    vCPU, 8 GiB RAM, 16 GiB disk. X_LARGE: 4 vCPU, 16 GiB RAM, 16 GiB disk.
-    XX_LARGE: 8 vCPU, 32 GiB RAM, 16 GiB disk. CUSTOM_SIZE: set custom_cpu_cores,
-    custom_gb_memory, and optionally custom_disk_size.
+    X_SMALL: 0.5 cpu x 1GiB memory x 4GiB disk SMALL: 1 cpu x 2GiB memory x 4GiB
+    disk MEDIUM: 2 cpu x 4GiB memory x 8GiB disk LARGE: 2 cpu x 8GiB memory x 16GiB
+    disk X_LARGE: 4 cpu x 16GiB memory x 16GiB disk XX_LARGE: 8 cpu x 32GiB memory x
+    16GiB disk CUSTOM_SIZE: To choose a custom size, set this enum and also the
+    custom_cpu_cores, custom_gb_memory, and optionally custom_disk_size in launch
+    parameters. CPU must be 0.5, 1, or a multiple of 2 (max 16). Memory must be 1 or
+    a multiple of 2 (max 64GiB). Disk must be a multiple of 2 (min 2GiB, max 64GiB).
+    The cpu:memory ratio must be between 1:2 and 1:8 inclusive.
     """
 
     user_parameters: Optional[UserParameters]
-    """Specify the user for execution on Devbox.
-
-    If not set, default `user` will be used.
-    """
+    """Configuration for the Linux user in the Devbox environment."""
