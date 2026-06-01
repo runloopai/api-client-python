@@ -22,6 +22,7 @@ from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
 from .tunnel_view import TunnelView as TunnelView
+from .account_view import AccountView as AccountView
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .axon_list_view import AxonListView as AxonListView

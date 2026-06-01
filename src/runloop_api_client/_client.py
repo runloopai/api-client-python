@@ -42,6 +42,7 @@ if TYPE_CHECKING:
         apikeys,
         objects,
         secrets,
+        accounts,
         devboxes,
         scenarios,
         benchmarks,
@@ -58,6 +59,7 @@ if TYPE_CHECKING:
     from .resources.apikeys import ApikeysResource, AsyncApikeysResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
+    from .resources.accounts import AccountsResource, AsyncAccountsResource
     from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.axons.axons import AxonsResource, AsyncAxonsResource
@@ -143,6 +145,12 @@ class Runloop(SyncAPIClient):
         )
 
         self._idempotency_header = "x-request-id"
+
+    @cached_property
+    def accounts(self) -> AccountsResource:
+        from .resources.accounts import AccountsResource
+
+        return AccountsResource(self)
 
     @cached_property
     def benchmarks(self) -> BenchmarksResource:
@@ -433,6 +441,12 @@ class AsyncRunloop(AsyncAPIClient):
         self._idempotency_header = "x-request-id"
 
     @cached_property
+    def accounts(self) -> AsyncAccountsResource:
+        from .resources.accounts import AsyncAccountsResource
+
+        return AsyncAccountsResource(self)
+
+    @cached_property
     def benchmarks(self) -> AsyncBenchmarksResource:
         from .resources.benchmarks import AsyncBenchmarksResource
 
@@ -656,6 +670,12 @@ class RunloopWithRawResponse:
         self._client = client
 
     @cached_property
+    def accounts(self) -> accounts.AccountsResourceWithRawResponse:
+        from .resources.accounts import AccountsResourceWithRawResponse
+
+        return AccountsResourceWithRawResponse(self._client.accounts)
+
+    @cached_property
     def benchmarks(self) -> benchmarks.BenchmarksResourceWithRawResponse:
         from .resources.benchmarks import BenchmarksResourceWithRawResponse
 
@@ -757,6 +777,12 @@ class AsyncRunloopWithRawResponse:
 
     def __init__(self, client: AsyncRunloop) -> None:
         self._client = client
+
+    @cached_property
+    def accounts(self) -> accounts.AsyncAccountsResourceWithRawResponse:
+        from .resources.accounts import AsyncAccountsResourceWithRawResponse
+
+        return AsyncAccountsResourceWithRawResponse(self._client.accounts)
 
     @cached_property
     def benchmarks(self) -> benchmarks.AsyncBenchmarksResourceWithRawResponse:
@@ -862,6 +888,12 @@ class RunloopWithStreamedResponse:
         self._client = client
 
     @cached_property
+    def accounts(self) -> accounts.AccountsResourceWithStreamingResponse:
+        from .resources.accounts import AccountsResourceWithStreamingResponse
+
+        return AccountsResourceWithStreamingResponse(self._client.accounts)
+
+    @cached_property
     def benchmarks(self) -> benchmarks.BenchmarksResourceWithStreamingResponse:
         from .resources.benchmarks import BenchmarksResourceWithStreamingResponse
 
@@ -963,6 +995,12 @@ class AsyncRunloopWithStreamedResponse:
 
     def __init__(self, client: AsyncRunloop) -> None:
         self._client = client
+
+    @cached_property
+    def accounts(self) -> accounts.AsyncAccountsResourceWithStreamingResponse:
+        from .resources.accounts import AsyncAccountsResourceWithStreamingResponse
+
+        return AsyncAccountsResourceWithStreamingResponse(self._client.accounts)
 
     @cached_property
     def benchmarks(self) -> benchmarks.AsyncBenchmarksResourceWithStreamingResponse:
