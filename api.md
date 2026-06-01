@@ -17,6 +17,18 @@ from runloop_api_client.types import (
 )
 ```
 
+# Accounts
+
+Types:
+
+```python
+from runloop_api_client.types import AccountView
+```
+
+Methods:
+
+- <code title="get /v1/accounts/me">client.accounts.<a href="./src/runloop_api_client/resources/accounts.py">me</a>() -> <a href="./src/runloop_api_client/types/account_view.py">AccountView</a></code>
+
 # Benchmarks
 
 Types:
