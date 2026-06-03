@@ -146,5 +146,6 @@ class DevboxView(BaseModel):
     services running inside a Devbox without requiring direct network access. Each
     tunnel is uniquely identified by an encrypted tunnel_key and can be configured
     for either open (public) or authenticated access. Usage:
-    https://{port}-{tunnel_key}.tunnel.runloop.ai
+    https://{port}-{tunnel_key}.tunnel.runloop.ai. Authenticated tunnels should pass
+    auth_token as X-Runloop-Tunnel-Authorization: Bearer {auth_token}.
     """
