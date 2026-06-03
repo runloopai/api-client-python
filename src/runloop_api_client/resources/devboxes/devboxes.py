@@ -418,8 +418,8 @@ class DevboxesResource(SyncAPIResource):
         Devbox.
 
         This tunnel is not persisted on the Devbox and is generated fresh on
-        each request. The returned auth_token must be passed as a Bearer token in the
-        Authorization header.
+        each request. The returned auth_token should be passed as a Bearer token in the
+        X-Runloop-Tunnel-Authorization header.
 
         Args:
           extra_headers: Send extra headers
@@ -1861,8 +1861,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Devbox.
 
         This tunnel is not persisted on the Devbox and is generated fresh on
-        each request. The returned auth_token must be passed as a Bearer token in the
-        Authorization header.
+        each request. The returned auth_token should be passed as a Bearer token in the
+        X-Runloop-Tunnel-Authorization header.
 
         Args:
           extra_headers: Send extra headers
