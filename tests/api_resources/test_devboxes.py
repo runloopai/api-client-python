@@ -246,7 +246,7 @@ class TestDevboxes:
             include_total_count=True,
             limit=0,
             starting_after="starting_after",
-            status="provisioning",
+            status="scheduled",
         )
         assert_matches_type(SyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
@@ -1442,7 +1442,7 @@ class TestAsyncDevboxes:
             include_total_count=True,
             limit=0,
             starting_after="starting_after",
-            status="provisioning",
+            status="scheduled",
         )
         assert_matches_type(AsyncDevboxesCursorIDPage[DevboxView], devbox, path=["response"])
 
