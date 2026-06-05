@@ -532,7 +532,15 @@ class DevboxesResource(SyncAPIResource):
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         status: Literal[
-            "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+            "scheduled",
+            "provisioning",
+            "initializing",
+            "running",
+            "suspending",
+            "suspended",
+            "resuming",
+            "failure",
+            "shutdown",
         ]
         | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2195,7 +2203,15 @@ class AsyncDevboxesResource(AsyncAPIResource):
         limit: int | Omit = omit,
         starting_after: str | Omit = omit,
         status: Literal[
-            "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+            "scheduled",
+            "provisioning",
+            "initializing",
+            "running",
+            "suspending",
+            "suspended",
+            "resuming",
+            "failure",
+            "shutdown",
         ]
         | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.

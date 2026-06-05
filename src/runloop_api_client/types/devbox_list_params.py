@@ -21,6 +21,14 @@ class DevboxListParams(TypedDict, total=False):
     """Load the next page of data starting after the item with the given ID."""
 
     status: Literal[
-        "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+        "scheduled",
+        "provisioning",
+        "initializing",
+        "running",
+        "suspending",
+        "suspended",
+        "resuming",
+        "failure",
+        "shutdown",
     ]
     """Filter by status"""
