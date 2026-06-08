@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.23.0 (2026-06-05)
+
+Full Changelog: [v1.22.1...v1.23.0](https://github.com/runloopai/api-client-python/compare/v1.22.1...v1.23.0)
+
+### Features
+
+* **devbox:** add SCHEDULED status to the data model ([#9654](https://github.com/runloopai/api-client-python/issues/9654)) ([8f45663](https://github.com/runloopai/api-client-python/commit/8f456631f96a56612ae9b438e9b6d2dc8d69095f))
+* **portal:** support tunnel authorization header ([#9597](https://github.com/runloopai/api-client-python/issues/9597)) ([8ca990e](https://github.com/runloopai/api-client-python/commit/8ca990e360f072adfdb9f789e37dbd2bb08e8f77))
+
 ## 1.22.1 (2026-06-01)
 
 Full Changelog: [v1.22.0...v1.22.1](https://github.com/runloopai/api-client-python/compare/v1.22.0...v1.22.1)

@@ -12,7 +12,7 @@ class TunnelView(BaseModel):
     """A V2 tunnel provides secure HTTP access to services running on a Devbox.
 
     Tunnels allow external clients to reach web servers, APIs, or other HTTP services running inside a Devbox without requiring direct network access. Each tunnel is uniquely identified by an encrypted tunnel_key and can be configured for either open (public) or authenticated access.
-    Usage: https://{port}-{tunnel_key}.tunnel.runloop.ai
+    Usage: https://{port}-{tunnel_key}.tunnel.runloop.ai. Authenticated tunnels should pass auth_token as X-Runloop-Tunnel-Authorization: Bearer {auth_token}.
     """
 
     auth_mode: Literal["open", "authenticated"]
@@ -42,5 +42,6 @@ class TunnelView(BaseModel):
     auth_token: Optional[str] = None
     """Bearer token for tunnel authentication.
 
-    Only present when auth_mode is 'authenticated'.
+    Only present when auth_mode is 'authenticated'. Pass as
+    X-Runloop-Tunnel-Authorization: Bearer {auth_token}.
     """

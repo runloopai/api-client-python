@@ -12,19 +12,30 @@ __all__ = ["DevboxView", "StateTransition", "GatewaySpecs", "McpSpecs"]
 
 class StateTransition(BaseModel):
     status: Optional[
-        Literal["provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"]
+        Literal[
+            "scheduled",
+            "provisioning",
+            "initializing",
+            "running",
+            "suspending",
+            "suspended",
+            "resuming",
+            "failure",
+            "shutdown",
+        ]
     ] = None
     """The status of the Devbox.
 
-    provisioning: Runloop is allocating and booting the necessary infrastructure
-    resources. initializing: Runloop defined boot scripts are running to enable the
-    environment for interaction. running: The Devbox is ready for interaction.
-    suspending: The Devbox disk is being snapshotted as part of suspension.
-    suspended: The Devbox disk is saved and no more active compute is being used for
-    the Devbox. resuming: The Devbox disk is being loaded as part of booting a
-    suspended Devbox. failure: The Devbox failed as part of booting or running user
-    requested actions. shutdown: The Devbox was successfully shutdown and no more
-    active compute is being used.
+    scheduled: The Devbox is scheduled to run but infrastructure allocation has not
+    started yet. provisioning: Runloop is allocating and booting the necessary
+    infrastructure resources. initializing: Runloop defined boot scripts are running
+    to enable the environment for interaction. running: The Devbox is ready for
+    interaction. suspending: The Devbox disk is being snapshotted as part of
+    suspension. suspended: The Devbox disk is saved and no more active compute is
+    being used for the Devbox. resuming: The Devbox disk is being loaded as part of
+    booting a suspended Devbox. failure: The Devbox failed as part of booting or
+    running user requested actions. shutdown: The Devbox was successfully shutdown
+    and no more active compute is being used.
     """
 
     transition_time_ms: Optional[object] = None
@@ -78,7 +89,15 @@ class DevboxView(BaseModel):
     """A list of state transitions in order with durations"""
 
     status: Literal[
-        "provisioning", "initializing", "running", "suspending", "suspended", "resuming", "failure", "shutdown"
+        "scheduled",
+        "provisioning",
+        "initializing",
+        "running",
+        "suspending",
+        "suspended",
+        "resuming",
+        "failure",
+        "shutdown",
     ]
     """The current status of the Devbox."""
 
@@ -146,5 +165,6 @@ class DevboxView(BaseModel):
     services running inside a Devbox without requiring direct network access. Each
     tunnel is uniquely identified by an encrypted tunnel_key and can be configured
     for either open (public) or authenticated access. Usage:
-    https://{port}-{tunnel_key}.tunnel.runloop.ai
+    https://{port}-{tunnel_key}.tunnel.runloop.ai. Authenticated tunnels should pass
+    auth_token as X-Runloop-Tunnel-Authorization: Bearer {auth_token}.
     """
