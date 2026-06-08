@@ -1082,6 +1082,51 @@ class TestRunloop:
         assert exc_info.value.response.status_code == 302
         assert exc_info.value.response.headers["Location"] == f"{base_url}/redirected"
 
+    @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @pytest.mark.respx(base_url=base_url)
+    def test_upload_file_408_does_not_retry(self, respx_mock: MockRouter, client: Runloop) -> None:
+        # 408 on upload_file means the server gave up waiting for the request body.
+        # Retrying piles another large request onto the same exhausted connection
+        # pool and amplifies the stall, so the SDK must NOT auto-retry these.
+        client = client.with_options(max_retries=4)
+
+        call_count = 0
+
+        def handler(_request: httpx.Request) -> httpx.Response:
+            nonlocal call_count
+            call_count += 1
+            return httpx.Response(408)
+
+        respx_mock.post("/v1/devboxes/dbx_test/upload_file").mock(side_effect=handler)
+
+        with pytest.raises(APIStatusError) as exc_info:
+            client.devboxes.upload_file(id="dbx_test", path="/tmp/foo", file=b"payload")
+
+        assert exc_info.value.response.status_code == 408
+        assert call_count == 1, f"upload_file 408 should not retry, got {call_count} attempts"
+
+    @mock.patch("runloop_api_client._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @pytest.mark.respx(base_url=base_url)
+    def test_non_upload_file_408_still_retries(self, respx_mock: MockRouter, client: Runloop) -> None:
+        # Sanity check that the upload_file carve-out didn't break the general
+        # 408-retries-by-default behavior for other routes.
+        client = client.with_options(max_retries=2)
+
+        call_count = 0
+
+        def handler(_request: httpx.Request) -> httpx.Response:
+            nonlocal call_count
+            call_count += 1
+            return httpx.Response(408)
+
+        respx_mock.post("/v1/devboxes").mock(side_effect=handler)
+
+        with pytest.raises(APIStatusError):
+            client.devboxes.create()
+
+        # initial attempt + 2 retries
+        assert call_count == 3
+
 
 class TestAsyncRunloop:
     @pytest.mark.respx(base_url=base_url)

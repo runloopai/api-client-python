@@ -288,6 +288,106 @@ class TestAsyncCopy:
         assert c2._client is custom
 
 
+class TestSyncConnectionLimits:
+    def test_custom_limits_force_private_pool(self):
+        limits = httpx.Limits(max_connections=42, max_keepalive_connections=7)
+        c = _make_client(connection_limits=limits)
+
+        assert c._uses_shared_pool is False
+        assert c._connection_limits is limits
+        transport = _get_transport(c)
+        # Real httpx.HTTPTransport (not the shared wrapper)
+        assert isinstance(transport, httpx.HTTPTransport)
+        # Pool actually got the requested limits
+        assert transport._pool._max_connections == 42
+        assert transport._pool._max_keepalive_connections == 7
+
+        c.close()
+
+    def test_custom_limits_override_shared_pool_request(self):
+        # Even with shared_http_pool=True (default), explicit limits take precedence
+        # and the client gets a private pool.
+        limits = httpx.Limits(max_connections=5)
+        c = _make_client(shared_http_pool=True, connection_limits=limits)
+
+        assert c._uses_shared_pool is False
+
+        c.close()
+
+    def test_copy_inherits_connection_limits(self):
+        limits = httpx.Limits(max_connections=25)
+        c1 = _make_client(connection_limits=limits)
+        c2 = c1.copy()
+
+        assert c2._connection_limits is limits
+        assert c2._uses_shared_pool is False
+        assert _get_transport(c2)._pool._max_connections == 25
+
+        c1.close()
+        c2.close()
+
+    def test_copy_can_override_connection_limits(self):
+        c1 = _make_client(connection_limits=httpx.Limits(max_connections=25))
+        new_limits = httpx.Limits(max_connections=200, max_keepalive_connections=50)
+        c2 = c1.copy(connection_limits=new_limits)
+
+        assert c2._connection_limits is new_limits
+        assert _get_transport(c2)._pool._max_connections == 200
+
+        c1.close()
+        c2.close()
+
+    def test_copy_can_reset_connection_limits(self):
+        c1 = _make_client(connection_limits=httpx.Limits(max_connections=25))
+        # Passing None resets to the SDK default limits but keeps the inherited
+        # sharing mode (parent was private, so the copy stays private). Use
+        # shared_http_pool=True alongside to also re-enable sharing.
+        c2 = c1.copy(connection_limits=None)
+
+        assert c2._connection_limits is None
+        assert c2._uses_shared_pool is False
+
+        c3 = c1.copy(connection_limits=None, shared_http_pool=True)
+        assert c3._connection_limits is None
+        assert c3._uses_shared_pool is True
+
+        c1.close()
+        c2.close()
+        c3.close()
+
+
+class TestAsyncConnectionLimits:
+    async def test_custom_limits_force_private_pool(self):
+        limits = httpx.Limits(max_connections=42, max_keepalive_connections=7)
+        c = _make_async_client(connection_limits=limits)
+
+        assert c._uses_shared_pool is False
+        assert c._connection_limits is limits
+        transport = _get_transport(c)
+        assert isinstance(transport, httpx.AsyncHTTPTransport)
+        assert transport._pool._max_connections == 42
+        assert transport._pool._max_keepalive_connections == 7
+
+        await c.close()
+
+    async def test_custom_limits_override_shared_pool_request(self):
+        limits = httpx.Limits(max_connections=5)
+        c = _make_async_client(shared_http_pool=True, connection_limits=limits)
+
+        assert c._uses_shared_pool is False
+
+        await c.close()
+
+    async def test_copy_inherits_connection_limits(self):
+        limits = httpx.Limits(max_connections=25)
+        c1 = _make_async_client(connection_limits=limits)
+        c2 = c1.copy()
+
+        assert c2._connection_limits is limits
+        assert c2._uses_shared_pool is False
+        assert _get_transport(c2)._pool._max_connections == 25
+
+
 class TestAsyncCrossLoop:
     def test_separate_loops_get_separate_transports(self):
         """Clients created in different asyncio.run() calls must not share a transport."""
