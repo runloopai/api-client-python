@@ -101,6 +101,7 @@ class TestDevboxes:
                     },
                 },
                 "network_policy_id": "network_policy_id",
+                "provisioning_tier": "standard",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
@@ -1770,6 +1771,7 @@ class TestAsyncDevboxes:
                     },
                 },
                 "network_policy_id": "network_policy_id",
+                "provisioning_tier": "standard",
                 "required_services": ["string"],
                 "resource_size_request": "X_SMALL",
                 "user_parameters": {
