@@ -77,7 +77,7 @@ class LaunchParameters(TypedDict, total=False):
     """
 
     provisioning_tier: Optional[Literal["standard", "flex"]]
-    """(Alpha) standard is default and flex is lazily provisioned and may be pre-empted.
+    """(Optional, Alpha) standard is default and flex is lazily provisioned and may be pre-empted.
 
     This is an alpha feature and its behavior may change without notice.
     """
