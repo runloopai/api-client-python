@@ -77,11 +77,10 @@ class LaunchParameters(TypedDict, total=False):
     """
 
     provisioning_tier: Optional[Literal["standard", "flex"]]
-    """(Optional, Alpha) standard is default and flex is lazily provisioned and may be pre-empted.
-
-    This is an alpha feature and its behavior may change without notice.
     """
-
+    (Optional, Alpha) standard is default and flex is lazily provisioned and may be
+    pre-empted. This is an alpha feature and its behavior may change without notice.
+    """
     required_services: Optional[SequenceNotStr[str]]
     """A list of ContainerizedService names to be started when a Devbox is created.
 

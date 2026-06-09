@@ -93,6 +93,7 @@ class TestScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -242,6 +243,7 @@ class TestScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -464,6 +466,7 @@ class TestScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -586,6 +589,7 @@ class TestAsyncScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -735,6 +739,7 @@ class TestAsyncScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
@@ -957,6 +962,7 @@ class TestAsyncScenarios:
                         },
                     },
                     "network_policy_id": "network_policy_id",
+                    "provisioning_tier": "standard",
                     "required_services": ["string"],
                     "resource_size_request": "X_SMALL",
                     "user_parameters": {
