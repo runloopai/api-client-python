@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.23.1 (2026-06-09)
+
+Full Changelog: [v1.23.0...v1.23.1](https://github.com/runloopai/api-client-python/compare/v1.23.0...v1.23.1)
+
+### Features
+
+* **devbox:** add provisioning_tier (flex) to LaunchParameters (alpha) ([#808](https://github.com/runloopai/api-client-python/issues/808)) ([cb59e8b](https://github.com/runloopai/api-client-python/commit/cb59e8bcb4578a8abc8c31902a80ec491949310b))
+
 ## 1.23.0 (2026-06-05)
 
 Full Changelog: [v1.22.1...v1.23.0](https://github.com/runloopai/api-client-python/compare/v1.22.1...v1.23.0)
