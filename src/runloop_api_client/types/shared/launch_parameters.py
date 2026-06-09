@@ -74,6 +74,9 @@ class LaunchParameters(BaseModel):
     will inherit this policy unless explicitly overridden.
     """
 
+    provisioning_tier: Optional[Literal["standard", "flex"]] = None
+    """(Optional) standard is default and flex is lazily provisioned and may be pre-empted."""
+
     required_services: Optional[List[str]] = None
     """A list of ContainerizedService names to be started when a Devbox is created.
 
