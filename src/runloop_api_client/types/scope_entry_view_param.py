@@ -16,7 +16,6 @@ class ScopeEntryViewParam(TypedDict, total=False):
         "RESOURCE_TYPE_SNAPSHOTS",
         "RESOURCE_TYPE_BENCHMARKS",
         "RESOURCE_TYPE_SCENARIOS",
-        "RESOURCE_TYPE_REPO_CONNECTIONS",
         "RESOURCE_TYPE_AGENTS",
         "RESOURCE_TYPE_OBJECTS",
         "RESOURCE_TYPE_ACCOUNT",

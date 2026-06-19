@@ -120,7 +120,6 @@ class TestDevboxes:
                 }
             ],
             name="name",
-            repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
             tunnel={
@@ -1317,7 +1316,6 @@ class TestAsyncDevboxes:
                 }
             ],
             name="name",
-            repo_connection_id="repo_connection_id",
             secrets={"foo": "string"},
             snapshot_id="snapshot_id",
             tunnel={

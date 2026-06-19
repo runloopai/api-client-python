@@ -78,9 +78,6 @@ class DevboxCreateParams(TypedDict, total=False):
     name: Optional[str]
     """(Optional) A user specified name to give the Devbox."""
 
-    repo_connection_id: Optional[str]
-    """Repository connection id the devbox should source its base image from."""
-
     secrets: Optional[Dict[str, str]]
     """(Optional) Map of environment variable names to secret names.
 

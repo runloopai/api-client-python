@@ -87,7 +87,6 @@ from .benchmark_job_list_view import BenchmarkJobListView as BenchmarkJobListVie
 from .benchmark_run_list_view import BenchmarkRunListView as BenchmarkRunListView
 from .benchmark_update_params import BenchmarkUpdateParams as BenchmarkUpdateParams
 from .blueprint_create_params import BlueprintCreateParams as BlueprintCreateParams
-from .inspection_source_param import InspectionSourceParam as InspectionSourceParam
 from .pty_control_result_view import PtyControlResultView as PtyControlResultView
 from .agent_devbox_counts_view import AgentDevboxCountsView as AgentDevboxCountsView
 from .agent_list_public_params import AgentListPublicParams as AgentListPublicParams
@@ -145,7 +144,4 @@ from .devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView a
 from .devbox_read_file_contents_response import DevboxReadFileContentsResponse as DevboxReadFileContentsResponse
 from .benchmark_run_list_scenario_runs_params import (
     BenchmarkRunListScenarioRunsParams as BenchmarkRunListScenarioRunsParams,
-)
-from .blueprint_create_from_inspection_params import (
-    BlueprintCreateFromInspectionParams as BlueprintCreateFromInspectionParams,
 )
