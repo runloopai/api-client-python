@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import logging
 import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
@@ -663,6 +664,31 @@ class FileInterface:
             **params,
         )
         return response.read()
+
+    def download_to_file(
+        self,
+        dest: str | os.PathLike[str],
+        *,
+        chunk_size: int | None = None,
+        **params: Unpack[SDKDevboxDownloadFileParams],
+    ) -> None:
+        """Download a file from the devbox, streaming it directly to ``dest``.
+
+        Unlike :meth:`download`, this never holds the whole file in memory: the
+        response body is streamed to disk in chunks, so it is safe for large files.
+
+        :param dest: Local path to write the downloaded contents to.
+        :param chunk_size: Size in bytes of each streamed chunk (httpx default if None).
+        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxDownloadFileParams` for available parameters
+
+        Example:
+            >>> devbox.file.download_to_file("local_output.bin", path="/home/user/output.bin")
+        """
+        with self._devbox._client.devboxes.with_streaming_response.download_file(
+            self._devbox.id,
+            **params,
+        ) as response:
+            response.stream_to_file(dest, chunk_size=chunk_size)
 
     def upload(
         self,
