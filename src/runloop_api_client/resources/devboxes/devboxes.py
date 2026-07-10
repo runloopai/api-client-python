@@ -175,7 +175,6 @@ class DevboxesResource(SyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -236,8 +235,6 @@ class DevboxesResource(SyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          repo_connection_id: Repository connection id the devbox should source its base image from.
-
           secrets: (Optional) Map of environment variable names to secret names. The secret values
               will be securely injected as environment variables in the Devbox. Example:
               {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
@@ -275,7 +272,6 @@ class DevboxesResource(SyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
-                    "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
                     "tunnel": tunnel,
@@ -472,7 +468,6 @@ class DevboxesResource(SyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
-        repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -513,7 +508,6 @@ class DevboxesResource(SyncAPIResource):
             metadata=metadata,
             mounts=mounts,
             name=name,
-            repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
             tunnel=tunnel,
@@ -1853,7 +1847,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         metadata: Optional[Dict[str, str]] | Omit = omit,
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
-        repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -1914,8 +1907,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           name: (Optional) A user specified name to give the Devbox.
 
-          repo_connection_id: Repository connection id the devbox should source its base image from.
-
           secrets: (Optional) Map of environment variable names to secret names. The secret values
               will be securely injected as environment variables in the Devbox. Example:
               {"DB_PASS": "DATABASE_PASSWORD"} sets environment variable 'DB_PASS' to the
@@ -1953,7 +1944,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "metadata": metadata,
                     "mounts": mounts,
                     "name": name,
-                    "repo_connection_id": repo_connection_id,
                     "secrets": secrets,
                     "snapshot_id": snapshot_id,
                     "tunnel": tunnel,
@@ -2019,7 +2009,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
-        repo_connection_id: Optional[str] | Omit = omit,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -2061,7 +2050,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             metadata=metadata,
             mounts=mounts,
             name=name,
-            repo_connection_id=repo_connection_id,
             secrets=secrets,
             snapshot_id=snapshot_id,
             tunnel=tunnel,
