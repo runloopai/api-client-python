@@ -14,7 +14,7 @@ import time
 from typing import List, Type, TypeVar, Callable, Optional, Awaitable
 
 from .polling import PollingConfig, PollingTimeout
-from .._exceptions import APIStatusError, APITimeoutError
+from .._exceptions import APIStatusError, APIConnectionError
 
 T = TypeVar("T")
 
@@ -49,8 +49,8 @@ def wait_for_status(
                 cast_to=cast_to,
                 options={"max_retries": 0},
             )
-        except (APITimeoutError, APIStatusError) as error:
-            if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+        except (APIConnectionError, APIStatusError) as error:
+            if isinstance(error, APIConnectionError) or error.response.status_code == 408:
                 last_result = placeholder()
             else:
                 raise
@@ -89,8 +89,8 @@ async def async_wait_for_status(
                 cast_to=cast_to,
                 options={"max_retries": 0},
             )
-        except (APITimeoutError, APIStatusError) as error:
-            if isinstance(error, APITimeoutError) or error.response.status_code == 408:
+        except (APIConnectionError, APIStatusError) as error:
+            if isinstance(error, APIConnectionError) or error.response.status_code == 408:
                 last_result = placeholder()
             else:
                 raise
