@@ -13,6 +13,16 @@ DEFAULT_CONNECTION_LIMITS = httpx.Limits(max_connections=20, max_keepalive_conne
 INITIAL_RETRY_DELAY = 1.0
 MAX_RETRY_DELAY = 60.0
 
+# Long-poll endpoints tell the server how long to hold the connection and expect a
+# graceful 408 when that hold elapses. The per-request client read timeout must
+# exceed the server hold so the server returns 408 first instead of the client
+# aborting the stream (RST_STREAM) and surfacing a connection error.
+LONG_POLL_CLIENT_BUFFER_SECONDS = 5.0
+
+# Authoritative server-side long-poll hold clamps, mirrored from the mux controllers.
+STATUS_LONG_POLL_SERVER_MAX_SECONDS = 30.0
+EXEC_LONG_POLL_SERVER_MAX_SECONDS = 25.0
+
 # Maximum allowed size (in bytes) for individual entries in `file_mounts` when creating Blueprints
 # NOTE: Empirically, ~131,000 is the maximum command length after
 # base64 encoding; 98,250 is the pre-encoded limit that stays within that bound.

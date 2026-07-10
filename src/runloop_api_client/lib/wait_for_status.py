@@ -13,7 +13,10 @@ from __future__ import annotations
 import time
 from typing import List, Type, TypeVar, Callable, Optional, Awaitable
 
+import httpx
+
 from .polling import PollingConfig, PollingTimeout
+from .._constants import LONG_POLL_CLIENT_BUFFER_SECONDS, STATUS_LONG_POLL_SERVER_MAX_SECONDS
 from .._exceptions import APIStatusError, APIConnectionError
 
 T = TypeVar("T")
@@ -27,6 +30,7 @@ def wait_for_status(
     placeholder: Callable[[], T],
     is_terminal: Callable[[T], bool],
     polling_config: Optional[PollingConfig] = None,
+    server_max_timeout_seconds: float = STATUS_LONG_POLL_SERVER_MAX_SECONDS,
 ) -> T:
     """Sync long-poll for a status change, retrying until *is_terminal* or timeout."""
     config = polling_config or PollingConfig()
@@ -42,12 +46,18 @@ def wait_for_status(
         if remaining <= 0:
             raise PollingTimeout(f"Exceeded timeout of {timeout} seconds", last_result)
 
+        # Cap the server hold at what the server honors, and give the client read
+        # timeout a buffer beyond it so the server returns 408 first.
+        server_timeout = min(remaining, server_max_timeout_seconds)
         try:
             last_result = post_fn(
                 path,
-                body={"statuses": statuses, "timeout_seconds": remaining},
+                body={"statuses": statuses, "timeout_seconds": server_timeout},
                 cast_to=cast_to,
-                options={"max_retries": 0},
+                options={
+                    "max_retries": 0,
+                    "timeout": httpx.Timeout(server_timeout + LONG_POLL_CLIENT_BUFFER_SECONDS, connect=5.0),
+                },
             )
         except (APIConnectionError, APIStatusError) as error:
             if isinstance(error, APIConnectionError) or error.response.status_code == 408:
@@ -67,6 +77,7 @@ async def async_wait_for_status(
     placeholder: Callable[[], T],
     is_terminal: Callable[[T], bool],
     polling_config: Optional[PollingConfig] = None,
+    server_max_timeout_seconds: float = STATUS_LONG_POLL_SERVER_MAX_SECONDS,
 ) -> T:
     """Async long-poll for a status change, retrying until *is_terminal* or timeout."""
     config = polling_config or PollingConfig()
@@ -82,12 +93,18 @@ async def async_wait_for_status(
         if remaining <= 0:
             raise PollingTimeout(f"Exceeded timeout of {timeout} seconds", last_result)
 
+        # Cap the server hold at what the server honors, and give the client read
+        # timeout a buffer beyond it so the server returns 408 first.
+        server_timeout = min(remaining, server_max_timeout_seconds)
         try:
             last_result = await post_fn(
                 path,
-                body={"statuses": statuses, "timeout_seconds": remaining},
+                body={"statuses": statuses, "timeout_seconds": server_timeout},
                 cast_to=cast_to,
-                options={"max_retries": 0},
+                options={
+                    "max_retries": 0,
+                    "timeout": httpx.Timeout(server_timeout + LONG_POLL_CLIENT_BUFFER_SECONDS, connect=5.0),
+                },
             )
         except (APIConnectionError, APIStatusError) as error:
             if isinstance(error, APIConnectionError) or error.response.status_code == 408:

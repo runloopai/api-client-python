@@ -18,7 +18,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._constants import DEFAULT_TIMEOUT, RAW_RESPONSE_HEADER
+from ..._constants import DEFAULT_TIMEOUT, RAW_RESPONSE_HEADER, EXEC_LONG_POLL_SERVER_MAX_SECONDS
 from ..._streaming import Stream, AsyncStream, ReconnectingStream, AsyncReconnectingStream
 from ...lib.polling import PollingConfig
 from ..._base_client import make_request_options
@@ -149,6 +149,7 @@ class ExecutionsResource(SyncAPIResource):
             lambda: placeholder_execution_detail_view(devbox_id, execution_id),
             is_done,
             polling_config,
+            EXEC_LONG_POLL_SERVER_MAX_SECONDS,
         )
 
     def execute_async(
@@ -680,6 +681,7 @@ class AsyncExecutionsResource(AsyncAPIResource):
             lambda: placeholder_execution_detail_view(devbox_id, execution_id),
             is_done,
             polling_config,
+            EXEC_LONG_POLL_SERVER_MAX_SECONDS,
         )
 
     async def execute_async(
