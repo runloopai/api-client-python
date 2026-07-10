@@ -64,7 +64,11 @@ from ..._response import (
     async_to_custom_raw_response_wrapper,
     async_to_custom_streamed_response_wrapper,
 )
-from ..._constants import DEFAULT_TIMEOUT
+from ..._constants import (
+    DEFAULT_TIMEOUT,
+    LONG_POLL_CLIENT_BUFFER_SECONDS,
+    EXEC_LONG_POLL_SERVER_MAX_SECONDS,
+)
 from ...pagination import (
     SyncDevboxesCursorIDPage,
     AsyncDevboxesCursorIDPage,
@@ -967,7 +971,15 @@ class DevboxesResource(SyncAPIResource):
             return result.status == "completed"
 
         return poll_until(
-            lambda: self.wait_for_command(execution.execution_id, devbox_id=devbox_id, statuses=["completed"]),
+            # Client read timeout must exceed the server long-poll hold so the server
+            # returns 408 first instead of the client aborting the stream.
+            lambda: self.wait_for_command(
+                execution.execution_id,
+                devbox_id=devbox_id,
+                statuses=["completed"],
+                timeout_seconds=int(EXEC_LONG_POLL_SERVER_MAX_SECONDS),
+                timeout=httpx.Timeout(EXEC_LONG_POLL_SERVER_MAX_SECONDS + LONG_POLL_CLIENT_BUFFER_SECONDS, connect=5.0),
+            ),
             is_done,
             polling_config,
             handle_timeout_error,
@@ -2637,7 +2649,15 @@ class AsyncDevboxesResource(AsyncAPIResource):
             return result.status == "completed"
 
         return await async_poll_until(
-            lambda: self.wait_for_command(execution.execution_id, devbox_id=devbox_id, statuses=["completed"]),
+            # Client read timeout must exceed the server long-poll hold so the server
+            # returns 408 first instead of the client aborting the stream.
+            lambda: self.wait_for_command(
+                execution.execution_id,
+                devbox_id=devbox_id,
+                statuses=["completed"],
+                timeout_seconds=int(EXEC_LONG_POLL_SERVER_MAX_SECONDS),
+                timeout=httpx.Timeout(EXEC_LONG_POLL_SERVER_MAX_SECONDS + LONG_POLL_CLIENT_BUFFER_SECONDS, connect=5.0),
+            ),
             is_done,
             polling_config,
             handle_timeout_error,
