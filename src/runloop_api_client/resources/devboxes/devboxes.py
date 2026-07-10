@@ -71,7 +71,7 @@ from ...pagination import (
     SyncDiskSnapshotsCursorIDPage,
     AsyncDiskSnapshotsCursorIDPage,
 )
-from ..._exceptions import RunloopError, APIStatusError, APITimeoutError
+from ..._exceptions import RunloopError, APIStatusError, APIConnectionError
 from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
@@ -957,7 +957,7 @@ class DevboxesResource(SyncAPIResource):
             return execution
 
         def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
-            if isinstance(error, APITimeoutError) or (
+            if isinstance(error, APIConnectionError) or (
                 isinstance(error, APIStatusError) and error.response.status_code == 408
             ):
                 return execution
@@ -2627,7 +2627,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
             return execution
 
         def handle_timeout_error(error: Exception) -> DevboxAsyncExecutionDetailView:
-            if isinstance(error, APITimeoutError) or (
+            if isinstance(error, APIConnectionError) or (
                 isinstance(error, APIStatusError) and error.response.status_code == 408
             ):
                 return execution
