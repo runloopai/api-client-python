@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.23.3 (2026-07-10)
+
+Full Changelog: [v1.23.2...v1.23.3](https://github.com/runloopai/api-client-python/compare/v1.23.2...v1.23.3)
+
+### Bug Fixes
+
+* **blueprints:** remove create_from_inspection endpoint ([fa8a630](https://github.com/runloopai/api-client-python/commit/fa8a630e348147eb6c3c0a0b2f8c7fc325ad6d1f))
+* **devbox:** remove stale repo_connection_id helper arg ([#813](https://github.com/runloopai/api-client-python/issues/813)) ([4b5a933](https://github.com/runloopai/api-client-python/commit/4b5a933b2ebefcf160015ee64ab8ec9d7fd9c5e5))
+* retry polling on HTTP/2 GOAWAY connection errors ([#817](https://github.com/runloopai/api-client-python/issues/817)) ([b0cc07c](https://github.com/runloopai/api-client-python/commit/b0cc07c35a3bd5796e9fe26df50d90981d54fec9))
+* update test script to work without lsof on CI ([#798](https://github.com/runloopai/api-client-python/issues/798)) ([50507eb](https://github.com/runloopai/api-client-python/commit/50507eba5537386e9af72ba3e2629cfac89c2391))
+
+
+### Chores
+
+* **devbox:** cap forwarded long-poll timeout and add client read margin ([#818](https://github.com/runloopai/api-client-python/issues/818)) ([c04f867](https://github.com/runloopai/api-client-python/commit/c04f867543c8ef0f2328c3235f9a26965dda2432))
+
+
+### Documentation
+
+* add agent PR guidance ([#814](https://github.com/runloopai/api-client-python/issues/814)) ([3c483bd](https://github.com/runloopai/api-client-python/commit/3c483bdfd46b48afe2b0f2e68d9f4326f980414a))
+
 ## 1.23.2 (2026-06-09)
 
 Full Changelog: [v1.23.1...v1.23.2](https://github.com/runloopai/api-client-python/compare/v1.23.1...v1.23.2)
