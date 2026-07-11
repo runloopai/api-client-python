@@ -44,6 +44,7 @@ def build_client() -> AsyncRunloop:
 async def send_request(client: AsyncRunloop, index: int, run_id: str) -> dict[str, object]:
     start = time.perf_counter()
     status: int | None = None
+    error: str | None = None
     try:
         await client.devboxes.create(
             blueprint_id="bp_nonexistent_loadtest_00000",
@@ -55,7 +56,13 @@ async def send_request(client: AsyncRunloop, index: int, run_id: str) -> dict[st
         status = 200
     except Exception as exc:
         status = getattr(exc, "status_code", None)
-    return {"index": index, "latency_ms": (time.perf_counter() - start) * 1000, "status": status}
+        error = str(exc) or type(exc).__name__
+    return {
+        "index": index,
+        "latency_ms": (time.perf_counter() - start) * 1000,
+        "status": status,
+        "error": error,
+    }
 
 
 def percentile(sorted_vals: list[float], p: float) -> float:
@@ -85,6 +92,18 @@ def print_metrics(results: list[dict[str, object]], wall_ms: float) -> None:
     print("\nStatus codes:")
     for s, c in sorted(status_counts.items()):
         print(f"  {s}: {c}")
+
+    # Break down the opaque "network_error" bucket by exception message so
+    # transport-level failures (timeouts, resets, pool exhaustion) are diagnosable.
+    error_counts: dict[str, int] = {}
+    for r in results:
+        if r["status"] is None and r["error"] is not None:
+            msg = str(r["error"])
+            error_counts[msg] = error_counts.get(msg, 0) + 1
+    if error_counts:
+        print("\nErrors (network_error breakdown):")
+        for msg, c in sorted(error_counts.items(), key=lambda kv: kv[1], reverse=True):
+            print(f"  {c}x  {msg}")
 
 
 async def main() -> None:
