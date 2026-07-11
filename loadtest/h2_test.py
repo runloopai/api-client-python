@@ -6,6 +6,7 @@ import asyncio
 import math
 import os
 import time
+from typing import cast
 
 import httpx
 
@@ -82,10 +83,10 @@ async def main() -> None:
     for c in clients:
         await c.aclose()
 
-    latencies: list[float] = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
+    latencies: list[float] = sorted(cast(float, r["latency_ms"]) for r in results)
     status_counts: dict[int, int] = {}
     for r in results:
-        s = int(r["status"])  # type: ignore[arg-type]
+        s = cast(int, r["status"])
         status_counts[s] = status_counts.get(s, 0) + 1
 
     print(f"\n=== HTTP/2 Results ===")

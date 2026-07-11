@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import os
 import time
+from typing import cast
 
 import httpx
 
@@ -49,7 +50,7 @@ async def main() -> None:
 
     await client.aclose()
 
-    lats = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
+    lats: list[float] = sorted(cast(float, r["latency_ms"]) for r in results)
     print(f"{count} requests in {wall_ms:.0f}ms ({count / (wall_ms / 1000):.1f} req/s)")
     print(
         f"Latency: min={lats[0]:.0f}ms  p50={lats[count // 2]:.0f}ms  max={lats[-1]:.0f}ms"

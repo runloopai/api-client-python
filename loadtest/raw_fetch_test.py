@@ -6,6 +6,7 @@ import asyncio
 import math
 import os
 import time
+from typing import cast
 
 import httpx
 
@@ -71,7 +72,7 @@ async def main() -> None:
 
     await client.aclose()
 
-    latencies: list[float] = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
+    latencies: list[float] = sorted(cast(float, r["latency_ms"]) for r in results)
     status_counts: dict[str, int] = {}
     for r in results:
         key = str(r["status"]) if r["status"] is not None else "network_error"
