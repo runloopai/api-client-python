@@ -71,7 +71,7 @@ async def main() -> None:
 
     await client.aclose()
 
-    latencies = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
+    latencies: list[float] = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
     status_counts: dict[str, int] = {}
     for r in results:
         key = str(r["status"]) if r["status"] is not None else "network_error"

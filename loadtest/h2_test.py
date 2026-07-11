@@ -82,7 +82,7 @@ async def main() -> None:
     for c in clients:
         await c.aclose()
 
-    latencies = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
+    latencies: list[float] = sorted(r["latency_ms"] for r in results)  # type: ignore[arg-type]
     status_counts: dict[int, int] = {}
     for r in results:
         s = int(r["status"])  # type: ignore[arg-type]
