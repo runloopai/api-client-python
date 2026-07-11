@@ -52,9 +52,7 @@ async def main() -> None:
 
     lats: list[float] = sorted(cast(float, r["latency_ms"]) for r in results)
     print(f"{count} requests in {wall_ms:.0f}ms ({count / (wall_ms / 1000):.1f} req/s)")
-    print(
-        f"Latency: min={lats[0]:.0f}ms  p50={lats[count // 2]:.0f}ms  max={lats[-1]:.0f}ms"
-    )
+    print(f"Latency: min={lats[0]:.0f}ms  p50={lats[count // 2]:.0f}ms  max={lats[-1]:.0f}ms")
 
 
 if __name__ == "__main__":
