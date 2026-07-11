@@ -61,4 +61,4 @@ file-descriptor limit (`ulimit -n 65536`) or keep `REQUEST_COUNT` small.
 | `NUM_CONNECTIONS` | `10` (`h2_test.py`) / `20` (`raw_fetch_test.py`) | Parallel connections |
 | `USE_HTTP2` | `1` | `0` to force HTTP/1.1 in `loadtest.py` |
 | `USE_SYNC` | `0` | `1` to benchmark the blocking `Runloop` client (thread pool) instead of async `AsyncRunloop` |
-| `CONCURRENCY` | `5000` | Worker-thread cap for the sync path. Effective workers = `min(REQUEST_COUNT, CONCURRENCY)`; above the cap, requests queue through the pool. Lower it (e.g. `500`) if thread/FD pressure dominates. |
+| `CONCURRENCY` | `500` | Worker-thread cap for the sync path. Effective workers = `min(REQUEST_COUNT, CONCURRENCY)`; above the cap, requests queue through the pool. The sync client is GIL-bound, so raising this past a few hundred adds contention without improving throughput (a 500-worker pool beat 5000 at 20k requests: 260 vs 199 req/s, ~10x lower p50 latency). |

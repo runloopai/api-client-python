@@ -19,12 +19,18 @@ infeasible at high request counts (memory + scheduler overhead, and on most
 hosts the open-file-descriptor limit caps real socket concurrency well below
 that anyway), so the worker pool is capped:
 
-    workers = min(REQUEST_COUNT, CONCURRENCY)   # CONCURRENCY default 5000
+    workers = min(REQUEST_COUNT, CONCURRENCY)   # CONCURRENCY default 500
 
 At request counts above the cap, requests queue through the pool — so for the
-sync path "concurrency" means the worker count, not REQUEST_COUNT. 5000 is the
-starting default; lower `CONCURRENCY` (e.g. 500) if thread/FD pressure makes it
-counterproductive on your host.
+sync path "concurrency" means the worker count, not REQUEST_COUNT.
+
+The default cap is 500. The blocking client is GIL-bound, so adding threads
+past a few hundred does not raise throughput and actively hurts: in testing
+against the dev cluster (20 000 HTTP/1.1 requests), a 500-worker pool beat a
+5000-worker pool on throughput (260 vs 199 req/s) with ~10x lower p50 latency
+(1.6s vs 16.9s), because 5000 threads add GIL contention and context-switching
+with no upside. Raise `CONCURRENCY` only if you have evidence it helps on your
+host; lower it if thread/FD pressure dominates.
 """
 
 from __future__ import annotations
@@ -46,8 +52,10 @@ RUNLOOP_BASE_URL = os.environ.get("RUNLOOP_BASE_URL")
 USE_HTTP2 = os.environ.get("USE_HTTP2", "1") == "1"
 # Async (asyncio) by default; set USE_SYNC=1 to benchmark the blocking client.
 USE_SYNC = os.environ.get("USE_SYNC", "0") == "1"
-# Worker-thread cap for the sync path (see module docstring).
-SYNC_WORKER_CAP = int(os.environ.get("CONCURRENCY", "5000"))
+# Worker-thread cap for the sync path (see module docstring). Default 500:
+# the blocking client is GIL-bound, so more threads add contention without
+# raising throughput (500 beat 5000 in testing — see docstring).
+SYNC_WORKER_CAP = int(os.environ.get("CONCURRENCY", "500"))
 PROGRESS_INTERVAL = 2.0
 
 
