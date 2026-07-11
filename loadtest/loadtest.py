@@ -10,10 +10,10 @@ REQUEST_COUNT defaults to 100 000.
 
 from __future__ import annotations
 
-import asyncio
-import math
 import os
+import math
 import time
+import asyncio
 
 import httpx
 

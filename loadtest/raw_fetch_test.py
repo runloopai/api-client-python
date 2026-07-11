@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import asyncio
-import math
 import os
+import math
 import time
+import asyncio
 from typing import cast
 
 import httpx

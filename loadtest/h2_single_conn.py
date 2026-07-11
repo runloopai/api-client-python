@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-import asyncio
 import os
 import time
+import asyncio
 from typing import cast
 
 import httpx
