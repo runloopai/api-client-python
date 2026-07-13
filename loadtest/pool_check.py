@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import os
 import resource
-import subprocess
 import sys
 
 from runloop_api_client import Runloop
@@ -32,11 +31,11 @@ def main() -> None:
     print(f"Creating {N} Runloop instances...\n")
 
     clients: list[Runloop] = []
-    for i in range(N):
+    for _ in range(N):
         clients.append(Runloop(bearer_token=os.environ.get("RUNLOOP_API_KEY", "dummy")))
 
     # All instances should reference the same shared transport object.
-    transport_ids = set()
+    transport_ids: set[int] = set()
     for c in clients:
         t = getattr(c._client, "_transport", None)
         if t is not None:
