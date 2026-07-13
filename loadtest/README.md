@@ -20,10 +20,15 @@ client + server _request handling_ from provisioning.
 | `h2_single_conn.py` | Raw `httpx` HTTP/2 on a single warmed connection (50-request burst). |
 | `raw_fetch_test.py` | Raw `httpx` HTTP/1.1 keep-alive baseline. |
 | `alpn_check.py` | Confirms the origin negotiates `h2` via TLS ALPN. |
+| `pool_check.py` | Verifies that multiple sync `Runloop` instances share a single connection pool (transport object identity check, no real requests). |
 
 The raw-transport probes compare httpx HTTP/2 multiplexing against HTTP/1.1
 directly — the same comparison that motivates the SDK's shared HTTP/2 pool.
 They're kept so the comparison stays reproducible.
+
+`pool_check.py` is a lightweight sanity check (no API key, no real requests) that
+confirms multiple sync `Runloop` instances reuse a single underlying transport
+object — preventing file-descriptor exhaustion when many clients are instantiated.
 
 ```sh
 # Install the SDK from this checkout (editable):

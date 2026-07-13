@@ -25,18 +25,6 @@ HOST = "api.runloop.ai"
 N = 20
 
 
-def open_connections_to(host: str) -> int:
-    """Count ESTABLISHED TCP connections to *host* via lsof."""
-    try:
-        out = subprocess.check_output(
-            ["lsof", "-i", f"@{host}", "-sTCP:ESTABLISHED", "-n", "-P"],
-            stderr=subprocess.DEVNULL,
-            text=True,
-        )
-        return max(0, len(out.strip().splitlines()) - 1)  # subtract header
-    except Exception:
-        return -1  # lsof unavailable
-
 
 def main() -> None:
     fd_before = resource.getrlimit(resource.RLIMIT_NOFILE)[0]
