@@ -15,8 +15,8 @@ OS-level connection count, not make real requests.
 from __future__ import annotations
 
 import os
-import resource
 import sys
+import resource
 
 from runloop_api_client import Runloop
 
