@@ -19,16 +19,16 @@ class BrokerMount(TypedDict, total=False):
     agent_binary: Optional[str]
     """Binary to launch the agent (e.g., 'opencode').
 
-    Used by protocols that launch a subprocess (acp, claude_json).
+    Used by protocols that launch a subprocess (acp, claude_json, codex_json).
     """
 
     launch_args: Optional[SequenceNotStr[str]]
     """Arguments to pass to the agent command (e.g., ['acp']).
 
-    Used by protocols that launch a subprocess (acp, claude_json).
+    Used by protocols that launch a subprocess (acp, claude_json, codex_json).
     """
 
-    protocol: Optional[Literal["acp", "claude_json"]]
+    protocol: Optional[Literal["acp", "claude_json", "codex_json"]]
     """The protocol used by the broker to deliver events to the agent."""
 
     working_directory: Optional[str]
