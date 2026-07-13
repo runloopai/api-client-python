@@ -24,7 +24,6 @@ HOST = "api.runloop.ai"
 N = 20
 
 
-
 def main() -> None:
     fd_before = resource.getrlimit(resource.RLIMIT_NOFILE)[0]
     print(f"FD limit: {fd_before}")
