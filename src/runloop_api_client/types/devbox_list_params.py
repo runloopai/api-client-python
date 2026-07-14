@@ -22,6 +22,7 @@ class DevboxListParams(TypedDict, total=False):
 
     status: Literal[
         "scheduled",
+        "queued",
         "provisioning",
         "initializing",
         "running",
