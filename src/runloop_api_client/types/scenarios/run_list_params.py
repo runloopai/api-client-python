@@ -26,6 +26,9 @@ class RunListParams(TypedDict, total=False):
     scenario_id: str
     """Filter runs associated to Scenario given ID"""
 
+    search: str
+    """Search by scenario run ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
 

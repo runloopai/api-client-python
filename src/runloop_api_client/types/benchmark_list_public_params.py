@@ -17,5 +17,11 @@ class BenchmarkListPublicParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""
 
+    name: str
+    """Filter by name"""
+
+    search: str
+    """Search by benchmark ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

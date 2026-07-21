@@ -23,6 +23,9 @@ class BenchmarkRunListParams(TypedDict, total=False):
     name: str
     """Filter by name"""
 
+    search: str
+    """Search by benchmark run ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
 

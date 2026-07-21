@@ -134,6 +134,7 @@ class BenchmarkJobsResource(SyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -152,6 +153,8 @@ class BenchmarkJobsResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
+
+          search: Search by benchmark job ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -175,6 +178,7 @@ class BenchmarkJobsResource(SyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     benchmark_job_list_params.BenchmarkJobListParams,
@@ -294,6 +298,7 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -312,6 +317,8 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
+
+          search: Search by benchmark job ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -335,6 +342,7 @@ class AsyncBenchmarkJobsResource(AsyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     benchmark_job_list_params.BenchmarkJobListParams,

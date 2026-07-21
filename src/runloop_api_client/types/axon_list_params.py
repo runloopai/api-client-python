@@ -23,5 +23,8 @@ class AxonListParams(TypedDict, total=False):
     name: str
     """Filter by axon name (prefix match supported)."""
 
+    search: str
+    """Search by axon ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

@@ -167,6 +167,7 @@ class TestBenchmarks:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -248,6 +249,8 @@ class TestBenchmarks:
         benchmark = client.benchmarks.list_public(
             include_total_count=True,
             limit=0,
+            name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -557,6 +560,7 @@ class TestAsyncBenchmarks:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])
@@ -638,6 +642,8 @@ class TestAsyncBenchmarks:
         benchmark = await async_client.benchmarks.list_public(
             include_total_count=True,
             limit=0,
+            name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncBenchmarksCursorIDPage[BenchmarkView], benchmark, path=["response"])

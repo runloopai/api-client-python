@@ -103,6 +103,7 @@ class TestAxons:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncAxonsCursorIDPage[AxonView], axon, path=["response"])
@@ -314,6 +315,7 @@ class TestAsyncAxons:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncAxonsCursorIDPage[AxonView], axon, path=["response"])

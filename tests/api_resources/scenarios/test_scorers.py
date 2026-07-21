@@ -151,6 +151,7 @@ class TestScorers:
         scorer = client.scenarios.scorers.list(
             include_total_count=True,
             limit=0,
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncScenarioScorersCursorIDPage[ScorerListResponse], scorer, path=["response"])
@@ -309,6 +310,7 @@ class TestAsyncScorers:
         scorer = await async_client.scenarios.scorers.list(
             include_total_count=True,
             limit=0,
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncScenarioScorersCursorIDPage[ScorerListResponse], scorer, path=["response"])

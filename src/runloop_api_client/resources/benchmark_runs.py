@@ -85,6 +85,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -106,6 +107,8 @@ class BenchmarkRunsResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
+
+          search: Search by benchmark run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -133,6 +136,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },
@@ -231,6 +235,7 @@ class BenchmarkRunsResource(SyncAPIResource):
         *,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -248,6 +253,8 @@ class BenchmarkRunsResource(SyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          search: Search by scenario run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -275,6 +282,7 @@ class BenchmarkRunsResource(SyncAPIResource):
                     {
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },
@@ -345,6 +353,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -366,6 +375,8 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name
+
+          search: Search by benchmark run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -393,6 +404,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },
@@ -491,6 +503,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
         *,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: Literal["running", "scoring", "scored", "completed", "canceled", "timeout", "failed"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -508,6 +521,8 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          search: Search by scenario run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -535,6 +550,7 @@ class AsyncBenchmarkRunsResource(AsyncAPIResource):
                     {
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },

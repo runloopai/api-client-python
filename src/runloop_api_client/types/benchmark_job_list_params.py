@@ -20,5 +20,8 @@ class BenchmarkJobListParams(TypedDict, total=False):
     name: str
     """Filter by name"""
 
+    search: str
+    """Search by benchmark job ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""
