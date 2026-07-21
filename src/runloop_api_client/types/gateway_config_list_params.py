@@ -23,5 +23,8 @@ class GatewayConfigListParams(TypedDict, total=False):
     name: str
     """Filter by name (partial match supported)."""
 
+    search: str
+    """Search by gateway config ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

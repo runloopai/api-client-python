@@ -166,6 +166,7 @@ class TestNetworkPolicies:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncNetworkPoliciesCursorIDPage[NetworkPolicyView], network_policy, path=["response"])
@@ -380,6 +381,7 @@ class TestAsyncNetworkPolicies:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncNetworkPoliciesCursorIDPage[NetworkPolicyView], network_policy, path=["response"])

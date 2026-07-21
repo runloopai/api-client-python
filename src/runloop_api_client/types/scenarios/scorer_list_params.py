@@ -17,5 +17,8 @@ class ScorerListParams(TypedDict, total=False):
     limit: int
     """The limit of items to return. Default is 20. Max is 5000."""
 
+    search: str
+    """Search by scenario scorer ID or type."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

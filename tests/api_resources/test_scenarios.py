@@ -325,6 +325,7 @@ class TestScenarios:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
             validation_type="validation_type",
         )
@@ -399,6 +400,7 @@ class TestScenarios:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])
@@ -821,6 +823,7 @@ class TestAsyncScenarios:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
             validation_type="validation_type",
         )
@@ -895,6 +898,7 @@ class TestAsyncScenarios:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncScenariosCursorIDPage[ScenarioView], scenario, path=["response"])

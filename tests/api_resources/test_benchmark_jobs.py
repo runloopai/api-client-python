@@ -105,6 +105,7 @@ class TestBenchmarkJobs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(BenchmarkJobListView, benchmark_job, path=["response"])
@@ -220,6 +221,7 @@ class TestAsyncBenchmarkJobs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(BenchmarkJobListView, benchmark_job, path=["response"])

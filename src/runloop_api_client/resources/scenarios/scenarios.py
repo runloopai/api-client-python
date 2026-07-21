@@ -303,6 +303,7 @@ class ScenariosResource(SyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         validation_type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -324,6 +325,8 @@ class ScenariosResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
+
+          search: Search by scenario ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -351,6 +354,7 @@ class ScenariosResource(SyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                         "validation_type": validation_type,
                     },
@@ -408,6 +412,7 @@ class ScenariosResource(SyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -426,6 +431,8 @@ class ScenariosResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
+
+          search: Search by scenario ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -450,6 +457,7 @@ class ScenariosResource(SyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     scenario_list_public_params.ScenarioListPublicParams,
@@ -827,6 +835,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         validation_type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -848,6 +857,8 @@ class AsyncScenariosResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
+
+          search: Search by scenario ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -875,6 +886,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                         "validation_type": validation_type,
                     },
@@ -932,6 +944,7 @@ class AsyncScenariosResource(AsyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -950,6 +963,8 @@ class AsyncScenariosResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Query for Scenarios with a given name.
+
+          search: Search by scenario ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -974,6 +989,7 @@ class AsyncScenariosResource(AsyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     scenario_list_public_params.ScenarioListPublicParams,

@@ -20,5 +20,8 @@ class ScenarioListPublicParams(TypedDict, total=False):
     name: str
     """Query for Scenarios with a given name."""
 
+    search: str
+    """Search by scenario ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

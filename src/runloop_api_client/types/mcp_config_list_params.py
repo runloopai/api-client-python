@@ -23,5 +23,8 @@ class McpConfigListParams(TypedDict, total=False):
     name: str
     """Filter by name (prefix match supported)."""
 
+    search: str
+    """Search by MCP config ID or name."""
+
     starting_after: str
     """Load the next page of data starting after the item with the given ID."""

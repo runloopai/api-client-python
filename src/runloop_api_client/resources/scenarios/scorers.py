@@ -188,6 +188,7 @@ class ScorersResource(SyncAPIResource):
         *,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -204,6 +205,8 @@ class ScorersResource(SyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          search: Search by scenario scorer ID or type.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -227,6 +230,7 @@ class ScorersResource(SyncAPIResource):
                     {
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     scorer_list_params.ScorerListParams,
@@ -399,6 +403,7 @@ class AsyncScorersResource(AsyncAPIResource):
         *,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -415,6 +420,8 @@ class AsyncScorersResource(AsyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          search: Search by scenario scorer ID or type.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -438,6 +445,7 @@ class AsyncScorersResource(AsyncAPIResource):
                     {
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     scorer_list_params.ScorerListParams,
