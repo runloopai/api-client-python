@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.24.0 (2026-07-22)
+
+Full Changelog: [v1.23.3...v1.24.0](https://github.com/runloopai/api-client-python/compare/v1.23.3...v1.24.0)
+
+### Features
+
+* add HTTP/2 load testing infrastructure ([#819](https://github.com/runloopai/api-client-python/issues/819)) ([4ef3c65](https://github.com/runloopai/api-client-python/commit/4ef3c65a2643a093f6589a45428ebd4f1a2bf79e))
+* **api:** add codex broker mount protocol and axon attach enum value ([#10186](https://github.com/runloopai/api-client-python/issues/10186)) ([b3a0a91](https://github.com/runloopai/api-client-python/commit/b3a0a91b5463e47787cce33aa6ad803446e41ecd))
+* **devbox:** rename scheduled -&gt; queued ([#10217](https://github.com/runloopai/api-client-python/issues/10217)) ([f6cc5b7](https://github.com/runloopai/api-client-python/commit/f6cc5b714771564aaa7c5424b21fbd3c87286306))
+* **loadtest:** add pool_check.py to verify shared sync connection pool  ([#822](https://github.com/runloopai/api-client-python/issues/822)) ([0000c52](https://github.com/runloopai/api-client-python/commit/0000c52205bb8942942b8dec9f91972e89eebafb))
+* **mux:** expose CIDR egress rules on the network policy API ([#10269](https://github.com/runloopai/api-client-python/issues/10269)) ([b77a065](https://github.com/runloopai/api-client-python/commit/b77a065422042d3a7717c02208e16b72fdddc5e3))
+* **network:** add allow_runloop_mirrors egress flag to network policies ([#10350](https://github.com/runloopai/api-client-python/issues/10350)) ([c042398](https://github.com/runloopai/api-client-python/commit/c04239892931cd1b80d926af8664a461ea426aab))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([6a762cb](https://github.com/runloopai/api-client-python/commit/6a762cb53fbf1b6a2d113874227d0b68caa979dc))
+
+
+### Bug Fixes
+
+* **internal:** resolve build failures ([a5b61f3](https://github.com/runloopai/api-client-python/commit/a5b61f3b981d74f4707d132513d59beb4bdb33c2))
+* **mux:** uniform id/name search across list endpoints, close cross-tenant IDOR ([#10267](https://github.com/runloopai/api-client-python/issues/10267)) ([4a40176](https://github.com/runloopai/api-client-python/commit/4a401768ae50e1047d4c6f80384c059112299463))
+
 ## 1.23.3 (2026-07-10)
 
 Full Changelog: [v1.23.2...v1.23.3](https://github.com/runloopai/api-client-python/compare/v1.23.2...v1.23.3)
