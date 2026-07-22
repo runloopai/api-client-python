@@ -416,10 +416,12 @@ Types:
 
 ```python
 from runloop_api_client.types import (
+    AllowedCidr,
     NetworkPolicyCreateParameters,
     NetworkPolicyListView,
     NetworkPolicyUpdateParameters,
     NetworkPolicyView,
+    PortRule,
 )
 ```
 

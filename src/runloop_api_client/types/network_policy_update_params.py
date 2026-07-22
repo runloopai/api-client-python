@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import TypedDict
 
 from .._types import SequenceNotStr
+from .allowed_cidr_param import AllowedCidrParam
 
 __all__ = ["NetworkPolicyUpdateParams"]
 
@@ -22,6 +23,12 @@ class NetworkPolicyUpdateParams(TypedDict, total=False):
 
     allow_mcp_gateway: Optional[bool]
     """If true, allows devbox egress to the MCP hub."""
+
+    allowed_cidrs: Optional[Iterable[AllowedCidrParam]]
+    """
+    Updated IPv4 CIDR-based allow list with optional port restrictions, additive
+    with allowed_hostnames.
+    """
 
     allowed_hostnames: Optional[SequenceNotStr[str]]
     """Updated DNS-based allow list with wildcard support.

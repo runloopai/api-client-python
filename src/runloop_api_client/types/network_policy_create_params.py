@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .allowed_cidr_param import AllowedCidrParam
 
 __all__ = ["NetworkPolicyCreateParams"]
 
@@ -40,6 +41,13 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     """(Optional) If true, allows devbox egress to the MCP hub for MCP server access.
 
     Defaults to false.
+    """
+
+    allowed_cidrs: Optional[Iterable[AllowedCidrParam]]
+    """
+    (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
+    with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
+    443}]}].
     """
 
     allowed_hostnames: Optional[SequenceNotStr[str]]

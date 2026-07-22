@@ -17,12 +17,14 @@ from .shared import (
     LifecycleConfiguration as LifecycleConfiguration,
 )
 from .axon_view import AxonView as AxonView
+from .port_rule import PortRule as PortRule
 from .agent_view import AgentView as AgentView
 from .devbox_view import DevboxView as DevboxView
 from .object_view import ObjectView as ObjectView
 from .secret_view import SecretView as SecretView
 from .tunnel_view import TunnelView as TunnelView
 from .account_view import AccountView as AccountView
+from .allowed_cidr import AllowedCidr as AllowedCidr
 from .input_context import InputContext as InputContext
 from .scenario_view import ScenarioView as ScenarioView
 from .axon_list_view import AxonListView as AxonListView
@@ -31,6 +33,7 @@ from .blueprint_view import BlueprintView as BlueprintView
 from .agent_list_view import AgentListView as AgentListView
 from .axon_event_view import AxonEventView as AxonEventView
 from .mcp_config_view import McpConfigView as McpConfigView
+from .port_rule_param import PortRuleParam as PortRuleParam
 from .pty_tunnel_view import PtyTunnelView as PtyTunnelView
 from .axon_list_params import AxonListParams as AxonListParams
 from .devbox_list_view import DevboxListView as DevboxListView
@@ -42,6 +45,7 @@ from .scoring_function import ScoringFunction as ScoringFunction
 from .secret_list_view import SecretListView as SecretListView
 from .agent_list_params import AgentListParams as AgentListParams
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
+from .allowed_cidr_param import AllowedCidrParam as AllowedCidrParam
 from .axon_create_params import AxonCreateParams as AxonCreateParams
 from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
