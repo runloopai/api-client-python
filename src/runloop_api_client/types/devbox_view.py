@@ -14,6 +14,7 @@ class StateTransition(BaseModel):
     status: Optional[
         Literal[
             "scheduled",
+            "queued",
             "provisioning",
             "initializing",
             "running",
@@ -26,8 +27,9 @@ class StateTransition(BaseModel):
     ] = None
     """The status of the Devbox.
 
-    scheduled: The Devbox is scheduled to run but infrastructure allocation has not
-    started yet. provisioning: Runloop is allocating and booting the necessary
+    scheduled: Deprecated. The Devbox is waiting for infrastructure allocation to
+    start. Use queued. queued: The Devbox is waiting for infrastructure allocation
+    to start. provisioning: Runloop is allocating and booting the necessary
     infrastructure resources. initializing: Runloop defined boot scripts are running
     to enable the environment for interaction. running: The Devbox is ready for
     interaction. suspending: The Devbox disk is being snapshotted as part of
@@ -90,6 +92,7 @@ class DevboxView(BaseModel):
 
     status: Literal[
         "scheduled",
+        "queued",
         "provisioning",
         "initializing",
         "running",

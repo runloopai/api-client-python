@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 
 import httpx
 
@@ -19,6 +19,7 @@ from .._response import (
 )
 from ..pagination import SyncNetworkPoliciesCursorIDPage, AsyncNetworkPoliciesCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
+from ..types.allowed_cidr_param import AllowedCidrParam
 from ..types.network_policy_view import NetworkPolicyView
 
 __all__ = ["NetworkPoliciesResource", "AsyncNetworkPoliciesResource"]
@@ -52,6 +53,8 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -84,6 +87,13 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allow_runloop_mirrors: (Optional) If true, allows devbox egress to Runloop's package/image registry
+              mirrors. Defaults to false. Implicitly allowed when allow_all is true.
+
+          allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
+              443}]}].
+
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
@@ -108,6 +118,8 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -164,6 +176,8 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -187,6 +201,12 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allow_runloop_mirrors: If true, allows devbox egress to Runloop's package/image registry mirrors.
+              Implicitly allowed when allow_all is true.
+
+          allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -215,6 +235,8 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,
@@ -238,6 +260,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -258,6 +281,8 @@ class NetworkPoliciesResource(SyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name (partial match supported).
+
+          search: Search by network policy ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -283,6 +308,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     network_policy_list_params.NetworkPolicyListParams,
@@ -361,6 +387,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -393,6 +421,13 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allow_runloop_mirrors: (Optional) If true, allows devbox egress to Runloop's package/image registry
+              mirrors. Defaults to false. Implicitly allowed when allow_all is true.
+
+          allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
+              443}]}].
+
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
@@ -417,6 +452,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -473,6 +510,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -496,6 +535,12 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allow_runloop_mirrors: If true, allows devbox egress to Runloop's package/image registry mirrors.
+              Implicitly allowed when allow_all is true.
+
+          allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -524,6 +569,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,
@@ -547,6 +594,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
         name: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -567,6 +615,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           limit: The limit of items to return. Default is 20. Max is 5000.
 
           name: Filter by name (partial match supported).
+
+          search: Search by network policy ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -592,6 +642,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                         "include_total_count": include_total_count,
                         "limit": limit,
                         "name": name,
+                        "search": search,
                         "starting_after": starting_after,
                     },
                     network_policy_list_params.NetworkPolicyListParams,

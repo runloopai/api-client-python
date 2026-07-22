@@ -172,6 +172,7 @@ class TestGatewayConfigs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncGatewayConfigsCursorIDPage[GatewayConfigView], gateway_config, path=["response"])
@@ -392,6 +393,7 @@ class TestAsyncGatewayConfigs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncGatewayConfigsCursorIDPage[GatewayConfigView], gateway_config, path=["response"])

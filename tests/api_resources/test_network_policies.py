@@ -35,6 +35,19 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
         )
@@ -117,6 +130,19 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
             name="name",
@@ -166,6 +192,7 @@ class TestNetworkPolicies:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncNetworkPoliciesCursorIDPage[NetworkPolicyView], network_policy, path=["response"])
@@ -249,6 +276,19 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
         )
@@ -331,6 +371,19 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
             name="name",
@@ -380,6 +433,7 @@ class TestAsyncNetworkPolicies:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncNetworkPoliciesCursorIDPage[NetworkPolicyView], network_policy, path=["response"])

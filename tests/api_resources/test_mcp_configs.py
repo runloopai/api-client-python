@@ -166,6 +166,7 @@ class TestMcpConfigs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(SyncMcpConfigsCursorIDPage[McpConfigView], mcp_config, path=["response"])
@@ -380,6 +381,7 @@ class TestAsyncMcpConfigs:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
         )
         assert_matches_type(AsyncMcpConfigsCursorIDPage[McpConfigView], mcp_config, path=["response"])

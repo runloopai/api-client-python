@@ -71,6 +71,7 @@ class TestBenchmarkRuns:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
             state="state",
         )
@@ -185,6 +186,7 @@ class TestBenchmarkRuns:
             id="id",
             include_total_count=True,
             limit=0,
+            search="search",
             starting_after="starting_after",
             state="running",
         )
@@ -277,6 +279,7 @@ class TestAsyncBenchmarkRuns:
             include_total_count=True,
             limit=0,
             name="name",
+            search="search",
             starting_after="starting_after",
             state="state",
         )
@@ -391,6 +394,7 @@ class TestAsyncBenchmarkRuns:
             id="id",
             include_total_count=True,
             limit=0,
+            search="search",
             starting_after="starting_after",
             state="running",
         )

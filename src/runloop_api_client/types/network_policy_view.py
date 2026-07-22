@@ -3,6 +3,7 @@
 from typing import List, Optional
 
 from .._models import BaseModel
+from .allowed_cidr import AllowedCidr
 
 __all__ = ["NetworkPolicyView", "Egress"]
 
@@ -24,6 +25,18 @@ class Egress(BaseModel):
 
     allow_mcp_gateway: bool
     """If true, allows devbox egress to the MCP hub for MCP server access."""
+
+    allow_runloop_mirrors: bool
+    """If true, allows devbox egress to Runloop's package/image registry mirrors.
+
+    Implicitly allowed when allow_all is true.
+    """
+
+    allowed_cidrs: List[AllowedCidr]
+    """
+    CIDR-based allow list with optional port restrictions, additive with
+    allowed_hostnames.
+    """
 
     allowed_hostnames: List[str]
     """DNS-based allow list with wildcard support.

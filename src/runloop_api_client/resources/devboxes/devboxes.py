@@ -531,6 +531,7 @@ class DevboxesResource(SyncAPIResource):
         starting_after: str | Omit = omit,
         status: Literal[
             "scheduled",
+            "queued",
             "provisioning",
             "initializing",
             "running",
@@ -2204,6 +2205,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         starting_after: str | Omit = omit,
         status: Literal[
             "scheduled",
+            "queued",
             "provisioning",
             "initializing",
             "running",

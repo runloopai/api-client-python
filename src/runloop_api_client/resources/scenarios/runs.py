@@ -94,6 +94,7 @@ class RunsResource(SyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         scenario_id: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -117,6 +118,8 @@ class RunsResource(SyncAPIResource):
           name: Filter by name
 
           scenario_id: Filter runs associated to Scenario given ID
+
+          search: Search by scenario run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -145,6 +148,7 @@ class RunsResource(SyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "scenario_id": scenario_id,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },
@@ -519,6 +523,7 @@ class AsyncRunsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         name: str | Omit = omit,
         scenario_id: str | Omit = omit,
+        search: str | Omit = omit,
         starting_after: str | Omit = omit,
         state: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -542,6 +547,8 @@ class AsyncRunsResource(AsyncAPIResource):
           name: Filter by name
 
           scenario_id: Filter runs associated to Scenario given ID
+
+          search: Search by scenario run ID or name.
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
@@ -570,6 +577,7 @@ class AsyncRunsResource(AsyncAPIResource):
                         "limit": limit,
                         "name": name,
                         "scenario_id": scenario_id,
+                        "search": search,
                         "starting_after": starting_after,
                         "state": state,
                     },
