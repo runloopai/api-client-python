@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 
 import httpx
 
@@ -19,6 +19,7 @@ from .._response import (
 )
 from ..pagination import SyncNetworkPoliciesCursorIDPage, AsyncNetworkPoliciesCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
+from ..types.allowed_cidr_param import AllowedCidrParam
 from ..types.network_policy_view import NetworkPolicyView
 
 __all__ = ["NetworkPoliciesResource", "AsyncNetworkPoliciesResource"]
@@ -52,6 +53,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -84,6 +86,10 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
+              443}]}].
+
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
@@ -108,6 +114,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -164,6 +171,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -187,6 +195,9 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -215,6 +226,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,
@@ -365,6 +377,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -397,6 +410,10 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
+              443}]}].
+
           allowed_hostnames: (Optional) DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
 
@@ -421,6 +438,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                 },
@@ -477,6 +495,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -500,6 +519,9 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
+              with allowed_hostnames.
 
           allowed_hostnames: Updated DNS-based allow list with wildcard support. Examples: ['github.com',
               '*.npmjs.org'].
@@ -528,6 +550,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
                     "name": name,

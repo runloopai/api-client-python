@@ -35,6 +35,18 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
         )
@@ -117,6 +129,18 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
             name="name",
@@ -250,6 +274,18 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
         )
@@ -332,6 +368,18 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allowed_cidrs=[
+                {
+                    "cidr": "cidr",
+                    "ports": [
+                        {
+                            "port": 0,
+                            "end_port": 0,
+                            "protocol": "TCP",
+                        }
+                    ],
+                }
+            ],
             allowed_hostnames=["string"],
             description="description",
             name="name",
