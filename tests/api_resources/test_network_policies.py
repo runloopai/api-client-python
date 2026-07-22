@@ -35,6 +35,7 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
             allowed_cidrs=[
                 {
                     "cidr": "cidr",
@@ -129,6 +130,7 @@ class TestNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
             allowed_cidrs=[
                 {
                     "cidr": "cidr",
@@ -274,6 +276,7 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
             allowed_cidrs=[
                 {
                     "cidr": "cidr",
@@ -368,6 +371,7 @@ class TestAsyncNetworkPolicies:
             allow_all=True,
             allow_devbox_to_devbox=True,
             allow_mcp_gateway=True,
+            allow_runloop_mirrors=True,
             allowed_cidrs=[
                 {
                     "cidr": "cidr",

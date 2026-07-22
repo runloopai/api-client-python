@@ -43,6 +43,12 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     Defaults to false.
     """
 
+    allow_runloop_mirrors: Optional[bool]
+    """
+    (Optional) If true, allows devbox egress to Runloop's package/image registry
+    mirrors. Defaults to false. Implicitly allowed when allow_all is true.
+    """
+
     allowed_cidrs: Optional[Iterable[AllowedCidrParam]]
     """
     (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive

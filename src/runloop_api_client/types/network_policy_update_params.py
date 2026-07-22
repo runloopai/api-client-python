@@ -24,6 +24,12 @@ class NetworkPolicyUpdateParams(TypedDict, total=False):
     allow_mcp_gateway: Optional[bool]
     """If true, allows devbox egress to the MCP hub."""
 
+    allow_runloop_mirrors: Optional[bool]
+    """If true, allows devbox egress to Runloop's package/image registry mirrors.
+
+    Implicitly allowed when allow_all is true.
+    """
+
     allowed_cidrs: Optional[Iterable[AllowedCidrParam]]
     """
     Updated IPv4 CIDR-based allow list with optional port restrictions, additive

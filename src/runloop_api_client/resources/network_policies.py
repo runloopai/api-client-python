@@ -53,6 +53,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
         allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
@@ -86,6 +87,9 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allow_runloop_mirrors: (Optional) If true, allows devbox egress to Runloop's package/image registry
+              mirrors. Defaults to false. Implicitly allowed when allow_all is true.
+
           allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
               with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
               443}]}].
@@ -114,6 +118,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
                     "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
@@ -171,6 +176,7 @@ class NetworkPoliciesResource(SyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
         allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
@@ -195,6 +201,9 @@ class NetworkPoliciesResource(SyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allow_runloop_mirrors: If true, allows devbox egress to Runloop's package/image registry mirrors.
+              Implicitly allowed when allow_all is true.
 
           allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
               with allowed_hostnames.
@@ -226,6 +235,7 @@ class NetworkPoliciesResource(SyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
                     "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
@@ -377,6 +387,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
         allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
@@ -410,6 +421,9 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_mcp_gateway: (Optional) If true, allows devbox egress to the MCP hub for MCP server access.
               Defaults to false.
 
+          allow_runloop_mirrors: (Optional) If true, allows devbox egress to Runloop's package/image registry
+              mirrors. Defaults to false. Implicitly allowed when allow_all is true.
+
           allowed_cidrs: (Optional) IPv4 CIDR-based allow list with optional port restrictions, additive
               with allowed_hostnames. Example: [{'cidr': '10.12.0.0/16', 'ports': [{'port':
               443}]}].
@@ -438,6 +452,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
                     "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
@@ -495,6 +510,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         allow_all: Optional[bool] | Omit = omit,
         allow_devbox_to_devbox: Optional[bool] | Omit = omit,
         allow_mcp_gateway: Optional[bool] | Omit = omit,
+        allow_runloop_mirrors: Optional[bool] | Omit = omit,
         allowed_cidrs: Optional[Iterable[AllowedCidrParam]] | Omit = omit,
         allowed_hostnames: Optional[SequenceNotStr[str]] | Omit = omit,
         description: Optional[str] | Omit = omit,
@@ -519,6 +535,9 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
           allow_devbox_to_devbox: If true, allows traffic between the account's own devboxes via tunnels.
 
           allow_mcp_gateway: If true, allows devbox egress to the MCP hub.
+
+          allow_runloop_mirrors: If true, allows devbox egress to Runloop's package/image registry mirrors.
+              Implicitly allowed when allow_all is true.
 
           allowed_cidrs: Updated IPv4 CIDR-based allow list with optional port restrictions, additive
               with allowed_hostnames.
@@ -550,6 +569,7 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
                     "allow_all": allow_all,
                     "allow_devbox_to_devbox": allow_devbox_to_devbox,
                     "allow_mcp_gateway": allow_mcp_gateway,
+                    "allow_runloop_mirrors": allow_runloop_mirrors,
                     "allowed_cidrs": allowed_cidrs,
                     "allowed_hostnames": allowed_hostnames,
                     "description": description,
