@@ -97,6 +97,7 @@ from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchPa
 from ...types.devbox_resource_usage_view import DevboxResourceUsageView
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
+from ...types.devbox_watch_evictions_response import DevboxWatchEvictionsResponse
 from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
@@ -1740,6 +1741,31 @@ class DevboxesResource(SyncAPIResource):
                 query=maybe_transform({"last_n": last_n}, devbox_wait_for_command_params.DevboxWaitForCommandParams),
             ),
             cast_to=DevboxAsyncExecutionDetailView,
+        )
+
+    def watch_evictions(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxWatchEvictionsResponse:
+        """
+        Subscribe, via server-sent events, to pending infrastructure evictions for every
+        Devbox in the account. On connect the stream emits one event per Devbox that
+        currently has a pending eviction, then one event as each further eviction is
+        scheduled. Best-effort and advisory: a Devbox stays running until its deadline,
+        and delivery is not guaranteed.
+        """
+        return self._get(
+            "/v1/devboxes/watch_evictions",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxWatchEvictionsResponse,
         )
 
     def write_file_contents(
@@ -3417,6 +3443,31 @@ class AsyncDevboxesResource(AsyncAPIResource):
             cast_to=DevboxAsyncExecutionDetailView,
         )
 
+    async def watch_evictions(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DevboxWatchEvictionsResponse:
+        """
+        Subscribe, via server-sent events, to pending infrastructure evictions for every
+        Devbox in the account. On connect the stream emits one event per Devbox that
+        currently has a pending eviction, then one event as each further eviction is
+        scheduled. Best-effort and advisory: a Devbox stays running until its deadline,
+        and delivery is not guaranteed.
+        """
+        return await self._get(
+            "/v1/devboxes/watch_evictions",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=DevboxWatchEvictionsResponse,
+        )
+
     async def write_file_contents(
         self,
         id: str,
@@ -3555,6 +3606,9 @@ class DevboxesResourceWithRawResponse:
         self.wait_for_command = to_raw_response_wrapper(
             devboxes.wait_for_command,
         )
+        self.watch_evictions = to_raw_response_wrapper(
+            devboxes.watch_evictions,
+        )
         self.write_file_contents = to_raw_response_wrapper(
             devboxes.write_file_contents,
         )
@@ -3650,6 +3704,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.wait_for_command = async_to_raw_response_wrapper(
             devboxes.wait_for_command,
+        )
+        self.watch_evictions = async_to_raw_response_wrapper(
+            devboxes.watch_evictions,
         )
         self.write_file_contents = async_to_raw_response_wrapper(
             devboxes.write_file_contents,
@@ -3747,6 +3804,9 @@ class DevboxesResourceWithStreamingResponse:
         self.wait_for_command = to_streamed_response_wrapper(
             devboxes.wait_for_command,
         )
+        self.watch_evictions = to_streamed_response_wrapper(
+            devboxes.watch_evictions,
+        )
         self.write_file_contents = to_streamed_response_wrapper(
             devboxes.write_file_contents,
         )
@@ -3842,6 +3902,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.wait_for_command = async_to_streamed_response_wrapper(
             devboxes.wait_for_command,
+        )
+        self.watch_evictions = async_to_streamed_response_wrapper(
+            devboxes.watch_evictions,
         )
         self.write_file_contents = async_to_streamed_response_wrapper(
             devboxes.write_file_contents,

@@ -20,6 +20,7 @@ from runloop_api_client.types import (
     DevboxResourceUsageView,
     DevboxExecutionDetailView,
     DevboxCreateSSHKeyResponse,
+    DevboxWatchEvictionsResponse,
     DevboxAsyncExecutionDetailView,
 )
 from runloop_api_client._response import (
@@ -1189,6 +1190,31 @@ class TestDevboxes:
                 devbox_id="devbox_id",
                 statuses=["queued"],
             )
+
+    @parametrize
+    def test_method_watch_evictions(self, client: Runloop) -> None:
+        devbox = client.devboxes.watch_evictions()
+        assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+    @parametrize
+    def test_raw_response_watch_evictions(self, client: Runloop) -> None:
+        response = client.devboxes.with_raw_response.watch_evictions()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = response.parse()
+        assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+    @parametrize
+    def test_streaming_response_watch_evictions(self, client: Runloop) -> None:
+        with client.devboxes.with_streaming_response.watch_evictions() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = response.parse()
+            assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_write_file_contents(self, client: Runloop) -> None:
@@ -2858,6 +2884,31 @@ class TestAsyncDevboxes:
                 devbox_id="devbox_id",
                 statuses=["queued"],
             )
+
+    @parametrize
+    async def test_method_watch_evictions(self, async_client: AsyncRunloop) -> None:
+        devbox = await async_client.devboxes.watch_evictions()
+        assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+    @parametrize
+    async def test_raw_response_watch_evictions(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.devboxes.with_raw_response.watch_evictions()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        devbox = await response.parse()
+        assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_watch_evictions(self, async_client: AsyncRunloop) -> None:
+        async with async_client.devboxes.with_streaming_response.watch_evictions() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            devbox = await response.parse()
+            assert_matches_type(DevboxWatchEvictionsResponse, devbox, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_write_file_contents(self, async_client: AsyncRunloop) -> None:
