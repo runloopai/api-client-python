@@ -33,6 +33,7 @@ from ._types import (
 from .._types import omit
 from .._client import AsyncRunloop
 from ._helpers import filter_params
+from .async_eviction import AsyncEvictionCallback, monitor_for as _eviction_monitor_for
 from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
@@ -215,6 +216,24 @@ class AsyncDevbox:
         :rtype: DevboxView
         """
         return await self._client.devboxes.await_suspended(self._id, polling_config=polling_config)
+
+    async def on_evict(self, callback: AsyncEvictionCallback) -> None:
+        """Register a callback fired once if this devbox gets a pending infrastructure eviction.
+
+        The first ``on_evict`` across any devbox on this client opens a single
+        account-wide notification stream; it closes automatically once every
+        registered devbox has been notified. The callback runs at most once and
+        receives the eviction event (with its ``eviction_deadline_ms``) — use it to
+        run cleanup before the devbox is suspended. The callback may be sync or async.
+
+        :param callback: Callable invoked with the eviction event for this devbox.
+        :type callback: AsyncEvictionCallback
+        """
+        await _eviction_monitor_for(self._client).register(self._id, callback)
+
+    async def cancel_on_evict(self) -> None:
+        """Withdraw this devbox's eviction interest registered via :meth:`on_evict`."""
+        await _eviction_monitor_for(self._client).unregister(self._id)
 
     async def shutdown(
         self,
