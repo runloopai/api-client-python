@@ -33,8 +33,8 @@ from ._types import (
 )
 from .._types import omit
 from .._client import Runloop
-from .eviction import EvictionCallback, monitor_for as _eviction_monitor_for
 from ._helpers import filter_params
+from .eviction import EvictionCallback, monitor_for as _eviction_monitor_for
 from .execution import Execution, _StreamingGroup
 from .._streaming import Stream
 from ..lib.polling import PollingConfig
@@ -225,14 +225,15 @@ class Devbox:
 
         The first ``on_evict`` across any devbox on this client opens a single
         account-wide notification stream; it closes automatically once every
-        registered devbox has been notified. The callback runs at most once and
-        receives the eviction event (with its ``eviction_deadline_ms``) — use it to
-        run cleanup before the devbox is suspended.
+        registered devbox has been notified. The callback runs at most once and is
+        invoked as ``callback(devbox, eviction_deadline_ms)`` — the devbox itself and
+        the Unix millisecond deadline by which it will be suspended. Use it to run
+        cleanup before the devbox is suspended.
 
-        :param callback: Callable invoked with the eviction event for this devbox.
+        :param callback: Callable invoked with this devbox and its eviction deadline (ms).
         :type callback: EvictionCallback
         """
-        _eviction_monitor_for(self._client).register(self._id, callback)
+        _eviction_monitor_for(self._client).register(self, callback)
 
     def cancel_on_evict(self) -> None:
         """Withdraw this devbox's eviction interest registered via :meth:`on_evict`."""

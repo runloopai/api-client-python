@@ -9,20 +9,17 @@ from __future__ import annotations
 import asyncio
 import inspect
 import logging
-from typing import TYPE_CHECKING, Dict, Union, Callable, Optional, Awaitable
+from typing import TYPE_CHECKING, Dict, Tuple, Union, Callable, Optional, Awaitable
 from weakref import WeakKeyDictionary
 
 if TYPE_CHECKING:
+    from ..types import DevboxEvictionEventView
     from .._client import AsyncRunloop
     from .._streaming import AsyncStream
+    from .async_devbox import AsyncDevbox
 
-    # Assumed Stainless-generated SSE event type for ``watch_evictions``; carries
-    # ``devbox_id`` and ``eviction_deadline_ms``. Reconcile the import once the
-    # generated code lands.
-    from ..types import DevboxEvictionEvent
-
-AsyncEvictionCallback = Callable[["DevboxEvictionEvent"], Union[None, Awaitable[None]]]
-"""Sync or async callable invoked once with the eviction event for its devbox."""
+AsyncEvictionCallback = Callable[["AsyncDevbox", int], Union[None, Awaitable[None]]]
+"""Sync or async callable invoked once with the devbox and its eviction deadline (ms)."""
 
 _logger = logging.getLogger(__name__)
 
@@ -33,14 +30,14 @@ class AsyncEvictionMonitor:
     def __init__(self, client: "AsyncRunloop") -> None:
         self._client = client
         self._lock = asyncio.Lock()
-        self._callbacks: Dict[str, AsyncEvictionCallback] = {}
+        self._callbacks: Dict[str, Tuple["AsyncDevbox", AsyncEvictionCallback]] = {}
         self._task: Optional["asyncio.Task[None]"] = None
-        self._stream: Optional["AsyncStream[DevboxEvictionEvent]"] = None
+        self._stream: Optional["AsyncStream[DevboxEvictionEventView]"] = None
 
-    async def register(self, devbox_id: str, callback: AsyncEvictionCallback) -> None:
-        """Add ``devbox_id`` to the interest set, starting the stream task if idle."""
+    async def register(self, devbox: "AsyncDevbox", callback: AsyncEvictionCallback) -> None:
+        """Add ``devbox`` to the interest set, starting the stream task if idle."""
         async with self._lock:
-            self._callbacks[devbox_id] = callback
+            self._callbacks[devbox.id] = (devbox, callback)
             if self._task is None or self._task.done():
                 self._task = asyncio.create_task(self._run(), name="runloop-eviction-monitor")
 
@@ -78,13 +75,14 @@ class AsyncEvictionMonitor:
                 self._stream = None
                 self._task = None
 
-    async def _dispatch(self, event: "DevboxEvictionEvent") -> None:
+    async def _dispatch(self, event: "DevboxEvictionEventView") -> None:
         async with self._lock:
-            callback = self._callbacks.pop(event.devbox_id, None)
-        if callback is None:
+            entry = self._callbacks.pop(event.devbox_id, None)
+        if entry is None:
             return
+        devbox, callback = entry
         try:
-            result = callback(event)
+            result = callback(devbox, event.eviction_deadline_ms)
             if inspect.isawaitable(result):
                 await result
         except Exception:

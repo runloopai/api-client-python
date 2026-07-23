@@ -45,8 +45,8 @@ from .async_axon import AsyncAxon
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
-from .async_eviction import shutdown_monitor_for as shutdown_eviction_monitor
 from .async_secret import AsyncSecret
+from .async_eviction import shutdown_monitor_for as shutdown_eviction_monitor
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .async_benchmark import AsyncBenchmark

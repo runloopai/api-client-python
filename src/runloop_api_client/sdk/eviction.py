@@ -18,20 +18,21 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import TYPE_CHECKING, Dict, Callable, Optional
+from typing import TYPE_CHECKING, Dict, Tuple, Callable, Optional
 from weakref import WeakKeyDictionary
 
 if TYPE_CHECKING:
+    from ..types import DevboxEvictionEventView
+    from .devbox import Devbox
     from .._client import Runloop
     from .._streaming import Stream
 
-    # Assumed Stainless-generated SSE event type for ``watch_evictions``; carries
-    # ``devbox_id`` and ``eviction_deadline_ms``. Reconcile the import once the
-    # generated code lands.
-    from ..types import DevboxEvictionEvent
+EvictionCallback = Callable[["Devbox", int], None]
+"""Invoked once when the devbox it was registered for has a pending eviction.
 
-EvictionCallback = Callable[["DevboxEvictionEvent"], None]
-"""Invoked once with the eviction event for the devbox it was registered for."""
+Receives the :class:`~runloop_api_client.sdk.devbox.Devbox` and the eviction
+deadline as a Unix timestamp in milliseconds.
+"""
 
 _logger = logging.getLogger(__name__)
 
@@ -47,14 +48,14 @@ class EvictionMonitor:
     def __init__(self, client: "Runloop") -> None:
         self._client = client
         self._lock = threading.Lock()
-        self._callbacks: Dict[str, EvictionCallback] = {}
+        self._callbacks: Dict[str, Tuple["Devbox", EvictionCallback]] = {}
         self._thread: Optional[threading.Thread] = None
-        self._stream: Optional["Stream[DevboxEvictionEvent]"] = None
+        self._stream: Optional["Stream[DevboxEvictionEventView]"] = None
 
-    def register(self, devbox_id: str, callback: EvictionCallback) -> None:
-        """Add ``devbox_id`` to the interest set, starting the stream if idle."""
+    def register(self, devbox: "Devbox", callback: EvictionCallback) -> None:
+        """Add ``devbox`` to the interest set, starting the stream if idle."""
         with self._lock:
-            self._callbacks[devbox_id] = callback
+            self._callbacks[devbox.id] = (devbox, callback)
             if self._thread is None or not self._thread.is_alive():
                 self._thread = threading.Thread(
                     target=self._run,
@@ -95,13 +96,14 @@ class EvictionMonitor:
                 self._stream = None
                 self._thread = None
 
-    def _dispatch(self, event: "DevboxEvictionEvent") -> None:
+    def _dispatch(self, event: "DevboxEvictionEventView") -> None:
         with self._lock:
-            callback = self._callbacks.pop(event.devbox_id, None)
-        if callback is None:
+            entry = self._callbacks.pop(event.devbox_id, None)
+        if entry is None:
             return
+        devbox, callback = entry
         try:
-            callback(event)
+            callback(devbox, event.eviction_deadline_ms)
         except Exception:
             _logger.exception("error in eviction callback for devbox %s", event.devbox_id)
 
