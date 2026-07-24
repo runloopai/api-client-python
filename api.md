@@ -200,6 +200,7 @@ Types:
 ```python
 from runloop_api_client.types import (
     DevboxAsyncExecutionDetailView,
+    DevboxEvictionEventView,
     DevboxExecutionDetailView,
     DevboxKillExecutionRequest,
     DevboxListView,
@@ -213,7 +214,6 @@ from runloop_api_client.types import (
     TunnelView,
     DevboxCreateSSHKeyResponse,
     DevboxReadFileContentsResponse,
-    DevboxWatchEvictionsResponse,
 )
 ```
 
@@ -243,7 +243,7 @@ Methods:
 - <code title="post /v1/devboxes/{id}/suspend">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">suspend</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="post /v1/devboxes/{id}/upload_file">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">upload_file</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_upload_file_params.py">params</a>) -> object</code>
 - <code title="post /v1/devboxes/{devbox_id}/executions/{execution_id}/wait_for_status">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">wait_for_command</a>(execution_id, \*, devbox_id, \*\*<a href="src/runloop_api_client/types/devbox_wait_for_command_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_async_execution_detail_view.py">DevboxAsyncExecutionDetailView</a></code>
-- <code title="get /v1/devboxes/watch_evictions">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">watch_evictions</a>() -> <a href="./src/runloop_api_client/types/devbox_watch_evictions_response.py">DevboxWatchEvictionsResponse</a></code>
+- <code title="get /v1/devboxes/watch_evictions">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">watch_evictions</a>() -> <a href="./src/runloop_api_client/types/devbox_eviction_event_view.py">DevboxEvictionEventView</a></code>
 - <code title="post /v1/devboxes/{id}/write_file_contents">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">write_file_contents</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_write_file_contents_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_execution_detail_view.py">DevboxExecutionDetailView</a></code>
 
 ## DiskSnapshots
