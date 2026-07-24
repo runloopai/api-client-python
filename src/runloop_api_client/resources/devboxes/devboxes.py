@@ -69,6 +69,7 @@ from ..._constants import (
     LONG_POLL_CLIENT_BUFFER_SECONDS,
     EXEC_LONG_POLL_SERVER_MAX_SECONDS,
 )
+from ..._streaming import Stream, AsyncStream
 from ...pagination import (
     SyncDevboxesCursorIDPage,
     AsyncDevboxesCursorIDPage,
@@ -94,10 +95,10 @@ from ...types.pty_tunnel_view import PtyTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
+from ...types.devbox_eviction_event_view import DevboxEvictionEventView
 from ...types.devbox_resource_usage_view import DevboxResourceUsageView
 from ...types.devbox_execution_detail_view import DevboxExecutionDetailView
 from ...types.devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse
-from ...types.devbox_watch_evictions_response import DevboxWatchEvictionsResponse
 from ...types.shared_params.launch_parameters import LaunchParameters
 from ...types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 from ...types.shared_params.code_mount_parameters import CodeMountParameters
@@ -1752,7 +1753,7 @@ class DevboxesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DevboxWatchEvictionsResponse:
+    ) -> Stream[DevboxEvictionEventView]:
         """
         Subscribe, via server-sent events, to pending infrastructure evictions for every
         Devbox in the account. On connect the stream emits one event per Devbox that
@@ -1765,7 +1766,9 @@ class DevboxesResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxWatchEvictionsResponse,
+            cast_to=DevboxEvictionEventView,
+            stream=True,
+            stream_cls=Stream[DevboxEvictionEventView],
         )
 
     def write_file_contents(
@@ -3452,7 +3455,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DevboxWatchEvictionsResponse:
+    ) -> AsyncStream[DevboxEvictionEventView]:
         """
         Subscribe, via server-sent events, to pending infrastructure evictions for every
         Devbox in the account. On connect the stream emits one event per Devbox that
@@ -3465,7 +3468,9 @@ class AsyncDevboxesResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DevboxWatchEvictionsResponse,
+            cast_to=DevboxEvictionEventView,
+            stream=True,
+            stream_cls=AsyncStream[DevboxEvictionEventView],
         )
 
     async def write_file_contents(

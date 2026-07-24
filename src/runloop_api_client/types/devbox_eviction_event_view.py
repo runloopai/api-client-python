@@ -2,10 +2,10 @@
 
 from .._models import BaseModel
 
-__all__ = ["DevboxWatchEvictionsResponse"]
+__all__ = ["DevboxEvictionEventView"]
 
 
-class DevboxWatchEvictionsResponse(BaseModel):
+class DevboxEvictionEventView(BaseModel):
     devbox_id: str
     """The ID of the Devbox with a pending eviction."""
 
