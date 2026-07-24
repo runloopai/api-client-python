@@ -1762,7 +1762,7 @@ class DevboxesResource(SyncAPIResource):
         and delivery is not guaranteed.
         """
         return self._get(
-            "/v1/devboxes/watch_evictions",
+            "/v1/devboxes/evictions/watch",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -3464,7 +3464,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         and delivery is not guaranteed.
         """
         return await self._get(
-            "/v1/devboxes/watch_evictions",
+            "/v1/devboxes/evictions/watch",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
