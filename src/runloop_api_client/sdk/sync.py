@@ -45,6 +45,7 @@ from .secret import Secret
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
 from ._helpers import detect_content_type
+from .eviction import shutdown_monitor_for as shutdown_eviction_monitor
 from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
@@ -1398,6 +1399,7 @@ class RunloopSDK:
 
     def close(self) -> None:
         """Close the underlying HTTP client and release resources."""
+        shutdown_eviction_monitor(self.api)
         self.api.close()
 
     def __enter__(self) -> "RunloopSDK":

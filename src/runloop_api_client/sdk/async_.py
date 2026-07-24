@@ -46,6 +46,7 @@ from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
 from .async_secret import AsyncSecret
+from .async_eviction import shutdown_monitor_for as shutdown_eviction_monitor
 from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .async_benchmark import AsyncBenchmark
@@ -1373,6 +1374,7 @@ class AsyncRunloopSDK:
 
     async def aclose(self) -> None:
         """Close the underlying HTTP client and release resources."""
+        await shutdown_eviction_monitor(self.api)
         await self.api.close()
 
     async def __aenter__(self) -> "AsyncRunloopSDK":
