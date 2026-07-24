@@ -16,6 +16,7 @@ Delivery contract:
 
 from __future__ import annotations
 
+import time
 import logging
 import threading
 from typing import TYPE_CHECKING, Dict, Tuple, Callable, Optional
@@ -78,19 +79,57 @@ class EvictionMonitor:
             self._callbacks.clear()
         self._close_stream()
 
+    # Reconnect backoff bounds (seconds). The server force-closes the stream on purpose — on a
+    # leader change (FAILED_PRECONDITION) or a slow consumer (RESOURCE_EXHAUSTED) — and expects the
+    # client to reconnect and re-read the snapshot, which re-delivers anything missed. So a single
+    # stream ending is normal, not terminal: reconnect until no devbox is still interested.
+    _RECONNECT_BACKOFF_INITIAL_S = 0.5
+    _RECONNECT_BACKOFF_MAX_S = 30.0
+
     def _run(self) -> None:
+        backoff = self._RECONNECT_BACKOFF_INITIAL_S
         try:
-            stream = self._client.devboxes.watch_evictions()
-            with self._lock:
-                self._stream = stream
-            with stream:
-                for event in stream:
-                    self._dispatch(event)
+            while True:
+                with self._lock:
+                    if not self._callbacks:
+                        return
+                try:
+                    # Force the SSE Accept header: the endpoint only streams for
+                    # text/event-stream; the generated client's default (application/json) gets an
+                    # empty text/plain response, so the feed would silently deliver nothing.
+                    stream = self._client.devboxes.watch_evictions(
+                        extra_headers={"Accept": "text/event-stream"}
+                    )
                     with self._lock:
-                        if not self._callbacks:
-                            break
-        except Exception:
-            _logger.exception("eviction monitor stream failed")
+                        self._stream = stream
+                    _logger.debug("eviction monitor stream connected")
+                    with stream:
+                        for event in stream:
+                            _logger.debug("eviction monitor received event for %s", event.devbox_id)
+                            self._dispatch(event)
+                            with self._lock:
+                                if not self._callbacks:
+                                    return
+                    # Clean end (server closed the stream): reset backoff and reconnect if still
+                    # interested. The reconnect's snapshot re-delivers still-pending evictions.
+                    backoff = self._RECONNECT_BACKOFF_INITIAL_S
+                    _logger.debug("eviction monitor stream ended; reconnecting")
+                except Exception:
+                    # An intentional teardown (close/unregister clears the interest set, then closes
+                    # the stream) surfaces here as a read error — exit quietly in that case.
+                    with self._lock:
+                        interested = bool(self._callbacks)
+                    if not interested:
+                        return
+                    # Routine: the server force-closes on leader change / slow consumer, and a
+                    # long-lived stream can drop (e.g. an HTTP/2 disconnect). Reconnecting recovers
+                    # it, so keep this at debug to avoid log spam.
+                    _logger.debug("eviction monitor stream error; reconnecting", exc_info=True)
+                with self._lock:
+                    if not self._callbacks:
+                        return
+                time.sleep(backoff)
+                backoff = min(backoff * 2, self._RECONNECT_BACKOFF_MAX_S)
         finally:
             with self._lock:
                 self._stream = None
