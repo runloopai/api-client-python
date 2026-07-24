@@ -191,7 +191,8 @@ class NetworkPoliciesResource(SyncAPIResource):
     ) -> NetworkPolicyView:
         """Update an existing NetworkPolicy.
 
-        All fields are optional.
+        All fields are optional - null fields preserve
+        existing values, provided fields replace entirely.
 
         Args:
           allow_agent_gateway: If true, allows devbox egress to the agent gateway.
@@ -525,7 +526,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
     ) -> NetworkPolicyView:
         """Update an existing NetworkPolicy.
 
-        All fields are optional.
+        All fields are optional - null fields preserve
+        existing values, provided fields replace entirely.
 
         Args:
           allow_agent_gateway: If true, allows devbox egress to the agent gateway.

@@ -110,6 +110,7 @@ from .object_list_public_params import ObjectListPublicParams as ObjectListPubli
 from .scenario_start_run_params import ScenarioStartRunParams as ScenarioStartRunParams
 from .benchmark_start_run_params import BenchmarkStartRunParams as BenchmarkStartRunParams
 from .blueprint_build_parameters import BlueprintBuildParameters as BlueprintBuildParameters
+from .devbox_eviction_event_view import DevboxEvictionEventView as DevboxEvictionEventView
 from .devbox_execute_sync_params import DevboxExecuteSyncParams as DevboxExecuteSyncParams
 from .devbox_resource_usage_view import DevboxResourceUsageView as DevboxResourceUsageView
 from .gateway_config_list_params import GatewayConfigListParams as GatewayConfigListParams

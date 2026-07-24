@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.27.0 (2026-07-24)
+
+Full Changelog: [v1.24.0...v1.27.0](https://github.com/runloopai/api-client-python/compare/v1.24.0...v1.27.0)
+
+### Features
+
+* **mux:** wait_for_eviction endpoint for flex eviction notifications ([#10325](https://github.com/runloopai/api-client-python/issues/10325)) ([c06794d](https://github.com/runloopai/api-client-python/commit/c06794d413f37be16ee5955fe31b07b92b8adbc8))
+
+
+### Bug Fixes
+
+* **mux:** field-level merge on network policy egress updates ([#10338](https://github.com/runloopai/api-client-python/issues/10338)) ([cfc97ef](https://github.com/runloopai/api-client-python/commit/cfc97ef55a65e88abb0d76f733cf51dc33823fb0))
+
+
+### Chores
+
+* **stainless:** generate watch_evictions as an SSE stream ([#10404](https://github.com/runloopai/api-client-python/issues/10404)) ([0413e7b](https://github.com/runloopai/api-client-python/commit/0413e7ba4cd10b919a3fc50e67e0238dc95f4b18))
+
 ## 1.24.0 (2026-07-22)
 
 Full Changelog: [v1.23.3...v1.24.0](https://github.com/runloopai/api-client-python/compare/v1.23.3...v1.24.0)
