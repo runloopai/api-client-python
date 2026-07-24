@@ -55,21 +55,57 @@ class AsyncEvictionMonitor:
             self._callbacks.clear()
         await self._close_stream()
 
+    # Reconnect backoff bounds (seconds). The server force-closes the stream on purpose — on a
+    # leader change (FAILED_PRECONDITION) or a slow consumer (RESOURCE_EXHAUSTED) — and expects the
+    # client to reconnect and re-read the snapshot, which re-delivers anything missed. So a single
+    # stream ending is normal, not terminal: reconnect until no devbox is still interested.
+    _RECONNECT_BACKOFF_INITIAL_S = 0.5
+    _RECONNECT_BACKOFF_MAX_S = 30.0
+
     async def _run(self) -> None:
+        backoff = self._RECONNECT_BACKOFF_INITIAL_S
         try:
-            stream = await self._client.devboxes.watch_evictions()
-            async with self._lock:
-                self._stream = stream
-            async with stream:
-                async for event in stream:
-                    await self._dispatch(event)
+            while True:
+                async with self._lock:
+                    if not self._callbacks:
+                        return
+                try:
+                    # Force the SSE Accept header: the endpoint only streams for
+                    # text/event-stream; the generated client's default (application/json) gets an
+                    # empty text/plain response, so the feed would silently deliver nothing.
+                    stream = await self._client.devboxes.watch_evictions(extra_headers={"Accept": "text/event-stream"})
                     async with self._lock:
-                        if not self._callbacks:
-                            break
-        except asyncio.CancelledError:
-            raise
-        except Exception:
-            _logger.exception("async eviction monitor stream failed")
+                        self._stream = stream
+                    _logger.debug("async eviction monitor stream connected")
+                    async with stream:
+                        async for event in stream:
+                            _logger.debug("async eviction monitor received event for %s", event.devbox_id)
+                            await self._dispatch(event)
+                            async with self._lock:
+                                if not self._callbacks:
+                                    return
+                    # Clean end (server closed the stream): reset backoff and reconnect if still
+                    # interested. The reconnect's snapshot re-delivers still-pending evictions.
+                    backoff = self._RECONNECT_BACKOFF_INITIAL_S
+                    _logger.debug("async eviction monitor stream ended; reconnecting")
+                except asyncio.CancelledError:
+                    raise
+                except Exception:
+                    # An intentional teardown (close/unregister clears the interest set, then closes
+                    # the stream) surfaces here as a read error — exit quietly in that case.
+                    async with self._lock:
+                        interested = bool(self._callbacks)
+                    if not interested:
+                        return
+                    # Routine: the server force-closes on leader change / slow consumer, and a
+                    # long-lived stream can drop (e.g. an HTTP/2 disconnect). Reconnecting recovers
+                    # it, so keep this at debug to avoid log spam.
+                    _logger.debug("async eviction monitor stream error; reconnecting", exc_info=True)
+                async with self._lock:
+                    if not self._callbacks:
+                        return
+                await asyncio.sleep(backoff)
+                backoff = min(backoff * 2, self._RECONNECT_BACKOFF_MAX_S)
         finally:
             async with self._lock:
                 self._stream = None

@@ -97,9 +97,7 @@ class EvictionMonitor:
                     # Force the SSE Accept header: the endpoint only streams for
                     # text/event-stream; the generated client's default (application/json) gets an
                     # empty text/plain response, so the feed would silently deliver nothing.
-                    stream = self._client.devboxes.watch_evictions(
-                        extra_headers={"Accept": "text/event-stream"}
-                    )
+                    stream = self._client.devboxes.watch_evictions(extra_headers={"Accept": "text/event-stream"})
                     with self._lock:
                         self._stream = stream
                     _logger.debug("eviction monitor stream connected")
