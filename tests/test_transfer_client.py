@@ -11,10 +11,10 @@ import pytest
 import runloop_api_client._base_client as _base_mod
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client._base_client import (
-    _is_background_path,
+    _shard_index,
     _is_transfer_path,
     _pool_affinity_key,
-    _shard_index,
+    _is_background_path,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")

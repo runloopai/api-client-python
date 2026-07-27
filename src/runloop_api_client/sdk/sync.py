@@ -44,13 +44,13 @@ from .scorer import Scorer
 from .secret import Secret
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
-from .._constants import DEFAULT_BACKGROUND_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS
 from ._helpers import detect_content_type
 from .scenario import Scenario
 from .snapshot import Snapshot
 from .benchmark import Benchmark
 from .blueprint import Blueprint
 from .mcp_config import McpConfig
+from .._constants import DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject

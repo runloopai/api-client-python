@@ -26,6 +26,7 @@ from ._utils import (
 )
 from ._compat import cached_property
 from ._version import __version__
+from ._constants import DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import RunloopError, APIStatusError
 from ._base_client import (
@@ -33,7 +34,6 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
-from ._constants import DEFAULT_BACKGROUND_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS
 
 if TYPE_CHECKING:
     from .resources import (

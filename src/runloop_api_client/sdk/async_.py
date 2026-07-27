@@ -40,9 +40,9 @@ from ._types import (
 )
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
-from .._constants import DEFAULT_BACKGROUND_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS
 from ._helpers import detect_content_type
 from .async_axon import AsyncAxon
+from .._constants import DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
