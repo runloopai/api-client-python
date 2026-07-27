@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 import httpx
 
@@ -232,6 +232,28 @@ class TestFileInterface:
         call_kwargs = mock_client.devboxes.download_file.call_args[1]
         assert call_kwargs["path"] == "/path/to/file"
         assert "timeout" not in call_kwargs
+
+    def test_download_to_file(self, mock_client: Mock, tmp_path: Path) -> None:
+        """Test streaming file download writes to disk without buffering."""
+        dest = tmp_path / "out.bin"
+
+        def _stream(path: object, *args: object, **kwargs: object) -> None:  # noqa: ARG001
+            with open(path, "wb") as f:  # type: ignore[arg-type]
+                f.write(b"streamed content")
+
+        mock_response = Mock()
+        mock_response.stream_to_file.side_effect = _stream
+        cm = MagicMock()
+        cm.__enter__.return_value = mock_response
+        mock_client.devboxes.with_streaming_response.download_file.return_value = cm
+
+        devbox = Devbox(mock_client, "dbx_123")
+        devbox.file.download_to_file(dest, path="/path/to/file")
+
+        assert dest.read_bytes() == b"streamed content"
+        mock_response.stream_to_file.assert_called_once()
+        call_kwargs = mock_client.devboxes.with_streaming_response.download_file.call_args[1]
+        assert call_kwargs["path"] == "/path/to/file"
 
     def test_upload(self, mock_client: Mock, tmp_path: Path) -> None:
         """Test file upload."""
