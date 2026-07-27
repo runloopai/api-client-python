@@ -15,7 +15,7 @@ import asyncio
 import tempfile
 import threading
 import subprocess
-from typing import Any, Iterator
+from typing import Any, Iterator, cast
 from pathlib import Path
 
 import httpx
@@ -26,9 +26,11 @@ import h2.config  # noqa: E402
 import h2.events  # noqa: E402
 import h2.settings  # noqa: E402
 import h2.connection  # noqa: E402
+import h2.exceptions  # noqa: E402
 
 import runloop_api_client._base_client as _base_mod
 from runloop_api_client import AsyncRunloop
+from runloop_api_client._base_client import make_request_options
 
 pytestmark = pytest.mark.timeout(30)
 
@@ -53,7 +55,7 @@ def _clear_pool_state() -> None:
 
 
 @pytest.fixture(autouse=True)
-def _reset_pools() -> Iterator[None]:
+def _reset_pools() -> Iterator[None]:  # pyright: ignore[reportUnusedFunction]
     _clear_pool_state()
     yield
     _clear_pool_state()
@@ -221,8 +223,10 @@ class _H2BulkheadServer:
                     events = conn.receive_data(data)
                 except h2.exceptions.ProtocolError:
                     break
-                for event in events:
-                    if isinstance(event, h2.events.RequestReceived):
+                for raw_event in events:
+                    # h2's Event hierarchy is poorly typed under pyright strict.
+                    event = cast(Any, raw_event)
+                    if isinstance(raw_event, h2.events.RequestReceived):
                         st = streams.setdefault(
                             event.stream_id,
                             {
@@ -250,7 +254,7 @@ class _H2BulkheadServer:
                             self.active_waits += 1
                         if str(st["path"]).endswith("/upload_file"):
                             self.active_uploads += 1
-                    elif isinstance(event, h2.events.DataReceived):
+                    elif isinstance(raw_event, h2.events.DataReceived):
                         st = streams.setdefault(event.stream_id, {"body": bytearray(), "flow_controlled": 0})
                         st["body"].extend(event.data)
                         stall_upload = self.upload_stall_s > 0 and str(st.get("path", "")).endswith("/upload_file")
@@ -258,11 +262,11 @@ class _H2BulkheadServer:
                             st["flow_controlled"] = st.get("flow_controlled", 0) + event.flow_controlled_length
                         else:
                             conn.acknowledge_received_data(event.flow_controlled_length, event.stream_id)
-                    elif isinstance(event, h2.events.StreamEnded):
+                    elif isinstance(raw_event, h2.events.StreamEnded):
                         st = streams.get(event.stream_id)
                         if st is not None:
                             asyncio.create_task(respond(event.stream_id, st))
-                    elif isinstance(event, h2.events.StreamReset):
+                    elif isinstance(raw_event, h2.events.StreamReset):
                         streams.pop(event.stream_id, None)
                 async with write_lock:
                     to_send = conn.data_to_send()
@@ -318,7 +322,7 @@ async def test_waits_and_create_use_different_h2_connections(monkeypatch: pytest
                 return await client.post(
                     "/v1/devboxes/dbx_shared/wait_for_status",
                     body={"statuses": ["running"], "timeout_seconds": 5},
-                    options={"extra_headers": wait_headers},
+                    options=make_request_options(extra_headers=wait_headers),
                     cast_to=object,
                 )
 
@@ -381,7 +385,9 @@ async def test_upload_stall_does_not_block_create(monkeypatch: pytest.MonkeyPatc
                     "/v1/devboxes/dbx_up/upload_file",
                     content=payload,
                     cast_to=object,
-                    options={"extra_headers": {"content-type": "application/octet-stream"}},
+                    options=make_request_options(
+                        extra_headers={"content-type": "application/octet-stream"},
+                    ),
                 )
 
             upload_task = asyncio.create_task(upload())
