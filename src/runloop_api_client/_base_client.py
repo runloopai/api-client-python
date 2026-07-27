@@ -1847,9 +1847,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             except RuntimeError:
                 loop = None
             if loop is not None:
-                transport = _acquire_shared_async_transport(
-                    _shared_async_background_transports, loop, shard
-                )
+                transport = _acquire_shared_async_transport(_shared_async_background_transports, loop, shard)
         client = self._make_bulkhead_client(transport=transport)
         self._background_clients[shard] = client
         return client
@@ -1865,9 +1863,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             except RuntimeError:
                 loop = None
             if loop is not None:
-                transport = _acquire_shared_async_transport(
-                    _shared_async_transfer_transports, loop, shard
-                )
+                transport = _acquire_shared_async_transport(_shared_async_transfer_transports, loop, shard)
         client = self._make_bulkhead_client(transport=transport)
         self._transfer_clients[shard] = client
         return client

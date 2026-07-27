@@ -335,9 +335,7 @@ class Runloop(SyncAPIClient):
             http_client=http_client,
             shared_http_pool=resolved_shared,
             background_pool_shards=(
-                background_pool_shards
-                if background_pool_shards is not None
-                else self._background_pool_shards
+                background_pool_shards if background_pool_shards is not None else self._background_pool_shards
             ),
             transfer_pool_shards=(
                 transfer_pool_shards if transfer_pool_shards is not None else self._transfer_pool_shards
@@ -645,9 +643,7 @@ class AsyncRunloop(AsyncAPIClient):
             http_client=http_client,
             shared_http_pool=resolved_shared,
             background_pool_shards=(
-                background_pool_shards
-                if background_pool_shards is not None
-                else self._background_pool_shards
+                background_pool_shards if background_pool_shards is not None else self._background_pool_shards
             ),
             transfer_pool_shards=(
                 transfer_pool_shards if transfer_pool_shards is not None else self._transfer_pool_shards

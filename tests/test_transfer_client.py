@@ -96,12 +96,8 @@ def test_api_background_transfer_use_distinct_transports() -> None:
 def test_same_resource_affinity_uses_same_shard() -> None:
     client = _make_client(background_pool_shards=2, transfer_pool_shards=2)
     try:
-        w1 = client._send_client_for_request(
-            httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/wait_for_status")
-        )
-        w2 = client._send_client_for_request(
-            httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/wait_for_status")
-        )
+        w1 = client._send_client_for_request(httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/wait_for_status"))
+        w2 = client._send_client_for_request(httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/wait_for_status"))
         assert w1 is w2
     finally:
         client.close()
@@ -161,9 +157,7 @@ async def test_async_bulkheads() -> None:
         wait = client._send_client_for_request(
             httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/executions/ex_1/wait_for_status")
         )
-        upload = client._send_client_for_request(
-            httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/upload_file")
-        )
+        upload = client._send_client_for_request(httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/upload_file"))
         assert wait is not client._client
         assert upload is not client._client
         assert wait is not upload
