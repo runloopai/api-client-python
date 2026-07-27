@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import os
+import re
+import threading
 from typing import Any, Iterator
+from pathlib import Path
 
 import httpx
 import pytest
@@ -19,6 +22,18 @@ from runloop_api_client._base_client import (
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 bearer_token = "My Bearer Token"
+
+# Invariant: every long-lived / bulk-body RPC in the resources tree must match
+# these suffixes or it silently shares the API H2 pool. Update both the
+# classification helpers and this list when adding endpoints.
+_KNOWN_BACKGROUND_PATHS = (
+    "/v1/devboxes/dbx_1/wait_for_status",
+    "/v1/devboxes/dbx_1/executions/ex_1/wait_for_status",
+)
+_KNOWN_TRANSFER_PATHS = (
+    "/v1/devboxes/dbx_1/upload_file",
+    "/v1/devboxes/dbx_1/download_file",
+)
 
 
 @pytest.fixture(autouse=True)
@@ -163,3 +178,60 @@ async def test_async_bulkheads() -> None:
         assert wait is not upload
     finally:
         await client.close()
+
+
+def test_concurrent_background_client_init_is_singleton() -> None:
+    client = _make_client(shared_http_pool=False, background_pool_shards=1)
+    barrier = threading.Barrier(16)
+    results: list[httpx.Client] = []
+    errors: list[BaseException] = []
+
+    def worker() -> None:
+        try:
+            barrier.wait()
+            results.append(client._ensure_background_client(0))
+        except BaseException as exc:  # noqa: BLE001
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker) for _ in range(16)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert not errors
+    assert len(results) == 16
+    assert len({id(c) for c in results}) == 1
+    client.close()
+
+
+def test_known_long_lived_paths_are_classified() -> None:
+    for path in _KNOWN_BACKGROUND_PATHS:
+        assert _is_background_path(path), path
+        assert not _is_transfer_path(path), path
+    for path in _KNOWN_TRANSFER_PATHS:
+        assert _is_transfer_path(path), path
+        assert not _is_background_path(path), path
+
+
+def test_resources_tree_long_lived_ops_match_classifier() -> None:
+    """Fail if a new wait_for_status / upload_file / download_file path is added
+    without being covered by the bulkhead suffixes.
+    """
+    root = Path(__file__).resolve().parents[1] / "src" / "runloop_api_client" / "resources"
+    text = "\n".join(p.read_text() for p in root.rglob("*.py"))
+    # Paths appear as f-strings or path_template("/v1/.../wait_for_status", ...)
+    found_wait = set(re.findall(r'(/v1/[^"\s]*wait_for_status)', text))
+    found_upload = set(re.findall(r'(/v1/[^"\s]*upload_file)', text))
+    found_download = set(re.findall(r'(/v1/[^"\s]*download_file)', text))
+
+    assert found_wait, "expected wait_for_status paths in resources/"
+    assert found_upload, "expected upload_file paths in resources/"
+    assert found_download, "expected download_file paths in resources/"
+
+    for path in found_wait:
+        concrete = path.replace("{id}", "dbx_1").replace("{devbox_id}", "dbx_1").replace("{execution_id}", "ex_1")
+        assert _is_background_path(concrete), path
+    for path in found_upload | found_download:
+        concrete = path.replace("{id}", "dbx_1")
+        assert _is_transfer_path(concrete), path

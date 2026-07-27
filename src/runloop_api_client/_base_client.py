@@ -1073,6 +1073,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         self._closed = False
         self._background_clients = {}
         self._transfer_clients = {}
+        self._bulkhead_lock = threading.Lock()
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
         # Custom http_client owns the full transport stack; don't invent sibling pools.
@@ -1118,29 +1119,37 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         existing = self._background_clients.get(shard)
         if existing is not None:
             return existing
-        if self._uses_shared_pool:
-            transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
-                _shared_sync_background_transports, shard
-            )
-        else:
-            transport = None
-        client = self._make_bulkhead_client(transport=transport)
-        self._background_clients[shard] = client
-        return client
+        with self._bulkhead_lock:
+            existing = self._background_clients.get(shard)
+            if existing is not None:
+                return existing
+            if self._uses_shared_pool:
+                transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
+                    _shared_sync_background_transports, shard
+                )
+            else:
+                transport = None
+            client = self._make_bulkhead_client(transport=transport)
+            self._background_clients[shard] = client
+            return client
 
     def _ensure_transfer_client(self, shard: int) -> httpx.Client:
         existing = self._transfer_clients.get(shard)
         if existing is not None:
             return existing
-        if self._uses_shared_pool:
-            transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
-                _shared_sync_transfer_transports, shard
-            )
-        else:
-            transport = None
-        client = self._make_bulkhead_client(transport=transport)
-        self._transfer_clients[shard] = client
-        return client
+        with self._bulkhead_lock:
+            existing = self._transfer_clients.get(shard)
+            if existing is not None:
+                return existing
+            if self._uses_shared_pool:
+                transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
+                    _shared_sync_transfer_transports, shard
+                )
+            else:
+                transport = None
+            client = self._make_bulkhead_client(transport=transport)
+            self._transfer_clients[shard] = client
+            return client
 
     def _send_client_for_request(self, request: httpx.Request) -> httpx.Client:
         if not self._isolate_workload_pools:
