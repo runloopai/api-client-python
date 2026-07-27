@@ -28,7 +28,12 @@ from ._exceptions import (
     APIResponseValidationError,
 )
 from ._base_client import DefaultHttpxClient, DefaultAioHttpClient, DefaultAsyncHttpxClient
+from ._http2_pool_fix import install as _install_http2_pool_fix
 from ._utils._logs import setup_logging as _setup_logging
+
+# Open additional HTTP/2 connections when a connection's stream slots are full
+# instead of blocking on httpcore's per-connection stream semaphore.
+_install_http2_pool_fix()
 
 __all__ = [
     "types",

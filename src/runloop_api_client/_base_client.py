@@ -174,6 +174,21 @@ _shared_async_transports: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _
     weakref.WeakKeyDictionary()
 )
 
+# Separate HTTP/1.1 pool for bulk file upload/download. Keeping these off the
+# main HTTP/2 connection avoids H2 session-window / stream-slot contention with
+# latency-sensitive RPCs (create, wait_for_status, execute, …).
+_shared_sync_transfer_transport: _SharedTransport | None = None
+_shared_async_transfer_transports: weakref.WeakKeyDictionary[
+    asyncio.AbstractEventLoop, _SharedAsyncTransport
+] = weakref.WeakKeyDictionary()
+
+# Paths that carry large request/response bodies and should use the transfer pool.
+_FILE_TRANSFER_PATH_SUFFIXES = ("/upload_file", "/download_file")
+
+
+def _is_file_transfer_path(path: str) -> bool:
+    return path.endswith(_FILE_TRANSFER_PATH_SUFFIXES)
+
 # TODO: make base page type vars covariant
 SyncPageT = TypeVar("SyncPageT", bound="BaseSyncPage[Any]")
 AsyncPageT = TypeVar("AsyncPageT", bound="BaseAsyncPage[Any]")
@@ -929,8 +944,10 @@ class SyncHttpxClientWrapper(DefaultHttpxClient):
 
 class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _client: httpx.Client
+    _transfer_client: httpx.Client | None
     _default_stream_cls: type[Stream[Any]] | None = None
     _uses_shared_pool: bool
+    _isolate_file_transfers: bool
     _closed: bool
 
     def __init__(
@@ -976,6 +993,9 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         )
 
         self._closed = False
+        self._transfer_client = None
+        # Custom http_client owns the full transport stack; don't invent a sibling pool.
+        self._isolate_file_transfers = http_client is None
 
         if http_client is not None:
             self._client = http_client
@@ -1000,6 +1020,38 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             )
             self._uses_shared_pool = False
 
+    def _ensure_transfer_client(self) -> httpx.Client:
+        """Lazy HTTP/1.1 client for upload_file / download_file."""
+        if self._transfer_client is not None:
+            return self._transfer_client
+
+        timeout = cast(Timeout, self.timeout)
+        if self._uses_shared_pool:
+            global _shared_sync_transfer_transport
+            with _pool_lock:
+                if _shared_sync_transfer_transport is None or not _shared_sync_transfer_transport.acquire():
+                    _shared_sync_transfer_transport = _SharedTransport(
+                        httpx.HTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=False),
+                    )
+            self._transfer_client = SyncHttpxClientWrapper(
+                base_url=self._base_url,
+                timeout=timeout,
+                transport=_shared_sync_transfer_transport,
+                http2=False,
+            )
+        else:
+            self._transfer_client = SyncHttpxClientWrapper(
+                base_url=self._base_url,
+                timeout=timeout,
+                http2=False,
+            )
+        return self._transfer_client
+
+    def _send_client_for_request(self, request: httpx.Request) -> httpx.Client:
+        if self._isolate_file_transfers and _is_file_transfer_path(request.url.path):
+            return self._ensure_transfer_client()
+        return self._client
+
     def is_closed(self) -> bool:
         return self._closed or self._client.is_closed
 
@@ -1014,6 +1066,10 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             return
         self._closed = True
         self._client.close()
+        transfer = self._transfer_client
+        self._transfer_client = None
+        if transfer is not None:
+            transfer.close()
 
     def __enter__(self: _T) -> _T:
         return self
@@ -1114,7 +1170,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
 
             response = None
             try:
-                response = self._client.send(
+                response = self._send_client_for_request(request).send(
                     request,
                     stream=stream or self._should_stream_response_body(request=request),
                     **kwargs,
@@ -1561,8 +1617,10 @@ class AsyncHttpxClientWrapper(DefaultAsyncHttpxClient):
 
 class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _client: httpx.AsyncClient
+    _transfer_client: httpx.AsyncClient | None
     _default_stream_cls: type[AsyncStream[Any]] | None = None
     _uses_shared_pool: bool
+    _isolate_file_transfers: bool
     _closed: bool
 
     def __init__(
@@ -1608,6 +1666,9 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         )
 
         self._closed = False
+        self._transfer_client = None
+        # Custom http_client owns the full transport stack; don't invent a sibling pool.
+        self._isolate_file_transfers = http_client is None
 
         if http_client is not None:
             self._client = http_client
@@ -1646,6 +1707,47 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             )
             self._uses_shared_pool = False
 
+    def _ensure_transfer_client(self) -> httpx.AsyncClient:
+        """Lazy HTTP/1.1 client for upload_file / download_file."""
+        if self._transfer_client is not None:
+            return self._transfer_client
+
+        timeout = cast(Timeout, self.timeout)
+        if self._uses_shared_pool:
+            try:
+                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+            if loop is not None:
+                with _pool_lock:
+                    existing = _shared_async_transfer_transports.get(loop)
+                    if existing is not None and existing.acquire():
+                        transport: _SharedAsyncTransport = existing
+                    else:
+                        transport = _SharedAsyncTransport(
+                            httpx.AsyncHTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=False),
+                        )
+                        _shared_async_transfer_transports[loop] = transport
+                self._transfer_client = AsyncHttpxClientWrapper(
+                    base_url=self._base_url,
+                    timeout=timeout,
+                    transport=transport,
+                    http2=False,
+                )
+                return self._transfer_client
+
+        self._transfer_client = AsyncHttpxClientWrapper(
+            base_url=self._base_url,
+            timeout=timeout,
+            http2=False,
+        )
+        return self._transfer_client
+
+    def _send_client_for_request(self, request: httpx.Request) -> httpx.AsyncClient:
+        if self._isolate_file_transfers and _is_file_transfer_path(request.url.path):
+            return self._ensure_transfer_client()
+        return self._client
+
     def is_closed(self) -> bool:
         return self._closed or self._client.is_closed
 
@@ -1660,6 +1762,10 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             return
         self._closed = True
         await self._client.aclose()
+        transfer = self._transfer_client
+        self._transfer_client = None
+        if transfer is not None:
+            await transfer.aclose()
 
     async def __aenter__(self: _T) -> _T:
         return self
@@ -1765,7 +1871,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
 
             response = None
             try:
-                response = await self._client.send(
+                response = await self._send_client_for_request(request).send(
                     request,
                     stream=stream or self._should_stream_response_body(request=request),
                     **kwargs,

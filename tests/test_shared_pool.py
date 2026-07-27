@@ -30,13 +30,17 @@ def _reset_shared_pool() -> Iterator[None]:  # pyright: ignore[reportUnusedFunct
 def _clear_pool_state() -> None:
     with _base_mod._pool_lock:
         old_sync = _base_mod._shared_sync_transport
+        old_sync_transfer = _base_mod._shared_sync_transfer_transport
         _base_mod._shared_sync_transport = None
+        _base_mod._shared_sync_transfer_transport = None
         _base_mod._shared_async_transports.clear()
-    if old_sync is not None:
-        try:
-            old_sync._transport.close()
-        except Exception:
-            pass
+        _base_mod._shared_async_transfer_transports.clear()
+    for transport in (old_sync, old_sync_transfer):
+        if transport is not None:
+            try:
+                transport._transport.close()
+            except Exception:
+                pass
 
 
 def _make_client(**kwargs: Any) -> Runloop:
