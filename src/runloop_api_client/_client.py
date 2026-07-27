@@ -33,6 +33,7 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
+from ._constants import DEFAULT_BACKGROUND_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS
 
 if TYPE_CHECKING:
     from .resources import (
@@ -96,6 +97,10 @@ class Runloop(SyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
+        # Separate H2 connection pools for long-polls (/wait_for_status) and file
+        # transfers. Each shard ≈ one H2 connection, selected by hash(resource_id).
+        background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
+        transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.
         # When enabled an error APIResponseValidationError is raised
         # if the API responds with invalid data for the expected schema.
@@ -142,6 +147,8 @@ class Runloop(SyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            background_pool_shards=background_pool_shards,
+            transfer_pool_shards=transfer_pool_shards,
         )
 
         self._idempotency_header = "x-request-id"
@@ -284,6 +291,8 @@ class Runloop(SyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
         shared_http_pool: bool | None = None,
+        background_pool_shards: int | None = None,
+        transfer_pool_shards: int | None = None,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -325,6 +334,14 @@ class Runloop(SyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            background_pool_shards=(
+                background_pool_shards
+                if background_pool_shards is not None
+                else self._background_pool_shards
+            ),
+            transfer_pool_shards=(
+                transfer_pool_shards if transfer_pool_shards is not None else self._transfer_pool_shards
+            ),
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,
@@ -390,6 +407,10 @@ class AsyncRunloop(AsyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
+        # Separate H2 connection pools for long-polls (/wait_for_status) and file
+        # transfers. Each shard ≈ one H2 connection, selected by hash(resource_id).
+        background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
+        transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.
         # When enabled an error APIResponseValidationError is raised
         # if the API responds with invalid data for the expected schema.
@@ -436,6 +457,8 @@ class AsyncRunloop(AsyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            background_pool_shards=background_pool_shards,
+            transfer_pool_shards=transfer_pool_shards,
         )
 
         self._idempotency_header = "x-request-id"
@@ -578,6 +601,8 @@ class AsyncRunloop(AsyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
         shared_http_pool: bool | None = None,
+        background_pool_shards: int | None = None,
+        transfer_pool_shards: int | None = None,
         max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
@@ -619,6 +644,14 @@ class AsyncRunloop(AsyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            background_pool_shards=(
+                background_pool_shards
+                if background_pool_shards is not None
+                else self._background_pool_shards
+            ),
+            transfer_pool_shards=(
+                transfer_pool_shards if transfer_pool_shards is not None else self._transfer_pool_shards
+            ),
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
             default_headers=headers,
             default_query=params,

@@ -30,12 +30,15 @@ def _reset_shared_pool() -> Iterator[None]:  # pyright: ignore[reportUnusedFunct
 def _clear_pool_state() -> None:
     with _base_mod._pool_lock:
         old_sync = _base_mod._shared_sync_transport
-        old_sync_transfer = _base_mod._shared_sync_transfer_transport
+        old_bg = list(_base_mod._shared_sync_background_transports.values())
+        old_xfer = list(_base_mod._shared_sync_transfer_transports.values())
         _base_mod._shared_sync_transport = None
-        _base_mod._shared_sync_transfer_transport = None
+        _base_mod._shared_sync_background_transports.clear()
+        _base_mod._shared_sync_transfer_transports.clear()
         _base_mod._shared_async_transports.clear()
+        _base_mod._shared_async_background_transports.clear()
         _base_mod._shared_async_transfer_transports.clear()
-    for transport in (old_sync, old_sync_transfer):
+    for transport in [old_sync, *old_bg, *old_xfer]:
         if transport is not None:
             try:
                 transport._transport.close()

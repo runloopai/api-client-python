@@ -10,6 +10,12 @@ DEFAULT_TIMEOUT = httpx.Timeout(timeout=30, connect=5.0)
 DEFAULT_MAX_RETRIES = 5
 DEFAULT_CONNECTION_LIMITS = httpx.Limits(max_connections=20, max_keepalive_connections=10)
 
+# Separate H2 connection pools for long-polls and file transfers. Each "shard" is
+# its own httpx client / transport (≈ one H2 connection). Default 2 shards ≈ two
+# H2 connections so waits/uploads do not share the API control-plane connection.
+DEFAULT_BACKGROUND_POOL_SHARDS = 2
+DEFAULT_TRANSFER_POOL_SHARDS = 2
+
 INITIAL_RETRY_DELAY = 1.0
 MAX_RETRY_DELAY = 60.0
 

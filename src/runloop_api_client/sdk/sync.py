@@ -44,6 +44,7 @@ from .scorer import Scorer
 from .secret import Secret
 from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, Runloop
+from .._constants import DEFAULT_BACKGROUND_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS
 from ._helpers import detect_content_type
 from .scenario import Scenario
 from .snapshot import Snapshot
@@ -1354,6 +1355,8 @@ class RunloopSDK:
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
         http_client: httpx.Client | None = None,
+        background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
+        transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
     ) -> None:
         """Configure the synchronous SDK wrapper.
 
@@ -1371,6 +1374,10 @@ class RunloopSDK:
         :type default_query: Mapping[str, object] | None, optional
         :param http_client: Custom ``httpx.Client`` instance to reuse, defaults to None
         :type http_client: httpx.Client | None, optional
+        :param background_pool_shards: H2 shards for long-polls, defaults to 2
+        :type background_pool_shards: int, optional
+        :param transfer_pool_shards: H2 shards for upload/download, defaults to 2
+        :type transfer_pool_shards: int, optional
         """
         self.api = Runloop(
             bearer_token=bearer_token,
@@ -1380,6 +1387,8 @@ class RunloopSDK:
             default_headers=default_headers,
             default_query=default_query,
             http_client=http_client,
+            background_pool_shards=background_pool_shards,
+            transfer_pool_shards=transfer_pool_shards,
         )
 
         self.agent = AgentOps(self.api)
