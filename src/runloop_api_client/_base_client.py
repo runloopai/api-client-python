@@ -210,9 +210,9 @@ class _SharedAsyncTransport(httpx.AsyncBaseTransport):
         """Per-event-loop map of shard index → shared async H2 transport."""
 
         def __init__(self) -> None:
-            self._by_loop: weakref.WeakKeyDictionary[
-                asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]
-            ] = weakref.WeakKeyDictionary()
+            self._by_loop: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]] = (
+                weakref.WeakKeyDictionary()
+            )
 
         def acquire(self, loop: asyncio.AbstractEventLoop, shard: int) -> _SharedAsyncTransport:
             with _pool_lock:
