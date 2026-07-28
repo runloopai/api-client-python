@@ -161,13 +161,14 @@ class _SharedTransport(httpx.BaseTransport):
                 return transport
 
         def take_all(self) -> list[_SharedTransport]:
-            """Remove and return all transports (test cleanup)."""
+            """Test-only: remove and return all transports for fixture cleanup."""
             with _pool_lock:
                 values = list(self._shards.values())
                 self._shards.clear()
                 return values
 
         def shard_ids(self) -> set[int]:
+            """Test-only: which shard indexes currently hold a shared transport."""
             with _pool_lock:
                 return set(self._shards)
 
@@ -229,6 +230,7 @@ class _SharedAsyncTransport(httpx.AsyncBaseTransport):
                 return transport
 
         def clear(self) -> None:
+            """Test-only: drop all per-loop shard maps (does not close transports)."""
             with _pool_lock:
                 self._by_loop.clear()
 

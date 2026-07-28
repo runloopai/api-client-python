@@ -28,7 +28,7 @@ def _reset_shared_pool() -> Iterator[None]:  # pyright: ignore[reportUnusedFunct
 
 
 def _clear_pool_state() -> None:
-    old = []
+    old: list[_base_mod._SharedTransport] = []
     old.extend(_base_mod._shared_sync_api_transports.take_all())
     old.extend(_base_mod._shared_sync_background_transports.take_all())
     old.extend(_base_mod._shared_sync_transfer_transports.take_all())
@@ -40,6 +40,7 @@ def _clear_pool_state() -> None:
             transport._transport.close()
         except Exception:
             pass
+
 
 def _make_client(**kwargs: Any) -> Runloop:
     kwargs.setdefault("base_url", base_url)
