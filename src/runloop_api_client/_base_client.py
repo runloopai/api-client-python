@@ -8,6 +8,7 @@ import email
 import asyncio
 import inspect
 import logging
+import secrets
 import weakref
 import platform
 import warnings
@@ -178,8 +179,8 @@ _shared_async_transports: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _
 
 # Sharded H2 bulkheads: long-polls and file transfers stay off the API control-plane
 # connection. Each shard index maps to its own shared transport (≈ one H2 connection).
-# Per-client round-robin spreads concurrent requests across shards. Removable once
-# httpcore respects stream capacity when opening connections.
+# Per-client round-robin (random start offset) spreads concurrent requests across
+# shards. Removable once httpcore respects stream capacity when opening connections.
 _shared_sync_background_transports: dict[int, _SharedTransport] = {}
 _shared_sync_transfer_transports: dict[int, _SharedTransport] = {}
 _shared_async_background_transports: weakref.WeakKeyDictionary[
@@ -1054,8 +1055,9 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         self._bulkhead_lock = threading.Lock()
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
-        self._background_next = 0
-        self._transfer_next = 0
+        # Random start avoids every short-lived SDK client pinning global shard 0.
+        self._background_next = secrets.randbelow(background_pool_shards)
+        self._transfer_next = secrets.randbelow(transfer_pool_shards)
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 
@@ -1786,8 +1788,9 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         self._transfer_clients = {}
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
-        self._background_next = 0
-        self._transfer_next = 0
+        # Random start avoids every short-lived SDK client pinning global shard 0.
+        self._background_next = secrets.randbelow(background_pool_shards)
+        self._transfer_next = secrets.randbelow(transfer_pool_shards)
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 

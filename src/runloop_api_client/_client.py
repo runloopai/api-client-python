@@ -98,7 +98,8 @@ class Runloop(SyncAPIClient):
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
         # Separate H2 connection pools for long-polls (/wait_for_status) and file
-        # transfers. Each shard ≈ one H2 connection; requests round-robin per client.
+        # transfers. Each shard ≈ one H2 connection; requests round-robin per client
+        # from a randomized starting offset (avoids every new client hitting shard 0).
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.
@@ -406,7 +407,8 @@ class AsyncRunloop(AsyncAPIClient):
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
         # Separate H2 connection pools for long-polls (/wait_for_status) and file
-        # transfers. Each shard ≈ one H2 connection; requests round-robin per client.
+        # transfers. Each shard ≈ one H2 connection; requests round-robin per client
+        # from a randomized starting offset (avoids every new client hitting shard 0).
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.

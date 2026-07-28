@@ -119,6 +119,18 @@ def test_round_robin_spreads_requests_across_shards() -> None:
         client.close()
 
 
+def test_many_clients_first_requests_use_both_shards() -> None:
+    clients = [_make_client(background_pool_shards=2) for _ in range(40)]
+    try:
+        req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/wait_for_status")
+        seen_transports = {id(c._send_client_for_request(req)._transport) for c in clients}  # type: ignore[attr-defined]
+        assert len(seen_transports) == 2
+        assert set(_base_mod._shared_sync_background_transports) == {0, 1}
+    finally:
+        for c in clients:
+            c.close()
+
+
 def test_custom_http_client_skips_isolation() -> None:
     custom = httpx.Client()
     client = _make_client(http_client=custom)
@@ -137,19 +149,24 @@ def test_round_robin_is_per_client_while_transports_are_shared() -> None:
     c2 = _make_client(background_pool_shards=2)
     try:
         req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_shared/wait_for_status")
-        # Each SDK client has its own counter; both start at shard 0.
+        start1 = c1._background_next
+        start2 = c2._background_next
         t1 = c1._send_client_for_request(req)
         t2 = c2._send_client_for_request(req)
         assert t1 is not t2
-        assert t1._transport is t2._transport  # type: ignore[attr-defined]
-        assert c1._background_next == 1
-        assert c2._background_next == 1
+        # Same starting shard → same shared transport; different → different shards.
+        if start1 % 2 == start2 % 2:
+            assert t1._transport is t2._transport  # type: ignore[attr-defined]
+        else:
+            assert t1._transport is not t2._transport  # type: ignore[attr-defined]
+        assert c1._background_next == start1 + 1
+        assert c2._background_next == start2 + 1
 
         # Advancing one client does not affect the other.
         t1b = c1._send_client_for_request(req)
         assert t1b is not t1
-        assert c1._background_next == 2
-        assert c2._background_next == 1
+        assert c1._background_next == start1 + 2
+        assert c2._background_next == start2 + 1
     finally:
         c1.close()
         c2.close()
