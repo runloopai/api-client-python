@@ -10,6 +10,13 @@ DEFAULT_TIMEOUT = httpx.Timeout(timeout=30, connect=5.0)
 DEFAULT_MAX_RETRIES = 5
 DEFAULT_CONNECTION_LIMITS = httpx.Limits(max_connections=20, max_keepalive_connections=10)
 
+# Separate H2 connection pools by workload. Each "shard" is its own httpx
+# client / transport (≈ one H2 connection). Defaults sized for Jetty's ~128
+# streams/connection: enough API/wait concurrency without oversized transfer.
+DEFAULT_API_POOL_SHARDS = 8
+DEFAULT_BACKGROUND_POOL_SHARDS = 16
+DEFAULT_TRANSFER_POOL_SHARDS = 2
+
 INITIAL_RETRY_DELAY = 1.0
 MAX_RETRY_DELAY = 60.0
 
