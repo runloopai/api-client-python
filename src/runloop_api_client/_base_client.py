@@ -4,7 +4,6 @@ import sys
 import json
 import time
 import uuid
-import zlib
 import email
 import asyncio
 import inspect
@@ -179,7 +178,8 @@ _shared_async_transports: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _
 
 # Sharded H2 bulkheads: long-polls and file transfers stay off the API control-plane
 # connection. Each shard index maps to its own shared transport (≈ one H2 connection).
-# Removable once httpcore respects stream capacity when opening connections.
+# Per-client round-robin spreads concurrent requests across shards. Removable once
+# httpcore respects stream capacity when opening connections.
 _shared_sync_background_transports: dict[int, _SharedTransport] = {}
 _shared_sync_transfer_transports: dict[int, _SharedTransport] = {}
 _shared_async_background_transports: weakref.WeakKeyDictionary[
@@ -199,30 +199,6 @@ def _is_background_path(path: str) -> bool:
 
 def _is_transfer_path(path: str) -> bool:
     return path.endswith(_TRANSFER_PATH_SUFFIXES)
-
-
-def _pool_affinity_key(path: str) -> str:
-    """Pick a stable resource id from the URL for shard routing."""
-    parts = [p for p in path.split("/") if p]
-    try:
-        if "executions" in parts:
-            idx = parts.index("executions")
-            if idx + 1 < len(parts):
-                return parts[idx + 1]
-        if "devboxes" in parts:
-            idx = parts.index("devboxes")
-            if idx + 1 < len(parts):
-                return parts[idx + 1]
-    except ValueError:
-        pass
-    return path
-
-
-def _shard_index(key: str, shards: int) -> int:
-    if shards <= 1:
-        return 0
-    # crc32 is stable across processes (unlike PYTHONHASHSEED-randomized hash()).
-    return zlib.crc32(key.encode("utf-8")) % shards
 
 
 def _acquire_shared_sync_transport(bucket: dict[int, _SharedTransport], shard: int) -> _SharedTransport:
@@ -1019,6 +995,8 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _isolate_workload_pools: bool
     _background_pool_shards: int
     _transfer_pool_shards: int
+    _background_next: int
+    _transfer_next: int
     _closed: bool
 
     def __init__(
@@ -1076,6 +1054,8 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         self._bulkhead_lock = threading.Lock()
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
+        self._background_next = 0
+        self._transfer_next = 0
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 
@@ -1151,15 +1131,27 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             self._transfer_clients[shard] = client
             return client
 
+    def _next_background_client(self) -> httpx.Client:
+        # Select under the lock; ensure afterward so _ensure_* can take the same lock.
+        with self._bulkhead_lock:
+            shard = self._background_next % self._background_pool_shards
+            self._background_next += 1
+        return self._ensure_background_client(shard)
+
+    def _next_transfer_client(self) -> httpx.Client:
+        with self._bulkhead_lock:
+            shard = self._transfer_next % self._transfer_pool_shards
+            self._transfer_next += 1
+        return self._ensure_transfer_client(shard)
+
     def _send_client_for_request(self, request: httpx.Request) -> httpx.Client:
         if not self._isolate_workload_pools:
             return self._client
         path = request.url.path
-        key = _pool_affinity_key(path)
         if _is_background_path(path):
-            return self._ensure_background_client(_shard_index(key, self._background_pool_shards))
+            return self._next_background_client()
         if _is_transfer_path(path):
-            return self._ensure_transfer_client(_shard_index(key, self._transfer_pool_shards))
+            return self._next_transfer_client()
         return self._client
 
     def is_closed(self) -> bool:
@@ -1736,6 +1728,8 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _isolate_workload_pools: bool
     _background_pool_shards: int
     _transfer_pool_shards: int
+    _background_next: int
+    _transfer_next: int
     _closed: bool
 
     def __init__(
@@ -1792,6 +1786,8 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         self._transfer_clients = {}
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
+        self._background_next = 0
+        self._transfer_next = 0
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 
@@ -1877,15 +1873,25 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         self._transfer_clients[shard] = client
         return client
 
+    def _next_background_client(self) -> httpx.AsyncClient:
+        # Single-threaded event loop: counter bump needs no lock when there is no await.
+        shard = self._background_next % self._background_pool_shards
+        self._background_next += 1
+        return self._ensure_background_client(shard)
+
+    def _next_transfer_client(self) -> httpx.AsyncClient:
+        shard = self._transfer_next % self._transfer_pool_shards
+        self._transfer_next += 1
+        return self._ensure_transfer_client(shard)
+
     def _send_client_for_request(self, request: httpx.Request) -> httpx.AsyncClient:
         if not self._isolate_workload_pools:
             return self._client
         path = request.url.path
-        key = _pool_affinity_key(path)
         if _is_background_path(path):
-            return self._ensure_background_client(_shard_index(key, self._background_pool_shards))
+            return self._next_background_client()
         if _is_transfer_path(path):
-            return self._ensure_transfer_client(_shard_index(key, self._transfer_pool_shards))
+            return self._next_transfer_client()
         return self._client
 
     def is_closed(self) -> bool:

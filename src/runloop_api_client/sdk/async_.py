@@ -1349,9 +1349,9 @@ class AsyncRunloopSDK:
         :type default_query: Mapping[str, object] | None, optional
         :param http_client: Custom ``httpx.AsyncClient`` instance to reuse, defaults to None
         :type http_client: httpx.AsyncClient | None, optional
-        :param background_pool_shards: H2 shards for long-polls, defaults to 2
+        :param background_pool_shards: H2 shards for long-polls (round-robin), defaults to 2
         :type background_pool_shards: int, optional
-        :param transfer_pool_shards: H2 shards for upload/download, defaults to 2
+        :param transfer_pool_shards: H2 shards for upload/download (round-robin), defaults to 2
         :type transfer_pool_shards: int, optional
         """
         self.api = AsyncRunloop(
