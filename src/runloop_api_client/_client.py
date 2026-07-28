@@ -26,7 +26,7 @@ from ._utils import (
 )
 from ._compat import cached_property
 from ._version import __version__
-from ._constants import DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
+from ._constants import DEFAULT_API_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import RunloopError, APIStatusError
 from ._base_client import (
@@ -97,9 +97,9 @@ class Runloop(SyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
-        # Separate H2 connection pools for long-polls (/wait_for_status) and file
-        # transfers. Each shard ≈ one H2 connection; requests round-robin per client
-        # from a randomized starting offset (avoids every new client hitting shard 0).
+        # Sharded H2 pools by workload (API / long-polls / transfers). Each shard ≈
+        # one H2 connection; requests round-robin per client from a random offset.
+        api_pool_shards: int = DEFAULT_API_POOL_SHARDS,
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.
@@ -148,6 +148,7 @@ class Runloop(SyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            api_pool_shards=api_pool_shards,
             background_pool_shards=background_pool_shards,
             transfer_pool_shards=transfer_pool_shards,
         )
@@ -292,6 +293,7 @@ class Runloop(SyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
         shared_http_pool: bool | None = None,
+        api_pool_shards: int | None = None,
         background_pool_shards: int | None = None,
         transfer_pool_shards: int | None = None,
         max_retries: int | NotGiven = not_given,
@@ -335,6 +337,7 @@ class Runloop(SyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            api_pool_shards=(api_pool_shards if api_pool_shards is not None else self._api_pool_shards),
             background_pool_shards=(
                 background_pool_shards if background_pool_shards is not None else self._background_pool_shards
             ),
@@ -406,9 +409,9 @@ class AsyncRunloop(AsyncAPIClient):
         # Enables HTTP/2 multiplexing and avoids ConnectTimeout storms under high concurrency.
         # Set to False to create a private connection pool (old behavior).
         shared_http_pool: bool = True,
-        # Separate H2 connection pools for long-polls (/wait_for_status) and file
-        # transfers. Each shard ≈ one H2 connection; requests round-robin per client
-        # from a randomized starting offset (avoids every new client hitting shard 0).
+        # Sharded H2 pools by workload (API / long-polls / transfers). Each shard ≈
+        # one H2 connection; requests round-robin per client from a random offset.
+        api_pool_shards: int = DEFAULT_API_POOL_SHARDS,
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
         # Enable or disable schema validation for data returned by the API.
@@ -457,6 +460,7 @@ class AsyncRunloop(AsyncAPIClient):
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
             shared_http_pool=shared_http_pool,
+            api_pool_shards=api_pool_shards,
             background_pool_shards=background_pool_shards,
             transfer_pool_shards=transfer_pool_shards,
         )
@@ -601,6 +605,7 @@ class AsyncRunloop(AsyncAPIClient):
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
         shared_http_pool: bool | None = None,
+        api_pool_shards: int | None = None,
         background_pool_shards: int | None = None,
         transfer_pool_shards: int | None = None,
         max_retries: int | NotGiven = not_given,
@@ -644,6 +649,7 @@ class AsyncRunloop(AsyncAPIClient):
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             shared_http_pool=resolved_shared,
+            api_pool_shards=(api_pool_shards if api_pool_shards is not None else self._api_pool_shards),
             background_pool_shards=(
                 background_pool_shards if background_pool_shards is not None else self._background_pool_shards
             ),

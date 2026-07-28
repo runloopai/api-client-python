@@ -25,6 +25,7 @@ from typing import (
     Generic,
     Mapping,
     TypeVar,
+    Callable,
     Iterable,
     Iterator,
     Optional,
@@ -79,6 +80,7 @@ from ._constants import (
     DEFAULT_MAX_RETRIES,
     INITIAL_RETRY_DELAY,
     RAW_RESPONSE_HEADER,
+    DEFAULT_API_POOL_SHARDS,
     OVERRIDE_CAST_TO_HEADER,
     DEFAULT_CONNECTION_LIMITS,
     DEFAULT_TRANSFER_POOL_SHARDS,
@@ -101,6 +103,10 @@ log: logging.Logger = logging.getLogger(__name__)
 # when the last user releases it.
 # The async transport is keyed by event loop because connections bind to the
 # loop that created them and cannot be reused across asyncio.run() calls.
+#
+# httpx/httpcore use a single H2 connection per transport, so each workload
+# category uses a sharded Registry of SharedTransport instances. Per-client
+# round-robin spreads requests across shards.
 _pool_lock = threading.Lock()
 
 
@@ -137,6 +143,34 @@ class _SharedTransport(httpx.BaseTransport):
         if should_close:
             self._transport.close()
 
+    class Registry:
+        """Process-global map of shard index → shared H2 transport."""
+
+        def __init__(self) -> None:
+            self._shards: dict[int, _SharedTransport] = {}
+
+        def acquire(self, shard: int) -> _SharedTransport:
+            with _pool_lock:
+                existing = self._shards.get(shard)
+                if existing is not None and existing.acquire():
+                    return existing
+                transport = _SharedTransport(
+                    httpx.HTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
+                )
+                self._shards[shard] = transport
+                return transport
+
+        def take_all(self) -> list[_SharedTransport]:
+            """Remove and return all transports (test cleanup)."""
+            with _pool_lock:
+                values = list(self._shards.values())
+                self._shards.clear()
+                return values
+
+        def shard_ids(self) -> set[int]:
+            with _pool_lock:
+                return set(self._shards)
+
 
 class _SharedAsyncTransport(httpx.AsyncBaseTransport):
     """Async refcounted wrapper: delegates to a real async transport."""
@@ -171,24 +205,41 @@ class _SharedAsyncTransport(httpx.AsyncBaseTransport):
         if should_close:
             await self._transport.aclose()
 
+    class Registry:
+        """Per-event-loop map of shard index → shared async H2 transport."""
 
-_shared_sync_transport: _SharedTransport | None = None
-_shared_async_transports: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, _SharedAsyncTransport] = (
-    weakref.WeakKeyDictionary()
-)
+        def __init__(self) -> None:
+            self._by_loop: weakref.WeakKeyDictionary[
+                asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]
+            ] = weakref.WeakKeyDictionary()
 
-# Sharded H2 bulkheads: long-polls and file transfers stay off the API control-plane
-# connection. Each shard index maps to its own shared transport (≈ one H2 connection).
-# Per-client round-robin (random start offset) spreads concurrent requests across
-# shards. Removable once httpcore respects stream capacity when opening connections.
-_shared_sync_background_transports: dict[int, _SharedTransport] = {}
-_shared_sync_transfer_transports: dict[int, _SharedTransport] = {}
-_shared_async_background_transports: weakref.WeakKeyDictionary[
-    asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]
-] = weakref.WeakKeyDictionary()
-_shared_async_transfer_transports: weakref.WeakKeyDictionary[
-    asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]
-] = weakref.WeakKeyDictionary()
+        def acquire(self, loop: asyncio.AbstractEventLoop, shard: int) -> _SharedAsyncTransport:
+            with _pool_lock:
+                bucket = self._by_loop.get(loop)
+                if bucket is None:
+                    bucket = {}
+                    self._by_loop[loop] = bucket
+                existing = bucket.get(shard)
+                if existing is not None and existing.acquire():
+                    return existing
+                transport = _SharedAsyncTransport(
+                    httpx.AsyncHTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
+                )
+                bucket[shard] = transport
+                return transport
+
+        def clear(self) -> None:
+            with _pool_lock:
+                self._by_loop.clear()
+
+
+# Process-global sharded registries (one ≈ H2 connection per shard index).
+_shared_sync_api_transports = _SharedTransport.Registry()
+_shared_sync_background_transports = _SharedTransport.Registry()
+_shared_sync_transfer_transports = _SharedTransport.Registry()
+_shared_async_api_transports = _SharedAsyncTransport.Registry()
+_shared_async_background_transports = _SharedAsyncTransport.Registry()
+_shared_async_transfer_transports = _SharedAsyncTransport.Registry()
 
 _BACKGROUND_PATH_SUFFIXES = ("/wait_for_status",)
 _TRANSFER_PATH_SUFFIXES = ("/upload_file", "/download_file")
@@ -202,36 +253,100 @@ def _is_transfer_path(path: str) -> bool:
     return path.endswith(_TRANSFER_PATH_SUFFIXES)
 
 
-def _acquire_shared_sync_transport(bucket: dict[int, _SharedTransport], shard: int) -> _SharedTransport:
-    with _pool_lock:
-        existing = bucket.get(shard)
-        if existing is not None and existing.acquire():
+class _SyncClientPool:
+    """Per-SDK-client round-robin over sharded httpx.Client wrappers."""
+
+    def __init__(
+        self,
+        *,
+        shards: int,
+        shared: bool,
+        registry: _SharedTransport.Registry | None,
+        make_client: Callable[[httpx.BaseTransport | None], httpx.Client],
+    ) -> None:
+        if shards < 1:
+            raise ValueError("shards must be >= 1")
+        self.shards = shards
+        self._shared = shared
+        self._registry = registry
+        self._make_client = make_client
+        self._clients: dict[int, httpx.Client] = {}
+        self._lock = threading.Lock()
+        self._next = secrets.randbelow(shards)
+
+    def ensure(self, shard: int) -> httpx.Client:
+        existing = self._clients.get(shard)
+        if existing is not None:
             return existing
-        transport = _SharedTransport(
-            httpx.HTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
-        )
-        bucket[shard] = transport
-        return transport
+        with self._lock:
+            existing = self._clients.get(shard)
+            if existing is not None:
+                return existing
+            transport: httpx.BaseTransport | None = None
+            if self._shared and self._registry is not None:
+                transport = self._registry.acquire(shard)
+            client = self._make_client(transport)
+            self._clients[shard] = client
+            return client
+
+    def next_client(self) -> httpx.Client:
+        with self._lock:
+            shard = self._next % self.shards
+            self._next += 1
+        return self.ensure(shard)
+
+    def close(self) -> None:
+        for client in self._clients.values():
+            client.close()
+        self._clients.clear()
 
 
-def _acquire_shared_async_transport(
-    by_loop: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, dict[int, _SharedAsyncTransport]],
-    loop: asyncio.AbstractEventLoop,
-    shard: int,
-) -> _SharedAsyncTransport:
-    with _pool_lock:
-        bucket = by_loop.get(loop)
-        if bucket is None:
-            bucket = {}
-            by_loop[loop] = bucket
-        existing = bucket.get(shard)
-        if existing is not None and existing.acquire():
+class _AsyncClientPool:
+    """Per-SDK-client round-robin over sharded httpx.AsyncClient wrappers."""
+
+    def __init__(
+        self,
+        *,
+        shards: int,
+        shared: bool,
+        registry: _SharedAsyncTransport.Registry | None,
+        make_client: Callable[[httpx.AsyncBaseTransport | None], httpx.AsyncClient],
+    ) -> None:
+        if shards < 1:
+            raise ValueError("shards must be >= 1")
+        self.shards = shards
+        self._shared = shared
+        self._registry = registry
+        self._make_client = make_client
+        self._clients: dict[int, httpx.AsyncClient] = {}
+        self._next = secrets.randbelow(shards)
+
+    def ensure(self, shard: int) -> httpx.AsyncClient:
+        existing = self._clients.get(shard)
+        if existing is not None:
             return existing
-        transport = _SharedAsyncTransport(
-            httpx.AsyncHTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
-        )
-        bucket[shard] = transport
-        return transport
+        transport: httpx.AsyncBaseTransport | None = None
+        if self._shared and self._registry is not None:
+            try:
+                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+            if loop is not None:
+                transport = self._registry.acquire(loop, shard)
+        client = self._make_client(transport)
+        self._clients[shard] = client
+        return client
+
+    def next_client(self) -> httpx.AsyncClient:
+        # Single-threaded event loop: counter bump needs no lock when there is no await.
+        shard = self._next % self.shards
+        self._next += 1
+        return self.ensure(shard)
+
+    async def aclose(self) -> None:
+        for client in self._clients.values():
+            await client.aclose()
+        self._clients.clear()
 
 
 # TODO: make base page type vars covariant
@@ -989,15 +1104,15 @@ class SyncHttpxClientWrapper(DefaultHttpxClient):
 
 class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
     _client: httpx.Client
-    _background_clients: dict[int, httpx.Client]
-    _transfer_clients: dict[int, httpx.Client]
+    _api_pool: _SyncClientPool | None
+    _background_pool: _SyncClientPool | None
+    _transfer_pool: _SyncClientPool | None
     _default_stream_cls: type[Stream[Any]] | None = None
     _uses_shared_pool: bool
     _isolate_workload_pools: bool
+    _api_pool_shards: int
     _background_pool_shards: int
     _transfer_pool_shards: int
-    _background_next: int
-    _transfer_next: int
     _closed: bool
 
     def __init__(
@@ -1012,6 +1127,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         custom_query: Mapping[str, object] | None = None,
         _strict_response_validation: bool,
         shared_http_pool: bool = True,
+        api_pool_shards: int = DEFAULT_API_POOL_SHARDS,
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
     ) -> None:
@@ -1033,6 +1149,8 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                 f"Invalid `http_client` argument; Expected an instance of `httpx.Client` but got {type(http_client)}"
             )
 
+        if api_pool_shards < 1:
+            raise ValueError("api_pool_shards must be >= 1")
         if background_pool_shards < 1:
             raise ValueError("background_pool_shards must be >= 1")
         if transfer_pool_shards < 1:
@@ -1050,111 +1168,72 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         )
 
         self._closed = False
-        self._background_clients = {}
-        self._transfer_clients = {}
-        self._bulkhead_lock = threading.Lock()
+        self._api_pool_shards = api_pool_shards
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
-        # Random start avoids every short-lived SDK client pinning global shard 0.
-        self._background_next = secrets.randbelow(background_pool_shards)
-        self._transfer_next = secrets.randbelow(transfer_pool_shards)
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 
         if http_client is not None:
             self._client = http_client
             self._uses_shared_pool = False
-        elif shared_http_pool:
-            global _shared_sync_transport
-            with _pool_lock:
-                if _shared_sync_transport is None or not _shared_sync_transport.acquire():
-                    _shared_sync_transport = _SharedTransport(
-                        httpx.HTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
-                    )
-            self._client = SyncHttpxClientWrapper(
-                base_url=base_url,
-                timeout=cast(Timeout, timeout),
-                transport=_shared_sync_transport,
-            )
-            self._uses_shared_pool = True
-        else:
-            self._client = SyncHttpxClientWrapper(
-                base_url=base_url,
-                timeout=cast(Timeout, timeout),
-            )
-            self._uses_shared_pool = False
+            self._api_pool = None
+            self._background_pool = None
+            self._transfer_pool = None
+            return
 
-    def _make_bulkhead_client(self, *, transport: httpx.BaseTransport | None) -> httpx.Client:
-        timeout = cast(Timeout, self.timeout)
-        if transport is not None:
+        self._uses_shared_pool = shared_http_pool
+
+        def make_client(transport: httpx.BaseTransport | None) -> httpx.Client:
+            timeout_ = cast(Timeout, self.timeout)
+            if transport is not None:
+                return SyncHttpxClientWrapper(
+                    base_url=self._base_url,
+                    timeout=timeout_,
+                    transport=transport,
+                )
             return SyncHttpxClientWrapper(
                 base_url=self._base_url,
-                timeout=timeout,
-                transport=transport,
+                timeout=timeout_,
             )
-        return SyncHttpxClientWrapper(
-            base_url=self._base_url,
-            timeout=timeout,
+
+        api_registry = _shared_sync_api_transports if shared_http_pool else None
+        bg_registry = _shared_sync_background_transports if shared_http_pool else None
+        xfer_registry = _shared_sync_transfer_transports if shared_http_pool else None
+
+        self._api_pool = _SyncClientPool(
+            shards=api_pool_shards,
+            shared=shared_http_pool,
+            registry=api_registry,
+            make_client=make_client,
         )
+        self._background_pool = _SyncClientPool(
+            shards=background_pool_shards,
+            shared=shared_http_pool,
+            registry=bg_registry,
+            make_client=make_client,
+        )
+        self._transfer_pool = _SyncClientPool(
+            shards=transfer_pool_shards,
+            shared=shared_http_pool,
+            registry=xfer_registry,
+            make_client=make_client,
+        )
+        # Eager primary client (shard 0) for lifecycle / cookie-jar compatibility.
+        self._client = self._api_pool.ensure(0)
 
-    def _ensure_background_client(self, shard: int) -> httpx.Client:
-        existing = self._background_clients.get(shard)
-        if existing is not None:
-            return existing
-        with self._bulkhead_lock:
-            existing = self._background_clients.get(shard)
-            if existing is not None:
-                return existing
-            if self._uses_shared_pool:
-                transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
-                    _shared_sync_background_transports, shard
-                )
-            else:
-                transport = None
-            client = self._make_bulkhead_client(transport=transport)
-            self._background_clients[shard] = client
-            return client
-
-    def _ensure_transfer_client(self, shard: int) -> httpx.Client:
-        existing = self._transfer_clients.get(shard)
-        if existing is not None:
-            return existing
-        with self._bulkhead_lock:
-            existing = self._transfer_clients.get(shard)
-            if existing is not None:
-                return existing
-            if self._uses_shared_pool:
-                transport: httpx.BaseTransport | None = _acquire_shared_sync_transport(
-                    _shared_sync_transfer_transports, shard
-                )
-            else:
-                transport = None
-            client = self._make_bulkhead_client(transport=transport)
-            self._transfer_clients[shard] = client
-            return client
-
-    def _next_background_client(self) -> httpx.Client:
-        # Select under the lock; ensure afterward so _ensure_* can take the same lock.
-        with self._bulkhead_lock:
-            shard = self._background_next % self._background_pool_shards
-            self._background_next += 1
-        return self._ensure_background_client(shard)
-
-    def _next_transfer_client(self) -> httpx.Client:
-        with self._bulkhead_lock:
-            shard = self._transfer_next % self._transfer_pool_shards
-            self._transfer_next += 1
-        return self._ensure_transfer_client(shard)
+    def _get_client_for_path(self, path: str) -> httpx.Client:
+        if not self._isolate_workload_pools or self._api_pool is None:
+            return self._client
+        assert self._background_pool is not None and self._transfer_pool is not None
+        if _is_background_path(path):
+            return self._background_pool.next_client()
+        if _is_transfer_path(path):
+            return self._transfer_pool.next_client()
+        return self._api_pool.next_client()
 
     def _send_client_for_request(self, request: httpx.Request) -> httpx.Client:
-        if not self._isolate_workload_pools:
-            return self._client
-        path = request.url.path
-        if _is_background_path(path):
-            return self._next_background_client()
-        if _is_transfer_path(path):
-            return self._next_transfer_client()
-        return self._client
+        return self._get_client_for_path(request.url.path)
 
     def is_closed(self) -> bool:
         return self._closed or self._client.is_closed
@@ -1169,13 +1248,14 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
         if self._closed:
             return
         self._closed = True
-        self._client.close()
-        for client in self._background_clients.values():
-            client.close()
-        self._background_clients.clear()
-        for client in self._transfer_clients.values():
-            client.close()
-        self._transfer_clients.clear()
+        if self._api_pool is not None:
+            # Closes _client (api shard 0) along with any other API shards.
+            self._api_pool.close()
+            assert self._background_pool is not None and self._transfer_pool is not None
+            self._background_pool.close()
+            self._transfer_pool.close()
+        else:
+            self._client.close()
 
     def __enter__(self: _T) -> _T:
         return self
@@ -1723,15 +1803,15 @@ class AsyncHttpxClientWrapper(DefaultAsyncHttpxClient):
 
 class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
     _client: httpx.AsyncClient
-    _background_clients: dict[int, httpx.AsyncClient]
-    _transfer_clients: dict[int, httpx.AsyncClient]
+    _api_pool: _AsyncClientPool | None
+    _background_pool: _AsyncClientPool | None
+    _transfer_pool: _AsyncClientPool | None
     _default_stream_cls: type[AsyncStream[Any]] | None = None
     _uses_shared_pool: bool
     _isolate_workload_pools: bool
+    _api_pool_shards: int
     _background_pool_shards: int
     _transfer_pool_shards: int
-    _background_next: int
-    _transfer_next: int
     _closed: bool
 
     def __init__(
@@ -1746,6 +1826,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         custom_headers: Mapping[str, str] | None = None,
         custom_query: Mapping[str, object] | None = None,
         shared_http_pool: bool = True,
+        api_pool_shards: int = DEFAULT_API_POOL_SHARDS,
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
     ) -> None:
@@ -1767,6 +1848,8 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                 f"Invalid `http_client` argument; Expected an instance of `httpx.AsyncClient` but got {type(http_client)}"
             )
 
+        if api_pool_shards < 1:
+            raise ValueError("api_pool_shards must be >= 1")
         if background_pool_shards < 1:
             raise ValueError("background_pool_shards must be >= 1")
         if transfer_pool_shards < 1:
@@ -1784,118 +1867,79 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         )
 
         self._closed = False
-        self._background_clients = {}
-        self._transfer_clients = {}
+        self._api_pool_shards = api_pool_shards
         self._background_pool_shards = background_pool_shards
         self._transfer_pool_shards = transfer_pool_shards
-        # Random start avoids every short-lived SDK client pinning global shard 0.
-        self._background_next = secrets.randbelow(background_pool_shards)
-        self._transfer_next = secrets.randbelow(transfer_pool_shards)
         # Custom http_client owns the full transport stack; don't invent sibling pools.
         self._isolate_workload_pools = http_client is None
 
         if http_client is not None:
             self._client = http_client
             self._uses_shared_pool = False
-        elif shared_http_pool:
+            self._api_pool = None
+            self._background_pool = None
+            self._transfer_pool = None
+            return
+
+        # Async shared transports require a running loop; without one, fall back to private.
+        can_share = shared_http_pool
+        if shared_http_pool:
             try:
-                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
+                asyncio.get_running_loop()
             except RuntimeError:
-                loop = None
-            if loop is not None:
-                with _pool_lock:
-                    existing = _shared_async_transports.get(loop)
-                    if existing is not None and existing.acquire():
-                        transport: _SharedAsyncTransport = existing
-                    else:
-                        transport = _SharedAsyncTransport(
-                            httpx.AsyncHTTPTransport(limits=DEFAULT_CONNECTION_LIMITS, http2=True),
-                        )
-                        _shared_async_transports[loop] = transport
-                self._client = AsyncHttpxClientWrapper(
-                    base_url=base_url,
-                    timeout=cast(Timeout, timeout),
+                can_share = False
+
+        self._uses_shared_pool = can_share
+
+        def make_client(transport: httpx.AsyncBaseTransport | None) -> httpx.AsyncClient:
+            timeout_ = cast(Timeout, self.timeout)
+            if transport is not None:
+                return AsyncHttpxClientWrapper(
+                    base_url=self._base_url,
+                    timeout=timeout_,
                     transport=transport,
                 )
-                self._uses_shared_pool = True
-            else:
-                self._client = AsyncHttpxClientWrapper(
-                    base_url=base_url,
-                    timeout=cast(Timeout, timeout),
-                )
-                self._uses_shared_pool = False
-        else:
-            self._client = AsyncHttpxClientWrapper(
-                base_url=base_url,
-                timeout=cast(Timeout, timeout),
-            )
-            self._uses_shared_pool = False
-
-    def _make_bulkhead_client(self, *, transport: httpx.AsyncBaseTransport | None) -> httpx.AsyncClient:
-        timeout = cast(Timeout, self.timeout)
-        if transport is not None:
             return AsyncHttpxClientWrapper(
                 base_url=self._base_url,
-                timeout=timeout,
-                transport=transport,
+                timeout=timeout_,
             )
-        return AsyncHttpxClientWrapper(
-            base_url=self._base_url,
-            timeout=timeout,
+
+        api_registry = _shared_async_api_transports if can_share else None
+        bg_registry = _shared_async_background_transports if can_share else None
+        xfer_registry = _shared_async_transfer_transports if can_share else None
+
+        self._api_pool = _AsyncClientPool(
+            shards=api_pool_shards,
+            shared=can_share,
+            registry=api_registry,
+            make_client=make_client,
         )
+        self._background_pool = _AsyncClientPool(
+            shards=background_pool_shards,
+            shared=can_share,
+            registry=bg_registry,
+            make_client=make_client,
+        )
+        self._transfer_pool = _AsyncClientPool(
+            shards=transfer_pool_shards,
+            shared=can_share,
+            registry=xfer_registry,
+            make_client=make_client,
+        )
+        self._client = self._api_pool.ensure(0)
 
-    def _ensure_background_client(self, shard: int) -> httpx.AsyncClient:
-        existing = self._background_clients.get(shard)
-        if existing is not None:
-            return existing
-        transport: httpx.AsyncBaseTransport | None = None
-        if self._uses_shared_pool:
-            try:
-                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
-            except RuntimeError:
-                loop = None
-            if loop is not None:
-                transport = _acquire_shared_async_transport(_shared_async_background_transports, loop, shard)
-        client = self._make_bulkhead_client(transport=transport)
-        self._background_clients[shard] = client
-        return client
-
-    def _ensure_transfer_client(self, shard: int) -> httpx.AsyncClient:
-        existing = self._transfer_clients.get(shard)
-        if existing is not None:
-            return existing
-        transport: httpx.AsyncBaseTransport | None = None
-        if self._uses_shared_pool:
-            try:
-                loop: asyncio.AbstractEventLoop | None = asyncio.get_running_loop()
-            except RuntimeError:
-                loop = None
-            if loop is not None:
-                transport = _acquire_shared_async_transport(_shared_async_transfer_transports, loop, shard)
-        client = self._make_bulkhead_client(transport=transport)
-        self._transfer_clients[shard] = client
-        return client
-
-    def _next_background_client(self) -> httpx.AsyncClient:
-        # Single-threaded event loop: counter bump needs no lock when there is no await.
-        shard = self._background_next % self._background_pool_shards
-        self._background_next += 1
-        return self._ensure_background_client(shard)
-
-    def _next_transfer_client(self) -> httpx.AsyncClient:
-        shard = self._transfer_next % self._transfer_pool_shards
-        self._transfer_next += 1
-        return self._ensure_transfer_client(shard)
+    def _get_client_for_path(self, path: str) -> httpx.AsyncClient:
+        if not self._isolate_workload_pools or self._api_pool is None:
+            return self._client
+        assert self._background_pool is not None and self._transfer_pool is not None
+        if _is_background_path(path):
+            return self._background_pool.next_client()
+        if _is_transfer_path(path):
+            return self._transfer_pool.next_client()
+        return self._api_pool.next_client()
 
     def _send_client_for_request(self, request: httpx.Request) -> httpx.AsyncClient:
-        if not self._isolate_workload_pools:
-            return self._client
-        path = request.url.path
-        if _is_background_path(path):
-            return self._next_background_client()
-        if _is_transfer_path(path):
-            return self._next_transfer_client()
-        return self._client
+        return self._get_client_for_path(request.url.path)
 
     def is_closed(self) -> bool:
         return self._closed or self._client.is_closed
@@ -1910,13 +1954,13 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
         if self._closed:
             return
         self._closed = True
-        await self._client.aclose()
-        for client in self._background_clients.values():
-            await client.aclose()
-        self._background_clients.clear()
-        for client in self._transfer_clients.values():
-            await client.aclose()
-        self._transfer_clients.clear()
+        if self._api_pool is not None:
+            await self._api_pool.aclose()
+            assert self._background_pool is not None and self._transfer_pool is not None
+            await self._background_pool.aclose()
+            await self._transfer_pool.aclose()
+        else:
+            await self._client.aclose()
 
     async def __aenter__(self: _T) -> _T:
         return self

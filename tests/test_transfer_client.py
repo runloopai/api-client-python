@@ -42,22 +42,18 @@ def _reset_shared_pool() -> Iterator[None]:  # pyright: ignore[reportUnusedFunct
 
 
 def _clear_pool_state() -> None:
-    with _base_mod._pool_lock:
-        old_sync = _base_mod._shared_sync_transport
-        old_bg = list(_base_mod._shared_sync_background_transports.values())
-        old_xfer = list(_base_mod._shared_sync_transfer_transports.values())
-        _base_mod._shared_sync_transport = None
-        _base_mod._shared_sync_background_transports.clear()
-        _base_mod._shared_sync_transfer_transports.clear()
-        _base_mod._shared_async_transports.clear()
-        _base_mod._shared_async_background_transports.clear()
-        _base_mod._shared_async_transfer_transports.clear()
-    for transport in [old_sync, *old_bg, *old_xfer]:
-        if transport is not None:
-            try:
-                transport._transport.close()
-            except Exception:
-                pass
+    old = []
+    old.extend(_base_mod._shared_sync_api_transports.take_all())
+    old.extend(_base_mod._shared_sync_background_transports.take_all())
+    old.extend(_base_mod._shared_sync_transfer_transports.take_all())
+    _base_mod._shared_async_api_transports.clear()
+    _base_mod._shared_async_background_transports.clear()
+    _base_mod._shared_async_transfer_transports.clear()
+    for transport in old:
+        try:
+            transport._transport.close()
+        except Exception:
+            pass
 
 
 def _make_client(**kwargs: Any) -> Runloop:
@@ -76,17 +72,16 @@ def test_path_classification() -> None:
 
 
 def test_api_background_transfer_use_distinct_transports() -> None:
-    client = _make_client(shared_http_pool=True, background_pool_shards=2, transfer_pool_shards=2)
+    client = _make_client(shared_http_pool=True, api_pool_shards=2, background_pool_shards=2, transfer_pool_shards=2)
     try:
         api_req = httpx.Request("POST", f"{base_url}/v1/devboxes")
         wait_req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_a/wait_for_status")
         upload_req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_a/upload_file")
 
-        api = client._send_client_for_request(api_req)
-        wait = client._send_client_for_request(wait_req)
-        upload = client._send_client_for_request(upload_req)
+        api = client._get_client_for_path(api_req.url.path)
+        wait = client._get_client_for_path(wait_req.url.path)
+        upload = client._get_client_for_path(upload_req.url.path)
 
-        assert api is client._client
         assert wait is not api
         assert upload is not api
         assert wait is not upload
@@ -99,22 +94,23 @@ def test_api_background_transfer_use_distinct_transports() -> None:
 
 def test_round_robin_spreads_requests_across_shards() -> None:
     client = _make_client(background_pool_shards=2, transfer_pool_shards=2)
+    assert client._background_pool is not None and client._transfer_pool is not None
     try:
         wait_req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/wait_for_status")
-        w0 = client._send_client_for_request(wait_req)
-        w1 = client._send_client_for_request(wait_req)
-        w2 = client._send_client_for_request(wait_req)
+        w0 = client._get_client_for_path(wait_req.url.path)
+        w1 = client._get_client_for_path(wait_req.url.path)
+        w2 = client._get_client_for_path(wait_req.url.path)
         assert w0 is not w1
         assert w0 is w2
-        assert set(client._background_clients) == {0, 1}
+        assert set(client._background_pool._clients) == {0, 1}
 
         upload_req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_same/upload_file")
-        t0 = client._send_client_for_request(upload_req)
-        t1 = client._send_client_for_request(upload_req)
+        t0 = client._get_client_for_path(upload_req.url.path)
+        t1 = client._get_client_for_path(upload_req.url.path)
         assert t0 is not t1
-        assert set(client._transfer_clients) == {0, 1}
-        assert len(_base_mod._shared_sync_background_transports) == 2
-        assert len(_base_mod._shared_sync_transfer_transports) == 2
+        assert set(client._transfer_pool._clients) == {0, 1}
+        assert _base_mod._shared_sync_background_transports.shard_ids() == {0, 1}
+        assert _base_mod._shared_sync_transfer_transports.shard_ids() == {0, 1}
     finally:
         client.close()
 
@@ -122,10 +118,10 @@ def test_round_robin_spreads_requests_across_shards() -> None:
 def test_many_clients_first_requests_use_both_shards() -> None:
     clients = [_make_client(background_pool_shards=2) for _ in range(40)]
     try:
-        req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/wait_for_status")
-        seen_transports = {id(c._send_client_for_request(req)._transport) for c in clients}  # type: ignore[attr-defined]
+        path = "/v1/devboxes/dbx_1/wait_for_status"
+        seen_transports = {id(c._get_client_for_path(path)._transport) for c in clients}  # type: ignore[attr-defined]
         assert len(seen_transports) == 2
-        assert set(_base_mod._shared_sync_background_transports) == {0, 1}
+        assert _base_mod._shared_sync_background_transports.shard_ids() == {0, 1}
     finally:
         for c in clients:
             c.close()
@@ -136,9 +132,8 @@ def test_custom_http_client_skips_isolation() -> None:
     client = _make_client(http_client=custom)
     try:
         assert client._isolate_workload_pools is False
-        req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/wait_for_status")
-        assert client._send_client_for_request(req) is custom
-        assert client._background_clients == {}
+        assert client._get_client_for_path("/v1/devboxes/dbx_1/wait_for_status") is custom
+        assert client._background_pool is None
     finally:
         client.close()
         custom.close()
@@ -147,26 +142,25 @@ def test_custom_http_client_skips_isolation() -> None:
 def test_round_robin_is_per_client_while_transports_are_shared() -> None:
     c1 = _make_client(background_pool_shards=2)
     c2 = _make_client(background_pool_shards=2)
+    assert c1._background_pool is not None and c2._background_pool is not None
     try:
-        req = httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_shared/wait_for_status")
-        start1 = c1._background_next
-        start2 = c2._background_next
-        t1 = c1._send_client_for_request(req)
-        t2 = c2._send_client_for_request(req)
+        path = "/v1/devboxes/dbx_shared/wait_for_status"
+        start1 = c1._background_pool._next
+        start2 = c2._background_pool._next
+        t1 = c1._get_client_for_path(path)
+        t2 = c2._get_client_for_path(path)
         assert t1 is not t2
-        # Same starting shard → same shared transport; different → different shards.
         if start1 % 2 == start2 % 2:
             assert t1._transport is t2._transport  # type: ignore[attr-defined]
         else:
             assert t1._transport is not t2._transport  # type: ignore[attr-defined]
-        assert c1._background_next == start1 + 1
-        assert c2._background_next == start2 + 1
+        assert c1._background_pool._next == start1 + 1
+        assert c2._background_pool._next == start2 + 1
 
-        # Advancing one client does not affect the other.
-        t1b = c1._send_client_for_request(req)
+        t1b = c1._get_client_for_path(path)
         assert t1b is not t1
-        assert c1._background_next == start1 + 2
-        assert c2._background_next == start2 + 1
+        assert c1._background_pool._next == start1 + 2
+        assert c2._background_pool._next == start2 + 1
     finally:
         c1.close()
         c2.close()
@@ -182,10 +176,8 @@ async def test_async_bulkheads() -> None:
         transfer_pool_shards=2,
     )
     try:
-        wait = client._send_client_for_request(
-            httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/executions/ex_1/wait_for_status")
-        )
-        upload = client._send_client_for_request(httpx.Request("POST", f"{base_url}/v1/devboxes/dbx_1/upload_file"))
+        wait = client._get_client_for_path("/v1/devboxes/dbx_1/executions/ex_1/wait_for_status")
+        upload = client._get_client_for_path("/v1/devboxes/dbx_1/upload_file")
         assert wait is not client._client
         assert upload is not client._client
         assert wait is not upload
@@ -195,6 +187,7 @@ async def test_async_bulkheads() -> None:
 
 def test_concurrent_background_client_init_is_singleton() -> None:
     client = _make_client(shared_http_pool=False, background_pool_shards=1)
+    assert client._background_pool is not None
     barrier = threading.Barrier(16)
     results: list[httpx.Client] = []
     errors: list[BaseException] = []
@@ -202,7 +195,7 @@ def test_concurrent_background_client_init_is_singleton() -> None:
     def worker() -> None:
         try:
             barrier.wait()
-            results.append(client._ensure_background_client(0))
+            results.append(client._background_pool.ensure(0))  # type: ignore[union-attr]
         except BaseException as exc:  # noqa: BLE001
             errors.append(exc)
 

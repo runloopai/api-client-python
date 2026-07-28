@@ -42,7 +42,7 @@ from .._types import Timeout, NotGiven, not_given
 from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
 from .async_axon import AsyncAxon
-from .._constants import DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
+from .._constants import DEFAULT_API_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_scorer import AsyncScorer
@@ -1330,6 +1330,7 @@ class AsyncRunloopSDK:
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
         http_client: httpx.AsyncClient | None = None,
+        api_pool_shards: int = DEFAULT_API_POOL_SHARDS,
         background_pool_shards: int = DEFAULT_BACKGROUND_POOL_SHARDS,
         transfer_pool_shards: int = DEFAULT_TRANSFER_POOL_SHARDS,
     ) -> None:
@@ -1349,7 +1350,9 @@ class AsyncRunloopSDK:
         :type default_query: Mapping[str, object] | None, optional
         :param http_client: Custom ``httpx.AsyncClient`` instance to reuse, defaults to None
         :type http_client: httpx.AsyncClient | None, optional
-        :param background_pool_shards: H2 shards for long-polls (round-robin), defaults to 2
+        :param api_pool_shards: H2 shards for short RPCs (round-robin), defaults to 8
+        :type api_pool_shards: int, optional
+        :param background_pool_shards: H2 shards for long-polls (round-robin), defaults to 16
         :type background_pool_shards: int, optional
         :param transfer_pool_shards: H2 shards for upload/download (round-robin), defaults to 2
         :type transfer_pool_shards: int, optional
@@ -1362,6 +1365,7 @@ class AsyncRunloopSDK:
             default_headers=default_headers,
             default_query=default_query,
             http_client=http_client,
+            api_pool_shards=api_pool_shards,
             background_pool_shards=background_pool_shards,
             transfer_pool_shards=transfer_pool_shards,
         )
