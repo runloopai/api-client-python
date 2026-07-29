@@ -154,11 +154,12 @@ class DevboxesResource(SyncAPIResource):
     ) -> DevboxView:
         """Create a Devbox and begin the boot process.
 
-        The Devbox will initially launch in
-        the 'provisioning' state while Runloop allocates the necessary infrastructure.
-        It will transition to the 'initializing' state while the booted Devbox runs any
-        Runloop or user defined set up scripts. Finally, the Devbox will transition to
-        the 'running' state when it is ready for use.
+        Standard Devboxes initially report
+        the 'provisioning' state. FLEX Devboxes initially report the 'queued' state
+        while waiting for infrastructure allocation, then transition to 'provisioning'
+        once assigned to a node. The Devbox transitions to 'initializing' while the
+        booted Devbox runs Runloop or user-defined setup scripts, then to 'running' when
+        it is ready for use.
 
         Args:
           blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
@@ -1629,11 +1630,12 @@ class AsyncDevboxesResource(AsyncAPIResource):
     ) -> DevboxView:
         """Create a Devbox and begin the boot process.
 
-        The Devbox will initially launch in
-        the 'provisioning' state while Runloop allocates the necessary infrastructure.
-        It will transition to the 'initializing' state while the booted Devbox runs any
-        Runloop or user defined set up scripts. Finally, the Devbox will transition to
-        the 'running' state when it is ready for use.
+        Standard Devboxes initially report
+        the 'provisioning' state. FLEX Devboxes initially report the 'queued' state
+        while waiting for infrastructure allocation, then transition to 'provisioning'
+        once assigned to a node. The Devbox transitions to 'initializing' while the
+        booted Devbox runs Runloop or user-defined setup scripts, then to 'running' when
+        it is ready for use.
 
         Args:
           blueprint_id: Blueprint ID to use for the Devbox. If none set, the Devbox will be created with
