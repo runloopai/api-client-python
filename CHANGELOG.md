@@ -11,6 +11,7 @@ Full Changelog: [v1.24.0...v1.27.0](https://github.com/runloopai/api-client-pyth
 
 ### Bug Fixes
 
+* isolate long-polls and file transfers on separate HTTP/2 pools ([#825](https://github.com/runloopai/api-client-python/issues/825)) ([d316188](https://github.com/runloopai/api-client-python/commit/d3161880b655904c31664975bb6f210c4df623b7))
 * **mux:** field-level merge on network policy egress updates ([#10338](https://github.com/runloopai/api-client-python/issues/10338)) ([366a3ee](https://github.com/runloopai/api-client-python/commit/366a3eefecb5239ccd7842c7b333c77740fbe8bc))
 * **mux:** move eviction-watch SSE route off the /{id} slot ([#10409](https://github.com/runloopai/api-client-python/issues/10409)) ([61f4143](https://github.com/runloopai/api-client-python/commit/61f4143ae27b6efd1d1abda4a2ceceb725a1709d))
 
