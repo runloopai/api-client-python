@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.29.0 (2026-07-31)
+
+Full Changelog: [v1.28.0...v1.29.0](https://github.com/runloopai/api-client-python/compare/v1.28.0...v1.29.0)
+
+### Features
+
+* **broker:** plumb Pi protocol selection ([#10256](https://github.com/runloopai/api-client-python/issues/10256)) ([974d52b](https://github.com/runloopai/api-client-python/commit/974d52b8743ceda8a7127e3a3432ce51e71b1bfd))
+* **converter:** add Helm chart, container image, and enable in dev ([#10405](https://github.com/runloopai/api-client-python/issues/10405)) ([0d5ca34](https://github.com/runloopai/api-client-python/commit/0d5ca3438ac4cbcafdfaf7584042bd78a956e3ae))
+
 ## 1.28.0 (2026-07-29)
 
 Full Changelog: [v1.27.0...v1.28.0](https://github.com/runloopai/api-client-python/compare/v1.27.0...v1.28.0)
