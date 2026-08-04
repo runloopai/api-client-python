@@ -371,7 +371,7 @@ class BlueprintsResource(SyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["queued", "building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning", "awaiting_upload"]
 
         blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
 
@@ -481,7 +481,7 @@ class BlueprintsResource(SyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -584,7 +584,7 @@ class BlueprintsResource(SyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1033,7 +1033,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["queued", "building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning", "awaiting_upload"]
 
         blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
 
@@ -1143,7 +1143,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1246,7 +1246,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
