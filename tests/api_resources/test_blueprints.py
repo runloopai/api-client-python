@@ -11,6 +11,7 @@ from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     BlueprintView,
+    BlueprintUploadView,
     BlueprintPreviewView,
     BlueprintBuildLogsListView,
 )
@@ -23,6 +24,38 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 class TestBlueprints:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+
+    @parametrize
+    def test_method_register(self, client: Runloop) -> None:
+        upload = client.blueprints.register(name="name")
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    def test_method_register_with_all_params(self, client: Runloop) -> None:
+        upload = client.blueprints.register(
+            name="name",
+            launch_parameters={"architecture": "x86_64"},
+            metadata={"source": "upload"},
+        )
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    def test_raw_response_register(self, client: Runloop) -> None:
+        response = client.blueprints.with_raw_response.register(name="name")
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = response.parse()
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    def test_streaming_response_register(self, client: Runloop) -> None:
+        with client.blueprints.with_streaming_response.register(name="name") as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+            upload = response.parse()
+            assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_create(self, client: Runloop) -> None:
@@ -459,6 +492,38 @@ class TestAsyncBlueprints:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
+
+    @parametrize
+    async def test_method_register(self, async_client: AsyncRunloop) -> None:
+        upload = await async_client.blueprints.register(name="name")
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    async def test_method_register_with_all_params(self, async_client: AsyncRunloop) -> None:
+        upload = await async_client.blueprints.register(
+            name="name",
+            launch_parameters={"architecture": "x86_64"},
+            metadata={"source": "upload"},
+        )
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    async def test_raw_response_register(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.blueprints.with_raw_response.register(name="name")
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = await response.parse()
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_register(self, async_client: AsyncRunloop) -> None:
+        async with async_client.blueprints.with_streaming_response.register(name="name") as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+            upload = await response.parse()
+            assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
