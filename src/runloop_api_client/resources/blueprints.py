@@ -11,6 +11,7 @@ from ..types import (
     blueprint_list_params,
     blueprint_create_params,
     blueprint_preview_params,
+    blueprint_register_params,
     blueprint_list_public_params,
 )
 from .._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
@@ -31,6 +32,7 @@ from .._base_client import AsyncPaginator, make_request_options
 from ..lib.polling_async import async_poll_until
 from .._utils._validation import ValidationNotification
 from ..types.blueprint_view import BlueprintView
+from ..types.blueprint_upload_view import BlueprintUploadView
 from ..types.blueprint_preview_view import BlueprintPreviewView
 from ..types.blueprint_build_logs_list_view import BlueprintBuildLogsListView
 from ..types.shared_params.launch_parameters import LaunchParameters
@@ -243,6 +245,63 @@ class BlueprintsResource(SyncAPIResource):
             cast_to=BlueprintView,
         )
 
+    def register(
+        self,
+        *,
+        name: str,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BlueprintUploadView:
+        """Create a private Blueprint awaiting its image to be pushed out-of-band via docker push.
+
+        Bypasses the build pipeline entirely: no Dockerfile is composed and no image is
+        built. The Blueprint stays in the 'awaiting_upload' step until the push
+        completes.
+
+        Args:
+          name: Name of the Blueprint.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          metadata: (Optional) User defined metadata for the Blueprint.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return self._post(
+            "/v1/blueprints/register",
+            body=maybe_transform(
+                {
+                    "name": name,
+                    "launch_parameters": launch_parameters,
+                    "metadata": metadata,
+                },
+                blueprint_register_params.BlueprintRegisterParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BlueprintUploadView,
+        )
+
     def retrieve(
         self,
         id: str,
@@ -312,7 +371,7 @@ class BlueprintsResource(SyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["queued", "building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning", "awaiting_upload"]
 
         blueprint = poll_until(retrieve_blueprint, is_done_building, polling_config)
 
@@ -422,7 +481,7 @@ class BlueprintsResource(SyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -525,7 +584,7 @@ class BlueprintsResource(SyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -848,6 +907,63 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             cast_to=BlueprintView,
         )
 
+    async def register(
+        self,
+        *,
+        name: str,
+        launch_parameters: Optional[LaunchParameters] | Omit = omit,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> BlueprintUploadView:
+        """Create a private Blueprint awaiting its image to be pushed out-of-band via docker push.
+
+        Bypasses the build pipeline entirely: no Dockerfile is composed and no image is
+        built. The Blueprint stays in the 'awaiting_upload' step until the push
+        completes.
+
+        Args:
+          name: Name of the Blueprint.
+
+          launch_parameters: Parameters to configure your Devbox at launch time.
+
+          metadata: (Optional) User defined metadata for the Blueprint.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        return await self._post(
+            "/v1/blueprints/register",
+            body=await async_maybe_transform(
+                {
+                    "name": name,
+                    "launch_parameters": launch_parameters,
+                    "metadata": metadata,
+                },
+                blueprint_register_params.BlueprintRegisterParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=BlueprintUploadView,
+        )
+
     async def retrieve(
         self,
         id: str,
@@ -917,7 +1033,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
             )
 
         def is_done_building(blueprint: BlueprintView) -> bool:
-            return blueprint.status not in ["queued", "building", "provisioning"]
+            return blueprint.status not in ["queued", "building", "provisioning", "awaiting_upload"]
 
         blueprint = await async_poll_until(retrieve_blueprint, is_done_building, polling_config)
 
@@ -1027,7 +1143,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1130,7 +1246,7 @@ class AsyncBlueprintsResource(AsyncAPIResource):
 
           starting_after: Load the next page of data starting after the item with the given ID.
 
-          status: Filter by build status (queued, provisioning, building, failed, build_complete)
+          status: Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)
 
           extra_headers: Send extra headers
 
@@ -1319,6 +1435,9 @@ class BlueprintsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             blueprints.create,
         )
+        self.register = to_raw_response_wrapper(
+            blueprints.register,
+        )
         self.retrieve = to_raw_response_wrapper(
             blueprints.retrieve,
         )
@@ -1347,6 +1466,9 @@ class AsyncBlueprintsResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             blueprints.create,
+        )
+        self.register = async_to_raw_response_wrapper(
+            blueprints.register,
         )
         self.retrieve = async_to_raw_response_wrapper(
             blueprints.retrieve,
@@ -1377,6 +1499,9 @@ class BlueprintsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             blueprints.create,
         )
+        self.register = to_streamed_response_wrapper(
+            blueprints.register,
+        )
         self.retrieve = to_streamed_response_wrapper(
             blueprints.retrieve,
         )
@@ -1405,6 +1530,9 @@ class AsyncBlueprintsResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             blueprints.create,
+        )
+        self.register = async_to_streamed_response_wrapper(
+            blueprints.register,
         )
         self.retrieve = async_to_streamed_response_wrapper(
             blueprints.retrieve,

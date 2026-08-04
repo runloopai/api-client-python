@@ -63,7 +63,7 @@ class BlueprintView(BaseModel):
     state: Literal["created", "deleted"]
     """The state of the Blueprint."""
 
-    status: Literal["queued", "provisioning", "building", "failed", "build_complete"]
+    status: Literal["queued", "provisioning", "building", "awaiting_upload", "failed", "build_complete"]
     """The status of the Blueprint build."""
 
     base_blueprint_id: Optional[str] = None
