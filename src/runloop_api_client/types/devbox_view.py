@@ -11,6 +11,9 @@ __all__ = ["DevboxView", "StateTransition", "GatewaySpecs", "McpSpecs"]
 
 
 class StateTransition(BaseModel):
+    failure_reason: Optional[str] = None
+    """The failure that caused this state transition, if applicable."""
+
     status: Optional[
         Literal[
             "scheduled",
