@@ -82,14 +82,7 @@ def _retry_delay(error: APIError) -> float:
 
 
 def _is_transient_status(error: APIStatusError) -> bool:
-    if error.code == "tunnel_unavailable":
-        return False
-    should_retry = error.response.headers.get("x-should-retry")
-    if should_retry == "false":
-        return False
-    if should_retry == "true":
-        return True
-    return error.code == "tunnel_service_not_ready"
+    return error.code == "tunnel_service_not_ready" and error.response.headers.get("x-should-retry") != "false"
 
 
 def send_tunnel_probe(

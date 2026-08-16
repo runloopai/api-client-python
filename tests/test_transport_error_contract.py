@@ -15,7 +15,7 @@ import pytest
 from runloop_api_client import Runloop, APIError, AsyncRunloop, APIStatusError
 from runloop_api_client.sdk.devbox import Devbox
 from runloop_api_client.sdk.async_devbox import AsyncDevbox
-from runloop_api_client.lib.tunnel_readiness import wait_for_tunnel_service
+from runloop_api_client.lib.tunnel_readiness import wait_for_tunnel_service, async_wait_for_tunnel_service
 
 
 def customer_shape(error: APIError) -> dict[str, object]:
@@ -400,28 +400,60 @@ def test_tunnel_readiness_timeout_preserves_connect_cause() -> None:
     assert caught.value.__cause__ is caught.value.cause
 
 
-def test_explicit_should_retry_applies_to_non_terminal_readiness_error() -> None:
+def test_retry_headers_do_not_make_terminal_readiness_error_transient() -> None:
     attempts = 0
+    sleep = Mock()
 
     def request(_remaining: float) -> httpx.Response:
         nonlocal attempts
         attempts += 1
         http_request = httpx.Request("GET", "https://8080-key.tunnel.runloop.ai/health")
-        if attempts == 1:
-            return httpx.Response(
-                503,
-                request=http_request,
-                headers={
-                    "X-Runloop-Error-Code": "tunnel_backend_connect_timeout",
-                    "X-Should-Retry": "true",
-                    "Retry-After": "0",
-                },
-                json={"error": "tunnel_backend_connect_timeout", "retryable": True},
-            )
-        return httpx.Response(204, request=http_request)
+        return httpx.Response(
+            503,
+            request=http_request,
+            headers={
+                "X-Runloop-Error-Code": "tunnel_backend_connect_timeout",
+                "X-Should-Retry": "true",
+                "Retry-After": "0",
+            },
+            json={"error": "tunnel_backend_connect_timeout", "retryable": True},
+        )
 
-    wait_for_tunnel_service(request, port=8080, sleep=lambda _delay: None)
-    assert attempts == 2
+    with pytest.raises(APIStatusError) as caught:
+        wait_for_tunnel_service(request, port=8080, sleep=sleep)
+
+    assert caught.value.code == "tunnel_backend_connect_timeout"
+    assert caught.value.attempts == 1
+    assert attempts == 1
+    sleep.assert_not_called()
+
+
+async def test_async_retry_headers_do_not_make_terminal_readiness_error_transient() -> None:
+    attempts = 0
+    sleep = AsyncMock()
+
+    async def request(_remaining: float) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        http_request = httpx.Request("GET", "https://8080-key.tunnel.runloop.ai/health")
+        return httpx.Response(
+            503,
+            request=http_request,
+            headers={
+                "X-Runloop-Error-Code": "tunnel_backend_connect_timeout",
+                "X-Should-Retry": "true",
+                "Retry-After": "0",
+            },
+            json={"error": "tunnel_backend_connect_timeout", "retryable": True},
+        )
+
+    with pytest.raises(APIStatusError) as caught:
+        await async_wait_for_tunnel_service(request, port=8080, sleep=sleep)
+
+    assert caught.value.code == "tunnel_backend_connect_timeout"
+    assert caught.value.attempts == 1
+    assert attempts == 1
+    sleep.assert_not_awaited()
 
 
 def test_generic_exception_is_not_retried_after_ambiguous_receipt() -> None:
