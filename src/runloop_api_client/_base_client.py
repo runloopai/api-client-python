@@ -1439,6 +1439,18 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             except httpx.HTTPStatusError as err:  # thrown on 4xx and 5xx status code
                 log.debug("Encountered httpx.HTTPStatusError", exc_info=True)
 
+                if remaining_retries > 0 and not err.response.is_closed:
+                    try:
+                        err.response.read()
+                    except httpx.TimeoutException as read_error:
+                        raise APITimeoutError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+                    except httpx.HTTPError as read_error:
+                        raise APIConnectionError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+
                 if remaining_retries > 0 and self._should_retry(err.response):
                     err.response.close()
                     self._sleep_for_retry(
@@ -1452,7 +1464,16 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                 # If the response is streamed then we need to explicitly read the response
                 # to completion before attempting to access the response text.
                 if not err.response.is_closed:
-                    err.response.read()
+                    try:
+                        err.response.read()
+                    except httpx.TimeoutException as read_error:
+                        raise APITimeoutError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+                    except httpx.HTTPError as read_error:
+                        raise APIConnectionError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
 
                 log.debug("Re-raising status error")
                 raise self._make_status_error_from_response(err.response, attempts=retries_taken + 1) from None
@@ -2149,6 +2170,18 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             except httpx.HTTPStatusError as err:  # thrown on 4xx and 5xx status code
                 log.debug("Encountered httpx.HTTPStatusError", exc_info=True)
 
+                if remaining_retries > 0 and not err.response.is_closed:
+                    try:
+                        await err.response.aread()
+                    except httpx.TimeoutException as read_error:
+                        raise APITimeoutError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+                    except httpx.HTTPError as read_error:
+                        raise APIConnectionError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+
                 if remaining_retries > 0 and self._should_retry(err.response):
                     await err.response.aclose()
                     await self._sleep_for_retry(
@@ -2162,7 +2195,16 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                 # If the response is streamed then we need to explicitly read the response
                 # to completion before attempting to access the response text.
                 if not err.response.is_closed:
-                    await err.response.aread()
+                    try:
+                        await err.response.aread()
+                    except httpx.TimeoutException as read_error:
+                        raise APITimeoutError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
+                    except httpx.HTTPError as read_error:
+                        raise APIConnectionError(
+                            request=request, cause=read_error, attempts=retries_taken + 1
+                        ) from read_error
 
                 log.debug("Re-raising status error")
                 raise self._make_status_error_from_response(err.response, attempts=retries_taken + 1) from None

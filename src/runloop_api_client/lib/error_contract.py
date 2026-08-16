@@ -39,7 +39,8 @@ def parse_retry_after(headers: httpx.Headers, body: object = None) -> float | No
     seconds = _number(headers.get("retry-after"))
     if seconds is not None:
         return seconds
-    retry_date = email.utils.parsedate_tz(headers.get("retry-after"))
+    retry_header = headers.get("retry-after")
+    retry_date = email.utils.parsedate_tz(retry_header) if isinstance(retry_header, str) else None
     if retry_date is not None:
         return max(float(email.utils.mktime_tz(retry_date) - time.time()), 0)
     if isinstance(body, Mapping):
@@ -94,9 +95,6 @@ def transport_error_details(error: BaseException) -> ErrorDetails:
 
 def is_safe_transport_retry(error: BaseException) -> bool:
     """Only retry failures that prove the request body was not partially sent."""
-    # Preserve the generated client's handling of non-HTTPX exceptions (for
-    # example a pre-send auth hook failure). HTTPX errors carry enough phase
-    # information for the stricter partial-write audit below.
     if not isinstance(error, httpx.HTTPError):
-        return True
+        return False
     return isinstance(error, (httpx.ConnectTimeout, httpx.ConnectError))

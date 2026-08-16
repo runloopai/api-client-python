@@ -15,6 +15,7 @@ import pytest
 from runloop_api_client import Runloop, APIError, AsyncRunloop, APIStatusError
 from runloop_api_client.sdk.devbox import Devbox
 from runloop_api_client.sdk.async_devbox import AsyncDevbox
+from runloop_api_client.lib.tunnel_readiness import wait_for_tunnel_service
 
 
 def customer_shape(error: APIError) -> dict[str, object]:
@@ -245,7 +246,10 @@ def test_high_level_tunnel_readiness_polls_established_authenticated_url() -> No
         auth_token="tunnel-secret",
     )
     generated.devboxes.enable_tunnel.return_value = tunnel
-    probe_client = httpx.Client(transport=httpx.MockTransport(handler))
+    probe_client = httpx.Client(
+        headers={"Authorization": "Bearer api-secret"},
+        transport=httpx.MockTransport(handler),
+    )
 
     with probe_client:
         result = Devbox(generated, "dbx").net.wait_for_tunnel_ready(
@@ -340,3 +344,160 @@ def test_tunnel_readiness_timeout_identifies_port_and_path() -> None:
     assert caught.value.attempts == 1
     assert "port 9090" in str(caught.value)
     assert "'/ready'" in str(caught.value)
+
+
+def test_tunnel_readiness_does_not_follow_authenticated_redirects() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(302, request=request, headers={"Location": "https://attacker.test/token"})
+
+    generated = Mock()
+    generated.with_options.return_value = generated
+    generated.base_url = httpx.URL("https://api.runloop.ai")
+    generated.devboxes.enable_tunnel.return_value = SimpleNamespace(
+        tunnel_key="key", auth_mode="authenticated", auth_token="tunnel-secret"
+    )
+    probe_client = httpx.Client(
+        headers={"Authorization": "Bearer api-secret"},
+        transport=httpx.MockTransport(handler),
+    )
+
+    with probe_client, pytest.raises(APIStatusError) as caught:
+        Devbox(generated, "dbx").net.wait_for_tunnel_ready(8080, http_client=probe_client)
+
+    assert caught.value.code == "http_302"
+    assert len(requests) == 1
+    assert requests[0].url.host == "8080-key.tunnel.runloop.ai"
+    assert "authorization" not in requests[0].headers
+    assert requests[0].headers["X-Runloop-Tunnel-Authorization"] == "Bearer tunnel-secret"
+
+
+def test_tunnel_readiness_timeout_preserves_connect_cause() -> None:
+    clock_value = [0.0]
+
+    def request(_remaining: float) -> httpx.Response:
+        http_request = httpx.Request("GET", "https://8080-key.tunnel.runloop.ai/health")
+        raise httpx.ConnectTimeout("connect timed out", request=http_request)
+
+    def sleep(delay: float) -> None:
+        clock_value[0] += delay
+
+    with pytest.raises(APIError) as caught:
+        wait_for_tunnel_service(
+            request,
+            port=8080,
+            path="/health",
+            timeout_seconds=1,
+            clock=lambda: clock_value[0],
+            sleep=sleep,
+        )
+
+    assert caught.value.code == "connection_timeout"
+    assert caught.value.attempts == 2
+    assert isinstance(caught.value.cause, httpx.ConnectTimeout)
+    assert caught.value.__cause__ is caught.value.cause
+
+
+def test_explicit_should_retry_applies_to_non_terminal_readiness_error() -> None:
+    attempts = 0
+
+    def request(_remaining: float) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        http_request = httpx.Request("GET", "https://8080-key.tunnel.runloop.ai/health")
+        if attempts == 1:
+            return httpx.Response(
+                503,
+                request=http_request,
+                headers={
+                    "X-Runloop-Error-Code": "tunnel_backend_connect_timeout",
+                    "X-Should-Retry": "true",
+                    "Retry-After": "0",
+                },
+                json={"error": "tunnel_backend_connect_timeout", "retryable": True},
+            )
+        return httpx.Response(204, request=http_request)
+
+    wait_for_tunnel_service(request, port=8080, sleep=lambda _delay: None)
+    assert attempts == 2
+
+
+def test_generic_exception_is_not_retried_after_ambiguous_receipt() -> None:
+    attempts = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        raise RuntimeError("response hook failed")
+
+    client = Runloop(
+        bearer_token="test",
+        base_url="https://example.test",
+        max_retries=2,
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+    with client, pytest.raises(APIError) as caught:
+        client.devboxes.enable_tunnel("dbx")
+
+    assert attempts == 1
+    assert caught.value.attempts == 1
+
+
+def ambiguous_transfer_response(request: httpx.Request) -> httpx.Response:
+    return httpx.Response(
+        503,
+        request=request,
+        json={
+            "error": "tunnel_backend_connection_reset",
+            "message": "Tunnel response ended after partial delivery.",
+            "retryable": True,
+            "phase": "response_read",
+        },
+    )
+
+
+def test_streamed_structured_ambiguous_error_is_not_retried() -> None:
+    attempts = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        return ambiguous_transfer_response(request)
+
+    client = Runloop(
+        bearer_token="test",
+        base_url="https://example.test",
+        max_retries=1,
+        http_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+    with client, pytest.raises(APIStatusError) as caught:
+        with client.devboxes.with_streaming_response.enable_tunnel("dbx"):
+            pass
+
+    assert attempts == 1
+    assert caught.value.code == "tunnel_backend_connection_reset"
+
+
+async def test_async_streamed_structured_ambiguous_error_is_not_retried() -> None:
+    attempts = 0
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        return ambiguous_transfer_response(request)
+
+    client = AsyncRunloop(
+        bearer_token="test",
+        base_url="https://example.test",
+        max_retries=1,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+    )
+    async with client:
+        with pytest.raises(APIStatusError) as caught:
+            async with client.devboxes.with_streaming_response.enable_tunnel("dbx"):
+                pass
+
+    assert attempts == 1
+    assert caught.value.code == "tunnel_backend_connection_reset"

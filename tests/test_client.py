@@ -970,7 +970,7 @@ class TestRunloop:
             if nb_retries < failures_before_success:
                 nb_retries += 1
                 if failure_mode == "exception":
-                    raise RuntimeError("oops")
+                    raise httpx.ConnectError("oops", request=_request)
                 return httpx.Response(500)
             return httpx.Response(200)
 
@@ -1949,7 +1949,7 @@ class TestAsyncRunloop:
             if nb_retries < failures_before_success:
                 nb_retries += 1
                 if failure_mode == "exception":
-                    raise RuntimeError("oops")
+                    raise httpx.ConnectError("oops", request=_request)
                 return httpx.Response(500)
             return httpx.Response(200)
 

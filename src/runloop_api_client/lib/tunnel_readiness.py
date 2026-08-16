@@ -72,6 +72,8 @@ def _raise_timeout(error: APIError, *, port: int, path: str, timeout_seconds: fl
     error.message = message
     error.args = (message,)
     error.attempts = attempts
+    if error.cause is not None:
+        raise error from error.cause
     raise error
 
 
@@ -82,7 +84,36 @@ def _retry_delay(error: APIError) -> float:
 def _is_transient_status(error: APIStatusError) -> bool:
     if error.code == "tunnel_unavailable":
         return False
-    return error.code == "tunnel_service_not_ready" and error.response.headers.get("x-should-retry") != "false"
+    should_retry = error.response.headers.get("x-should-retry")
+    if should_retry == "false":
+        return False
+    if should_retry == "true":
+        return True
+    return error.code == "tunnel_service_not_ready"
+
+
+def send_tunnel_probe(
+    client: httpx.Client,
+    url: str,
+    headers: Mapping[str, str],
+    timeout: float,
+) -> httpx.Response:
+    """Send one probe without client auth or cross-origin redirect forwarding."""
+    request = client.build_request("GET", url, headers=headers, timeout=timeout)
+    request.headers.pop("authorization", None)
+    return client.send(request, auth=None, follow_redirects=False)
+
+
+async def async_send_tunnel_probe(
+    client: httpx.AsyncClient,
+    url: str,
+    headers: Mapping[str, str],
+    timeout: float,
+) -> httpx.Response:
+    """Async counterpart to :func:`send_tunnel_probe`."""
+    request = client.build_request("GET", url, headers=headers, timeout=timeout)
+    request.headers.pop("authorization", None)
+    return await client.send(request, auth=None, follow_redirects=False)
 
 
 def wait_for_tunnel_service(

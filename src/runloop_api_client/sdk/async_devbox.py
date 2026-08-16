@@ -40,7 +40,12 @@ from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
-from ..lib.tunnel_readiness import tunnel_url, tunnel_auth_headers, async_wait_for_tunnel_service
+from ..lib.tunnel_readiness import (
+    tunnel_url,
+    tunnel_auth_headers,
+    async_send_tunnel_probe,
+    async_wait_for_tunnel_service,
+)
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
@@ -856,10 +861,10 @@ class AsyncNetworkInterface:
             auth_token=tunnel.auth_token,
             request=httpx.Request("GET", url),
         )
-        probe_client = http_client or httpx.AsyncClient(follow_redirects=True)
+        probe_client = http_client or httpx.AsyncClient()
         try:
             await async_wait_for_tunnel_service(
-                lambda remaining: probe_client.get(url, headers=headers, timeout=remaining, follow_redirects=True),
+                lambda remaining: async_send_tunnel_probe(probe_client, url, headers, remaining),
                 port=port,
                 path=path,
                 timeout_seconds=timeout_seconds,
