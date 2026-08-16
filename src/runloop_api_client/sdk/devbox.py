@@ -8,6 +8,8 @@ import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
 from typing_extensions import Unpack, override
 
+import httpx
+
 from ..types import (
     DevboxView,
     TunnelView,
@@ -40,7 +42,7 @@ from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .execution_result import ExecutionResult
-from ..lib.tunnel_readiness import wait_for_tunnel_service
+from ..lib.tunnel_readiness import tunnel_url, tunnel_auth_headers, wait_for_tunnel_service
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -841,24 +843,40 @@ class NetworkInterface:
         path: str = "/",
         *,
         timeout_seconds: float = 30.0,
+        http_client: httpx.Client | None = None,
         clock: Callable[[], float] = time.monotonic,
         sleep: Callable[[float], None] = time.sleep,
         **params: Unpack[SDKDevboxEnableTunnelParams],
     ) -> TunnelView:
-        """Enable a tunnel, waiting through transient service readiness failures.
+        """Enable a tunnel and poll the requested service until it is ready.
 
-        The generated client's own retries are disabled so this bounded helper
-        owns the deadline and preserves the final normalized error.
+        The readiness probe uses the tunnel-specific authorization token when
+        required and never forwards the Runloop API bearer token.
         """
         client = self._devbox._client.with_options(max_retries=0)
-        return wait_for_tunnel_service(
-            lambda: client.devboxes.enable_tunnel(self._devbox.id, **params),
-            port=port,
-            path=path,
-            timeout_seconds=timeout_seconds,
-            clock=clock,
-            sleep=sleep,
+        enable_params: dict[str, Any] = dict(params)
+        enable_params.setdefault("timeout", timeout_seconds)
+        tunnel = client.devboxes.enable_tunnel(self._devbox.id, **enable_params)
+        url = tunnel_url(api_host=client.base_url.host, tunnel_key=tunnel.tunnel_key, port=port, path=path)
+        headers = tunnel_auth_headers(
+            auth_mode=tunnel.auth_mode,
+            auth_token=tunnel.auth_token,
+            request=httpx.Request("GET", url),
         )
+        probe_client = http_client or httpx.Client(follow_redirects=True)
+        try:
+            wait_for_tunnel_service(
+                lambda remaining: probe_client.get(url, headers=headers, timeout=remaining, follow_redirects=True),
+                port=port,
+                path=path,
+                timeout_seconds=timeout_seconds,
+                clock=clock,
+                sleep=sleep,
+            )
+        finally:
+            if http_client is None:
+                probe_client.close()
+        return tunnel
 
     def remove_tunnel(
         self,

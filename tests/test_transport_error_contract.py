@@ -175,6 +175,18 @@ def test_sync_structured_tunnel_not_ready_shape() -> None:
     }
 
 
+def test_retry_after_http_date_is_exposed_without_negative_delay() -> None:
+    request = httpx.Request("GET", "https://8080-key.tunnel.runloop.ai/health")
+    response = httpx.Response(
+        503,
+        request=request,
+        headers={"Retry-After": "Wed, 21 Oct 2015 07:28:00 GMT"},
+        json={"error": "tunnel_service_not_ready", "retryable": True},
+    )
+    error = APIStatusError("not ready", response=response, body=response.json())
+    assert error.retry_after == 0
+
+
 async def test_async_structured_tunnel_not_ready_shape() -> None:
     async def handler(request: httpx.Request) -> httpx.Response:
         return structured_not_ready(request)
@@ -193,56 +205,138 @@ async def test_async_structured_tunnel_not_ready_shape() -> None:
     assert caught.value.retry_after == 1.5
 
 
-def readiness_error(*, code: str = "tunnel_service_not_ready", retry_after: str = "2") -> APIStatusError:
-    request = httpx.Request("POST", "https://example.test/v1/devboxes/dbx/enable_tunnel")
-    response = httpx.Response(
-        503,
-        request=request,
-        headers={"X-Runloop-Error-Code": code, "Retry-After": retry_after},
-    )
-    return APIStatusError("not ready", response=response, body={"error": code, "retryable": True})
-
-
-def test_high_level_tunnel_readiness_honors_retry_after_and_deadline() -> None:
+def test_high_level_tunnel_readiness_polls_established_authenticated_url() -> None:
     clock_value = [0.0]
     delays: list[float] = []
+    requests: list[httpx.Request] = []
 
     def sleep(delay: float) -> None:
         delays.append(delay)
         clock_value[0] += delay
 
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        if len(requests) == 1:
+            return httpx.Response(
+                503,
+                request=request,
+                headers={
+                    "X-Runloop-Error-Code": "tunnel_service_not_ready",
+                    "X-Runloop-Request-Id": "req_probe",
+                    "Retry-After": "1.5",
+                },
+                json={
+                    "error": "tunnel_service_not_ready",
+                    "message": "Tunnel routing is not ready for this backend.",
+                    "retryable": True,
+                    "phase": "tunnel_readiness",
+                    "request_id": "req_body",
+                    "details": {"port": 8080, "path": "/health"},
+                },
+            )
+        return httpx.Response(204, request=request)
+
     generated = Mock()
     generated.with_options.return_value = generated
-    generated.devboxes.enable_tunnel.side_effect = [readiness_error(), readiness_error()]
+    generated.base_url = httpx.URL("https://api.runloop.ai")
+    tunnel = SimpleNamespace(
+        tunnel_key="tunnel-key",
+        auth_mode="authenticated",
+        auth_token="tunnel-secret",
+    )
+    generated.devboxes.enable_tunnel.return_value = tunnel
+    probe_client = httpx.Client(transport=httpx.MockTransport(handler))
 
-    with pytest.raises(APIStatusError) as caught:
-        Devbox(generated, "dbx").net.wait_for_tunnel_ready(
+    with probe_client:
+        result = Devbox(generated, "dbx").net.wait_for_tunnel_ready(
             8080,
             "/health",
-            timeout_seconds=2,
+            timeout_seconds=3,
+            http_client=probe_client,
             clock=lambda: clock_value[0],
             sleep=sleep,
         )
 
     generated.with_options.assert_called_once_with(max_retries=0)
-    assert delays == [2.0]
-    assert caught.value.code == "tunnel_service_not_ready"
-    assert caught.value.attempts == 2
-    assert "port 8080" in str(caught.value)
-    assert "'/health'" in str(caught.value)
+    generated.devboxes.enable_tunnel.assert_called_once_with("dbx", timeout=3)
+    assert result is tunnel
+    assert delays == [1.5]
+    assert [str(request.url) for request in requests] == [
+        "https://8080-tunnel-key.tunnel.runloop.ai/health",
+        "https://8080-tunnel-key.tunnel.runloop.ai/health",
+    ]
+    assert all(request.headers["X-Runloop-Tunnel-Authorization"] == "Bearer tunnel-secret" for request in requests)
+    assert all("authorization" not in request.headers for request in requests)
 
 
 async def test_async_high_level_tunnel_readiness_stops_on_terminal_error() -> None:
     generated = Mock()
     generated.with_options.return_value = generated
+    generated.base_url = httpx.URL("https://api.runloop.ai")
     generated.devboxes = SimpleNamespace(
-        enable_tunnel=AsyncMock(side_effect=readiness_error(code="tunnel_unavailable"))
+        enable_tunnel=AsyncMock(return_value=SimpleNamespace(tunnel_key="key", auth_mode="open", auth_token=None))
     )
     sleep = AsyncMock()
 
-    with pytest.raises(APIStatusError) as caught:
-        await AsyncDevbox(generated, "dbx").net.wait_for_tunnel_ready(3000, sleep=sleep)
+    async def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            503,
+            request=request,
+            headers={"X-Runloop-Error-Code": "tunnel_unavailable", "Retry-After": "0"},
+            json={
+                "error": "tunnel_unavailable",
+                "message": "Tunnel is unavailable.",
+                "retryable": False,
+                "phase": "tunnel_readiness",
+            },
+        )
+
+    probe_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    async with probe_client:
+        with pytest.raises(APIStatusError) as caught:
+            await AsyncDevbox(generated, "dbx").net.wait_for_tunnel_ready(
+                3000,
+                http_client=probe_client,
+                sleep=sleep,
+            )
 
     assert caught.value.code == "tunnel_unavailable"
     assert caught.value.attempts == 1
+    assert caught.value.retryable is False
     sleep.assert_not_awaited()
+
+
+def test_tunnel_readiness_timeout_identifies_port_and_path() -> None:
+    clock_value = [0.0]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            503,
+            request=request,
+            headers={"X-Runloop-Error-Code": "tunnel_service_not_ready", "Retry-After": "2"},
+            json={"error": "tunnel_service_not_ready", "retryable": True},
+        )
+
+    def sleep(delay: float) -> None:
+        clock_value[0] += delay
+
+    generated = Mock()
+    generated.with_options.return_value = generated
+    generated.base_url = httpx.URL("https://api.runloop.ai")
+    generated.devboxes.enable_tunnel.return_value = SimpleNamespace(tunnel_key="key", auth_mode="open", auth_token=None)
+    probe_client = httpx.Client(transport=httpx.MockTransport(handler))
+
+    with probe_client, pytest.raises(APIStatusError) as caught:
+        Devbox(generated, "dbx").net.wait_for_tunnel_ready(
+            9090,
+            "/ready",
+            timeout_seconds=2,
+            http_client=probe_client,
+            clock=lambda: clock_value[0],
+            sleep=sleep,
+        )
+
+    assert caught.value.code == "tunnel_service_not_ready"
+    assert caught.value.attempts == 1
+    assert "port 9090" in str(caught.value)
+    assert "'/ready'" in str(caught.value)

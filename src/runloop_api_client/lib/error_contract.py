@@ -6,6 +6,8 @@ client updates only need a small integration point.
 
 from __future__ import annotations
 
+import time
+import email.utils
 from typing import Mapping, cast
 from dataclasses import dataclass
 
@@ -37,6 +39,9 @@ def parse_retry_after(headers: httpx.Headers, body: object = None) -> float | No
     seconds = _number(headers.get("retry-after"))
     if seconds is not None:
         return seconds
+    retry_date = email.utils.parsedate_tz(headers.get("retry-after"))
+    if retry_date is not None:
+        return max(float(email.utils.mktime_tz(retry_date) - time.time()), 0)
     if isinstance(body, Mapping):
         payload = cast(Mapping[str, object], body)
         details = payload.get("details")
