@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 import asyncio
 import logging
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence, Awaitable, cast
@@ -37,6 +38,7 @@ from .._streaming import AsyncStream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .async_execution import AsyncExecution, _AsyncStreamingGroup
+from ..lib.tunnel_readiness import async_wait_for_tunnel_service
 from .async_execution_result import AsyncExecutionResult
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
@@ -828,6 +830,27 @@ class AsyncNetworkInterface:
         return await self._devbox._client.devboxes.enable_tunnel(
             self._devbox.id,
             **params,
+        )
+
+    async def wait_for_tunnel_ready(
+        self,
+        port: int,
+        path: str = "/",
+        *,
+        timeout_seconds: float = 30.0,
+        clock: Callable[[], float] = time.monotonic,
+        sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+        **params: Unpack[SDKDevboxEnableTunnelParams],
+    ) -> TunnelView:
+        """Enable a tunnel, waiting through transient service readiness failures."""
+        client = self._devbox._client.with_options(max_retries=0)
+        return await async_wait_for_tunnel_service(
+            lambda: client.devboxes.enable_tunnel(self._devbox.id, **params),
+            port=port,
+            path=path,
+            timeout_seconds=timeout_seconds,
+            clock=clock,
+            sleep=sleep,
         )
 
     async def remove_tunnel(

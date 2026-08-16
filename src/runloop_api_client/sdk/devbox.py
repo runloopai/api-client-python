@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 import logging
 import threading
 from typing import TYPE_CHECKING, Any, Callable, Optional, Sequence
@@ -39,6 +40,7 @@ from .._streaming import Stream
 from ..lib.polling import PollingConfig
 from ..types.devboxes import ExecutionUpdateChunk
 from .execution_result import ExecutionResult
+from ..lib.tunnel_readiness import wait_for_tunnel_service
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 from ..types.devboxes.devbox_logs_list_view import DevboxLogsListView
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
@@ -831,6 +833,31 @@ class NetworkInterface:
         return self._devbox._client.devboxes.enable_tunnel(
             self._devbox.id,
             **params,
+        )
+
+    def wait_for_tunnel_ready(
+        self,
+        port: int,
+        path: str = "/",
+        *,
+        timeout_seconds: float = 30.0,
+        clock: Callable[[], float] = time.monotonic,
+        sleep: Callable[[float], None] = time.sleep,
+        **params: Unpack[SDKDevboxEnableTunnelParams],
+    ) -> TunnelView:
+        """Enable a tunnel, waiting through transient service readiness failures.
+
+        The generated client's own retries are disabled so this bounded helper
+        owns the deadline and preserves the final normalized error.
+        """
+        client = self._devbox._client.with_options(max_retries=0)
+        return wait_for_tunnel_service(
+            lambda: client.devboxes.enable_tunnel(self._devbox.id, **params),
+            port=port,
+            path=path,
+            timeout_seconds=timeout_seconds,
+            clock=clock,
+            sleep=sleep,
         )
 
     def remove_tunnel(

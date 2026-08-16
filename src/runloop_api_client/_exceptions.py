@@ -6,6 +6,8 @@ from typing_extensions import Literal
 
 import httpx
 
+from .lib.error_contract import status_error_details, transport_error_details
+
 __all__ = [
     "BadRequestError",
     "AuthenticationError",
@@ -37,11 +39,39 @@ class APIError(RunloopError):
     If there was no response associated with this error then it will be `None`.
     """
 
-    def __init__(self, message: str, request: httpx.Request, *, body: object | None) -> None:  # noqa: ARG002
+    code: str
+    phase: str
+    retryable: bool
+    request_id: str | None
+    retry_after: float | None
+    attempts: int
+    cause: BaseException | None
+
+    def __init__(
+        self,
+        message: str,
+        request: httpx.Request,
+        *,
+        body: object | None,
+        code: str = "runloop_error",
+        phase: str = "unknown",
+        retryable: bool = False,
+        request_id: str | None = None,
+        retry_after: float | None = None,
+        attempts: int = 1,
+        cause: BaseException | None = None,
+    ) -> None:
         super().__init__(message)
         self.request = request
         self.message = message
         self.body = body
+        self.code = code
+        self.phase = phase
+        self.retryable = retryable
+        self.request_id = request_id
+        self.retry_after = retry_after
+        self.attempts = attempts
+        self.cause = cause
 
 
 class APIResponseValidationError(APIError):
@@ -60,20 +90,52 @@ class APIStatusError(APIError):
     response: httpx.Response
     status_code: int
 
-    def __init__(self, message: str, *, response: httpx.Response, body: object | None) -> None:
-        super().__init__(message, response.request, body=body)
+    def __init__(self, message: str, *, response: httpx.Response, body: object | None, attempts: int = 1) -> None:
+        details = status_error_details(response, body)
+        super().__init__(
+            message,
+            response.request,
+            body=body,
+            code=details.code,
+            phase=details.phase,
+            retryable=details.retryable,
+            request_id=details.request_id,
+            retry_after=details.retry_after,
+            attempts=attempts,
+        )
         self.response = response
         self.status_code = response.status_code
 
 
 class APIConnectionError(APIError):
-    def __init__(self, *, message: str = "Connection error.", request: httpx.Request) -> None:
-        super().__init__(message, request, body=None)
+    def __init__(
+        self,
+        *,
+        message: str = "Connection error.",
+        request: httpx.Request,
+        cause: BaseException | None = None,
+        attempts: int = 1,
+    ) -> None:
+        details = transport_error_details(cause) if cause is not None else transport_error_details(Exception())
+        super().__init__(
+            message,
+            request,
+            body=None,
+            code=details.code,
+            phase=details.phase,
+            retryable=details.retryable,
+            attempts=attempts,
+            cause=cause,
+        )
 
 
 class APITimeoutError(APIConnectionError):
-    def __init__(self, request: httpx.Request) -> None:
-        super().__init__(message="Request timed out.", request=request)
+    def __init__(self, request: httpx.Request, *, cause: BaseException | None = None, attempts: int = 1) -> None:
+        super().__init__(message="Request timed out.", request=request, cause=cause, attempts=attempts)
+        if cause is None:
+            self.code = "connection_timeout"
+            self.phase = "connect"
+            self.retryable = True
 
 
 class BadRequestError(APIStatusError):

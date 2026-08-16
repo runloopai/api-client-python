@@ -94,6 +94,7 @@ from ._exceptions import (
     APIResponseValidationError,
 )
 from ._utils._json import openapi_dumps
+from .lib.error_contract import is_safe_transport_retry
 
 log: logging.Logger = logging.getLogger(__name__)
 
@@ -665,7 +666,10 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
     def _make_status_error_from_response(
         self,
         response: httpx.Response,
+        *,
+        attempts: int = 1,
     ) -> APIStatusError:
+        body: object | None
         if response.is_closed and not response.is_stream_consumed:
             # We can't read the response body as it has been closed
             # before it was read. This can happen if an event hook
@@ -677,12 +681,19 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             body = err_text
 
             try:
-                body = json.loads(err_text)
-                err_msg = f"Error code: {response.status_code} - {body}"
+                body = cast(object, json.loads(err_text))
+                body_mapping = cast(Mapping[str, object], body) if isinstance(body, dict) else None
+                body_message = body_mapping.get("message") if body_mapping is not None else None
+                if isinstance(body_message, str):
+                    err_msg = body_message
+                else:
+                    err_msg = f"Error code: {response.status_code} - {body}"
             except Exception:
                 err_msg = err_text or f"Error code: {response.status_code}"
 
-        return self._make_status_error(err_msg, body=body, response=response)
+        error = self._make_status_error(err_msg, body=cast(object, body), response=response)
+        error.attempts = attempts
+        return error
 
     def _make_status_error(
         self,
@@ -1045,6 +1056,26 @@ class BaseClient(Generic[_HttpxClientT, _DefaultStreamT]):
             log.debug("Not retrying as header `x-should-retry` is set to `false`")
             return False
 
+        # These failures happen after a request or response may have been
+        # partially transferred. Retrying them implicitly can duplicate an
+        # execute or replay a multipart stream. Servers may explicitly opt in
+        # with X-Should-Retry when an idempotency record makes that safe.
+        try:
+            raw_payload = response.json()
+        except Exception:
+            raw_payload = None
+        payload = cast(Mapping[str, object], raw_payload) if isinstance(raw_payload, dict) else None
+        code = response.headers.get("x-runloop-error-code")
+        if code is None and isinstance(payload, dict) and isinstance(payload.get("error"), str):
+            code = payload["error"]
+        if code in {
+            "upload_request_body_idle_timeout",
+            "tunnel_backend_idle_timeout",
+            "tunnel_backend_connection_reset",
+        }:
+            log.debug("Not retrying ambiguous transfer failure %s", code)
+            return False
+
         # Retry on request timeouts.
         if response.status_code == 408:
             log.debug("Retrying due to status code %i", response.status_code)
@@ -1366,7 +1397,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
             except httpx.TimeoutException as err:
                 log.debug("Encountered httpx.TimeoutException", exc_info=True)
 
-                if remaining_retries > 0:
+                if remaining_retries > 0 and is_safe_transport_retry(err):
                     self._sleep_for_retry(
                         retries_taken=retries_taken,
                         max_retries=max_retries,
@@ -1377,11 +1408,11 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                     continue
 
                 log.debug("Raising timeout error")
-                raise APITimeoutError(request=request) from err
+                raise APITimeoutError(request=request, cause=err, attempts=retries_taken + 1) from err
             except Exception as err:
                 log.debug("Encountered Exception", exc_info=True)
 
-                if remaining_retries > 0:
+                if remaining_retries > 0 and is_safe_transport_retry(err):
                     self._sleep_for_retry(
                         retries_taken=retries_taken,
                         max_retries=max_retries,
@@ -1392,7 +1423,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                     continue
 
                 log.debug("Raising connection error")
-                raise APIConnectionError(request=request) from err
+                raise APIConnectionError(request=request, cause=err, attempts=retries_taken + 1) from err
 
             log.debug(
                 'HTTP Response: %s %s "%i %s" %s',
@@ -1424,7 +1455,7 @@ class SyncAPIClient(BaseClient[httpx.Client, Stream[Any]]):
                     err.response.read()
 
                 log.debug("Re-raising status error")
-                raise self._make_status_error_from_response(err.response) from None
+                raise self._make_status_error_from_response(err.response, attempts=retries_taken + 1) from None
 
             break
 
@@ -2076,7 +2107,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
             except httpx.TimeoutException as err:
                 log.debug("Encountered httpx.TimeoutException", exc_info=True)
 
-                if remaining_retries > 0:
+                if remaining_retries > 0 and is_safe_transport_retry(err):
                     await self._sleep_for_retry(
                         retries_taken=retries_taken,
                         max_retries=max_retries,
@@ -2087,11 +2118,11 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                     continue
 
                 log.debug("Raising timeout error")
-                raise APITimeoutError(request=request) from err
+                raise APITimeoutError(request=request, cause=err, attempts=retries_taken + 1) from err
             except Exception as err:
                 log.debug("Encountered Exception", exc_info=True)
 
-                if remaining_retries > 0:
+                if remaining_retries > 0 and is_safe_transport_retry(err):
                     await self._sleep_for_retry(
                         retries_taken=retries_taken,
                         max_retries=max_retries,
@@ -2102,7 +2133,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                     continue
 
                 log.debug("Raising connection error")
-                raise APIConnectionError(request=request) from err
+                raise APIConnectionError(request=request, cause=err, attempts=retries_taken + 1) from err
 
             log.debug(
                 'HTTP Response: %s %s "%i %s" %s',
@@ -2134,7 +2165,7 @@ class AsyncAPIClient(BaseClient[httpx.AsyncClient, AsyncStream[Any]]):
                     await err.response.aread()
 
                 log.debug("Re-raising status error")
-                raise self._make_status_error_from_response(err.response) from None
+                raise self._make_status_error_from_response(err.response, attempts=retries_taken + 1) from None
 
             break
 
