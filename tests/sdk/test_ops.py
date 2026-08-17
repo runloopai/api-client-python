@@ -64,11 +64,13 @@ class TestDevboxOps:
             name="test-devbox",
             metadata={"key": "value"},
             polling_config=PollingConfig(timeout_seconds=60.0),
+            shutdown_on_timeout=False,
         )
 
         assert isinstance(devbox, Devbox)
         assert devbox.id == "dbx_123"
         mock_client.devboxes.create_and_await_running.assert_called_once()
+        assert mock_client.devboxes.create_and_await_running.call_args.kwargs["shutdown_on_timeout"] is False
 
     def test_create_from_blueprint_id(self, mock_client: Mock, devbox_view: MockDevboxView) -> None:
         """Test create_from_blueprint_id method."""
