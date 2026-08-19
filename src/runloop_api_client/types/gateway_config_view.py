@@ -11,10 +11,14 @@ class AuthMechanism(BaseModel):
     """How credentials should be applied to proxied requests."""
 
     type: str
-    """The type of authentication mechanism: 'header', 'bearer'."""
+    """The type of authentication mechanism: 'header', 'bearer', or 'basic'.
+
+    For 'basic', store the secret as plain 'user:pass'; the gateway base64-encodes
+    it.
+    """
 
     key: Optional[str] = None
-    """For 'header' type: the header name (e.g., 'x-api-key')."""
+    """Only valid for 'header' type: the header name (e.g., 'x-api-key')."""
 
 
 class GatewayConfigView(BaseModel):
