@@ -7,6 +7,7 @@ from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
 from .shared_params.custom_header import CustomHeader
+from .shared_params.auth_mechanism import AuthMechanism
 
 __all__ = ["McpConfigCreateParams"]
 
@@ -28,6 +29,12 @@ class McpConfigCreateParams(TypedDict, total=False):
     Must be unique within your account. The first segment before '-' is used as the
     service name for tool routing (e.g., 'github-readonly' uses 'github' as the
     service name).
+    """
+
+    auth_mechanism: Optional[AuthMechanism]
+    """
+    Defines how the primary credential is applied to requests proxied to the
+    upstream.
     """
 
     custom_headers: Optional[Iterable[CustomHeader]]

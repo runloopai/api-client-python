@@ -21,6 +21,7 @@ from ..pagination import SyncMcpConfigsCursorIDPage, AsyncMcpConfigsCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.mcp_config_view import McpConfigView
 from ..types.shared_params.custom_header import CustomHeader
+from ..types.shared_params.auth_mechanism import AuthMechanism
 
 __all__ = ["McpConfigsResource", "AsyncMcpConfigsResource"]
 
@@ -51,6 +52,7 @@ class McpConfigsResource(SyncAPIResource):
         allowed_tools: SequenceNotStr[str],
         endpoint: str,
         name: str,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -77,6 +79,9 @@ class McpConfigsResource(SyncAPIResource):
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
+
           custom_headers: Additional headers applied to upstream requests after the credential. At most 8
               entries.
 
@@ -99,6 +104,7 @@ class McpConfigsResource(SyncAPIResource):
                     "allowed_tools": allowed_tools,
                     "endpoint": endpoint,
                     "name": name,
+                    "auth_mechanism": auth_mechanism,
                     "custom_headers": custom_headers,
                     "description": description,
                 },
@@ -152,6 +158,7 @@ class McpConfigsResource(SyncAPIResource):
         id: str,
         *,
         allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
@@ -171,6 +178,9 @@ class McpConfigsResource(SyncAPIResource):
         Args:
           allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
               tools, ['github.search_*'] for specific patterns.
+
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
 
           custom_headers: New list of additional headers. Replaces the existing list entirely; use an
               empty list to clear all custom headers. At most 8 entries.
@@ -198,6 +208,7 @@ class McpConfigsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
+                    "auth_mechanism": auth_mechanism,
                     "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,
@@ -347,6 +358,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         allowed_tools: SequenceNotStr[str],
         endpoint: str,
         name: str,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -373,6 +385,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
+
           custom_headers: Additional headers applied to upstream requests after the credential. At most 8
               entries.
 
@@ -395,6 +410,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
                     "allowed_tools": allowed_tools,
                     "endpoint": endpoint,
                     "name": name,
+                    "auth_mechanism": auth_mechanism,
                     "custom_headers": custom_headers,
                     "description": description,
                 },
@@ -448,6 +464,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         id: str,
         *,
         allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
@@ -467,6 +484,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         Args:
           allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
               tools, ['github.search_*'] for specific patterns.
+
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
 
           custom_headers: New list of additional headers. Replaces the existing list entirely; use an
               empty list to clear all custom headers. At most 8 entries.
@@ -494,6 +514,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
+                    "auth_mechanism": auth_mechanism,
                     "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,

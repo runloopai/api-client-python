@@ -35,6 +35,10 @@ class TestMcpConfigs:
             allowed_tools=["string"],
             endpoint="endpoint",
             name="name",
+            auth_mechanism={
+                "type": "type",
+                "key": "key",
+            },
             custom_headers=[
                 {
                     "name": "name",
@@ -124,6 +128,10 @@ class TestMcpConfigs:
         mcp_config = client.mcp_configs.update(
             id="id",
             allowed_tools=["string"],
+            auth_mechanism={
+                "type": "type",
+                "key": "key",
+            },
             custom_headers=[
                 {
                     "name": "name",
@@ -264,6 +272,10 @@ class TestAsyncMcpConfigs:
             allowed_tools=["string"],
             endpoint="endpoint",
             name="name",
+            auth_mechanism={
+                "type": "type",
+                "key": "key",
+            },
             custom_headers=[
                 {
                     "name": "name",
@@ -353,6 +365,10 @@ class TestAsyncMcpConfigs:
         mcp_config = await async_client.mcp_configs.update(
             id="id",
             allowed_tools=["string"],
+            auth_mechanism={
+                "type": "type",
+                "key": "key",
+            },
             custom_headers=[
                 {
                     "name": "name",

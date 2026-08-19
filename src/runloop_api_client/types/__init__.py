@@ -11,6 +11,7 @@ from .shared import (
     BrokerMount as BrokerMount,
     ObjectMount as ObjectMount,
     CustomHeader as CustomHeader,
+    AuthMechanism as AuthMechanism,
     LifecycleHooks as LifecycleHooks,
     ResumeTriggers as ResumeTriggers,
     LaunchParameters as LaunchParameters,
