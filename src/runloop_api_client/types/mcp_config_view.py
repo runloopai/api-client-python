@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from .._models import BaseModel
 from .shared.custom_header import CustomHeader
+from .shared.auth_mechanism import AuthMechanism
 
 __all__ = ["McpConfigView"]
 
@@ -21,6 +22,9 @@ class McpConfigView(BaseModel):
     Glob patterns specifying which tools are allowed from this MCP server (e.g.,
     ['github.search_*', 'github.get_*'] or ['*'] for all tools).
     """
+
+    auth_mechanism: AuthMechanism
+    """How the primary credential is applied to upstream requests."""
 
     create_time_ms: int
     """Creation time of the McpConfig (Unix timestamp in milliseconds)."""

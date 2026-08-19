@@ -21,6 +21,7 @@ from ..pagination import SyncGatewayConfigsCursorIDPage, AsyncGatewayConfigsCurs
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.gateway_config_view import GatewayConfigView
 from ..types.shared_params.custom_header import CustomHeader
+from ..types.shared_params.auth_mechanism import AuthMechanism
 
 __all__ = ["GatewayConfigsResource", "AsyncGatewayConfigsResource"]
 
@@ -48,7 +49,7 @@ class GatewayConfigsResource(SyncAPIResource):
     def create(
         self,
         *,
-        auth_mechanism: gateway_config_create_params.AuthMechanism,
+        auth_mechanism: AuthMechanism,
         endpoint: str,
         name: str,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
@@ -149,7 +150,7 @@ class GatewayConfigsResource(SyncAPIResource):
         self,
         id: str,
         *,
-        auth_mechanism: Optional[gateway_config_update_params.AuthMechanism] | Omit = omit,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
@@ -167,8 +168,8 @@ class GatewayConfigsResource(SyncAPIResource):
         All fields are optional.
 
         Args:
-          auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
-              gateway.
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
 
           custom_headers: New list of additional headers. Replaces the existing list entirely; use an
               empty list to clear all custom headers. At most 8 entries.
@@ -343,7 +344,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        auth_mechanism: gateway_config_create_params.AuthMechanism,
+        auth_mechanism: AuthMechanism,
         endpoint: str,
         name: str,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
@@ -444,7 +445,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         self,
         id: str,
         *,
-        auth_mechanism: Optional[gateway_config_update_params.AuthMechanism] | Omit = omit,
+        auth_mechanism: Optional[AuthMechanism] | Omit = omit,
         custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
@@ -462,8 +463,8 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         All fields are optional.
 
         Args:
-          auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
-              gateway.
+          auth_mechanism: Defines how the primary credential is applied to requests proxied to the
+              upstream.
 
           custom_headers: New list of additional headers. Replaces the existing list entirely; use an
               empty list to clear all custom headers. At most 8 entries.

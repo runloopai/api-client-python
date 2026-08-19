@@ -6,8 +6,9 @@ from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
 
 from .shared_params.custom_header import CustomHeader
+from .shared_params.auth_mechanism import AuthMechanism
 
-__all__ = ["GatewayConfigCreateParams", "AuthMechanism"]
+__all__ = ["GatewayConfigCreateParams"]
 
 
 class GatewayConfigCreateParams(TypedDict, total=False):
@@ -34,20 +35,3 @@ class GatewayConfigCreateParams(TypedDict, total=False):
 
     description: Optional[str]
     """Optional description for this gateway configuration."""
-
-
-class AuthMechanism(TypedDict, total=False):
-    """How credentials should be applied to proxied requests.
-
-    Specify the type ('header', 'bearer') and optional key field.
-    """
-
-    type: Required[str]
-    """The type of authentication mechanism: 'header', 'bearer', or 'basic'.
-
-    For 'basic', store the secret as plain 'user:pass'; the gateway base64-encodes
-    it.
-    """
-
-    key: Optional[str]
-    """Only valid for 'header' type: the header name (e.g., 'x-api-key')."""

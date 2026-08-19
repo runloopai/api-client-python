@@ -5,6 +5,7 @@ from runloop_api_client.types import (
     AfterIdle,
     AgentMount,
     AgentSource,
+    AuthMechanism,
     BrokerMount,
     CodeMountParameters,
     CustomHeader,

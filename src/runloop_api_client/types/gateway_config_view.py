@@ -4,22 +4,9 @@ from typing import List, Optional
 
 from .._models import BaseModel
 from .shared.custom_header import CustomHeader
+from .shared.auth_mechanism import AuthMechanism
 
-__all__ = ["GatewayConfigView", "AuthMechanism"]
-
-
-class AuthMechanism(BaseModel):
-    """How credentials should be applied to proxied requests."""
-
-    type: str
-    """The type of authentication mechanism: 'header', 'bearer', or 'basic'.
-
-    For 'basic', store the secret as plain 'user:pass'; the gateway base64-encodes
-    it.
-    """
-
-    key: Optional[str] = None
-    """Only valid for 'header' type: the header name (e.g., 'x-api-key')."""
+__all__ = ["GatewayConfigView"]
 
 
 class GatewayConfigView(BaseModel):
