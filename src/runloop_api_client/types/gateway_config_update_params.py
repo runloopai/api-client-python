@@ -31,7 +31,11 @@ class AuthMechanism(TypedDict, total=False):
     """
 
     type: Required[str]
-    """The type of authentication mechanism: 'header', 'bearer'."""
+    """The type of authentication mechanism: 'header', 'bearer', or 'basic'.
+
+    For 'basic', store the secret as plain 'user:pass'; the gateway base64-encodes
+    it.
+    """
 
     key: Optional[str]
-    """For 'header' type: the header name (e.g., 'x-api-key')."""
+    """Only valid for 'header' type: the header name (e.g., 'x-api-key')."""
