@@ -10,6 +10,7 @@ from .shared import (
     AgentSource as AgentSource,
     BrokerMount as BrokerMount,
     ObjectMount as ObjectMount,
+    CustomHeader as CustomHeader,
     LifecycleHooks as LifecycleHooks,
     ResumeTriggers as ResumeTriggers,
     LaunchParameters as LaunchParameters,

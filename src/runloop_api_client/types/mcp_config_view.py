@@ -3,6 +3,7 @@
 from typing import List, Optional
 
 from .._models import BaseModel
+from .shared.custom_header import CustomHeader
 
 __all__ = ["McpConfigView"]
 
@@ -29,6 +30,13 @@ class McpConfigView(BaseModel):
 
     name: str
     """The human-readable name of the McpConfig. Unique per account."""
+
+    custom_headers: Optional[List[CustomHeader]] = None
+    """Additional headers applied to upstream requests after the credential.
+
+    Secret-backed entries reference the secret by 'sec\\__' id; values are never
+    returned.
+    """
 
     description: Optional[str] = None
     """Optional description for this MCP configuration."""

@@ -7,6 +7,7 @@ from .run_profile import RunProfile as RunProfile
 from .agent_source import AgentSource as AgentSource
 from .broker_mount import BrokerMount as BrokerMount
 from .object_mount import ObjectMount as ObjectMount
+from .custom_header import CustomHeader as CustomHeader
 from .lifecycle_hooks import LifecycleHooks as LifecycleHooks
 from .resume_triggers import ResumeTriggers as ResumeTriggers
 from .launch_parameters import LaunchParameters as LaunchParameters

@@ -35,6 +35,13 @@ class TestMcpConfigs:
             allowed_tools=["string"],
             endpoint="endpoint",
             name="name",
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
         )
         assert_matches_type(McpConfigView, mcp_config, path=["response"])
@@ -117,6 +124,13 @@ class TestMcpConfigs:
         mcp_config = client.mcp_configs.update(
             id="id",
             allowed_tools=["string"],
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
             endpoint="endpoint",
             name="name",
@@ -250,6 +264,13 @@ class TestAsyncMcpConfigs:
             allowed_tools=["string"],
             endpoint="endpoint",
             name="name",
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
         )
         assert_matches_type(McpConfigView, mcp_config, path=["response"])
@@ -332,6 +353,13 @@ class TestAsyncMcpConfigs:
         mcp_config = await async_client.mcp_configs.update(
             id="id",
             allowed_tools=["string"],
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
             endpoint="endpoint",
             name="name",
