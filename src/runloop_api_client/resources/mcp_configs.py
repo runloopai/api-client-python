@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 
 import httpx
 
@@ -20,6 +20,7 @@ from .._response import (
 from ..pagination import SyncMcpConfigsCursorIDPage, AsyncMcpConfigsCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.mcp_config_view import McpConfigView
+from ..types.shared_params.custom_header import CustomHeader
 
 __all__ = ["McpConfigsResource", "AsyncMcpConfigsResource"]
 
@@ -50,6 +51,7 @@ class McpConfigsResource(SyncAPIResource):
         allowed_tools: SequenceNotStr[str],
         endpoint: str,
         name: str,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -75,6 +77,9 @@ class McpConfigsResource(SyncAPIResource):
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
+          custom_headers: Additional headers applied to upstream requests after the credential. At most 8
+              entries.
+
           description: Optional description for this MCP configuration.
 
           extra_headers: Send extra headers
@@ -94,6 +99,7 @@ class McpConfigsResource(SyncAPIResource):
                     "allowed_tools": allowed_tools,
                     "endpoint": endpoint,
                     "name": name,
+                    "custom_headers": custom_headers,
                     "description": description,
                 },
                 mcp_config_create_params.McpConfigCreateParams,
@@ -146,6 +152,7 @@ class McpConfigsResource(SyncAPIResource):
         id: str,
         *,
         allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -164,6 +171,9 @@ class McpConfigsResource(SyncAPIResource):
         Args:
           allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
               tools, ['github.search_*'] for specific patterns.
+
+          custom_headers: New list of additional headers. Replaces the existing list entirely; use an
+              empty list to clear all custom headers. At most 8 entries.
 
           description: New description for this MCP configuration.
 
@@ -188,6 +198,7 @@ class McpConfigsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
+                    "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,
                     "name": name,
@@ -336,6 +347,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         allowed_tools: SequenceNotStr[str],
         endpoint: str,
         name: str,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -361,6 +373,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
+          custom_headers: Additional headers applied to upstream requests after the credential. At most 8
+              entries.
+
           description: Optional description for this MCP configuration.
 
           extra_headers: Send extra headers
@@ -380,6 +395,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
                     "allowed_tools": allowed_tools,
                     "endpoint": endpoint,
                     "name": name,
+                    "custom_headers": custom_headers,
                     "description": description,
                 },
                 mcp_config_create_params.McpConfigCreateParams,
@@ -432,6 +448,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         id: str,
         *,
         allowed_tools: Optional[SequenceNotStr[str]] | Omit = omit,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -450,6 +467,9 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
         Args:
           allowed_tools: New glob patterns specifying which tools are allowed. Examples: ['*'] for all
               tools, ['github.search_*'] for specific patterns.
+
+          custom_headers: New list of additional headers. Replaces the existing list entirely; use an
+              empty list to clear all custom headers. At most 8 entries.
 
           description: New description for this MCP configuration.
 
@@ -474,6 +494,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "allowed_tools": allowed_tools,
+                    "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,
                     "name": name,

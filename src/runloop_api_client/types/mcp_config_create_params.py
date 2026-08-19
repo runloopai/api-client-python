@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .shared_params.custom_header import CustomHeader
 
 __all__ = ["McpConfigCreateParams"]
 
@@ -27,6 +28,12 @@ class McpConfigCreateParams(TypedDict, total=False):
     Must be unique within your account. The first segment before '-' is used as the
     service name for tool routing (e.g., 'github-readonly' uses 'github' as the
     service name).
+    """
+
+    custom_headers: Optional[Iterable[CustomHeader]]
+    """Additional headers applied to upstream requests after the credential.
+
+    At most 8 entries.
     """
 
     description: Optional[str]

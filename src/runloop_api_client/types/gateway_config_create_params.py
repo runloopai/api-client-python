@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
+
+from .shared_params.custom_header import CustomHeader
 
 __all__ = ["GatewayConfigCreateParams", "AuthMechanism"]
 
@@ -22,6 +24,12 @@ class GatewayConfigCreateParams(TypedDict, total=False):
     """The human-readable name for the GatewayConfig.
 
     Must be unique within your account.
+    """
+
+    custom_headers: Optional[Iterable[CustomHeader]]
+    """Additional headers applied to proxied requests after the auth mechanism.
+
+    At most 8 entries.
     """
 
     description: Optional[str]

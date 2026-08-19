@@ -1,8 +1,9 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 
 from .._models import BaseModel
+from .shared.custom_header import CustomHeader
 
 __all__ = ["GatewayConfigView", "AuthMechanism"]
 
@@ -46,6 +47,13 @@ class GatewayConfigView(BaseModel):
 
     account_id: Optional[str] = None
     """The account ID that owns this config."""
+
+    custom_headers: Optional[List[CustomHeader]] = None
+    """Additional headers applied to proxied requests after the auth mechanism.
+
+    Secret-backed entries reference the secret by 'sec\\__' id; values are never
+    returned.
+    """
 
     description: Optional[str] = None
     """Optional description for this gateway configuration."""

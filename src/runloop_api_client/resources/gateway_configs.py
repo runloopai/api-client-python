@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 
 import httpx
 
@@ -20,6 +20,7 @@ from .._response import (
 from ..pagination import SyncGatewayConfigsCursorIDPage, AsyncGatewayConfigsCursorIDPage
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.gateway_config_view import GatewayConfigView
+from ..types.shared_params.custom_header import CustomHeader
 
 __all__ = ["GatewayConfigsResource", "AsyncGatewayConfigsResource"]
 
@@ -50,6 +51,7 @@ class GatewayConfigsResource(SyncAPIResource):
         auth_mechanism: gateway_config_create_params.AuthMechanism,
         endpoint: str,
         name: str,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -73,6 +75,9 @@ class GatewayConfigsResource(SyncAPIResource):
           name: The human-readable name for the GatewayConfig. Must be unique within your
               account.
 
+          custom_headers: Additional headers applied to proxied requests after the auth mechanism. At most
+              8 entries.
+
           description: Optional description for this gateway configuration.
 
           extra_headers: Send extra headers
@@ -92,6 +97,7 @@ class GatewayConfigsResource(SyncAPIResource):
                     "auth_mechanism": auth_mechanism,
                     "endpoint": endpoint,
                     "name": name,
+                    "custom_headers": custom_headers,
                     "description": description,
                 },
                 gateway_config_create_params.GatewayConfigCreateParams,
@@ -144,6 +150,7 @@ class GatewayConfigsResource(SyncAPIResource):
         id: str,
         *,
         auth_mechanism: Optional[gateway_config_update_params.AuthMechanism] | Omit = omit,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -162,6 +169,9 @@ class GatewayConfigsResource(SyncAPIResource):
         Args:
           auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
               gateway.
+
+          custom_headers: New list of additional headers. Replaces the existing list entirely; use an
+              empty list to clear all custom headers. At most 8 entries.
 
           description: New description for this gateway configuration.
 
@@ -186,6 +196,7 @@ class GatewayConfigsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "auth_mechanism": auth_mechanism,
+                    "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,
                     "name": name,
@@ -335,6 +346,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         auth_mechanism: gateway_config_create_params.AuthMechanism,
         endpoint: str,
         name: str,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -358,6 +370,9 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
           name: The human-readable name for the GatewayConfig. Must be unique within your
               account.
 
+          custom_headers: Additional headers applied to proxied requests after the auth mechanism. At most
+              8 entries.
+
           description: Optional description for this gateway configuration.
 
           extra_headers: Send extra headers
@@ -377,6 +392,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
                     "auth_mechanism": auth_mechanism,
                     "endpoint": endpoint,
                     "name": name,
+                    "custom_headers": custom_headers,
                     "description": description,
                 },
                 gateway_config_create_params.GatewayConfigCreateParams,
@@ -429,6 +445,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         id: str,
         *,
         auth_mechanism: Optional[gateway_config_update_params.AuthMechanism] | Omit = omit,
+        custom_headers: Optional[Iterable[CustomHeader]] | Omit = omit,
         description: Optional[str] | Omit = omit,
         endpoint: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
@@ -447,6 +464,9 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
         Args:
           auth_mechanism: Defines how credentials are applied to HTTP requests when proxying through the
               gateway.
+
+          custom_headers: New list of additional headers. Replaces the existing list entirely; use an
+              empty list to clear all custom headers. At most 8 entries.
 
           description: New description for this gateway configuration.
 
@@ -471,6 +491,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "auth_mechanism": auth_mechanism,
+                    "custom_headers": custom_headers,
                     "description": description,
                     "endpoint": endpoint,
                     "name": name,

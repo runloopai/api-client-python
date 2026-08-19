@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
+
+from .shared_params.custom_header import CustomHeader
 
 __all__ = ["GatewayConfigUpdateParams", "AuthMechanism"]
 
@@ -13,6 +15,13 @@ class GatewayConfigUpdateParams(TypedDict, total=False):
     """
     Defines how credentials are applied to HTTP requests when proxying through the
     gateway.
+    """
+
+    custom_headers: Optional[Iterable[CustomHeader]]
+    """New list of additional headers.
+
+    Replaces the existing list entirely; use an empty list to clear all custom
+    headers. At most 8 entries.
     """
 
     description: Optional[str]
