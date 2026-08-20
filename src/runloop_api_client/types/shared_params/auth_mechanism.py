@@ -20,4 +20,7 @@ class AuthMechanism(TypedDict, total=False):
     """
 
     key: Optional[str]
-    """Only valid for 'header' type: the header name (e.g., 'x-api-key')."""
+    """The header name (e.g., 'x-api-key').
+
+    Required for 'header' type; invalid for other types.
+    """
