@@ -500,29 +500,40 @@ class DevboxesResource(SyncAPIResource):
             PollingTimeout: If polling times out before devbox is running
             RunloopError: If devbox enters a non-running terminal state
         """
-        # Pass all create_args to the underlying create method
-        devbox = self.create(
-            blueprint_id=blueprint_id,
-            blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            gateways=gateways,
-            launch_parameters=launch_parameters,
-            mcp=mcp,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            secrets=secrets,
-            snapshot_id=snapshot_id,
-            tunnel=tunnel,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+        devbox = self._post(
+            "/v1/devboxes/create_and_await_running",
+            body=maybe_transform(
+                {
+                    "blueprint_id": blueprint_id,
+                    "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
+                    "entrypoint": entrypoint,
+                    "environment_variables": environment_variables,
+                    "file_mounts": file_mounts,
+                    "gateways": gateways,
+                    "launch_parameters": launch_parameters,
+                    "mcp": mcp,
+                    "metadata": metadata,
+                    "mounts": mounts,
+                    "name": name,
+                    "secrets": secrets,
+                    "snapshot_id": snapshot_id,
+                    "tunnel": tunnel,
+                },
+                devbox_create_params.DevboxCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxView,
         )
+
+        if devbox.status == "running":
+            return devbox
 
         return self.await_running(
             devbox.id,
@@ -2071,29 +2082,40 @@ class AsyncDevboxesResource(AsyncAPIResource):
             RunloopError: If devbox enters a non-running terminal state
         """
 
-        # Pass all create_args, relevant request args to the underlying create method
-        devbox = await self.create(
-            blueprint_id=blueprint_id,
-            blueprint_name=blueprint_name,
-            code_mounts=code_mounts,
-            entrypoint=entrypoint,
-            environment_variables=environment_variables,
-            file_mounts=file_mounts,
-            gateways=gateways,
-            launch_parameters=launch_parameters,
-            mcp=mcp,
-            metadata=metadata,
-            mounts=mounts,
-            name=name,
-            secrets=secrets,
-            snapshot_id=snapshot_id,
-            tunnel=tunnel,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-            idempotency_key=idempotency_key,
+        devbox = await self._post(
+            "/v1/devboxes/create_and_await_running",
+            body=await async_maybe_transform(
+                {
+                    "blueprint_id": blueprint_id,
+                    "blueprint_name": blueprint_name,
+                    "code_mounts": code_mounts,
+                    "entrypoint": entrypoint,
+                    "environment_variables": environment_variables,
+                    "file_mounts": file_mounts,
+                    "gateways": gateways,
+                    "launch_parameters": launch_parameters,
+                    "mcp": mcp,
+                    "metadata": metadata,
+                    "mounts": mounts,
+                    "name": name,
+                    "secrets": secrets,
+                    "snapshot_id": snapshot_id,
+                    "tunnel": tunnel,
+                },
+                devbox_create_params.DevboxCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=DevboxView,
         )
+
+        if devbox.status == "running":
+            return devbox
 
         return await self.await_running(
             devbox.id,

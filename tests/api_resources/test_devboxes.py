@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import Any, cast
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, AsyncMock, patch
 
 import httpx
 import pytest
@@ -1452,9 +1452,9 @@ class TestDevboxes:
             state_transitions=[],
         )
 
-        with patch.object(client.devboxes, "create") as mock_create:
+        with patch.object(client.devboxes, "_post") as mock_post:
             with patch.object(client.devboxes, "await_running") as mock_await:
-                mock_create.return_value = mock_devbox_creating
+                mock_post.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
                 result = client.devboxes.create_and_await_running(
@@ -1463,8 +1463,33 @@ class TestDevboxes:
 
                 assert result.id == "test_id"
                 assert result.status == "running"
-                mock_create.assert_called_once()
+                assert mock_post.call_args.args[0] == "/v1/devboxes/create_and_await_running"
+                assert mock_post.call_args.kwargs["body"]["name"] == "test"
                 mock_await.assert_called_once_with("test_id", polling_config=None)
+
+    @parametrize
+    def test_method_create_and_await_running_optimistic_success(self, client: Runloop) -> None:
+        """Test create_and_await_running returns a running response without polling."""
+
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(client.devboxes, "_post") as mock_post:
+            with patch.object(client.devboxes, "await_running") as mock_await:
+                mock_post.return_value = mock_devbox_running
+
+                result = client.devboxes.create_and_await_running(name="test")
+
+                assert result.status == "running"
+                assert mock_post.call_args.args[0] == "/v1/devboxes/create_and_await_running"
+                mock_await.assert_not_called()
 
     @parametrize
     def test_method_create_and_await_running_with_config(self, client: Runloop) -> None:
@@ -1492,9 +1517,9 @@ class TestDevboxes:
 
         config = PollingConfig(interval_seconds=0.1, max_attempts=10)
 
-        with patch.object(client.devboxes, "create") as mock_create:
+        with patch.object(client.devboxes, "_post") as mock_post:
             with patch.object(client.devboxes, "await_running") as mock_await:
-                mock_create.return_value = mock_devbox_creating
+                mock_post.return_value = mock_devbox_creating
                 mock_await.return_value = mock_devbox_running
 
                 result = client.devboxes.create_and_await_running(
@@ -1514,8 +1539,8 @@ class TestDevboxes:
         mock_response.status_code = 400
         mock_error = APIStatusError("Bad request", response=mock_response, body=None)
 
-        with patch.object(client.devboxes, "create") as mock_create:
-            mock_create.side_effect = mock_error
+        with patch.object(client.devboxes, "_post") as mock_post:
+            mock_post.side_effect = mock_error
 
             with pytest.raises(APIStatusError, match="Bad request"):
                 client.devboxes.create_and_await_running(
@@ -1536,9 +1561,9 @@ class TestDevboxes:
             state_transitions=[],
         )
 
-        with patch.object(client.devboxes, "create") as mock_create:
+        with patch.object(client.devboxes, "_post") as mock_post:
             with patch.object(client.devboxes, "await_running") as mock_await:
-                mock_create.return_value = mock_devbox_creating
+                mock_post.return_value = mock_devbox_creating
                 mock_await.side_effect = RunloopError("Devbox entered non-running terminal state: failed")
 
                 with pytest.raises(RunloopError, match="Devbox entered non-running terminal state: failed"):
@@ -1738,6 +1763,51 @@ class TestAsyncDevboxes:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
+
+    @parametrize
+    async def test_method_create_and_await_running_success(self, async_client: AsyncRunloop) -> None:
+        mock_devbox_creating = DevboxView(
+            id="test_id",
+            status="provisioning",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+        mock_devbox_running = mock_devbox_creating.model_copy(update={"status": "running"})
+
+        with patch.object(async_client.devboxes, "_post", new_callable=AsyncMock) as mock_post:
+            with patch.object(async_client.devboxes, "await_running", new_callable=AsyncMock) as mock_await:
+                mock_post.return_value = mock_devbox_creating
+                mock_await.return_value = mock_devbox_running
+
+                result = await async_client.devboxes.create_and_await_running(name="test")
+
+                assert result.status == "running"
+                assert mock_post.call_args.args[0] == "/v1/devboxes/create_and_await_running"
+                mock_await.assert_awaited_once_with("test_id", polling_config=None)
+
+    @parametrize
+    async def test_method_create_and_await_running_optimistic_success(self, async_client: AsyncRunloop) -> None:
+        mock_devbox_running = DevboxView(
+            id="test_id",
+            status="running",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+
+        with patch.object(async_client.devboxes, "_post", new_callable=AsyncMock) as mock_post:
+            with patch.object(async_client.devboxes, "await_running", new_callable=AsyncMock) as mock_await:
+                mock_post.return_value = mock_devbox_running
+
+                result = await async_client.devboxes.create_and_await_running(name="test")
+
+                assert result.status == "running"
+                mock_await.assert_not_awaited()
 
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
