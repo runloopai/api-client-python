@@ -2,17 +2,27 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing_extensions import Required, TypedDict
+from typing import Iterable, Optional
+from typing_extensions import TypedDict
 
-__all__ = ["GatewayConfigUpdateParams", "AuthMechanism"]
+from .shared_params.custom_header import CustomHeader
+from .shared_params.auth_mechanism import AuthMechanism
+
+__all__ = ["GatewayConfigUpdateParams"]
 
 
 class GatewayConfigUpdateParams(TypedDict, total=False):
     auth_mechanism: Optional[AuthMechanism]
     """
-    Defines how credentials are applied to HTTP requests when proxying through the
-    gateway.
+    Defines how the primary credential is applied to requests proxied to the
+    upstream.
+    """
+
+    custom_headers: Optional[Iterable[CustomHeader]]
+    """New list of additional headers.
+
+    Replaces the existing list entirely; use an empty list to clear all custom
+    headers. At most 8 entries.
     """
 
     description: Optional[str]
@@ -23,15 +33,3 @@ class GatewayConfigUpdateParams(TypedDict, total=False):
 
     name: Optional[str]
     """New name for the GatewayConfig. Must be unique within your account."""
-
-
-class AuthMechanism(TypedDict, total=False):
-    """
-    Defines how credentials are applied to HTTP requests when proxying through the gateway.
-    """
-
-    type: Required[str]
-    """The type of authentication mechanism: 'header', 'bearer'."""
-
-    key: Optional[str]
-    """For 'header' type: the header name (e.g., 'x-api-key')."""

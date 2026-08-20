@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.29.0 (2026-08-20)
+
+Full Changelog: [v1.28.0...v1.29.0](https://github.com/runloopai/api-client-python/compare/v1.28.0...v1.29.0)
+
+### Features
+
+* **axon:** add registry delete endpoint ([#10769](https://github.com/runloopai/api-client-python/issues/10769)) ([c63f011](https://github.com/runloopai/api-client-python/commit/c63f01108d98785b358357e4e65e5e517dd0805e))
+* **broker:** plumb Pi protocol selection ([#10256](https://github.com/runloopai/api-client-python/issues/10256)) ([974d52b](https://github.com/runloopai/api-client-python/commit/974d52b8743ceda8a7127e3a3432ce51e71b1bfd))
+* **config:** custom_headers on McpConfig/GatewayConfig — persistence, REST, validation, provisioner, OpenAPI ([#11096](https://github.com/runloopai/api-client-python/issues/11096)) ([9482e47](https://github.com/runloopai/api-client-python/commit/9482e475d0ad6e2b1989ee25f66a759fe839065f))
+* **converter:** add Helm chart, container image, and enable in dev ([#10405](https://github.com/runloopai/api-client-python/issues/10405)) ([0d5ca34](https://github.com/runloopai/api-client-python/commit/0d5ca3438ac4cbcafdfaf7584042bd78a956e3ae))
+* **devbox:** recover resume provisioning failures ([#10597](https://github.com/runloopai/api-client-python/issues/10597)) ([518301e](https://github.com/runloopai/api-client-python/commit/518301e444b95bc5fa73cc0f13be67cf3f750024))
+* **gateway:** first-class BASIC auth mechanism ([#11063](https://github.com/runloopai/api-client-python/issues/11063)) ([1f50f93](https://github.com/runloopai/api-client-python/commit/1f50f93c26c6696d2a9f81b1b677eb9b7282601a))
+* **mcp:** configurable auth_mechanism on McpConfig, shared shape with gateway ([#11113](https://github.com/runloopai/api-client-python/issues/11113)) ([4dd9edd](https://github.com/runloopai/api-client-python/commit/4dd9edd5abbdfab0466826db8d18cbd2efae7b31))
+
+
+### Bug Fixes
+
+* **devbox:** make Devbox update API patch-like ([#10582](https://github.com/runloopai/api-client-python/issues/10582)) ([0a74521](https://github.com/runloopai/api-client-python/commit/0a7452145ee6d1689d8635e65f88b8f778a84820))
+* **gateway:** reject keyless HEADER auth_mechanism at admission and in looper ([#11120](https://github.com/runloopai/api-client-python/issues/11120)) ([194c060](https://github.com/runloopai/api-client-python/commit/194c060f4c95a85d895fc4e0d701e48b5222646c))
+
 ## 1.28.0 (2026-07-29)
 
 Full Changelog: [v1.27.0...v1.28.0](https://github.com/runloopai/api-client-python/compare/v1.27.0...v1.28.0)

@@ -38,6 +38,13 @@ class TestGatewayConfigs:
             },
             endpoint="endpoint",
             name="name",
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
         )
         assert_matches_type(GatewayConfigView, gateway_config, path=["response"])
@@ -123,6 +130,13 @@ class TestGatewayConfigs:
                 "type": "type",
                 "key": "key",
             },
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
             endpoint="endpoint",
             name="name",
@@ -259,6 +273,13 @@ class TestAsyncGatewayConfigs:
             },
             endpoint="endpoint",
             name="name",
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
         )
         assert_matches_type(GatewayConfigView, gateway_config, path=["response"])
@@ -344,6 +365,13 @@ class TestAsyncGatewayConfigs:
                 "type": "type",
                 "key": "key",
             },
+            custom_headers=[
+                {
+                    "name": "name",
+                    "secret": "secret",
+                    "value": "value",
+                }
+            ],
             description="description",
             endpoint="endpoint",
             name="name",

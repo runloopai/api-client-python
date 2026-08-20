@@ -10,7 +10,13 @@ __all__ = ["DevboxUpdateParams"]
 
 class DevboxUpdateParams(TypedDict, total=False):
     metadata: Optional[Dict[str, str]]
-    """User defined metadata to attach to the devbox for organization."""
+    """User defined metadata to replace the Devbox metadata.
+
+    Omit to leave unchanged or set to an empty map to clear it.
+    """
 
     name: Optional[str]
-    """(Optional) A user specified name to give the Devbox."""
+    """A user specified name to give the Devbox.
+
+    Omit to leave unchanged or set to an empty string to clear it.
+    """

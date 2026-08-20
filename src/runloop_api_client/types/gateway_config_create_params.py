@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 from typing_extensions import Required, TypedDict
 
-__all__ = ["GatewayConfigCreateParams", "AuthMechanism"]
+from .shared_params.custom_header import CustomHeader
+from .shared_params.auth_mechanism import AuthMechanism
+
+__all__ = ["GatewayConfigCreateParams"]
 
 
 class GatewayConfigCreateParams(TypedDict, total=False):
@@ -24,18 +27,11 @@ class GatewayConfigCreateParams(TypedDict, total=False):
     Must be unique within your account.
     """
 
-    description: Optional[str]
-    """Optional description for this gateway configuration."""
+    custom_headers: Optional[Iterable[CustomHeader]]
+    """Additional headers applied to proxied requests after the auth mechanism.
 
-
-class AuthMechanism(TypedDict, total=False):
-    """How credentials should be applied to proxied requests.
-
-    Specify the type ('header', 'bearer') and optional key field.
+    At most 8 entries.
     """
 
-    type: Required[str]
-    """The type of authentication mechanism: 'header', 'bearer'."""
-
-    key: Optional[str]
-    """For 'header' type: the header name (e.g., 'x-api-key')."""
+    description: Optional[str]
+    """Optional description for this gateway configuration."""
