@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.30.0 (2026-08-20)
+
+Full Changelog: [v1.29.0...v1.30.0](https://github.com/runloopai/api-client-python/compare/v1.29.0...v1.30.0)
+
+### Features
+
+* **devboxes:** use optimistic create endpoint ([#829](https://github.com/runloopai/api-client-python/issues/829)) ([3f47b22](https://github.com/runloopai/api-client-python/commit/3f47b2256189b1aca4c4137134df2643dd3d7ca5))
+
+
+### Chores
+
+* **internal:** allow the mock server port to be set with STAINLESS_MOCK_PORT ([b7a3d87](https://github.com/runloopai/api-client-python/commit/b7a3d87997538ff6d4658df77d68177f83811eb3))
+
 ## 1.29.0 (2026-08-20)
 
 Full Changelog: [v1.28.0...v1.29.0](https://github.com/runloopai/api-client-python/compare/v1.28.0...v1.29.0)
