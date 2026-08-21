@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from typing import Any, cast
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, AsyncMock, patch
 
 import httpx
 import pytest
@@ -1547,6 +1547,49 @@ class TestDevboxes:
                     )
 
     @parametrize
+    def test_method_create_and_await_running_timeout_shuts_down(self, client: Runloop) -> None:
+        devbox = DevboxView(
+            id="test_id",
+            status="provisioning",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+        timeout = PollingTimeout("Timed out", devbox)
+
+        with patch.object(client.devboxes, "create", return_value=devbox):
+            with patch.object(client.devboxes, "await_running", side_effect=timeout):
+                with patch.object(client.devboxes, "shutdown") as mock_shutdown:
+                    with pytest.raises(PollingTimeout) as exc_info:
+                        client.devboxes.create_and_await_running()
+
+        assert exc_info.value is timeout
+        mock_shutdown.assert_called_once_with("test_id")
+
+    @parametrize
+    def test_method_create_and_await_running_timeout_returns_devbox_when_configured(self, client: Runloop) -> None:
+        devbox = DevboxView(
+            id="test_id",
+            status="provisioning",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+        timeout = PollingTimeout("Timed out", devbox)
+
+        with patch.object(client.devboxes, "create", return_value=devbox):
+            with patch.object(client.devboxes, "await_running", side_effect=timeout):
+                with patch.object(client.devboxes, "shutdown") as mock_shutdown:
+                    result = client.devboxes.create_and_await_running(shutdown_on_timeout=False)
+
+        assert result is devbox
+        mock_shutdown.assert_not_called()
+
+    @parametrize
     def test_method_await_suspended_success(self, client: Runloop) -> None:
         """Test await_suspended with successful polling to suspended state"""
 
@@ -1743,6 +1786,51 @@ class TestAsyncDevboxes:
     async def test_method_create(self, async_client: AsyncRunloop) -> None:
         devbox = await async_client.devboxes.create()
         assert_matches_type(DevboxView, devbox, path=["response"])
+
+    @parametrize
+    async def test_method_create_and_await_running_timeout_shuts_down(self, async_client: AsyncRunloop) -> None:
+        devbox = DevboxView(
+            id="test_id",
+            status="provisioning",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+        timeout = PollingTimeout("Timed out", devbox)
+
+        with patch.object(async_client.devboxes, "create", AsyncMock(return_value=devbox)):
+            with patch.object(async_client.devboxes, "await_running", AsyncMock(side_effect=timeout)):
+                with patch.object(async_client.devboxes, "shutdown", AsyncMock()) as mock_shutdown:
+                    with pytest.raises(PollingTimeout) as exc_info:
+                        await async_client.devboxes.create_and_await_running()
+
+        assert exc_info.value is timeout
+        mock_shutdown.assert_awaited_once_with("test_id")
+
+    @parametrize
+    async def test_method_create_and_await_running_timeout_returns_devbox_when_configured(
+        self, async_client: AsyncRunloop
+    ) -> None:
+        devbox = DevboxView(
+            id="test_id",
+            status="provisioning",
+            capabilities=[],
+            create_time_ms=1234567890,
+            launch_parameters=LaunchParameters(resource_size_request="X_SMALL"),
+            metadata={},
+            state_transitions=[],
+        )
+        timeout = PollingTimeout("Timed out", devbox)
+
+        with patch.object(async_client.devboxes, "create", AsyncMock(return_value=devbox)):
+            with patch.object(async_client.devboxes, "await_running", AsyncMock(side_effect=timeout)):
+                with patch.object(async_client.devboxes, "shutdown", AsyncMock()) as mock_shutdown:
+                    result = await async_client.devboxes.create_and_await_running(shutdown_on_timeout=False)
+
+        assert result is devbox
+        mock_shutdown.assert_not_awaited()
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncRunloop) -> None:

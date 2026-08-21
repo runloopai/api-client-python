@@ -77,7 +77,7 @@ from ...pagination import (
     AsyncDiskSnapshotsCursorIDPage,
 )
 from ..._exceptions import RunloopError, APIStatusError, APIConnectionError
-from ...lib.polling import PollingConfig, poll_until
+from ...lib.polling import PollingConfig, PollingTimeout, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from .disk_snapshots import (
     DiskSnapshotsResource,
@@ -474,6 +474,7 @@ class DevboxesResource(SyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        shutdown_on_timeout: bool = True,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -492,9 +493,11 @@ class DevboxesResource(SyncAPIResource):
         Args:
             create_args: Arguments to pass to the `create` method. See the `create` method for detailed documentation.
             request_args: Optional request arguments including polling configuration and additional request options
+            shutdown_on_timeout: Shutdown the created devbox if waiting for running state times out.
 
         Returns:
-            The devbox in running state
+            The devbox in running state, or the created devbox if waiting times out and
+            shutdown_on_timeout is False.
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
@@ -524,10 +527,16 @@ class DevboxesResource(SyncAPIResource):
             idempotency_key=idempotency_key,
         )
 
-        return self.await_running(
-            devbox.id,
-            polling_config=polling_config,
-        )
+        try:
+            return self.await_running(
+                devbox.id,
+                polling_config=polling_config,
+            )
+        except PollingTimeout:
+            if not shutdown_on_timeout:
+                return devbox
+            self.shutdown(devbox.id)
+            raise
 
     def list(
         self,
@@ -2044,6 +2053,7 @@ class AsyncDevboxesResource(AsyncAPIResource):
         mounts: Optional[Iterable[Mount]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
+        shutdown_on_timeout: bool = True,
         secrets: Optional[Dict[str, str]] | Omit = omit,
         snapshot_id: Optional[str] | Omit = omit,
         tunnel: Optional[devbox_create_params.Tunnel] | Omit = omit,
@@ -2062,9 +2072,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         Args:
             See the `create` method for detailed documentation.
             polling_config: Optional polling configuration
+            shutdown_on_timeout: Shutdown the created devbox if waiting for running state times out.
 
         Returns:
-            The devbox in running state
+            The devbox in running state, or the created devbox if waiting times out and
+            shutdown_on_timeout is False.
 
         Raises:
             PollingTimeout: If polling times out before devbox is running
@@ -2095,10 +2107,16 @@ class AsyncDevboxesResource(AsyncAPIResource):
             idempotency_key=idempotency_key,
         )
 
-        return await self.await_running(
-            devbox.id,
-            polling_config=polling_config,
-        )
+        try:
+            return await self.await_running(
+                devbox.id,
+                polling_config=polling_config,
+            )
+        except PollingTimeout:
+            if not shutdown_on_timeout:
+                return devbox
+            await self.shutdown(devbox.id)
+            raise
 
     async def await_running(
         self,

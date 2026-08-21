@@ -92,11 +92,16 @@ class LongPollingRequestOptions(LongRequestOptions, PollingRequestOptions):  # t
     pass
 
 
-class SDKDevboxCreateParams(DevboxCreateParams, LongPollingRequestOptions):
+class DevboxTimeoutCleanupOptions(TypedDict, total=False):
+    shutdown_on_timeout: bool
+    """Shutdown the created devbox when waiting for it to run times out. Defaults to true."""
+
+
+class SDKDevboxCreateParams(DevboxCreateParams, LongPollingRequestOptions, DevboxTimeoutCleanupOptions):
     pass
 
 
-class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestOptions):
+class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestOptions, DevboxTimeoutCleanupOptions):
     pass
 
 
