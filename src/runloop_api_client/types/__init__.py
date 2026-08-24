@@ -53,6 +53,7 @@ from .axon_create_params import AxonCreateParams as AxonCreateParams
 from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
+from .gateway_token_view import GatewayTokenView as GatewayTokenView
 from .object_list_params import ObjectListParams as ObjectListParams
 from .pty_connect_params import PtyConnectParams as PtyConnectParams
 from .pty_control_params import PtyControlParams as PtyControlParams
@@ -150,6 +151,7 @@ from .devbox_list_disk_snapshots_params import DevboxListDiskSnapshotsParams as 
 from .devbox_snapshot_disk_async_params import DevboxSnapshotDiskAsyncParams as DevboxSnapshotDiskAsyncParams
 from .devbox_write_file_contents_params import DevboxWriteFileContentsParams as DevboxWriteFileContentsParams
 from .devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView as DevboxAsyncExecutionDetailView
+from .devbox_create_gateway_token_params import DevboxCreateGatewayTokenParams as DevboxCreateGatewayTokenParams
 from .devbox_read_file_contents_response import DevboxReadFileContentsResponse as DevboxReadFileContentsResponse
 from .benchmark_run_list_scenario_runs_params import (
     BenchmarkRunListScenarioRunsParams as BenchmarkRunListScenarioRunsParams,

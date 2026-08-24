@@ -213,6 +213,7 @@ from runloop_api_client.types import (
     DevboxSnapshotListView,
     DevboxSnapshotView,
     DevboxView,
+    GatewayTokenView,
     McpTokenView,
     PtyTunnelView,
     TunnelView,
@@ -227,6 +228,7 @@ Methods:
 - <code title="get /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="post /v1/devboxes/{id}">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">DevboxView</a></code>
 - <code title="get /v1/devboxes">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">list</a>(\*\*<a href="src/runloop_api_client/types/devbox_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/devbox_view.py">SyncDevboxesCursorIDPage[DevboxView]</a></code>
+- <code title="post /v1/devboxes/{id}/create_gateway_token">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_gateway_token</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_create_gateway_token_params.py">params</a>) -> <a href="./src/runloop_api_client/types/gateway_token_view.py">GatewayTokenView</a></code>
 - <code title="post /v1/devboxes/{id}/create_mcp_token">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_mcp_token</a>(id, \*\*<a href="src/runloop_api_client/types/devbox_create_mcp_token_params.py">params</a>) -> <a href="./src/runloop_api_client/types/mcp_token_view.py">McpTokenView</a></code>
 - <code title="post /v1/devboxes/{id}/create_pty_tunnel">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_pty_tunnel</a>(id) -> <a href="./src/runloop_api_client/types/pty_tunnel_view.py">PtyTunnelView</a></code>
 - <code title="post /v1/devboxes/{id}/create_ssh_key">client.devboxes.<a href="./src/runloop_api_client/resources/devboxes/devboxes.py">create_ssh_key</a>(id) -> <a href="./src/runloop_api_client/types/devbox_create_ssh_key_response.py">DevboxCreateSSHKeyResponse</a></code>
