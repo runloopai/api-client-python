@@ -28,6 +28,7 @@ from ...types import (
     devbox_enable_tunnel_params,
     devbox_execute_async_params,
     devbox_snapshot_disk_params,
+    devbox_create_mcp_token_params,
     devbox_wait_for_command_params,
     devbox_read_file_contents_params,
     devbox_list_disk_snapshots_params,
@@ -80,6 +81,7 @@ from .disk_snapshots import (
 )
 from ...types.devbox_view import DevboxView
 from ...types.tunnel_view import TunnelView
+from ...types.mcp_token_view import McpTokenView
 from ...types.pty_tunnel_view import PtyTunnelView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
@@ -411,6 +413,66 @@ class DevboxesResource(SyncAPIResource):
                 ),
             ),
             model=DevboxView,
+        )
+
+    def create_mcp_token(
+        self,
+        id: str,
+        *,
+        mcp_config: str,
+        secret: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> McpTokenView:
+        """
+        [Beta] Mint a token that lets a running Devbox reach an upstream MCP (Model
+        Context Protocol) server through the Runloop MCP hub, using the credential in
+        the supplied secret. Tool access is limited to the MCP config's allowed_tools,
+        and the credential itself is never exposed to the Devbox.
+
+        The token is bound to this Devbox and is only accepted for requests that
+        originate from it. Nothing is stored on the Devbox: the token is returned to the
+        caller and is not re-issued when the Devbox is resumed.
+
+        Args:
+          mcp_config: The MCP config to use. Can be an MCP config ID (mcp_xxx) or name.
+
+          secret: The secret containing the MCP server credential. Can be a secret ID or name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/devboxes/{id}/create_mcp_token", id=id),
+            body=maybe_transform(
+                {
+                    "mcp_config": mcp_config,
+                    "secret": secret,
+                },
+                devbox_create_mcp_token_params.DevboxCreateMcpTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=McpTokenView,
         )
 
     def create_pty_tunnel(
@@ -1892,6 +1954,66 @@ class AsyncDevboxesResource(AsyncAPIResource):
             model=DevboxView,
         )
 
+    async def create_mcp_token(
+        self,
+        id: str,
+        *,
+        mcp_config: str,
+        secret: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> McpTokenView:
+        """
+        [Beta] Mint a token that lets a running Devbox reach an upstream MCP (Model
+        Context Protocol) server through the Runloop MCP hub, using the credential in
+        the supplied secret. Tool access is limited to the MCP config's allowed_tools,
+        and the credential itself is never exposed to the Devbox.
+
+        The token is bound to this Devbox and is only accepted for requests that
+        originate from it. Nothing is stored on the Devbox: the token is returned to the
+        caller and is not re-issued when the Devbox is resumed.
+
+        Args:
+          mcp_config: The MCP config to use. Can be an MCP config ID (mcp_xxx) or name.
+
+          secret: The secret containing the MCP server credential. Can be a secret ID or name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/devboxes/{id}/create_mcp_token", id=id),
+            body=await async_maybe_transform(
+                {
+                    "mcp_config": mcp_config,
+                    "secret": secret,
+                },
+                devbox_create_mcp_token_params.DevboxCreateMcpTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=McpTokenView,
+        )
+
     async def create_pty_tunnel(
         self,
         id: str,
@@ -3070,6 +3192,9 @@ class DevboxesResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             devboxes.list,
         )
+        self.create_mcp_token = to_raw_response_wrapper(
+            devboxes.create_mcp_token,
+        )
         self.create_pty_tunnel = to_raw_response_wrapper(
             devboxes.create_pty_tunnel,
         )
@@ -3168,6 +3293,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
+        )
+        self.create_mcp_token = async_to_raw_response_wrapper(
+            devboxes.create_mcp_token,
         )
         self.create_pty_tunnel = async_to_raw_response_wrapper(
             devboxes.create_pty_tunnel,
@@ -3268,6 +3396,9 @@ class DevboxesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.create_mcp_token = to_streamed_response_wrapper(
+            devboxes.create_mcp_token,
+        )
         self.create_pty_tunnel = to_streamed_response_wrapper(
             devboxes.create_pty_tunnel,
         )
@@ -3366,6 +3497,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
+        )
+        self.create_mcp_token = async_to_streamed_response_wrapper(
+            devboxes.create_mcp_token,
         )
         self.create_pty_tunnel = async_to_streamed_response_wrapper(
             devboxes.create_pty_tunnel,
