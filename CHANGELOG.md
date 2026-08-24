@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.31.0 (2026-08-24)
+
+Full Changelog: [v1.30.0...v1.31.0](https://github.com/runloopai/api-client-python/compare/v1.30.0...v1.31.0)
+
+### Features
+
+* **mux:** mint agent gateway tokens for running devboxes ([#10872](https://github.com/runloopai/api-client-python/issues/10872)) ([b7763ba](https://github.com/runloopai/api-client-python/commit/b7763baa74ba6cabc3b061e606237154e871ef9d))
+* **mux:** mint MCP tokens for running devboxes ([#10871](https://github.com/runloopai/api-client-python/issues/10871)) ([a02b75f](https://github.com/runloopai/api-client-python/commit/a02b75f9c6df9e93ba1495b88c4ce0ae7cb95835))
+
+
+### Chores
+
+* configure new SDK language ([db64ef6](https://github.com/runloopai/api-client-python/commit/db64ef64bf7e0354e589ffe036a44ef9c7ba4c67))
+
 ## 1.30.0 (2026-08-20)
 
 Full Changelog: [v1.29.0...v1.30.0](https://github.com/runloopai/api-client-python/compare/v1.29.0...v1.30.0)
