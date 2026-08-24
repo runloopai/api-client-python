@@ -32,6 +32,7 @@ from .scenario_view import ScenarioView as ScenarioView
 from .axon_list_view import AxonListView as AxonListView
 from .benchmark_view import BenchmarkView as BenchmarkView
 from .blueprint_view import BlueprintView as BlueprintView
+from .mcp_token_view import McpTokenView as McpTokenView
 from .agent_list_view import AgentListView as AgentListView
 from .axon_event_view import AxonEventView as AxonEventView
 from .mcp_config_view import McpConfigView as McpConfigView
@@ -140,6 +141,7 @@ from .scoring_function_result_view import ScoringFunctionResultView as ScoringFu
 from .scenario_definition_list_view import ScenarioDefinitionListView as ScenarioDefinitionListView
 from .scoring_contract_update_param import ScoringContractUpdateParam as ScoringContractUpdateParam
 from .blueprint_build_logs_list_view import BlueprintBuildLogsListView as BlueprintBuildLogsListView
+from .devbox_create_mcp_token_params import DevboxCreateMcpTokenParams as DevboxCreateMcpTokenParams
 from .devbox_create_ssh_key_response import DevboxCreateSSHKeyResponse as DevboxCreateSSHKeyResponse
 from .devbox_wait_for_command_params import DevboxWaitForCommandParams as DevboxWaitForCommandParams
 from .devbox_read_file_contents_params import DevboxReadFileContentsParams as DevboxReadFileContentsParams
