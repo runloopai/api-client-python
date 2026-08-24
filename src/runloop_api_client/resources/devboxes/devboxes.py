@@ -37,6 +37,7 @@ from ...types import (
     devbox_list_disk_snapshots_params,
     devbox_snapshot_disk_async_params,
     devbox_write_file_contents_params,
+    devbox_create_gateway_token_params,
 )
 from ..._files import deepcopy_with_paths
 from ..._types import Body, Omit, Query, Headers, NotGiven, FileTypes, omit, not_given
@@ -94,6 +95,7 @@ from ...types.tunnel_view import TunnelView
 from ...lib.wait_for_status import wait_for_status, async_wait_for_status
 from ...types.mcp_token_view import McpTokenView
 from ...types.pty_tunnel_view import PtyTunnelView
+from ...types.gateway_token_view import GatewayTokenView
 from ...types.shared_params.mount import Mount
 from ...types.devbox_snapshot_view import DevboxSnapshotView
 from ...types.shared.launch_parameters import LaunchParameters as SharedLaunchParameters
@@ -608,6 +610,66 @@ class DevboxesResource(SyncAPIResource):
                 ),
             ),
             model=DevboxView,
+        )
+
+    def create_gateway_token(
+        self,
+        id: str,
+        *,
+        gateway: str,
+        secret: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> GatewayTokenView:
+        """
+        Mint a token that lets a running Devbox call an external API through the Runloop
+        agent gateway, using the credential in the supplied secret. The gateway applies
+        the credential to proxied requests, so the real API key is never exposed to the
+        Devbox.
+
+        The token is bound to this Devbox and is only accepted for requests that
+        originate from it. Nothing is stored on the Devbox: the token is returned to the
+        caller and is not re-issued when the Devbox is resumed.
+
+        Args:
+          gateway: The gateway config to use. Can be a gateway config ID (gwc_xxx) or name.
+
+          secret: The secret containing the credential. Can be a secret ID or name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/devboxes/{id}/create_gateway_token", id=id),
+            body=maybe_transform(
+                {
+                    "gateway": gateway,
+                    "secret": secret,
+                },
+                devbox_create_gateway_token_params.DevboxCreateGatewayTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=GatewayTokenView,
         )
 
     def create_mcp_token(
@@ -2386,6 +2448,66 @@ class AsyncDevboxesResource(AsyncAPIResource):
             model=DevboxView,
         )
 
+    async def create_gateway_token(
+        self,
+        id: str,
+        *,
+        gateway: str,
+        secret: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> GatewayTokenView:
+        """
+        Mint a token that lets a running Devbox call an external API through the Runloop
+        agent gateway, using the credential in the supplied secret. The gateway applies
+        the credential to proxied requests, so the real API key is never exposed to the
+        Devbox.
+
+        The token is bound to this Devbox and is only accepted for requests that
+        originate from it. Nothing is stored on the Devbox: the token is returned to the
+        caller and is not re-issued when the Devbox is resumed.
+
+        Args:
+          gateway: The gateway config to use. Can be a gateway config ID (gwc_xxx) or name.
+
+          secret: The secret containing the credential. Can be a secret ID or name.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/devboxes/{id}/create_gateway_token", id=id),
+            body=await async_maybe_transform(
+                {
+                    "gateway": gateway,
+                    "secret": secret,
+                },
+                devbox_create_gateway_token_params.DevboxCreateGatewayTokenParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=GatewayTokenView,
+        )
+
     async def create_mcp_token(
         self,
         id: str,
@@ -3700,6 +3822,9 @@ class DevboxesResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             devboxes.list,
         )
+        self.create_gateway_token = to_raw_response_wrapper(
+            devboxes.create_gateway_token,
+        )
         self.create_mcp_token = to_raw_response_wrapper(
             devboxes.create_mcp_token,
         )
@@ -3801,6 +3926,9 @@ class AsyncDevboxesResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             devboxes.list,
+        )
+        self.create_gateway_token = async_to_raw_response_wrapper(
+            devboxes.create_gateway_token,
         )
         self.create_mcp_token = async_to_raw_response_wrapper(
             devboxes.create_mcp_token,
@@ -3904,6 +4032,9 @@ class DevboxesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devboxes.list,
         )
+        self.create_gateway_token = to_streamed_response_wrapper(
+            devboxes.create_gateway_token,
+        )
         self.create_mcp_token = to_streamed_response_wrapper(
             devboxes.create_mcp_token,
         )
@@ -4005,6 +4136,9 @@ class AsyncDevboxesResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             devboxes.list,
+        )
+        self.create_gateway_token = async_to_streamed_response_wrapper(
+            devboxes.create_gateway_token,
         )
         self.create_mcp_token = async_to_streamed_response_wrapper(
             devboxes.create_mcp_token,
