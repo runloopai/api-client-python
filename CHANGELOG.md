@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.31.1 (2026-08-25)
+
+Full Changelog: [v1.31.0...v1.31.1](https://github.com/runloopai/api-client-python/compare/v1.31.0...v1.31.1)
+
+### Bug Fixes
+
+* **docs:** deploy documentation for releases ([#835](https://github.com/runloopai/api-client-python/issues/835)) ([68023fb](https://github.com/runloopai/api-client-python/commit/68023fb7c86dd5c9d23360fb8f4e680914d99e52))
+
 ## [1.31.0](https://github.com/runloopai/api-client-python/compare/v1.30.0...v1.31.0) (2026-08-25)
 
 
