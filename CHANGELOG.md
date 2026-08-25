@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.31.0](https://github.com/runloopai/api-client-python/compare/v1.30.0...v1.31.0) (2026-08-25)
+
+
+### Features
+
+* initial stlc build ([9591d74](https://github.com/runloopai/api-client-python/commit/9591d741d3e840a7f7eadb0935989af1ea78d337))
+* **mux:** mint agent gateway tokens for running devboxes ([#10872](https://github.com/runloopai/api-client-python/issues/10872)) ([8ca74f9](https://github.com/runloopai/api-client-python/commit/8ca74f9390524e2b99791a6967dd8e355df0cff8))
+* **mux:** mint MCP tokens for running devboxes ([#10871](https://github.com/runloopai/api-client-python/issues/10871)) ([7edf2e9](https://github.com/runloopai/api-client-python/commit/7edf2e9daa607705070df22c02d3e95a1fb13a60))
+
+
+### Bug Fixes
+
+* **lint:** sort the devboxes import block ([22bc6c2](https://github.com/runloopai/api-client-python/commit/22bc6c22f41c0db8b50df3f264e47e9b6b5e1e11))
+* **release:** use stable versioning instead of prerelease ([3d2cf64](https://github.com/runloopai/api-client-python/commit/3d2cf6463a9556dcc0bb2eddc397e5d2bdf7d69b))
+
+
+### Chores
+
+* sync uv.lock to 1.30.0 ([d7d2993](https://github.com/runloopai/api-client-python/commit/d7d29930aa3a460d9a0dac9651860b11292c8769))
+
 ## 1.30.0 (2026-08-20)
 
 Full Changelog: [v1.29.0...v1.30.0](https://github.com/runloopai/api-client-python/compare/v1.29.0...v1.30.0)
