@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import AsyncMock
+from unittest.mock import Mock, AsyncMock, MagicMock
 
 import httpx
 import pytest
@@ -139,6 +139,30 @@ class TestAsyncFileInterface:
 
         assert result == b"file content"
         mock_async_client.devboxes.download_file.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_download_to_file(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
+        """Test streaming file download writes to disk without buffering."""
+        dest = tmp_path / "out.bin"
+
+        def _stream(path: object, *args: object, **kwargs: object) -> None:  # noqa: ARG001
+            with open(path, "wb") as f:  # type: ignore[arg-type]
+                f.write(b"streamed content")
+
+        mock_response = Mock()
+        mock_response.stream_to_file = AsyncMock(side_effect=_stream)
+        cm = MagicMock()
+        cm.__aenter__ = AsyncMock(return_value=mock_response)
+        cm.__aexit__ = AsyncMock(return_value=None)
+        mock_async_client.devboxes.with_streaming_response.download_file = Mock(return_value=cm)
+
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+        await devbox.file.download_to_file(dest, path="/path/to/file")
+
+        assert dest.read_bytes() == b"streamed content"
+        mock_response.stream_to_file.assert_awaited_once()
+        call_kwargs = mock_async_client.devboxes.with_streaming_response.download_file.call_args[1]
+        assert call_kwargs["path"] == "/path/to/file"
 
     @pytest.mark.asyncio
     async def test_upload(self, mock_async_client: AsyncMock, tmp_path: Path) -> None:
