@@ -79,6 +79,7 @@ from .secret_create_params import SecretCreateParams as SecretCreateParams
 from .secret_update_params import SecretUpdateParams as SecretUpdateParams
 from .benchmark_list_params import BenchmarkListParams as BenchmarkListParams
 from .blueprint_list_params import BlueprintListParams as BlueprintListParams
+from .blueprint_upload_view import BlueprintUploadView as BlueprintUploadView
 from .devbox_execute_params import DevboxExecuteParams as DevboxExecuteParams
 from .blueprint_preview_view import BlueprintPreviewView as BlueprintPreviewView
 from .devbox_shutdown_params import DevboxShutdownParams as DevboxShutdownParams
@@ -107,6 +108,7 @@ from .object_download_url_view import ObjectDownloadURLView as ObjectDownloadURL
 from .axon_subscribe_sse_params import AxonSubscribeSseParams as AxonSubscribeSseParams
 from .benchmark_job_list_params import BenchmarkJobListParams as BenchmarkJobListParams
 from .benchmark_run_list_params import BenchmarkRunListParams as BenchmarkRunListParams
+from .blueprint_register_params import BlueprintRegisterParams as BlueprintRegisterParams
 from .devbox_send_std_in_result import DevboxSendStdInResult as DevboxSendStdInResult
 from .devbox_snapshot_list_view import DevboxSnapshotListView as DevboxSnapshotListView
 from .devbox_upload_file_params import DevboxUploadFileParams as DevboxUploadFileParams
