@@ -1,8 +1,19 @@
 [project]
 name = "runloop_api_client"
 version = "1.31.0"
-description = "The official Python library for the runloop API"
+description = "Official Python SDK for Runloop — secure Linux sandboxes (Devboxes) where AI agents run code, edit files, and expose ports"
 dynamic = ["readme"]
+keywords = [
+  "runloop",
+  "sandbox",
+  "devbox",
+  "ai-agents",
+  "code-execution",
+  "code-interpreter",
+  "agent-runtime",
+  "microvm",
+  "llm",
+]
 license = "MIT"
 authors = [
 { name = "Runloop", email = "support@runloop.ai" },
@@ -34,13 +45,15 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
   "Operating System :: Microsoft :: Windows",
   "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "License :: OSI Approved :: MIT License"
 ]
 
 [project.urls]
-Homepage = "https://github.com/runloopai/api-client-python"
+Homepage = "https://runloop.ai"
 Repository = "https://github.com/runloopai/api-client-python"
-Documentation = "https://runloopai.github.io/api-client-python/"
+Documentation = "https://docs.runloop.ai"
+"API Reference" = "https://runloopai.github.io/api-client-python/"
 
 [project.optional-dependencies]
 aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.9"]
