@@ -1,51 +1,72 @@
-# Runloop Python API library
+# Runloop Python SDK — secure sandboxes for AI agents
 
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/runloop_api_client.svg?label=pypi%20(stable))](https://pypi.org/project/runloop_api_client/)
 
-The Runloop Python library provides convenient access to the Runloop REST API from any Python 3.9+
-application. The library includes type definitions for all request params and response fields,
-and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
+Run AI agents and AI-generated code in **Devboxes**: isolated Linux sandboxes with a shell, a
+filesystem, networking, and optional GPUs. Use this library to create a sandbox, run commands in it,
+read and write files, expose ports over HTTPS, and snapshot the whole machine so you can pause and
+resume it later.
 
-It is generated with [Stainless](https://www.stainless.com/).
+Why teams pick Runloop:
 
-## Documentation
-
-The REST API documentation can be found on
-[runloop.ai](https://runloop.ai). The full API of this library can be found in
-[api.md](https://github.com/runloopai/api-client-python/blob/main/api.md).
+- **Safe by default.** Every devbox is isolated at both the VM and container level, so untrusted
+  agent output never touches your infrastructure.
+- **Built for long-running agents.** Devboxes persist for as long as you need, and snapshots let you
+  suspend, resume, and branch an agent's machine state.
+- **Fast starts.** Blueprints bake your dependencies into a reusable image so agents boot in seconds
+  instead of installing tooling every run.
+- **Ready for production.** Secrets injection, AI gateways, network policies, and VPC deployment are
+  part of the platform.
+- **Measurable.** Built-in benchmarks and evaluations score agent runs so you can tell whether a
+  change actually helped.
 
 ## Installation
 
 ```sh
-# install from PyPI
 pip install runloop_api_client
 ```
 
-## Usage
+## Quickstart
 
-The full API of this library can be found in [api.md](api.md).
-
-### Object-Oriented SDK
-
-For a higher-level, Pythonic interface, check out the new [`RunloopSDK`](README-SDK.md) which layers an object-oriented API on top of the generated client (including synchronous and asynchronous variants).
+Set `RUNLOOP_API_KEY` in your environment ([get a free key](https://runloop.ai) — new accounts start
+with $50 in credits), then:
 
 ```python
 from runloop_api_client import RunloopSDK
 
 runloop = RunloopSDK()  # Uses RUNLOOP_API_KEY environment variable by default
 
-# Create a devbox and execute commands with a clean, object-oriented interface
+# Create a sandbox, run a command in it, and clean it up on exit.
 with runloop.devbox.create(name="my-devbox") as devbox:
-    result = devbox.cmd.exec("echo 'Hello from Runloop!'")
+    devbox.file.write(file_path="main.py", contents="print('hello from a sandbox')")
+    result = devbox.cmd.exec("python main.py")
     print(result.stdout())
 ```
 
-**See the [SDK documentation](README-SDK.md) for complete examples and API reference.**
+**See the [SDK documentation](README-SDK.md) for complete examples and API reference**, and
+[docs.runloop.ai](https://docs.runloop.ai) for platform guides. Agents and LLM tooling can read
+[llms.txt](llms.txt) for a condensed overview of the whole platform.
+
+## Documentation
+
+- [Platform documentation](https://docs.runloop.ai) — devboxes, blueprints, snapshots, tunnels, agents, benchmarks
+- [`RunloopSDK` reference](README-SDK.md) — the high-level, object-oriented Python interface
+- [api.md](https://github.com/runloopai/api-client-python/blob/main/api.md) — the full generated REST surface
+- [examples/](examples) — runnable end-to-end scripts
+- [llms.txt](llms.txt) — condensed platform summary for AI coding agents
+
+## Usage
+
+This library ships two layers: the object-oriented `RunloopSDK` shown above, and the generated REST
+client it is built on. Both have synchronous and asynchronous variants, include type definitions for
+all request params and response fields, and are powered by
+[httpx](https://github.com/encode/httpx). The generated client is produced with
+[Stainless](https://www.stainless.com/).
 
 ### REST API Client
 
-Alternatively, you can use the generated REST API client directly:
+To use the generated REST API client directly:
 
 ```python
 import os
