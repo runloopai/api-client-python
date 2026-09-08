@@ -122,6 +122,7 @@ from runloop_api_client.types import (
     AxonCreateParams,
     AxonEventView,
     AxonListView,
+    AxonUpdateParams,
     AxonView,
     PublishParams,
     PublishResultView,
@@ -132,6 +133,7 @@ Methods:
 
 - <code title="post /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">create</a>(\*\*<a href="src/runloop_api_client/types/axon_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
 - <code title="get /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
+- <code title="post /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/axon_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">AxonView</a></code>
 - <code title="get /v1/axons">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">list</a>(\*\*<a href="src/runloop_api_client/types/axon_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/axon_view.py">SyncAxonsCursorIDPage[AxonView]</a></code>
 - <code title="delete /v1/axons/{id}">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">delete</a>(id) -> object</code>
 - <code title="post /v1/axons/{id}/publish">client.axons.<a href="./src/runloop_api_client/resources/axons/axons.py">publish</a>(id, \*\*<a href="src/runloop_api_client/types/axon_publish_params.py">params</a>) -> <a href="./src/runloop_api_client/types/publish_result_view.py">PublishResultView</a></code>

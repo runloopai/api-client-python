@@ -50,6 +50,7 @@ from .agent_list_params import AgentListParams as AgentListParams
 from .scenario_run_view import ScenarioRunView as ScenarioRunView
 from .allowed_cidr_param import AllowedCidrParam as AllowedCidrParam
 from .axon_create_params import AxonCreateParams as AxonCreateParams
+from .axon_update_params import AxonUpdateParams as AxonUpdateParams
 from .benchmark_job_view import BenchmarkJobView as BenchmarkJobView
 from .benchmark_run_view import BenchmarkRunView as BenchmarkRunView
 from .devbox_list_params import DevboxListParams as DevboxListParams
