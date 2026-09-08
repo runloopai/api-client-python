@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Dict, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -75,6 +75,7 @@ class AxonsResource(SyncAPIResource):
     def create(
         self,
         *,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -88,6 +89,8 @@ class AxonsResource(SyncAPIResource):
         [Beta] Create a new axon.
 
         Args:
+          metadata: User defined metadata to attach to the axon for organization.
+
           name: (Optional) Name for the axon.
 
           extra_headers: Send extra headers
@@ -102,7 +105,13 @@ class AxonsResource(SyncAPIResource):
         """
         return self._post(
             "/v1/axons",
-            body=maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
+            body=maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                axon_create_params.AxonCreateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -390,6 +399,7 @@ class AsyncAxonsResource(AsyncAPIResource):
     async def create(
         self,
         *,
+        metadata: Optional[Dict[str, str]] | Omit = omit,
         name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -403,6 +413,8 @@ class AsyncAxonsResource(AsyncAPIResource):
         [Beta] Create a new axon.
 
         Args:
+          metadata: User defined metadata to attach to the axon for organization.
+
           name: (Optional) Name for the axon.
 
           extra_headers: Send extra headers
@@ -417,7 +429,13 @@ class AsyncAxonsResource(AsyncAPIResource):
         """
         return await self._post(
             "/v1/axons",
-            body=await async_maybe_transform({"name": name}, axon_create_params.AxonCreateParams),
+            body=await async_maybe_transform(
+                {
+                    "metadata": metadata,
+                    "name": name,
+                },
+                axon_create_params.AxonCreateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
