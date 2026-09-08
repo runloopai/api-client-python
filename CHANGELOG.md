@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.32.0](https://github.com/runloopai/api-client-python/compare/v1.31.0...v1.32.0) (2026-09-08)
+
+
+### Features
+
+* **axon:** accept user metadata at creation ([d2a4242](https://github.com/runloopai/api-client-python/commit/d2a42420be6a0b355a5511eefedc83044d7f11fe))
+* **axon:** add axon metadata update endpoint ([f66ff15](https://github.com/runloopai/api-client-python/commit/f66ff15436bf522020ebc8dd5b891fd21f0081af))
+* **axon:** filter axon lists by metadata and add metadata discovery endpoints ([a8dc212](https://github.com/runloopai/api-client-python/commit/a8dc212b840327a430d7f98f45172fd110f7a9f6))
+* **stlc:** automate SDK generation ([a33c2a4](https://github.com/runloopai/api-client-python/commit/a33c2a470b6701da37a2c9869d9216d67daa0d2a))
+
+
+### Bug Fixes
+
+* **ci:** authenticate SDK back-sync pushes ([#4](https://github.com/runloopai/api-client-python/issues/4)) ([04cae15](https://github.com/runloopai/api-client-python/commit/04cae15abe12cbf205b1d645592a89c9a530752f))
+* **docs:** deploy documentation for releases ([#835](https://github.com/runloopai/api-client-python/issues/835)) ([68023fb](https://github.com/runloopai/api-client-python/commit/68023fb7c86dd5c9d23360fb8f4e680914d99e52))
+
+
+### Chores
+
+* **stlc:** run Promote SDKs on a daily schedule ([582ab9d](https://github.com/runloopai/api-client-python/commit/582ab9d957684efadcf585f3632ec58084232bcc))
+* **stlc:** run Promote SDKs on a daily schedule ([63c6ef1](https://github.com/runloopai/api-client-python/commit/63c6ef146a0ec0ea5cf5487f01e4ae51ca0e2b54))
+
+
+### Documentation
+
+* **readme:** lead with the sandbox category and add package keywords ([#840](https://github.com/runloopai/api-client-python/issues/840)) ([8353d09](https://github.com/runloopai/api-client-python/commit/8353d097d2ae185cf9082f4c59db468a6fcd15c8))
+
 ## [1.31.0](https://github.com/runloopai/api-client-python/compare/v1.30.0...v1.31.0) (2026-08-25)
 
 
