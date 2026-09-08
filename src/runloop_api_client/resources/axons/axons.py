@@ -161,6 +161,8 @@ class AxonsResource(SyncAPIResource):
         id: str | Omit = omit,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        metadata_key: str | Omit = omit,
+        metadata_key_in: str | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -181,6 +183,11 @@ class AxonsResource(SyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          metadata_key: Filter axons by metadata key-value pair. Can be used multiple times for
+              different keys.
+
+          metadata_key_in: Filter axons by metadata key with multiple possible values (OR condition).
 
           name: Filter by axon name (prefix match supported).
 
@@ -209,6 +216,8 @@ class AxonsResource(SyncAPIResource):
                         "id": id,
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "metadata_key": metadata_key,
+                        "metadata_key_in": metadata_key_in,
                         "name": name,
                         "search": search,
                         "starting_after": starting_after,
@@ -485,6 +494,8 @@ class AsyncAxonsResource(AsyncAPIResource):
         id: str | Omit = omit,
         include_total_count: bool | Omit = omit,
         limit: int | Omit = omit,
+        metadata_key: str | Omit = omit,
+        metadata_key_in: str | Omit = omit,
         name: str | Omit = omit,
         search: str | Omit = omit,
         starting_after: str | Omit = omit,
@@ -505,6 +516,11 @@ class AsyncAxonsResource(AsyncAPIResource):
               the count query for better performance on large datasets.
 
           limit: The limit of items to return. Default is 20. Max is 5000.
+
+          metadata_key: Filter axons by metadata key-value pair. Can be used multiple times for
+              different keys.
+
+          metadata_key_in: Filter axons by metadata key with multiple possible values (OR condition).
 
           name: Filter by axon name (prefix match supported).
 
@@ -533,6 +549,8 @@ class AsyncAxonsResource(AsyncAPIResource):
                         "id": id,
                         "include_total_count": include_total_count,
                         "limit": limit,
+                        "metadata_key": metadata_key,
+                        "metadata_key_in": metadata_key_in,
                         "name": name,
                         "search": search,
                         "starting_after": starting_after,
