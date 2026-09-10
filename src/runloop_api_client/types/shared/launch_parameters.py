@@ -42,7 +42,7 @@ class LaunchParameters(BaseModel):
     This field is ignored.
     """
 
-    custom_cpu_cores: Optional[int] = None
+    custom_cpu_cores: Optional[float] = None
     """Custom CPU cores. Must be 0.5, 1, or a multiple of 2. Max is 16."""
 
     custom_disk_size: Optional[int] = None
