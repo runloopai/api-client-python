@@ -142,7 +142,11 @@ class Tunnel(TypedDict, total=False):
     """
 
     auth_mode: Optional[Literal["open", "authenticated"]]
-    """Authentication mode for the tunnel. Defaults to 'public' if not specified."""
+    """Authentication mode for the tunnel.
+
+    Defaults to open if omitted: the hostname is a public capability and does not
+    require a tunnel bearer token.
+    """
 
     http_keep_alive: Optional[bool]
     """
