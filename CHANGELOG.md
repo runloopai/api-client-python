@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.32.1](https://github.com/runloopai/api-client-python/compare/v1.32.0...v1.32.1) (2026-09-12)
+
+
+### Bug Fixes
+
+* **api:** allow CUSTOM_SIZE with 0.5 CPU cores ([4c0df1f](https://github.com/runloopai/api-client-python/commit/4c0df1f95fa7f4d1d10bb72b3ed274333139ef61))
+
+
+### Chores
+
+* **security:** Improve security docs and tighten JWT audience ([53adee2](https://github.com/runloopai/api-client-python/commit/53adee2578b0040853a9d1a13e8c14b48b9738a8))
+
 ## [1.32.0](https://github.com/runloopai/api-client-python/compare/v1.31.0...v1.32.0) (2026-09-08)
 
 
