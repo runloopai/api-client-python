@@ -35,5 +35,11 @@ class ObjectView(BaseModel):
     size_bytes: Optional[int] = None
     """The size of the Object content in bytes (null until uploaded)."""
 
+    upload_headers: Optional[Dict[str, str]] = None
+    """
+    HTTP headers required when uploading to upload_url (only present when needed on
+    create).
+    """
+
     upload_url: Optional[str] = None
-    """Presigned URL for uploading content to S3 (only present on create)."""
+    """Presigned URL for uploading content with HTTP PUT (only present on create)."""
