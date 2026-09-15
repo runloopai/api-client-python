@@ -22,9 +22,7 @@ class TestRunloopSDKInitialization:
         assert sdk_client.blueprint is not None
         assert sdk_client.snapshot is not None
         assert sdk_client.storage_object is not None
-        assert sdk_client.scorer is not None
         assert sdk_client.agent is not None
-        assert sdk_client.scenario is not None
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     def test_legacy_api_access(self, sdk_client: RunloopSDK) -> None:

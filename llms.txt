@@ -25,7 +25,7 @@
 
 - **Prefer `AsyncRunloopSDK` over `RunloopSDK`** for better concurrency and performance; all SDK methods have async equivalents
 - Use `async with await runloop.devbox.create()` for automatic cleanup via context manager
-- For resources without SDK coverage (e.g., benchmarks), use `runloop.api.*` as a fallback
+- For resources without SDK coverage, use `runloop.api.*` as a fallback
 - Use `await devbox.cmd.exec('command')` for commands expected to return immediately (e.g., `echo`, `pwd`, `cat`)—blocks until completion, returns `ExecutionResult` with stdout/stderr
 - Use `await devbox.cmd.exec_async('command')` for long-running or background processes (servers, watchers, builds)—returns immediately with `Execution` handle to check status, get result, or kill
 - Both `exec` and `exec_async` support streaming callbacks (`stdout`, `stderr`, `output`) for real-time output

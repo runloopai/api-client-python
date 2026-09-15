@@ -1,9 +1,8 @@
-from typing import Union, Literal, Callable, Optional
+from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
 from ..types import (
     InputContext,
-    ScenarioView,
     AxonListParams,
     AgentListParams,
     AxonCreateParams,
@@ -13,15 +12,10 @@ from ..types import (
     AxonPublishParams,
     DevboxCreateParams,
     ObjectCreateParams,
-    ScenarioListParams,
-    BenchmarkListParams,
     BlueprintListParams,
     McpConfigListParams,
     ObjectDownloadParams,
-    ScenarioUpdateParams,
     AgentListPublicParams,
-    BenchmarkCreateParams,
-    BenchmarkUpdateParams,
     BlueprintCreateParams,
     McpConfigCreateParams,
     McpConfigUpdateParams,
@@ -37,17 +31,13 @@ from ..types import (
     NetworkPolicyUpdateParams,
     DevboxReadFileContentsParams,
     DevboxWriteFileContentsParams,
-    BenchmarkRunListScenarioRunsParams,
 )
 from .._types import Body, Query, Headers, Timeout, NotGiven
 from ..lib.polling import PollingConfig
 from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
-from ..types.scenarios import ScorerListParams, ScorerCreateParams, ScorerUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.axons.sql_batch_params import SqlBatchParams
 from ..types.axons.sql_query_params import SqlQueryParams
-from ..types.scenario_start_run_params import ScenarioStartRunBaseParams
-from ..types.benchmark_start_run_params import BenchmarkSelfStartRunParams
 from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 
 LogCallback = Callable[[str], None]
@@ -172,18 +162,6 @@ class SDKObjectDownloadParams(ObjectDownloadParams, BaseRequestOptions):
     pass
 
 
-class SDKScorerCreateParams(ScorerCreateParams, LongRequestOptions):
-    pass
-
-
-class SDKScorerListParams(ScorerListParams, BaseRequestOptions):
-    pass
-
-
-class SDKScorerUpdateParams(ScorerUpdateParams, LongRequestOptions):
-    pass
-
-
 class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
     pass
 
@@ -216,69 +194,8 @@ class SDKAxonSqlBatchParams(SqlBatchParams, LongRequestOptions):
     pass
 
 
-class SDKScenarioListParams(ScenarioListParams, BaseRequestOptions):
-    pass
-
-
-class SDKScenarioUpdateParams(ScenarioUpdateParams, LongRequestOptions):
-    pass
-
-
-class SDKScenarioRunAsyncParams(ScenarioStartRunBaseParams, LongRequestOptions):
-    pass
-
-
-class SDKScenarioRunParams(ScenarioStartRunBaseParams, LongPollingRequestOptions):
-    pass
-
-
 class InputContextPreview(InputContext):
     problem_statement: Optional[str] = None  # type: ignore[assignment]
-    """The problem statement for the Scenario."""
-
-
-class ScenarioPreview(ScenarioView):
-    """Preview of scenario configuration with all fields optional."""
-
-    id: Optional[str] = None  # type: ignore[assignment]
-    """The ID of the Scenario."""
-
-    input_context: InputContextPreview  # type: ignore[assignment]
-    """The input context for the Scenario."""
-
-    status: Optional[Literal["active", "archived"]] = None  # type: ignore[assignment]
-    """Status is not set for previews."""
-
-
-class SDKBenchmarkCreateParams(BenchmarkCreateParams, LongRequestOptions):
-    pass
-
-
-class SDKBenchmarkListParams(BenchmarkListParams, BaseRequestOptions):
-    pass
-
-
-class SDKBenchmarkUpdateParams(BenchmarkUpdateParams, LongRequestOptions):
-    pass
-
-
-class SDKBenchmarkStartRunParams(BenchmarkSelfStartRunParams, LongRequestOptions):
-    pass
-
-
-class SDKBenchmarkListRunsParams(BaseRequestOptions, total=False):
-    limit: int
-    """The limit of items to return. Default is 20. Max is 5000."""
-
-    name: str
-    """Filter by name"""
-
-    starting_after: str
-    """Load the next page of data starting after the item with the given ID."""
-
-
-class SDKBenchmarkRunListScenarioRunsParams(BenchmarkRunListScenarioRunsParams, BaseRequestOptions):
-    pass
 
 
 class SDKNetworkPolicyCreateParams(NetworkPolicyCreateParams, LongRequestOptions):
