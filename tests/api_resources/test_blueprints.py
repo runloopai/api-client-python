@@ -5,12 +5,15 @@ from __future__ import annotations
 import os
 from typing import Any, cast
 
+import httpx
 import pytest
+from respx import MockRouter
 
 from tests.utils import assert_matches_type
 from runloop_api_client import Runloop, AsyncRunloop
 from runloop_api_client.types import (
     BlueprintView,
+    BlueprintUploadView,
     BlueprintPreviewView,
     BlueprintBuildLogsListView,
 )
@@ -21,8 +24,68 @@ from runloop_api_client.pagination import SyncBlueprintsCursorIDPage, AsyncBluep
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
+def mock_register(respx_mock: MockRouter) -> None:
+    respx_mock.post("/v1/blueprints/register").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "blueprint": {
+                    "id": "bpt_123",
+                    "name": "name",
+                    "status": "awaiting_upload",
+                    "state": "created",
+                    "create_time_ms": 0,
+                    "parameters": {"name": "name"},
+                },
+                "push_reference": "converter.runloop.ai/blueprints:bpt_123",
+            },
+        )
+    )
+
+
 class TestBlueprints:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_method_register(self, client: Runloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        upload = client.blueprints.register(name="name")
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+        assert upload.push_reference == "converter.runloop.ai/blueprints:bpt_123"
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_method_register_with_all_params(self, client: Runloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        upload = client.blueprints.register(
+            name="name",
+            launch_parameters={"architecture": "x86_64"},
+            metadata={"source": "upload"},
+        )
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_raw_response_register(self, client: Runloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        response = client.blueprints.with_raw_response.register(name="name")
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = response.parse()
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_streaming_response_register(self, client: Runloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        with client.blueprints.with_streaming_response.register(name="name") as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+            upload = response.parse()
+            assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_create(self, client: Runloop) -> None:
@@ -459,6 +522,50 @@ class TestAsyncBlueprints:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
+    register_parametrize = pytest.mark.parametrize(
+        "async_client", [False, True], indirect=True, ids=["loose", "strict"]
+    )
+
+    @register_parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_method_register(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        upload = await async_client.blueprints.register(name="name")
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+        assert upload.push_reference == "converter.runloop.ai/blueprints:bpt_123"
+
+    @register_parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_method_register_with_all_params(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        upload = await async_client.blueprints.register(
+            name="name",
+            launch_parameters={"architecture": "x86_64"},
+            metadata={"source": "upload"},
+        )
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @register_parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_raw_response_register(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        response = await async_client.blueprints.with_raw_response.register(name="name")
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        upload = await response.parse()
+        assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+    @register_parametrize
+    @pytest.mark.respx(base_url=base_url)
+    async def test_streaming_response_register(self, async_client: AsyncRunloop, respx_mock: MockRouter) -> None:
+        mock_register(respx_mock)
+        async with async_client.blueprints.with_streaming_response.register(name="name") as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+            upload = await response.parse()
+            assert_matches_type(BlueprintUploadView, upload, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_create(self, async_client: AsyncRunloop) -> None:

@@ -24,4 +24,4 @@ class BlueprintListPublicParams(TypedDict, total=False):
     """Load the next page of data starting after the item with the given ID."""
 
     status: str
-    """Filter by build status (queued, provisioning, building, failed, build_complete)"""
+    """Filter by build status (queued, provisioning, building, awaiting_upload, failed, build_complete)"""
