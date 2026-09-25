@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -23,11 +23,8 @@ from ..._response import (
     async_to_custom_streamed_response_wrapper,
 )
 from ...pagination import SyncBenchmarkRunsCursorIDPage, AsyncBenchmarkRunsCursorIDPage
-from ..._exceptions import RunloopError
-from ...lib.polling import PollingConfig, poll_until
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.scenarios import run_list_params
-from ...lib.polling_async import async_poll_until
 from ...types.scenario_run_view import ScenarioRunView
 
 __all__ = ["RunsResource", "AsyncRunsResource"]
@@ -324,143 +321,6 @@ class RunsResource(SyncAPIResource):
             cast_to=ScenarioRunView,
         )
 
-    def await_scored(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Wait for a scenario run to be scored.
-
-        Args:
-            id: The ID of the scenario run to wait for
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The scored scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-
-        def retrieve_run() -> ScenarioRunView:
-            return self.retrieve(
-                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            )
-
-        def is_done_scoring(run: ScenarioRunView) -> bool:
-            return run.state not in ["scoring"]
-
-        run = poll_until(retrieve_run, is_done_scoring, polling_config)
-
-        if run.state != "scored":
-            raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
-
-        return run
-
-    def score_and_await(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Score a scenario run and wait for it to be scored.
-
-        Args:
-            id: The ID of the scenario run to score and wait for
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The scored scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-        self.score(
-            id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-        return self.await_scored(
-            id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-    def score_and_complete(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Score a scenario run, wait for it to be scored, then complete it.
-
-        Args:
-            id: The ID of the scenario run to score, wait for, and complete
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The completed scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-        self.score_and_await(
-            id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-        return self.complete(
-            id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
 
 class AsyncRunsResource(AsyncAPIResource):
     @cached_property
@@ -751,143 +611,6 @@ class AsyncRunsResource(AsyncAPIResource):
                 idempotency_key=idempotency_key,
             ),
             cast_to=ScenarioRunView,
-        )
-
-    async def await_scored(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Wait for a scenario run to be scored.
-
-        Args:
-            id: The ID of the scenario run to wait for
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The scored scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-
-        async def retrieve_run() -> ScenarioRunView:
-            return await self.retrieve(
-                id, extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            )
-
-        def is_done_scoring(run: ScenarioRunView) -> bool:
-            return run.state not in ["scoring"]
-
-        run = await async_poll_until(retrieve_run, is_done_scoring, polling_config)
-
-        if run.state != "scored":
-            raise RunloopError(f"Scenario run entered non-scored state unexpectedly: {run.state}")
-
-        return run
-
-    async def score_and_await(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Score a scenario run and wait for it to be scored.
-
-        Args:
-            id: The ID of the scenario run to score and wait for
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The scored scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-        await self.score(
-            id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-        return await self.await_scored(
-            id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-    async def score_and_complete(
-        self,
-        id: str,
-        *,
-        polling_config: PollingConfig | None = None,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScenarioRunView:
-        """Score a scenario run, wait for it to be scored, then complete it.
-
-        Args:
-            id: The ID of the scenario run to score, wait for, and complete
-            polling_config: Optional polling configuration
-            extra_headers: Send extra headers
-            extra_query: Add additional query parameters to the request
-            extra_body: Add additional JSON properties to the request
-            timeout: Override the client-level default timeout for this request, in seconds
-
-        Returns:
-            The completed scenario run
-
-        Raises:
-            PollingTimeout: If polling times out before scenario run is scored
-            RunloopError: If scenario run enters a non-scored terminal state
-        """
-        await self.score_and_await(
-            id,
-            polling_config=polling_config,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
-        )
-
-        return await self.complete(
-            id,
-            extra_headers=extra_headers,
-            extra_query=extra_query,
-            extra_body=extra_body,
-            timeout=timeout,
         )
 
 

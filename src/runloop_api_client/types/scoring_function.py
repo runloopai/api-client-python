@@ -146,7 +146,7 @@ class ScoringFunction(BaseModel):
     """ScoringFunction specifies a method of scoring a Scenario."""
 
     name: str
-    """Name of scoring function. Names must only contain ``[a-zA-Z0-9_-]``."""
+    """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 
     scorer: Scorer
     """The scoring function to use for evaluating this scenario.
