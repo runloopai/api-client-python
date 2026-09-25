@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.0.0](https://github.com/runloopai/api-client-python/compare/v1.32.0...v2.0.0) (2026-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove benchmark identities and shared provisioning behavior
+* **api:** remove the benchmark and scenario APIs
+* **sdk:** drop InputContextPreview
+* **sdk:** drop custom edits to generated benchmark and scenario files
+* **sdk:** remove hosted benchmark and scenario wrappers
+
+### Features
+
+* **api:** remove the benchmark and scenario APIs ([fe3aca1](https://github.com/runloopai/api-client-python/commit/fe3aca1d53f2f5ad3dc48da321bbb0d01c7a03f7))
+* implement Azure storage, runtime secrets, and service lifecycle coverage ([6d46b7b](https://github.com/runloopai/api-client-python/commit/6d46b7b58c770af8fe548cb270530cd083d0f5b4))
+* remove benchmark identities and shared provisioning behavior ([9922030](https://github.com/runloopai/api-client-python/commit/9922030a5057e3b01c656eb1ab708d1cff4d41e8))
+* **sdk:** remove hosted benchmark and scenario wrappers ([f14c4c2](https://github.com/runloopai/api-client-python/commit/f14c4c2aad5ec0e76a21538fac5fab58d08f1964))
+
+
+### Bug Fixes
+
+* **api:** allow CUSTOM_SIZE with 0.5 CPU cores ([4c0df1f](https://github.com/runloopai/api-client-python/commit/4c0df1f95fa7f4d1d10bb72b3ed274333139ef61))
+* **mux:** validate scenario custom scorer references ([a3b50f5](https://github.com/runloopai/api-client-python/commit/a3b50f5b6e42753d497686818a72f484b0987811))
+* require scoped handles in backend workflows ([e666db1](https://github.com/runloopai/api-client-python/commit/e666db1d07eaac7d39bc66368a4cdd9a16b74e19))
+* **sdk:** drop custom edits to generated benchmark and scenario files ([a01ed98](https://github.com/runloopai/api-client-python/commit/a01ed98a7eedc32834528923a246450be3839745))
+* **sdk:** drop InputContextPreview ([ed06423](https://github.com/runloopai/api-client-python/commit/ed064233c4b228b2a30b846414e22a9ca95ac91f))
+
+
+### Chores
+
+* **security:** Improve security docs and tighten JWT audience ([53adee2](https://github.com/runloopai/api-client-python/commit/53adee2578b0040853a9d1a13e8c14b48b9738a8))
+
 ## [1.32.0](https://github.com/runloopai/api-client-python/compare/v1.31.0...v1.32.0) (2026-09-08)
 
 
