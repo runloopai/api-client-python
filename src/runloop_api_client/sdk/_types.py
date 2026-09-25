@@ -2,7 +2,6 @@ from typing import Union, Callable, Optional
 from typing_extensions import TypedDict
 
 from ..types import (
-    InputContext,
     AxonListParams,
     AgentListParams,
     AxonCreateParams,
@@ -192,10 +191,6 @@ class SDKAxonSqlQueryParams(SqlQueryParams, LongRequestOptions):
 
 class SDKAxonSqlBatchParams(SqlBatchParams, LongRequestOptions):
     pass
-
-
-class InputContextPreview(InputContext):
-    problem_statement: Optional[str] = None  # type: ignore[assignment]
 
 
 class SDKNetworkPolicyCreateParams(NetworkPolicyCreateParams, LongRequestOptions):
