@@ -15,7 +15,6 @@ from runloop_api_client.types import (
     Mount,
     ObjectMount,
     ResumeTriggers,
-    RunProfile,
 )
 ```
 
@@ -30,66 +29,6 @@ from runloop_api_client.types import AccountView
 Methods:
 
 - <code title="get /v1/accounts/me">client.accounts.<a href="./src/runloop_api_client/resources/accounts.py">me</a>() -> <a href="./src/runloop_api_client/types/account_view.py">AccountView</a></code>
-
-# Benchmarks
-
-Types:
-
-```python
-from runloop_api_client.types import (
-    BenchmarkCreateParameters,
-    BenchmarkScenarioUpdateParameters,
-    BenchmarkUpdateParameters,
-    BenchmarkView,
-    ScenarioDefinitionListView,
-    StartBenchmarkRunParameters,
-)
-```
-
-Methods:
-
-- <code title="post /v1/benchmarks">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">create</a>(\*\*<a href="src/runloop_api_client/types/benchmark_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
-- <code title="get /v1/benchmarks/{id}">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
-- <code title="post /v1/benchmarks/{id}">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
-- <code title="get /v1/benchmarks">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
-- <code title="get /v1/benchmarks/{id}/definitions">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">definitions</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_definitions_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_definition_list_view.py">ScenarioDefinitionListView</a></code>
-- <code title="get /v1/benchmarks/list_public">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/benchmark_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">SyncBenchmarksCursorIDPage[BenchmarkView]</a></code>
-- <code title="post /v1/benchmarks/start_run">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/benchmark_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
-- <code title="post /v1/benchmarks/{id}/scenarios">client.benchmarks.<a href="./src/runloop_api_client/resources/benchmarks.py">update_scenarios</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_update_scenarios_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_view.py">BenchmarkView</a></code>
-
-# BenchmarkRuns
-
-Types:
-
-```python
-from runloop_api_client.types import BenchmarkRunListView, BenchmarkRunView
-```
-
-Methods:
-
-- <code title="get /v1/benchmark_runs/{id}">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
-- <code title="get /v1/benchmark_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">SyncBenchmarkRunsCursorIDPage[BenchmarkRunView]</a></code>
-- <code title="post /v1/benchmark_runs/{id}/cancel">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
-- <code title="post /v1/benchmark_runs/{id}/complete">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_run_view.py">BenchmarkRunView</a></code>
-- <code title="get /v1/benchmark_runs/{id}/scenario_runs">client.benchmark_runs.<a href="./src/runloop_api_client/resources/benchmark_runs.py">list_scenario_runs</a>(id, \*\*<a href="src/runloop_api_client/types/benchmark_run_list_scenario_runs_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
-
-# BenchmarkJobs
-
-Types:
-
-```python
-from runloop_api_client.types import (
-    BenchmarkJobCreateParameters,
-    BenchmarkJobListView,
-    BenchmarkJobView,
-)
-```
-
-Methods:
-
-- <code title="post /v1/benchmark_jobs">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">create</a>(\*\*<a href="src/runloop_api_client/types/benchmark_job_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_job_view.py">BenchmarkJobView</a></code>
-- <code title="get /v1/benchmark_jobs/{id}">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/benchmark_job_view.py">BenchmarkJobView</a></code>
-- <code title="get /v1/benchmark_jobs">client.benchmark_jobs.<a href="./src/runloop_api_client/resources/benchmark_jobs.py">list</a>(\*\*<a href="src/runloop_api_client/types/benchmark_job_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/benchmark_job_list_view.py">BenchmarkJobListView</a></code>
 
 # Agents
 
@@ -315,70 +254,6 @@ Methods:
 
 - <code title="get /pty/{session_name}">client.pty.<a href="./src/runloop_api_client/resources/pty.py">connect</a>(session_name, \*\*<a href="src/runloop_api_client/types/pty_connect_params.py">params</a>) -> <a href="./src/runloop_api_client/types/pty_connect_view.py">PtyConnectView</a></code>
 - <code title="post /pty/{session_name}/control">client.pty.<a href="./src/runloop_api_client/resources/pty.py">control</a>(session_name, \*\*<a href="src/runloop_api_client/types/pty_control_params.py">params</a>) -> <a href="./src/runloop_api_client/types/pty_control_result_view.py">PtyControlResultView</a></code>
-
-# Scenarios
-
-Types:
-
-```python
-from runloop_api_client.types import (
-    InputContext,
-    InputContextUpdate,
-    ScenarioCreateParameters,
-    ScenarioEnvironment,
-    ScenarioRunListView,
-    ScenarioRunView,
-    ScenarioUpdateParameters,
-    ScenarioView,
-    ScoringContract,
-    ScoringContractResultView,
-    ScoringContractUpdate,
-    ScoringFunction,
-    ScoringFunctionResultView,
-    StartScenarioRunParameters,
-)
-```
-
-Methods:
-
-- <code title="post /v1/scenarios">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">create</a>(\*\*<a href="src/runloop_api_client/types/scenario_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
-- <code title="get /v1/scenarios/{id}">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
-- <code title="post /v1/scenarios/{id}">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/scenario_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
-- <code title="get /v1/scenarios">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenario_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">SyncScenariosCursorIDPage[ScenarioView]</a></code>
-- <code title="post /v1/scenarios/{id}/archive">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">archive</a>(id) -> <a href="./src/runloop_api_client/types/scenario_view.py">ScenarioView</a></code>
-- <code title="get /v1/scenarios/list_public">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/scenario_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_view.py">SyncScenariosCursorIDPage[ScenarioView]</a></code>
-- <code title="post /v1/scenarios/start_run">client.scenarios.<a href="./src/runloop_api_client/resources/scenarios/scenarios.py">start_run</a>(\*\*<a href="src/runloop_api_client/types/scenario_start_run_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
-
-## Runs
-
-Methods:
-
-- <code title="get /v1/scenarios/runs/{id}">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
-- <code title="get /v1/scenarios/runs">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/run_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">SyncBenchmarkRunsCursorIDPage[ScenarioRunView]</a></code>
-- <code title="post /v1/scenarios/runs/{id}/cancel">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">cancel</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
-- <code title="post /v1/scenarios/runs/{id}/complete">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">complete</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
-- <code title="post /v1/scenarios/runs/{id}/download_logs">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">download_logs</a>(id) -> BinaryAPIResponse</code>
-- <code title="post /v1/scenarios/runs/{id}/score">client.scenarios.runs.<a href="./src/runloop_api_client/resources/scenarios/runs.py">score</a>(id) -> <a href="./src/runloop_api_client/types/scenario_run_view.py">ScenarioRunView</a></code>
-
-## Scorers
-
-Types:
-
-```python
-from runloop_api_client.types.scenarios import (
-    ScorerCreateResponse,
-    ScorerRetrieveResponse,
-    ScorerUpdateResponse,
-    ScorerListResponse,
-)
-```
-
-Methods:
-
-- <code title="post /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">create</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_create_response.py">ScorerCreateResponse</a></code>
-- <code title="get /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/scenarios/scorer_retrieve_response.py">ScorerRetrieveResponse</a></code>
-- <code title="post /v1/scenarios/scorers/{id}">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">update</a>(id, \*\*<a href="src/runloop_api_client/types/scenarios/scorer_update_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_update_response.py">ScorerUpdateResponse</a></code>
-- <code title="get /v1/scenarios/scorers">client.scenarios.scorers.<a href="./src/runloop_api_client/resources/scenarios/scorers.py">list</a>(\*\*<a href="src/runloop_api_client/types/scenarios/scorer_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/scenarios/scorer_list_response.py">SyncScenarioScorersCursorIDPage[ScorerListResponse]</a></code>
 
 # Objects
 

@@ -45,12 +45,8 @@ if TYPE_CHECKING:
         secrets,
         accounts,
         devboxes,
-        scenarios,
-        benchmarks,
         blueprints,
         mcp_configs,
-        benchmark_jobs,
-        benchmark_runs,
         gateway_configs,
         restricted_keys,
         network_policies,
@@ -61,17 +57,13 @@ if TYPE_CHECKING:
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
     from .resources.accounts import AccountsResource, AsyncAccountsResource
-    from .resources.benchmarks import BenchmarksResource, AsyncBenchmarksResource
     from .resources.blueprints import BlueprintsResource, AsyncBlueprintsResource
     from .resources.axons.axons import AxonsResource, AsyncAxonsResource
     from .resources.mcp_configs import McpConfigsResource, AsyncMcpConfigsResource
-    from .resources.benchmark_jobs import BenchmarkJobsResource, AsyncBenchmarkJobsResource
-    from .resources.benchmark_runs import BenchmarkRunsResource, AsyncBenchmarkRunsResource
     from .resources.gateway_configs import GatewayConfigsResource, AsyncGatewayConfigsResource
     from .resources.restricted_keys import RestrictedKeysResource, AsyncRestrictedKeysResource
     from .resources.network_policies import NetworkPoliciesResource, AsyncNetworkPoliciesResource
     from .resources.devboxes.devboxes import DevboxesResource, AsyncDevboxesResource
-    from .resources.scenarios.scenarios import ScenariosResource, AsyncScenariosResource
 
 __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Runloop", "AsyncRunloop", "Client", "AsyncClient"]
 
@@ -162,24 +154,6 @@ class Runloop(SyncAPIClient):
         return AccountsResource(self)
 
     @cached_property
-    def benchmarks(self) -> BenchmarksResource:
-        from .resources.benchmarks import BenchmarksResource
-
-        return BenchmarksResource(self)
-
-    @cached_property
-    def benchmark_runs(self) -> BenchmarkRunsResource:
-        from .resources.benchmark_runs import BenchmarkRunsResource
-
-        return BenchmarkRunsResource(self)
-
-    @cached_property
-    def benchmark_jobs(self) -> BenchmarkJobsResource:
-        from .resources.benchmark_jobs import BenchmarkJobsResource
-
-        return BenchmarkJobsResource(self)
-
-    @cached_property
     def agents(self) -> AgentsResource:
         from .resources.agents import AgentsResource
 
@@ -208,12 +182,6 @@ class Runloop(SyncAPIClient):
         from .resources.pty import PtyResource
 
         return PtyResource(self)
-
-    @cached_property
-    def scenarios(self) -> ScenariosResource:
-        from .resources.scenarios import ScenariosResource
-
-        return ScenariosResource(self)
 
     @cached_property
     def objects(self) -> ObjectsResource:
@@ -474,24 +442,6 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncAccountsResource(self)
 
     @cached_property
-    def benchmarks(self) -> AsyncBenchmarksResource:
-        from .resources.benchmarks import AsyncBenchmarksResource
-
-        return AsyncBenchmarksResource(self)
-
-    @cached_property
-    def benchmark_runs(self) -> AsyncBenchmarkRunsResource:
-        from .resources.benchmark_runs import AsyncBenchmarkRunsResource
-
-        return AsyncBenchmarkRunsResource(self)
-
-    @cached_property
-    def benchmark_jobs(self) -> AsyncBenchmarkJobsResource:
-        from .resources.benchmark_jobs import AsyncBenchmarkJobsResource
-
-        return AsyncBenchmarkJobsResource(self)
-
-    @cached_property
     def agents(self) -> AsyncAgentsResource:
         from .resources.agents import AsyncAgentsResource
 
@@ -520,12 +470,6 @@ class AsyncRunloop(AsyncAPIClient):
         from .resources.pty import AsyncPtyResource
 
         return AsyncPtyResource(self)
-
-    @cached_property
-    def scenarios(self) -> AsyncScenariosResource:
-        from .resources.scenarios import AsyncScenariosResource
-
-        return AsyncScenariosResource(self)
 
     @cached_property
     def objects(self) -> AsyncObjectsResource:
@@ -713,24 +657,6 @@ class RunloopWithRawResponse:
         return AccountsResourceWithRawResponse(self._client.accounts)
 
     @cached_property
-    def benchmarks(self) -> benchmarks.BenchmarksResourceWithRawResponse:
-        from .resources.benchmarks import BenchmarksResourceWithRawResponse
-
-        return BenchmarksResourceWithRawResponse(self._client.benchmarks)
-
-    @cached_property
-    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithRawResponse:
-        from .resources.benchmark_runs import BenchmarkRunsResourceWithRawResponse
-
-        return BenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
-
-    @cached_property
-    def benchmark_jobs(self) -> benchmark_jobs.BenchmarkJobsResourceWithRawResponse:
-        from .resources.benchmark_jobs import BenchmarkJobsResourceWithRawResponse
-
-        return BenchmarkJobsResourceWithRawResponse(self._client.benchmark_jobs)
-
-    @cached_property
     def agents(self) -> agents.AgentsResourceWithRawResponse:
         from .resources.agents import AgentsResourceWithRawResponse
 
@@ -759,12 +685,6 @@ class RunloopWithRawResponse:
         from .resources.pty import PtyResourceWithRawResponse
 
         return PtyResourceWithRawResponse(self._client.pty)
-
-    @cached_property
-    def scenarios(self) -> scenarios.ScenariosResourceWithRawResponse:
-        from .resources.scenarios import ScenariosResourceWithRawResponse
-
-        return ScenariosResourceWithRawResponse(self._client.scenarios)
 
     @cached_property
     def objects(self) -> objects.ObjectsResourceWithRawResponse:
@@ -822,24 +742,6 @@ class AsyncRunloopWithRawResponse:
         return AsyncAccountsResourceWithRawResponse(self._client.accounts)
 
     @cached_property
-    def benchmarks(self) -> benchmarks.AsyncBenchmarksResourceWithRawResponse:
-        from .resources.benchmarks import AsyncBenchmarksResourceWithRawResponse
-
-        return AsyncBenchmarksResourceWithRawResponse(self._client.benchmarks)
-
-    @cached_property
-    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithRawResponse:
-        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithRawResponse
-
-        return AsyncBenchmarkRunsResourceWithRawResponse(self._client.benchmark_runs)
-
-    @cached_property
-    def benchmark_jobs(self) -> benchmark_jobs.AsyncBenchmarkJobsResourceWithRawResponse:
-        from .resources.benchmark_jobs import AsyncBenchmarkJobsResourceWithRawResponse
-
-        return AsyncBenchmarkJobsResourceWithRawResponse(self._client.benchmark_jobs)
-
-    @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
         from .resources.agents import AsyncAgentsResourceWithRawResponse
 
@@ -868,12 +770,6 @@ class AsyncRunloopWithRawResponse:
         from .resources.pty import AsyncPtyResourceWithRawResponse
 
         return AsyncPtyResourceWithRawResponse(self._client.pty)
-
-    @cached_property
-    def scenarios(self) -> scenarios.AsyncScenariosResourceWithRawResponse:
-        from .resources.scenarios import AsyncScenariosResourceWithRawResponse
-
-        return AsyncScenariosResourceWithRawResponse(self._client.scenarios)
 
     @cached_property
     def objects(self) -> objects.AsyncObjectsResourceWithRawResponse:
@@ -931,24 +827,6 @@ class RunloopWithStreamedResponse:
         return AccountsResourceWithStreamingResponse(self._client.accounts)
 
     @cached_property
-    def benchmarks(self) -> benchmarks.BenchmarksResourceWithStreamingResponse:
-        from .resources.benchmarks import BenchmarksResourceWithStreamingResponse
-
-        return BenchmarksResourceWithStreamingResponse(self._client.benchmarks)
-
-    @cached_property
-    def benchmark_runs(self) -> benchmark_runs.BenchmarkRunsResourceWithStreamingResponse:
-        from .resources.benchmark_runs import BenchmarkRunsResourceWithStreamingResponse
-
-        return BenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
-
-    @cached_property
-    def benchmark_jobs(self) -> benchmark_jobs.BenchmarkJobsResourceWithStreamingResponse:
-        from .resources.benchmark_jobs import BenchmarkJobsResourceWithStreamingResponse
-
-        return BenchmarkJobsResourceWithStreamingResponse(self._client.benchmark_jobs)
-
-    @cached_property
     def agents(self) -> agents.AgentsResourceWithStreamingResponse:
         from .resources.agents import AgentsResourceWithStreamingResponse
 
@@ -977,12 +855,6 @@ class RunloopWithStreamedResponse:
         from .resources.pty import PtyResourceWithStreamingResponse
 
         return PtyResourceWithStreamingResponse(self._client.pty)
-
-    @cached_property
-    def scenarios(self) -> scenarios.ScenariosResourceWithStreamingResponse:
-        from .resources.scenarios import ScenariosResourceWithStreamingResponse
-
-        return ScenariosResourceWithStreamingResponse(self._client.scenarios)
 
     @cached_property
     def objects(self) -> objects.ObjectsResourceWithStreamingResponse:
@@ -1040,24 +912,6 @@ class AsyncRunloopWithStreamedResponse:
         return AsyncAccountsResourceWithStreamingResponse(self._client.accounts)
 
     @cached_property
-    def benchmarks(self) -> benchmarks.AsyncBenchmarksResourceWithStreamingResponse:
-        from .resources.benchmarks import AsyncBenchmarksResourceWithStreamingResponse
-
-        return AsyncBenchmarksResourceWithStreamingResponse(self._client.benchmarks)
-
-    @cached_property
-    def benchmark_runs(self) -> benchmark_runs.AsyncBenchmarkRunsResourceWithStreamingResponse:
-        from .resources.benchmark_runs import AsyncBenchmarkRunsResourceWithStreamingResponse
-
-        return AsyncBenchmarkRunsResourceWithStreamingResponse(self._client.benchmark_runs)
-
-    @cached_property
-    def benchmark_jobs(self) -> benchmark_jobs.AsyncBenchmarkJobsResourceWithStreamingResponse:
-        from .resources.benchmark_jobs import AsyncBenchmarkJobsResourceWithStreamingResponse
-
-        return AsyncBenchmarkJobsResourceWithStreamingResponse(self._client.benchmark_jobs)
-
-    @cached_property
     def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
         from .resources.agents import AsyncAgentsResourceWithStreamingResponse
 
@@ -1086,12 +940,6 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.pty import AsyncPtyResourceWithStreamingResponse
 
         return AsyncPtyResourceWithStreamingResponse(self._client.pty)
-
-    @cached_property
-    def scenarios(self) -> scenarios.AsyncScenariosResourceWithStreamingResponse:
-        from .resources.scenarios import AsyncScenariosResourceWithStreamingResponse
-
-        return AsyncScenariosResourceWithStreamingResponse(self._client.scenarios)
 
     @cached_property
     def objects(self) -> objects.AsyncObjectsResourceWithStreamingResponse:

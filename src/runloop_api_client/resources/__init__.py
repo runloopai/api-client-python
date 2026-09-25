@@ -64,22 +64,6 @@ from .devboxes import (
     DevboxesResourceWithStreamingResponse,
     AsyncDevboxesResourceWithStreamingResponse,
 )
-from .scenarios import (
-    ScenariosResource,
-    AsyncScenariosResource,
-    ScenariosResourceWithRawResponse,
-    AsyncScenariosResourceWithRawResponse,
-    ScenariosResourceWithStreamingResponse,
-    AsyncScenariosResourceWithStreamingResponse,
-)
-from .benchmarks import (
-    BenchmarksResource,
-    AsyncBenchmarksResource,
-    BenchmarksResourceWithRawResponse,
-    AsyncBenchmarksResourceWithRawResponse,
-    BenchmarksResourceWithStreamingResponse,
-    AsyncBenchmarksResourceWithStreamingResponse,
-)
 from .blueprints import (
     BlueprintsResource,
     AsyncBlueprintsResource,
@@ -95,22 +79,6 @@ from .mcp_configs import (
     AsyncMcpConfigsResourceWithRawResponse,
     McpConfigsResourceWithStreamingResponse,
     AsyncMcpConfigsResourceWithStreamingResponse,
-)
-from .benchmark_jobs import (
-    BenchmarkJobsResource,
-    AsyncBenchmarkJobsResource,
-    BenchmarkJobsResourceWithRawResponse,
-    AsyncBenchmarkJobsResourceWithRawResponse,
-    BenchmarkJobsResourceWithStreamingResponse,
-    AsyncBenchmarkJobsResourceWithStreamingResponse,
-)
-from .benchmark_runs import (
-    BenchmarkRunsResource,
-    AsyncBenchmarkRunsResource,
-    BenchmarkRunsResourceWithRawResponse,
-    AsyncBenchmarkRunsResourceWithRawResponse,
-    BenchmarkRunsResourceWithStreamingResponse,
-    AsyncBenchmarkRunsResourceWithStreamingResponse,
 )
 from .gateway_configs import (
     GatewayConfigsResource,
@@ -144,24 +112,6 @@ __all__ = [
     "AsyncAccountsResourceWithRawResponse",
     "AccountsResourceWithStreamingResponse",
     "AsyncAccountsResourceWithStreamingResponse",
-    "BenchmarksResource",
-    "AsyncBenchmarksResource",
-    "BenchmarksResourceWithRawResponse",
-    "AsyncBenchmarksResourceWithRawResponse",
-    "BenchmarksResourceWithStreamingResponse",
-    "AsyncBenchmarksResourceWithStreamingResponse",
-    "BenchmarkRunsResource",
-    "AsyncBenchmarkRunsResource",
-    "BenchmarkRunsResourceWithRawResponse",
-    "AsyncBenchmarkRunsResourceWithRawResponse",
-    "BenchmarkRunsResourceWithStreamingResponse",
-    "AsyncBenchmarkRunsResourceWithStreamingResponse",
-    "BenchmarkJobsResource",
-    "AsyncBenchmarkJobsResource",
-    "BenchmarkJobsResourceWithRawResponse",
-    "AsyncBenchmarkJobsResourceWithRawResponse",
-    "BenchmarkJobsResourceWithStreamingResponse",
-    "AsyncBenchmarkJobsResourceWithStreamingResponse",
     "AgentsResource",
     "AsyncAgentsResource",
     "AgentsResourceWithRawResponse",
@@ -192,12 +142,6 @@ __all__ = [
     "AsyncPtyResourceWithRawResponse",
     "PtyResourceWithStreamingResponse",
     "AsyncPtyResourceWithStreamingResponse",
-    "ScenariosResource",
-    "AsyncScenariosResource",
-    "ScenariosResourceWithRawResponse",
-    "AsyncScenariosResourceWithRawResponse",
-    "ScenariosResourceWithStreamingResponse",
-    "AsyncScenariosResourceWithStreamingResponse",
     "ObjectsResource",
     "AsyncObjectsResource",
     "ObjectsResourceWithRawResponse",
