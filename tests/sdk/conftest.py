@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import asyncio
 import threading
-from typing import Any, Dict
+from typing import Any
 from dataclasses import field, dataclass
 from unittest.mock import Mock, AsyncMock
 
@@ -21,13 +21,8 @@ TEST_IDS = {
     "snapshot": "snp_123",
     "blueprint": "bpt_123",
     "object": "obj_123",
-    "scorer": "sco_123",
     "agent": "agt_123",
     "axon": "axn_123",
-    "scenario": "scn_123",
-    "scenario_run": "scr_123",
-    "benchmark": "bmd_123",
-    "benchmark_run": "bmr_123",
     "network_policy": "np_123",
     "gateway_config": "gwc_123",
 }
@@ -97,15 +92,6 @@ class MockObjectView:
 
 
 @dataclass
-class MockScorerView:
-    """Mock ScorerView for testing."""
-
-    id: str = TEST_IDS["scorer"]
-    bash_script: str = "echo 'score=1.0'"
-    type: str = "test_scorer"
-
-
-@dataclass
 class MockAgentView:
     """Mock AgentView for testing."""
 
@@ -172,50 +158,6 @@ class MockSqlBatchResultView:
     """Mock SqlBatchResultView for testing."""
 
     results: list[Any] = field(default_factory=lambda: [MockSqlStepResultView()])
-
-
-@dataclass
-class MockScenarioView:
-    """Mock ScenarioView for testing."""
-
-    id: str = TEST_IDS["scenario"]
-    name: str = "test-scenario"
-    metadata: Dict[str, str] = field(default_factory=dict)
-
-
-@dataclass
-class MockScenarioRunView:
-    """Mock ScenarioRunView for testing."""
-
-    id: str = TEST_IDS["scenario_run"]
-    devbox_id: str = TEST_IDS["devbox"]
-    scenario_id: str = TEST_IDS["scenario"]
-    state: str = "running"
-    metadata: Dict[str, str] = field(default_factory=dict)
-    scoring_contract_result: object = None
-
-
-@dataclass
-class MockBenchmarkView:
-    """Mock BenchmarkView for testing."""
-
-    id: str = TEST_IDS["benchmark"]
-    name: str = "test-benchmark"
-    metadata: Dict[str, str] = field(default_factory=dict)
-    scenario_ids: list[str] = field(default_factory=list)
-
-
-@dataclass
-class MockBenchmarkRunView:
-    """Mock BenchmarkRunView for testing."""
-
-    id: str = TEST_IDS["benchmark_run"]
-    benchmark_id: str = TEST_IDS["benchmark"]
-    state: str = "running"
-    metadata: Dict[str, str] = field(default_factory=dict)
-    start_time_ms: int = 1234567890000
-    duration_ms: int | None = None
-    score: float | None = None
 
 
 @dataclass
@@ -355,12 +297,6 @@ def object_view() -> MockObjectView:
 
 
 @pytest.fixture
-def scorer_view() -> MockScorerView:
-    """Create a mock ScorerView."""
-    return MockScorerView()
-
-
-@pytest.fixture
 def agent_view() -> MockAgentView:
     """Create a mock AgentView."""
     return MockAgentView()
@@ -370,30 +306,6 @@ def agent_view() -> MockAgentView:
 def axon_view() -> MockAxonView:
     """Create a mock AxonView."""
     return MockAxonView()
-
-
-@pytest.fixture
-def scenario_view() -> MockScenarioView:
-    """Create a mock ScenarioView."""
-    return MockScenarioView()
-
-
-@pytest.fixture
-def scenario_run_view() -> MockScenarioRunView:
-    """Create a mock ScenarioRunView."""
-    return MockScenarioRunView()
-
-
-@pytest.fixture
-def benchmark_view() -> MockBenchmarkView:
-    """Create a mock BenchmarkView."""
-    return MockBenchmarkView()
-
-
-@pytest.fixture
-def benchmark_run_view() -> MockBenchmarkRunView:
-    """Create a mock BenchmarkRunView."""
-    return MockBenchmarkRunView()
 
 
 @pytest.fixture

@@ -22,9 +22,7 @@ class TestAsyncRunloopSDKInitialization:
         assert async_sdk_client.blueprint is not None
         assert async_sdk_client.snapshot is not None
         assert async_sdk_client.storage_object is not None
-        assert async_sdk_client.scorer is not None
         assert async_sdk_client.agent is not None
-        assert async_sdk_client.scenario is not None
 
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_legacy_api_access(self, async_sdk_client: AsyncRunloopSDK) -> None:

@@ -142,7 +142,7 @@ class ScoringFunctionParam(TypedDict, total=False):
     """ScoringFunction specifies a method of scoring a Scenario."""
 
     name: Required[str]
-    """Name of scoring function. Names must only contain ``[a-zA-Z0-9_-]``."""
+    """Name of scoring function. Names must only contain [a-zA-Z0-9_-]."""
 
     scorer: Required[Scorer]
     """The scoring function to use for evaluating this scenario.

@@ -15,10 +15,7 @@ from tests.sdk.conftest import (
     MockAgentView,
     MockDevboxView,
     MockObjectView,
-    MockScorerView,
-    MockScenarioView,
     MockSnapshotView,
-    MockBenchmarkView,
     MockBlueprintView,
     MockGatewayConfigView,
     MockNetworkPolicyView,
@@ -28,19 +25,13 @@ from runloop_api_client.sdk import (
     Axon,
     Agent,
     Devbox,
-    Scorer,
     AxonOps,
     AgentOps,
-    Scenario,
     Snapshot,
-    Benchmark,
     Blueprint,
     DevboxOps,
-    ScorerOps,
     RunloopSDK,
-    ScenarioOps,
     SnapshotOps,
-    BenchmarkOps,
     BlueprintOps,
     GatewayConfig,
     NetworkPolicy,
@@ -658,76 +649,6 @@ class TestStorageObjectOps:
         assert not any(name.startswith("build/") for name in names)
 
 
-class TestScorerOps:
-    """Tests for ScorerOps class."""
-
-    def test_create(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
-        """Test create method."""
-        mock_client.scenarios.scorers.create.return_value = scorer_view
-
-        ops = ScorerOps(mock_client)
-        scorer = ops.create(
-            bash_script="echo 'score=1.0'",
-            type="test_scorer",
-        )
-
-        assert isinstance(scorer, Scorer)
-        assert scorer.id == "sco_123"
-        mock_client.scenarios.scorers.create.assert_called_once()
-
-    def test_from_id(self, mock_client: Mock) -> None:
-        """Test from_id method."""
-        ops = ScorerOps(mock_client)
-        scorer = ops.from_id("sco_123")
-
-        assert isinstance(scorer, Scorer)
-        assert scorer.id == "sco_123"
-
-    def test_list_empty(self, mock_client: Mock) -> None:
-        """Test list method with empty results."""
-        page = SimpleNamespace(scorers=[])
-        mock_client.scenarios.scorers.list.return_value = page
-
-        ops = ScorerOps(mock_client)
-        scorers = ops.list(limit=10)
-
-        assert len(scorers) == 0
-        mock_client.scenarios.scorers.list.assert_called_once()
-
-    def test_list_single(self, mock_client: Mock, scorer_view: MockScorerView) -> None:
-        """Test list method with single result."""
-        page = SimpleNamespace(scorers=[scorer_view])
-        mock_client.scenarios.scorers.list.return_value = page
-
-        ops = ScorerOps(mock_client)
-        scorers = ops.list(
-            limit=10,
-            starting_after="scorer_000",
-        )
-
-        assert len(scorers) == 1
-        assert isinstance(scorers[0], Scorer)
-        assert scorers[0].id == "sco_123"
-        mock_client.scenarios.scorers.list.assert_called_once()
-
-    def test_list_multiple(self, mock_client: Mock) -> None:
-        """Test list method with multiple results."""
-        scorer_view1 = MockScorerView(id="scorer_001", type="scorer-1")
-        scorer_view2 = MockScorerView(id="scorer_002", type="scorer-2")
-        page = SimpleNamespace(scorers=[scorer_view1, scorer_view2])
-        mock_client.scenarios.scorers.list.return_value = page
-
-        ops = ScorerOps(mock_client)
-        scorers = ops.list(limit=10)
-
-        assert len(scorers) == 2
-        assert isinstance(scorers[0], Scorer)
-        assert isinstance(scorers[1], Scorer)
-        assert scorers[0].id == "scorer_001"
-        assert scorers[1].id == "scorer_002"
-        mock_client.scenarios.scorers.list.assert_called_once()
-
-
 class TestAxonOps:
     """Tests for AxonOps class."""
 
@@ -1121,113 +1042,6 @@ class TestAgentClient:
         )
 
 
-class TestScenarioOps:
-    """Tests for ScenarioOps class."""
-
-    def test_from_id(self, mock_client: Mock) -> None:
-        """Test from_id method."""
-
-        ops = ScenarioOps(mock_client)
-        scenario = ops.from_id("scn_123")
-
-        assert isinstance(scenario, Scenario)
-        assert scenario.id == "scn_123"
-
-    def test_list_empty(self, mock_client: Mock) -> None:
-        """Test list method with empty results."""
-        page = SimpleNamespace(scenarios=[])
-        mock_client.scenarios.list.return_value = page
-
-        ops = ScenarioOps(mock_client)
-        scenarios = ops.list(limit=10)
-
-        assert len(scenarios) == 0
-        mock_client.scenarios.list.assert_called_once()
-
-    def test_list_single(self, mock_client: Mock, scenario_view: MockScenarioView) -> None:
-        """Test list method with single result."""
-        page = SimpleNamespace(scenarios=[scenario_view])
-        mock_client.scenarios.list.return_value = page
-
-        ops = ScenarioOps(mock_client)
-        scenarios = ops.list(limit=10)
-
-        assert len(scenarios) == 1
-        assert isinstance(scenarios[0], Scenario)
-        assert scenarios[0].id == "scn_123"
-        mock_client.scenarios.list.assert_called_once()
-
-    def test_list_multiple(self, mock_client: Mock) -> None:
-        """Test list method with multiple results."""
-        scenario_view1 = MockScenarioView(id="scn_001", name="scenario-1")
-        scenario_view2 = MockScenarioView(id="scn_002", name="scenario-2")
-        page = SimpleNamespace(scenarios=[scenario_view1, scenario_view2])
-        mock_client.scenarios.list.return_value = page
-
-        ops = ScenarioOps(mock_client)
-        scenarios = ops.list(limit=10)
-
-        assert len(scenarios) == 2
-        assert isinstance(scenarios[0], Scenario)
-        assert isinstance(scenarios[1], Scenario)
-        assert scenarios[0].id == "scn_001"
-        assert scenarios[1].id == "scn_002"
-        mock_client.scenarios.list.assert_called_once()
-
-
-class TestBenchmarkOps:
-    """Tests for BenchmarkOps class."""
-
-    def test_create(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
-        """Test create method."""
-        mock_client.benchmarks.create.return_value = benchmark_view
-
-        ops = BenchmarkOps(mock_client)
-        benchmark = ops.create(name="test-benchmark", scenario_ids=["scn_001", "scn_002"])
-
-        assert isinstance(benchmark, Benchmark)
-        assert benchmark.id == "bmd_123"
-        mock_client.benchmarks.create.assert_called_once_with(
-            name="test-benchmark", scenario_ids=["scn_001", "scn_002"]
-        )
-
-    def test_from_id(self, mock_client: Mock) -> None:
-        """Test from_id method."""
-        ops = BenchmarkOps(mock_client)
-        benchmark = ops.from_id("bmd_123")
-
-        assert isinstance(benchmark, Benchmark)
-        assert benchmark.id == "bmd_123"
-
-    def test_list_multiple(self, mock_client: Mock) -> None:
-        """Test list method with multiple results."""
-        benchmark_view1 = MockBenchmarkView(id="bmd_001", name="benchmark-1")
-        benchmark_view2 = MockBenchmarkView(id="bmd_002", name="benchmark-2")
-        page = SimpleNamespace(benchmarks=[benchmark_view1, benchmark_view2])
-        mock_client.benchmarks.list.return_value = page
-
-        ops = BenchmarkOps(mock_client)
-        benchmarks = ops.list(limit=10)
-
-        assert len(benchmarks) == 2
-        assert isinstance(benchmarks[0], Benchmark)
-        assert isinstance(benchmarks[1], Benchmark)
-        assert benchmarks[0].id == "bmd_001"
-        assert benchmarks[1].id == "bmd_002"
-        mock_client.benchmarks.list.assert_called_once_with(limit=10)
-
-    def test_list_with_name_filter(self, mock_client: Mock, benchmark_view: MockBenchmarkView) -> None:
-        """Test list method with name filter."""
-        page = SimpleNamespace(benchmarks=[benchmark_view])
-        mock_client.benchmarks.list.return_value = page
-
-        ops = BenchmarkOps(mock_client)
-        benchmarks = ops.list(name="test-benchmark", limit=10)
-
-        assert len(benchmarks) == 1
-        mock_client.benchmarks.list.assert_called_once_with(name="test-benchmark", limit=10)
-
-
 class TestNetworkPolicyOps:
     """Tests for NetworkPolicyOps class."""
 
@@ -1377,11 +1191,9 @@ class TestRunloopSDK:
         runloop = RunloopSDK(bearer_token="test-token")
         assert runloop.api is not None
         assert isinstance(runloop.agent, AgentOps)
-        assert isinstance(runloop.benchmark, BenchmarkOps)
         assert isinstance(runloop.devbox, DevboxOps)
         assert isinstance(runloop.gateway_config, GatewayConfigOps)
         assert isinstance(runloop.network_policy, NetworkPolicyOps)
-        assert isinstance(runloop.scorer, ScorerOps)
         assert isinstance(runloop.snapshot, SnapshotOps)
         assert isinstance(runloop.blueprint, BlueprintOps)
         assert isinstance(runloop.storage_object, StorageObjectOps)

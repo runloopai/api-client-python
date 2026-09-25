@@ -1,6 +1,6 @@
 # Smoke tests
 
-End-to-end smoke tests run against the real API to validate critical flows (devboxes, snapshots, blueprints, executions/log tailing, scenarios/benchmarks). Theses smoketests run both the 
+End-to-end smoke tests run against the real API to validate critical flows (devboxes, snapshots, blueprints, executions/log tailing). Theses smoketests run both the
 async and sync clients.
 
 - Local run (requires `RUNLOOP_API_KEY`):

@@ -10,12 +10,9 @@ from .sync import (
     AxonOps,
     AgentOps,
     DevboxOps,
-    ScorerOps,
     SecretOps,
     RunloopSDK,
-    ScenarioOps,
     SnapshotOps,
-    BenchmarkOps,
     BlueprintOps,
     McpConfigOps,
     GatewayConfigOps,
@@ -23,17 +20,13 @@ from .sync import (
     StorageObjectOps,
 )
 from .agent import Agent
-from ._types import ScenarioPreview
 from .async_ import (
     AsyncAxonOps,
     AsyncAgentOps,
     AsyncDevboxOps,
-    AsyncScorerOps,
     AsyncSecretOps,
     AsyncRunloopSDK,
-    AsyncScenarioOps,
     AsyncSnapshotOps,
-    AsyncBenchmarkOps,
     AsyncBlueprintOps,
     AsyncMcpConfigOps,
     AsyncGatewayConfigOps,
@@ -41,39 +34,27 @@ from .async_ import (
     AsyncStorageObjectOps,
 )
 from .devbox import Devbox, NamedShell
-from .scorer import Scorer
 from .secret import Secret
-from .scenario import Scenario
 from .snapshot import Snapshot
-from .benchmark import Benchmark
 from .blueprint import Blueprint
 from .execution import Execution
 from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
-from .async_scorer import AsyncScorer
 from .async_secret import AsyncSecret
-from .scenario_run import ScenarioRun
-from .benchmark_run import BenchmarkRun
-from .async_scenario import AsyncScenario
 from .async_snapshot import AsyncSnapshot
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
-from .async_benchmark import AsyncBenchmark
 from .async_blueprint import AsyncBlueprint
 from .async_execution import AsyncExecution
 from .async_mcp_config import AsyncMcpConfig
 from .execution_result import ExecutionResult
-from .scenario_builder import ScenarioBuilder
-from .async_scenario_run import AsyncScenarioRun
-from .async_benchmark_run import AsyncBenchmarkRun
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
 from .async_execution_result import AsyncExecutionResult
-from .async_scenario_builder import AsyncScenarioBuilder
 
 __all__ = [
     # Main SDK entry points
@@ -84,18 +65,12 @@ __all__ = [
     "AsyncAgentOps",
     "AxonOps",
     "AsyncAxonOps",
-    "BenchmarkOps",
-    "AsyncBenchmarkOps",
     "DevboxOps",
     "AsyncDevboxOps",
     "BlueprintOps",
     "AsyncBlueprintOps",
-    "ScenarioOps",
-    "AsyncScenarioOps",
     "SecretOps",
     "AsyncSecretOps",
-    "ScorerOps",
-    "AsyncScorerOps",
     "SnapshotOps",
     "AsyncSnapshotOps",
     "StorageObjectOps",
@@ -114,10 +89,6 @@ __all__ = [
     "AxonSqlOps",
     "AsyncAxonSqlOps",
     "AsyncSecret",
-    "Benchmark",
-    "AsyncBenchmark",
-    "BenchmarkRun",
-    "AsyncBenchmarkRun",
     "Devbox",
     "AsyncDevbox",
     "Execution",
@@ -126,17 +97,8 @@ __all__ = [
     "AsyncExecutionResult",
     "Blueprint",
     "AsyncBlueprint",
-    "Scenario",
-    "AsyncScenario",
-    "ScenarioRun",
-    "AsyncScenarioRun",
-    "ScenarioBuilder",
-    "AsyncScenarioBuilder",
-    "ScenarioPreview",
     "Secret",
     "AsyncSecret",
-    "Scorer",
-    "AsyncScorer",
     "Snapshot",
     "AsyncSnapshot",
     "StorageObject",

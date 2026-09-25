@@ -18,8 +18,6 @@ Why teams pick Runloop:
   instead of installing tooling every run.
 - **Ready for production.** Secrets injection, AI gateways, network policies, and VPC deployment are
   part of the platform.
-- **Measurable.** Built-in benchmarks and evaluations score agent runs so you can tell whether a
-  change actually helped.
 
 ## Installation
 
@@ -50,7 +48,7 @@ with runloop.devbox.create(name="my-devbox") as devbox:
 
 ## Documentation
 
-- [Platform documentation](https://docs.runloop.ai) — devboxes, blueprints, snapshots, tunnels, agents, benchmarks
+- [Platform documentation](https://docs.runloop.ai) — devboxes, blueprints, snapshots, tunnels, agents
 - [`RunloopSDK` reference](README-SDK.md) — the high-level, object-oriented Python interface
 - [api.md](https://github.com/runloopai/api-client-python/blob/main/api.md) — the full generated REST surface
 - [examples/](examples) — runnable end-to-end scripts

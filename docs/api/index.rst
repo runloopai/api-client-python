@@ -19,15 +19,9 @@ with ``await`` required on all methods.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Agents & Evaluation
+   :caption: Agents
 
    agent
-   scorer
-   scenario
-   scenario_builder
-   scenario_run
-   benchmark
-   benchmark_run
 
 .. toctree::
    :maxdepth: 1
