@@ -66,7 +66,11 @@ def _transform_file(file: FileTypes) -> HttpxFileTypes:
     if is_file_content(file):
         if isinstance(file, os.PathLike):
             path = pathlib.Path(file)
-            return (path.name, path.read_bytes())
+            # Hand httpx an open file handle so its multipart encoder reads the
+            # file lazily in chunks. read_bytes() would buffer the entire file
+            # in memory up front, which is wasteful for the large files this
+            # endpoint targets.
+            return (path.name, path.open("rb"))
 
         return file
 
@@ -107,8 +111,11 @@ async def async_to_httpx_files(files: RequestFiles | None) -> HttpxRequestFiles 
 async def _async_transform_file(file: FileTypes) -> HttpxFileTypes:
     if is_file_content(file):
         if isinstance(file, os.PathLike):
-            path = anyio.Path(file)
-            return (path.name, await path.read_bytes())
+            path = pathlib.Path(file)
+            # Same rationale as the sync path: stream from an open handle rather
+            # than buffering the whole file. httpx's multipart encoder reads from
+            # this handle in chunks as it serializes the request body.
+            return (path.name, path.open("rb"))
 
         return file
 
