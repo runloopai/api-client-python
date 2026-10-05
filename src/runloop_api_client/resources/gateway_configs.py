@@ -73,8 +73,8 @@ class GatewayConfigsResource(SyncAPIResource):
 
           endpoint: The target endpoint URL (e.g., 'https://api.anthropic.com').
 
-          name: The human-readable name for the GatewayConfig. Must be unique within your
-              account.
+          name: The human-readable name for the GatewayConfig. Names are labels and may be
+              reused.
 
           custom_headers: Additional headers applied to proxied requests after the auth mechanism. At most
               8 entries.
@@ -178,7 +178,7 @@ class GatewayConfigsResource(SyncAPIResource):
 
           endpoint: New target endpoint URL (e.g., 'https://api.anthropic.com').
 
-          name: New name for the GatewayConfig. Must be unique within your account.
+          name: New name for the GatewayConfig. Names are labels and may be reused.
 
           extra_headers: Send extra headers
 
@@ -368,8 +368,8 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
 
           endpoint: The target endpoint URL (e.g., 'https://api.anthropic.com').
 
-          name: The human-readable name for the GatewayConfig. Must be unique within your
-              account.
+          name: The human-readable name for the GatewayConfig. Names are labels and may be
+              reused.
 
           custom_headers: Additional headers applied to proxied requests after the auth mechanism. At most
               8 entries.
@@ -473,7 +473,7 @@ class AsyncGatewayConfigsResource(AsyncAPIResource):
 
           endpoint: New target endpoint URL (e.g., 'https://api.anthropic.com').
 
-          name: New name for the GatewayConfig. Must be unique within your account.
+          name: New name for the GatewayConfig. Names are labels and may be reused.
 
           extra_headers: Send extra headers
 

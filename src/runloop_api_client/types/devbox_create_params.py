@@ -117,7 +117,11 @@ class Gateways(TypedDict, total=False):
     """
 
     gateway: Required[str]
-    """The gateway config to use. Can be a gateway config ID (gwc_xxx) or name."""
+    """The gateway config to use.
+
+    Can be a gateway config ID (gwc_xxx) or name. A name binds the most recently
+    created config with that name.
+    """
 
     secret: Required[str]
     """The secret containing the credential. Can be a secret ID or name."""
@@ -129,7 +133,11 @@ class Mcp(TypedDict, total=False):
     """
 
     mcp_config: Required[str]
-    """The MCP config to use. Can be an MCP config ID (mcp_xxx) or name."""
+    """The MCP config to use.
+
+    Can be an MCP config ID (mcp_xxx) or name. A name binds the most recently
+    created config with that name.
+    """
 
     secret: Required[str]
     """The secret containing the MCP server credential. Can be a secret ID or name."""

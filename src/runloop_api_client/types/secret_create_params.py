@@ -9,7 +9,7 @@ __all__ = ["SecretCreateParams"]
 
 class SecretCreateParams(TypedDict, total=False):
     name: Required[str]
-    """The globally unique name for the Secret.
+    """The name for the Secret.
 
     Must be a valid environment variable name (alphanumeric and underscores only).
     Example: 'DATABASE_PASSWORD'

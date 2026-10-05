@@ -17,10 +17,7 @@ class SecretView(BaseModel):
     """Creation time of the Secret (Unix timestamp in milliseconds)."""
 
     name: str
-    """The globally unique name of the Secret.
-
-    Used as the environment variable name in Devboxes.
-    """
+    """The name of the Secret. Used as the environment variable name in Devboxes."""
 
     update_time_ms: int
     """Last update time of the Secret (Unix timestamp in milliseconds)."""

@@ -24,7 +24,7 @@ class GatewayConfigCreateParams(TypedDict, total=False):
     name: Required[str]
     """The human-readable name for the GatewayConfig.
 
-    Must be unique within your account.
+    Names are labels and may be reused.
     """
 
     custom_headers: Optional[Iterable[CustomHeader]]

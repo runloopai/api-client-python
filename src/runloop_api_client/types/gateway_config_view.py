@@ -27,10 +27,7 @@ class GatewayConfigView(BaseModel):
     """The target endpoint URL (e.g., 'https://api.anthropic.com')."""
 
     name: str
-    """The human-readable name of the GatewayConfig.
-
-    Unique per account (or globally for system configs).
-    """
+    """The human-readable name of the GatewayConfig. Names may be reused."""
 
     account_id: Optional[str] = None
     """The account ID that owns this config."""

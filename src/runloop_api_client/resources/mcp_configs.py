@@ -75,7 +75,7 @@ class McpConfigsResource(SyncAPIResource):
 
           endpoint: The target MCP server endpoint URL (e.g., 'https://mcp.example.com').
 
-          name: The human-readable name for the McpConfig. Must be unique within your account.
+          name: The human-readable name for the McpConfig. Names are labels and may be reused.
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
@@ -189,7 +189,7 @@ class McpConfigsResource(SyncAPIResource):
 
           endpoint: New target MCP server endpoint URL.
 
-          name: New name for the McpConfig. Must be unique within your account.
+          name: New name for the McpConfig. Names are labels and may be reused.
 
           extra_headers: Send extra headers
 
@@ -381,7 +381,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
 
           endpoint: The target MCP server endpoint URL (e.g., 'https://mcp.example.com').
 
-          name: The human-readable name for the McpConfig. Must be unique within your account.
+          name: The human-readable name for the McpConfig. Names are labels and may be reused.
               The first segment before '-' is used as the service name for tool routing (e.g.,
               'github-readonly' uses 'github' as the service name).
 
@@ -495,7 +495,7 @@ class AsyncMcpConfigsResource(AsyncAPIResource):
 
           endpoint: New target MCP server endpoint URL.
 
-          name: New name for the McpConfig. Must be unique within your account.
+          name: New name for the McpConfig. Names are labels and may be reused.
 
           extra_headers: Send extra headers
 

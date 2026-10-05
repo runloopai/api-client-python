@@ -32,4 +32,4 @@ class GatewayConfigUpdateParams(TypedDict, total=False):
     """New target endpoint URL (e.g., 'https://api.anthropic.com')."""
 
     name: Optional[str]
-    """New name for the GatewayConfig. Must be unique within your account."""
+    """New name for the GatewayConfig. Names are labels and may be reused."""

@@ -39,4 +39,4 @@ class McpConfigUpdateParams(TypedDict, total=False):
     """New target MCP server endpoint URL."""
 
     name: Optional[str]
-    """New name for the McpConfig. Must be unique within your account."""
+    """New name for the McpConfig. Names are labels and may be reused."""

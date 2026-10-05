@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import secret_list_params, secret_create_params, secret_update_params
+from ..types import secret_list_params, secret_create_params, secret_update_params, secret_update_by_id_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -55,14 +55,16 @@ class SecretsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> SecretView:
-        """Create a new Secret with a globally unique name and value.
+        """Create a new Secret with a name and value.
 
-        The Secret will be
-        encrypted at rest and made available as an environment variable in Devboxes.
+        The Secret will be encrypted at rest
+        and made available as an environment variable in Devboxes. Creation rejects an
+        existing name within the account on a best-effort basis; concurrent creates may
+        produce duplicates.
 
         Args:
-          name: The globally unique name for the Secret. Must be a valid environment variable
-              name (alphanumeric and underscores only). Example: 'DATABASE_PASSWORD'
+          name: The name for the Secret. Must be a valid environment variable name (alphanumeric
+              and underscores only). Example: 'DATABASE_PASSWORD'
 
           value: The value to store for this Secret. This will be encrypted at rest and made
               available as an environment variable in Devboxes. Example: 'my-secure-password'
@@ -109,7 +111,8 @@ class SecretsResource(SyncAPIResource):
     ) -> SecretView:
         """Retrieve a Secret by name.
 
-        The secret value is not included for security.
+        If several match, the greatest ID is selected. The
+        secret value is not included for security.
 
         Args:
           extra_headers: Send extra headers
@@ -145,8 +148,10 @@ class SecretsResource(SyncAPIResource):
     ) -> SecretView:
         """Update the value of an existing Secret by name.
 
-        The new value will be encrypted
-        at rest.
+        If several Secrets in the
+        account have this name, only the one with the greatest ID at lookup is updated
+        and returned. Older matches are unchanged. A concurrent create may become the
+        latest match. The new value will be encrypted at rest.
 
         Args:
           value: The new value for the Secret. This will replace the existing value and be
@@ -230,8 +235,10 @@ class SecretsResource(SyncAPIResource):
     ) -> SecretView:
         """Delete an existing Secret by name.
 
-        This action is irreversible and will remove
-        the Secret from all Devboxes.
+        If several Secrets in the account have this
+        name, every selected match is deleted and the one with the greatest selected ID
+        is returned. Deletions are not atomic across matches: a failure may leave some
+        matches deleted. A concurrent create may survive. This action is irreversible.
 
         Args:
           extra_headers: Send extra headers
@@ -248,6 +255,128 @@ class SecretsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return self._post(
             path_template("/v1/secrets/{name}/delete", name=name),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=SecretView,
+        )
+
+    def delete_by_id(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> SecretView:
+        """Delete an existing Secret by ID.
+
+        This action is irreversible.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/secrets/id/{id}/delete", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=SecretView,
+        )
+
+    def retrieve_by_id(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SecretView:
+        """Retrieve a Secret by ID.
+
+        The secret value is not included for security.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            path_template("/v1/secrets/id/{id}", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SecretView,
+        )
+
+    def update_by_id(
+        self,
+        id: str,
+        *,
+        value: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> SecretView:
+        """Update the value of an existing Secret by ID.
+
+        The new value will be encrypted at
+        rest.
+
+        Args:
+          value: The new value for the Secret. This will replace the existing value and be
+              encrypted at rest. Example: 'my-updated-secure-password'
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            path_template("/v1/secrets/id/{id}/update", id=id),
+            body=maybe_transform({"value": value}, secret_update_by_id_params.SecretUpdateByIDParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -292,14 +421,16 @@ class AsyncSecretsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> SecretView:
-        """Create a new Secret with a globally unique name and value.
+        """Create a new Secret with a name and value.
 
-        The Secret will be
-        encrypted at rest and made available as an environment variable in Devboxes.
+        The Secret will be encrypted at rest
+        and made available as an environment variable in Devboxes. Creation rejects an
+        existing name within the account on a best-effort basis; concurrent creates may
+        produce duplicates.
 
         Args:
-          name: The globally unique name for the Secret. Must be a valid environment variable
-              name (alphanumeric and underscores only). Example: 'DATABASE_PASSWORD'
+          name: The name for the Secret. Must be a valid environment variable name (alphanumeric
+              and underscores only). Example: 'DATABASE_PASSWORD'
 
           value: The value to store for this Secret. This will be encrypted at rest and made
               available as an environment variable in Devboxes. Example: 'my-secure-password'
@@ -346,7 +477,8 @@ class AsyncSecretsResource(AsyncAPIResource):
     ) -> SecretView:
         """Retrieve a Secret by name.
 
-        The secret value is not included for security.
+        If several match, the greatest ID is selected. The
+        secret value is not included for security.
 
         Args:
           extra_headers: Send extra headers
@@ -382,8 +514,10 @@ class AsyncSecretsResource(AsyncAPIResource):
     ) -> SecretView:
         """Update the value of an existing Secret by name.
 
-        The new value will be encrypted
-        at rest.
+        If several Secrets in the
+        account have this name, only the one with the greatest ID at lookup is updated
+        and returned. Older matches are unchanged. A concurrent create may become the
+        latest match. The new value will be encrypted at rest.
 
         Args:
           value: The new value for the Secret. This will replace the existing value and be
@@ -467,8 +601,10 @@ class AsyncSecretsResource(AsyncAPIResource):
     ) -> SecretView:
         """Delete an existing Secret by name.
 
-        This action is irreversible and will remove
-        the Secret from all Devboxes.
+        If several Secrets in the account have this
+        name, every selected match is deleted and the one with the greatest selected ID
+        is returned. Deletions are not atomic across matches: a failure may leave some
+        matches deleted. A concurrent create may survive. This action is irreversible.
 
         Args:
           extra_headers: Send extra headers
@@ -485,6 +621,128 @@ class AsyncSecretsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `name` but received {name!r}")
         return await self._post(
             path_template("/v1/secrets/{name}/delete", name=name),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=SecretView,
+        )
+
+    async def delete_by_id(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> SecretView:
+        """Delete an existing Secret by ID.
+
+        This action is irreversible.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/secrets/id/{id}/delete", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                idempotency_key=idempotency_key,
+            ),
+            cast_to=SecretView,
+        )
+
+    async def retrieve_by_id(
+        self,
+        id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SecretView:
+        """Retrieve a Secret by ID.
+
+        The secret value is not included for security.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            path_template("/v1/secrets/id/{id}", id=id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SecretView,
+        )
+
+    async def update_by_id(
+        self,
+        id: str,
+        *,
+        value: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+        idempotency_key: str | None = None,
+    ) -> SecretView:
+        """Update the value of an existing Secret by ID.
+
+        The new value will be encrypted at
+        rest.
+
+        Args:
+          value: The new value for the Secret. This will replace the existing value and be
+              encrypted at rest. Example: 'my-updated-secure-password'
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+
+          idempotency_key: Specify a custom idempotency key for this request
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            path_template("/v1/secrets/id/{id}/update", id=id),
+            body=await async_maybe_transform({"value": value}, secret_update_by_id_params.SecretUpdateByIDParams),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -515,6 +773,15 @@ class SecretsResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             secrets.delete,
         )
+        self.delete_by_id = to_raw_response_wrapper(
+            secrets.delete_by_id,
+        )
+        self.retrieve_by_id = to_raw_response_wrapper(
+            secrets.retrieve_by_id,
+        )
+        self.update_by_id = to_raw_response_wrapper(
+            secrets.update_by_id,
+        )
 
 
 class AsyncSecretsResourceWithRawResponse:
@@ -535,6 +802,15 @@ class AsyncSecretsResourceWithRawResponse:
         )
         self.delete = async_to_raw_response_wrapper(
             secrets.delete,
+        )
+        self.delete_by_id = async_to_raw_response_wrapper(
+            secrets.delete_by_id,
+        )
+        self.retrieve_by_id = async_to_raw_response_wrapper(
+            secrets.retrieve_by_id,
+        )
+        self.update_by_id = async_to_raw_response_wrapper(
+            secrets.update_by_id,
         )
 
 
@@ -557,6 +833,15 @@ class SecretsResourceWithStreamingResponse:
         self.delete = to_streamed_response_wrapper(
             secrets.delete,
         )
+        self.delete_by_id = to_streamed_response_wrapper(
+            secrets.delete_by_id,
+        )
+        self.retrieve_by_id = to_streamed_response_wrapper(
+            secrets.retrieve_by_id,
+        )
+        self.update_by_id = to_streamed_response_wrapper(
+            secrets.update_by_id,
+        )
 
 
 class AsyncSecretsResourceWithStreamingResponse:
@@ -577,4 +862,13 @@ class AsyncSecretsResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             secrets.delete,
+        )
+        self.delete_by_id = async_to_streamed_response_wrapper(
+            secrets.delete_by_id,
+        )
+        self.retrieve_by_id = async_to_streamed_response_wrapper(
+            secrets.retrieve_by_id,
+        )
+        self.update_by_id = async_to_streamed_response_wrapper(
+            secrets.update_by_id,
         )

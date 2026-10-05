@@ -62,7 +62,7 @@ class NetworkPolicyView(BaseModel):
     """The egress rules for this policy."""
 
     name: str
-    """The human-readable name of the NetworkPolicy. Unique per account."""
+    """The human-readable name of the NetworkPolicy. Names may be reused."""
 
     update_time_ms: int
     """Last update time of the NetworkPolicy (Unix timestamp in milliseconds)."""

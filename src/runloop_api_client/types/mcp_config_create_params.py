@@ -26,7 +26,7 @@ class McpConfigCreateParams(TypedDict, total=False):
     name: Required[str]
     """The human-readable name for the McpConfig.
 
-    Must be unique within your account. The first segment before '-' is used as the
+    Names are labels and may be reused. The first segment before '-' is used as the
     service name for tool routing (e.g., 'github-readonly' uses 'github' as the
     service name).
     """

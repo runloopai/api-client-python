@@ -15,7 +15,7 @@ class NetworkPolicyCreateParams(TypedDict, total=False):
     name: Required[str]
     """The human-readable name for the NetworkPolicy.
 
-    Must be unique within the account.
+    Names are labels and may be reused.
     """
 
     allow_agent_gateway: Optional[bool]

@@ -71,8 +71,8 @@ class NetworkPoliciesResource(SyncAPIResource):
         be applied to blueprints, devboxes, or snapshot resumes.
 
         Args:
-          name: The human-readable name for the NetworkPolicy. Must be unique within the
-              account.
+          name: The human-readable name for the NetworkPolicy. Names are labels and may be
+              reused.
 
           allow_agent_gateway: (Optional) If true, allows devbox egress to the agent gateway for credential
               proxying. Defaults to false.
@@ -406,8 +406,8 @@ class AsyncNetworkPoliciesResource(AsyncAPIResource):
         be applied to blueprints, devboxes, or snapshot resumes.
 
         Args:
-          name: The human-readable name for the NetworkPolicy. Must be unique within the
-              account.
+          name: The human-readable name for the NetworkPolicy. Names are labels and may be
+              reused.
 
           allow_agent_gateway: (Optional) If true, allows devbox egress to the agent gateway for credential
               proxying. Defaults to false.

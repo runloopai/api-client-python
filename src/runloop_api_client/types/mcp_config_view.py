@@ -33,7 +33,7 @@ class McpConfigView(BaseModel):
     """The target MCP server endpoint URL (e.g., 'https://mcp.example.com')."""
 
     name: str
-    """The human-readable name of the McpConfig. Unique per account."""
+    """The human-readable name of the McpConfig. Names may be reused."""
 
     custom_headers: Optional[List[CustomHeader]] = None
     """Additional headers applied to upstream requests after the credential.

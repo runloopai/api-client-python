@@ -204,6 +204,124 @@ class TestSecrets:
                 "",
             )
 
+    @parametrize
+    def test_method_delete_by_id(self, client: Runloop) -> None:
+        secret = client.secrets.delete_by_id(
+            "id",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_raw_response_delete_by_id(self, client: Runloop) -> None:
+        response = client.secrets.with_raw_response.delete_by_id(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_streaming_response_delete_by_id(self, client: Runloop) -> None:
+        with client.secrets.with_streaming_response.delete_by_id(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_delete_by_id(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.secrets.with_raw_response.delete_by_id(
+                "",
+            )
+
+    @parametrize
+    def test_method_retrieve_by_id(self, client: Runloop) -> None:
+        secret = client.secrets.retrieve_by_id(
+            "id",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_raw_response_retrieve_by_id(self, client: Runloop) -> None:
+        response = client.secrets.with_raw_response.retrieve_by_id(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_streaming_response_retrieve_by_id(self, client: Runloop) -> None:
+        with client.secrets.with_streaming_response.retrieve_by_id(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_retrieve_by_id(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.secrets.with_raw_response.retrieve_by_id(
+                "",
+            )
+
+    @parametrize
+    def test_method_update_by_id(self, client: Runloop) -> None:
+        secret = client.secrets.update_by_id(
+            id="id",
+            value="value",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_raw_response_update_by_id(self, client: Runloop) -> None:
+        response = client.secrets.with_raw_response.update_by_id(
+            id="id",
+            value="value",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    def test_streaming_response_update_by_id(self, client: Runloop) -> None:
+        with client.secrets.with_streaming_response.update_by_id(
+            id="id",
+            value="value",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_path_params_update_by_id(self, client: Runloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.secrets.with_raw_response.update_by_id(
+                id="",
+                value="value",
+            )
+
 
 class TestAsyncSecrets:
     parametrize = pytest.mark.parametrize(
@@ -392,4 +510,122 @@ class TestAsyncSecrets:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `name` but received ''"):
             await async_client.secrets.with_raw_response.delete(
                 "",
+            )
+
+    @parametrize
+    async def test_method_delete_by_id(self, async_client: AsyncRunloop) -> None:
+        secret = await async_client.secrets.delete_by_id(
+            "id",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_raw_response_delete_by_id(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.secrets.with_raw_response.delete_by_id(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = await response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_delete_by_id(self, async_client: AsyncRunloop) -> None:
+        async with async_client.secrets.with_streaming_response.delete_by_id(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = await response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_delete_by_id(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.secrets.with_raw_response.delete_by_id(
+                "",
+            )
+
+    @parametrize
+    async def test_method_retrieve_by_id(self, async_client: AsyncRunloop) -> None:
+        secret = await async_client.secrets.retrieve_by_id(
+            "id",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_raw_response_retrieve_by_id(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.secrets.with_raw_response.retrieve_by_id(
+            "id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = await response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_retrieve_by_id(self, async_client: AsyncRunloop) -> None:
+        async with async_client.secrets.with_streaming_response.retrieve_by_id(
+            "id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = await response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_retrieve_by_id(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.secrets.with_raw_response.retrieve_by_id(
+                "",
+            )
+
+    @parametrize
+    async def test_method_update_by_id(self, async_client: AsyncRunloop) -> None:
+        secret = await async_client.secrets.update_by_id(
+            id="id",
+            value="value",
+        )
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_raw_response_update_by_id(self, async_client: AsyncRunloop) -> None:
+        response = await async_client.secrets.with_raw_response.update_by_id(
+            id="id",
+            value="value",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        secret = await response.parse()
+        assert_matches_type(SecretView, secret, path=["response"])
+
+    @parametrize
+    async def test_streaming_response_update_by_id(self, async_client: AsyncRunloop) -> None:
+        async with async_client.secrets.with_streaming_response.update_by_id(
+            id="id",
+            value="value",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            secret = await response.parse()
+            assert_matches_type(SecretView, secret, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_path_params_update_by_id(self, async_client: AsyncRunloop) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.secrets.with_raw_response.update_by_id(
+                id="",
+                value="value",
             )
