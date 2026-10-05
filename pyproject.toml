@@ -59,6 +59,7 @@ Documentation = "https://docs.runloop.ai"
 aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.9"]
 
 [tool.uv]
+exclude-newer = "14 days"
 managed = true
 required-version = ">=0.9"
 
