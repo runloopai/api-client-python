@@ -15,7 +15,7 @@ client + server _request handling_ from provisioning.
 
 | Script | Transport under test |
 | --- | --- |
-| `loadtest.py` | The **SDK** itself (`AsyncRunloop`). `USE_HTTP2=0` → HTTP/1.1; default / `USE_HTTP2=1` → HTTP/2 (shared httpx pool). Always runs against the installed package in this checkout. |
+| `loadtest.py` | The **SDK** itself. `USE_HTTP2=0` → HTTP/1.1; default / `USE_HTTP2=1` → HTTP/2 (shared httpx pool). `USE_SYNC=0` (default) → async `AsyncRunloop` via asyncio; `USE_SYNC=1` → blocking `Runloop` via a thread pool. Always runs against the installed package in this checkout. |
 | `h2_test.py` | Raw `httpx` HTTP/2, bypassing the SDK. Configurable connection count. |
 | `h2_single_conn.py` | Raw `httpx` HTTP/2 on a single warmed connection (50-request burst). |
 | `raw_fetch_test.py` | Raw `httpx` HTTP/1.1 keep-alive baseline. |
@@ -37,6 +37,10 @@ cd /path/to/api-client-python && uv sync
 # SDK: HTTP/2 (default) vs HTTP/1.1, 2000-request burst
 source ~/env && REQUEST_COUNT=2000 uv run python loadtest/loadtest.py            # HTTP/2
 source ~/env && REQUEST_COUNT=2000 USE_HTTP2=0 uv run python loadtest/loadtest.py # HTTP/1.1
+
+# SDK: async (default) vs sync client
+source ~/env && REQUEST_COUNT=2000 USE_SYNC=1 uv run python loadtest/loadtest.py             # sync, HTTP/2
+source ~/env && REQUEST_COUNT=2000 USE_SYNC=1 CONCURRENCY=500 uv run python loadtest/loadtest.py  # cap the thread pool
 
 # Raw httpx HTTP/2 vs HTTP/1.1 comparison
 source ~/env && uv run python loadtest/h2_test.py
@@ -61,3 +65,5 @@ file-descriptor limit (`ulimit -n 65536`) or keep `REQUEST_COUNT` small.
 | `REQUEST_COUNT` | `100000` (`loadtest.py`) / `10000` (`h2_test.py`) / `500` (`raw_fetch_test.py`) | Total requests |
 | `NUM_CONNECTIONS` | `10` (`h2_test.py`) / `20` (`raw_fetch_test.py`) | Parallel connections |
 | `USE_HTTP2` | `1` | `0` to force HTTP/1.1 in `loadtest.py` |
+| `USE_SYNC` | `0` | `1` to benchmark the blocking `Runloop` client (thread pool) instead of async `AsyncRunloop` |
+| `CONCURRENCY` | `500` | Worker-thread cap for the sync path. Effective workers = `min(REQUEST_COUNT, CONCURRENCY)`; above the cap, requests queue through the pool. The sync client is GIL-bound, so raising this past a few hundred adds contention without improving throughput (a 500-worker pool beat 5000 at 20k requests: 260 vs 199 req/s, ~10x lower p50 latency). |
