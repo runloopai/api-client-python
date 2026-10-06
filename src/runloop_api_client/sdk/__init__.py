@@ -43,6 +43,7 @@ from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox, AsyncNamedShell
 from .async_secret import AsyncSecret
+from .secret_by_id import SecretById
 from .async_snapshot import AsyncSnapshot
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
@@ -51,6 +52,7 @@ from .async_blueprint import AsyncBlueprint
 from .async_execution import AsyncExecution
 from .async_mcp_config import AsyncMcpConfig
 from .execution_result import ExecutionResult
+from .async_secret_by_id import AsyncSecretById
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
@@ -98,6 +100,8 @@ __all__ = [
     "Blueprint",
     "AsyncBlueprint",
     "Secret",
+    "SecretById",
+    "AsyncSecretById",
     "AsyncSecret",
     "Snapshot",
     "AsyncSnapshot",

@@ -45,6 +45,7 @@ from .async_snapshot import AsyncSnapshot
 from .async_blueprint import AsyncBlueprint
 from .async_mcp_config import AsyncMcpConfig
 from ..types.secret_view import SecretView
+from .async_secret_by_id import AsyncSecretById
 from ..lib.context_loader import TarFilter, build_directory_tar
 from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
@@ -1006,7 +1007,7 @@ class AsyncSecretOps:
             ... )
             >>> print(f"Created secret: {secret.name}")
 
-        :param name: Globally unique secret name (must be a valid env var name)
+        :param name: Account-scoped secret name (must be a valid env var name)
         :type name: str
         :param value: Secret value to store (encrypted at rest)
         :type value: str
@@ -1027,12 +1028,16 @@ class AsyncSecretOps:
             >>> info = await secret.get_info()
             >>> print(f"Secret ID: {info.id}")
 
-        :param name: The globally unique name of the secret
+        :param name: The literal account-scoped name of the secret
         :type name: str
         :return: An AsyncSecret instance (no API call made)
         :rtype: AsyncSecret
         """
         return AsyncSecret(self._client, name)
+
+    def from_id(self, id: str) -> AsyncSecretById:
+        """Get a lazy exact-ID handle; its operations never fall back to a name."""
+        return AsyncSecretById(self._client, id)
 
     async def update(
         self,

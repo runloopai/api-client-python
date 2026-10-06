@@ -43,6 +43,7 @@ from .snapshot import Snapshot
 from .blueprint import Blueprint
 from .mcp_config import McpConfig
 from .._constants import DEFAULT_API_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
+from .secret_by_id import SecretById
 from .gateway_config import GatewayConfig
 from .network_policy import NetworkPolicy
 from .storage_object import StorageObject
@@ -1031,7 +1032,7 @@ class SecretOps:
             ... )
             >>> print(f"Created secret: {secret.name}")
 
-        :param name: Globally unique secret name (must be a valid env var name)
+        :param name: Account-scoped secret name (must be a valid env var name)
         :type name: str
         :param value: Secret value to store (encrypted at rest)
         :type value: str
@@ -1052,12 +1053,16 @@ class SecretOps:
             >>> info = secret.get_info()
             >>> print(f"Secret ID: {info.id}")
 
-        :param name: The globally unique name of the secret
+        :param name: The literal account-scoped name of the secret
         :type name: str
         :return: A Secret instance (no API call made)
         :rtype: Secret
         """
         return Secret(self._client, name)
+
+    def from_id(self, id: str) -> SecretById:
+        """Get a lazy exact-ID handle; its operations never fall back to a name."""
+        return SecretById(self._client, id)
 
     def update(
         self,

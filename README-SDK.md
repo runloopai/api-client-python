@@ -10,6 +10,7 @@ The `RunloopSDK` builds on top of the underlying REST client and provides a Pyth
 - [Core Concepts](#core-concepts)
   - [RunloopSDK](#runloopsdk)
   - [Available Resources](#available-resources)
+  - [Secrets: names and exact IDs](#secrets-names-and-exact-ids)
   - [Devbox](#devbox)
     - [Command Execution](#command-execution)
     - [Execution Management](#execution-management)
@@ -127,6 +128,20 @@ The SDK provides object-oriented interfaces for all major Runloop resources:
 - **`runloop.mcp_config`** - MCP config management (create, list MCP server configurations)
 - **`runloop.secret`** - Secret management (create, update, list, delete encrypted key-value pairs)
 - **`runloop.api`** - Direct access to the underlying REST API client
+
+### Secrets: names and exact IDs
+
+`Secret` / `AsyncSecret` objects from `create()`, `list()`, and `from_name()` always operate by name, even when they carry a captured `.id`. Use a separate `SecretById` / `AsyncSecretById` handle for one exact row:
+
+```python
+created = runloop.secret.create(name="API_TOKEN", value="synthetic-example")
+assert created.id is not None
+exact = runloop.secret.from_id(created.id)  # Lazy; never falls back to a name.
+exact.update("synthetic-rotated")  # Returns SecretView, as do get_info() and delete().
+exact.delete()  # Deletes only this row.
+```
+
+For `AsyncRunloopSDK`, await the operations but not `from_id()`. The handle types are exported from `runloop_api_client.sdk`. ID handles have `.id`, not `.name`; use their instance methods rather than name-only manager helpers. Environment-secret maps still take names; pass `exact.id` explicitly for an ID-based gateway/MCP binding. Name reads/updates select the greatest ID; name deletion removes selected matches nonatomically. IDs identify mutable rows, not value versions, and existing retries can replay writes. Rotation does not rewrite running devbox environments or issued tokens. Avoid debug request logging with real credentials.
 
 ### Devbox
 

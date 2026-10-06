@@ -13,8 +13,10 @@ class AsyncSecret:
     """Asynchronous wrapper around a secret resource.
 
     Secrets are encrypted key-value pairs that can be securely stored and injected
-    into Devboxes as environment variables. Secrets are identified by their globally
-    unique name.
+    into Devboxes as environment variables. This wrapper always operates by its account-scoped
+    name, even if it contains an ID from an earlier response. Reads and updates
+    select the greatest ID at lookup; deletion removes all selected matches,
+    nonatomically. Use ``sdk.secret.from_id(id)`` for exact row operations.
 
     Example:
         >>> runloop = AsyncRunloopSDK()
@@ -36,7 +38,7 @@ class AsyncSecret:
 
         :param client: Generated AsyncRunloop client
         :type client: AsyncRunloop
-        :param name: The globally unique name of the secret
+        :param name: The literal account-scoped name of the secret
         :type name: str
         :param id: The secret ID (optional, may not be known until get_info is called)
         :type id: str | None
@@ -53,7 +55,7 @@ class AsyncSecret:
     def id(self) -> str | None:
         """Return the secret ID.
 
-        :return: Secret ID, or None if not yet fetched from API
+        :return: Captured response ID, or None. Fetching metadata does not refresh this property.
         :rtype: str | None
         """
         return self._id
@@ -62,7 +64,7 @@ class AsyncSecret:
     def name(self) -> str:
         """Return the secret name.
 
-        :return: Globally unique secret name
+        :return: Literal account-scoped secret name
         :rtype: str
         """
         return self._name
@@ -93,7 +95,9 @@ class AsyncSecret:
         value: str,
         **options: Unpack[LongRequestOptions],
     ) -> SecretView:
-        """Update this secret's value.
+        """Update the greatest-ID row matching this name at lookup.
+
+        This wrapper remains name-bound and its captured ID is unchanged.
 
         Example:
             >>> updated = await secret.update("new-secret-value")
@@ -115,7 +119,9 @@ class AsyncSecret:
         self,
         **options: Unpack[LongRequestOptions],
     ) -> SecretView:
-        """Delete this secret. This action is irreversible.
+        """Delete every selected row matching this name, nonatomically.
+
+        A concurrent create can survive. This action is irreversible.
 
         Example:
             >>> await secret.delete()
