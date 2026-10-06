@@ -139,8 +139,10 @@ class AxonsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AxonView:
-        """
-        [Beta] Get an axon given ID.
+        """[Beta] Get an axon by ID.
+
+        Deleted axons remain readable and include their
+        deletion time.
 
         Args:
           extra_headers: Send extra headers
@@ -177,7 +179,8 @@ class AxonsResource(SyncAPIResource):
         """[Beta] Updates the specified axon fields.
 
         Omitted fields are left unchanged. An
-        empty metadata map clears the metadata.
+        empty metadata map clears the metadata. Deleted axons remain readable but cannot
+        be updated.
 
         Args:
           metadata: User defined metadata to replace the axon metadata. Omit or set to null to leave
@@ -226,8 +229,10 @@ class AxonsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncAxonsCursorIDPage[AxonView]:
-        """
-        [Beta] List all active axons.
+        """[Beta] List axons, including deleted axons.
+
+        Deleted axons include their deletion
+        time.
 
         Args:
           id: Filter by axon ID.
@@ -293,8 +298,9 @@ class AxonsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        [Beta] Mark an axon deleted.
+        """[Beta] Delete an axon's event data.
+
+        The axon's registry record remains readable.
 
         Args:
           extra_headers: Send extra headers
@@ -519,8 +525,10 @@ class AsyncAxonsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AxonView:
-        """
-        [Beta] Get an axon given ID.
+        """[Beta] Get an axon by ID.
+
+        Deleted axons remain readable and include their
+        deletion time.
 
         Args:
           extra_headers: Send extra headers
@@ -557,7 +565,8 @@ class AsyncAxonsResource(AsyncAPIResource):
         """[Beta] Updates the specified axon fields.
 
         Omitted fields are left unchanged. An
-        empty metadata map clears the metadata.
+        empty metadata map clears the metadata. Deleted axons remain readable but cannot
+        be updated.
 
         Args:
           metadata: User defined metadata to replace the axon metadata. Omit or set to null to leave
@@ -606,8 +615,10 @@ class AsyncAxonsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[AxonView, AsyncAxonsCursorIDPage[AxonView]]:
-        """
-        [Beta] List all active axons.
+        """[Beta] List axons, including deleted axons.
+
+        Deleted axons include their deletion
+        time.
 
         Args:
           id: Filter by axon ID.
@@ -673,8 +684,9 @@ class AsyncAxonsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> object:
-        """
-        [Beta] Mark an axon deleted.
+        """[Beta] Delete an axon's event data.
+
+        The axon's registry record remains readable.
 
         Args:
           extra_headers: Send extra headers

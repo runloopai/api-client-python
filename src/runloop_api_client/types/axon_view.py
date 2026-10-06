@@ -17,5 +17,8 @@ class AxonView(BaseModel):
     metadata: Dict[str, str]
     """The user defined axon metadata."""
 
+    deleted_at_ms: Optional[int] = None
+    """Deletion time in milliseconds since epoch; null while the axon is active."""
+
     name: Optional[str] = None
     """The name of the axon."""
