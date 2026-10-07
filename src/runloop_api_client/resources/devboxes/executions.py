@@ -352,8 +352,12 @@ class ExecutionsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxSendStdInResult:
-        """
-        Send content to the Std In of a running execution.
+        """Send nonempty text or a signal to an execution started with attach_stdin
+        enabled.
+
+        The request body is required. Supply exactly one of nonempty text or a
+        non-null signal. Wait for each send before sending more input or EOF; concurrent
+        requests are not ordered and retries after connection failures can replay input.
 
         Args:
           signal: Signal to send to std in of the running execution.
@@ -886,8 +890,12 @@ class AsyncExecutionsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
         idempotency_key: str | None = None,
     ) -> DevboxSendStdInResult:
-        """
-        Send content to the Std In of a running execution.
+        """Send nonempty text or a signal to an execution started with attach_stdin
+        enabled.
+
+        The request body is required. Supply exactly one of nonempty text or a
+        non-null signal. Wait for each send before sending more input or EOF; concurrent
+        requests are not ordered and retries after connection failures can replay input.
 
         Args:
           signal: Signal to send to std in of the running execution.
