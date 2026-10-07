@@ -125,6 +125,22 @@ class TestAsyncDevboxCommandExecution:
         assert result.success is False
         assert await result.stdout(num_lines=1) == ""
 
+    @pytest.mark.timeout(TWO_MINUTE_TIMEOUT)
+    async def test_stdin_ordered_roundtrip(self, shared_devbox: AsyncDevbox) -> None:
+        execution = await shared_devbox.cmd.exec_async("cat", attach_stdin=True)
+        completed = False
+        try:
+            await execution.send_std_in("first\n")
+            await execution.send_std_in("second\n")
+            await execution.close_std_in()
+            result = await execution.result()
+            completed = True
+            assert result.exit_code == 0
+            assert await result.stdout() == "first\nsecond\n"
+        finally:
+            if not completed:
+                await execution.kill()
+
     @pytest.mark.timeout(THIRTY_SECOND_TIMEOUT)
     async def test_exec_async_command(self, shared_devbox: AsyncDevbox) -> None:
         """Test executing a command asynchronously with exec_async."""

@@ -233,6 +233,23 @@ print("Errors:", result.stderr())
 execution.kill()
 ```
 
+To send input, start the execution with stdin attached:
+
+```python
+execution = devbox.cmd.exec_async("cat", attach_stdin=True)
+execution.send_std_in("first\n")
+execution.send_std_in("second\n")
+execution.close_std_in()
+result = execution.result()
+assert result.stdout() == "first\nsecond\n"
+```
+
+The async SDK exposes the same helpers with `await`. Send nonempty text, finish each
+send before the next, and wait for pending sends before closing stdin. Concurrent
+calls are not serialized. These helpers preserve the generated client's retry policy;
+a retry after an ambiguous connection failure can replay input (not exactly-once
+execution).
+
 **Key methods:**
 
 - `execution.get_state()` - Get current execution state (status, exit_code, etc.)

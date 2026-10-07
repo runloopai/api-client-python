@@ -9,6 +9,7 @@ from typing_extensions import Unpack, override
 
 from ._types import BaseRequestOptions, LongRequestOptions
 from .._client import Runloop
+from .._exceptions import RunloopError
 from .execution_result import ExecutionResult
 from ..types.devbox_async_execution_detail_view import DevboxAsyncExecutionDetailView
 
@@ -119,6 +120,38 @@ class Execution:
             devbox_id=self._devbox_id,
             **options,
         )
+
+    def send_std_in(self, text: str, **options: Unpack[LongRequestOptions]) -> None:
+        """Send nonempty text to an execution started with ``attach_stdin=True``.
+
+        Complete each send before the next send or ``close_std_in``. Concurrent
+        calls are not ordered. Client retries can replay input after an ambiguous
+        connection failure; delivery is not guaranteed to be exactly once.
+
+        :param text: Text to write to stdin
+        :param options: Request configuration forwarded to the generated client
+        :raises RunloopError: If the API reports unsuccessful delivery
+        """
+        response = self._client.devboxes.executions.send_std_in(
+            self._execution_id, devbox_id=self._devbox_id, text=text, **options
+        )
+        if not response.success:
+            raise RunloopError(f"Failed to send stdin to execution {self._execution_id}")
+
+    def close_std_in(self, **options: Unpack[LongRequestOptions]) -> None:
+        """Send EOF after all input has been delivered so the execution can finish.
+
+        Requires ``attach_stdin=True``. Wait for pending sends before closing.
+        This handle does not serialize calls or guarantee exactly-once delivery.
+
+        :param options: Request configuration forwarded to the generated client
+        :raises RunloopError: If the API reports unsuccessful delivery
+        """
+        response = self._client.devboxes.executions.send_std_in(
+            self._execution_id, devbox_id=self._devbox_id, signal="EOF", **options
+        )
+        if not response.success:
+            raise RunloopError(f"Failed to send stdin to execution {self._execution_id}")
 
     def kill(self, **options: Unpack[LongRequestOptions]) -> None:
         """Request termination of the running execution.
