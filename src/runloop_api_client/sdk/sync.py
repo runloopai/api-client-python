@@ -536,7 +536,7 @@ class AxonOps:
         return Axon(self._client, axon_id)
 
     def list(self, **params: Unpack[SDKAxonListParams]) -> list[Axon]:
-        """[Beta] List all active axons.
+        """[Beta] List all axons, including deleted axons.
 
         :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAxonListParams` for available parameters
         :return: Collection of axon wrappers
