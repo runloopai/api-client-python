@@ -201,12 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -248,12 +242,10 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for runloop_api_client.sdk._types</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">InputContext</span><span class="p">,</span>
-    <span class="n">ScenarioView</span><span class="p">,</span>
     <span class="n">AxonListParams</span><span class="p">,</span>
     <span class="n">AgentListParams</span><span class="p">,</span>
     <span class="n">AxonCreateParams</span><span class="p">,</span>
@@ -263,15 +255,10 @@
     <span class="n">AxonPublishParams</span><span class="p">,</span>
     <span class="n">DevboxCreateParams</span><span class="p">,</span>
     <span class="n">ObjectCreateParams</span><span class="p">,</span>
-    <span class="n">ScenarioListParams</span><span class="p">,</span>
-    <span class="n">BenchmarkListParams</span><span class="p">,</span>
     <span class="n">BlueprintListParams</span><span class="p">,</span>
     <span class="n">McpConfigListParams</span><span class="p">,</span>
     <span class="n">ObjectDownloadParams</span><span class="p">,</span>
-    <span class="n">ScenarioUpdateParams</span><span class="p">,</span>
     <span class="n">AgentListPublicParams</span><span class="p">,</span>
-    <span class="n">BenchmarkCreateParams</span><span class="p">,</span>
-    <span class="n">BenchmarkUpdateParams</span><span class="p">,</span>
     <span class="n">BlueprintCreateParams</span><span class="p">,</span>
     <span class="n">McpConfigCreateParams</span><span class="p">,</span>
     <span class="n">McpConfigUpdateParams</span><span class="p">,</span>
@@ -287,17 +274,13 @@
     <span class="n">NetworkPolicyUpdateParams</span><span class="p">,</span>
     <span class="n">DevboxReadFileContentsParams</span><span class="p">,</span>
     <span class="n">DevboxWriteFileContentsParams</span><span class="p">,</span>
-    <span class="n">BenchmarkRunListScenarioRunsParams</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">Headers</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">NotGiven</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..lib.polling</span><span class="w"> </span><span class="kn">import</span> <span class="n">PollingConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devboxes</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiskSnapshotListParams</span><span class="p">,</span> <span class="n">DiskSnapshotUpdateParams</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.scenarios</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScorerListParams</span><span class="p">,</span> <span class="n">ScorerCreateParams</span><span class="p">,</span> <span class="n">ScorerUpdateParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_create_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxBaseCreateParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.axons.sql_batch_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">SqlBatchParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.axons.sql_query_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">SqlQueryParams</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.scenario_start_run_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScenarioStartRunBaseParams</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.benchmark_start_run_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">BenchmarkSelfStartRunParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_execute_async_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxNiceExecuteAsyncParams</span>
 
 <span class="n">LogCallback</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
@@ -494,27 +477,6 @@
 
 
 
-<div class="viewcode-block" id="SDKScorerCreateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScorerCreateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScorerCreateParams</span><span class="p">(</span><span class="n">ScorerCreateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScorerListParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScorerListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScorerListParams</span><span class="p">(</span><span class="n">ScorerListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScorerUpdateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScorerUpdateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScorerUpdateParams</span><span class="p">(</span><span class="n">ScorerUpdateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
 <div class="viewcode-block" id="SDKAgentCreateParams">
 <a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKAgentCreateParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKAgentCreateParams</span><span class="p">(</span><span class="n">AgentCreateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
@@ -564,101 +526,6 @@
 <div class="viewcode-block" id="SDKAxonSqlBatchParams">
 <a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKAxonSqlBatchParams">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKAxonSqlBatchParams</span><span class="p">(</span><span class="n">SqlBatchParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScenarioListParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScenarioListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScenarioListParams</span><span class="p">(</span><span class="n">ScenarioListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScenarioUpdateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScenarioUpdateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScenarioUpdateParams</span><span class="p">(</span><span class="n">ScenarioUpdateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScenarioRunAsyncParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScenarioRunAsyncParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScenarioRunAsyncParams</span><span class="p">(</span><span class="n">ScenarioStartRunBaseParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKScenarioRunParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKScenarioRunParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKScenarioRunParams</span><span class="p">(</span><span class="n">ScenarioStartRunBaseParams</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">InputContextPreview</span><span class="p">(</span><span class="n">InputContext</span><span class="p">):</span>
-    <span class="n">problem_statement</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore[assignment]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The problem statement for the Scenario.&quot;&quot;&quot;</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ScenarioPreview</span><span class="p">(</span><span class="n">ScenarioView</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preview of scenario configuration with all fields optional.&quot;&quot;&quot;</span>
-
-    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore[assignment]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ID of the Scenario.&quot;&quot;&quot;</span>
-
-    <span class="n">input_context</span><span class="p">:</span> <span class="n">InputContextPreview</span>  <span class="c1"># type: ignore[assignment]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The input context for the Scenario.&quot;&quot;&quot;</span>
-
-    <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="s2">&quot;archived&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore[assignment]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status is not set for previews.&quot;&quot;&quot;</span>
-
-
-<div class="viewcode-block" id="SDKBenchmarkCreateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkCreateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkCreateParams</span><span class="p">(</span><span class="n">BenchmarkCreateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKBenchmarkListParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkListParams</span><span class="p">(</span><span class="n">BenchmarkListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKBenchmarkUpdateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkUpdateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkUpdateParams</span><span class="p">(</span><span class="n">BenchmarkUpdateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKBenchmarkStartRunParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkStartRunParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkStartRunParams</span><span class="p">(</span><span class="n">BenchmarkSelfStartRunParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKBenchmarkListRunsParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkListRunsParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkListRunsParams</span><span class="p">(</span><span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The limit of items to return. Default is 20. Max is 5000.&quot;&quot;&quot;</span>
-
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter by name&quot;&quot;&quot;</span>
-
-    <span class="n">starting_after</span><span class="p">:</span> <span class="nb">str</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the next page of data starting after the item with the given ID.&quot;&quot;&quot;</span></div>
-
-
-
-<div class="viewcode-block" id="SDKBenchmarkRunListScenarioRunsParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKBenchmarkRunListScenarioRunsParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKBenchmarkRunListScenarioRunsParams</span><span class="p">(</span><span class="n">BenchmarkRunListScenarioRunsParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 

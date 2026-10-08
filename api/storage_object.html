@@ -202,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="snapshot.html">Snapshot</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcp_config.html">MCP Config</a></li>
@@ -260,34 +254,34 @@
 <div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Async</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Sync</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><p id="module-runloop_api_client.sdk.async_storage_object">Storage object resource class for asynchronous operations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_storage_object.AsyncStorageObject">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_storage_object.</span></span><span class="sig-name descname"><span class="pre">AsyncStorageObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_storage_object.html#AsyncStorageObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_storage_object.</span></span><span class="sig-name descname"><span class="pre">AsyncStorageObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_storage_object.html#AsyncStorageObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject" title="Link to this definition">¶</a></dt>
 <dd><p>Async wrapper around storage object operations, including uploads and downloads.</p>
 <dl class="field-list simple">
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_storage_object.AsyncStorageObject.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject.id" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject.id" title="Link to this definition">¶</a></dt>
 <dd><p>Return the storage object identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Unique object ID</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_storage_object.AsyncStorageObject.upload_url">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject.upload_url" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject.upload_url" title="Link to this definition">¶</a></dt>
 <dd><p>Return the pre-signed upload URL, if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Upload URL when the object is pending completion</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -355,7 +349,7 @@
 <dd class="field-even"><p>Entire object payload</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -372,7 +366,7 @@
 <dd class="field-even"><p>Entire object payload decoded as UTF-8</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -398,9 +392,13 @@
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_storage_object.AsyncStorageObject.upload_content">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_storage_object.html#AsyncStorageObject.upload_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_storage_object.AsyncStorageObject.upload_content" title="Link to this definition">¶</a></dt>
 <dd><p>Upload content to the object’s pre-signed URL.</p>
+<p>The URL and required headers are sensitive upload credentials. Requests use
+the configured HTTP transport, but not its default headers, cookies, or auth.
+Custom transport implementations and event hooks must preserve this isolation.
+Uploads are not retried and redirects are not followed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em> | </em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em>]</em>) – Bytes payload, text payload, or an iterable streaming bytes</p>
+<dd class="field-odd"><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em> | </em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em>]</em>) – Bytes payload, text payload, or an iterable streaming bytes</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -410,8 +408,9 @@
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no upload URL is available</p></li>
-<li><p><strong>httpx.HTTPStatusError</strong> – Propagated from the underlying <code class="docutils literal notranslate"><span class="pre">httpx</span></code> client when the upload fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no upload URL is available</p></li>
+<li><p><strong>httpx.HTTPStatusError</strong> – If storage rejects the upload (message excludes signed credentials)</p></li>
+<li><p><strong>httpx.RequestError</strong> – If the upload cannot be sent</p></li>
 </ul>
 </dd>
 </dl>
@@ -438,34 +437,34 @@ when creating a blueprint.</p>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><p id="module-runloop_api_client.sdk.storage_object">Storage object resource class for synchronous operations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.storage_object.StorageObject">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.storage_object.</span></span><span class="sig-name descname"><span class="pre">StorageObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/storage_object.html#StorageObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.storage_object.</span></span><span class="sig-name descname"><span class="pre">StorageObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/storage_object.html#StorageObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject" title="Link to this definition">¶</a></dt>
 <dd><p>Wrapper around storage object operations, including uploads and downloads.</p>
 <dl class="field-list simple">
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.storage_object.StorageObject.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject.id" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject.id" title="Link to this definition">¶</a></dt>
 <dd><p>Return the storage object identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Unique object ID</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.storage_object.StorageObject.upload_url">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject.upload_url" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject.upload_url" title="Link to this definition">¶</a></dt>
 <dd><p>Return the pre-signed upload URL, if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Upload URL when the object is pending completion</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -533,7 +532,7 @@ when creating a blueprint.</p>
 <dd class="field-even"><p>Entire object payload</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,7 +549,7 @@ when creating a blueprint.</p>
 <dd class="field-even"><p>Entire object payload decoded as UTF-8</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -576,9 +575,13 @@ when creating a blueprint.</p>
 <dt class="sig sig-object py" id="runloop_api_client.sdk.storage_object.StorageObject.upload_content">
 <span class="sig-name descname"><span class="pre">upload_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/storage_object.html#StorageObject.upload_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.storage_object.StorageObject.upload_content" title="Link to this definition">¶</a></dt>
 <dd><p>Upload content to the object’s pre-signed URL.</p>
+<p>The URL and required headers are sensitive upload credentials. Requests use
+the configured HTTP transport, but not its default headers, cookies, or auth.
+Custom transport implementations and event hooks must preserve this isolation.
+Uploads are not retried and redirects are not followed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em> | </em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em>]</em>) – Bytes payload, text payload, or an iterable streaming bytes</p>
+<dd class="field-odd"><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em> | </em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a><em>]</em>) – Bytes payload, text payload, or an iterable streaming bytes</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -588,8 +591,9 @@ when creating a blueprint.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no upload URL is available</p></li>
-<li><p><strong>httpx.HTTPStatusError</strong> – Propagated from the underlying <code class="docutils literal notranslate"><span class="pre">httpx</span></code> client when the upload fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If no upload URL is available</p></li>
+<li><p><strong>httpx.HTTPStatusError</strong> – If storage rejects the upload (message excludes signed credentials)</p></li>
+<li><p><strong>httpx.RequestError</strong> – If the upload cannot be sent</p></li>
 </ul>
 </dd>
 </dl>

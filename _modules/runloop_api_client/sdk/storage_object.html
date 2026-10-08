@@ -201,12 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -252,8 +246,10 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">override</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">,</span> <span class="n">SDKObjectDownloadParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runloop</span>
@@ -267,7 +263,13 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">StorageObject</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around storage object operations, including uploads and downloads.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">upload_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">,</span>
+        <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">upload_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">upload_headers</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the wrapper.</span>
 
 <span class="sd">        :param client: Generated Runloop client</span>
@@ -276,10 +278,12 @@
 <span class="sd">        :type object_id: str</span>
 <span class="sd">        :param upload_url: Pre-signed upload URL, if the object is in draft state, defaults to None</span>
 <span class="sd">        :type upload_url: str | None, optional</span>
+<span class="sd">        :param upload_headers: Required signed-upload headers returned with the URL; copied on construction</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">object_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_upload_url</span> <span class="o">=</span> <span class="n">upload_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_upload_headers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">upload_headers</span> <span class="ow">or</span> <span class="p">{})</span>
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -338,6 +342,7 @@
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_upload_url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_upload_headers</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
 
@@ -423,16 +428,30 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">upload_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload content to the object&#39;s pre-signed URL.</span>
 
+<span class="sd">        The URL and required headers are sensitive upload credentials. Requests use</span>
+<span class="sd">        the configured HTTP transport, but not its default headers, cookies, or auth.</span>
+<span class="sd">        Custom transport implementations and event hooks must preserve this isolation.</span>
+<span class="sd">        Uploads are not retried and redirects are not followed.</span>
+
 <span class="sd">        :param content: Bytes payload, text payload, or an iterable streaming bytes</span>
 <span class="sd">        :type content: str | bytes | Iterable[bytes]</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: None</span>
 <span class="sd">        :raises RuntimeError: If no upload URL is available</span>
-<span class="sd">        :raises httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails</span>
+<span class="sd">        :raises httpx.HTTPStatusError: If storage rejects the upload (message excludes signed credentials)</span>
+<span class="sd">        :raises httpx.RequestError: If the upload cannot be sent</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_upload_url</span><span class="p">()</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span></div>
+        <span class="c1"># Construct directly so HTTPX does not merge API-client defaults into storage requests.</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_headers</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">follow_redirects</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">RequestError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">httpx</span><span class="o">.</span><span class="n">RequestError</span><span class="p">(</span><span class="s2">&quot;Storage upload failed during transport&quot;</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">is_success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Storage upload failed (HTTP </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="n">response</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StorageObject.as_build_context">

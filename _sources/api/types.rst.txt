@@ -87,16 +87,6 @@ These TypeDicts define parameters for agent creation and listing.
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKAgentListParams
 
-Scorer Parameters
------------------
-
-These TypeDicts define parameters for scorer creation, listing, and updating.
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScorerCreateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScorerListParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScorerUpdateParams
 
 Axon Parameters
 ---------------
@@ -113,35 +103,7 @@ These TypeDicts define parameters for axon creation, listing, publishing, and SQ
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKAxonSqlBatchParams
 
-Scenario Parameters
--------------------
 
-These TypeDicts define parameters for scenario listing, updating, and running.
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioListParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioUpdateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioRunParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKScenarioRunAsyncParams
-
-Benchmark Parameters
---------------------
-
-These TypeDicts define parameters for benchmark creation, listing, updating, and running.
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkCreateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkListParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkUpdateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkStartRunParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkListRunsParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKBenchmarkRunListScenarioRunsParams
 
 Network Policy Parameters
 -------------------------

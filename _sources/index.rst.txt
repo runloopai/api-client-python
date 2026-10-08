@@ -2,7 +2,7 @@ Runloop Python SDK Documentation
 ==================================
 
 The Runloop Python SDK provides a Pythonic, object-oriented interface for managing
-devboxes, blueprints, snapshots, storage objects, scenarios, benchmarks, and more.
+devboxes, blueprints, snapshots, storage objects, agents, and more.
 The SDK offers both asynchronous and synchronous variants with identical interfaces.
 
 Installation

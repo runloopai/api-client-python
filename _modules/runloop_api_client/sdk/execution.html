@@ -201,12 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -259,6 +253,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRequestOptions</span><span class="p">,</span> <span class="n">LongRequestOptions</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runloop</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunloopError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.execution_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExecutionResult</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_async_execution_detail_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxAsyncExecutionDetailView</span>
 
@@ -376,6 +371,44 @@
             <span class="n">devbox_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_devbox_id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Execution.send_std_in">
+<a class="viewcode-back" href="../../../api/execution.html#runloop_api_client.sdk.execution.Execution.send_std_in">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">send_std_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send nonempty text to an execution started with ``attach_stdin=True``.</span>
+
+<span class="sd">        Complete each send before the next send or ``close_std_in``. Concurrent</span>
+<span class="sd">        calls are not ordered. Client retries can replay input after an ambiguous</span>
+<span class="sd">        connection failure; delivery is not guaranteed to be exactly once.</span>
+
+<span class="sd">        :param text: Text to write to stdin</span>
+<span class="sd">        :param options: Request configuration forwarded to the generated client</span>
+<span class="sd">        :raises RunloopError: If the API reports unsuccessful delivery</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">executions</span><span class="o">.</span><span class="n">send_std_in</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_execution_id</span><span class="p">,</span> <span class="n">devbox_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_devbox_id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RunloopError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send stdin to execution </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_execution_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Execution.close_std_in">
+<a class="viewcode-back" href="../../../api/execution.html#runloop_api_client.sdk.execution.Execution.close_std_in">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close_std_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LongRequestOptions</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send EOF after all input has been delivered so the execution can finish.</span>
+
+<span class="sd">        Requires ``attach_stdin=True``. Wait for pending sends before closing.</span>
+<span class="sd">        This handle does not serialize calls or guarantee exactly-once delivery.</span>
+
+<span class="sd">        :param options: Request configuration forwarded to the generated client</span>
+<span class="sd">        :raises RunloopError: If the API reports unsuccessful delivery</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">executions</span><span class="o">.</span><span class="n">send_std_in</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_execution_id</span><span class="p">,</span> <span class="n">devbox_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_devbox_id</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="s2">&quot;EOF&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RunloopError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send stdin to execution </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_execution_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Execution.kill">

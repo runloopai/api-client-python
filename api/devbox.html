@@ -202,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcp_config.html">MCP Config</a></li>
@@ -277,14 +271,14 @@ management.</p>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_devbox.AsyncDevbox.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.id" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.id" title="Link to this definition">¶</a></dt>
 <dd><p>Return the devbox identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Unique devbox ID</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -338,7 +332,7 @@ management.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The port number to construct the URL for</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The port number to construct the URL for</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[BaseRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -346,7 +340,7 @@ management.</p>
 <dd class="field-even"><p>The public tunnel URL if a tunnel is enabled, None otherwise</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -366,8 +360,8 @@ by execution ID or shell name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>execution_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by execution ID, defaults to None</p></li>
-<li><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by shell name, defaults to None</p></li>
+<li><p><strong>execution_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by execution ID, defaults to None</p></li>
+<li><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by shell name, defaults to None</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[BaseRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -511,7 +505,7 @@ from being automatically shut down due to inactivity.</p>
 <dd class="field-even"><p>Response confirming the keep-alive request</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -560,7 +554,7 @@ for completion. Use snapshot.await_completed() to wait for completion.</p>
 <dd><p>Alias for <a class="reference internal" href="#runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown" title="runloop_api_client.sdk.async_devbox.AsyncDevbox.shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code></a> to support common resource patterns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -619,7 +613,7 @@ that environment changes and directory changes from one command are preserved fo
 the next command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – The name of the persistent shell session. If not provided, a UUID will be generated automatically.</p>
+<dd class="field-odd"><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – The name of the persistent shell session. If not provided, a UUID will be generated automatically.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An AsyncNamedShell instance for executing commands in the named shell</p>
@@ -724,7 +718,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>File contents</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -768,7 +762,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>Raw file contents</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -791,7 +785,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>API response confirming the upload</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -837,7 +831,7 @@ processed before returning.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
+<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -871,7 +865,7 @@ it will wait for both the command to complete and all streaming to finish.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
+<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -962,7 +956,7 @@ Each devbox can have one tunnel. The tunnel URL format is:
 <dd class="field-even"><p>Response confirming the tunnel removal</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -992,14 +986,14 @@ including command execution, file operations, networking, and lifecycle manageme
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.devbox.Devbox.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.devbox.Devbox.id" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#runloop_api_client.sdk.devbox.Devbox.id" title="Link to this definition">¶</a></dt>
 <dd><p>Return the devbox identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Unique devbox ID</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1053,7 +1047,7 @@ including command execution, file operations, networking, and lifecycle manageme
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The port number to construct the URL for</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The port number to construct the URL for</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[BaseRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -1061,7 +1055,7 @@ including command execution, file operations, networking, and lifecycle manageme
 <dd class="field-even"><p>The public tunnel URL if a tunnel is enabled, None otherwise</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a> | None</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -1081,8 +1075,8 @@ by execution ID or shell name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>execution_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by execution ID, defaults to None</p></li>
-<li><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by shell name, defaults to None</p></li>
+<li><p><strong>execution_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by execution ID, defaults to None</p></li>
+<li><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – Filter logs by shell name, defaults to None</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[BaseRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -1224,7 +1218,7 @@ from being automatically shut down due to inactivity.</p>
 <dd class="field-even"><p>Response confirming the keep-alive request</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1273,7 +1267,7 @@ for completion. Use snapshot.await_completed() to wait for completion.</p>
 <dd><p>Alias for <a class="reference internal" href="#runloop_api_client.sdk.devbox.Devbox.shutdown" title="runloop_api_client.sdk.devbox.Devbox.shutdown"><code class="xref py py-meth docutils literal notranslate"><span class="pre">shutdown()</span></code></a> to support common resource patterns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1332,7 +1326,7 @@ that environment changes and directory changes from one command are preserved fo
 the next command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – The name of the persistent shell session. If not provided, a UUID will be generated automatically.</p>
+<dd class="field-odd"><p><strong>shell_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em><em>, </em><em>optional</em>) – The name of the persistent shell session. If not provided, a UUID will be generated automatically.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A NamedShell instance for executing commands in the named shell</p>
@@ -1437,7 +1431,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>File contents</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -1481,7 +1475,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>Raw file contents</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)">bytes</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -1504,7 +1498,7 @@ uploading, and downloading files.</p>
 <dd class="field-even"><p>API response confirming the upload</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -1550,7 +1544,7 @@ processed before returning.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
+<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -1584,7 +1578,7 @@ it will wait for both the command to complete and all streaming to finish.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
+<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The command to execute</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams" title="runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxExecuteAsyncParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -1675,7 +1669,7 @@ Each devbox can have one tunnel. The tunnel URL format is:
 <dd class="field-even"><p>Response confirming the tunnel removal</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)">object</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)">object</a></p>
 </dd>
 </dl>
 <p class="rubric">Example</p>

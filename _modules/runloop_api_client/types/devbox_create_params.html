@@ -201,12 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -372,7 +366,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">gateway</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The gateway config to use. Can be a gateway config ID (gwc_xxx) or name.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The gateway config to use.</span>
+
+<span class="sd">    Can be a gateway config ID (gwc_xxx) or name. A name binds the most recently</span>
+<span class="sd">    created config with that name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">secret</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The secret containing the credential. Can be a secret ID or name.&quot;&quot;&quot;</span></div>
@@ -387,7 +385,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">mcp_config</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The MCP config to use. Can be an MCP config ID (mcp_xxx) or name.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The MCP config to use.</span>
+
+<span class="sd">    Can be an MCP config ID (mcp_xxx) or name. A name binds the most recently</span>
+<span class="sd">    created config with that name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">secret</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The secret containing the MCP server credential. Can be a secret ID or name.&quot;&quot;&quot;</span></div>
@@ -403,7 +405,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">auth_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;authenticated&quot;</span><span class="p">]]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Authentication mode for the tunnel. Defaults to &#39;public&#39; if not specified.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Authentication mode for the tunnel.</span>
+
+<span class="sd">    Defaults to open if omitted: the hostname is a public capability and does not</span>
+<span class="sd">    require a tunnel bearer token.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">http_keep_alive</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

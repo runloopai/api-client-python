@@ -202,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mcp_config.html">MCP Config</a></li>
@@ -270,11 +264,8 @@ client via the <code class="docutils literal notranslate"><span class="pre">api<
 <li><p><strong>api</strong> (<a class="reference internal" href="#runloop_api_client.AsyncRunloop" title="runloop_api_client.AsyncRunloop"><em>AsyncRunloop</em></a>) – Direct access to the generated async REST API client</p></li>
 <li><p><strong>agent</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps" title="runloop_api_client.sdk.async_.AsyncAgentOps"><em>AsyncAgentOps</em></a>) – High-level async interface for agent management.</p></li>
 <li><p><strong>axon</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAxonOps" title="runloop_api_client.sdk.async_.AsyncAxonOps"><em>AsyncAxonOps</em></a>) – [Beta] High-level async interface for axon management</p></li>
-<li><p><strong>benchmark</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps" title="runloop_api_client.sdk.async_.AsyncBenchmarkOps"><em>AsyncBenchmarkOps</em></a>) – High-level async interface for benchmark management</p></li>
 <li><p><strong>devbox</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncDevboxOps" title="runloop_api_client.sdk.async_.AsyncDevboxOps"><em>AsyncDevboxOps</em></a>) – High-level async interface for devbox management</p></li>
 <li><p><strong>blueprint</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBlueprintOps" title="runloop_api_client.sdk.async_.AsyncBlueprintOps"><em>AsyncBlueprintOps</em></a>) – High-level async interface for blueprint management</p></li>
-<li><p><strong>scenario</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScenarioOps" title="runloop_api_client.sdk.async_.AsyncScenarioOps"><em>AsyncScenarioOps</em></a>) – High-level async interface for scenario management</p></li>
-<li><p><strong>scorer</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScorerOps" title="runloop_api_client.sdk.async_.AsyncScorerOps"><em>AsyncScorerOps</em></a>) – High-level async interface for scorer management</p></li>
 <li><p><strong>snapshot</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSnapshotOps" title="runloop_api_client.sdk.async_.AsyncSnapshotOps"><em>AsyncSnapshotOps</em></a>) – High-level async interface for snapshot management</p></li>
 <li><p><strong>storage_object</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncStorageObjectOps" title="runloop_api_client.sdk.async_.AsyncStorageObjectOps"><em>AsyncStorageObjectOps</em></a>) – High-level async interface for storage object management</p></li>
 <li><p><strong>network_policy</strong> (<a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncNetworkPolicyOps" title="runloop_api_client.sdk.async_.AsyncNetworkPolicyOps"><em>AsyncNetworkPolicyOps</em></a>) – High-level async interface for network policy management</p></li>
@@ -298,7 +289,7 @@ client via the <code class="docutils literal notranslate"><span class="pre">api<
 <dd><p>Close the underlying HTTP client and release resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,7 +336,7 @@ list existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to create from</p></li>
+<li><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -365,7 +356,7 @@ list existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>blueprint_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint name to create from</p></li>
+<li><p><strong>blueprint_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint name to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -385,7 +376,7 @@ list existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to create from</p></li>
+<li><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -407,7 +398,7 @@ state. Call <code class="docutils literal notranslate"><span class="pre">await_r
 you need to wait for readiness (contrast with the synchronous SDK, which blocks).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>devbox_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing devbox ID</p>
+<dd class="field-odd"><p><strong>devbox_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing devbox ID</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper bound to the requested devbox</p>
@@ -430,7 +421,7 @@ you need to wait for readiness (contrast with the synchronous SDK, which blocks)
 <dd class="field-even"><p>Collection of devbox wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="devbox.html#runloop_api_client.sdk.async_devbox.AsyncDevbox" title="runloop_api_client.sdk.async_devbox.AsyncDevbox">AsyncDevbox</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="devbox.html#runloop_api_client.sdk.async_devbox.AsyncDevbox" title="runloop_api_client.sdk.async_devbox.AsyncDevbox">AsyncDevbox</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -463,7 +454,7 @@ coroutines to list snapshots and access snapshot details.</p>
 <dd class="field-even"><p>Snapshot wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="snapshot.html#runloop_api_client.sdk.async_snapshot.AsyncSnapshot" title="runloop_api_client.sdk.async_snapshot.AsyncSnapshot">AsyncSnapshot</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="snapshot.html#runloop_api_client.sdk.async_snapshot.AsyncSnapshot" title="runloop_api_client.sdk.async_snapshot.AsyncSnapshot">AsyncSnapshot</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -474,7 +465,7 @@ coroutines to list snapshots and access snapshot details.</p>
 <dd><p>Return a snapshot wrapper for the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to wrap</p>
+<dd class="field-odd"><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the snapshot resource</p>
@@ -544,7 +535,7 @@ and list existing blueprints.</p>
 <dd><p>Return a blueprint wrapper for the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to wrap</p>
+<dd class="field-odd"><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the blueprint resource</p>
@@ -567,7 +558,7 @@ and list existing blueprints.</p>
 <dd class="field-even"><p>Blueprint wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="blueprint.html#runloop_api_client.sdk.async_blueprint.AsyncBlueprint" title="runloop_api_client.sdk.async_blueprint.AsyncBlueprint">AsyncBlueprint</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="blueprint.html#runloop_api_client.sdk.async_blueprint.AsyncBlueprint" title="runloop_api_client.sdk.async_blueprint.AsyncBlueprint">AsyncBlueprint</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -613,7 +604,7 @@ helpers for file and text uploads.</p>
 <dd><p>Return a storage object wrapper by identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object identifier to wrap</p>
+<dd class="field-odd"><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object identifier to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the storage object resource</p>
@@ -636,7 +627,7 @@ helpers for file and text uploads.</p>
 <dd class="field-even"><p>Storage object wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="storage_object.html#runloop_api_client.sdk.async_storage_object.AsyncStorageObject" title="runloop_api_client.sdk.async_storage_object.AsyncStorageObject">AsyncStorageObject</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="storage_object.html#runloop_api_client.sdk.async_storage_object.AsyncStorageObject" title="runloop_api_client.sdk.async_storage_object.AsyncStorageObject">AsyncStorageObject</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -648,10 +639,10 @@ helpers for file and text uploads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem path to read</p></li>
-<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the file name</p></li>
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem path to read</p></li>
+<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the file name</p></li>
 <li><p><strong>content_type</strong> (<em>Optional</em><em>[</em><em>ContentType</em><em>]</em>) – Optional MIME type to apply to the object</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -663,7 +654,7 @@ helpers for file and text uploads.</p>
 <dd class="field-odd"><p><a class="reference internal" href="storage_object.html#runloop_api_client.sdk.async_storage_object.AsyncStorageObject" title="runloop_api_client.sdk.async_storage_object.AsyncStorageObject">AsyncStorageObject</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p>
 </dd>
 </dl>
 </dd></dl>
@@ -676,9 +667,9 @@ helpers for file and text uploads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dir_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem directory path to tar</p></li>
-<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the directory name + ‘.tar.gz’</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>dir_path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem directory path to tar</p></li>
+<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the directory name + ‘.tar.gz’</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>ignore</strong> (<em>Optional</em><em>[</em><em>TarFilter</em><em>]</em>) – Optional tar filter function compatible with
 <a class="reference external" href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.add" title="(in Python v3.14)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tarfile.TarFile.add()</span></code></a>. If provided, it will be called for each
@@ -695,8 +686,8 @@ for available options</p></li>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local directory cannot be read</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> does not point to a directory</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local directory cannot be read</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> does not point to a directory</p></li>
 </ul>
 </dd>
 </dl>
@@ -709,9 +700,9 @@ for available options</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Text content to upload</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Text content to upload</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -732,10 +723,10 @@ for available options</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a>) – Binary payload to upload</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a>) – Binary payload to upload</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
 <li><p><strong>content_type</strong> (<em>ContentType</em>) – MIME type describing the payload</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -788,7 +779,7 @@ for available options</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncAxonOps.list">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncAxonOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncAxonOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>[Beta] List all active axons.</p>
+<dd><p>[Beta] List all axons, including deleted axons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAxonListParams" title="runloop_api_client.sdk._types.SDKAxonListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAxonListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAxonListParams" title="runloop_api_client.sdk._types.SDKAxonListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAxonListParams</span></code></a> for available parameters</p>
@@ -797,72 +788,7 @@ for available options</p></li>
 <dd class="field-even"><p>Collection of axon wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="axon.html#runloop_api_client.sdk.async_axon.AsyncAxon" title="runloop_api_client.sdk.async_axon.AsyncAxon">AsyncAxon</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScorerOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_.</span></span><span class="sig-name descname"><span class="pre">AsyncScorerOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScorerOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScorerOps" title="Link to this definition">¶</a></dt>
-<dd><p>Create and manage custom scorers (async). Access via <code class="docutils literal notranslate"><span class="pre">runloop.scorer</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">AsyncRunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scorer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;my_scorer&quot;</span><span class="p">,</span> <span class="n">bash_script</span><span class="o">=</span><span class="s2">&quot;echo &#39;score=1.0&#39;&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">all_scorers</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScorerOps.create">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScorerOps.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScorerOps.create" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new scorer with the given type and bash script.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerCreateParams" title="runloop_api_client.sdk._types.SDKScorerCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScorerCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerCreateParams" title="runloop_api_client.sdk._types.SDKScorerCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScorerCreateParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The newly created scorer</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scorer.html#runloop_api_client.sdk.async_scorer.AsyncScorer" title="runloop_api_client.sdk.async_scorer.AsyncScorer">AsyncScorer</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScorerOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scorer_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScorerOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScorerOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get an AsyncScorer instance for an existing scorer ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>scorer_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the scorer</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncScorer instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scorer.html#runloop_api_client.sdk.async_scorer.AsyncScorer" title="runloop_api_client.sdk.async_scorer.AsyncScorer">AsyncScorer</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScorerOps.list">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScorerOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScorerOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all scorers, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerListParams" title="runloop_api_client.sdk._types.SDKScorerListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScorerListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerListParams" title="runloop_api_client.sdk._types.SDKScorerListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScorerListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of scorers</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="scorer.html#runloop_api_client.sdk.async_scorer.AsyncScorer" title="runloop_api_client.sdk.async_scorer.AsyncScorer">AsyncScorer</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="axon.html#runloop_api_client.sdk.async_axon.AsyncAxon" title="runloop_api_client.sdk.async_axon.AsyncAxon">AsyncAxon</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -913,9 +839,9 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – NPM package name</p></li>
-<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – NPM registry URL, defaults to None</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
+<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – NPM package name</p></li>
+<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – NPM registry URL, defaults to None</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -926,7 +852,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -938,9 +864,9 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pip package name</p></li>
-<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Pip registry URL, defaults to None</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
+<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pip package name</p></li>
+<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Pip registry URL, defaults to None</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -951,7 +877,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -963,9 +889,9 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>repository</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Git repository URL</p></li>
-<li><p><strong>ref</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Optional Git ref (branch/tag/commit), defaults to main/HEAD</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after cloning, defaults to None</p></li>
+<li><p><strong>repository</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Git repository URL</p></li>
+<li><p><strong>ref</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Optional Git ref (branch/tag/commit), defaults to main/HEAD</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after cloning, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -976,7 +902,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -988,8 +914,8 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object ID</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after unpacking, defaults to None</p></li>
+<li><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object ID</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after unpacking, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -1000,7 +926,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1011,7 +937,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd><p>Attach to an existing agent by ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>agent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing agent ID</p>
+<dd class="field-odd"><p><strong>agent_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing agent ID</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper bound to the requested agent</p>
@@ -1034,7 +960,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-even"><p>Collection of agent wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1051,7 +977,7 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 <dd class="field-even"><p>Collection of public agent wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.async_agent.AsyncAgent" title="runloop_api_client.sdk.async_agent.AsyncAgent">AsyncAgent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1069,151 +995,6 @@ coroutines to create, retrieve, and list agents from various sources (npm, pip, 
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="types.html#runloop_api_client.types.agent_devbox_counts_view.AgentDevboxCountsView" title="runloop_api_client.types.agent_devbox_counts_view.AgentDevboxCountsView">AgentDevboxCountsView</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScenarioOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_.</span></span><span class="sig-name descname"><span class="pre">AsyncScenarioOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScenarioOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScenarioOps" title="Link to this definition">¶</a></dt>
-<dd><p>Manage scenarios (async). Access via <code class="docutils literal notranslate"><span class="pre">runloop.scenario</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">AsyncRunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenario</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="s2">&quot;scn-xxx&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="k">await</span> <span class="n">scenario</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenarios</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl>
-<dt>Example using builder:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="s2">&quot;my-scenario&quot;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">from_blueprint</span><span class="p">(</span><span class="n">blueprint</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">with_problem_statement</span><span class="p">(</span><span class="s2">&quot;Fix the bug&quot;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">add_test_command_scorer</span><span class="p">(</span><span class="s2">&quot;tests&quot;</span><span class="p">,</span> <span class="n">test_command</span><span class="o">=</span><span class="s2">&quot;pytest&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenario</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># equivalent to builder.push()</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScenarioOps.builder">
-<span class="sig-name descname"><span class="pre">builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScenarioOps.builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.builder" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new scenario builder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name for the scenario</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new AsyncScenarioBuilder instance</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scenario_builder.html#runloop_api_client.sdk.async_scenario_builder.AsyncScenarioBuilder" title="runloop_api_client.sdk.async_scenario_builder.AsyncScenarioBuilder">AsyncScenarioBuilder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScenarioOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScenarioOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get an AsyncScenario instance for an existing scenario ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>scenario_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the scenario</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncScenario instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scenario.html#runloop_api_client.sdk.async_scenario.AsyncScenario" title="runloop_api_client.sdk.async_scenario.AsyncScenario">AsyncScenario</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncScenarioOps.list">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncScenarioOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all scenarios, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScenarioListParams" title="runloop_api_client.sdk._types.SDKScenarioListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScenarioListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScenarioListParams" title="runloop_api_client.sdk._types.SDKScenarioListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScenarioListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of scenarios</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="scenario.html#runloop_api_client.sdk.async_scenario.AsyncScenario" title="runloop_api_client.sdk.async_scenario.AsyncScenario">AsyncScenario</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncBenchmarkOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.async_.</span></span><span class="sig-name descname"><span class="pre">AsyncBenchmarkOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncBenchmarkOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps" title="Link to this definition">¶</a></dt>
-<dd><p>Manage benchmarks (async). Access via <code class="docutils literal notranslate"><span class="pre">runloop.benchmark</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">AsyncRunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmarks</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runloop</span><span class="o">.</span><span class="n">benchmark</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">benchmark</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="s2">&quot;bmd_xxx&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="k">await</span> <span class="n">benchmark</span><span class="o">.</span><span class="n">start_run</span><span class="p">(</span><span class="n">run_name</span><span class="o">=</span><span class="s2">&quot;evaluation-v1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncBenchmarkOps.create">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncBenchmarkOps.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.create" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new benchmark.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkCreateParams" title="runloop_api_client.sdk._types.SDKBenchmarkCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKBenchmarkCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkCreateParams" title="runloop_api_client.sdk._types.SDKBenchmarkCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKBenchmarkCreateParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The newly created benchmark</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="benchmark.html#runloop_api_client.sdk.async_benchmark.AsyncBenchmark" title="runloop_api_client.sdk.async_benchmark.AsyncBenchmark">AsyncBenchmark</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncBenchmarkOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmark_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncBenchmarkOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get an AsyncBenchmark instance for an existing benchmark ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>benchmark_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the benchmark</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncBenchmark instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="benchmark.html#runloop_api_client.sdk.async_benchmark.AsyncBenchmark" title="runloop_api_client.sdk.async_benchmark.AsyncBenchmark">AsyncBenchmark</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncBenchmarkOps.list">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncBenchmarkOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all benchmarks, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkListParams" title="runloop_api_client.sdk._types.SDKBenchmarkListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKBenchmarkListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkListParams" title="runloop_api_client.sdk._types.SDKBenchmarkListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKBenchmarkListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of benchmarks</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="benchmark.html#runloop_api_client.sdk.async_benchmark.AsyncBenchmark" title="runloop_api_client.sdk.async_benchmark.AsyncBenchmark">AsyncBenchmark</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1260,7 +1041,7 @@ coroutines to create, retrieve, update, delete, and list network policies.</p>
 <dd><p>Get an AsyncNetworkPolicy instance for an existing network policy ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>network_policy_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the network policy</p>
+<dd class="field-odd"><p><strong>network_policy_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the network policy</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>AsyncNetworkPolicy instance for the given ID</p>
@@ -1283,7 +1064,7 @@ coroutines to create, retrieve, update, delete, and list network policies.</p>
 <dd class="field-even"><p>List of network policies</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="network_policy.html#runloop_api_client.sdk.async_network_policy.AsyncNetworkPolicy" title="runloop_api_client.sdk.async_network_policy.AsyncNetworkPolicy">AsyncNetworkPolicy</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="network_policy.html#runloop_api_client.sdk.async_network_policy.AsyncNetworkPolicy" title="runloop_api_client.sdk.async_network_policy.AsyncNetworkPolicy">AsyncNetworkPolicy</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1357,7 +1138,7 @@ proxying without exposing API keys.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gateway_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the gateway config</p>
+<dd class="field-odd"><p><strong>gateway_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the gateway config</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>AsyncGatewayConfig instance for the given ID</p>
@@ -1386,7 +1167,7 @@ proxying without exposing API keys.</p>
 <dd class="field-even"><p>List of gateway configs</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gateway_config.html#runloop_api_client.sdk.async_gateway_config.AsyncGatewayConfig" title="runloop_api_client.sdk.async_gateway_config.AsyncGatewayConfig">AsyncGatewayConfig</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gateway_config.html#runloop_api_client.sdk.async_gateway_config.AsyncGatewayConfig" title="runloop_api_client.sdk.async_gateway_config.AsyncGatewayConfig">AsyncGatewayConfig</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1435,7 +1216,7 @@ target endpoint and which tools are allowed.</p>
 <dd><p>Get an AsyncMcpConfig instance for an existing MCP config ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mcp_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the MCP config</p>
+<dd class="field-odd"><p><strong>mcp_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the MCP config</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>AsyncMcpConfig instance for the given ID</p>
@@ -1458,7 +1239,7 @@ target endpoint and which tools are allowed.</p>
 <dd class="field-even"><p>List of MCP configs</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="mcp_config.html#runloop_api_client.sdk.async_mcp_config.AsyncMcpConfig" title="runloop_api_client.sdk.async_mcp_config.AsyncMcpConfig">AsyncMcpConfig</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="mcp_config.html#runloop_api_client.sdk.async_mcp_config.AsyncMcpConfig" title="runloop_api_client.sdk.async_mcp_config.AsyncMcpConfig">AsyncMcpConfig</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1495,8 +1276,8 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Globally unique secret name (must be a valid env var name)</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Secret value to store (encrypted at rest)</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Account-scoped secret name (must be a valid env var name)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Secret value to store (encrypted at rest)</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -1522,13 +1303,24 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The globally unique name of the secret</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The literal account-scoped name of the secret</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An AsyncSecret instance (no API call made)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret">AsyncSecret</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.async_.AsyncSecretOps.from_id">
+<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/async_.html#AsyncSecretOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.async_.AsyncSecretOps.from_id" title="Link to this definition">¶</a></dt>
+<dd><p>Get a lazy exact-ID handle; its operations never fall back to a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret_by_id.AsyncSecretById" title="runloop_api_client.sdk.async_secret_by_id.AsyncSecretById"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncSecretById</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1546,8 +1338,8 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret"><em>AsyncSecret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to update (AsyncSecret object or name string)</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The new secret value</p></li>
+<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret"><em>AsyncSecret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to update (AsyncSecret object or name string)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The new secret value</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -1578,7 +1370,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dd class="field-even"><p>List of AsyncSecret instances</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret">AsyncSecret</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret">AsyncSecret</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1596,7 +1388,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret"><em>AsyncSecret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to delete (AsyncSecret object or name string)</p></li>
+<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.async_secret.AsyncSecret" title="runloop_api_client.sdk.async_secret.AsyncSecret"><em>AsyncSecret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to delete (AsyncSecret object or name string)</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -1624,11 +1416,8 @@ attribute for advanced use cases.</p>
 <li><p><strong>api</strong> (<a class="reference internal" href="#runloop_api_client.Runloop" title="runloop_api_client.Runloop"><em>Runloop</em></a>) – Direct access to the generated REST API client</p></li>
 <li><p><strong>agent</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps" title="runloop_api_client.sdk.sync.AgentOps"><em>AgentOps</em></a>) – High-level interface for agent management.</p></li>
 <li><p><strong>axon</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.AxonOps" title="runloop_api_client.sdk.sync.AxonOps"><em>AxonOps</em></a>) – [Beta] High-level interface for axon management</p></li>
-<li><p><strong>benchmark</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.BenchmarkOps" title="runloop_api_client.sdk.sync.BenchmarkOps"><em>BenchmarkOps</em></a>) – High-level interface for benchmark management</p></li>
 <li><p><strong>devbox</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.DevboxOps" title="runloop_api_client.sdk.sync.DevboxOps"><em>DevboxOps</em></a>) – High-level interface for devbox management</p></li>
 <li><p><strong>blueprint</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.BlueprintOps" title="runloop_api_client.sdk.sync.BlueprintOps"><em>BlueprintOps</em></a>) – High-level interface for blueprint management</p></li>
-<li><p><strong>scenario</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.ScenarioOps" title="runloop_api_client.sdk.sync.ScenarioOps"><em>ScenarioOps</em></a>) – High-level interface for scenario management</p></li>
-<li><p><strong>scorer</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.ScorerOps" title="runloop_api_client.sdk.sync.ScorerOps"><em>ScorerOps</em></a>) – High-level interface for scorer management</p></li>
 <li><p><strong>snapshot</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.SnapshotOps" title="runloop_api_client.sdk.sync.SnapshotOps"><em>SnapshotOps</em></a>) – High-level interface for snapshot management</p></li>
 <li><p><strong>storage_object</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.StorageObjectOps" title="runloop_api_client.sdk.sync.StorageObjectOps"><em>StorageObjectOps</em></a>) – High-level interface for storage object management</p></li>
 <li><p><strong>network_policy</strong> (<a class="reference internal" href="#runloop_api_client.sdk.sync.NetworkPolicyOps" title="runloop_api_client.sdk.sync.NetworkPolicyOps"><em>NetworkPolicyOps</em></a>) – High-level interface for network policy management</p></li>
@@ -1652,7 +1441,7 @@ attribute for advanced use cases.</p>
 <dd><p>Close the underlying HTTP client and release resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1699,7 +1488,7 @@ existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to create from</p></li>
+<li><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -1719,7 +1508,7 @@ existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>blueprint_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint name to create from</p></li>
+<li><p><strong>blueprint_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint name to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -1739,7 +1528,7 @@ existing devboxes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to create from</p></li>
+<li><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to create from</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams" title="runloop_api_client.sdk._types.SDKDevboxCreateFromImageParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKDevboxCreateFromImageParams</span></code></a> for available parameters</p></li>
 </ul>
 </dd>
@@ -1760,7 +1549,7 @@ existing devboxes.</p>
 issuing commands immediately.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>devbox_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing devbox ID</p>
+<dd class="field-odd"><p><strong>devbox_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing devbox ID</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper bound to the requested devbox</p>
@@ -1783,7 +1572,7 @@ issuing commands immediately.</p>
 <dd class="field-even"><p>Collection of devbox wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="devbox.html#runloop_api_client.sdk.devbox.Devbox" title="runloop_api_client.sdk.devbox.Devbox">Devbox</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="devbox.html#runloop_api_client.sdk.devbox.Devbox" title="runloop_api_client.sdk.devbox.Devbox">Devbox</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1816,7 +1605,7 @@ to list snapshots and access snapshot details.</p>
 <dd class="field-even"><p>Snapshot wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="snapshot.html#runloop_api_client.sdk.snapshot.Snapshot" title="runloop_api_client.sdk.snapshot.Snapshot">Snapshot</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="snapshot.html#runloop_api_client.sdk.snapshot.Snapshot" title="runloop_api_client.sdk.snapshot.Snapshot">Snapshot</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1827,7 +1616,7 @@ to list snapshots and access snapshot details.</p>
 <dd><p>Return a snapshot wrapper for the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to wrap</p>
+<dd class="field-odd"><p><strong>snapshot_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Snapshot ID to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the snapshot resource</p>
@@ -1896,7 +1685,7 @@ list existing blueprints.</p>
 <dd><p>Return a blueprint wrapper for the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to wrap</p>
+<dd class="field-odd"><p><strong>blueprint_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Blueprint ID to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the blueprint resource</p>
@@ -1919,7 +1708,7 @@ list existing blueprints.</p>
 <dd class="field-even"><p>Blueprint wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="blueprint.html#runloop_api_client.sdk.blueprint.Blueprint" title="runloop_api_client.sdk.blueprint.Blueprint">Blueprint</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="blueprint.html#runloop_api_client.sdk.blueprint.Blueprint" title="runloop_api_client.sdk.blueprint.Blueprint">Blueprint</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1965,7 +1754,7 @@ helpers for file and text uploads.</p>
 <dd><p>Return a storage object wrapper by identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object identifier to wrap</p>
+<dd class="field-odd"><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object identifier to wrap</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper for the storage object resource</p>
@@ -1988,7 +1777,7 @@ helpers for file and text uploads.</p>
 <dd class="field-even"><p>Storage object wrappers for each record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="storage_object.html#runloop_api_client.sdk.storage_object.StorageObject" title="runloop_api_client.sdk.storage_object.StorageObject">StorageObject</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="storage_object.html#runloop_api_client.sdk.storage_object.StorageObject" title="runloop_api_client.sdk.storage_object.StorageObject">StorageObject</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2000,10 +1789,10 @@ helpers for file and text uploads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem path to read</p></li>
-<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the file name</p></li>
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem path to read</p></li>
+<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the file name</p></li>
 <li><p><strong>content_type</strong> (<em>Optional</em><em>[</em><em>ContentType</em><em>]</em>) – Optional MIME type to apply to the object</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -2015,7 +1804,7 @@ helpers for file and text uploads.</p>
 <dd class="field-odd"><p><a class="reference internal" href="storage_object.html#runloop_api_client.sdk.storage_object.StorageObject" title="runloop_api_client.sdk.storage_object.StorageObject">StorageObject</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2028,9 +1817,9 @@ helpers for file and text uploads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dir_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem directory path to tar</p></li>
-<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the directory name + ‘.tar.gz’</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>dir_path</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>Path</em>) – Local filesystem directory path to tar</p></li>
+<li><p><strong>name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Optional object name; defaults to the directory name + ‘.tar.gz’</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>ignore</strong> (<em>Optional</em><em>[</em><em>TarFilter</em><em>]</em>) – Optional tar filter function compatible with
 <a class="reference external" href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.add" title="(in Python v3.14)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tarfile.TarFile.add()</span></code></a>. If provided, it will be called for each
@@ -2047,8 +1836,8 @@ for available options</p></li>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> does not point to a directory</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the local file cannot be read</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> does not point to a directory</p></li>
 </ul>
 </dd>
 </dl>
@@ -2061,9 +1850,9 @@ for available options</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Text content to upload</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Text content to upload</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -2084,10 +1873,10 @@ for available options</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a>) – Binary payload to upload</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><em>bytes</em></a>) – Binary payload to upload</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Object display name</p></li>
 <li><p><strong>content_type</strong> (<em>ContentType</em>) – MIME type describing the payload</p></li>
-<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
+<li><p><strong>metadata</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Optional key-value metadata</p></li>
 <li><p><strong>ttl</strong> (<em>Optional</em><em>[</em><em>timedelta</em><em>]</em>) – Optional Time-To-Live, after which the object is automatically deleted</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a> for available options</p></li>
 </ul>
@@ -2140,7 +1929,7 @@ for available options</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="runloop_api_client.sdk.sync.AxonOps.list">
 <span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#AxonOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.AxonOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>[Beta] List all active axons.</p>
+<dd><p>[Beta] List all axons, including deleted axons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAxonListParams" title="runloop_api_client.sdk._types.SDKAxonListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAxonListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAxonListParams" title="runloop_api_client.sdk._types.SDKAxonListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAxonListParams</span></code></a> for available parameters</p>
@@ -2149,72 +1938,7 @@ for available options</p></li>
 <dd class="field-even"><p>Collection of axon wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="axon.html#runloop_api_client.sdk.axon.Axon" title="runloop_api_client.sdk.axon.Axon">Axon</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScorerOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.sync.</span></span><span class="sig-name descname"><span class="pre">ScorerOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScorerOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScorerOps" title="Link to this definition">¶</a></dt>
-<dd><p>Create and manage custom scorers. Access via <code class="docutils literal notranslate"><span class="pre">runloop.scorer</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">RunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scorer</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;my_scorer&quot;</span><span class="p">,</span> <span class="n">bash_script</span><span class="o">=</span><span class="s2">&quot;echo &#39;score=1.0&#39;&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">all_scorers</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scorer</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScorerOps.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScorerOps.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScorerOps.create" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new scorer with the given type and bash script.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerCreateParams" title="runloop_api_client.sdk._types.SDKScorerCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScorerCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerCreateParams" title="runloop_api_client.sdk._types.SDKScorerCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScorerCreateParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The newly created scorer</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scorer.html#runloop_api_client.sdk.scorer.Scorer" title="runloop_api_client.sdk.scorer.Scorer">Scorer</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScorerOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scorer_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScorerOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScorerOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get a Scorer instance for an existing scorer ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>scorer_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the scorer</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Scorer instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scorer.html#runloop_api_client.sdk.scorer.Scorer" title="runloop_api_client.sdk.scorer.Scorer">Scorer</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScorerOps.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScorerOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScorerOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all scorers, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerListParams" title="runloop_api_client.sdk._types.SDKScorerListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScorerListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScorerListParams" title="runloop_api_client.sdk._types.SDKScorerListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScorerListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of scorers</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="scorer.html#runloop_api_client.sdk.scorer.Scorer" title="runloop_api_client.sdk.scorer.Scorer">Scorer</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="axon.html#runloop_api_client.sdk.axon.Axon" title="runloop_api_client.sdk.axon.Axon">Axon</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2271,9 +1995,9 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – NPM package name</p></li>
-<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – NPM registry URL, defaults to None</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
+<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – NPM package name</p></li>
+<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – NPM registry URL, defaults to None</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -2284,7 +2008,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2302,9 +2026,9 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pip package name</p></li>
-<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Pip registry URL, defaults to None</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
+<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pip package name</p></li>
+<li><p><strong>registry_url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Pip registry URL, defaults to None</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after installation, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -2315,7 +2039,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2337,9 +2061,9 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>repository</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Git repository URL</p></li>
-<li><p><strong>ref</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Optional Git ref (branch/tag/commit), defaults to main/HEAD</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after cloning, defaults to None</p></li>
+<li><p><strong>repository</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Git repository URL</p></li>
+<li><p><strong>ref</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Optional Git ref (branch/tag/commit), defaults to main/HEAD</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after cloning, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -2350,7 +2074,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2374,8 +2098,8 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object ID</p></li>
-<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after unpacking, defaults to None</p></li>
+<li><p><strong>object_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Storage object ID</p></li>
+<li><p><strong>agent_setup</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Setup commands to run after unpacking, defaults to None</p></li>
 <li><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKAgentCreateParams" title="runloop_api_client.sdk._types.SDKAgentCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKAgentCreateParams</span></code></a> for additional parameters (excluding ‘source’)</p></li>
 </ul>
 </dd>
@@ -2386,7 +2110,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-odd"><p><a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If ‘source’ is provided in params</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2397,7 +2121,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd><p>Attach to an existing agent by ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>agent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing agent ID</p>
+<dd class="field-odd"><p><strong>agent_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Existing agent ID</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Wrapper bound to the requested agent</p>
@@ -2420,7 +2144,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-even"><p>Collection of agent wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2437,7 +2161,7 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 <dd class="field-even"><p>Collection of public agent wrappers</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="agent.html#runloop_api_client.sdk.agent.Agent" title="runloop_api_client.sdk.agent.Agent">Agent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2455,151 +2179,6 @@ create, retrieve, and list agents from various sources (npm, pip, git, object st
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="types.html#runloop_api_client.types.agent_devbox_counts_view.AgentDevboxCountsView" title="runloop_api_client.types.agent_devbox_counts_view.AgentDevboxCountsView">AgentDevboxCountsView</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScenarioOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.sync.</span></span><span class="sig-name descname"><span class="pre">ScenarioOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScenarioOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScenarioOps" title="Link to this definition">¶</a></dt>
-<dd><p>Manage scenarios. Access via <code class="docutils literal notranslate"><span class="pre">runloop.scenario</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">RunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenario</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="s2">&quot;scn-xxx&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">scenario</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenarios</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl>
-<dt>Example using builder:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="p">(</span>
-<span class="gp">... </span>    <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="s2">&quot;my-scenario&quot;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">from_blueprint</span><span class="p">(</span><span class="n">blueprint</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">with_problem_statement</span><span class="p">(</span><span class="s2">&quot;Fix the bug&quot;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="o">.</span><span class="n">add_test_command_scorer</span><span class="p">(</span><span class="s2">&quot;tests&quot;</span><span class="p">,</span> <span class="n">test_command</span><span class="o">=</span><span class="s2">&quot;pytest&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scenario</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># equivalent to builder.push()</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScenarioOps.builder">
-<span class="sig-name descname"><span class="pre">builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScenarioOps.builder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScenarioOps.builder" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new scenario builder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name for the scenario</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new ScenarioBuilder instance</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scenario_builder.html#runloop_api_client.sdk.scenario_builder.ScenarioBuilder" title="runloop_api_client.sdk.scenario_builder.ScenarioBuilder">ScenarioBuilder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScenarioOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScenarioOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScenarioOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get a Scenario instance for an existing scenario ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>scenario_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the scenario</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Scenario instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="scenario.html#runloop_api_client.sdk.scenario.Scenario" title="runloop_api_client.sdk.scenario.Scenario">Scenario</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.ScenarioOps.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#ScenarioOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.ScenarioOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all scenarios, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScenarioListParams" title="runloop_api_client.sdk._types.SDKScenarioListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKScenarioListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKScenarioListParams" title="runloop_api_client.sdk._types.SDKScenarioListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKScenarioListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of scenarios</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="scenario.html#runloop_api_client.sdk.scenario.Scenario" title="runloop_api_client.sdk.scenario.Scenario">Scenario</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.BenchmarkOps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">runloop_api_client.sdk.sync.</span></span><span class="sig-name descname"><span class="pre">BenchmarkOps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#BenchmarkOps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.BenchmarkOps" title="Link to this definition">¶</a></dt>
-<dd><p>Manage benchmarks. Access via <code class="docutils literal notranslate"><span class="pre">runloop.benchmark</span></code>.</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runloop</span> <span class="o">=</span> <span class="n">RunloopSDK</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmarks</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">benchmark</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">runloop</span><span class="o">.</span><span class="n">benchmark</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="s2">&quot;bmd_xxx&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">benchmark</span><span class="o">.</span><span class="n">start_run</span><span class="p">(</span><span class="n">run_name</span><span class="o">=</span><span class="s2">&quot;evaluation-v1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.BenchmarkOps.create">
-<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#BenchmarkOps.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.BenchmarkOps.create" title="Link to this definition">¶</a></dt>
-<dd><p>Create a new benchmark.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkCreateParams" title="runloop_api_client.sdk._types.SDKBenchmarkCreateParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKBenchmarkCreateParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkCreateParams" title="runloop_api_client.sdk._types.SDKBenchmarkCreateParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKBenchmarkCreateParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The newly created benchmark</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="benchmark.html#runloop_api_client.sdk.benchmark.Benchmark" title="runloop_api_client.sdk.benchmark.Benchmark">Benchmark</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.BenchmarkOps.from_id">
-<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmark_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#BenchmarkOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.BenchmarkOps.from_id" title="Link to this definition">¶</a></dt>
-<dd><p>Get a Benchmark instance for an existing benchmark ID.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>benchmark_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the benchmark</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Benchmark instance for the given ID</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="benchmark.html#runloop_api_client.sdk.benchmark.Benchmark" title="runloop_api_client.sdk.benchmark.Benchmark">Benchmark</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.BenchmarkOps.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#BenchmarkOps.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.BenchmarkOps.list" title="Link to this definition">¶</a></dt>
-<dd><p>List all benchmarks, optionally filtered by parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>params</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkListParams" title="runloop_api_client.sdk._types.SDKBenchmarkListParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">SDKBenchmarkListParams</span></code></a>]</span>) – See <a class="reference internal" href="types.html#runloop_api_client.sdk._types.SDKBenchmarkListParams" title="runloop_api_client.sdk._types.SDKBenchmarkListParams"><code class="xref py py-typeddict docutils literal notranslate"><span class="pre">SDKBenchmarkListParams</span></code></a> for available parameters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of benchmarks</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="benchmark.html#runloop_api_client.sdk.benchmark.Benchmark" title="runloop_api_client.sdk.benchmark.Benchmark">Benchmark</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2646,7 +2225,7 @@ to create, retrieve, update, delete, and list network policies.</p>
 <dd><p>Get a NetworkPolicy instance for an existing network policy ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>network_policy_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the network policy</p>
+<dd class="field-odd"><p><strong>network_policy_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the network policy</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>NetworkPolicy instance for the given ID</p>
@@ -2669,7 +2248,7 @@ to create, retrieve, update, delete, and list network policies.</p>
 <dd class="field-even"><p>List of network policies</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="network_policy.html#runloop_api_client.sdk.network_policy.NetworkPolicy" title="runloop_api_client.sdk.network_policy.NetworkPolicy">NetworkPolicy</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="network_policy.html#runloop_api_client.sdk.network_policy.NetworkPolicy" title="runloop_api_client.sdk.network_policy.NetworkPolicy">NetworkPolicy</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2743,7 +2322,7 @@ proxying without exposing API keys.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gateway_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the gateway config</p>
+<dd class="field-odd"><p><strong>gateway_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the gateway config</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>GatewayConfig instance for the given ID</p>
@@ -2772,7 +2351,7 @@ proxying without exposing API keys.</p>
 <dd class="field-even"><p>List of gateway configs</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gateway_config.html#runloop_api_client.sdk.gateway_config.GatewayConfig" title="runloop_api_client.sdk.gateway_config.GatewayConfig">GatewayConfig</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gateway_config.html#runloop_api_client.sdk.gateway_config.GatewayConfig" title="runloop_api_client.sdk.gateway_config.GatewayConfig">GatewayConfig</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2821,7 +2400,7 @@ target endpoint and which tools are allowed.</p>
 <dd><p>Get a McpConfig instance for an existing MCP config ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mcp_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the MCP config</p>
+<dd class="field-odd"><p><strong>mcp_config_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID of the MCP config</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>McpConfig instance for the given ID</p>
@@ -2844,7 +2423,7 @@ target endpoint and which tools are allowed.</p>
 <dd class="field-even"><p>List of MCP configs</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="mcp_config.html#runloop_api_client.sdk.mcp_config.McpConfig" title="runloop_api_client.sdk.mcp_config.McpConfig">McpConfig</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="mcp_config.html#runloop_api_client.sdk.mcp_config.McpConfig" title="runloop_api_client.sdk.mcp_config.McpConfig">McpConfig</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2881,8 +2460,8 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Globally unique secret name (must be a valid env var name)</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Secret value to store (encrypted at rest)</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Account-scoped secret name (must be a valid env var name)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Secret value to store (encrypted at rest)</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unpack</span></code>[<a class="reference internal" href="types.html#runloop_api_client.sdk._types.LongRequestOptions" title="runloop_api_client.sdk._types.LongRequestOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LongRequestOptions</span></code></a>]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -2908,13 +2487,24 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The globally unique name of the secret</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The literal account-scoped name of the secret</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A Secret instance (no API call made)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret">Secret</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="runloop_api_client.sdk.sync.SecretOps.from_id">
+<span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/runloop_api_client/sdk/sync.html#SecretOps.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#runloop_api_client.sdk.sync.SecretOps.from_id" title="Link to this definition">¶</a></dt>
+<dd><p>Get a lazy exact-ID handle; its operations never fall back to a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="secret.html#runloop_api_client.sdk.secret_by_id.SecretById" title="runloop_api_client.sdk.secret_by_id.SecretById"><code class="xref py py-class docutils literal notranslate"><span class="pre">SecretById</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2932,8 +2522,8 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret"><em>Secret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to update (Secret object or name string)</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The new secret value</p></li>
+<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret"><em>Secret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to update (Secret object or name string)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The new secret value</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -2964,7 +2554,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dd class="field-even"><p>List of Secret instances</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret">Secret</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret">Secret</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2982,7 +2572,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret"><em>Secret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to delete (Secret object or name string)</p></li>
+<li><p><strong>secret</strong> (<a class="reference internal" href="secret.html#runloop_api_client.sdk.secret.Secret" title="runloop_api_client.sdk.secret.Secret"><em>Secret</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The secret to delete (Secret object or name string)</p></li>
 <li><p><strong>options</strong> (<span class="sphinx_autodoc_typehints-type">Unpack[LongRequestOptions]</span>) – Optional request configuration</p></li>
 </ul>
 </dd>
@@ -3116,12 +2706,6 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAxonOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncAxonOps.list()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScorerOps"><code class="docutils literal notranslate"><span class="pre">AsyncScorerOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScorerOps.create"><code class="docutils literal notranslate"><span class="pre">AsyncScorerOps.create()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScorerOps.from_id"><code class="docutils literal notranslate"><span class="pre">AsyncScorerOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScorerOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncScorerOps.list()</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps</span></code></a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps.create"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps.create()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps.create_from_npm"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps.create_from_npm()</span></code></a></li>
@@ -3132,18 +2716,6 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps.list()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps.list_public"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps.list_public()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncAgentOps.devbox_counts"><code class="docutils literal notranslate"><span class="pre">AsyncAgentOps.devbox_counts()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScenarioOps"><code class="docutils literal notranslate"><span class="pre">AsyncScenarioOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.builder"><code class="docutils literal notranslate"><span class="pre">AsyncScenarioOps.builder()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.from_id"><code class="docutils literal notranslate"><span class="pre">AsyncScenarioOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncScenarioOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncScenarioOps.list()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps"><code class="docutils literal notranslate"><span class="pre">AsyncBenchmarkOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.create"><code class="docutils literal notranslate"><span class="pre">AsyncBenchmarkOps.create()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.from_id"><code class="docutils literal notranslate"><span class="pre">AsyncBenchmarkOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncBenchmarkOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncBenchmarkOps.list()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncNetworkPolicyOps"><code class="docutils literal notranslate"><span class="pre">AsyncNetworkPolicyOps</span></code></a><ul>
@@ -3167,6 +2739,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps</span></code></a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.create"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.create()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.from_name"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.from_name()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.from_id"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.from_id()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.update"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.update()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.list"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.list()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.async_.AsyncSecretOps.delete"><code class="docutils literal notranslate"><span class="pre">AsyncSecretOps.delete()</span></code></a></li>
@@ -3212,12 +2785,6 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AxonOps.list"><code class="docutils literal notranslate"><span class="pre">AxonOps.list()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScorerOps"><code class="docutils literal notranslate"><span class="pre">ScorerOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScorerOps.create"><code class="docutils literal notranslate"><span class="pre">ScorerOps.create()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScorerOps.from_id"><code class="docutils literal notranslate"><span class="pre">ScorerOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScorerOps.list"><code class="docutils literal notranslate"><span class="pre">ScorerOps.list()</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps"><code class="docutils literal notranslate"><span class="pre">AgentOps</span></code></a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps.create"><code class="docutils literal notranslate"><span class="pre">AgentOps.create()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps.create_from_npm"><code class="docutils literal notranslate"><span class="pre">AgentOps.create_from_npm()</span></code></a></li>
@@ -3228,18 +2795,6 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps.list"><code class="docutils literal notranslate"><span class="pre">AgentOps.list()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps.list_public"><code class="docutils literal notranslate"><span class="pre">AgentOps.list_public()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.AgentOps.devbox_counts"><code class="docutils literal notranslate"><span class="pre">AgentOps.devbox_counts()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScenarioOps"><code class="docutils literal notranslate"><span class="pre">ScenarioOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScenarioOps.builder"><code class="docutils literal notranslate"><span class="pre">ScenarioOps.builder()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScenarioOps.from_id"><code class="docutils literal notranslate"><span class="pre">ScenarioOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.ScenarioOps.list"><code class="docutils literal notranslate"><span class="pre">ScenarioOps.list()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.BenchmarkOps"><code class="docutils literal notranslate"><span class="pre">BenchmarkOps</span></code></a><ul>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.BenchmarkOps.create"><code class="docutils literal notranslate"><span class="pre">BenchmarkOps.create()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.BenchmarkOps.from_id"><code class="docutils literal notranslate"><span class="pre">BenchmarkOps.from_id()</span></code></a></li>
-<li><a class="reference internal" href="#runloop_api_client.sdk.sync.BenchmarkOps.list"><code class="docutils literal notranslate"><span class="pre">BenchmarkOps.list()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.NetworkPolicyOps"><code class="docutils literal notranslate"><span class="pre">NetworkPolicyOps</span></code></a><ul>
@@ -3263,6 +2818,7 @@ key-value pairs that can be injected into Devboxes as environment variables.</p>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps"><code class="docutils literal notranslate"><span class="pre">SecretOps</span></code></a><ul>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.create"><code class="docutils literal notranslate"><span class="pre">SecretOps.create()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.from_name"><code class="docutils literal notranslate"><span class="pre">SecretOps.from_name()</span></code></a></li>
+<li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.from_id"><code class="docutils literal notranslate"><span class="pre">SecretOps.from_id()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.update"><code class="docutils literal notranslate"><span class="pre">SecretOps.update()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.list"><code class="docutils literal notranslate"><span class="pre">SecretOps.list()</span></code></a></li>
 <li><a class="reference internal" href="#runloop_api_client.sdk.sync.SecretOps.delete"><code class="docutils literal notranslate"><span class="pre">SecretOps.delete()</span></code></a></li>

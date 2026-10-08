@@ -201,12 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scorer.html">Scorer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario.html">Scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_builder.html">Scenario Builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/scenario_run.html">Scenario Run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark.html">Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/benchmark_run.html">Benchmark Run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -269,17 +263,12 @@
     <span class="n">SDKAxonCreateParams</span><span class="p">,</span>
     <span class="n">SDKDevboxListParams</span><span class="p">,</span>
     <span class="n">SDKObjectListParams</span><span class="p">,</span>
-    <span class="n">SDKScorerListParams</span><span class="p">,</span>
     <span class="n">SDKAgentCreateParams</span><span class="p">,</span>
     <span class="n">SDKDevboxCreateParams</span><span class="p">,</span>
     <span class="n">SDKObjectCreateParams</span><span class="p">,</span>
-    <span class="n">SDKScenarioListParams</span><span class="p">,</span>
-    <span class="n">SDKScorerCreateParams</span><span class="p">,</span>
-    <span class="n">SDKBenchmarkListParams</span><span class="p">,</span>
     <span class="n">SDKBlueprintListParams</span><span class="p">,</span>
     <span class="n">SDKMcpConfigListParams</span><span class="p">,</span>
     <span class="n">SDKAgentListPublicParams</span><span class="p">,</span>
-    <span class="n">SDKBenchmarkCreateParams</span><span class="p">,</span>
     <span class="n">SDKBlueprintCreateParams</span><span class="p">,</span>
     <span class="n">SDKMcpConfigCreateParams</span><span class="p">,</span>
     <span class="n">SDKDiskSnapshotListParams</span><span class="p">,</span>
@@ -290,21 +279,18 @@
     <span class="n">SDKDevboxCreateFromImageParams</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.devbox</span><span class="w"> </span><span class="kn">import</span> <span class="n">Devbox</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.scorer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scorer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.secret</span><span class="w"> </span><span class="kn">import</span> <span class="n">Secret</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">NotGiven</span><span class="p">,</span> <span class="n">not_given</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._client</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_MAX_RETRIES</span><span class="p">,</span> <span class="n">Runloop</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_content_type</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.scenario</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scenario</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.snapshot</span><span class="w"> </span><span class="kn">import</span> <span class="n">Snapshot</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.benchmark</span><span class="w"> </span><span class="kn">import</span> <span class="n">Benchmark</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.blueprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blueprint</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.mcp_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">McpConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_API_POOL_SHARDS</span><span class="p">,</span> <span class="n">DEFAULT_TRANSFER_POOL_SHARDS</span><span class="p">,</span> <span class="n">DEFAULT_BACKGROUND_POOL_SHARDS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.secret_by_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">SecretById</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.gateway_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">GatewayConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.network_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">NetworkPolicy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.storage_object</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageObject</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.scenario_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScenarioBuilder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.secret_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">SecretView</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..lib.context_loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarFilter</span><span class="p">,</span> <span class="n">build_directory_tar</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.object_create_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentType</span>
@@ -640,7 +626,7 @@
 <span class="sd">        :rtype: StorageObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">StorageObject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">upload_url</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">upload_url</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">StorageObject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">upload_url</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">upload_url</span><span class="p">,</span> <span class="n">upload_headers</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">upload_headers</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StorageObjectOps.from_id">
@@ -870,7 +856,7 @@
 <div class="viewcode-block" id="AxonOps.list">
 <a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AxonOps.list">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAxonListParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Axon</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;[Beta] List all active axons.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;[Beta] List all axons, including deleted axons.</span>
 
 <span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAxonListParams` for available parameters</span>
 <span class="sd">        :return: Collection of axon wrappers</span>
@@ -878,66 +864,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">axons</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Axon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">axon</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">axon</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">axons</span><span class="p">]</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="ScorerOps">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScorerOps">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ScorerOps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and manage custom scorers. Access via ``runloop.scorer``.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; runloop = RunloopSDK()</span>
-<span class="sd">        &gt;&gt;&gt; scorer = runloop.scorer.create(type=&quot;my_scorer&quot;, bash_script=&quot;echo &#39;score=1.0&#39;&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; all_scorers = runloop.scorer.list()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ScorerOps.</span>
-
-<span class="sd">        :param client: Runloop client instance</span>
-<span class="sd">        :type client: Runloop</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
-
-<div class="viewcode-block" id="ScorerOps.create">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScorerOps.create">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKScorerCreateParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Scorer</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new scorer with the given type and bash script.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerCreateParams` for available parameters</span>
-<span class="sd">        :return: The newly created scorer</span>
-<span class="sd">        :rtype: Scorer</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">scenarios</span><span class="o">.</span><span class="n">scorers</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Scorer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ScorerOps.from_id">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScorerOps.from_id">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scorer_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scorer</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a Scorer instance for an existing scorer ID.</span>
-
-<span class="sd">        :param scorer_id: ID of the scorer</span>
-<span class="sd">        :type scorer_id: str</span>
-<span class="sd">        :return: Scorer instance for the given ID</span>
-<span class="sd">        :rtype: Scorer</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Scorer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">scorer_id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ScorerOps.list">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScorerOps.list">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKScorerListParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Scorer</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all scorers, optionally filtered by parameters.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScorerListParams` for available parameters</span>
-<span class="sd">        :return: List of scorers</span>
-<span class="sd">        :rtype: list[Scorer]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">scenarios</span><span class="o">.</span><span class="n">scorers</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Scorer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">scorers</span><span class="p">]</span></div>
 </div>
 
 
@@ -1233,138 +1159,6 @@
 
 
 
-<div class="viewcode-block" id="ScenarioOps">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScenarioOps">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ScenarioOps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage scenarios. Access via ``runloop.scenario``.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; runloop = RunloopSDK()</span>
-<span class="sd">        &gt;&gt;&gt; scenario = runloop.scenario.from_id(&quot;scn-xxx&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; run = scenario.run()</span>
-<span class="sd">        &gt;&gt;&gt; scenarios = runloop.scenario.list()</span>
-
-<span class="sd">    Example using builder:</span>
-<span class="sd">        &gt;&gt;&gt; builder = (</span>
-<span class="sd">        ...     runloop.scenario.builder(&quot;my-scenario&quot;)</span>
-<span class="sd">        ...     .from_blueprint(blueprint)</span>
-<span class="sd">        ...     .with_problem_statement(&quot;Fix the bug&quot;)</span>
-<span class="sd">        ...     .add_test_command_scorer(&quot;tests&quot;, test_command=&quot;pytest&quot;)</span>
-<span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; params = builder.build()</span>
-<span class="sd">        &gt;&gt;&gt; scenario = runloop.scenario.create(**params)  # equivalent to builder.push()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ScenarioOps.</span>
-
-<span class="sd">        :param client: Runloop client instance</span>
-<span class="sd">        :type client: Runloop</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
-
-<div class="viewcode-block" id="ScenarioOps.builder">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScenarioOps.builder">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">builder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ScenarioBuilder</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new scenario builder.</span>
-
-<span class="sd">        :param name: Name for the scenario</span>
-<span class="sd">        :type name: str</span>
-<span class="sd">        :return: A new ScenarioBuilder instance</span>
-<span class="sd">        :rtype: ScenarioBuilder</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ScenarioBuilder</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ScenarioOps.from_id">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScenarioOps.from_id">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scenario</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a Scenario instance for an existing scenario ID.</span>
-
-<span class="sd">        :param scenario_id: ID of the scenario</span>
-<span class="sd">        :type scenario_id: str</span>
-<span class="sd">        :return: Scenario instance for the given ID</span>
-<span class="sd">        :rtype: Scenario</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Scenario</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">scenario_id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ScenarioOps.list">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.ScenarioOps.list">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKScenarioListParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Scenario</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all scenarios, optionally filtered by parameters.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKScenarioListParams` for available parameters</span>
-<span class="sd">        :return: List of scenarios</span>
-<span class="sd">        :rtype: list[Scenario]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">scenarios</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Scenario</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">scenarios</span><span class="p">]</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="BenchmarkOps">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.BenchmarkOps">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">BenchmarkOps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage benchmarks. Access via ``runloop.benchmark``.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; runloop = RunloopSDK()</span>
-<span class="sd">        &gt;&gt;&gt; benchmarks = runloop.benchmark.list()</span>
-<span class="sd">        &gt;&gt;&gt; benchmark = runloop.benchmark.from_id(&quot;bmd_xxx&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; run = benchmark.start_run(run_name=&quot;evaluation-v1&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize BenchmarkOps.</span>
-
-<span class="sd">        :param client: Runloop client instance</span>
-<span class="sd">        :type client: Runloop</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
-
-<div class="viewcode-block" id="BenchmarkOps.create">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.BenchmarkOps.create">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKBenchmarkCreateParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Benchmark</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new benchmark.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkCreateParams` for available parameters</span>
-<span class="sd">        :return: The newly created benchmark</span>
-<span class="sd">        :rtype: Benchmark</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">benchmarks</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Benchmark</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="BenchmarkOps.from_id">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.BenchmarkOps.from_id">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">benchmark_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Benchmark</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a Benchmark instance for an existing benchmark ID.</span>
-
-<span class="sd">        :param benchmark_id: ID of the benchmark</span>
-<span class="sd">        :type benchmark_id: str</span>
-<span class="sd">        :return: Benchmark instance for the given ID</span>
-<span class="sd">        :rtype: Benchmark</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Benchmark</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">benchmark_id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="BenchmarkOps.list">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.BenchmarkOps.list">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKBenchmarkListParams</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Benchmark</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all benchmarks, optionally filtered by parameters.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKBenchmarkListParams` for available parameters</span>
-<span class="sd">        :return: List of benchmarks</span>
-<span class="sd">        :rtype: list[Benchmark]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">benchmarks</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Benchmark</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">benchmarks</span><span class="p">]</span></div>
-</div>
-
-
-
 <div class="viewcode-block" id="NetworkPolicyOps">
 <a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.NetworkPolicyOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NetworkPolicyOps</span><span class="p">:</span>
@@ -1630,7 +1424,7 @@
 <span class="sd">            ... )</span>
 <span class="sd">            &gt;&gt;&gt; print(f&quot;Created secret: {secret.name}&quot;)</span>
 
-<span class="sd">        :param name: Globally unique secret name (must be a valid env var name)</span>
+<span class="sd">        :param name: Account-scoped secret name (must be a valid env var name)</span>
 <span class="sd">        :type name: str</span>
 <span class="sd">        :param value: Secret value to store (encrypted at rest)</span>
 <span class="sd">        :type value: str</span>
@@ -1654,12 +1448,19 @@
 <span class="sd">            &gt;&gt;&gt; info = secret.get_info()</span>
 <span class="sd">            &gt;&gt;&gt; print(f&quot;Secret ID: {info.id}&quot;)</span>
 
-<span class="sd">        :param name: The globally unique name of the secret</span>
+<span class="sd">        :param name: The literal account-scoped name of the secret</span>
 <span class="sd">        :type name: str</span>
 <span class="sd">        :return: A Secret instance (no API call made)</span>
 <span class="sd">        :rtype: Secret</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Secret</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SecretOps.from_id">
+<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.SecretOps.from_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SecretById</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a lazy exact-ID handle; its operations never fall back to a name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SecretById</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SecretOps.update">
@@ -1747,16 +1548,10 @@
 <span class="sd">    :vartype agent: AgentOps</span>
 <span class="sd">    :ivar axon: [Beta] High-level interface for axon management</span>
 <span class="sd">    :vartype axon: AxonOps</span>
-<span class="sd">    :ivar benchmark: High-level interface for benchmark management</span>
-<span class="sd">    :vartype benchmark: BenchmarkOps</span>
 <span class="sd">    :ivar devbox: High-level interface for devbox management</span>
 <span class="sd">    :vartype devbox: DevboxOps</span>
 <span class="sd">    :ivar blueprint: High-level interface for blueprint management</span>
 <span class="sd">    :vartype blueprint: BlueprintOps</span>
-<span class="sd">    :ivar scenario: High-level interface for scenario management</span>
-<span class="sd">    :vartype scenario: ScenarioOps</span>
-<span class="sd">    :ivar scorer: High-level interface for scorer management</span>
-<span class="sd">    :vartype scorer: ScorerOps</span>
 <span class="sd">    :ivar snapshot: High-level interface for snapshot management</span>
 <span class="sd">    :vartype snapshot: SnapshotOps</span>
 <span class="sd">    :ivar storage_object: High-level interface for storage object management</span>
@@ -1781,14 +1576,11 @@
     <span class="n">api</span><span class="p">:</span> <span class="n">Runloop</span>
     <span class="n">agent</span><span class="p">:</span> <span class="n">AgentOps</span>
     <span class="n">axon</span><span class="p">:</span> <span class="n">AxonOps</span>
-    <span class="n">benchmark</span><span class="p">:</span> <span class="n">BenchmarkOps</span>
     <span class="n">devbox</span><span class="p">:</span> <span class="n">DevboxOps</span>
     <span class="n">blueprint</span><span class="p">:</span> <span class="n">BlueprintOps</span>
     <span class="n">gateway_config</span><span class="p">:</span> <span class="n">GatewayConfigOps</span>
     <span class="n">mcp_config</span><span class="p">:</span> <span class="n">McpConfigOps</span>
     <span class="n">network_policy</span><span class="p">:</span> <span class="n">NetworkPolicyOps</span>
-    <span class="n">scenario</span><span class="p">:</span> <span class="n">ScenarioOps</span>
-    <span class="n">scorer</span><span class="p">:</span> <span class="n">ScorerOps</span>
     <span class="n">secret</span><span class="p">:</span> <span class="n">SecretOps</span>
     <span class="n">snapshot</span><span class="p">:</span> <span class="n">SnapshotOps</span>
     <span class="n">storage_object</span><span class="p">:</span> <span class="n">StorageObjectOps</span>
@@ -1845,15 +1637,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">agent</span> <span class="o">=</span> <span class="n">AgentOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axon</span> <span class="o">=</span> <span class="n">AxonOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">BenchmarkOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">devbox</span> <span class="o">=</span> <span class="n">DevboxOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blueprint</span> <span class="o">=</span> <span class="n">BlueprintOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gateway_config</span> <span class="o">=</span> <span class="n">GatewayConfigOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mcp_config</span> <span class="o">=</span> <span class="n">McpConfigOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network_policy</span> <span class="o">=</span> <span class="n">NetworkPolicyOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secret</span> <span class="o">=</span> <span class="n">SecretOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scenario</span> <span class="o">=</span> <span class="n">ScenarioOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scorer</span> <span class="o">=</span> <span class="n">ScorerOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">snapshot</span> <span class="o">=</span> <span class="n">SnapshotOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">storage_object</span> <span class="o">=</span> <span class="n">StorageObjectOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
 
