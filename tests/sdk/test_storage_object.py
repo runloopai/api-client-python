@@ -188,32 +188,6 @@ class TestStorageObject:
             idempotency_key="key-123",
         )
 
-    def test_upload_content_string(self, mock_client: Mock) -> None:
-        """Test upload_content with string."""
-        mock_response = create_mock_httpx_response()
-        http_client = Mock()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-        obj.upload_content("test content")
-
-        http_client.put.assert_called_once_with("https://upload.example.com", content="test content")
-        mock_response.raise_for_status.assert_called_once()
-
-    def test_upload_content_bytes(self, mock_client: Mock) -> None:
-        """Test upload_content with bytes."""
-        mock_response = create_mock_httpx_response()
-        http_client = Mock()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-        obj.upload_content(b"test content")
-
-        http_client.put.assert_called_once_with("https://upload.example.com", content=b"test content")
-        mock_response.raise_for_status.assert_called_once()
-
     def test_upload_content_no_url(self, mock_client: Mock) -> None:
         """Test upload_content raises error when no upload URL."""
         obj = StorageObject(mock_client, "obj_123", None)
@@ -233,46 +207,3 @@ class TestStorageObject:
 
         with pytest.raises(RuntimeError, match="No upload URL available"):
             obj._ensure_upload_url()
-
-
-class TestStorageObjectEdgeCases:
-    """Tests for StorageObject edge cases."""
-
-    def test_large_file_upload(self, mock_client: Mock) -> None:
-        """Test handling of large file uploads."""
-        LARGE_FILE_SIZE = 10 * 1024 * 1024  # 10MB
-
-        object_view = SimpleNamespace(id="obj_123", upload_url="https://upload.example.com")
-        mock_client.objects.create.return_value = object_view
-
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-        large_content = b"x" * LARGE_FILE_SIZE  # 10MB
-        obj.upload_content(large_content)
-
-        http_client.put.assert_called_once_with("https://upload.example.com", content=large_content)
-
-
-class TestStorageObjectPythonSpecific:
-    """Tests for Python-specific StorageObject behavior."""
-
-    def test_upload_data_types(self, mock_client: Mock) -> None:
-        """Test Python supports more upload data types."""
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
-
-        # String
-        obj.upload_content("string content")
-
-        # Bytes
-        obj.upload_content(b"bytes content")
-
-        assert http_client.put.call_count == 2

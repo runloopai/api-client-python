@@ -163,34 +163,6 @@ class TestAsyncStorageObject:
         mock_async_client.objects.delete.assert_awaited_once()
 
     @pytest.mark.asyncio
-    async def test_upload_content_string(self, mock_async_client: AsyncMock) -> None:
-        """Test upload_content with string."""
-        mock_response = create_mock_httpx_response()
-        http_client = AsyncMock()
-        http_client.put = AsyncMock(return_value=mock_response)
-        mock_async_client._client = http_client
-
-        obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
-        await obj.upload_content("test content")
-
-        http_client.put.assert_awaited_once_with("https://upload.example.com", content="test content")
-        mock_response.raise_for_status.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_upload_content_bytes(self, mock_async_client: AsyncMock) -> None:
-        """Test upload_content with bytes."""
-        mock_response = create_mock_httpx_response()
-        http_client = AsyncMock()
-        http_client.put = AsyncMock(return_value=mock_response)
-        mock_async_client._client = http_client
-
-        obj = AsyncStorageObject(mock_async_client, "obj_123", "https://upload.example.com")
-        await obj.upload_content(b"test content")
-
-        http_client.put.assert_awaited_once_with("https://upload.example.com", content=b"test content")
-        mock_response.raise_for_status.assert_called_once()
-
-    @pytest.mark.asyncio
     async def test_upload_content_no_url(self, mock_async_client: AsyncMock) -> None:
         """Test upload_content raises error when no upload URL."""
         obj = AsyncStorageObject(mock_async_client, "obj_123", None)

@@ -585,6 +585,17 @@ snapshot.delete()
 
 ### StorageObject
 
+Uploads retain the create response's signed URL **and** required headers (including
+Azure's `x-ms-blob-type`). All upload helpers use those instructions before marking
+the object complete. Treat both as credentials; retrieval does not refresh them.
+
+Signed uploads reuse the configured HTTP transport but exclude client-level default
+headers, cookies, and authentication. Custom HTTP transports and event hooks must
+not add API credentials to storage requests. Redirects and SDK-level upload retries
+are disabled. Upload exception messages omit signed credentials and storage response
+bodies; HTTPX request/response objects and third-party debug logging can still contain
+sensitive data and must not be logged indiscriminately.
+
 Object-oriented interface for working with storage objects. Created via `runloop.storage_object.create()` or `runloop.storage_object.from_id()`:
 
 ```python

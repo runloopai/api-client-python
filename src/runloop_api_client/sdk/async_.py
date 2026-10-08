@@ -338,7 +338,7 @@ class AsyncStorageObjectOps:
         :rtype: AsyncStorageObject
         """
         obj = await self._client.objects.create(**params)
-        return AsyncStorageObject(self._client, obj.id, upload_url=obj.upload_url)
+        return AsyncStorageObject(self._client, obj.id, upload_url=obj.upload_url, upload_headers=obj.upload_headers)
 
     def from_id(self, object_id: str) -> AsyncStorageObject:
         """Return a storage object wrapper by identifier.

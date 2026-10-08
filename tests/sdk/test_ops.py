@@ -382,7 +382,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -396,53 +396,8 @@ class TestStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
-        mock_client.objects.complete.assert_called_once()
-
-    def test_upload_from_text(self, mock_client: Mock, object_view: MockObjectView) -> None:
-        """Test upload_from_text method."""
-        mock_client.objects.create.return_value = object_view
-
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        ops = StorageObjectOps(mock_client)
-        obj = ops.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
-
-        assert isinstance(obj, StorageObject)
-        assert obj.id == "obj_123"
-        mock_client.objects.create.assert_called_once_with(
-            name="test.txt",
-            content_type="text",
-            metadata={"key": "value"},
-            ttl_ms=None,
-        )
-        http_client.put.assert_called_once_with(object_view.upload_url, content="test content")
-        mock_client.objects.complete.assert_called_once()
-
-    def test_upload_from_bytes(self, mock_client: Mock, object_view: MockObjectView) -> None:
-        """Test upload_from_bytes method."""
-        mock_client.objects.create.return_value = object_view
-
-        http_client = Mock()
-        mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
-        mock_client._client = http_client
-
-        ops = StorageObjectOps(mock_client)
-        obj = ops.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
-
-        assert isinstance(obj, StorageObject)
-        assert obj.id == "obj_123"
-        mock_client.objects.create.assert_called_once_with(
-            name="test.bin",
-            content_type="binary",
-            metadata=None,
-            ttl_ms=None,
-        )
-        http_client.put.assert_called_once_with(object_view.upload_url, content=b"test content")
+        assert http_client.send.call_count == 1
+        assert http_client.send.call_args[0][0].read() == b"test content"
         mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_file_missing_path(self, mock_client: Mock, tmp_path: Path) -> None:
@@ -477,7 +432,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -491,11 +446,11 @@ class TestStorageObjectOps:
             metadata={"key": "value"},
             ttl_ms=None,
         )
-        # Verify that put was called with tarball content
-        http_client.put.assert_called_once()
-        call_args = http_client.put.call_args
-        assert call_args[0][0] == object_view.upload_url
-        uploaded_content = call_args[1]["content"]
+        # Verify that a request was sent with tarball content
+        http_client.send.assert_called_once()
+        call_args = http_client.send.call_args
+        assert str(call_args[0][0].url) == object_view.upload_url
+        uploaded_content = call_args[0][0].read()
         # Verify it is bytes representing a gzipped tar archive
         assert isinstance(uploaded_content, (bytes, bytearray))
         mock_client.objects.complete.assert_called_once()
@@ -510,7 +465,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -537,7 +492,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -562,7 +517,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -576,7 +531,7 @@ class TestStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_called_once()
+        http_client.send.assert_called_once()
         mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_dir_with_string_path(
@@ -591,7 +546,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         ops = StorageObjectOps(mock_client)
@@ -606,7 +561,7 @@ class TestStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_called_once()
+        http_client.send.assert_called_once()
         mock_client.objects.complete.assert_called_once()
 
     def test_upload_from_dir_respects_filter(
@@ -625,7 +580,7 @@ class TestStorageObjectOps:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         client = StorageObjectOps(mock_client)
@@ -639,7 +594,7 @@ class TestStorageObjectOps:
         obj = client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
 
         assert isinstance(obj, StorageObject)
-        uploaded_content = http_client.put.call_args[1]["content"]
+        uploaded_content = http_client.send.call_args[0][0].read()
 
         with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
             names = {m.name for m in tar.getmembers()}

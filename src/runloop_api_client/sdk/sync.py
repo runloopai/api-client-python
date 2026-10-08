@@ -336,7 +336,7 @@ class StorageObjectOps:
         :rtype: StorageObject
         """
         obj = self._client.objects.create(**params)
-        return StorageObject(self._client, obj.id, upload_url=obj.upload_url)
+        return StorageObject(self._client, obj.id, upload_url=obj.upload_url, upload_headers=obj.upload_headers)
 
     def from_id(self, object_id: str) -> StorageObject:
         """Return a storage object wrapper by identifier.

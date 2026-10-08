@@ -88,6 +88,7 @@ class MockObjectView:
 
     id: str = TEST_IDS["object"]
     upload_url: str = "https://upload.example.com/obj_123"
+    upload_headers: dict[str, str] | None = None
     name: str = "test-object"
 
 

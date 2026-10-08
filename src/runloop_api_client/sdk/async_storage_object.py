@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Mapping, Iterable
 from typing_extensions import Unpack, override
+
+import httpx
 
 from ._types import BaseRequestOptions, LongRequestOptions, SDKObjectDownloadParams
 from .._client import AsyncRunloop
@@ -15,7 +17,13 @@ from ..types.object_download_url_view import ObjectDownloadURLView
 class AsyncStorageObject:
     """Async wrapper around storage object operations, including uploads and downloads."""
 
-    def __init__(self, client: AsyncRunloop, object_id: str, upload_url: str | None) -> None:
+    def __init__(
+        self,
+        client: AsyncRunloop,
+        object_id: str,
+        upload_url: str | None,
+        upload_headers: Mapping[str, str] | None = None,
+    ) -> None:
         """Initialize the wrapper.
 
         :param client: Generated AsyncRunloop client
@@ -24,10 +32,12 @@ class AsyncStorageObject:
         :type object_id: str
         :param upload_url: Optional pre-signed upload URL if the object is still open, defaults to None
         :type upload_url: str | None, optional
+        :param upload_headers: Required signed-upload headers returned with the URL; copied on construction
         """
         self._client = client
         self._id = object_id
         self._upload_url = upload_url
+        self._upload_headers = dict(upload_headers or {})
 
     @override
     def __repr__(self) -> str:
@@ -81,6 +91,7 @@ class AsyncStorageObject:
             **options,
         )
         self._upload_url = None
+        self._upload_headers = {}
         return result
 
     async def get_download_url(
@@ -151,16 +162,30 @@ class AsyncStorageObject:
     async def upload_content(self, content: str | bytes | Iterable[bytes]) -> None:
         """Upload content to the object's pre-signed URL.
 
+        The URL and required headers are sensitive upload credentials. Requests use
+        the configured HTTP transport, but not its default headers, cookies, or auth.
+        Custom transport implementations and event hooks must preserve this isolation.
+        Uploads are not retried and redirects are not followed.
+
         :param content: Bytes payload, text payload, or an iterable streaming bytes
         :type content: str | bytes | Iterable[bytes]
         :return: None
         :rtype: None
         :raises RuntimeError: If no upload URL is available
-        :raises httpx.HTTPStatusError: Propagated from the underlying ``httpx`` client when the upload fails
+        :raises httpx.HTTPStatusError: If storage rejects the upload (message excludes signed credentials)
+        :raises httpx.RequestError: If the upload cannot be sent
         """
         url = self._ensure_upload_url()
-        response = await self._client._client.put(url, content=content)
-        response.raise_for_status()
+        # Construct directly so HTTPX does not merge API-client defaults into storage requests.
+        request = httpx.Request("PUT", url, content=content, headers=self._upload_headers)
+        try:
+            response = await self._client._client.send(request, auth=None, follow_redirects=False)
+        except httpx.RequestError:
+            raise httpx.RequestError("Storage upload failed during transport", request=request) from None
+        if not response.is_success:
+            raise httpx.HTTPStatusError(
+                f"Storage upload failed (HTTP {response.status_code})", request=request, response=response
+            )
 
     def as_build_context(self) -> BuildContext:
         """Return this object in the shape expected for a Blueprint build context.

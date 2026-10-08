@@ -138,11 +138,11 @@ class TestDevboxPythonSpecific:
 
         http_client = Mock()
         mock_response = create_mock_httpx_response()
-        http_client.put.return_value = mock_response
+        http_client.send.return_value = mock_response
         mock_client._client = http_client
 
         obj = StorageObject(mock_client, "obj_123", "https://upload.example.com")
         obj.upload_content(temp_file.read_text())
         obj.upload_content(temp_file.read_bytes())
 
-        assert http_client.put.call_count == 2
+        assert http_client.send.call_count == 2

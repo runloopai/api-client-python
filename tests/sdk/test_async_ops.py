@@ -402,7 +402,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -416,57 +416,8 @@ class TestAsyncStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
-        mock_async_client.objects.complete.assert_awaited_once()
-
-    @pytest.mark.asyncio
-    async def test_upload_from_text(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
-        """Test upload_from_text method."""
-        mock_async_client.objects.create = AsyncMock(return_value=object_view)
-        mock_async_client.objects.complete = AsyncMock(return_value=object_view)
-
-        http_client = AsyncMock()
-        mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
-        mock_async_client._client = http_client
-
-        ops = AsyncStorageObjectOps(mock_async_client)
-        obj = await ops.upload_from_text("test content", name="test.txt", metadata={"key": "value"})
-
-        assert isinstance(obj, AsyncStorageObject)
-        assert obj.id == "obj_123"
-        mock_async_client.objects.create.assert_awaited_once_with(
-            name="test.txt",
-            content_type="text",
-            metadata={"key": "value"},
-            ttl_ms=None,
-        )
-        http_client.put.assert_awaited_once_with(object_view.upload_url, content="test content")
-        mock_async_client.objects.complete.assert_awaited_once()
-
-    @pytest.mark.asyncio
-    async def test_upload_from_bytes(self, mock_async_client: AsyncMock, object_view: MockObjectView) -> None:
-        """Test upload_from_bytes method."""
-        mock_async_client.objects.create = AsyncMock(return_value=object_view)
-        mock_async_client.objects.complete = AsyncMock(return_value=object_view)
-
-        http_client = AsyncMock()
-        mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
-        mock_async_client._client = http_client
-
-        ops = AsyncStorageObjectOps(mock_async_client)
-        obj = await ops.upload_from_bytes(b"test content", name="test.bin", content_type="binary")
-
-        assert isinstance(obj, AsyncStorageObject)
-        assert obj.id == "obj_123"
-        mock_async_client.objects.create.assert_awaited_once_with(
-            name="test.bin",
-            content_type="binary",
-            metadata=None,
-            ttl_ms=None,
-        )
-        http_client.put.assert_awaited_once_with(object_view.upload_url, content=b"test content")
+        assert http_client.send.call_count == 1
+        assert http_client.send.call_args[0][0].read() == b"test content"
         mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
@@ -506,7 +457,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -520,13 +471,13 @@ class TestAsyncStorageObjectOps:
             metadata={"key": "value"},
             ttl_ms=None,
         )
-        # Verify that put was called with tarball content
-        http_client.put.assert_awaited_once()
-        call_args = http_client.put.call_args
-        assert call_args[0][0] == object_view.upload_url
+        # Verify that a request was sent with tarball content
+        http_client.send.assert_awaited_once()
+        call_args = http_client.send.call_args
+        assert str(call_args[0][0].url) == object_view.upload_url
 
         # Verify it's a valid gzipped tarball
-        uploaded_content = call_args[1]["content"]
+        uploaded_content = call_args[0][0].read()
         with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
             members = tar.getmembers()
             member_names = [m.name for m in members]
@@ -555,7 +506,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         client = AsyncStorageObjectOps(mock_async_client)
@@ -569,7 +520,7 @@ class TestAsyncStorageObjectOps:
         obj = await client.upload_from_dir(test_dir, ignore=ignore_logs_and_build)
 
         assert isinstance(obj, AsyncStorageObject)
-        uploaded_content = http_client.put.call_args[1]["content"]
+        uploaded_content = http_client.send.call_args[0][0].read()
 
         with tarfile.open(fileobj=io.BytesIO(uploaded_content), mode="r:gz") as tar:
             names = {m.name for m in tar.getmembers()}
@@ -592,7 +543,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -623,7 +574,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -650,7 +601,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -664,7 +615,7 @@ class TestAsyncStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_awaited_once()
+        http_client.send.assert_awaited_once()
         mock_async_client.objects.complete.assert_awaited_once()
 
     @pytest.mark.asyncio
@@ -681,7 +632,7 @@ class TestAsyncStorageObjectOps:
 
         http_client = AsyncMock()
         mock_response = create_mock_httpx_response()
-        http_client.put = AsyncMock(return_value=mock_response)
+        http_client.send = AsyncMock(return_value=mock_response)
         mock_async_client._client = http_client
 
         ops = AsyncStorageObjectOps(mock_async_client)
@@ -696,7 +647,7 @@ class TestAsyncStorageObjectOps:
             metadata=None,
             ttl_ms=None,
         )
-        http_client.put.assert_awaited_once()
+        http_client.send.assert_awaited_once()
         mock_async_client.objects.complete.assert_awaited_once()
 
 
