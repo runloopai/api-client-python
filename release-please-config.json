@@ -61,6 +61,11 @@
   ],
   "release-type": "python",
   "extra-files": [
-    "src/runloop_api_client/_version.py"
+    "src/runloop_api_client/_version.py",
+    {
+      "type": "toml",
+      "path": "uv.lock",
+      "jsonpath": "$.package[?(@.name.value == \"runloop-api-client\")].version"
+    }
   ]
 }

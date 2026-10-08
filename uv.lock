@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -2422,7 +2422,7 @@ wheels = [
 
 [[package]]
 name = "runloop-api-client"
-version = "1.31.0"
+version = "1.32.0"
 source = { editable = "." }
 dependencies = [
     { name = "anyio" },

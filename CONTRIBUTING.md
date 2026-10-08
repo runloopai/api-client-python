@@ -150,6 +150,18 @@ $ ./scripts/format
 
 ## Publishing and releases
 
+The checked-in `uv.lock` must match `pyproject.toml` before dependency installation.
+CI checks this with its pinned uv version (0.10.2). Refresh with that version of
+`uv lock`, without upgrading dependencies, when changing package metadata.
+
+Release Please updates the editable root package in `uv.lock` through its TOML
+extra-file updater. The name filter uses `name.value` because the pinned
+Release Please 17.3.0 parser represents TOML strings as tagged values. When upgrading
+the release action, verify a simulated version bump changes only the root package's
+version and that `uv lock --check` still succeeds; never target a positional package
+index or apply a version replacement to all dependencies.
+
+
 Changes made to this repository via the automated release PR pipeline should publish to PyPI automatically. If
 the changes aren't made through the automated pipeline, you may want to make releases manually.
 
