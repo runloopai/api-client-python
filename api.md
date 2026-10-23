@@ -3,8 +3,6 @@
 ```python
 from runloop_api_client.types import (
     AfterIdle,
-    AgentMount,
-    AgentSource,
     AuthMechanism,
     BrokerMount,
     CodeMountParameters,
@@ -29,28 +27,6 @@ from runloop_api_client.types import AccountView
 Methods:
 
 - <code title="get /v1/accounts/me">client.accounts.<a href="./src/runloop_api_client/resources/accounts.py">me</a>() -> <a href="./src/runloop_api_client/types/account_view.py">AccountView</a></code>
-
-# Agents
-
-Types:
-
-```python
-from runloop_api_client.types import (
-    AgentCreateParameters,
-    AgentDevboxCountsView,
-    AgentListView,
-    AgentView,
-)
-```
-
-Methods:
-
-- <code title="post /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">create</a>(\*\*<a href="src/runloop_api_client/types/agent_create_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
-- <code title="get /v1/agents/{id}">client.agents.<a href="./src/runloop_api_client/resources/agents.py">retrieve</a>(id) -> <a href="./src/runloop_api_client/types/agent_view.py">AgentView</a></code>
-- <code title="get /v1/agents">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list</a>(\*\*<a href="src/runloop_api_client/types/agent_list_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
-- <code title="post /v1/agents/{id}/delete">client.agents.<a href="./src/runloop_api_client/resources/agents.py">delete</a>(id) -> object</code>
-- <code title="get /v1/agents/devbox_counts">client.agents.<a href="./src/runloop_api_client/resources/agents.py">devbox_counts</a>() -> <a href="./src/runloop_api_client/types/agent_devbox_counts_view.py">AgentDevboxCountsView</a></code>
-- <code title="get /v1/agents/list_public">client.agents.<a href="./src/runloop_api_client/resources/agents.py">list_public</a>(\*\*<a href="src/runloop_api_client/types/agent_list_public_params.py">params</a>) -> <a href="./src/runloop_api_client/types/agent_view.py">SyncAgentsCursorIDPage[AgentView]</a></code>
 
 # Axons
 

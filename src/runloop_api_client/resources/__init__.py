@@ -16,14 +16,6 @@ from .axons import (
     AxonsResourceWithStreamingResponse,
     AsyncAxonsResourceWithStreamingResponse,
 )
-from .agents import (
-    AgentsResource,
-    AsyncAgentsResource,
-    AgentsResourceWithRawResponse,
-    AsyncAgentsResourceWithRawResponse,
-    AgentsResourceWithStreamingResponse,
-    AsyncAgentsResourceWithStreamingResponse,
-)
 from .apikeys import (
     ApikeysResource,
     AsyncApikeysResource,
@@ -112,12 +104,6 @@ __all__ = [
     "AsyncAccountsResourceWithRawResponse",
     "AccountsResourceWithStreamingResponse",
     "AsyncAccountsResourceWithStreamingResponse",
-    "AgentsResource",
-    "AsyncAgentsResource",
-    "AgentsResourceWithRawResponse",
-    "AsyncAgentsResourceWithRawResponse",
-    "AgentsResourceWithStreamingResponse",
-    "AsyncAgentsResourceWithStreamingResponse",
     "AxonsResource",
     "AsyncAxonsResource",
     "AxonsResourceWithRawResponse",

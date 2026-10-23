@@ -39,7 +39,6 @@ if TYPE_CHECKING:
     from .resources import (
         pty,
         axons,
-        agents,
         apikeys,
         objects,
         secrets,
@@ -52,7 +51,6 @@ if TYPE_CHECKING:
         network_policies,
     )
     from .resources.pty import PtyResource, AsyncPtyResource
-    from .resources.agents import AgentsResource, AsyncAgentsResource
     from .resources.apikeys import ApikeysResource, AsyncApikeysResource
     from .resources.objects import ObjectsResource, AsyncObjectsResource
     from .resources.secrets import SecretsResource, AsyncSecretsResource
@@ -152,12 +150,6 @@ class Runloop(SyncAPIClient):
         from .resources.accounts import AccountsResource
 
         return AccountsResource(self)
-
-    @cached_property
-    def agents(self) -> AgentsResource:
-        from .resources.agents import AgentsResource
-
-        return AgentsResource(self)
 
     @cached_property
     def axons(self) -> AxonsResource:
@@ -442,12 +434,6 @@ class AsyncRunloop(AsyncAPIClient):
         return AsyncAccountsResource(self)
 
     @cached_property
-    def agents(self) -> AsyncAgentsResource:
-        from .resources.agents import AsyncAgentsResource
-
-        return AsyncAgentsResource(self)
-
-    @cached_property
     def axons(self) -> AsyncAxonsResource:
         from .resources.axons import AsyncAxonsResource
 
@@ -657,12 +643,6 @@ class RunloopWithRawResponse:
         return AccountsResourceWithRawResponse(self._client.accounts)
 
     @cached_property
-    def agents(self) -> agents.AgentsResourceWithRawResponse:
-        from .resources.agents import AgentsResourceWithRawResponse
-
-        return AgentsResourceWithRawResponse(self._client.agents)
-
-    @cached_property
     def axons(self) -> axons.AxonsResourceWithRawResponse:
         from .resources.axons import AxonsResourceWithRawResponse
 
@@ -740,12 +720,6 @@ class AsyncRunloopWithRawResponse:
         from .resources.accounts import AsyncAccountsResourceWithRawResponse
 
         return AsyncAccountsResourceWithRawResponse(self._client.accounts)
-
-    @cached_property
-    def agents(self) -> agents.AsyncAgentsResourceWithRawResponse:
-        from .resources.agents import AsyncAgentsResourceWithRawResponse
-
-        return AsyncAgentsResourceWithRawResponse(self._client.agents)
 
     @cached_property
     def axons(self) -> axons.AsyncAxonsResourceWithRawResponse:
@@ -827,12 +801,6 @@ class RunloopWithStreamedResponse:
         return AccountsResourceWithStreamingResponse(self._client.accounts)
 
     @cached_property
-    def agents(self) -> agents.AgentsResourceWithStreamingResponse:
-        from .resources.agents import AgentsResourceWithStreamingResponse
-
-        return AgentsResourceWithStreamingResponse(self._client.agents)
-
-    @cached_property
     def axons(self) -> axons.AxonsResourceWithStreamingResponse:
         from .resources.axons import AxonsResourceWithStreamingResponse
 
@@ -910,12 +878,6 @@ class AsyncRunloopWithStreamedResponse:
         from .resources.accounts import AsyncAccountsResourceWithStreamingResponse
 
         return AsyncAccountsResourceWithStreamingResponse(self._client.accounts)
-
-    @cached_property
-    def agents(self) -> agents.AsyncAgentsResourceWithStreamingResponse:
-        from .resources.agents import AsyncAgentsResourceWithStreamingResponse
-
-        return AsyncAgentsResourceWithStreamingResponse(self._client.agents)
 
     @cached_property
     def axons(self) -> axons.AsyncAxonsResourceWithStreamingResponse:

@@ -14,7 +14,6 @@ class ScopeEntryViewParam(TypedDict, total=False):
         "RESOURCE_TYPE_DEVBOXES",
         "RESOURCE_TYPE_BLUEPRINTS",
         "RESOURCE_TYPE_SNAPSHOTS",
-        "RESOURCE_TYPE_AGENTS",
         "RESOURCE_TYPE_OBJECTS",
         "RESOURCE_TYPE_ACCOUNT",
     ]
