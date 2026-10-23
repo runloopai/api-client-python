@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0](https://github.com/runloopai/api-client-python/compare/v2.0.0...v3.0.0) (2026-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove the agent API and agent mounts
+* **sdk:** finish retired agent and shell API cleanup ([#17](https://github.com/runloopai/api-client-python/issues/17))
+* **exec:** remove stateful shell execution from the exec stack
+* **sdk:** remove named shell helpers and API references ([#16](https://github.com/runloopai/api-client-python/issues/16))
+
+### Features
+
+* **exec:** remove stateful shell execution from the exec stack ([855d22d](https://github.com/runloopai/api-client-python/commit/855d22d4aabb625b2a70236d96f41b3bc31b925f))
+* remove the agent API and agent mounts ([26abd67](https://github.com/runloopai/api-client-python/commit/26abd674496a671df6e8ece5dbc65c3d5512bce3))
+* **sdk:** remove named shell helpers and API references ([#16](https://github.com/runloopai/api-client-python/issues/16)) ([d0caf3e](https://github.com/runloopai/api-client-python/commit/d0caf3e889885203911a6ca9188ba46d764c290e))
+
+
+### Bug Fixes
+
+* **sdk:** finish retired agent and shell API cleanup ([#17](https://github.com/runloopai/api-client-python/issues/17)) ([1484c74](https://github.com/runloopai/api-client-python/commit/1484c746c9f3da572dda66f6eff17cf27f647557))
+
 ## [2.0.0](https://github.com/runloopai/api-client-python/compare/v1.32.0...v2.0.0) (2026-10-08)
 
 
