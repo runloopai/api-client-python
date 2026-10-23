@@ -39,6 +39,19 @@ class TestAsyncCommandInterface:
         mock_async_client.devboxes.executions.await_completed.assert_not_called()
 
     @pytest.mark.asyncio
+    async def test_exec_async_forwards_stdin(
+        self, mock_async_client: AsyncMock, execution_view: MockExecutionView
+    ) -> None:
+        mock_async_client.devboxes.execute_async = AsyncMock(return_value=execution_view)
+        devbox = AsyncDevbox(mock_async_client, "dbx_123")
+
+        await devbox.cmd.exec_async("cat", attach_stdin=True)
+
+        call_kwargs = mock_async_client.devboxes.execute_async.call_args.kwargs
+        assert call_kwargs["command"] == "cat"
+        assert call_kwargs["attach_stdin"] is True
+
+    @pytest.mark.asyncio
     async def test_exec_with_stdout_callback(self, mock_async_client: AsyncMock, mock_async_stream: AsyncMock) -> None:
         """Test exec with stdout callback."""
         execution_async = SimpleNamespace(

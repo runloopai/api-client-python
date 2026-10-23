@@ -37,7 +37,6 @@ from ..types.devboxes import DiskSnapshotListParams, DiskSnapshotUpdateParams
 from ..types.devbox_create_params import DevboxBaseCreateParams
 from ..types.axons.sql_batch_params import SqlBatchParams
 from ..types.axons.sql_query_params import SqlQueryParams
-from ..types.devbox_execute_async_params import DevboxNiceExecuteAsyncParams
 
 LogCallback = Callable[[str], None]
 
@@ -89,11 +88,17 @@ class SDKDevboxCreateFromImageParams(DevboxBaseCreateParams, LongPollingRequestO
     pass
 
 
-class SDKDevboxExecuteParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongPollingRequestOptions):
+class DevboxCommandOptions(TypedDict, total=False):
+    """Optional API fields shared by command execution helpers."""
+
+    attach_stdin: Optional[bool]
+
+
+class SDKDevboxExecuteParams(DevboxCommandOptions, ExecuteStreamingCallbacks, LongPollingRequestOptions):
     pass
 
 
-class SDKDevboxExecuteAsyncParams(DevboxNiceExecuteAsyncParams, ExecuteStreamingCallbacks, LongRequestOptions):
+class SDKDevboxExecuteAsyncParams(DevboxCommandOptions, ExecuteStreamingCallbacks, LongRequestOptions):
     pass
 
 

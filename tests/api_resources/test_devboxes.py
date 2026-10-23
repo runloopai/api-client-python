@@ -605,7 +605,6 @@ class TestDevboxes:
             command_id="command_id",
             last_n="last_n",
             optimistic_timeout=0,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -660,7 +659,6 @@ class TestDevboxes:
             id="id",
             command="command",
             attach_stdin=True,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -715,7 +713,6 @@ class TestDevboxes:
                 id="id",
                 command="command",
                 attach_stdin=True,
-                shell_name="shell_name",
             )
 
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])
@@ -2460,7 +2457,6 @@ class TestAsyncDevboxes:
             command_id="command_id",
             last_n="last_n",
             optimistic_timeout=0,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -2515,7 +2511,6 @@ class TestAsyncDevboxes:
             id="id",
             command="command",
             attach_stdin=True,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, devbox, path=["response"])
 
@@ -2570,7 +2565,6 @@ class TestAsyncDevboxes:
                 id="id",
                 command="command",
                 attach_stdin=True,
-                shell_name="shell_name",
             )
 
         assert_matches_type(DevboxExecutionDetailView, devbox, path=["response"])

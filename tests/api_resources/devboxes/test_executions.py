@@ -95,7 +95,6 @@ class TestExecutions:
             id="id",
             command="command",
             attach_stdin=True,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -150,7 +149,6 @@ class TestExecutions:
                 id="id",
                 command="command",
                 attach_stdin=True,
-                shell_name="shell_name",
             )
 
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])
@@ -678,7 +676,6 @@ class TestAsyncExecutions:
             id="id",
             command="command",
             attach_stdin=True,
-            shell_name="shell_name",
         )
         assert_matches_type(DevboxAsyncExecutionDetailView, execution, path=["response"])
 
@@ -733,7 +730,6 @@ class TestAsyncExecutions:
                 id="id",
                 command="command",
                 attach_stdin=True,
-                shell_name="shell_name",
             )
 
         assert_matches_type(DevboxExecutionDetailView, execution, path=["response"])

@@ -437,7 +437,7 @@ async with await runloop.devbox.create(name="temp-devbox") as devbox:
 
 #### Devbox Logs
 
-Retrieve logs from a devbox, optionally filtered by execution ID or shell name:
+Retrieve logs from a devbox, optionally filtered by execution ID:
 
 ```python
 # Get all devbox logs
@@ -448,9 +448,6 @@ for log in logs.logs:
 # Filter logs by execution ID
 result = devbox.cmd.exec('echo "hello"')
 exec_logs = devbox.logs(execution_id=result.execution_id)
-
-# Filter logs by shell name
-shell_logs = devbox.logs(shell_name="my-shell")
 ```
 
 **Key methods:**
@@ -458,7 +455,7 @@ shell_logs = devbox.logs(shell_name="my-shell")
 - `devbox.get_info()` - Get devbox details and status
 - `devbox.cmd.exec()` - Execute commands synchronously
 - `devbox.cmd.exec_async()` - Execute commands asynchronously
-- `devbox.logs()` - Retrieve devbox logs (optionally filter by execution_id or shell_name)
+- `devbox.logs()` - Retrieve devbox logs (optionally filter by execution_id)
 - `devbox.file.read()` - Read file contents
 - `devbox.file.write()` - Write file contents
 - `devbox.file.upload()` - Upload files

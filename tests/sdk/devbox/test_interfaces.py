@@ -35,6 +35,16 @@ class TestCommandInterface:
         assert "timeout" not in call_kwargs
         mock_client.devboxes.executions.await_completed.assert_not_called()
 
+    def test_exec_async_forwards_stdin(self, mock_client: Mock, execution_view: MockExecutionView) -> None:
+        mock_client.devboxes.execute_async.return_value = execution_view
+        devbox = Devbox(mock_client, "dbx_123")
+
+        devbox.cmd.exec_async("cat", attach_stdin=True)
+
+        call_kwargs = mock_client.devboxes.execute_async.call_args.kwargs
+        assert call_kwargs["command"] == "cat"
+        assert call_kwargs["attach_stdin"] is True
+
     def test_exec_with_stdout_callback(self, mock_client: Mock, mock_stream: Mock) -> None:
         """Test exec with stdout callback."""
         execution_async = SimpleNamespace(

@@ -33,7 +33,7 @@ from .async_ import (
     AsyncNetworkPolicyOps,
     AsyncStorageObjectOps,
 )
-from .devbox import Devbox, NamedShell
+from .devbox import Devbox
 from .secret import Secret
 from .snapshot import Snapshot
 from .blueprint import Blueprint
@@ -41,7 +41,7 @@ from .execution import Execution
 from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
 from .async_agent import AsyncAgent
-from .async_devbox import AsyncDevbox, AsyncNamedShell
+from .async_devbox import AsyncDevbox
 from .async_secret import AsyncSecret
 from .secret_by_id import SecretById
 from .async_snapshot import AsyncSnapshot
@@ -113,6 +113,4 @@ __all__ = [
     "AsyncMcpConfig",
     "GatewayConfig",
     "AsyncGatewayConfig",
-    "NamedShell",
-    "AsyncNamedShell",
 ]
