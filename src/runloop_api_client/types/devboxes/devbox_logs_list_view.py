@@ -30,9 +30,6 @@ class Log(BaseModel):
     message: Optional[str] = None
     """Log line message."""
 
-    shell_name: Optional[str] = None
-    """The Shell name the cmd executed in."""
-
 
 class DevboxLogsListView(BaseModel):
     logs: List[Log]

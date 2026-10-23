@@ -12,9 +12,7 @@ class DevboxExecuteParams(TypedDict, total=False):
     command: Required[str]
     """The command to execute via the Devbox shell.
 
-    By default, commands are run from the user home directory unless shell_name is
-    specified. If shell_name is specified the command is run from the directory
-    based on the recent state of the persistent shell.
+    Commands are run from the user home directory in a fresh login shell.
     """
 
     command_id: Required[str]
@@ -27,11 +25,4 @@ class DevboxExecuteParams(TypedDict, total=False):
     """Timeout in seconds to wait for command completion, up to 25 seconds.
 
     Defaults to 25 seconds. Operation is not killed.
-    """
-
-    shell_name: Optional[str]
-    """The name of the persistent shell to create or use if already created.
-
-    When using a persistent shell, the command will run from the directory at the
-    end of the previous command and environment variables will be preserved.
     """

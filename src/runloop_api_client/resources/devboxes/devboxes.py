@@ -981,7 +981,6 @@ class DevboxesResource(SyncAPIResource):
         command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -998,10 +997,8 @@ class DevboxesResource(SyncAPIResource):
         support.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           command_id: The command ID in UUIDv7 string format for idempotency and tracking.
               A fresh UUID is generated per call if not provided.
@@ -1010,10 +1007,6 @@ class DevboxesResource(SyncAPIResource):
 
           optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
               25 seconds. Operation is not killed.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -1038,7 +1031,6 @@ class DevboxesResource(SyncAPIResource):
                     "command": command,
                     "command_id": command_id,
                     "optimistic_timeout": optimistic_timeout,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_params.DevboxExecuteParams,
             ),
@@ -1129,7 +1121,6 @@ class DevboxesResource(SyncAPIResource):
         *,
         command: str,
         attach_stdin: Optional[bool] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1143,17 +1134,11 @@ class DevboxesResource(SyncAPIResource):
         execution that can be used to track the command's progress.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
               endpoint. Defaults to false if not specified.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -1173,7 +1158,6 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "command": command,
                     "attach_stdin": attach_stdin,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_async_params.DevboxExecuteAsyncParams,
             ),
@@ -1195,7 +1179,6 @@ class DevboxesResource(SyncAPIResource):
         *,
         command: str,
         attach_stdin: Optional[bool] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1213,17 +1196,11 @@ class DevboxesResource(SyncAPIResource):
            Use execute, execute_async, or execute_and_await_completion instead.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
               endpoint. Defaults to false if not specified.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -1245,7 +1222,6 @@ class DevboxesResource(SyncAPIResource):
                 {
                     "command": command,
                     "attach_stdin": attach_stdin,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_sync_params.DevboxExecuteSyncParams,
             ),
@@ -2819,7 +2795,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2836,10 +2811,8 @@ class AsyncDevboxesResource(AsyncAPIResource):
         support.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           command_id: The command ID in UUIDv7 string format for idempotency and tracking.
               A fresh UUID is generated per call if not provided.
@@ -2848,10 +2821,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
 
           optimistic_timeout: Timeout in seconds to wait for command completion, up to 25 seconds. Defaults to
               25 seconds. Operation is not killed.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -2876,7 +2845,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                     "command": command,
                     "command_id": command_id,
                     "optimistic_timeout": optimistic_timeout,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_params.DevboxExecuteParams,
             ),
@@ -2966,7 +2934,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         command: str,
         attach_stdin: Optional[bool] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2980,17 +2947,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
         execution that can be used to track the command's progress.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
               endpoint. Defaults to false if not specified.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -3010,7 +2971,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "command": command,
                     "attach_stdin": attach_stdin,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_async_params.DevboxExecuteAsyncParams,
             ),
@@ -3032,7 +2992,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         *,
         command: str,
         attach_stdin: Optional[bool] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -3050,17 +3009,11 @@ class AsyncDevboxesResource(AsyncAPIResource):
            Use execute, execute_async, or execute_and_await_completion instead.
 
         Args:
-          command: The command to execute via the Devbox shell. By default, commands are run from
-              the user home directory unless shell_name is specified. If shell_name is
-              specified the command is run from the directory based on the recent state of the
-              persistent shell.
+          command: The command to execute via the Devbox shell. Commands are run from the user home
+              directory in a fresh login shell.
 
           attach_stdin: Whether to attach stdin streaming for async commands. Not valid for execute_sync
               endpoint. Defaults to false if not specified.
-
-          shell_name: The name of the persistent shell to create or use if already created. When using
-              a persistent shell, the command will run from the directory at the end of the
-              previous command and environment variables will be preserved.
 
           extra_headers: Send extra headers
 
@@ -3082,7 +3035,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
                 {
                     "command": command,
                     "attach_stdin": attach_stdin,
-                    "shell_name": shell_name,
                 },
                 devbox_execute_sync_params.DevboxExecuteSyncParams,
             ),
