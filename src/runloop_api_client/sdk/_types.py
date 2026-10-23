@@ -3,18 +3,15 @@ from typing_extensions import TypedDict
 
 from ..types import (
     AxonListParams,
-    AgentListParams,
     AxonCreateParams,
     DevboxListParams,
     ObjectListParams,
-    AgentCreateParams,
     AxonPublishParams,
     DevboxCreateParams,
     ObjectCreateParams,
     BlueprintListParams,
     McpConfigListParams,
     ObjectDownloadParams,
-    AgentListPublicParams,
     BlueprintCreateParams,
     McpConfigCreateParams,
     McpConfigUpdateParams,
@@ -163,18 +160,6 @@ class SDKObjectCreateParams(ObjectCreateParams, LongRequestOptions):
 
 
 class SDKObjectDownloadParams(ObjectDownloadParams, BaseRequestOptions):
-    pass
-
-
-class SDKAgentCreateParams(AgentCreateParams, LongRequestOptions):
-    pass
-
-
-class SDKAgentListParams(AgentListParams, BaseRequestOptions):
-    pass
-
-
-class SDKAgentListPublicParams(AgentListPublicParams, BaseRequestOptions):
     pass
 
 

@@ -65,6 +65,20 @@ class TestCommandIdGeneration:
         body = _get_request_body(route)
         assert body["command_id"] == "my-custom-id"
 
+    @pytest.mark.respx(base_url=base_url)
+    def test_execute_and_await_completion(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        with Runloop(base_url=base_url, bearer_token="test") as client:
+            result = client.devboxes.execute_and_await_completion(
+                "dbx_test", command="echo hi", command_id="my-custom-id"
+            )
+
+        assert result.status == "completed"
+        body = _get_request_body(route)
+        assert body["command"] == "echo hi"
+        assert body["command_id"] == "my-custom-id"
+        assert "shell_name" not in body
+
 
 class TestAsyncCommandIdGeneration:
     """Async variant: command_id must be a fresh UUIDv7 per call when not explicitly provided."""
@@ -92,3 +106,18 @@ class TestAsyncCommandIdGeneration:
 
         body = _get_request_body(route)
         assert body["command_id"] == "my-custom-id"
+
+    @pytest.mark.respx(base_url=base_url)
+    @pytest.mark.asyncio
+    async def test_execute_and_await_completion(self, respx_mock: MockRouter) -> None:
+        route = respx_mock.post(EXECUTE_PATH).mock(return_value=httpx.Response(200, json=STUB_RESPONSE))
+        async with AsyncRunloop(base_url=base_url, bearer_token="test") as client:
+            result = await client.devboxes.execute_and_await_completion(
+                "dbx_test", command="echo hi", command_id="my-custom-id"
+            )
+
+        assert result.status == "completed"
+        body = _get_request_body(route)
+        assert body["command"] == "echo hi"
+        assert body["command_id"] == "my-custom-id"
+        assert "shell_name" not in body

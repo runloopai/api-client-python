@@ -6,7 +6,7 @@ Comprehensive end-to-end tests for the object-oriented Python SDK (`runloop_api_
 
 The Python SDK provides both synchronous and asynchronous interfaces:
 - **Synchronous SDK**: `RunloopSDK` with `Agent`, `Devbox`, `Blueprint`, `Snapshot`, `StorageObject`
-- **Asynchronous SDK**: `AsyncRunloopSDK` with `AsyncAgent`, `AsyncDevbox`, `AsyncBlueprint`, `AsyncSnapshot`, `AsyncStorageObject`
+- **Asynchronous SDK**: `AsyncRunloopSDK` with `AsyncDevbox`, `AsyncBlueprint`, `AsyncSnapshot`, `AsyncStorageObject`
 
 These tests ensure both interfaces work correctly in real-world scenarios.
 

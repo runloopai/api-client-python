@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Dict, List, Mapping, Optional
+from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -14,16 +14,13 @@ from ._types import (
     SDKAxonListParams,
     BaseRequestOptions,
     LongRequestOptions,
-    SDKAgentListParams,
     SDKAxonCreateParams,
     SDKDevboxListParams,
     SDKObjectListParams,
-    SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
     SDKBlueprintListParams,
     SDKMcpConfigListParams,
-    SDKAgentListPublicParams,
     SDKBlueprintCreateParams,
     SDKMcpConfigCreateParams,
     SDKDiskSnapshotListParams,
@@ -38,7 +35,6 @@ from .._client import DEFAULT_MAX_RETRIES, AsyncRunloop
 from ._helpers import detect_content_type
 from .async_axon import AsyncAxon
 from .._constants import DEFAULT_API_POOL_SHARDS, DEFAULT_TRANSFER_POOL_SHARDS, DEFAULT_BACKGROUND_POOL_SHARDS
-from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_secret import AsyncSecret
 from .async_snapshot import AsyncSnapshot
@@ -51,8 +47,6 @@ from .async_gateway_config import AsyncGatewayConfig
 from .async_network_policy import AsyncNetworkPolicy
 from .async_storage_object import AsyncStorageObject
 from ..types.object_create_params import ContentType
-from ..types.agent_devbox_counts_view import AgentDevboxCountsView
-from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
 
 class AsyncDevboxOps:
@@ -551,237 +545,6 @@ class AsyncAxonOps:
         return [AsyncAxon(self._client, axon.id) for axon in result.axons]
 
 
-class AsyncAgentOps:
-    """High-level async manager for creating and managing agents.
-
-    Accessed via ``runloop.agent`` from :class:`AsyncRunloopSDK`, provides
-    coroutines to create, retrieve, and list agents from various sources (npm, pip, git, object storage).
-
-    Example:
-        >>> runloop = AsyncRunloopSDK()
-        >>> # Create agent from NPM package
-        >>> agent = await runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
-        >>> # Create agent from Git repository
-        >>> agent = await runloop.agent.create_from_git(
-        ...     name="git-agent", repository="https://github.com/user/agent-repo", ref="main"
-        ... )
-        >>> # List all agents
-        >>> agents = await runloop.agent.list(limit=10)
-    """
-
-    def __init__(self, client: AsyncRunloop) -> None:
-        """Initialize the manager.
-
-        :param client: Generated AsyncRunloop client to wrap
-        :type client: AsyncRunloop
-        """
-        self._client = client
-
-    async def create(
-        self,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> AsyncAgent:
-        """Create a new agent.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for available parameters
-        :return: Wrapper bound to the newly created agent
-        :rtype: AsyncAgent
-        """
-        agent_view = await self._client.agents.create(
-            **params,
-        )
-        return AsyncAgent(self._client, agent_view.id, agent_view)
-
-    async def create_from_npm(
-        self,
-        *,
-        package_name: str,
-        registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> AsyncAgent:
-        """Create an agent from an NPM package.
-
-        :param package_name: NPM package name
-        :type package_name: str
-        :param registry_url: NPM registry URL, defaults to None
-        :type registry_url: Optional[str], optional
-        :param agent_setup: Setup commands to run after installation, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: AsyncAgent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
-            )
-
-        npm_config: Npm = {"package_name": package_name}
-        if registry_url is not None:
-            npm_config["registry_url"] = registry_url
-        if agent_setup is not None:
-            npm_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "npm", "npm": npm_config}
-        return await self.create(**params)
-
-    async def create_from_pip(
-        self,
-        *,
-        package_name: str,
-        registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> AsyncAgent:
-        """Create an agent from a Pip package.
-
-        :param package_name: Pip package name
-        :type package_name: str
-        :param registry_url: Pip registry URL, defaults to None
-        :type registry_url: Optional[str], optional
-        :param agent_setup: Setup commands to run after installation, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: AsyncAgent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
-            )
-
-        pip_config: Pip = {"package_name": package_name}
-        if registry_url is not None:
-            pip_config["registry_url"] = registry_url
-        if agent_setup is not None:
-            pip_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "pip", "pip": pip_config}
-        return await self.create(**params)
-
-    async def create_from_git(
-        self,
-        *,
-        repository: str,
-        ref: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> AsyncAgent:
-        """Create an agent from a Git repository.
-
-        :param repository: Git repository URL
-        :type repository: str
-        :param ref: Optional Git ref (branch/tag/commit), defaults to main/HEAD
-        :type ref: Optional[str], optional
-        :param agent_setup: Setup commands to run after cloning, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: AsyncAgent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
-            )
-
-        git_config: Git = {"repository": repository}
-        if ref is not None:
-            git_config["ref"] = ref
-        if agent_setup is not None:
-            git_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "git", "git": git_config}
-        return await self.create(**params)
-
-    async def create_from_object(
-        self,
-        *,
-        object_id: str,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> AsyncAgent:
-        """Create an agent from a storage object.
-
-        :param object_id: Storage object ID
-        :type object_id: str
-        :param agent_setup: Setup commands to run after unpacking, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: AsyncAgent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
-            )
-
-        object_config: Object = {"object_id": object_id}
-        if agent_setup is not None:
-            object_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "object", "object": object_config}
-        return await self.create(**params)
-
-    def from_id(self, agent_id: str) -> AsyncAgent:
-        """Attach to an existing agent by ID.
-
-        :param agent_id: Existing agent ID
-        :type agent_id: str
-        :return: Wrapper bound to the requested agent
-        :rtype: AsyncAgent
-        """
-        return AsyncAgent(self._client, agent_id)
-
-    async def list(
-        self,
-        **params: Unpack[SDKAgentListParams],
-    ) -> list[AsyncAgent]:
-        """List agents accessible to the caller.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
-        :return: Collection of agent wrappers
-        :rtype: list[AsyncAgent]
-        """
-        page = await self._client.agents.list(
-            **params,
-        )
-        return [AsyncAgent(self._client, item.id, item) for item in page.agents]
-
-    async def list_public(
-        self,
-        **params: Unpack[SDKAgentListPublicParams],
-    ) -> List[AsyncAgent]:
-        """List public agents.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters
-        :return: Collection of public agent wrappers
-        :rtype: list[AsyncAgent]
-        """
-        page = await self._client.agents.list_public(
-            **params,
-        )
-        return [AsyncAgent(self._client, item.id, item) for item in page.agents]
-
-    async def devbox_counts(
-        self,
-        **options: Unpack[BaseRequestOptions],
-    ) -> AgentDevboxCountsView:
-        """Get devbox counts grouped by agent name.
-
-        :param options: Optional request configuration
-        :return: Devbox counts per agent name and total
-        :rtype: AgentDevboxCountsView
-        """
-        return await self._client.agents.devbox_counts(
-            **options,
-        )
-
-
 class AsyncNetworkPolicyOps:
     """High-level async manager for creating and managing network policies.
 
@@ -1110,8 +873,6 @@ class AsyncRunloopSDK:
 
     :ivar api: Direct access to the generated async REST API client
     :vartype api: AsyncRunloop
-    :ivar agent: High-level async interface for agent management.
-    :vartype agent: AsyncAgentOps
     :ivar axon: [Beta] High-level async interface for axon management
     :vartype axon: AsyncAxonOps
     :ivar devbox: High-level async interface for devbox management
@@ -1140,7 +901,6 @@ class AsyncRunloopSDK:
     """
 
     api: AsyncRunloop
-    agent: AsyncAgentOps
     axon: AsyncAxonOps
     devbox: AsyncDevboxOps
     blueprint: AsyncBlueprintOps
@@ -1201,7 +961,6 @@ class AsyncRunloopSDK:
             transfer_pool_shards=transfer_pool_shards,
         )
 
-        self.agent = AsyncAgentOps(self.api)
         self.axon = AsyncAxonOps(self.api)
         self.devbox = AsyncDevboxOps(self.api)
         self.blueprint = AsyncBlueprintOps(self.api)

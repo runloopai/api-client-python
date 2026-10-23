@@ -8,7 +8,6 @@ from __future__ import annotations
 from .axon import Axon, AxonSqlOps
 from .sync import (
     AxonOps,
-    AgentOps,
     DevboxOps,
     SecretOps,
     RunloopSDK,
@@ -19,10 +18,8 @@ from .sync import (
     NetworkPolicyOps,
     StorageObjectOps,
 )
-from .agent import Agent
 from .async_ import (
     AsyncAxonOps,
-    AsyncAgentOps,
     AsyncDevboxOps,
     AsyncSecretOps,
     AsyncRunloopSDK,
@@ -40,7 +37,6 @@ from .blueprint import Blueprint
 from .execution import Execution
 from .async_axon import AsyncAxon, AsyncAxonSqlOps
 from .mcp_config import McpConfig
-from .async_agent import AsyncAgent
 from .async_devbox import AsyncDevbox
 from .async_secret import AsyncSecret
 from .secret_by_id import SecretById
@@ -63,8 +59,6 @@ __all__ = [
     "RunloopSDK",
     "AsyncRunloopSDK",
     # Management interfaces
-    "AgentOps",
-    "AsyncAgentOps",
     "AxonOps",
     "AsyncAxonOps",
     "DevboxOps",
@@ -84,8 +78,6 @@ __all__ = [
     "GatewayConfigOps",
     "AsyncGatewayConfigOps",
     # Resource classes
-    "Agent",
-    "AsyncAgent",
     "Axon",
     "AsyncAxon",
     "AxonSqlOps",

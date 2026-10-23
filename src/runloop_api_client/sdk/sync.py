@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Mapping, Optional
+from typing import Dict, Mapping, Optional
 from pathlib import Path
 from datetime import timedelta
 from typing_extensions import Unpack
@@ -10,21 +10,17 @@ from typing_extensions import Unpack
 import httpx
 
 from .axon import Axon
-from .agent import Agent
 from ._types import (
     SDKAxonListParams,
     BaseRequestOptions,
     LongRequestOptions,
-    SDKAgentListParams,
     SDKAxonCreateParams,
     SDKDevboxListParams,
     SDKObjectListParams,
-    SDKAgentCreateParams,
     SDKDevboxCreateParams,
     SDKObjectCreateParams,
     SDKBlueprintListParams,
     SDKMcpConfigListParams,
-    SDKAgentListPublicParams,
     SDKBlueprintCreateParams,
     SDKMcpConfigCreateParams,
     SDKDiskSnapshotListParams,
@@ -50,8 +46,6 @@ from .storage_object import StorageObject
 from ..types.secret_view import SecretView
 from ..lib.context_loader import TarFilter, build_directory_tar
 from ..types.object_create_params import ContentType
-from ..types.agent_devbox_counts_view import AgentDevboxCountsView
-from ..types.shared_params.agent_source import Git, Npm, Pip, Object
 
 
 class DevboxOps:
@@ -546,267 +540,6 @@ class AxonOps:
         return [Axon(self._client, axon.id) for axon in result.axons]
 
 
-class AgentOps:
-    """High-level manager for creating and managing agents.
-
-    Accessed via ``runloop.agent`` from :class:`RunloopSDK`, provides methods to
-    create, retrieve, and list agents from various sources (npm, pip, git, object storage).
-
-    Example:
-        >>> runloop = RunloopSDK()
-        >>> # Create agent from NPM package
-        >>> agent = runloop.agent.create_from_npm(name="my-agent", package_name="@runloop/example-agent")
-        >>> # Create agent from Git repository
-        >>> agent = runloop.agent.create_from_git(
-        ...     name="git-agent", repository="https://github.com/user/agent-repo", ref="main"
-        ... )
-        >>> # List all agents
-        >>> agents = runloop.agent.list(limit=10)
-    """
-
-    def __init__(self, client: Runloop) -> None:
-        """Initialize the manager.
-
-        :param client: Generated Runloop client to wrap
-        :type client: Runloop
-        """
-        self._client = client
-
-    def create(
-        self,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> Agent:
-        """Create a new agent.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for available parameters
-        :return: Wrapper bound to the newly created agent
-        :rtype: Agent
-        """
-        agent_view = self._client.agents.create(
-            **params,
-        )
-        return Agent(self._client, agent_view.id, agent_view)
-
-    def create_from_npm(
-        self,
-        *,
-        package_name: str,
-        registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> Agent:
-        """Create an agent from an NPM package.
-
-        Example:
-            >>> agent = runloop.agent.create_from_npm(
-            ...     name="my-npm-agent", package_name="@runloop/example-agent", version="1.0.0"
-            ... )
-
-        :param package_name: NPM package name
-        :type package_name: str
-        :param registry_url: NPM registry URL, defaults to None
-        :type registry_url: Optional[str], optional
-        :param agent_setup: Setup commands to run after installation, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: Agent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_npm(); source is automatically set to npm configuration"
-            )
-
-        npm_config: Npm = {"package_name": package_name}
-        if registry_url is not None:
-            npm_config["registry_url"] = registry_url
-        if agent_setup is not None:
-            npm_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "npm", "npm": npm_config}
-        return self.create(**params)
-
-    def create_from_pip(
-        self,
-        *,
-        package_name: str,
-        registry_url: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> Agent:
-        """Create an agent from a Pip package.
-
-        Example:
-            >>> agent = runloop.agent.create_from_pip(
-            ...     name="my-pip-agent", package_name="runloop-example-agent", version="1.0.0"
-            ... )
-
-        :param package_name: Pip package name
-        :type package_name: str
-        :param registry_url: Pip registry URL, defaults to None
-        :type registry_url: Optional[str], optional
-        :param agent_setup: Setup commands to run after installation, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: Agent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_pip(); source is automatically set to pip configuration"
-            )
-
-        pip_config: Pip = {"package_name": package_name}
-        if registry_url is not None:
-            pip_config["registry_url"] = registry_url
-        if agent_setup is not None:
-            pip_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "pip", "pip": pip_config}
-        return self.create(**params)
-
-    def create_from_git(
-        self,
-        *,
-        repository: str,
-        ref: Optional[str] = None,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> Agent:
-        """Create an agent from a Git repository.
-
-        Example:
-            >>> agent = runloop.agent.create_from_git(
-            ...     name="my-git-agent",
-            ...     repository="https://github.com/user/agent-repo",
-            ...     ref="main",
-            ...     agent_setup=["npm install", "npm run build"],
-            ...     version="1.0.0",
-            ... )
-
-        :param repository: Git repository URL
-        :type repository: str
-        :param ref: Optional Git ref (branch/tag/commit), defaults to main/HEAD
-        :type ref: Optional[str], optional
-        :param agent_setup: Setup commands to run after cloning, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: Agent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_git(); source is automatically set to git configuration"
-            )
-
-        git_config: Git = {"repository": repository}
-        if ref is not None:
-            git_config["ref"] = ref
-        if agent_setup is not None:
-            git_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "git", "git": git_config}
-        return self.create(**params)
-
-    def create_from_object(
-        self,
-        *,
-        object_id: str,
-        agent_setup: Optional[list[str]] = None,
-        **params: Unpack[SDKAgentCreateParams],
-    ) -> Agent:
-        """Create an agent from a storage object.
-
-        Example:
-            >>> # First upload agent code as an object
-            >>> obj = runloop.storage_object.upload_from_dir("./my-agent")
-            >>> # Then create agent from the object
-            >>> agent = runloop.agent.create_from_object(
-            ...     name="my-object-agent",
-            ...     object_id=obj.id,
-            ...     agent_setup=["chmod +x setup.sh", "./setup.sh"],
-            ...     version="1.0.0",
-            ... )
-
-        :param object_id: Storage object ID
-        :type object_id: str
-        :param agent_setup: Setup commands to run after unpacking, defaults to None
-        :type agent_setup: Optional[list[str]], optional
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding 'source')
-        :return: Wrapper bound to the newly created agent
-        :rtype: Agent
-        :raises ValueError: If 'source' is provided in params
-        """
-        if "source" in params:
-            raise ValueError(
-                "Cannot specify 'source' when using create_from_object(); source is automatically set to object configuration"
-            )
-
-        object_config: Object = {"object_id": object_id}
-        if agent_setup is not None:
-            object_config["agent_setup"] = agent_setup
-
-        params["source"] = {"type": "object", "object": object_config}
-        return self.create(**params)
-
-    def from_id(self, agent_id: str) -> Agent:
-        """Attach to an existing agent by ID.
-
-        :param agent_id: Existing agent ID
-        :type agent_id: str
-        :return: Wrapper bound to the requested agent
-        :rtype: Agent
-        """
-        return Agent(self._client, agent_id)
-
-    def list(
-        self,
-        **params: Unpack[SDKAgentListParams],
-    ) -> list[Agent]:
-        """List agents accessible to the caller.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters
-        :return: Collection of agent wrappers
-        :rtype: list[Agent]
-        """
-        page = self._client.agents.list(
-            **params,
-        )
-        return [Agent(self._client, item.id, item) for item in page.agents]
-
-    def list_public(
-        self,
-        **params: Unpack[SDKAgentListPublicParams],
-    ) -> List[Agent]:
-        """List public agents.
-
-        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters
-        :return: Collection of public agent wrappers
-        :rtype: list[Agent]
-        """
-        page = self._client.agents.list_public(
-            **params,
-        )
-        return [Agent(self._client, item.id, item) for item in page.agents]
-
-    def devbox_counts(
-        self,
-        **options: Unpack[BaseRequestOptions],
-    ) -> AgentDevboxCountsView:
-        """Get devbox counts grouped by agent name.
-
-        :param options: Optional request configuration
-        :return: Devbox counts per agent name and total
-        :rtype: AgentDevboxCountsView
-        """
-        return self._client.agents.devbox_counts(
-            **options,
-        )
-
-
 class NetworkPolicyOps:
     """High-level manager for creating and managing network policies.
 
@@ -1135,8 +868,6 @@ class RunloopSDK:
 
     :ivar api: Direct access to the generated REST API client
     :vartype api: Runloop
-    :ivar agent: High-level interface for agent management.
-    :vartype agent: AgentOps
     :ivar axon: [Beta] High-level interface for axon management
     :vartype axon: AxonOps
     :ivar devbox: High-level interface for devbox management
@@ -1165,7 +896,6 @@ class RunloopSDK:
     """
 
     api: Runloop
-    agent: AgentOps
     axon: AxonOps
     devbox: DevboxOps
     blueprint: BlueprintOps
@@ -1226,7 +956,6 @@ class RunloopSDK:
             transfer_pool_shards=transfer_pool_shards,
         )
 
-        self.agent = AgentOps(self.api)
         self.axon = AxonOps(self.api)
         self.devbox = DevboxOps(self.api)
         self.blueprint = BlueprintOps(self.api)

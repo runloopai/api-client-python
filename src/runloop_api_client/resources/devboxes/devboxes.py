@@ -1053,7 +1053,6 @@ class DevboxesResource(SyncAPIResource):
         command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         # The following are forwarded to the initial execute request
         extra_headers: Headers | None = None,
@@ -1080,7 +1079,6 @@ class DevboxesResource(SyncAPIResource):
             command_id=command_id,
             last_n=last_n,
             optimistic_timeout=optimistic_timeout,
-            shell_name=shell_name,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,
@@ -2867,7 +2865,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
         command_id: str | None = None,
         last_n: str | Omit = omit,
         optimistic_timeout: Optional[int] | Omit = omit,
-        shell_name: Optional[str] | Omit = omit,
         polling_config: PollingConfig | None = None,
         # The following are forwarded to the initial execute request
         extra_headers: Headers | None = None,
@@ -2893,7 +2890,6 @@ class AsyncDevboxesResource(AsyncAPIResource):
             command_id=command_id,
             last_n=last_n,
             optimistic_timeout=optimistic_timeout,
-            shell_name=shell_name,
             extra_headers=extra_headers,
             extra_query=extra_query,
             extra_body=extra_body,

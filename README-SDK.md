@@ -121,7 +121,6 @@ The SDK provides object-oriented interfaces for all major Runloop resources:
 - **`runloop.blueprint`** - Blueprint management (create, list, build blueprints)
 - **`runloop.snapshot`** - Snapshot management (list disk snapshots)
 - **`runloop.storage_object`** - Storage object management (upload, download, list objects)
-- **`runloop.agent`** - Agent management (create, list agents from npm/pip/git)
 - **`runloop.axon`** - [Beta] Axon management (create, publish events, subscribe to SSE streams, SQL queries)
 - **`runloop.network_policy`** - Network policy management (create, list, update egress rules)
 - **`runloop.gateway_config`** - Gateway config management (create, list API proxy configurations)

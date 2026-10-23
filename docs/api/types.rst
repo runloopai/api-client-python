@@ -78,16 +78,6 @@ These TypeDicts define parameters for storage object creation, listing, and down
 
 .. autotypeddict:: runloop_api_client.sdk._types.SDKObjectDownloadParams
 
-Agent Parameters
-----------------
-
-These TypeDicts define parameters for agent creation and listing.
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKAgentCreateParams
-
-.. autotypeddict:: runloop_api_client.sdk._types.SDKAgentListParams
-
-
 Axon Parameters
 ---------------
 
