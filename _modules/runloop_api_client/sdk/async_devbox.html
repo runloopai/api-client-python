@@ -200,7 +200,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/blueprint.html">Blueprint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -261,6 +260,7 @@
     <span class="n">LogCallback</span><span class="p">,</span>
     <span class="n">BaseRequestOptions</span><span class="p">,</span>
     <span class="n">LongRequestOptions</span><span class="p">,</span>
+    <span class="n">DevboxCommandOptions</span><span class="p">,</span>
     <span class="n">PollingRequestOptions</span><span class="p">,</span>
     <span class="n">SDKDevboxExecuteParams</span><span class="p">,</span>
     <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span>
@@ -282,7 +282,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devboxes</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExecutionUpdateChunk</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.async_execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncExecution</span><span class="p">,</span> <span class="n">_AsyncStreamingGroup</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.async_execution_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncExecutionResult</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_execute_async_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxNiceExecuteAsyncParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devboxes.devbox_logs_list_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxLogsListView</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_async_execution_detail_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxAsyncExecutionDetailView</span>
 
@@ -425,18 +424,15 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">execution_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">shell_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DevboxLogsListView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve logs for the devbox.</span>
 
 <span class="sd">        Returns all logs from a running or completed devbox. Optionally filter</span>
-<span class="sd">        by execution ID or shell name.</span>
+<span class="sd">        by execution ID.</span>
 
 <span class="sd">        :param execution_id: Filter logs by execution ID, defaults to None</span>
 <span class="sd">        :type execution_id: str | None, optional</span>
-<span class="sd">        :param shell_name: Filter logs by shell name, defaults to None</span>
-<span class="sd">        :type shell_name: str | None, optional</span>
 <span class="sd">        :param options: Optional request configuration</span>
 <span class="sd">        :return: Log entries for the devbox</span>
 <span class="sd">        :rtype: :class:`~runloop_api_client.types.devboxes.devbox_logs_list_view.DevboxLogsListView`</span>
@@ -449,7 +445,6 @@
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span>
             <span class="n">execution_id</span><span class="o">=</span><span class="n">execution_id</span> <span class="k">if</span> <span class="n">execution_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">omit</span><span class="p">,</span>
-            <span class="n">shell_name</span><span class="o">=</span><span class="n">shell_name</span> <span class="k">if</span> <span class="n">shell_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">omit</span><span class="p">,</span>
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
         <span class="p">)</span></div>
 
@@ -664,42 +659,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">AsyncNetworkInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AsyncDevbox.shell">
-<a class="viewcode-back" href="../../../api/devbox.html#runloop_api_client.sdk.async_devbox.AsyncDevbox.shell">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncNamedShell</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a named shell instance for stateful command execution.</span>
-
-<span class="sd">        Named shells are stateful and maintain environment variables and the current working</span>
-<span class="sd">        directory (CWD) across commands, just like a real shell on your local computer.</span>
-<span class="sd">        Commands executed through the same named shell instance will execute sequentially -</span>
-<span class="sd">        the shell can only run one command at a time with automatic queuing. This ensures</span>
-<span class="sd">        that environment changes and directory changes from one command are preserved for</span>
-<span class="sd">        the next command.</span>
-
-<span class="sd">        :param shell_name: The name of the persistent shell session. If not provided, a UUID will be generated automatically.</span>
-<span class="sd">        :type shell_name: str | None, optional</span>
-<span class="sd">        :return: An AsyncNamedShell instance for executing commands in the named shell</span>
-<span class="sd">        :rtype: AsyncNamedShell</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; # Create a named shell with a custom name</span>
-<span class="sd">            &gt;&gt;&gt; shell = await devbox.shell(&quot;my-session&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; # Create a named shell with an auto-generated UUID name</span>
-<span class="sd">            &gt;&gt;&gt; shell2 = await devbox.shell()</span>
-<span class="sd">            &gt;&gt;&gt; # Commands execute sequentially and share state</span>
-<span class="sd">            &gt;&gt;&gt; await shell.exec(&quot;cd /app&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; await shell.exec(&quot;export MY_VAR=value&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; result = await shell.exec(&quot;echo $MY_VAR&quot;)  # Will output &#39;value&#39;</span>
-<span class="sd">            &gt;&gt;&gt; result = await shell.exec(&quot;pwd&quot;)  # Will output &#39;/app&#39;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">shell_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># uuid_utils is not typed</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">uuid_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">uuid7</span>  <span class="c1"># type: ignore</span>
-
-            <span class="n">shell_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid7</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">AsyncNamedShell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell_name</span><span class="p">)</span></div>
-
-
     <span class="c1"># ------------------------------------------------------------------ #</span>
     <span class="c1"># Internal helpers</span>
     <span class="c1"># ------------------------------------------------------------------ #</span>
@@ -815,7 +774,7 @@
         <span class="n">execution</span><span class="p">:</span> <span class="n">DevboxAsyncExecutionDetailView</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">execute_async</span><span class="p">(</span>
             <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">DevboxNiceExecuteAsyncParams</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">DevboxCommandOptions</span><span class="p">),</span>
             <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">streaming_group</span> <span class="o">=</span> <span class="n">devbox</span><span class="o">.</span><span class="n">_start_streaming</span><span class="p">(</span>
@@ -878,7 +837,7 @@
         <span class="n">execution</span><span class="p">:</span> <span class="n">DevboxAsyncExecutionDetailView</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">devboxes</span><span class="o">.</span><span class="n">execute_async</span><span class="p">(</span>
             <span class="n">devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">DevboxNiceExecuteAsyncParams</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">DevboxCommandOptions</span><span class="p">),</span>
             <span class="o">**</span><span class="n">filter_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">),</span>
         <span class="p">)</span>
 
@@ -993,112 +952,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="o">**</span><span class="n">params</span><span class="p">,</span>
         <span class="p">)</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="AsyncNamedShell">
-<a class="viewcode-back" href="../../../api/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNamedShell">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">AsyncNamedShell</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for executing commands in a persistent, stateful shell session.</span>
-
-<span class="sd">    Named shells are stateful and maintain environment variables and the current working</span>
-<span class="sd">    directory (CWD) across commands. Commands executed through the same named shell</span>
-<span class="sd">    instance will execute sequentially - the shell can only run one command at a time</span>
-<span class="sd">    with automatic queuing. This ensures that environment changes and directory changes</span>
-<span class="sd">    from one command are preserved for the next command.</span>
-
-<span class="sd">    Use :meth:`AsyncDevbox.shell` to create a named shell instance. If you use the same</span>
-<span class="sd">    shell name, it will re-attach to the existing named shell, preserving its state.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; shell = await devbox.shell(&quot;my-session&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; await shell.exec(&quot;cd /app&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; await shell.exec(&quot;export MY_VAR=value&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; result = await shell.exec(&quot;echo $MY_VAR&quot;)  # Will output &#39;value&#39;</span>
-<span class="sd">        &gt;&gt;&gt; result = await shell.exec(&quot;pwd&quot;)  # Will output &#39;/app&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devbox</span><span class="p">:</span> <span class="n">AsyncDevbox</span><span class="p">,</span> <span class="n">shell_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the named shell.</span>
-
-<span class="sd">        :param devbox: The async devbox instance to execute commands on</span>
-<span class="sd">        :type devbox: AsyncDevbox</span>
-<span class="sd">        :param shell_name: The name of the persistent shell session</span>
-<span class="sd">        :type shell_name: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span> <span class="o">=</span> <span class="n">devbox</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shell_name</span> <span class="o">=</span> <span class="n">shell_name</span>
-
-<div class="viewcode-block" id="AsyncNamedShell.exec">
-<a class="viewcode-back" href="../../../api/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNamedShell.exec">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exec</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncExecutionResult</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a command in the named shell and wait for it to complete.</span>
-
-<span class="sd">        The command will execute in the persistent shell session, maintaining environment</span>
-<span class="sd">        variables and the current working directory from previous commands. Commands are</span>
-<span class="sd">        queued and execute sequentially - only one command runs at a time in the named shell.</span>
-
-<span class="sd">        Optionally provide callbacks to stream logs in real-time. When callbacks are provided,</span>
-<span class="sd">        this method waits for both the command to complete AND all streaming data to be</span>
-<span class="sd">        processed before returning.</span>
-
-<span class="sd">        :param command: The command to execute</span>
-<span class="sd">        :type command: str</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteParams` for available parameters</span>
-<span class="sd">        :return: Wrapper with exit status and output helpers</span>
-<span class="sd">        :rtype: AsyncExecutionResult</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; shell = await devbox.shell(&quot;my-session&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; result = await shell.exec(&quot;ls -la&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; print(await result.stdout())</span>
-<span class="sd">            &gt;&gt;&gt; # With streaming callbacks</span>
-<span class="sd">            &gt;&gt;&gt; result = await shell.exec(&quot;npm install&quot;, stdout=lambda line: print(f&quot;[LOG] {line}&quot;))</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Ensure shell_name is set and cannot be overridden by user params</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;shell_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell_name</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AsyncNamedShell.exec_async">
-<a class="viewcode-back" href="../../../api/devbox.html#runloop_api_client.sdk.async_devbox.AsyncNamedShell.exec_async">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">exec_async</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKDevboxExecuteAsyncParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncExecution</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a command in the named shell asynchronously without waiting for completion.</span>
-
-<span class="sd">        The command will execute in the persistent shell session, maintaining environment</span>
-<span class="sd">        variables and the current working directory from previous commands. Commands are</span>
-<span class="sd">        queued and execute sequentially - only one command runs at a time in the named shell.</span>
-
-<span class="sd">        Optionally provide callbacks to stream logs in real-time as they are produced.</span>
-<span class="sd">        Callbacks fire in real-time as logs arrive. When you call execution.result(),</span>
-<span class="sd">        it will wait for both the command to complete and all streaming to finish.</span>
-
-<span class="sd">        :param command: The command to execute</span>
-<span class="sd">        :type command: str</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams` for available parameters</span>
-<span class="sd">        :return: Handle for managing the running process</span>
-<span class="sd">        :rtype: AsyncExecution</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; shell = await devbox.shell(&quot;my-session&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; execution = await shell.exec_async(&quot;long-running-task.sh&quot;, stdout=lambda line: print(f&quot;[LOG] {line}&quot;))</span>
-<span class="sd">            &gt;&gt;&gt; # Do other work while command runs...</span>
-<span class="sd">            &gt;&gt;&gt; result = await execution.result()</span>
-<span class="sd">            &gt;&gt;&gt; if result.success:</span>
-<span class="sd">            ...     print(&quot;Task completed successfully!&quot;)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Ensure shell_name is set and cannot be overridden by user params</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;shell_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shell_name</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devbox</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">exec_async</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 </div>
 
 

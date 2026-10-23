@@ -200,7 +200,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/blueprint.html">Blueprint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -258,9 +257,7 @@
     <span class="n">command</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The command to execute via the Devbox shell.</span>
 
-<span class="sd">    By default, commands are run from the user home directory unless shell_name is</span>
-<span class="sd">    specified. If shell_name is specified the command is run from the directory</span>
-<span class="sd">    based on the recent state of the persistent shell.</span>
+<span class="sd">    Commands are run from the user home directory in a fresh login shell.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">command_id</span><span class="p">:</span> <span class="n">Required</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
@@ -273,13 +270,6 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Timeout in seconds to wait for command completion, up to 25 seconds.</span>
 
 <span class="sd">    Defaults to 25 seconds. Operation is not killed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">shell_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the persistent shell to create or use if already created.</span>
-
-<span class="sd">    When using a persistent shell, the command will run from the directory at the</span>
-<span class="sd">    end of the previous command and environment variables will be preserved.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 </pre></div>

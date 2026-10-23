@@ -200,7 +200,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/blueprint.html">Blueprint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -247,18 +246,15 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AxonListParams</span><span class="p">,</span>
-    <span class="n">AgentListParams</span><span class="p">,</span>
     <span class="n">AxonCreateParams</span><span class="p">,</span>
     <span class="n">DevboxListParams</span><span class="p">,</span>
     <span class="n">ObjectListParams</span><span class="p">,</span>
-    <span class="n">AgentCreateParams</span><span class="p">,</span>
     <span class="n">AxonPublishParams</span><span class="p">,</span>
     <span class="n">DevboxCreateParams</span><span class="p">,</span>
     <span class="n">ObjectCreateParams</span><span class="p">,</span>
     <span class="n">BlueprintListParams</span><span class="p">,</span>
     <span class="n">McpConfigListParams</span><span class="p">,</span>
     <span class="n">ObjectDownloadParams</span><span class="p">,</span>
-    <span class="n">AgentListPublicParams</span><span class="p">,</span>
     <span class="n">BlueprintCreateParams</span><span class="p">,</span>
     <span class="n">McpConfigCreateParams</span><span class="p">,</span>
     <span class="n">McpConfigUpdateParams</span><span class="p">,</span>
@@ -281,7 +277,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_create_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxBaseCreateParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.axons.sql_batch_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">SqlBatchParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.axons.sql_query_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">SqlQueryParams</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.devbox_execute_async_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DevboxNiceExecuteAsyncParams</span>
 
 <span class="n">LogCallback</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
 
@@ -351,16 +346,22 @@
 
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">DevboxCommandOptions</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional API fields shared by command execution helpers.&quot;&quot;&quot;</span>
+
+    <span class="n">attach_stdin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+
+
 <div class="viewcode-block" id="SDKDevboxExecuteParams">
 <a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKDevboxExecuteParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteParams</span><span class="p">(</span><span class="n">DevboxNiceExecuteAsyncParams</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteParams</span><span class="p">(</span><span class="n">DevboxCommandOptions</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongPollingRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 
 <div class="viewcode-block" id="SDKDevboxExecuteAsyncParams">
 <a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKDevboxExecuteAsyncParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteAsyncParams</span><span class="p">(</span><span class="n">DevboxNiceExecuteAsyncParams</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDKDevboxExecuteAsyncParams</span><span class="p">(</span><span class="n">DevboxCommandOptions</span><span class="p">,</span> <span class="n">ExecuteStreamingCallbacks</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
@@ -475,24 +476,6 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">SDKObjectDownloadParams</span><span class="p">(</span><span class="n">ObjectDownloadParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
-
-
-<div class="viewcode-block" id="SDKAgentCreateParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKAgentCreateParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKAgentCreateParams</span><span class="p">(</span><span class="n">AgentCreateParams</span><span class="p">,</span> <span class="n">LongRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<div class="viewcode-block" id="SDKAgentListParams">
-<a class="viewcode-back" href="../../../api/types.html#runloop_api_client.sdk._types.SDKAgentListParams">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKAgentListParams</span><span class="p">(</span><span class="n">AgentListParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">SDKAgentListPublicParams</span><span class="p">(</span><span class="n">AgentListPublicParams</span><span class="p">,</span> <span class="n">BaseRequestOptions</span><span class="p">):</span>
-    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="SDKAxonListParams">

@@ -19,12 +19,6 @@ with ``await`` required on all methods.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Agents
-
-   agent
-
-.. toctree::
-   :maxdepth: 1
    :caption: Communication
 
    axon

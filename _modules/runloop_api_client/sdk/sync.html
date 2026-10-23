@@ -200,7 +200,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/blueprint.html">Blueprint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/snapshot.html">Snapshot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/storage_object.html">Storage Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/agent.html">Agent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/axon.html">Axon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/secret.html">Secret</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/mcp_config.html">MCP Config</a></li>
@@ -246,7 +245,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span>
@@ -254,21 +253,17 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.axon</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axon</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">SDKAxonListParams</span><span class="p">,</span>
     <span class="n">BaseRequestOptions</span><span class="p">,</span>
     <span class="n">LongRequestOptions</span><span class="p">,</span>
-    <span class="n">SDKAgentListParams</span><span class="p">,</span>
     <span class="n">SDKAxonCreateParams</span><span class="p">,</span>
     <span class="n">SDKDevboxListParams</span><span class="p">,</span>
     <span class="n">SDKObjectListParams</span><span class="p">,</span>
-    <span class="n">SDKAgentCreateParams</span><span class="p">,</span>
     <span class="n">SDKDevboxCreateParams</span><span class="p">,</span>
     <span class="n">SDKObjectCreateParams</span><span class="p">,</span>
     <span class="n">SDKBlueprintListParams</span><span class="p">,</span>
     <span class="n">SDKMcpConfigListParams</span><span class="p">,</span>
-    <span class="n">SDKAgentListPublicParams</span><span class="p">,</span>
     <span class="n">SDKBlueprintCreateParams</span><span class="p">,</span>
     <span class="n">SDKMcpConfigCreateParams</span><span class="p">,</span>
     <span class="n">SDKDiskSnapshotListParams</span><span class="p">,</span>
@@ -294,8 +289,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.secret_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">SecretView</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..lib.context_loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarFilter</span><span class="p">,</span> <span class="n">build_directory_tar</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..types.object_create_params</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.agent_devbox_counts_view</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentDevboxCountsView</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..types.shared_params.agent_source</span><span class="w"> </span><span class="kn">import</span> <span class="n">Git</span><span class="p">,</span> <span class="n">Npm</span><span class="p">,</span> <span class="n">Pip</span><span class="p">,</span> <span class="n">Object</span>
 
 
 <div class="viewcode-block" id="DevboxOps">
@@ -868,297 +861,6 @@
 
 
 
-<div class="viewcode-block" id="AgentOps">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">AgentOps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level manager for creating and managing agents.</span>
-
-<span class="sd">    Accessed via ``runloop.agent`` from :class:`RunloopSDK`, provides methods to</span>
-<span class="sd">    create, retrieve, and list agents from various sources (npm, pip, git, object storage).</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; runloop = RunloopSDK()</span>
-<span class="sd">        &gt;&gt;&gt; # Create agent from NPM package</span>
-<span class="sd">        &gt;&gt;&gt; agent = runloop.agent.create_from_npm(name=&quot;my-agent&quot;, package_name=&quot;@runloop/example-agent&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; # Create agent from Git repository</span>
-<span class="sd">        &gt;&gt;&gt; agent = runloop.agent.create_from_git(</span>
-<span class="sd">        ...     name=&quot;git-agent&quot;, repository=&quot;https://github.com/user/agent-repo&quot;, ref=&quot;main&quot;</span>
-<span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; # List all agents</span>
-<span class="sd">        &gt;&gt;&gt; agents = runloop.agent.list(limit=10)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Runloop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the manager.</span>
-
-<span class="sd">        :param client: Generated Runloop client to wrap</span>
-<span class="sd">        :type client: Runloop</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
-
-<div class="viewcode-block" id="AgentOps.create">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.create">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentCreateParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new agent.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for available parameters</span>
-<span class="sd">        :return: Wrapper bound to the newly created agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">agent_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">Agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">agent_view</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">agent_view</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.create_from_npm">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.create_from_npm">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_from_npm</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="p">,</span>
-        <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">registry_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">agent_setup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentCreateParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an agent from an NPM package.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; agent = runloop.agent.create_from_npm(</span>
-<span class="sd">            ...     name=&quot;my-npm-agent&quot;, package_name=&quot;@runloop/example-agent&quot;, version=&quot;1.0.0&quot;</span>
-<span class="sd">            ... )</span>
-
-<span class="sd">        :param package_name: NPM package name</span>
-<span class="sd">        :type package_name: str</span>
-<span class="sd">        :param registry_url: NPM registry URL, defaults to None</span>
-<span class="sd">        :type registry_url: Optional[str], optional</span>
-<span class="sd">        :param agent_setup: Setup commands to run after installation, defaults to None</span>
-<span class="sd">        :type agent_setup: Optional[list[str]], optional</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding &#39;source&#39;)</span>
-<span class="sd">        :return: Wrapper bound to the newly created agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        :raises ValueError: If &#39;source&#39; is provided in params</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot specify &#39;source&#39; when using create_from_npm(); source is automatically set to npm configuration&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">npm_config</span><span class="p">:</span> <span class="n">Npm</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;package_name&quot;</span><span class="p">:</span> <span class="n">package_name</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">registry_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">npm_config</span><span class="p">[</span><span class="s2">&quot;registry_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">registry_url</span>
-        <span class="k">if</span> <span class="n">agent_setup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">npm_config</span><span class="p">[</span><span class="s2">&quot;agent_setup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_setup</span>
-
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;npm&quot;</span><span class="p">,</span> <span class="s2">&quot;npm&quot;</span><span class="p">:</span> <span class="n">npm_config</span><span class="p">}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.create_from_pip">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.create_from_pip">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_from_pip</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="p">,</span>
-        <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">registry_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">agent_setup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentCreateParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an agent from a Pip package.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; agent = runloop.agent.create_from_pip(</span>
-<span class="sd">            ...     name=&quot;my-pip-agent&quot;, package_name=&quot;runloop-example-agent&quot;, version=&quot;1.0.0&quot;</span>
-<span class="sd">            ... )</span>
-
-<span class="sd">        :param package_name: Pip package name</span>
-<span class="sd">        :type package_name: str</span>
-<span class="sd">        :param registry_url: Pip registry URL, defaults to None</span>
-<span class="sd">        :type registry_url: Optional[str], optional</span>
-<span class="sd">        :param agent_setup: Setup commands to run after installation, defaults to None</span>
-<span class="sd">        :type agent_setup: Optional[list[str]], optional</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding &#39;source&#39;)</span>
-<span class="sd">        :return: Wrapper bound to the newly created agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        :raises ValueError: If &#39;source&#39; is provided in params</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot specify &#39;source&#39; when using create_from_pip(); source is automatically set to pip configuration&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">pip_config</span><span class="p">:</span> <span class="n">Pip</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;package_name&quot;</span><span class="p">:</span> <span class="n">package_name</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">registry_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pip_config</span><span class="p">[</span><span class="s2">&quot;registry_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">registry_url</span>
-        <span class="k">if</span> <span class="n">agent_setup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">pip_config</span><span class="p">[</span><span class="s2">&quot;agent_setup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_setup</span>
-
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">:</span> <span class="n">pip_config</span><span class="p">}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.create_from_git">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.create_from_git">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_from_git</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="p">,</span>
-        <span class="n">repository</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">agent_setup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentCreateParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an agent from a Git repository.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; agent = runloop.agent.create_from_git(</span>
-<span class="sd">            ...     name=&quot;my-git-agent&quot;,</span>
-<span class="sd">            ...     repository=&quot;https://github.com/user/agent-repo&quot;,</span>
-<span class="sd">            ...     ref=&quot;main&quot;,</span>
-<span class="sd">            ...     agent_setup=[&quot;npm install&quot;, &quot;npm run build&quot;],</span>
-<span class="sd">            ...     version=&quot;1.0.0&quot;,</span>
-<span class="sd">            ... )</span>
-
-<span class="sd">        :param repository: Git repository URL</span>
-<span class="sd">        :type repository: str</span>
-<span class="sd">        :param ref: Optional Git ref (branch/tag/commit), defaults to main/HEAD</span>
-<span class="sd">        :type ref: Optional[str], optional</span>
-<span class="sd">        :param agent_setup: Setup commands to run after cloning, defaults to None</span>
-<span class="sd">        :type agent_setup: Optional[list[str]], optional</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding &#39;source&#39;)</span>
-<span class="sd">        :return: Wrapper bound to the newly created agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        :raises ValueError: If &#39;source&#39; is provided in params</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot specify &#39;source&#39; when using create_from_git(); source is automatically set to git configuration&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">git_config</span><span class="p">:</span> <span class="n">Git</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;repository&quot;</span><span class="p">:</span> <span class="n">repository</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">git_config</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
-        <span class="k">if</span> <span class="n">agent_setup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">git_config</span><span class="p">[</span><span class="s2">&quot;agent_setup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_setup</span>
-
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;git&quot;</span><span class="p">:</span> <span class="n">git_config</span><span class="p">}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.create_from_object">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.create_from_object">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_from_object</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="p">,</span>
-        <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">agent_setup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentCreateParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an agent from a storage object.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; # First upload agent code as an object</span>
-<span class="sd">            &gt;&gt;&gt; obj = runloop.storage_object.upload_from_dir(&quot;./my-agent&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; # Then create agent from the object</span>
-<span class="sd">            &gt;&gt;&gt; agent = runloop.agent.create_from_object(</span>
-<span class="sd">            ...     name=&quot;my-object-agent&quot;,</span>
-<span class="sd">            ...     object_id=obj.id,</span>
-<span class="sd">            ...     agent_setup=[&quot;chmod +x setup.sh&quot;, &quot;./setup.sh&quot;],</span>
-<span class="sd">            ...     version=&quot;1.0.0&quot;,</span>
-<span class="sd">            ... )</span>
-
-<span class="sd">        :param object_id: Storage object ID</span>
-<span class="sd">        :type object_id: str</span>
-<span class="sd">        :param agent_setup: Setup commands to run after unpacking, defaults to None</span>
-<span class="sd">        :type agent_setup: Optional[list[str]], optional</span>
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentCreateParams` for additional parameters (excluding &#39;source&#39;)</span>
-<span class="sd">        :return: Wrapper bound to the newly created agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        :raises ValueError: If &#39;source&#39; is provided in params</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;source&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot specify &#39;source&#39; when using create_from_object(); source is automatically set to object configuration&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">object_config</span><span class="p">:</span> <span class="n">Object</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;object_id&quot;</span><span class="p">:</span> <span class="n">object_id</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">agent_setup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">object_config</span><span class="p">[</span><span class="s2">&quot;agent_setup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_setup</span>
-
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="n">object_config</span><span class="p">}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.from_id">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.from_id">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Attach to an existing agent by ID.</span>
-
-<span class="sd">        :param agent_id: Existing agent ID</span>
-<span class="sd">        :type agent_id: str</span>
-<span class="sd">        :return: Wrapper bound to the requested agent</span>
-<span class="sd">        :rtype: Agent</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">agent_id</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.list">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.list">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentListParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Agent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List agents accessible to the caller.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListParams` for available parameters</span>
-<span class="sd">        :return: Collection of agent wrappers</span>
-<span class="sd">        :rtype: list[Agent]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
-            <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">agents</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.list_public">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.list_public">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list_public</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">SDKAgentListPublicParams</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Agent</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;List public agents.</span>
-
-<span class="sd">        :param params: See :typeddict:`~runloop_api_client.sdk._types.SDKAgentListPublicParams` for available parameters</span>
-<span class="sd">        :return: Collection of public agent wrappers</span>
-<span class="sd">        :rtype: list[Agent]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list_public</span><span class="p">(</span>
-            <span class="o">**</span><span class="n">params</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">agents</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="AgentOps.devbox_counts">
-<a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.AgentOps.devbox_counts">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">devbox_counts</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">BaseRequestOptions</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AgentDevboxCountsView</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get devbox counts grouped by agent name.</span>
-
-<span class="sd">        :param options: Optional request configuration</span>
-<span class="sd">        :return: Devbox counts per agent name and total</span>
-<span class="sd">        :rtype: AgentDevboxCountsView</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">devbox_counts</span><span class="p">(</span>
-            <span class="o">**</span><span class="n">options</span><span class="p">,</span>
-        <span class="p">)</span></div>
-</div>
-
-
-
 <div class="viewcode-block" id="NetworkPolicyOps">
 <a class="viewcode-back" href="../../../api/core.html#runloop_api_client.sdk.sync.NetworkPolicyOps">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NetworkPolicyOps</span><span class="p">:</span>
@@ -1544,8 +1246,6 @@
 
 <span class="sd">    :ivar api: Direct access to the generated REST API client</span>
 <span class="sd">    :vartype api: Runloop</span>
-<span class="sd">    :ivar agent: High-level interface for agent management.</span>
-<span class="sd">    :vartype agent: AgentOps</span>
 <span class="sd">    :ivar axon: [Beta] High-level interface for axon management</span>
 <span class="sd">    :vartype axon: AxonOps</span>
 <span class="sd">    :ivar devbox: High-level interface for devbox management</span>
@@ -1574,7 +1274,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">api</span><span class="p">:</span> <span class="n">Runloop</span>
-    <span class="n">agent</span><span class="p">:</span> <span class="n">AgentOps</span>
     <span class="n">axon</span><span class="p">:</span> <span class="n">AxonOps</span>
     <span class="n">devbox</span><span class="p">:</span> <span class="n">DevboxOps</span>
     <span class="n">blueprint</span><span class="p">:</span> <span class="n">BlueprintOps</span>
@@ -1635,7 +1334,6 @@
             <span class="n">transfer_pool_shards</span><span class="o">=</span><span class="n">transfer_pool_shards</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span> <span class="o">=</span> <span class="n">AgentOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axon</span> <span class="o">=</span> <span class="n">AxonOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">devbox</span> <span class="o">=</span> <span class="n">DevboxOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blueprint</span> <span class="o">=</span> <span class="n">BlueprintOps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="p">)</span>
