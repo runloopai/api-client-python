@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/runloopai/api-client-python/compare/v3.0.0...v3.0.1) (2026-10-24)
+
+
+### Refactors
+
+* **billing:** remove Amazon Marketplace billing ([6f1cef4](https://github.com/runloopai/api-client-python/commit/6f1cef47b7f48c39073089f17db19e3901cf0315))
+
 ## [3.0.0](https://github.com/runloopai/api-client-python/compare/v2.0.0...v3.0.0) (2026-10-23)
 
 
