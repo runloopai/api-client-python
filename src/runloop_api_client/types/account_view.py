@@ -5,20 +5,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["AccountView", "Billing", "BillingAws", "BillingStripe"]
-
-
-class BillingAws(BaseModel):
-    """AWS Marketplace billing information."""
-
-    customer_identifier: Optional[str] = None
-    """The AWS account ID used for Marketplace billing (12-digit)."""
-
-    license_arn: Optional[str] = None
-    """The AWS Marketplace license ARN."""
-
-    subscription_status: Optional[str] = None
-    """The AWS Marketplace subscription status."""
+__all__ = ["AccountView", "Billing", "BillingStripe"]
 
 
 class BillingStripe(BaseModel):
@@ -34,11 +21,8 @@ class BillingStripe(BaseModel):
 class Billing(BaseModel):
     """The account billing information."""
 
-    account_billing_type: Literal["STRIPE", "AWS_MARKETPLACE", "STRIPE_PROJECTS", "UNRECOGNIZED"]
+    account_billing_type: Literal["STRIPE", "AWS_MARKETPLACE", "STRIPE_PROJECTS", "NONE", "UNRECOGNIZED"]
     """The account billing type."""
-
-    aws: Optional[BillingAws] = None
-    """AWS Marketplace billing information."""
 
     stripe: Optional[BillingStripe] = None
     """Stripe billing information."""
@@ -84,14 +68,13 @@ class AccountView(BaseModel):
     ]
     """The account tier."""
 
-    account_billing_type: Optional[Literal["STRIPE", "AWS_MARKETPLACE", "STRIPE_PROJECTS", "UNRECOGNIZED"]] = None
+    account_billing_type: Optional[Literal["STRIPE", "AWS_MARKETPLACE", "STRIPE_PROJECTS", "NONE", "UNRECOGNIZED"]] = (
+        None
+    )
     """Deprecated: use billing.account_billing_type."""
 
     active_subscription: Optional[str] = None
     """Deprecated: use billing.stripe.active_subscription."""
-
-    external_billing_account_id: Optional[str] = None
-    """Deprecated: use billing.aws.customer_identifier."""
 
     stripe_customer_id: Optional[str] = None
     """Deprecated: use billing.stripe.customer_id."""
